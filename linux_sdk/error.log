@@ -1,0 +1,2 @@
+obj/RCBot2MetaDebug_i486/utilCBot2_metmeta/bot.o: In function `memset':
+/usr/include/i386-linux-gnu/bits/string3.h:81: warning: memset used with constant zero length parameter; this could be due to transposed parameters

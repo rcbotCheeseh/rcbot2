@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HPB_bot2", "HPB_Bot2.vcxproj", "{B6572CBE-7C7F-4FFF-94DE-AFBBBAB11C64}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release_NonHomeFolder|x86 = Release_NonHomeFolder|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B6572CBE-7C7F-4FFF-94DE-AFBBBAB11C64}.Debug|x86.ActiveCfg = Debug|Win32
+		{B6572CBE-7C7F-4FFF-94DE-AFBBBAB11C64}.Debug|x86.Build.0 = Debug|Win32
+		{B6572CBE-7C7F-4FFF-94DE-AFBBBAB11C64}.Release_NonHomeFolder|x86.ActiveCfg = Release_NonHomeFolder|Win32
+		{B6572CBE-7C7F-4FFF-94DE-AFBBBAB11C64}.Release_NonHomeFolder|x86.Build.0 = Release_NonHomeFolder|Win32
+		{B6572CBE-7C7F-4FFF-94DE-AFBBBAB11C64}.Release|x86.ActiveCfg = Release|Win32
+		{B6572CBE-7C7F-4FFF-94DE-AFBBBAB11C64}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

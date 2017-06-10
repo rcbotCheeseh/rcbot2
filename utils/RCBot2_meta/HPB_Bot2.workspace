@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Workspace Name="HPB_Bot2" Database="">
+  <Project Name="RCBot2Meta" Path="RCBot2Meta.project" Active="Yes"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Environment/>
+      <Project Name="RCBot2Meta" ConfigName="Debug_Win32"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Environment/>
+      <Project Name="RCBot2Meta" ConfigName="Release_NonHomeFolder_Win32"/>
+      <Project Name="RCBot2Meta" ConfigName="Release_Win32"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>

@@ -1,0 +1,70 @@
+UTILS_RCBOT2_META_SRC_DIR=../utils/RCBot2_meta
+UTILS_RCBOT2_META_OBJ_DIR=obj/$(NAME)_$(ARCH)/utilCBot2_metmeta
+
+
+INCLUDES=-I../utils/RCBot2_meta/../../public/mathlib -I../utils/RCBot2_meta/../../public -I../utils/RCBot2_meta/../../public/engine -I../utils/RCBot2_meta/../../public/tier0 -I../utils/RCBot2_meta/../../public/tier1 -I../utils/RCBot2_meta/../../dlls -I../utils/RCBot2_meta/../../game_shared -I../utils/RCBot2_meta/../../game/shared -I../utils/RCBot2_meta/../../game/server -I../utils/RCBot2_meta/../../public/game/server -I../utils/RCBot2_meta/../metamod-source-mmsource-1.10.6/public -I../utils/RCBot2_meta/../metamod-source-mmsource-1.10.6/core -I../utils/RCBot2_meta/../metamod-source-mmsource-1.10.6/core/sourcehook -D_DEBUG -DHOMEFOLDER 
+
+UTILS_RCBOT2_META_OBJS= \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_accessclient.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_buttons.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_client.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_commands.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_configfile.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_coop.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_css_bot.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_dod_bot.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_dod_mod.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_events.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_fortress.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_ga.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_ga_ind.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_getprop.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_globals.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_hl1dmsrc.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_hldm_bot.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_kv.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_menu.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_mods.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_mtrand.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_navmesh.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_perceptron.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_profile.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_profiling.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_schedule.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_tf2_points.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_som.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_squads.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_strings.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_task.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_tf2_mod.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_usercmd.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_utility.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_visibles.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_waypoint.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_waypoint_locations.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_waypoint_visibility.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_weapons.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_wpt_dist.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_zombie.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_sigscan.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_cvars.o \
+	$(UTILS_RCBOT2_META_OBJ_DIR)/bot_plugin_meta.o \
+
+
+
+
+all: dirs $(NAME)_$(ARCH).$(SHLIBEXT)
+
+dirs:
+	-mkdir -p $(UTILS_RCBOT2_META_OBJ_DIR)
+
+
+
+
+$(NAME)_$(ARCH).$(SHLIBEXT): $(UTILS_RCBOT2_META_OBJS) 
+	$(CLINK) $(SHLIBLDFLAGS) $(DEBUG) -o $(BUILD_DIR)/$@ $(UTILS_RCBOT2_META_OBJS) $(LDFLAGS) $(CPP_LIB)
+
+$(UTILS_RCBOT2_META_OBJ_DIR)/%.o: $(UTILS_RCBOT2_META_SRC_DIR)/%.cpp
+	$(DO_CC)
+

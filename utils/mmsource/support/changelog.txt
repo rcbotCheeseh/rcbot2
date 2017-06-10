@@ -1,0 +1,322 @@
+2015/09/17 1.10.6:
+ - Updated support for recent TF2, CS:S, DoD:S, and HL2:DM game updates.
+
+2014/05/30 1.10.5:
+ - Added support for Black Mesa (PR #14).
+ - Updated support for recent CS:GO game updates.
+ - Fixed game detection issues on Nuclear Dawn.
+
+2014/11/25 1.10.4:
+ - Updated support for recent TF2 game updates.
+
+2014/09/20 1.10.3:
+ - Updated support for recent TF2 and CS:GO game updates.
+
+2014/08/17 1.10.2:
+ - Fixed regression in Alien Swarm engine detection from version 1.10.1 (PR #6).
+ - Improved engine detection for more games when '-game' launching param is missing (PR #7).
+
+2014/07/03 1.10.1:
+ - Added support for Source SDK 2013 mods (bug 5916).
+ - Added support for Insurgency (bug 5950).
+ - Added support for Contagion (bug 6006).
+ - Added support for Blade Symphony (bug 5948).
+ - Updated Dota 2 support to add Linux and Mac OS X support (bug 6067).
+ - Improved engine detection when '-game' launch param is not present (bug 6020).
+ - Fixed a regression in engine detection for some cases (bug 5963).
+
+2013/08/25 1.10.0:
+ - Added support for Dota 2 on Windows.
+ - Split TF2, DoD:S, HL2:DM, and ND to separate binaries (bug 5667).
+ - Updated for latest games changes on HL2:DM, TF2, CS:S, DoD:S, L4D2, and Dota 2.
+ - Added basic VDF file for easier installation (bug 5681).
+ - Removed loader's reliance on tier0 by manually parsing command line for -game (bug 5674).
+ - Fixed MetamodVersionInfo::GetGameDir always returning NULL or garbage. 
+ - Added META_NO_HL2SDK define to stop MM:S headers using the HL2SDK (bug 5079, bug 5469).
+ - Remove unused variables and defines (bug 5523).
+ - Fixed NULL conversion compile warning in loader.
+
+2013/02/06 1.9.2:
+ - Fixed load issues on CS:GO after protobuf networking game update (bug 5578).
+ - Fixed load issues on CS:S under linux after game update.
+
+2012/12/23 1.9.1:
+ - Fixed core-legacy crash on hook from making wrong page writable (bug 5533).
+ - Updated loader to attempt to guess correct tier0/vstdlib filenames on linux, fixing load on ep2v engine (bug 5522).
+ - Recompiled against new hl2sdk-ob-valve to fix vdf plugin loading on ep2v engine.
+
+2012/09/03 1.9.0:
+ - Added support for Counter-Strike: Global Offensive (bug 5228).
+ - Split Counter-Strike: Source to a separate build from 'ep2v' (SOURCE_ENGINE_CSS) (bug 5369).
+ - Fixed page protection bug causing a rare startup crash (bug 5133).
+ - Delayed unloading of plugins until it is absolutely safe (bug 5034).
+ - Fixed passage of non-literals as error and warning format strings.
+
+2011/06/23 1.8.7:
+ - Fixed libgcc_s.so.1 load error present on some systems (bug 4876). 
+ - Metamod:Source will now work even when the Valve filesytem interface isn't
+   found (bug 4958).
+
+2011/04/15 1.8.6:
+ - Fixed compatibility with latest breaking Orange Box changes.
+ - Added support for Bloody Good Time (bug 4784).
+
+2010/12/19 1.8.5:
+ - Added support for latest Orange Box engine update (bug 4752).
+
+2010/10/30 1.8.4:
+ - Added support for Alien Swarm (bug 4529).
+ - Added support for L4D and L4D2 on Mac OS X (bug 4683 and bug 4646).
+ - Updated support for L4D (bug 4680).
+ - Fixed bug on OB listen servers where the engine was being detected as OBV
+   (bug 4560).
+ - Fixed hooking vtables with unaligned thunk entries and returning references
+   in manual hooks (bug 4655).
+
+2010/07/18 1.8.3:
+ - Added support for the latest L4D2 update (bug 4509).
+ - Fixed bug on OBV engine where extended plugins (such as SourceMod and
+   Stripper) could be given the wrong engine. (bug 4491).
+ - Fixed rare crash when certain engine libraries were loaded from an unexpected
+   location (bug 4475).
+ - Added MSVC 10.0 (Visual Studio 2010) project files for stub_mm and sample_mm
+   (bug 4520).
+
+2010/06/11 1.8.2:
+ - Added support for Mac OS X (bug 4391).
+ - Added support for CS:S on Orange Box (bug 4401).
+ - Platform suffix "_i486" is now optional for plugins (bug 4410).
+
+2010/05/02 1.8.1:
+ - Added support for latest L4D2 and Orange Box engine updates.
+ 
+2009/12/19 1.8.0:
+ - Added support for the Source engine that runs Left 4 Dead 2 (bug 4078).
+ - Added VP hook support to legacy SourceHook (bug 4019).
+ - Backported GetSourceEngineBuild from the new API to the legacy API (bug
+   4082).
+ - Backported GetVSPInfo from the new API to the legacy API (bug 4079).
+ - Backported OnUnlinkConCommandBase event from the new API to the legacy API
+   (bug 4018).
+ - Improved usermessage extraction code (bug 4117).
+ - Improved OS X support for SourceHook (bug 3514).
+ - Added separate build for the Orange Box engine (bug 4084).
+ - Added game path to ISmmPluginExt API.
+
+2009/02/25 1.7.1:
+ - Added support for the Source engine version that runs Dark Messiah. The
+   development of this feature would not be possible without the support of the
+   following people from the game's community: Dylan Riggs, Carl Pettengill, Ed
+   Moreland, and Christian. 
+ - Fixed a bug where plugin aliases defined in VDF files were not working on the
+   Orange Box and Left 4 Dead engines.
+ - Fixed SourceHook passing invalid mprotect() values (bug 3642).
+ - Fixed "late" load parameter always being true in VSP mode (bug 3532).
+ - Added MSVC project templates for plugins, from Daedilus.
+
+2008/11/26 1.7.0:
+ - Metamod:Source now uses a unified package that will run on all supported 
+   Source engines.  This means you do not have to download a version based on
+   which Source engine or game you use.
+ - Added support for the Source engine version that runs Left 4 Dead.
+ - The 'meta refresh' command now handles plugins loaded from VDF files.
+ - Fixed amb1952: Crash when the first plugin listed in metaplugins.ini had an 
+   alias and was not on the first line of the file.
+
+2008/07/26 1.6.2:
+ - Fixed a bug where VDF files were opened by MM:S even if the .vdf extension
+   was not at the very end of the filename. For example, "plugin.vdf.disabled"
+   would have been opened in previous versions.  (amb1534)
+ - Removed FCVAR_REPLICATED from MM:S convars. The following message will no
+   longer appear in client consoles: ConVarRef metamod_version doesn't point to
+   an existing ConVar. (amb1480)
+
+2008/02/25 1.6.1:
+ - Fixed crash bug against mods compiled with GCC-4.2 -fvisibility=hidden
+ - API wrappers for GetUserMessageInfo() now have failsafe fallbacks 
+   since the OrangeBox SDK fixed an older SDK's crash bug.
+
+2008/02/18 1.6.0:
+ - Added ability to load from a VDF file instead of gameinfo.txt.
+ - Added ability to load MM:S plugins from VDF files.
+ - Added new version of SourceHook with the following changes:
+   - Added API for hooking functions on a virtual table to all instances.
+   - SH_ADD_HOOK macros now return non-zero hook IDs.  Additionally,
+     the old hook adding/removing syntax is deprecated (but still supported).
+   - Added SH_REMOVE_HOOK_ID to remove hooks by ID.
+   - CallClasses have been deprecated.  The SH_CALL macro can now take a class
+     instance pointer rather than a callclass pointer.
+   - Can now generate dynamic, arbitrary hooks at runtime (see hookmangen).
+ - Metamod:Source has now received a large internal rewrite to improve coding 
+   standards and to separate internal logic from engine specifics.
+ - Added mm_basedir cvar to specify Metamod's base folder.
+ - Added API for getting highest supported IServerPluginCallbacks interface
+   version.
+ - Added API for detecting the engine version.
+ - Added API for getting the VSP-simulation interface upon late loading.
+ - Added OnUnlinkConCommandBase to IMetamodListner to notify when Metamod:Source
+   is about to remove a concommand or convar.
+ - Added the ability for Metamod:Source to load as a VSP instead of through 
+   gameinfo.txt.
+ - The output of the "meta list" command has been reformatted in order to allow
+   more space for plugins' name, version, and author fields.
+ - Sample/Stub plugins have improved building mechanism and code, and will 
+   compile against both MM:S 1.6 for OrangeBox and MM:S 1.4 for Episode 1.
+
+2008/07/26 1.4.4:
+ - Fixed a bug where loading plugins built for MM:S 1.3 or older (API ver <= 9)
+   would cause a crash.
+ - Fixed a bug where loading plugins using VDF files caused Metamod:Source
+   to crash on The Ship. (bug 1523)
+ - Fixed a class of crashes caused by improper cvar removal handling. (bug 1416)
+ - Fixed a bug where VDF files were opened by MM:S even if the .vdf extension
+   was not at the very end of the filename. For example, "plugin.vdf.disabled"
+   would have been opened in previous versions. (bug 1534)
+ - Removed FCVAR_REPLICATED from MM:S convars. (bug 1479)
+
+2008/01/23 1.4.3:
+ - Metamod:Source can now be loaded via a .vdf instead of gameinfo.txt.
+ - Added new plugin loading mechanism via .vdf files in the metamod folder.
+ - Changed "meta list" output to look similar to Metamod:Source 1.6.
+ - Plugins which need a VSP pointer can now receive it on late load.
+ - Fixed a small memory leak when using recalls (RETURN_META_NEWPARAMS).
+ - Fixed a rare memory corruption bug in the CVector class.
+
+2007/06/26 1.4.2:
+ - Fixed a bug where unloading all plugins could crash if one plugin had child
+   plugins.
+
+2007/05/16 1.4.1:
+ - The client version of the "meta" command should now work with games using the
+   latest Source beta (srcds0407).
+ - Fixed amb233 (VSP listener didn't work with Steam dedicated version).
+ - Fixed amb277 (failed to get user message list in Kreedz Climbing).
+
+2007/04/05 1.4.0:
+ - Added API functions for retrieving User Message info without potentially
+   crashing.
+ - Added API functions for letting SourceMM plugins use Valve Server Plugin
+   callbacks.
+ - Added plugin status to client version of "meta list" command.  Previously, it
+   did not differentiate between running and paused plugins.
+ - An experimental automatic gameinfo.txt fixer is now available.
+ - Changed version numbering to include the build number (SVN revision).
+ - Fixed amb93 (improved mod path detection).
+ - Fixed various rare string inconsistencies.
+
+2006/11/29 1.3d:
+ - Updated Metamod:Source to recognize the latest Source Engine version
+   (ServerGameDLL006)
+
+2006/09/06 1.3a:
+ - Fixed a building issue on Linux which caused unresolved symbol errors when
+   trying to load Metamod:Source on a game using an older set of engine
+   libraries.  This fix should now allow Metamod:Source to run with The Ship on
+   Linux.
+
+2006/08/16 1.3:
+ - Added SourceHook support for functions that return references.
+ - Added some extra information to the "meta game" command: Description and
+   Interface.  For example, CS:S would display "Counter-Strike: Source" and
+   "ServerGameDLL004."
+ - Added some extra functionality to ISmmPluginManager.
+ - Added compiling support for MSVC 8.0 (Visual Studio 2005) and GCC 4.x.
+ - Added another API helper function for formatting and searching for
+   interfaces.
+ - Updated project files and source tree to use the latest HL2SDK.
+ - Updated the sample plugins to be a bit cleaner and use newer API.
+ - Fixed bug where Metamod:Source could load the wrong GameDLL and/or load more
+   than one GameDLL.  This issue occured in HL2 CTF, SourceForts, or any other
+   mod that relied on files from another mod directory.
+ - Fixed bug where ISmmAPI::MetaFactory() would return the wrong interface when
+   trying to retrieve ISmmPluginManager.
+ - Fixed bug where returning false in Load() after adding a Metamod event
+   listener or hooking a function could cause a crash instead of rejecting the
+   plugin.
+ - Fixed bug where trying to load Metamod:Source a second time as a SourceMM or
+   Valve server plugin could cause a crash.
+ - Fixed a bug in FormatIface() that caused InterfaceSearch() to infinite loop.
+
+2006/06/14 1.2.3:
+ - Added SourceHook API for manual recalls: RETURN_META_(VALUE_)MNEWPARAMS
+ - Added support for ServerGameDLL005 (latest HL2DM update)
+
+2006/05/25 1.2.2:
+ - Added the ability to "alias" plugin names in metaplugins.ini.
+ - Added "meta alias" command.
+ - Added SourceHook API for manual callclasses.
+ - Added support for the latest Source engine (ServerGameDLL005).
+ - Added API for printing text in a client's console with ClientConPrintf.  This
+   does the same thing as IVEngineServer::ClientPrintf except that it allows
+   string formatting.
+ - Added client version of "meta" command in order to allow clients to view
+   version information and a list of loaded plugins.
+ - Fixed a bug causing old mods on newer engines to fail loading.
+ - Fixed issues with SourceHook's SH_CALL and reference parameters.
+ - Fixed a bug where the mm_pluginsfile cvar was being ignored.
+ - Fixed a memory leak when using ISmmAPI::InterfaceSearch.
+
+2006/02/15 1.2.1:
+ - Fixed bug where returning newparams in a post hook would cause infinite
+   recursion.
+ - Fixed bug where "meta load" could load the same plugin multiple times.
+ - Fixed bug where unloading a plugin could crash internal hook states.
+ - Fixed bug where unhooking a single hook would clear the hook chain.
+
+2006/01/07 1.2:
+ - Added SourceHook API for modifying parameters in the hook chain.
+ - Added SourceHook API for declaring and hooking manual vtable hooks.
+ - Added better API for querying an interface factory.
+ - Added API for formatting an OS-independent path.
+ - Added Listen Server Launcher to the graphical installer.
+ - Fixed bug where failed plugins could crash the plugin list.
+ - NOTE: SourceHook changes may require plugins to be recompiled against the new
+   API.
+
+2005/12/06 1.1.2:
+ - Added interface overriding/sharing examples to sample plugins.
+ - Added API to help guessing at Valve interface versions.
+ - Fixed various memory leaks.
+ - Fixed memory corruption bug on vector copying.
+ - Fixed other various template bugs.
+
+2005/10/21 1.1.1:
+ - Fixed a bug where AllPluginsLoaded() was not called after DLLInit().
+
+2005/10/21 1.1:
+ - Rewrote GameDLL loading code to be API version generic. As such, SourceMM
+   will now easily support new API releases without an SDK release, such as the
+   case with Day of Defeat:Source.
+ - Added more flexibility to plugin control by supplying an event system.
+ - Removed dependency on libstdc++.so by supplying a small template library.
+ - SourceHook internal API is now interface-based, meaning that future updates
+   to the API will not break older plugins.  This update, however, breaks older
+   plugins.
+ - SourceHook is now re-entrant.
+ - Added a basic automated installer (by Basic-Master).
+ - Fixed a bug where games with changing game names would not work.
+ - Fixed various bugs, including a cvarlist corruption bug on unloading plugins.
+
+2005/07/07 1.00-RC2:
+ - Added API for dealing with ConCommandBase registration (cvars/concmds).  This
+   is to fix the fact that Valve API provides no way to unlist a cvar/cmd.
+ - Added two new commands - "meta cmds" and "meta cvars".
+ - Added API calls for correctly printing to the console such that rcon will
+   also receive messages that a plugin prints. This problem was mentioned on
+   hlcoders and Valve offered no reply.
+ - Added event hooking and cvar samples to sample_mm.
+ - Added new cvar, mm_pluginsfile, which defaults to
+   "addons/metamod/metaplugins.ini".
+ - Fixed a bug where multiple vtable patches on the same hook were not
+   re-patched when removed.  This caused a crash when two hooks were declared on
+   one function, the first was removed, and the original function was then
+   called.
+ - Fixed "meta clear" not unloading all plugins.
+ - Fixed Metamod:Source loading plugins with a higher current API version.
+ - Fixed whitespace being parsed in metaplugins.ini.
+ - Fixed bug where SourceHook tried to patch already destroyed/unavailable
+   memory.
+ - Bumped Plugin API version to 6.
+
+2005/05/06 1.00-RC1:
+ - Initial release.

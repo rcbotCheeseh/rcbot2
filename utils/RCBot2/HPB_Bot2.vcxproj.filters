@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{d0223f65-09ca-4e8f-96fe-4ff831ea149e}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{e025fef0-70f0-4600-8074-0f1dc2322afb}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="text">
+      <UniqueIdentifier>{14bf2933-c488-4a10-a46e-0335575f5c8d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="bot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_accessclient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_buttons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_commands.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_configfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_coop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_css_bot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_dod_bot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_dod_mod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_events.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_fortress.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_ga.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_ga_ind.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_getprop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_globals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_hl1dmsrc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_hldm_bot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_kv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_mods.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_mtrand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_navmesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_perceptron.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_profile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_profiling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_schedule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_tf2_points.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_som.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_squads.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_strings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_task.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_tf2_mod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_usercmd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_visibles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_waypoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_waypoint_locations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_waypoint_visibility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_weapons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_wpt_dist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_zombie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="bot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_accessclient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_belief.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_buttons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_commands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_configfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_const.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_coop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_css_bot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_dod_bot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_ehandle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_fortress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_ga.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_ga_ind.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_genclass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_getprop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_hl1dmsrc_bot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_hldm_bot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_kv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_mods.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_mtrand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_navigator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_perceptron.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_profile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_profiling.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_rb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_recipients.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_schedule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_tf2_points.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_som.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_squads.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_strings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_task.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_visibles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_waypoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_waypoint_locations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_waypoint_visibility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_weapons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_wpt_color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_wpt_dist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bot_zombie.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\Color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\const.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier0\dbg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\dt_send.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Public\eiface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Public\FileSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier0\icommandline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\icvar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\igameevents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier1\interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\game\server\iplayerinfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\engine\iserverplugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier1\KeyValues.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\mathlib\mathlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier0\mem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier0\memalloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier0\memdbgon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\server_class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier1\strtools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier1\utlbuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier1\utlmemory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\tier1\utlvector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\mathlib\vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\vstdlib\vstdlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="update.txt">
+      <Filter>text</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\lib\public\mathlib.lib" />
+    <Library Include="..\..\lib\public\tier0.lib" />
+    <Library Include="..\..\lib\public\tier1.lib" />
+    <Library Include="..\..\lib\public\tier2.lib" />
+    <Library Include="..\..\lib\public\vstdlib.lib" />
+  </ItemGroup>
+</Project>
