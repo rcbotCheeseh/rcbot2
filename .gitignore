@@ -5,6 +5,8 @@
 .project
 .cproject
 .buildpath
+.o
+.obj
 
 ###############
 ## Generated ##
@@ -16,3 +18,6 @@ utils/RCBot2_meta/Release_NonHomeFolder
 
 utils/RCBot2_meta/HPB_Bot2.opensdf
 utils/RCBot2_meta/HPB_Bot2.sdf
+/linux_sdk/obj/HPB_bot2_meta_i486/utilCBot2_metmeta
+/linux_sdk/obj/vcpm
+/utils/RCBot2/Debug

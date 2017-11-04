@@ -1,2 +1,5 @@
-obj/RCBot2MetaDebug_i486/utilCBot2_metmeta/bot.o: In function `memset':
-/usr/include/i386-linux-gnu/bits/string3.h:81: warning: memset used with constant zero length parameter; this could be due to transposed parameters
+obj/HPB_bot2_meta_i486/utilCBot2_metmeta/bot.o: In function `memset':
+/usr/include/i386-linux-gnu/bits/string3.h:86: undefined reference to `__warn_memset_zero_len'
+collect2: error: ld returned 1 exit status
+make[1]: *** [HPB_bot2_meta_i486.so] Error 1
+make: *** [server] Error 2

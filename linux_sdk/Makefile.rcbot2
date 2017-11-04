@@ -9,9 +9,7 @@
 
 # the name of the mod binary (_i486.so is appended to the end)
 #NAME=server
-#NAME=HPB_bot2_meta
-NAME=RCBot2Meta
-#NAME=RCBot2MetaDebug
+NAME=HPB_bot2_meta
 
 # the location of the vcproj that builds the mod
 #MOD_PROJ=../game/server/server_hl2mp-2005.vcproj
@@ -22,37 +20,41 @@ MOD_PROJ=../utils/RCBot2_meta/HPB_Bot2.vcproj
 MOD_CONFIG=HPB_bot2_Release_NonHomeFolderWin32
 #MOD_CONFIG=HPB_bot2_DebugWin32
 
-# the directory the base binaries (tier0_i486.so, etc) are located
+# the directory the base binaries (tier0.so, etc) are located
 # this should point to your orange box subfolder of where you have srcds installed.
 #GAME_DIR=~/srcds/orangebox
-GAME_DIR=~/Documents/server/hl2dm_server
+GAME_DIR=./gamedir
 
 # the path to your mods directory
 # set this so that 'make install' or 'make installrelease' will copy your binary over automatically.
 #MOD_DIR=$(GAME_DIR)/SampleMod
-MOD_DIR=$(GAME_DIR)/
+MOD_DIR=$(GAME_DIR)
 
-# compiler options (gcc 3.4.1 will work - 4.2.2 recommended)
-#CC=/usr/local/bin/gcc
-#CPLUS=/usr/local/bin/g++
-#CLINK=/usr/local/bin/gcc
-#CPP_LIB="/usr/local/lib/libstdc++.a /usr/local/lib/gcc/i686-pc-linux-gnu/4.2.2/libgcc_eh.a"
-#CC=/usr/bin/gcc
-#CPLUS=/usr/bin/g++-4.1
-#CLINK=/usr/bin/gcc-4.1
-CPP_LIB=" /usr/lib/gcc/i686-linux-gnu/4.8/libstdc++.a /usr/lib/gcc/i686-linux-gnu/4.8/libgcc_eh.a"
-C = /usr/bin/gcc
-CPLUS = /usr/bin/g++
-CLINK = /usr/bin/gcc
+# compiler options
+#C=/usr/lbin/gcc-5
+#CPLUS=/usr/bin/g++-5
+#CLINK=/usr/bin/gcc-5
+#CPP_LIB=" /usr/lib/gcc/i686-linux-gnu/5/libstdc++.a /usr/lib/gcc/i686-linux-gnu/5/libgcc_eh.a"
+C=/usr/bin/gcc-4.9
+CPLUS=/usr/bin/g++-4.9
+CLINK=/usr/bin/gcc-4.9
+CPP_LIB=" /usr/lib/gcc/i686-linux-gnu/4.9/libstdc++.a /usr/lib/gcc/i686-linux-gnu/4.9/libgcc_eh.a"
+#C = /usr/bin/clang --gcc-toolchain=c48
+#CPLUS = /usr/bin/clang++ --gcc-toolchain=c48
+#CLINK = /usr/bin/clang --gcc-toolchain=c48
 #CPP_LIB = "libstdc++.a libgcc_eh.a"
 
 # GCC 4.2.2 optimization flags, if you're using anything below, don't use these!
 #OPTFLAGS=-O1 -fomit-frame-pointer -ffast-math -fforce-addr -funroll-loops -fthread-jumps -fcrossjumping -foptimize-sibling-calls -fcse-follow-jumps -fcse-skip-blocks -fgcse -fgcse-lm -fexpensive-optimizations -frerun-cse-after-loop -fcaller-saves -fpeephole2 -fschedule-insns2 -fsched-interblock -fsched-spec -fregmove -fstrict-overflow -fdelete-null-pointer-checks -freorder-blocks -freorder-functions -falign-functions -falign-jumps -falign-loops -falign-labels -ftree-vrp -ftree-pre -finline-functions -funswitch-loops -fgcse-after-reload
 
-OPTFLAGS=-O2 -fomit-frame-pointer -fforce-addr -fthread-jumps -fcrossjumping -foptimize-sibling-calls -fcse-follow-jumps -fcse-skip-blocks -fgcse -fgcse-lm -frerun-cse-after-loop -fcaller-saves -fpeephole2 -fschedule-insns2 -fsched-interblock -fsched-spec -fregmove -fdelete-null-pointer-checks -freorder-blocks -freorder-functions -falign-functions -falign-jumps -falign-loops -falign-labels -ftree-vrp -ftree-pre -finline-functions -funswitch-loops -fgcse-after-reload
+#Only compatible for GCC onwards
+OPTFLAGS=-O1 -fomit-frame-pointer -fforce-addr -fthread-jumps -fcrossjumping -foptimize-sibling-calls -fcse-follow-jumps -fcse-skip-blocks -fgcse -fgcse-lm -frerun-cse-after-loop -fcaller-saves -fpeephole2 -fschedule-insns2 -fsched-interblock -fsched-spec -fregmove -fdelete-null-pointer-checks -freorder-blocks -freorder-functions -falign-functions -falign-jumps -falign-loops -falign-labels -ftree-vrp -ftree-pre -finline-functions -funswitch-loops -fgcse-after-reload
+
+#Only compatible for Clang
+#OPTFLAGS=-O1 -fomit-frame-pointer -fforce-addr -foptimize-sibling-calls -fgcse -fcaller-saves -fschedule-insns2 -fsched-interblock -fdelete-null-pointer-checks -freorder-blocks -falign-functions -falign-jumps -falign-loops -falign-labels -ftree-vrp -finline-functions -funswitch-loops -fgcse-after-reload
 
 # put any compiler flags you want passed here
-USER_CFLAGS= -std=c++0x -w -D__linux # -g -D_DEBUG -DDEBUG -DSH_DEBUG -DTF2_HOOKS
+USER_CFLAGS= -std=c++11 -w -D__linux -g # -D_DEBUG -DDEBUG -DSH_DEBUG -DTF2_HOOKS
 
 # Link Libraries
 #LIBFILES= \
@@ -100,7 +102,7 @@ SRC_DIR=~/Documents/rcbot-svn/rcbot2-code-468
 
 # the CPU target for the build, must be i486 for now
 ARCH=i486
-ARCH_CFLAGS=-mtune=i686 -march=pentium4 -mmmx -msse -msse2 -pipe -m32
+ARCH_CFLAGS=-mtune=generic -march=i686 -mmmx -msse -msse2 -pipe -m32
 
 # -fpermissive is so gcc 3.4.x doesn't complain about some template stuff
 BASE_CFLAGS=-DVPROF_LEVEL=1 -DSWDS -D_LINUX -DLINUX -DNDEBUG -fpermissive -Dstricmp=strcasecmp -D_stricmp=strcasecmp -D_strnicmp=strncasecmp -Dstrnicmp=strncasecmp -D_snprintf=snprintf -D_vsnprintf=vsnprintf -D_alloca=alloca -Dstrcmpi=strcasecmp -D__linux__ -DSOURCE_ENGINE=4 -DSE_EPISODEONE=1 -DSE_DARKMESSIAH=2 -DSE_ORANGEBOX=3 -DSE_ORANGEBOXVALVE=4 -DSE_LEFT4DEAD=5 -DSE_LEFT4DEAD2=6 -DSE_ALIENSWARM=7
@@ -167,4 +169,3 @@ install:
 installrelease:
 	cp -f $(NAME)_$(ARCH).so $(MOD_DIR)/bin/$(NAME)_$(ARCH).so
 	strip $(MOD_DIR)/bin/$(NAME)_$(ARCH).so
-

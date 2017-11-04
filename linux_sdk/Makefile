@@ -57,7 +57,7 @@ CHOREO_PROJ=../choreoobjects/choreoobjects-2005.vcproj
 
 # the CPU target for the build, must be i486 for now
 ARCH=i486
-ARCH_CFLAGS=-mtune=i686 -march=pentium3 -mmmx -O3
+ARCH_CFLAGS=-mtune=generic -march=i686 -msse2 -O2
 
 BASE_CFLAGS=-D_LINUX -DNDEBUG -Dstricmp=strcasecmp -D_stricmp=strcasecmp -D_strnicmp=strncasecmp -Dstrnicmp=strncasecmp -D_vsnprintf=vsnprintf -D_alloca=alloca -Dstrcmpi=strcasecmp -Wall -Wno-non-virtual-dtor -Wno-invalid-offsetof
 SHLIBEXT=so

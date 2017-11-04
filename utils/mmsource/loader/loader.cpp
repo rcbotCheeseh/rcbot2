@@ -90,6 +90,7 @@ static const char *backend_names[] =
 	"2.insurgency",
 	"2.contagion",
 	"2.bms",
+	"2.doi",
 };
 
 #if defined _WIN32
@@ -287,6 +288,14 @@ mm_DetermineBackend(QueryValveInterface engineFactory, QueryValveInterface serve
 
 		if (engineFactory("IEngineSoundServer004", NULL) != NULL)
 		{
+			void *lib = (void *)serverFactory;
+			void *addr;
+			if (strcmp(game_name, "doi") == 0
+				|| (addr = mm_FindPattern(lib, "doi_gamerules_data", sizeof("doi_gamerules_data") - 1)))
+			{
+				return MMBackend_DOI;
+			}
+			
 			return MMBackend_Insurgency;
 		}
 		
@@ -387,8 +396,7 @@ mm_DetermineBackend(QueryValveInterface engineFactory, QueryValveInterface serve
 					{
 						return MMBackend_DODS;
 					}
-					else if (strcmp(game_name, "hl2mp") == 0
-						|| (addr = mm_FindPattern(lib, "Half-Life 2 Deathmatch", sizeof("Half-Life 2 Deathmatch") - 1)))
+					else if (strcmp(game_name, "hl2mp") == 0)
 					{
 						return MMBackend_HL2DM;
 					}

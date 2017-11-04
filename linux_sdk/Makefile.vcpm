@@ -22,7 +22,8 @@ TINYXML_OBJ_DIR=$(BUILD_OBJ_DIR)/vcpm/tinyxml
 CFLAGS= -m32 -w -fpermissive -D_LINUX -DNDEBUG -U_DEBUG $(ARCH_CFLAGS) 
 
 INCLUDEDIRS=-I$(PUBLIC_SRC_DIR) -I$(UTIL_COMMON_SRC_DIR) -I$(TIER1_PUBLIC_SRC_DIR) -I$(TIER0_PUBLIC_SRC_DIR) -I$(TINYXML_SRC_DIR)
-LDFLAGS_VC= -m32 -lpthread -lm -ldl -Wl,-rpath . -l:libtier0_srv.so -l:libvstdlib_srv.so -Wl,-rpath-link .
+#LDFLAGS_VC= -m32 -lpthread -lm -ldl -Wl,-rpath . -l:libtier0_srv.so -l:libvstdlib_srv.so -Wl,-rpath-link .
+LDFLAGS_VC= -m32 -lpthread -lm -ldl -Wl,-rpath . libtier0_srv.so libvstdlib_srv.so -Wl,-rpath-link .
 
 DO_CC=$(CPLUS) $(INCLUDEDIRS) -w $(CFLAGS) -U_DEBUG -DARCH=$(ARCH) -o $@ -c $<
 DEBUG=

@@ -193,9 +193,9 @@ typedef enum
 #define BUILDNUM "365"*/
 #define BOT_NAME "RCBot"
 #ifdef __linux__
-#define BOT_VER "TF2/HL2DM/DOD:S 1.00 META Linux 473 (BUILD " __DATE__ "-" __TIME__ ")" //bir3yk
+#define BOT_VER "TF2/HL2DM/DOD:S 1.00 META Linux 475-apg (BUILD " __DATE__ "-" __TIME__ ")" //bir3yk
 #else
-#define BOT_VER "TF2/HL2DM/DOD:S 1.00 META Win32 473 (BUILD " ## __DATE__ ## "-" ## __TIME__ ## ")"
+#define BOT_VER "TF2/HL2DM/DOD:S 1.00 META Win32 475-apg (BUILD " ## __DATE__ ## "-" ## __TIME__ ## ")"
 #endif
 #define BOT_NAME_VER "RCbot version"
 #define BOT_VER_CVAR "rcbot_ver"
