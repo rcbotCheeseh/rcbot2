@@ -1,8 +1,6 @@
 ## RCBot2 v1.00 for Windows and Linux (TF2, HL2:DM, DOD:S)
 
-Note: Those are beta builds recompiled by [APG] Clan for RCBot2 v1.00. I don't know how to check or know much on the TF2 hookinfo.ini that requires to be up to date. But if anyone knows on how to fix the TF2 hookinfo.ini please let me know.
-
-Those builds are recompiled for newer Metamod Source engine and it appears to work OK on my DoD:S server.
+Note: Those are beta builds recompiled by [APG] Clan for RCBot2 v1.00, and those builds are recompiled for newer Metamod Source engine.
 
 ### Information
 This is a fork of the official RCBot2 plugin written by Cheeseh, which can be found [here](http://rcbot.bots-united.com/). <br />
