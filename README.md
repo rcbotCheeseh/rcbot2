@@ -18,16 +18,3 @@ This thread is also maintained by me.
   * Most of the time you will only need to modify Line 21 and 55 of `Makefile.rcbot2`
 * Type `make -f Makefile.rcbot2 all -j4 2> error.log`
 * Check the `error.log`
-
-### Changelog
-* Fixed a bug in getNextRoutePoint, which destroyed bot aiming, because of invalid vLook
-* Fixed reading of files with windows line ending (\r\n)
-* Fixed all offsets for Linux
-* Added "master offset" settings for TF2
-* Fixed a typo while reading bot configs (visionticksclients -> visionticks_clients)
-* Fixed macro in bot_profile.cpp
-* Fixed consecutive use of "addbot"
-* Added debug messages in chat (rcbot debug chat 1)
-* Added automatic bot quota, based on human players
-* You can now edit the path of where you have installed RCBot by writing it in the rcbot2.vdf
-  * (relative paths to the mod folder are also supported)
