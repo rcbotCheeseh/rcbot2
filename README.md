@@ -10,7 +10,7 @@ This repository is mainly used for the Linux release of his plugin, but it also 
 A complete guide for installing this plugin can be found at the official RCBot2 forums over [here](http://rcbot.bots-united.com/forums/index.php?showtopic=1967). <br />
 This thread is also maintained by me.
 
-### Build
+### How to compile for Linux
 * Go to `linux_sdk`
 * Type `make -f Makefile.rcbot2 vcpm`
 * Type `make -f Makefile.rcbot2 genmf` (this will generate the Makefiles)
