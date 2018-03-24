@@ -745,7 +745,7 @@ public:
 	{
 		return m_pEvent->GetString(keyName,defaultValue);
 	}
-
+	//Arguments needing filled? [APG]RoboCop[CL]
 	const char *getName ()
 	{
 		return m_pEvent->GetName();

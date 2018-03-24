@@ -1,5 +1,5 @@
 UTILS_RCBOT2_META_SRC_DIR=../utils/RCBot2_meta
-UTILS_RCBOT2_META_OBJ_DIR=obj/$(NAME)_$(ARCH)/utilCBot2_metmeta
+UTILS_RCBOT2_META_OBJ_DIR=obj/$(NAME)_$(ARCH)/utils/RCBot2_meta
 
 
 INCLUDES=-I../utils/RCBot2_meta/../../public/mathlib -I../utils/RCBot2_meta/../../public -I../utils/RCBot2_meta/../../public/engine -I../utils/RCBot2_meta/../../public/tier0 -I../utils/RCBot2_meta/../../public/tier1 -I../utils/RCBot2_meta/../../dlls -I../utils/RCBot2_meta/../../game_shared -I../utils/RCBot2_meta/../../game/shared -I../utils/RCBot2_meta/../../game/server -I../utils/RCBot2_meta/../../public/game/server -I../utils/RCBot2_meta/../mmsource/public -I../utils/RCBot2_meta/../mmsource/core -I../utils/RCBot2_meta/../mmsource/core/sourcehook -D_DEBUG -DHOMEFOLDER 

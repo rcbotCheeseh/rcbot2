@@ -43,7 +43,7 @@ ConVar bot_avoid_radius("rcbot_avoid_radius","80",0,"radius in units for bots to
 ConVar bot_avoid_strength("rcbot_avoid_strength","100",0,"strength of avoidance (0 = disable)");
 ConVar bot_messaround("rcbot_messaround","1",0,"bots mess around at start up");
 ConVar bot_heavyaimoffset("rcbot_heavyaimoffset","0.1",0,"fraction of how much the heavy aims at a diagonal offset");
-ConVar bot_aimsmoothing("rcbot_aimsmooting","1",0,"(0 = no smoothing)");
+ConVar bot_aimsmoothing("rcbot_aimsmoothing","1",0,"(0 = no smoothing)");
 ConVar bot_bossattackfactor("rcbot_bossattackfactor","1.0",0,"the higher the more often the bots will shoot the boss");
 ConVar rcbot_enemyshootfov("rcbot_enemyshootfov","0.97",0,"the fov dot product before the bot shoots an enemy 0.7 = 45 degrees");
 ConVar rcbot_enemyshoot_gravgun_fov("rcbot_enemyshoot_gravgun_fov","0.98",0,"the fov dot product before the bot shoots an enemy 0.98 = 11 degrees");
@@ -59,7 +59,7 @@ ConVar rcbot_demo_runup_dist("rcbot_demo_runup","99.0",0,"distance the demo bot 
 ConVar rcbot_demo_jump("rcbot_enable_pipejump","1",0,"Enable experimental pipe jumping at rocket jump waypoints");
 ConVar rcbot_move_tele_time("rcbot_move_tele_time","120",0,"seconds for bots to start thinking about moving teleporters");
 ConVar rcbot_move_tele_tpm("rcbot_move_tele_tpm","1",0,"if no of players teleported per minute is less than this, bot will move the teleport");
-ConVar rcbot_tf2_protect_cap_time("rcbot_tf2_prot_cap_time","12.5",0,"time that the bots will spen more attention to the cap point if attacked");
+ConVar rcbot_tf2_protect_cap_time("rcbot_tf2_prot_cap_time","12.5",0,"time that the bots will spend more attention to the cap point if attacked");
 ConVar rcbot_tf2_protect_cap_percent("rcbot_tf2_protect_cap_percent","0.25",0,"the percentage that bots defend the capture point by standing on the point");
 ConVar rcbot_tf2_spy_kill_on_cap_dist("rcbot_tf2_spy_kill_on_cap_dist","200.0",0,"the distance for spy bots to attack players capturing a point");
 ConVar rcbot_move_dist("rcbot_move_dist","800",0,"minimum distance to move objects to");
@@ -78,7 +78,7 @@ ConVar rcbot_debug_iglev("rcbot_debug_iglev","0",0,"bot think ignores functions 
 ConVar rcbot_dont_move("rcbot_dontmove","0",0,"if 1 , bots will all move forward");
 ConVar rcbot_runplayercmd_dods("rcbot_runplayer_cmd_dods","417",0,"offset of the DOD:S PlayerRunCommand function");
 ConVar rcbot_runplayercmd_tf2("rcbot_runplayer_cmd_tf2","418",0,"offset of the TF2 PlayerRunCommand function");
-ConVar rcbot_runplayercmd_hookonce("rcbot_runplayer_hookonce","1",0,"function will hook only once, if 0 it will unook and rehook after every map");
+ConVar rcbot_runplayercmd_hookonce("rcbot_runplayer_hookonce","1",0,"function will hook only once, if 0 it will unhook and rehook after every map");
 ConVar rcbot_ladder_offs("rcbot_ladder_offs","42",0,"difference in height for bot to think it has touched the ladder waypoint");
 ConVar rcbot_ffa("rcbot_ffa","0",0,"Free for all mode -- bots shoot everyone");
 ConVar rcbot_prone_enemy_only("rcbot_prone_enemy_only","1",0,"if 1 bots only prone in DOD:S when they have an enemy");
