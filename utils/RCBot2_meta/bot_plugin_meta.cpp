@@ -23,7 +23,7 @@
 #include "shake.h"    //bir3yk
 #endif
 #include "IEffects.h"
-#include "igameevents.h"
+//#include "igameevents.h" // fix by sorry guy - [APG]RoboCop[CL]
 #include "IEngineTrace.h"
 
 #include "Color.h"
@@ -69,7 +69,6 @@ SH_DECL_HOOK1_void(IServerGameClients, SetCommandClient, SH_NOATTRIB, 0, int);
 SH_DECL_HOOK1_void(IServerGameClients, ClientSettingsChanged, SH_NOATTRIB, 0, edict_t *);
 SH_DECL_HOOK5(IServerGameClients, ClientConnect, SH_NOATTRIB, 0, bool, edict_t *, const char*, const char *, char *, int);
 SH_DECL_HOOK2(IGameEventManager2, FireEvent, SH_NOATTRIB, 0, bool, IGameEvent *, bool);
-
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
 SH_DECL_HOOK2_void(IServerGameClients, NetworkIDValidated, SH_NOATTRIB, 0, const char *, const char *);
@@ -803,8 +802,8 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientSettingsChanged, gameclients, this, &RCBotPluginMeta::Hook_ClientSettingsChanged, false);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientConnect, gameclients, this, &RCBotPluginMeta::Hook_ClientConnect, false);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientCommand, gameclients, this, &RCBotPluginMeta::Hook_ClientCommand, false);
-	//Hook FireEvent to our function
-	SH_ADD_HOOK_MEMFUNC(IGameEventManager2, FireEvent, gameevents, this, &RCBotPluginMeta::FireGameEvent, false);
+	//Hook FireEvent to our function - fix by sorry guy - [APG]RoboCop[CL]
+	//SH_ADD_HOOK_MEMFUNC(IGameEventManager2, FireEvent, gameevents, this, &RCBotPluginMeta::FireGameEvent, false);
 
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
@@ -1010,8 +1009,22 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	return true;
 }
 
+// Fix suggested by sorry guy - [APG]RoboCop[CL]
+class CMyListener : public IGameEventListener2
+{
+    CMyListener()
+    {
+        // add myself as client-side listener for all events
+        gameeventmanager->AddListener(this, true);
+    }
+
+    void FireGameEvent(IGameEvent* pEvent)
+    {
+        CBotEvents::executeEvent((void*)pEvent,TYPE_IGAMEEVENT);    
+    }
+};
 // This script dangerous and unstable? [APG]RoboCop[CL]
-bool RCBotPluginMeta::FireGameEvent(IGameEvent * pevent, bool bDontBroadcast)
+/*bool RCBotPluginMeta::FireGameEvent(bool bDontBroadcast, IGameEvent * pevent)
 {
 	static char szKey[128];
 	static char szValue[128];
@@ -1019,7 +1032,7 @@ bool RCBotPluginMeta::FireGameEvent(IGameEvent * pevent, bool bDontBroadcast)
 	CBotEvents::executeEvent((void*)pevent,TYPE_IGAMEEVENT);	
 
 RETURN_META_VALUE(MRES_IGNORED, true);
-}
+}*/
 
 bool RCBotPluginMeta::Unload(char *error, size_t maxlen)
 {

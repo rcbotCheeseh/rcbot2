@@ -45,7 +45,7 @@
 #define __BOT_PLUGIN_META_H__
 
 #include <ISmmPlugin.h>
-#include <igameevents.h>
+//#include "igameevents.h" // fix by sorry guy - [APG]RoboCop[CL]
 #include <iplayerinfo.h>
 #include <sh_vector.h>
 #include "engine_wrappers.h"
@@ -86,8 +86,8 @@ public: //hooks
 	void Hook_ClientPutInServer(edict_t *pEntity, char const *playername);
 	void Hook_SetCommandClient(int index);
 	void Hook_ClientSettingsChanged(edict_t *pEdict);
-	//Called for a game event.  Same definition as server plugins???
-	bool FireGameEvent( IGameEvent *pevent, bool bDontBroadcast );
+	//Called for a game event fix by sorry guy - [APG]RoboCop[CL]
+	//bool FireGameEvent(bool bDontBroadcast, IGameEvent * pevent);
 	void Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper);
 	CBaseEntity *Hook_GiveNamedItem(const char *name, int subtype, CEconItemView *cscript, bool b);
 	bool Hook_ClientConnect(edict_t *pEntity, 

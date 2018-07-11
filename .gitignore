@@ -22,3 +22,14 @@ utils/RCBot2_meta/HPB_Bot2.sdf
 /linux_sdk/obj/vcpm
 /utils/RCBot2/Debug
 /linux_sdk/obj/RCBot2MetaDebug_i486/utils/RCBot2_meta
+linux_sdk/compile.log
+linux_sdk/RCBot2Meta_i486.so
+*.o
+utils/RCBot2_meta/.vs/HPB_Bot2/v15/.suo
+utils/RCBot2_meta/.vs/HPB_Bot2/v15/Browse.VC.db
+utils/RCBot2_meta/.vs/HPB_Bot2/v15/ipch/AutoPCH/d4de04c781d129aa/BOT_PLUGIN_META.ipch
+utils/RCBot2_meta/.vs/HPB_Bot2/v15/Browse.VC.db
+utils/RCBot2_meta/.vs/HPB_Bot2/v15/ipch/AutoPCH/614135fe39e25e38/BOT_CLIENT.ipch
+utils/RCBot2_meta/.vs/HPB_Bot2/v15/Browse.VC.db
+utils/RCBot2_meta/.vs/HPB_Bot2/v15/.suo
+utils/RCBot2_meta/.vs/HPB_Bot2/v15/.suo
