@@ -40,7 +40,8 @@ Or:-
 * Fixed Engineer bots have a harder time placing down a Dispenser, and will do so of their own free will
 * Fixed Engineers might place their Sentry Gun facing the wrong direction
 * Fixed Makefile.rcbot vcpm depreciation fixes for -l:libtier0_srv.so -l:libvstdlib_srv.so
---Fixes by pongo1321--
+--------
+Fixes by pongo1321:-
 * CVar rcbot_show_welcome_msg to enable/disable player welcome text by RCBot2
 * Better compatibility with the VSH gamemode (?)
 * Updated mm headers
