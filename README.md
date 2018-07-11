@@ -11,6 +11,8 @@ A complete guide for installing this plugin can be found at the official RCBot2 
 This thread is also maintained by me.
 
 ### Build
+Run ./compile.sh in 'linux_sdk'
+Or:-
 * Go to `linux_sdk`
 * Type `make -f Makefile.rcbot2 vcpm`
 * Type `make -f Makefile.rcbot2 genmf` (this will generate the Makefiles)
@@ -20,6 +22,7 @@ This thread is also maintained by me.
 * Check the `error.log`
 
 ### Changelog
+* Fixed typo for config.ini 'rcbot_meleeonly' and 'rcbot_aimsmooting'
 * Fixed a bug in getNextRoutePoint, which destroyed bot aiming, because of invalid vLook
 * Fixed reading of files with windows line ending (\r\n)
 * Fixed all offsets for Linux
@@ -27,7 +30,18 @@ This thread is also maintained by me.
 * Fixed a typo while reading bot configs (visionticksclients -> visionticks_clients)
 * Fixed macro in bot_profile.cpp
 * Fixed consecutive use of "addbot"
+* Added more Cvars and TF2 Cvars for config.ini
 * Added debug messages in chat (rcbot debug chat 1)
 * Added automatic bot quota, based on human players
 * You can now edit the path of where you have installed RCBot by writing it in the rcbot2.vdf
-  * (relative paths to the mod folder are also supported)
+(relative paths to the mod folder are also supported)
+* Fixed waypointing system, that had often times end up running into another bot, leaving both of them stuck until either bot is killed
+* FixedSpy bots may end up bumping into a player and not moving, due to how waypointing works. They can only navigate to the set point and are on a fixed track
+* Fixed Engineer bots have a harder time placing down a Dispenser, and will do so of their own free will
+* Fixed Engineers might place their Sentry Gun facing the wrong direction
+* Fixed Makefile.rcbot vcpm depreciation fixes for -l:libtier0_srv.so -l:libvstdlib_srv.so
+--Fixes by pongo1321--
+* CVar rcbot_show_welcome_msg to enable/disable player welcome text by RCBot2
+* Better compatibility with the VSH gamemode (?)
+* Updated mm headers
+* Other minor fixes/changes
