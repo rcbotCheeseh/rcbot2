@@ -345,7 +345,8 @@ void CClient :: think ()
 
 		if ( (m_fUpdatePos > 0) && (m_fSpeed > 0) )
 		{
-			if ( !m_bSentWelcomeMessage )
+			extern ConVar rcbot_show_welcome_msg; // Added by pongo1231
+			if ( !m_bSentWelcomeMessage && rcbot_show_welcome_msg.GetBool() )
 			{
 				m_bSentWelcomeMessage = true;
 

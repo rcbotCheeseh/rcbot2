@@ -803,8 +803,8 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientSettingsChanged, gameclients, this, &RCBotPluginMeta::Hook_ClientSettingsChanged, false);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientConnect, gameclients, this, &RCBotPluginMeta::Hook_ClientConnect, false);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientCommand, gameclients, this, &RCBotPluginMeta::Hook_ClientCommand, false);
-	//Hook FireEvent to our function - but unstable? [APG]RoboCop[CL]
-	//SH_ADD_HOOK_MEMFUNC(IGameEventManager2, FireEvent, gameevents, this, &RCBotPluginMeta::FireGameEvent, false);
+	//Hook FireEvent to our function
+	SH_ADD_HOOK_MEMFUNC(IGameEventManager2, FireEvent, gameevents, this, &RCBotPluginMeta::FireGameEvent, false);
 
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
@@ -1011,7 +1011,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 }
 
 // This script dangerous and unstable? [APG]RoboCop[CL]
-/*bool RCBotPluginMeta::FireGameEvent(IGameEvent * pevent, bool bDontBroadcast)
+bool RCBotPluginMeta::FireGameEvent(IGameEvent * pevent, bool bDontBroadcast)
 {
 	static char szKey[128];
 	static char szValue[128];
@@ -1019,7 +1019,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	CBotEvents::executeEvent((void*)pevent,TYPE_IGAMEEVENT);	
 
 RETURN_META_VALUE(MRES_IGNORED, true);
-}*/
+}
 
 bool RCBotPluginMeta::Unload(char *error, size_t maxlen)
 {
@@ -1478,7 +1478,7 @@ const char *RCBotPluginMeta::GetLicense()
 
 const char *RCBotPluginMeta::GetVersion()
 {
-	return "1.00 (r486-apg)";
+	return "1.00 (r487-apg)";
 }
 
 const char *RCBotPluginMeta::GetDate()

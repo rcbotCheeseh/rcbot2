@@ -133,7 +133,8 @@ CBaseEntity * __fastcall nTF2GiveNamedItem( CBaseEntity *_this, void *punused, c
 		g_pVTable_Attributes = cscript->m_pVTable_Attributes;
 	}
 	
-	if ( rcbot_customloadouts.GetBool() && (cscript != NULL) && ((pBot=CBots::getBotPointer(pEdict)) != NULL) )
+	// Custom Loadouts are bugged right now? - pongo1231
+	if ( /*rcbot_customloadouts.GetBool()*/ false && (cscript != NULL) && ((pBot=CBots::getBotPointer(pEdict)) != NULL) )
 	{		
 		int iclass = CClassInterface::getTF2Class(pEdict);
 

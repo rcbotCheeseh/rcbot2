@@ -100,7 +100,7 @@ ConVar rcbot_tf2_payload_dist_retreat("rcbot_tf2_payload_dist_retreat","512.0",0
 ConVar rcbot_spy_runaway_health("rcbot_spy_runaway_health","70",0,"health which spies run away after attacking");
 ConVar rcbot_supermode("rcbot_supermode","0",0,"If 1 will make every bot skill and reaction much higher");
 ConVar rcbot_addbottime("rcbot_addbottime","0.83",0,"The time in seconds for bots to be added after another");
-ConVar rcbot_customloadouts("rcbot_customloadouts","0",0,"if 1 bots can use custom weapons");
+ConVar rcbot_customloadouts("rcbot_customloadouts","0",0,"!!BROKEN RIGHT NOW!! - if 1 bots can use custom weapons");
 ConVar rcbot_givenameditem_offset("rcbot_givenameditem_offset","471",0,"offset of the GiveNamedItem function");
 ConVar rcbot_equipwearable_offset("rcbot_equipwearable_offset","426",0,"offset of the EquipWearable function");
 ConVar rcbot_rmplayeritem_offset("rcbot_rmplayeritem_offset","270",0,"offset of the RemovePlayerItem function");
@@ -115,6 +115,8 @@ ConVar rcbot_weaponswitch_offset("rcbot_weaponswitch_offset", "264", 0, "offset 
 ConVar rcbot_bot_quota_interval("rcbot_bot_quota_interval", "-1", 0, "Interval between bot quota checks");
 //ConVar rcbot_bot_add_cmd("rcbot_bot_add_cmd","bot",0,"command to add puppet bots");
 //ConVar rcbot_bot_add_cmd("rcbot_hook_engine","1",0,"command to add puppet bots");
+ConVar rcbot_show_welcome_msg("rcbot_show_welcome_msg", "1", 0, "Show welcome message on player connect");
+
 ConVar *sv_gravity = NULL;
 ConVar *sv_cheats = NULL;//("sv_cheats");
 ConVar *mp_teamplay = NULL;

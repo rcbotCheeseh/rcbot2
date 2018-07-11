@@ -781,6 +781,8 @@ void CTeamFortress2Mod :: mapInit ()
 		m_MapType = TF_MAP_CART; // pipeline
 	else if ( strncmp(szmapname,"plr_",4) == 0 )
 		m_MapType = TF_MAP_CARTRACE; // pipeline racing
+	else if ( strncmp(szmapname,"arena_",6) == 0 || strncmp(szmapname,"vsh_",4) == 0 ) // pongo1321
+		m_MapType = TF_MAP_ARENA; // arena mode (also fallback for VS Saxton Hale gamemode)
 	else if ( strncmp(szmapname,"arena_",6) == 0 )
 		m_MapType = TF_MAP_ARENA; // arena mode
 	else if ( strncmp(szmapname,"koth_",5) == 0 )
@@ -954,7 +956,7 @@ case TF_CLASS_SOLDIER: return 80.0f;
 case TF_CLASS_DEMOMAN: return 93.00; 
 case TF_CLASS_MEDIC: return 109.0f; 
 case TF_CLASS_PYRO: return 100.0f; 
-case TF_CLASS_SPY: return 100.0f; 
+case TF_CLASS_SPY: return 109.0f; 
 case TF_CLASS_ENGINEER: return 100.0f; 
 case TF_CLASS_SNIPER: return 100.0f; 
 case TF_CLASS_HWGUY: return 77.0f; 

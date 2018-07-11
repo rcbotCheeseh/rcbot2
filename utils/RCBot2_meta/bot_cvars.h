@@ -108,9 +108,11 @@ extern ConVar rcbot_gamerules_offset;
 extern ConVar rcbot_bot_quota_interval;
 //extern ConVar rcbot_util_learning;
 //extern ConVar rcbot_bot_add_cmd;
-//extern ConVar rcbot_bot_add_cmd;
+
+extern ConVar rcbot_show_welcome_msg; // Added by pongo1231
+
 extern ConVar *sv_gravity;
-extern ConVar *sv_cheats;//;
+extern ConVar *sv_cheats;
 extern ConVar *mp_teamplay;
 extern ConVar *sv_tags;
 extern ConVar *mp_friendlyfire;
