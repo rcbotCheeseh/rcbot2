@@ -1,6 +1,6 @@
 ## RCBot2 v1.00 for Windows and Linux (TF2, HL2:DM, DOD:S)
 
-Note: Those are beta builds recompiled by [APG] Clan for RCBot2 v1.00, and those builds are recompiled for newer Metamod Source engine.
+Note: Those are beta builds recompiled by [APG] Foundation for RCBot2 v1.00, and those builds are recompiled for newer Metamod Source engine.
 
 ### Information
 This is a fork of the official RCBot2 plugin written by Cheeseh, which can be found [here](http://rcbot.bots-united.com/). <br />
@@ -8,10 +8,10 @@ This repository is mainly used for the Linux release of his plugin, but it also 
 
 ### Installation
 A complete guide for installing this plugin can be found at the official RCBot2 forums over [here](http://rcbot.bots-united.com/forums/index.php?showtopic=1967). <br />
-This thread is also maintained by me.
 
 ### Build
 Run ./compile.sh in 'linux_sdk'
+
 Or:-
 * Go to `linux_sdk`
 * Type `make -f Makefile.rcbot2 vcpm`
@@ -36,7 +36,7 @@ Or:-
 * You can now edit the path of where you have installed RCBot by writing it in the rcbot2.vdf
 (relative paths to the mod folder are also supported)
 * Fixed waypointing system, that had often times end up running into another bot, leaving both of them stuck until either bot is killed
-* FixedSpy bots may end up bumping into a player and not moving, due to how waypointing works. They can only navigate to the set point and are on a fixed track
+* Fixed Spy bots may end up bumping into a player and not moving, due to how waypointing works. They can only navigate to the set point and are on a fixed track
 * Fixed Engineer bots have a harder time placing down a Dispenser, and will do so of their own free will
 * Fixed Engineers might place their Sentry Gun facing the wrong direction
 * Fixed Makefile.rcbot vcpm depreciation fixes for -l:libtier0_srv.so -l:libvstdlib_srv.so
@@ -46,3 +46,6 @@ Fixes by pongo1321:-
 * Better compatibility with the VSH gamemode (?)
 * Updated mm headers
 * Other minor fixes/changes
+--------
+Fixes by Cheeseh:-
+* Added a TF2 lag bot prevention fix that prevents causing rcbots to crash in config.ini
