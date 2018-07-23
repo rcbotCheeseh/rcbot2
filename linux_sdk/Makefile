@@ -16,12 +16,13 @@ MOD_PROJ=../dlls/server_scratch-2005.vcproj
 MOD_CONFIG=server_sdk_ReleaseSDKWin32
 
 # the directory the base binaries (tier0_i486.so, etc) are located
-GAME_DIR=/home/desktop/steamcmd/steamapps/common/sdk2007/bin
+#GAME_DIR=/home/desktop/steamcmd/steamapps/common/sdk2007/bin
+GAME_DIR=./gamedir
 
 # compiler options (gcc 3.4.1 or above is required)
-CC=/usr/bin/gcc-4.9
-CPLUS=/usr/bin/g++-4.9
-CLINK=/usr/bin/gcc-4.9
+CC=/usr/bin/gcc
+CPLUS=/usr/bin/g++
+CLINK=/usr/bin/gcc
 CPP_LIB="/usr/lib/libstdc++.a /usr/lib/libgcc_eh.a"
 
 # put any compiler flags you want passed here
@@ -57,7 +58,7 @@ CHOREO_PROJ=../choreoobjects/choreoobjects-2005.vcproj
 
 # the CPU target for the build, must be i486 for now
 ARCH=i486
-ARCH_CFLAGS=-mtune=i686 -march=pentium3 -mmmx -O3
+ARCH_CFLAGS=-mtune=generic -march=i686 -mfpmath=sse -msse -msse2 -m32 -s -pipe
 
 BASE_CFLAGS=-D_LINUX -DNDEBUG -Dstricmp=strcasecmp -D_stricmp=strcasecmp -D_strnicmp=strncasecmp -Dstrnicmp=strncasecmp -D_vsnprintf=vsnprintf -D_alloca=alloca -Dstrcmpi=strcasecmp -Wall -Wno-non-virtual-dtor -Wno-invalid-offsetof
 SHLIBEXT=so

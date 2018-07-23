@@ -1015,7 +1015,52 @@ class CMyListener : public IGameEventListener2
     CMyListener()
     {
         // add myself as client-side listener for all events
-        gameeventmanager->AddListener(this, true);
+        gameeventmanager->AddListener(this, "round_start", false );
+        gameeventmanager->AddListener(this, "post_inventory_application", false );
+        gameeventmanager->AddListener(this, "teamplay_round_win", false );
+        gameeventmanager->AddListener(this, "player_hurt", false );
+        gameeventmanager->AddListener(this, "player_death", false );
+        gameeventmanager->AddListener(this, "bomb_pickup", false );
+        gameeventmanager->AddListener(this, "player_footstep", false );
+        gameeventmanager->AddListener(this, "player_spawn", false );
+        gameeventmanager->AddListener(this, "bomb_dropped", false );
+        gameeventmanager->AddListener(this, "teamplay_overtime_begin", false );
+        gameeventmanager->AddListener(this, "player_healed", false );
+        gameeventmanager->AddListener(this, "player_teleported", false );
+        gameeventmanager->AddListener(this, "weapon_fire", false );
+        gameeventmanager->AddListener(this, "player_sapped_object", false );
+        gameeventmanager->AddListener(this, "object_destroyed", false );
+        gameeventmanager->AddListener(this, "teamplay_point_captured", false );
+        gameeventmanager->AddListener(this, "teamplay_round_active", false );
+        gameeventmanager->AddListener(this, "teamplay_capture_broken", false );
+        gameeventmanager->AddListener(this, "teamplay_capture_blocked", false );
+        gameeventmanager->AddListener(this, "teamplay_point_startcapture", false );
+        gameeventmanager->AddListener(this, "mvm_wave_failed", false );
+        gameeventmanager->AddListener(this, "mvm_wave_complete", false );
+        gameeventmanager->AddListener(this, "controlpoint_starttouch", false );
+        gameeventmanager->AddListener(this, "controlpoint_endtouch", false );
+        gameeventmanager->AddListener(this, "teamplay_round_start", false );
+        gameeventmanager->AddListener(this, "teamplay_setup_finished", false );
+        gameeventmanager->AddListener(this, "bullet_impact", false );
+        gameeventmanager->AddListener(this, "object_destroyed", false );
+        gameeventmanager->AddListener(this, "player_builtobject", false );
+        gameeventmanager->AddListener(this, "player_upgradedobject", false );
+        gameeventmanager->AddListener(this, "player_changeclass", false );
+        gameeventmanager->AddListener(this, "teamplay_point_locked", false );
+        gameeventmanager->AddListener(this, "teamplay_point_unlocked", false );
+        gameeventmanager->AddListener(this, "mvm_bomb_alarm_triggered", false );
+        gameeventmanager->AddListener(this, "teamplay_flag_event", false );
+        gameeventmanager->AddListener(this, "ctf_flag_captured", false );
+        gameeventmanager->AddListener(this, "dod_stats_weapon_attack", false );
+        gameeventmanager->AddListener(this, "dod_bomb_exploded", false );
+        gameeventmanager->AddListener(this, "dod_bomb_planted", false );
+        gameeventmanager->AddListener(this, "dod_bomb_defused", false );
+        gameeventmanager->AddListener(this, "dod_point_captured", false );
+        gameeventmanager->AddListener(this, "player_changeclass", false );
+        gameeventmanager->AddListener(this, "dod_round_start", false );
+        gameeventmanager->AddListener(this, "dod_round_active", false );
+        gameeventmanager->AddListener(this, "dod_round_win", false );
+        gameeventmanager->AddListener(this, "dod_game_over", false );
     }
 
     void FireGameEvent(IGameEvent* pEvent)

@@ -1843,12 +1843,13 @@ void CBot :: freeMapMemory ()
 	// we can save things here
 	// 
 	/////////////////////////////////
-	if ( m_pButtons != NULL )
+	//fix by sorry guy - [APG]RoboCop[CL]
+	/*if ( m_pButtons != NULL )
 	{
 		m_pButtons->freeMemory();
 		delete m_pButtons;
 		m_pButtons = NULL;
-	}
+	}*/
 	/////////////////////////////////
 	if ( m_pSchedules != NULL )
 	{

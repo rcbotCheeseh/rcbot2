@@ -68,7 +68,7 @@ CBotButtons :: CBotButtons()
 	add(new CBotButton(IN_ALT1)); // for proning
 	add(new CBotButton(IN_RUN)); // ????
 
-	m_bLetGoAll = false;
+	//m_bLetGoAll = false; //fix by sorry guy - [APG]RoboCop[CL]
 }
 
 void CBotButtons :: holdButton ( int iButtonId, float fFrom, float fFor, float fLetGoTime )
@@ -95,29 +95,30 @@ void CBotButtons :: letGo (int iButtonId)
 	}
 }
 
-int CBotButtons :: getBitMask ()
+int CBotButtons::getBitMask ()
 {
-	if ( m_bLetGoAll )
-		return 0;
-	else
-	{
+	//fix by sorry guy - [APG]RoboCop[CL]
+    //if ( m_bLetGoAll )
+    //   return 0;
+    //else
+    //{
 
-		int iBitMask = 0;
+        int iBitMask = 0;
 
-		float fTime = engine->Time();
+        float fTime = engine->Time();
 
-		for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
-		{			
-			if ( m_theButtons[i]->held(fTime) )
-			{
-				m_theButtons[i]->unTap();
-				iBitMask |= m_theButtons[i]->getID();
-			}
-		}
+        for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
+        {
+            if ( m_theButtons[i]->held(fTime) )
+            {
+                m_theButtons[i]->unTap();
+                iBitMask |= m_theButtons[i]->getID();
+            }
+        }
 
-		return iBitMask;
+        return iBitMask;
 
-	}
+    //}
 }
 
 bool CBotButtons :: canPressButton ( int iButtonId )

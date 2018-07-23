@@ -86,7 +86,8 @@ class CBotButtons
 public:
 	CBotButtons();
 
-	void freeMemory ()
+	//fix by sorry guy - [APG]RoboCop[CL]
+	/*void freeMemory ()
 	{
 		for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
 		{			
@@ -94,7 +95,7 @@ public:
 		}
 
 		m_theButtons.clear();
-	}
+	}*/
 
 	void letGo (int iButtonId);
 	void holdButton ( int iButtonId, float fFrom = 0.0, float fFor = 1.0f, float m_fLetGoTime = 0.0f );
