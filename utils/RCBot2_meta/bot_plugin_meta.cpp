@@ -23,7 +23,7 @@
 #include "shake.h"    //bir3yk
 #endif
 #include "IEffects.h"
-//#include "igameevents.h" // fix by sorry guy - [APG]RoboCop[CL]
+#include "igameevents.h"
 #include "IEngineTrace.h"
 
 #include "Color.h"
@@ -139,6 +139,7 @@ int UTIL_ListAttributesOnEntity(edict_t *pEdict)
 	if (!pAttributeList)
 		return 0;
 
+	//local variable is initialized but not referenced - [APG]RoboCop[CL]
 	int *pAttribList1 = (int*)((unsigned int)pAttributeList + 4);
 
 	int *pAttribList = (int*)((unsigned int)pEntity + offset + 4);
@@ -802,8 +803,8 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientSettingsChanged, gameclients, this, &RCBotPluginMeta::Hook_ClientSettingsChanged, false);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientConnect, gameclients, this, &RCBotPluginMeta::Hook_ClientConnect, false);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientCommand, gameclients, this, &RCBotPluginMeta::Hook_ClientCommand, false);
-	//Hook FireEvent to our function - fix by sorry guy - [APG]RoboCop[CL]
-	//SH_ADD_HOOK_MEMFUNC(IGameEventManager2, FireEvent, gameevents, this, &RCBotPluginMeta::FireGameEvent, false);
+	//Hook FireEvent to our function
+	SH_ADD_HOOK_MEMFUNC(IGameEventManager2, FireEvent, gameevents, this, &RCBotPluginMeta::FireGameEvent, false);
 
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
@@ -1009,67 +1010,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	return true;
 }
 
-// Fix suggested by sorry guy - [APG]RoboCop[CL]
-class CMyListener : public IGameEventListener2
-{
-    CMyListener()
-    {
-        // add myself as client-side listener for all events
-        gameeventmanager->AddListener(this, "round_start", false );
-        gameeventmanager->AddListener(this, "post_inventory_application", false );
-        gameeventmanager->AddListener(this, "teamplay_round_win", false );
-        gameeventmanager->AddListener(this, "player_hurt", false );
-        gameeventmanager->AddListener(this, "player_death", false );
-        gameeventmanager->AddListener(this, "bomb_pickup", false );
-        gameeventmanager->AddListener(this, "player_footstep", false );
-        gameeventmanager->AddListener(this, "player_spawn", false );
-        gameeventmanager->AddListener(this, "bomb_dropped", false );
-        gameeventmanager->AddListener(this, "teamplay_overtime_begin", false );
-        gameeventmanager->AddListener(this, "player_healed", false );
-        gameeventmanager->AddListener(this, "player_teleported", false );
-        gameeventmanager->AddListener(this, "weapon_fire", false );
-        gameeventmanager->AddListener(this, "player_sapped_object", false );
-        gameeventmanager->AddListener(this, "object_destroyed", false );
-        gameeventmanager->AddListener(this, "teamplay_point_captured", false );
-        gameeventmanager->AddListener(this, "teamplay_round_active", false );
-        gameeventmanager->AddListener(this, "teamplay_capture_broken", false );
-        gameeventmanager->AddListener(this, "teamplay_capture_blocked", false );
-        gameeventmanager->AddListener(this, "teamplay_point_startcapture", false );
-        gameeventmanager->AddListener(this, "mvm_wave_failed", false );
-        gameeventmanager->AddListener(this, "mvm_wave_complete", false );
-        gameeventmanager->AddListener(this, "controlpoint_starttouch", false );
-        gameeventmanager->AddListener(this, "controlpoint_endtouch", false );
-        gameeventmanager->AddListener(this, "teamplay_round_start", false );
-        gameeventmanager->AddListener(this, "teamplay_setup_finished", false );
-        gameeventmanager->AddListener(this, "bullet_impact", false );
-        gameeventmanager->AddListener(this, "object_destroyed", false );
-        gameeventmanager->AddListener(this, "player_builtobject", false );
-        gameeventmanager->AddListener(this, "player_upgradedobject", false );
-        gameeventmanager->AddListener(this, "player_changeclass", false );
-        gameeventmanager->AddListener(this, "teamplay_point_locked", false );
-        gameeventmanager->AddListener(this, "teamplay_point_unlocked", false );
-        gameeventmanager->AddListener(this, "mvm_bomb_alarm_triggered", false );
-        gameeventmanager->AddListener(this, "teamplay_flag_event", false );
-        gameeventmanager->AddListener(this, "ctf_flag_captured", false );
-        gameeventmanager->AddListener(this, "dod_stats_weapon_attack", false );
-        gameeventmanager->AddListener(this, "dod_bomb_exploded", false );
-        gameeventmanager->AddListener(this, "dod_bomb_planted", false );
-        gameeventmanager->AddListener(this, "dod_bomb_defused", false );
-        gameeventmanager->AddListener(this, "dod_point_captured", false );
-        gameeventmanager->AddListener(this, "player_changeclass", false );
-        gameeventmanager->AddListener(this, "dod_round_start", false );
-        gameeventmanager->AddListener(this, "dod_round_active", false );
-        gameeventmanager->AddListener(this, "dod_round_win", false );
-        gameeventmanager->AddListener(this, "dod_game_over", false );
-    }
-
-    void FireGameEvent(IGameEvent* pEvent)
-    {
-        CBotEvents::executeEvent((void*)pEvent,TYPE_IGAMEEVENT);    
-    }
-};
-// This script dangerous and unstable? [APG]RoboCop[CL]
-/*bool RCBotPluginMeta::FireGameEvent(bool bDontBroadcast, IGameEvent * pevent)
+bool RCBotPluginMeta::FireGameEvent(IGameEvent * pevent, bool bDontBroadcast)
 {
 	static char szKey[128];
 	static char szValue[128];
@@ -1077,7 +1018,7 @@ class CMyListener : public IGameEventListener2
 	CBotEvents::executeEvent((void*)pevent,TYPE_IGAMEEVENT);	
 
 RETURN_META_VALUE(MRES_IGNORED, true);
-}*/
+}
 
 bool RCBotPluginMeta::Unload(char *error, size_t maxlen)
 {
