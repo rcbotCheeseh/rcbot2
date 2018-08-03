@@ -127,6 +127,8 @@ class MMSConfig(object):
         '-msse',
         '-m32',
       ]
+
+      cfg.cxxflags += [ '-std=c++11' ]
       if (cxx.name == 'gcc' and cxx.majorVersion >= 4) or cxx.name == 'clang':
         cfg.cflags += ['-fvisibility=hidden']
         cfg.cxxflags += ['-fvisibility-inlines-hidden']
@@ -326,6 +328,8 @@ class MMSConfig(object):
 
       if sdk.name in ['blade', 'insurgency', 'doi', 'csgo', 'dota']:
         compiler.postlink += [compiler.Dep(os.path.join(lib_folder, 'interfaces_i486.a'))]
+        if sdk.name == 'bms':
+          compiler.postlink += [compiler.Dep(os.path.join(lib_folder, 'mathlib.a'))]
 
     binary = self.LibraryBuilder(compiler, name)
 
@@ -345,6 +349,8 @@ class MMSConfig(object):
       libs = ['tier0', 'tier1', 'vstdlib']
       if sdk.name in ['swarm', 'blade', 'insurgency', 'doi', 'csgo', 'dota']:
         libs.append('interfaces')
+      if sdk.name == 'bms':
+        libs.append('mathlib')
       for lib in libs:
         lib_path = os.path.join(sdk.path, 'lib', 'public', lib) + '.lib'
         binary.compiler.linkflags.append(binary.Dep(lib_path))
