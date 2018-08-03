@@ -49,3 +49,4 @@ Fixes by pongo1321:-
 --------
 Fixes by Cheeseh:-
 * Added a TF2 lag bot prevention fix that prevents causing rcbots to crash in config.ini
+* Added new 2018 HookInfo Update Tool in /rcbot2/tools folder
