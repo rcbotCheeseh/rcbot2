@@ -21,6 +21,9 @@
 #include "tier2/tier2.h"
 #ifdef __linux__
 #include "shake.h"    //bir3yk
+#ifndef sscanf_s
+#define sscanf_s sscanf
+#endif
 #endif
 #include "eiface.h"
 #include "bot_const.h"
@@ -71,6 +74,7 @@ size_t CSignatureFunction::decodeHexString(unsigned char *buffer, size_t maxleng
 			s_byte[2] = '\0';
 			// Read it as an integer 
 			sscanf_s(s_byte, "%x", &r_byte);
+			
 			// Save the value 
 			buffer[written - 1] = r_byte;
 			// Adjust index 
