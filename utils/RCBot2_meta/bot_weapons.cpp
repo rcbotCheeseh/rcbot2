@@ -661,27 +661,27 @@ CBotWeapon *CBotWeapons :: getCurrentWeaponInSlot ( int iSlot )
 }
 
 const char *szWeaponFlags[] = {
-	{ "primary_attack" },
-	{ "secondary_attack" },
-	{ "explosive" },
-	{ "melee" },
-	{ "underwater" },
-	{ "hold_attack" },
-	{ "special" },
-	{ "can_kill_pipes" },
-	{ "can_deflect_rockets" },
-	{ "is_grav_gun" },
-	{ "has_explosive_secondary" },
-	{ "is_zoomable" },
-	{ "is_deployable_dods" },
-	{ "has_melee_secondary" },
-	{ "has_fire_select_mode_dods" },
-	{ "cant_be_fired_unzoomed_undeployed_dods" },
-	{ "is_grenade" },
-	{ "has_high_recoil_dods" },
-	{ "has_scope" },
-	{ "weapon_fires_projectile" },
-	{ "\0" }
+	 "primary_attack" ,
+	 "secondary_attack" ,
+	 "explosive" ,
+	 "melee" ,
+	 "underwater" ,
+	 "hold_attack" ,
+	 "special" ,
+	 "can_kill_pipes" ,
+	 "can_deflect_rockets" ,
+	 "is_grav_gun" ,
+	 "has_explosive_secondary" ,
+	 "is_zoomable" ,
+	 "is_deployable_dods" ,
+	 "has_melee_secondary" ,
+	 "has_fire_select_mode_dods" ,
+	 "cant_be_fired_unzoomed_undeployed_dods" ,
+	 "is_grenade" ,
+	 "has_high_recoil_dods" ,
+	 "has_scope" ,
+	 "weapon_fires_projectile" ,
+	 "\0"
 };
 
 void CWeapons::loadWeapons(const char *szWeaponListName, WeaponsData_t *pDefault)
