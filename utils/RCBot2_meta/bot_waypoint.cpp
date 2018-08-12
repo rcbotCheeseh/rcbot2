@@ -2222,6 +2222,7 @@ int CWaypoints :: getClosestFlagged ( int iFlags, Vector &vOrigin, int iTeam, fl
 	int iFrom = CWaypointLocations::NearestWaypoint(vOrigin,fDist,-1,true,false,true,NULL,false,iTeam);
 
 	CWaypoint *pWpt;
+	CBotMod *pCurrentMod = CBotGlobals::getCurrentMod();
 
 	for ( i = 0; i < size; i ++ )
 	{
@@ -2237,7 +2238,8 @@ int CWaypoints :: getClosestFlagged ( int iFlags, Vector &vOrigin, int iTeam, fl
 		{
 			if ( pWpt->hasFlag(iFlags) )
 			{
-				if ( !CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(pWpt->getArea()) )
+				// BUG FIX for DOD:S 
+				if (!pCurrentMod->isWaypointAreaValid(pWpt->getArea(), iFlags)) // CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(pWpt->getArea()) )
 					continue;
 
 				if ( (iFrom == -1) )
@@ -2490,6 +2492,8 @@ int CWaypoints :: nearestWaypointGoal ( int iFlags, Vector &origin, float fDist,
 
 	size = numWaypoints();
 
+	CBotMod *pCurrentMod = CBotGlobals::getCurrentMod();
+
 	for ( i = 0; i < size; i ++ )
 	{
 		pWpt = &m_theWaypoints[i];
@@ -2498,7 +2502,8 @@ int CWaypoints :: nearestWaypointGoal ( int iFlags, Vector &origin, float fDist,
 		{
 			if ( (iFlags == -1) || pWpt->hasFlag(iFlags) )
 			{
-				if ( CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(pWpt->getArea()) )
+				// FIX DODS bug
+				if (pCurrentMod->isWaypointAreaValid(pWpt->getArea(), iFlags)) // CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(pWpt->getArea()))
 				{
 					if ( (distance = pWpt->distanceFrom(origin)) < fDist)
 					{
@@ -2744,6 +2749,8 @@ CWaypoint *CWaypoints :: randomWaypointGoalNearestArea ( int iFlags, int iTeam, 
 
 	dataUnconstArray<AStarNode*> goals;
 
+	CBotMod *pCurrentMod = CBotGlobals::getCurrentMod();
+
 	if ( iWpt1 == -1 )
 	   iWpt1 = CWaypointLocations::NearestWaypoint(*origin,200,-1);
 
@@ -2758,7 +2765,8 @@ CWaypoint *CWaypoints :: randomWaypointGoalNearestArea ( int iFlags, int iTeam, 
 		{
 			if ( (iFlags == -1) || pWpt->hasSomeFlags(iFlags) )
 			{
-				if ( !bForceArea && !CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(pWpt->getArea()) )
+				//DOD:S Bug
+				if (!bForceArea && !pCurrentMod->isWaypointAreaValid(pWpt->getArea(), iFlags))
 					continue;
 				else if ( bForceArea && (pWpt->getArea() != iArea) )
 					continue;
@@ -2909,6 +2917,8 @@ CWaypoint *CWaypoints :: randomWaypointGoal ( int iFlags, int iTeam, int iArea, 
 
 	dataUnconstArray<CWaypoint*> goals;
 
+	CBotMod *pCurrentMod = CBotGlobals::getCurrentMod();
+
 	for ( i = 0; i < size; i ++ )
 	{
 		if ( iIgnore == i )
@@ -2920,7 +2930,7 @@ CWaypoint *CWaypoints :: randomWaypointGoal ( int iFlags, int iTeam, int iArea, 
 		{
 			if ( (iFlags == -1) || pWpt->hasSomeFlags(iFlags) )
 			{
-				if ( !bForceArea && !CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(pWpt->getArea()) )
+				if (!bForceArea && !pCurrentMod->isWaypointAreaValid(pWpt->getArea(), iFlags))
 					continue;
 				else if ( bForceArea && (pWpt->getArea() != iArea) )
 					continue;

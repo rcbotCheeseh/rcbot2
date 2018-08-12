@@ -743,7 +743,7 @@ public:
 
 	void selectWeaponName ( const char *szWeaponName );
 
-	CBotWeapon *getCurrentWeapon ();
+	virtual CBotWeapon *getCurrentWeapon();
 
 	void kill ();
 

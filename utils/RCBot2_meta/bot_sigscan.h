@@ -79,6 +79,14 @@ public:
 	bool callme(edict_t *pEnt, CAttributeList *list, CEconItemAttributeDefinition *attrib,float value);
 };
 
+class CGetAttributeDefinitionByID : public CSignatureFunction
+{
+public:
+	CGetAttributeDefinitionByID(CRCBotKeyValueList *list, void *pAddrBase);
+
+	CEconItemAttributeDefinition *callme(CEconItemSchema *schema, int id);
+};
+
 class CGetAttributeDefinitionByName : public CSignatureFunction
 {
 public:
@@ -128,6 +136,7 @@ extern CGetAttributeDefinitionByName *g_pGetAttributeDefinitionByName;
 extern CAttributeList_GetAttributeByID *g_pAttribList_GetAttributeByID;
 extern CGameRulesObject *g_pGameRules_Obj;
 extern CCreateGameRulesObject *g_pGameRules_Create_Obj;
+extern CGetAttributeDefinitionByID *g_pGetAttributeDefinitionByID;
 
 void *GetGameRules();
 

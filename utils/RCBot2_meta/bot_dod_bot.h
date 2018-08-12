@@ -168,8 +168,6 @@ public:
 
 	void getTasks (unsigned int iIgnore);
 
-	void fixWeapons ();
-
 	bool executeAction ( CBotUtility *util );
 
 	void updateConditions ();

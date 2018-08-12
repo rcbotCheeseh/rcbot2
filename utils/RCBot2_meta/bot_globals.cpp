@@ -1037,6 +1037,7 @@ void CBotGlobals :: buildFileName ( char *szOutput, const char *szFile, const ch
 	{
 #ifdef HOMEFOLDER
 		char home[512];
+		home[0] = 0;
 #endif
 		szOutput[0] = 0;
 

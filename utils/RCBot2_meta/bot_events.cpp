@@ -874,10 +874,11 @@ void CTF2PointStartCapture :: execute ( IBotEventInterface *pEvent )
 void CTF2MannVsMachineAlarm :: execute ( IBotEventInterface *pEvent )
 {
 	CBroadcastMVMAlarm alarm = CBroadcastMVMAlarm(CTeamFortress2Mod::getMVMCapturePointRadius());
-	   // MUST BE AFTER POINTS HAVE BEEN UPDATED!
-    CBots::botFunction(&alarm);
 
 	CTeamFortress2Mod::MVMAlarmSounded();
+
+	// MUST BE AFTER POINTS HAVE BEEN UPDATED!
+	CBots::botFunction(&alarm);
 }
 
 void CTF2PointCaptured :: execute ( IBotEventInterface *pEvent )

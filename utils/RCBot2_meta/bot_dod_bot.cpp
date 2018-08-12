@@ -1184,15 +1184,8 @@ void CDODBot :: modThink ()
 	else if ( m_iEnemyTeam == TEAM_AXIS ) // im axis and my enemy team is wrong
 		m_iEnemyTeam = TEAM_ALLIES;
 
-	// find weapons and neat stuff
-	//if ( m_fFixWeaponTime < engine->Time() )
-	//{
-	//fixWeapons(); // done in bot.cpp before mod think
 	m_pCurrentWeapon = CClassInterface::getCurrentWeapon(m_pEdict);
 	pWeapon = getCurrentWeapon();
-
-	//m_fFixWeaponTime = engine->Time() + 1.0f;
-	//}
 
 	if ( m_pCurrentWeapon )
 	{
@@ -1446,55 +1439,6 @@ void CDODBot :: modThink ()
 			}
 		}
 	}
-}
-
-void CDODBot :: fixWeapons ()
-{
-	/*
-	m_Weapons = CClassInterface::getWeaponList(m_pEdict);
-
-	if ( m_pWeapons )
-		m_pWeapons->update();*/
-	/*
-	if ( m_pWeapons && m_Weapons ) 
-	{
-		//m_pWeapons->clearWeapons();
-
-		// loop through the weapons array in the CBaseCombatCharacter
-		for ( unsigned int i = 0; i < MAX_WEAPONS; i ++ )
-		{
-			// get the information from the bot 
-			const char *classname;
-			CWeapon *pBotWeapon;
-			CBotWeapon *pHasWeapon;
-			int iWeaponState;
-
-			edict_t *pWeapon = INDEXENT(m_Weapons[i].GetEntryIndex());
-
-			if ( pWeapon && CBotGlobals::entityIsValid(pWeapon) )
-			{
-				classname = pWeapon->GetClassName();
-
-				// find this weapon in our initialized array in the code
-				pBotWeapon = CWeapons::getWeapon(classname);
-
-				if ( pBotWeapon )
-				{
-					iWeaponState = CClassInterface::getWeaponState(pWeapon);
-					// see if the bot has this weapon or not already
-					pHasWeapon = m_pWeapons->getWeapon(pBotWeapon);
-
-					// if the bot doesn't have it or the state has changed, update
-					if ( pHasWeapon && pHasWeapon->hasWeapon() && (iWeaponState == WEAPON_NOT_CARRIED) )
-						pHasWeapon->setHasWeapon(false);
-					else if ( !pHasWeapon || !pHasWeapon->hasWeapon() )
-						m_pWeapons->addWeapon(pBotWeapon->getID(),pWeapon);
-					else if ( pHasWeapon && (pHasWeapon->getWeaponEntity() != pWeapon) )
-						pHasWeapon->setWeaponEntity(pWeapon);
-				}
-			}
-		}
-	}*/
 }
 
 void CDODBot ::defending()

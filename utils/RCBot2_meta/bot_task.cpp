@@ -1590,6 +1590,8 @@ void CBotBackstab ::execute (CBot *pBot,CBotSchedule *pSchedule)
 	AngleVectors(CBotGlobals::entityEyeAngles(pEnemy),&vangles);
 	vrear = CBotGlobals::entityOrigin(pEnemy) - (vangles * 45) + Vector(0,0,32);
 
+	pTF2Bot->resetAttackingEnemy();
+
 	if ( pBot->distanceFrom(vrear) > 40 ) 
 	{
 		pBot->setMoveTo(vrear);
@@ -2670,7 +2672,8 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 
 		pChooseWeapon = pWeaponList->getWeapon(CWeapons::getWeapon(TF2_WEAPON_FLAMETHROWER));
 		
-		if ( !pChooseWeapon->outOfAmmo(pBot) )
+
+		if (pChooseWeapon && pChooseWeapon->hasWeapon() && !pChooseWeapon->outOfAmmo(pBot))
 		{
 			// use flamethrower
 			iAttackProb = 90;
@@ -2865,14 +2868,14 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 {
 	CBotWeapon *pBotWeapon;
 	CWeapon *pWeapon;
+	CBotTF2 *pBotTF2;
 
+	pBotTF2 = (CBotTF2*)pBot;
 	// Sniper should move if the point has changed, so he's not wasting time
 	if (!CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(m_iArea))
 		fail(); // move up
 	else if (m_iArea > 0)
 	{
-		CBotTF2 *pBotTF2 = (CBotTF2*)pBot;
-
 		if (CTeamFortress2Mod::isAttackDefendMap())
 		{
 			if (pBotTF2->getTeam() == TF2_TEAM_BLUE)
@@ -2892,7 +2895,7 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 
 	// disable normal attack functions
 	pBot->wantToShoot(false);
-
+	pBotTF2->resetAttackingEnemy();
 	// disable listening functions
 	pBot->wantToListen(false);
 	pBot->wantToInvestigateSound(false);
@@ -3705,8 +3708,18 @@ void CThrowGrenadeTask ::execute (CBot *pBot,CBotSchedule *pSchedule)
 		}
 	}
 
-	if ( m_fTime < engine->Time() )
+	// time out
+	if (m_fTime < engine->Time())
+	{
 		fail();
+		return;
+	}
+	// used all grenades Updated: 2017-05-22 Created: 2017 - 05 - 22 Creator : Gabor Szuromi
+	if (!m_pWeapon || !m_pWeapon->hasWeapon())
+	{
+		complete();
+		return;
+	}
 
 	if ( m_pWeapon->getAmmo(pBot) < m_iAmmo )
 	{
@@ -4466,7 +4479,12 @@ void CBotTF2DemomanPipeTrap :: execute (CBot *pBot,CBotSchedule *pSchedule)
 {
 	bool bFail = false;
 	CBotTF2 *pTF2Bot = (CBotTF2*)pBot;
-
+	if (pBot->getWeapons()->getWeapon(CWeapons::getWeapon(TF2_WEAPON_PIPEBOMBS)) == NULL)
+	{
+		// don't have the weapon
+		fail();
+		return;
+	}
 	pBot->wantToChangeWeapon(false);
 
 	if ( pBot->getEnemy() && pBot->hasSomeConditions(CONDITION_SEE_CUR_ENEMY) )
@@ -4834,6 +4852,9 @@ void CBotTF2AttackSentryGunTask::execute (CBot *pBot,CBotSchedule *pSchedule)
 	{
 		// use this shooting method below
 		pBot->wantToShoot(false);
+
+		CBotTF2 *pTF2Bot = (CBotTF2*)pBot;
+		pTF2Bot->resetAttackingEnemy();
 		// attack
 		pBot->handleAttack(m_pWeapon,m_pSentryGun);
 	}

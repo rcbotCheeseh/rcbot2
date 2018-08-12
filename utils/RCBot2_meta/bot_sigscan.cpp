@@ -29,7 +29,7 @@
 #include "bot_kv.h"
 #include "bot_getprop.h"
 #include "bot_sigscan.h"
-
+#include "bot_mods.h"
 
 CGetEconItemSchema *g_pGetEconItemSchema = NULL;
 CSetRuntimeAttributeValue *g_pSetRuntimeAttributeValue = NULL;
@@ -37,6 +37,7 @@ CGetAttributeDefinitionByName *g_pGetAttributeDefinitionByName = NULL;
 CAttributeList_GetAttributeByID *g_pAttribList_GetAttributeByID = NULL;
 CGameRulesObject *g_pGameRules_Obj = NULL;
 CCreateGameRulesObject *g_pGameRules_Create_Obj = NULL;
+CGetAttributeDefinitionByID *g_pGetAttributeDefinitionByID = NULL;
 
 void **g_pGameRules = NULL;
 
@@ -48,7 +49,7 @@ void *GetGameRules()
 	return *g_pGameRules;
 }
 
-size_t CSignatureFunction :: decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr)
+size_t CSignatureFunction::decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr)
 {
 	size_t written = 0;
 	size_t length = strlen(hexstr);
@@ -69,7 +70,7 @@ size_t CSignatureFunction :: decodeHexString(unsigned char *buffer, size_t maxle
 			s_byte[1] = hexstr[i + 3];
 			s_byte[2] = '\0';
 			// Read it as an integer 
-			sscanf(s_byte, "%x", &r_byte);
+			sscanf_s(s_byte, "%x", &r_byte);
 			// Save the value 
 			buffer[written - 1] = r_byte;
 			// Adjust index 
@@ -118,8 +119,8 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 	}
 
 	// Check architecture, which is 32-bit/x86 right now
-		// Should change this for 64-bit if Valve gets their act together
-	
+	// Should change this for 64-bit if Valve gets their act together
+
 	if (file->Machine != IMAGE_FILE_MACHINE_I386)
 	{
 		return false;
@@ -167,8 +168,8 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 	}
 
 	// Check ELF architecture, which is 32-bit/x86 right now
-		// Should change this for 64-bit if Valve gets their act together
-		
+	// Should change this for 64-bit if Valve gets their act together
+
 	if (file->e_ident[EI_CLASS] != ELFCLASS32 || file->e_machine != EM_386 || file->e_ident[EI_DATA] != ELFDATA2LSB)
 	{
 		return false;
@@ -188,7 +189,7 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 		Elf32_Phdr &hdr = phdr[i];
 
 		// We only really care about the segment with executable code 
-		if (hdr.p_type == PT_LOAD && hdr.p_flags == (PF_X|PF_R))
+		if (hdr.p_type == PT_LOAD && hdr.p_flags == (PF_X | PF_R))
 		{
 			// From glibc, elf/dl-load.c:
 			// c->mapend = ((ph->p_vaddr + ph->p_filesz + GLRO(dl_pagesize) - 1) 
@@ -196,7 +197,7 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 			//
 			// In glibc, the segment file size is aligned up to the nearest page size and
 			// added to the virtual address of the segment. We just want the size here.
-			
+
 			lib.memorySize = PAGE_ALIGN_UP(hdr.p_filesz);
 			break;
 		}
@@ -245,7 +246,7 @@ void *CSignatureFunction::findPattern(const void *libPtr, const char *pattern, s
 	return NULL;
 }
 // Sourcemod - Metamod - Allied Modders.net
-void *CSignatureFunction::findSignature ( void *addrInBase, const char *signature )
+void *CSignatureFunction::findSignature(void *addrInBase, const char *signature)
 {
 	// First, preprocess the signature 
 	unsigned char real_sig[511];
@@ -256,21 +257,21 @@ void *CSignatureFunction::findSignature ( void *addrInBase, const char *signatur
 
 	if (real_bytes >= 1)
 	{
-		return findPattern(addrInBase, (char*) real_sig, real_bytes);
+		return findPattern(addrInBase, (char*)real_sig, real_bytes);
 	}
 
 	return NULL;
 }
 
 
-void CSignatureFunction :: findFunc ( CRCBotKeyValueList *kv, const char*pKey, void *pAddrBase, const char *defaultsig )
+void CSignatureFunction::findFunc(CRCBotKeyValueList *kv, const char*pKey, void *pAddrBase, const char *defaultsig)
 {
 	char *sig = NULL;
 
-	if ( kv->getString(pKey,&sig) && sig )
-		m_func = findSignature(pAddrBase,sig);
+	if (kv->getString(pKey, &sig) && sig)
+		m_func = findSignature(pAddrBase, sig);
 	else
-		m_func = findSignature(pAddrBase,defaultsig);
+		m_func = findSignature(pAddrBase, defaultsig);
 }
 
 CGameRulesObject::CGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase)
@@ -299,12 +300,12 @@ void **CCreateGameRulesObject::getGameRules()
 	return *reinterpret_cast<void ***>(addr + rcbot_gamerules_offset.GetInt());
 }
 
-CGetEconItemSchema::CGetEconItemSchema ( CRCBotKeyValueList *list, void *pAddrBase )
+CGetEconItemSchema::CGetEconItemSchema(CRCBotKeyValueList *list, void *pAddrBase)
 {
 #ifdef _WIN32
-	findFunc(list,"get_item_schema_win",pAddrBase,"\\xE8\\x2A\\x2A\\x2A\\x2A\\x83\\xC0\\x04\\xC3");
+	findFunc(list, "get_item_schema_win", pAddrBase, "\\xE8\\x2A\\x2A\\x2A\\x2A\\x83\\xC0\\x04\\xC3");
 #else
-	findFunc(list,"get_item_schema_linux",pAddrBase,"@_Z15GEconItemSchemav");
+	findFunc(list, "get_item_schema_linux", pAddrBase, "@_Z15GEconItemSchemav");
 #endif
 }
 
@@ -313,7 +314,7 @@ CEconItemSchema *CGetEconItemSchema::callme()
 	void *thefunc = m_func;
 	CEconItemSchema *pret = NULL;
 
-	if ( thefunc == NULL )
+	if (thefunc == NULL)
 		return NULL;
 #ifdef _WIN32
 	__asm
@@ -331,51 +332,94 @@ CEconItemSchema *CGetEconItemSchema::callme()
 
 
 
-CSetRuntimeAttributeValue::CSetRuntimeAttributeValue ( CRCBotKeyValueList *list, void *pAddrBase )
+CSetRuntimeAttributeValue::CSetRuntimeAttributeValue(CRCBotKeyValueList *list, void *pAddrBase)
 {
 #ifdef _WIN32
-	findFunc(list,"set_attribute_value_win",pAddrBase,"\\x55\\x8B\\xEC\\x83\\xEC\\x14\\x33\\xD2\\x53\\x8B\\xD9\\x56\\x57\\x8B\\x73\\x10\\x85\\xF6");
+	findFunc(list, "set_attribute_value_win", pAddrBase, "\\x55\\x8B\\xEC\\x83\\xEC\\x14\\x33\\xD2\\x53\\x8B\\xD9\\x56\\x57\\x8B\\x73\\x10\\x85\\xF6");
 #else
-	findFunc(list,"set_attribute_value_linux",pAddrBase,"@_ZN14CAttributeList24SetRuntimeAttributeValueEPK28CEconItemAttributeDefinitionf");
+	findFunc(list, "set_attribute_value_linux", pAddrBase, "@_ZN14CAttributeList24SetRuntimeAttributeValueEPK28CEconItemAttributeDefinitionf");
 #endif
 }
 
-bool CSetRuntimeAttributeValue::callme(edict_t *pEnt, CAttributeList *list, CEconItemAttributeDefinition *attrib,float value)
+bool CSetRuntimeAttributeValue::callme(edict_t *pEnt, CAttributeList *list, CEconItemAttributeDefinition *attrib, float value)
 {
+	union {
+		int (CAttributeList::*SetRunTimeAttributeValue)(CEconItemAttributeDefinition*, float);
+		void* addr;
+	} u;
+
 	int bret = 0;
 	void *thefunc = m_func;
 
 	int iEntityIndex = ENTINDEX(pEnt);
 
-	if ( list && attrib && thefunc )
+	if (list && attrib && thefunc)
 	{
-#ifdef _WIN32
-		__asm 
+		u.addr = m_func;
+
+		bret = (reinterpret_cast<CAttributeList*>(list)->*u.SetRunTimeAttributeValue)(attrib, value);
+		/*
+		#ifdef _WIN32
+		__asm
 		{
-			mov ecx, list;
-			push attrib;
-			push value;
-			call thefunc;
-			mov bret, eax;
+		mov ecx, list;
+		push attrib;
+		push value;
+		call thefunc;
+		mov bret, eax;
 		};
-#else
+		#else
 		FUNC_SET_ATTRIB_VALUE func = (FUNC_SET_ATTRIB_VALUE)thefunc;
 
 		bret = func(list,attrib,value);
-#endif
+		#endif*/
 	}
 
-	return (bret==1) || ((bret & 0x1FFF) == ((iEntityIndex + 4) * 4));
+	return (bret == 1) || ((bret & 0x1FFF) == ((iEntityIndex + 4) * 4));
 }
 
 
-
-CGetAttributeDefinitionByName::CGetAttributeDefinitionByName ( CRCBotKeyValueList *list, void *pAddrBase )
+CGetAttributeDefinitionByID::CGetAttributeDefinitionByID(CRCBotKeyValueList *list, void *pAddrBase)
 {
 #ifdef _WIN32
-	findFunc(list,"get_attrib_definition_win",pAddrBase,"\\x55\\x8B\\xEC\\x83\\xEC\\x1C\\x53\\x8B\\xD9\\x8B\\x0D\\x2A\\x2A\\x2A\\x2A\\x56\\x33\\xF6\\x89\\x5D\\xF8\\x89\\x75\\xE4\\x89\\x75\\xE8");
+	findFunc(list, "get_attrib_def_id_win", pAddrBase, "\\x55\\x8B\\xEC\\x83\\xEC\\x2A\\x53\\x56\\x8B\\xD9\\x8D\\x2A\\x2A\\x57");
 #else
-	findFunc(list,"get_attrib_definition_linux",pAddrBase,"@_ZN15CEconItemSchema22GetAttributeDefinitionEi");
+	findFunc(list, "get_attrib_def_id_linux", pAddrBase, "@_ZN15CEconItemSchema22GetAttributeDefinitionEi");
+#endif
+}
+
+CEconItemAttributeDefinition *CGetAttributeDefinitionByID::callme(CEconItemSchema *schema, int id)
+{
+	void *pret = NULL;
+
+	if (schema && m_func)
+	{
+		void *thefunc = m_func;
+#ifdef _WIN32
+		__asm
+		{
+			mov ecx, schema;
+			push id;
+			call thefunc;
+			mov pret, eax;
+		};
+#else
+		FUNC_GET_ATTRIB_BY_NAME func = (FUNC_GET_ATTRIB_BY_NAME)thefunc;
+
+		pret = (void*)func(schema, id);
+#endif
+	}
+
+	return (CEconItemAttributeDefinition*)pret;
+}
+
+
+CGetAttributeDefinitionByName::CGetAttributeDefinitionByName(CRCBotKeyValueList *list, void *pAddrBase)
+{
+#ifdef _WIN32
+	findFunc(list, "get_attrib_definition_win", pAddrBase, "\\x55\\x8B\\xEC\\x83\\xEC\\x18\\x83\\x7D\\x08\\x00\\x53\\x56\\x57\\x8B\\xD9\\x75\\x2A\\x33\\xC0\\x5F");
+#else
+	findFunc(list, "get_attrib_definition_linux", pAddrBase, "@_ZN15CEconItemSchema28GetAttributeDefinitionByNameEPKc");
 #endif
 }
 
@@ -383,7 +427,7 @@ CEconItemAttributeDefinition *CGetAttributeDefinitionByName::callme(CEconItemSch
 {
 	void *pret = NULL;
 
-	if ( schema && m_func )
+	if (schema && m_func)
 	{
 		void *thefunc = m_func;
 #ifdef _WIN32
@@ -397,7 +441,7 @@ CEconItemAttributeDefinition *CGetAttributeDefinitionByName::callme(CEconItemSch
 #else
 		FUNC_GET_ATTRIB_BY_NAME func = (FUNC_GET_ATTRIB_BY_NAME)thefunc;
 
-		pret = (void*)func(schema,attrib);
+		pret = (void*)func(schema, attrib);
 #endif
 	}
 
@@ -405,12 +449,12 @@ CEconItemAttributeDefinition *CGetAttributeDefinitionByName::callme(CEconItemSch
 }
 
 
-CAttributeList_GetAttributeByID::CAttributeList_GetAttributeByID ( CRCBotKeyValueList *list, void *pAddrBase )
+CAttributeList_GetAttributeByID::CAttributeList_GetAttributeByID(CRCBotKeyValueList *list, void *pAddrBase)
 {
 #ifdef _WIN32
-	findFunc(list,"attributelist_get_attrib_by_id_win",pAddrBase,"\\x55\\x8B\\xEC\\x51\\x8B\\xC1\\x53\\x56\\x33\\xF6\\x89\\x45\\xFC\\x8B\\x58\\x10");
+	findFunc(list, "attributelist_get_attrib_by_id_win", pAddrBase, "\\x55\\x8B\\xEC\\x51\\x8B\\xC1\\x53\\x56\\x33\\xF6\\x89\\x45\\xFC\\x8B\\x58\\x10");
 #else
-	findFunc(list,"attributelist_get_attrib_by_id_linux",pAddrBase,"@_ZNK14CAttributeList16GetAttributeByIDEi");
+	findFunc(list, "attributelist_get_attrib_by_id_linux", pAddrBase, "@_ZNK14CAttributeList16GetAttributeByIDEi");
 #endif
 }
 
@@ -418,21 +462,21 @@ CEconItemAttribute *CAttributeList_GetAttributeByID::callme(CAttributeList *list
 {
 	void *pret = NULL;
 
-	if ( list && m_func )
+	if (list && m_func)
 	{
 		void *thefunc = m_func;
 #ifdef _WIN32
 		__asm
-	   {
-		  mov ecx, list;
-		  push id;
-		  call thefunc;
-		  mov pret, eax;
-	   };
+		{
+			mov ecx, list;
+			push id;
+			call thefunc;
+			mov pret, eax;
+		};
 #else
-	   FUNC_ATTRIBLIST_GET_ATTRIB_BY_ID func = (FUNC_ATTRIBLIST_GET_ATTRIB_BY_ID)thefunc;
+		FUNC_ATTRIBLIST_GET_ATTRIB_BY_ID func = (FUNC_ATTRIBLIST_GET_ATTRIB_BY_ID)thefunc;
 
-	   pret = (void*)func(list,id);
+		pret = (void*)func(list, id);
 #endif
 	}
 
@@ -451,12 +495,17 @@ bool TF2_SetAttrib(edict_t *pedict, const char *strAttrib, float flVal)
 
 	CEconItemSchema *pSchema = g_pGetEconItemSchema->callme();
 
-	if (pSchema == NULL) 
+	if (pSchema == NULL)
 		return false;
 
-	CEconItemAttributeDefinition *pAttribDef = g_pGetAttributeDefinitionByName->callme(pSchema, strAttrib);
+	int id = CAttributeLookup::findAttributeID(strAttrib);
 
-	if ( (unsigned int)pAttribDef < 0x10000)
+	if (id == -1)
+		return false;
+
+	CEconItemAttributeDefinition *pAttribDef = g_pGetAttributeDefinitionByID->callme(pSchema, id);
+
+	if ((unsigned int)pAttribDef < 0x10000)
 	{
 		return false;
 	}
@@ -479,7 +528,7 @@ bool TF2_SetAttrib(edict_t *pedict, const char *strAttrib, float flVal)
 }
 
 CEconItemAttribute *TF2Attrib_GetByName(edict_t *entity, const char *strAttrib)
-{	
+{
 	if (entity->IsFree())
 	{
 		return NULL;
@@ -531,7 +580,7 @@ bool TF2_setAttribute(edict_t *pEdict, const char *szName, float flVal)
 
 	catch (const char *str)
 	{
-		if ( str && *str )
+		if (str && *str)
 			return false;
 	}
 
@@ -548,25 +597,25 @@ bool TF2_setAttribute(edict_t *pEdict, const char *szName, float flVal)
 /*
 CEconItemAttribute *UTIL_AttributeList_GetAttributeByID ( CAttributeList *list, int id )
 {
-	void *pret = NULL;
+void *pret = NULL;
 
-	if ( list && AttributeList_GetAttributeByID )
-	{
+if ( list && AttributeList_GetAttributeByID )
+{
 #ifdef _WIN32
-		__asm
-	   {
-		  mov ecx, list;
-		  push id;
-		  call AttributeList_GetAttributeByID;
-		  mov pret, eax;
-	   };
+__asm
+{
+mov ecx, list;
+push id;
+call AttributeList_GetAttributeByID;
+mov pret, eax;
+};
 #else
-	   FUNC_ATTRIBLIST_GET_ATTRIB_BY_ID func = (FUNC_ATTRIBLIST_GET_ATTRIB_BY_ID)AttributeList_GetAttributeByID;
+FUNC_ATTRIBLIST_GET_ATTRIB_BY_ID func = (FUNC_ATTRIBLIST_GET_ATTRIB_BY_ID)AttributeList_GetAttributeByID;
 
-	   pret = (void*)func(list,id);
+pret = (void*)func(list,id);
 #endif
-	}
+}
 
-	return (CEconItemAttribute*)pret;
+return (CEconItemAttribute*)pret;
 }
 */

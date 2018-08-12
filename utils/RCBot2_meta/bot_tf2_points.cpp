@@ -241,20 +241,17 @@ int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDef
 	// no points
 	return 0;
 }
-
-void CTeamRoundTimer :: reset ()
+void CTeamRoundTimer::reset()
 {
-	if ( m_Resource.get() == NULL )
-	{
-		m_Resource = CClassInterface::FindEntityByNetClass(gpGlobals->maxClients,"CTeamRoundTimer");
+	CTeamRoundTimer();
 
-		if ( m_Resource.get() != NULL )
-		{
-			CClassInterface::setupCTeamRoundTimer(this);
-		}
+	m_Resource = CClassInterface::FindEntityByNetClass(gpGlobals->maxClients + 1, "CTeamRoundTimer");
+
+	if (m_Resource.get() != NULL)
+	{
+		CClassInterface::setupCTeamRoundTimer(this);
 	}
 }
-
 bool CTeamControlPointRound :: isPointInRound ( edict_t *point_pent )
 {
 	edict_t *pPoint;

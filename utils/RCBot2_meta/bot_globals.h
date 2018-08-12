@@ -105,8 +105,7 @@ public:
 
 	static inline bool entityIsValid ( edict_t *pEntity )
 	{
-		return pEntity && !pEntity->IsFree() && pEntity->GetNetworkable() && pEntity->GetIServerEntity();
-		//return ( !FNullEnt(pEntity) && !pEntity->IsFree() && pEntity->GetNetworkable() && pEntity->GetIServerEntity() && pEntity->GetCollideable() );
+		return pEntity && !pEntity->IsFree() && (pEntity->GetNetworkable() != NULL) && (pEntity->GetIServerEntity() != NULL) && (pEntity->m_NetworkSerialNumber != 0);	
 	}
 
 	static void serverSay ( char *fmt, ... );

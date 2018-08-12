@@ -80,6 +80,32 @@ typedef enum
 	BOTTYPE_MAX
 }eBotType;
 
+
+// tf2
+class CAttributeID
+{
+public:
+	CAttributeID(int id, const char *attrib)
+	{
+		m_id = id;
+		m_attribute = attrib;
+	}
+
+	int m_id;
+	const char *m_attribute;
+};
+
+class CAttributeLookup
+{
+public:
+	static void addAttribute(const char *szAttrib, int id);
+	static int findAttributeID(const char *szAttrib);
+	static void freeMemory();
+private:
+	static vector<CAttributeID*> attributes;
+};
+
+
 class CBotMod
 {
 public:
@@ -904,7 +930,8 @@ public:
 	static void setArea ( int area ) { m_iArea = area; }
 
 	static bool isSentry ( edict_t *pEntity, int iTeam, bool checkcarrying = false );
-
+	static bool isTankBoss(edict_t *pEntity);
+	static void checkMVMTankBoss(edict_t *pEntity);
 	static bool isTeleporter ( edict_t *pEntity, int iTeam, bool checkcarrying = false );
 
 	static void updateTeleportTime ( edict_t *pOwner );
@@ -1026,6 +1053,12 @@ public:
 		m_bHasRoundStarted = false;
 		m_bRoundOver = true;
 		m_iWinningTeam = iWinningTeam;
+		m_iLastWinningTeam = m_iWinningTeam;
+	}
+
+	static inline bool wonLastRound(int iTeam)
+	{
+		return m_iLastWinningTeam == iTeam;
 	}
 
 	static inline bool isLosingTeam ( int iTeam )
@@ -1326,7 +1359,7 @@ private:
 
 	static bool m_bRoundOver;
 	static int m_iWinningTeam;
-
+	static int m_iLastWinningTeam;
 	static Vector m_vFlagLocationBlue;
 	static bool m_bFlagLocationValidBlue;
 	static Vector m_vFlagLocationRed;
@@ -1344,6 +1377,9 @@ private:
 
 	static void setupLoadOutWeapons ( void );
 
+	static MyEHandle m_pNearestTankBoss;
+	static float m_fNearestTankDistance;
+	static Vector m_vNearestTankLocation;
 	// slots X nine classes
 	static vector<CTF2Loadout*> m_pLoadoutWeapons[TF2_SLOT_MAX][9];
 	//static vector<CTF2Loadout*> m_pHats;

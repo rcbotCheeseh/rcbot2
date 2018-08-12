@@ -146,52 +146,6 @@ void CHLDMBot :: spawnInit ()
 	m_fUseCrateTime = 0.0f;
 }
 
-// check updates on weapons every so often
-void CHLDMBot :: fixWeapons ()
-{
-	m_Weapons = CClassInterface::getWeaponList(m_pEdict);
-
-	if ( m_pWeapons ) 
-	{
-		//m_pWeapons->clearWeapons();
-
-		// loop through the weapons array in the CBaseCombatCharacter
-		for ( unsigned int i = 0; i < MAX_WEAPONS; i ++ )
-		{
-			// get the information from the bot 
-			const char *classname;
-			CWeapon *pBotWeapon;
-			CBotWeapon *pHasWeapon;
-
-			edict_t *pWeapon = INDEXENT(m_Weapons[i].GetEntryIndex());
-
-			if ( pWeapon && CBotGlobals::entityIsValid(pWeapon) )
-			{
-				classname = pWeapon->GetClassName();
-
-				// find this weapon in our initialized array in the code
-				pBotWeapon = CWeapons::getWeapon(classname);
-
-				if ( pBotWeapon )
-				{
-					// see if the bot has this weapon or not already
-					pHasWeapon = m_pWeapons->getWeapon(pBotWeapon);
-
-					// if the bot doesn't have it or the state has changed, update
-					if ( !pHasWeapon || !pHasWeapon->hasWeapon() )
-						m_pWeapons->addWeapon(pBotWeapon->getID(),pWeapon);
-					// update weapon entity
-					else if ( pHasWeapon && (pHasWeapon->getWeaponEntity() != pWeapon) )
-						pHasWeapon->setWeaponEntity(pWeapon);
-				}
-			}
-			//else
-			//{
-			//	CWeapons::getWeapon();
-			//}
-		}
-	}
-}
 // Is pEdict an enemy? return true if enemy / false if not
 // if checkWeapons is true, check if current weapon can attack enemy 
 //							return false if not 
@@ -598,15 +552,8 @@ void CHLDMBot :: modThink ()
 	if ( !CBotGlobals::entityIsValid(m_FailedPhysObj) )
 		m_FailedPhysObj = NULL;
 
-	//if ( m_pWeapons )
-	//	m_pWeapons->update();
-
-	//if ( m_fFixWeaponTime < engine->Time() )
-	//{
-	//	fixWeapons();
 	m_pCurrentWeapon = CClassInterface::getCurrentWeapon(m_pEdict);
-	//	m_fFixWeaponTime = engine->Time() + 1.0f;
-	//}
+
 
 	if ( m_pCurrentWeapon )
 		CClassInterface::getWeaponClip(m_pCurrentWeapon,&m_iClip1,&m_iClip2);

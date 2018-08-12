@@ -155,6 +155,7 @@ typedef enum
 	GETPROP_TF2_BUILDER_MODE,
 	GETPROP_TF2_CHARGE_RESIST_TYPE,
 	GETPROP_TF2_ROUNDSTATE,
+	GETPROP_TF2DESIREDCLASS, //Jrob
 	GET_PROPDATA_MAX
 }getpropdata_id;
 
@@ -409,6 +410,14 @@ public:
 		*pitype = imode;
 		//GETPROP_TF2_BUILDER_MODE, ]
 	}
+	//Jrob
+	inline static int getTF2DesiredClass(edict_t *edict) { return g_GetProps[GETPROP_TF2DESIREDCLASS].getInt(edict, 0); }
+	inline static void setTF2Class(edict_t *edict, int _class)
+	{
+		int* p = g_GetProps[GETPROP_TF2DESIREDCLASS].getIntPointer(edict);
+		if (p != NULL) *p = _class;
+	}
+	//end Jrob
 	inline static bool TF2_IsMedievalMode(void*gamerules) { return g_GetProps[GETPROP_TF2_MEDIEVALMODE].getBool(gamerules, false, false);}
 	inline static int TF2_getRoundState(void *gamerules) { return g_GetProps[GETPROP_TF2_ROUNDSTATE].getInt(gamerules, 0, 0); }
 	inline static float getTF2SpyCloakMeter ( edict_t *edict ) { return g_GetProps[GETPROP_TF2SPYMETER].getFloat(edict,0); }
@@ -438,6 +447,11 @@ public:
 		*_health = g_GetProps[GETPROP_TF2SPYDISGUISED_DIS_HEALTH].getInt(edict,0);
 
 		return !CClassInterfaceValue::isError();
+	}
+
+	inline static int TF2_getItemDefinitionIndex(edict_t *edict)
+	{
+		return g_GetProps[GETPROP_TF2_ITEMDEFINITIONINDEX].getInt(edict, 0);
 	}
 	inline static void setEntityIndex_Level_Quality( edict_t *edict, int iIndex, int iLevel = 0, int iQuality = 0 )
 	{

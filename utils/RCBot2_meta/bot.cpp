@@ -99,6 +99,7 @@
 
 // for critical sections
 CThreadMutex g_MutexAddBot;
+CThreadMutex g_MutexBotThink;
 
 //extern void HookPlayerRunCommand ( edict_t *edict );
 
@@ -663,7 +664,7 @@ void CBot :: reachedCoverSpot (int flags)
 // something now visiable or not visible anymore
 bool CBot :: setVisible ( edict_t *pEntity, bool bVisible )
 {
-	bool bValid = (pEntity->GetUnknown()!=NULL);
+	bool bValid = CBotGlobals::entityIsValid(pEntity);
 
 	if ( bValid && bVisible )
 	{
@@ -786,12 +787,13 @@ void CBot :: think ()
 	m_iMovePriority = 0;
 	m_iMoveSpeedPriority = 0;
 	
-	//if ( !CBotGlobals::entityIsValid(m_pEdict) || m_pPlayerInfo == NULL )
-	//{
-	//	m_pPlayerInfo = playerinfomanager->GetPlayerInfo(m_pEdict);
-	//	CBotGlobals::botMessage(NULL,0,"%s : m_pPlayerInfo = NULL; Waiting for player info...",m_szBotName);
-	//	return;
-	//}
+	// re-added
+	if ( !CBotGlobals::entityIsValid(m_pEdict) || m_pPlayerInfo == NULL )
+	{
+		m_pPlayerInfo = playerinfomanager->GetPlayerInfo(m_pEdict);
+		CBotGlobals::botMessage(NULL,0,"%s : m_pPlayerInfo = NULL; Waiting for player info...",m_szBotName);
+		return;
+	}
 
 #ifdef _DEBUG
 	if ( rcbot_debug_iglev.GetInt() != 1 )
@@ -3359,12 +3361,13 @@ void CBots :: botThink ()
 						CBotThink->Start();
 					}
 
-				#endif
+				#endif				
 
+				g_MutexBotThink.Lock();
 				pBot->setMoveLookPriority(MOVELOOK_THINK);
 				pBot->think();
 				pBot->setMoveLookPriority(MOVELOOK_EVENT);
-
+				g_MutexBotThink.Unlock();
 
 				#ifdef _DEBUG
 

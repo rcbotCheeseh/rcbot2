@@ -114,7 +114,8 @@ WeaponsData_t DODWeaps[] =
 	{3,DOD_WEAPON_FRAG_GER, g_szDODWeapons[21],		WEAP_FL_PROJECTILE|WEAP_FL_GRENADE|WEAP_FL_EXPLOSIVE|WEAP_FL_NONE,0,1200,-1,1,0},
 	{3,DOD_WEAPON_SMOKE_US, g_szDODWeapons[22],		WEAP_FL_PROJECTILE|WEAP_FL_GRENADE,0,1200,-1,1,0},
 	{3,DOD_WEAPON_SMOKE_GER, g_szDODWeapons[23],	WEAP_FL_PROJECTILE|WEAP_FL_GRENADE,0,1200,-1,1,0},
-	{3,DOD_WEAPON_BOMB, g_szDODWeapons[24], WEAP_FL_NONE,0,0,-1,1,0}
+	{3,DOD_WEAPON_BOMB, g_szDODWeapons[24], WEAP_FL_NONE,0,0,-1,1,0},
+	{ 0, 0, "\0", 0, 0, 0, 0, 0, 0 }//signal last weapon
 };
 
 
@@ -134,7 +135,8 @@ WeaponsData_t HL2DMWeaps[] =
 	{2,HL2DM_WEAPON_RPG,		g_szHL2DMWeapons[8],	WEAP_FL_PROJECTILE|WEAP_FL_EXPLOSIVE|WEAP_FL_PRIM_ATTACK|WEAP_FL_UNDERWATER,400,2000,-1,3,1000.0f},
 	{1,HL2DM_WEAPON_SLAM,		g_szHL2DMWeapons[9],	WEAP_FL_EXPLOSIVE,0,180,-1,1,0},
 	{2,HL2DM_WEAPON_SHOTGUN,	g_szHL2DMWeapons[10],	WEAP_FL_PRIM_ATTACK,0,768,-1,2,0},
-	{1,HL2DM_WEAPON_PHYSCANNON,	g_szHL2DMWeapons[11],	WEAP_FL_GRAVGUN|WEAP_FL_PRIM_ATTACK,0,768,-1,4,0}
+	{1,HL2DM_WEAPON_PHYSCANNON,	g_szHL2DMWeapons[11],	WEAP_FL_GRAVGUN|WEAP_FL_PRIM_ATTACK,0,768,-1,4,0},
+	{ 0, 0, "\0", 0, 0, 0, 0, 0, 0 }//signal last weapon
 };
 
 //SENTRYGUN ID = 34
@@ -246,28 +248,32 @@ bool CBotWeapons::hasExplosives( void )
 
 bool CBotWeapons::hasWeapon(int id)
 {
-	for ( int i = 0; i < MAX_WEAPONS; i ++ )
+	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
-		// find weapon info from weapon id
-		if ( m_theWeapons[i].getID() == id )
+		if (m_theWeapons[i].getWeaponInfo() == NULL)
+			continue;
+		if (m_theWeapons[i].hasWeapon() == false)
+			continue;
+		if (m_theWeapons[i].getID() == id)
+			// find weapon info from weapon id
 		{
-			return m_theWeapons[i].hasWeapon();
+			return true;
 		}
 	}
 	return false;
 }
-
 // Bot Weapons
-CBotWeapons :: CBotWeapons ( CBot *pBot ) 
+CBotWeapons::CBotWeapons(CBot *pBot)
 {
 	m_pBot = pBot;
-
+	clearWeapons();
+	/*
 	for ( int i = 0; i < MAX_WEAPONS; i ++ )
 	{
-		// find weapon info from weapon id
-		m_theWeapons[i].setWeapon(CWeapons::getWeapon(i));
+	// find weapon info from weapon id
+	m_theWeapons[i].setWeapon(CWeapons::getWeapon(i));
 	}
-
+	*/
 	m_fUpdateWeaponsTime = 0;
 	m_iWeaponsSignature = 0x0;
 }
@@ -295,6 +301,81 @@ edict_t *CWeapons :: findWeapon ( edict_t *pPlayer, const char *pszWeaponName )
 	return NULL;
 }
 
+
+bool CBotWeapons::update(bool bOverrideAllFromEngine)
+{
+	// create mask of weapons data
+	short int i = 0;
+	unsigned short int iWeaponsSignature = 0x0; // check sum of weapons
+	edict_t *pWeapon;
+	CBaseHandle *m_Weapons = CClassInterface::getWeaponList(m_pBot->getEdict());
+	CBaseHandle *m_Weapon_iter;
+
+	m_Weapon_iter = m_Weapons;
+
+	for (i = 0; i < MAX_WEAPONS; i++)
+	{
+		// create a 'hash' of current weapons
+		pWeapon = (m_Weapon_iter == NULL) ? NULL : INDEXENT(m_Weapon_iter->GetEntryIndex());
+		iWeaponsSignature += ((unsigned int)pWeapon) + ((pWeapon == NULL) ? 0 : (unsigned int)CClassInterface::getWeaponState(pWeapon));
+		m_Weapon_iter++;
+	}
+
+	// if weapons have changed this will be different
+	if (iWeaponsSignature != m_iWeaponsSignature) // m_fUpdateWeaponsTime < engine->Time() )
+	{
+		this->clearWeapons();
+
+		int iWeaponState;
+		register unsigned short int i;
+		bool bFound;
+
+		const char *pszClassname;
+
+		CBaseHandle *m_Weapons = CClassInterface::getWeaponList(m_pBot->getEdict());
+		CBotWeapon *m_BotWeapon_iter = m_theWeapons;
+
+		// loop through the weapons array and see if it is in the CBaseCombatCharacter
+		for (i = 0; i < MAX_WEAPONS; i++)
+		{
+			m_Weapon_iter = &m_Weapons[i];
+			iWeaponState = 0;
+			bFound = false;
+
+			pWeapon = INDEXENT(m_Weapon_iter->GetEntryIndex());
+
+			if (!pWeapon || pWeapon->IsFree())
+			{
+				continue;
+			}
+
+			iWeaponState = CClassInterface::getWeaponState(pWeapon);
+
+			pszClassname = pWeapon->GetClassName();
+
+			CWeapon *pWeaponInfo = CWeapons::getWeapon(pszClassname);
+
+			if (pWeaponInfo != NULL)
+			{
+				if (iWeaponState != WEAPON_NOT_CARRIED)
+				{
+					CBotWeapon *pAdded = addWeapon(pWeaponInfo, i, pWeapon, bOverrideAllFromEngine);
+					pAdded->setHasWeapon(true);
+				}
+			}
+		}
+
+		// check again in 1 second
+		m_fUpdateWeaponsTime = engine->Time() + 1.0f;
+
+		m_iWeaponsSignature = iWeaponsSignature;
+
+		return true; // change
+	}
+
+	return false;
+}
+/*
 bool CBotWeapons ::update ( bool bOverrideAllFromEngine )
 {
 	// create mask of weapons data
@@ -375,7 +456,7 @@ bool CBotWeapons ::update ( bool bOverrideAllFromEngine )
 	}
 
 	return false;
-}
+}*/
 
 CBotWeapon *CBotWeapons :: getBestWeapon ( edict_t *pEnemy, bool bAllowMelee, bool bAllowMeleeFallback, bool bMeleeOnly, bool bExplosivesOnly, bool bIgnorePrimaryMinimum )
 {
@@ -447,73 +528,116 @@ CBotWeapon *CBotWeapons :: getBestWeapon ( edict_t *pEnemy, bool bAllowMelee, bo
 	return m_theBestWeapon;
 }
 
-void CBotWeapon :: setWeaponEntity (edict_t *pent, bool bOverrideAmmoTypes ) 
-{ 
-	m_pEnt = pent; 
+void CBotWeapon::setWeaponEntity(edict_t *pent, bool bOverrideAmmoTypes)
+{
+	m_pEnt = pent;
 	m_iClip1 = CClassInterface::getWeaponClip1Pointer(pent);
 	m_iClip2 = CClassInterface::getWeaponClip2Pointer(pent);
 
-	if ( bOverrideAmmoTypes )
+	if (bOverrideAmmoTypes)
 	{
-		int iAmmoType1,iAmmoType2;
-		CClassInterface::getAmmoTypes(pent,&iAmmoType1,&iAmmoType2);
-		m_pWeaponInfo->setAmmoIndex(iAmmoType1,iAmmoType2);
+		int iAmmoType1, iAmmoType2;
+		CClassInterface::getAmmoTypes(pent, &iAmmoType1, &iAmmoType2);
+		m_pWeaponInfo->setAmmoIndex(iAmmoType1, iAmmoType2);
 	}
+
+	setWeaponIndex(ENTINDEX(m_pEnt));
 }
 
 
-void CBotWeapons :: addWeapon ( int iId, edict_t *pent, bool bOverrideAll )
+CBotWeapon *CBotWeapons::addWeapon(CWeapon *pWeaponInfo, int iId, edict_t *pent, bool bOverrideAll)
 {
-
 	register int i = 0;
 	Vector origin;
 	const char *classname;
-	CWeapon *pWeapon;
 	edict_t *pEnt = NULL;
 
 	m_theWeapons[iId].setHasWeapon(true);
+	m_theWeapons[iId].setWeapon(pWeaponInfo);
 
-	pWeapon = m_theWeapons[iId].getWeaponInfo();
+	if (!m_theWeapons[iId].getWeaponInfo())
+		return NULL;
 
-	if ( !pWeapon )
-		return;
-
-	classname = pWeapon->getWeaponName();
+	classname = pWeaponInfo->getWeaponName();
 
 	origin = m_pBot->getOrigin();
 
 	// if entity comes from the engine use the entity
-	if ( pent )
+	if (pent)
 	{
-		m_theWeapons[iId].setWeaponEntity(pent,bOverrideAll);
-		m_theWeapons[iId].setWeaponIndex(ENTINDEX(pent));
+		m_theWeapons[iId].setWeaponEntity(pent, bOverrideAll);
 	}
 	else // find the weapon entity
 	{
-		for ( i = (gpGlobals->maxClients+1); i <= gpGlobals->maxEntities; i ++ )
+		for (i = (gpGlobals->maxClients + 1); i <= gpGlobals->maxEntities; i++)
 		{
 			pEnt = INDEXENT(i);
 
-			if ( pEnt && CBotGlobals::entityIsValid(pEnt) )
+			if (pEnt && CBotGlobals::entityIsValid(pEnt))
 			{
-				if ( CBotGlobals::entityOrigin(pEnt) == origin )
+				if (CBotGlobals::entityOrigin(pEnt) == origin)
 				{
-					if ( strcmp(pEnt->GetClassName(),classname) == 0 )
+					if (strcmp(pEnt->GetClassName(), classname) == 0)
 					{
-						m_theWeapons[iId].setWeaponIndex(ENTINDEX(pEnt));
+						m_theWeapons[iId].setWeaponEntity(pEnt, bOverrideAll);// .setWeaponIndex(ENTINDEX(pEnt));
 
-						if ( pent )
-							break;
-						else
-							return;
+						return &m_theWeapons[iId];
 					}
 				}
 			}
 		}
 	}
 
+	return &m_theWeapons[iId];
+
+}
+/*
+void CBotWeapons :: addWeapon ( int iId, edict_t *pent, bool bOverrideAll )
+{
+register int i = 0;
+Vector origin;
+const char *classname;
+CWeapon *pWeapon;
+edict_t *pEnt = NULL;
+
+m_theWeapons[iId].setHasWeapon(true);
+
+pWeapon = m_theWeapons[iId].getWeaponInfo();
+
+if ( !pWeapon )
+return;
+
+classname = pWeapon->getWeaponName();
+
+origin = m_pBot->getOrigin();
+
+// if entity comes from the engine use the entity
+if ( pent )
+{
+m_theWeapons[iId].setWeaponEntity(pent,bOverrideAll);
+}
+else // find the weapon entity
+{
+for ( i = (gpGlobals->maxClients+1); i <= gpGlobals->maxEntities; i ++ )
+{
+pEnt = INDEXENT(i);
+
+if ( pEnt && CBotGlobals::entityIsValid(pEnt) )
+{
+if ( CBotGlobals::entityOrigin(pEnt) == origin )
+{
+if ( strcmp(pEnt->GetClassName(),classname) == 0 )
+{
+m_theWeapons[iId].setWeaponEntity(pEnt, bOverrideAll);// .setWeaponIndex(ENTINDEX(pEnt));
+
+return;
+}
+}
+}
+}
 }
 
+}*/
 CBotWeapon *CBotWeapons :: getWeapon ( CWeapon *pWeapon )
 {
 	for ( register unsigned int i = 0; i < MAX_WEAPONS; i ++ )
@@ -537,27 +661,27 @@ CBotWeapon *CBotWeapons :: getCurrentWeaponInSlot ( int iSlot )
 }
 
 const char *szWeaponFlags[] = {
-	 "primary_attack" ,
-	 "secondary_attack" ,
-	 "explosive" ,
-	 "melee" ,
-	 "underwater" ,
-	 "hold_attack" ,
-	 "special" ,
-	 "can_kill_pipes" ,
-	 "can_deflect_rockets" ,
-	 "is_grav_gun" ,
-	 "has_explosive_secondary" ,
-	 "is_zoomable" ,
-	 "is_deployable_dods" ,
-	 "has_melee_secondary" ,
-	 "has_fire_select_mode_dods" ,
-	 "cant_be_fired_unzoomed_undeployed_dods" ,
-	 "is_grenade" ,
-	 "has_high_recoil_dods" ,
-	 "has_scope" ,
-	 "weapon_fires_projectile" ,
-	 "\0"
+	{ "primary_attack" },
+	{ "secondary_attack" },
+	{ "explosive" },
+	{ "melee" },
+	{ "underwater" },
+	{ "hold_attack" },
+	{ "special" },
+	{ "can_kill_pipes" },
+	{ "can_deflect_rockets" },
+	{ "is_grav_gun" },
+	{ "has_explosive_secondary" },
+	{ "is_zoomable" },
+	{ "is_deployable_dods" },
+	{ "has_melee_secondary" },
+	{ "has_fire_select_mode_dods" },
+	{ "cant_be_fired_unzoomed_undeployed_dods" },
+	{ "is_grenade" },
+	{ "has_high_recoil_dods" },
+	{ "has_scope" },
+	{ "weapon_fires_projectile" },
+	{ "\0" }
 };
 
 void CWeapons::loadWeapons(const char *szWeaponListName, WeaponsData_t *pDefault)
@@ -649,10 +773,14 @@ void CWeapons::loadWeapons(const char *szWeaponListName, WeaponsData_t *pDefault
 	}
 }
 
-void CBotWeapons :: clearWeapons ()
+
+void CBotWeapons::clearWeapons()
 {
-	for ( register unsigned short i = 0; i < MAX_WEAPONS; i ++ )
-		m_theWeapons[i].setHasWeapon(false);	
+	for (register unsigned short i = 0; i < MAX_WEAPONS; i++)
+	{
+		memset(&m_theWeapons[i], 0, sizeof(CBotWeapon));
+		//m_theWeapons[i].setHasWeapon(false);
+	}
 }
 
 // returns weapon with highest priority even if no ammo
@@ -676,17 +804,41 @@ CBotWeapon *CBotWeapons :: getPrimaryWeapon ()
 	return pBest;
 }
 
-CBotWeapon *CBotWeapons :: getActiveWeapon ( const char *szWeaponName )
+
+CBotWeapon *CBotWeapons::getActiveWeapon(const char *szWeaponName, edict_t *pWeaponUpdate, bool bOverrideAmmoTypes)
 {
-	if ( szWeaponName && *szWeaponName )
+	CBotWeapon *toReturn = NULL;
+
+	if (szWeaponName && *szWeaponName)
 	{
 		CWeapon *pWeapon = CWeapons::getWeapon(szWeaponName);
 
-		if ( pWeapon )
-			return &m_theWeapons[pWeapon->getID()];
+		if (pWeapon)
+		{
+			register unsigned short int i;
+
+			for (i = 0; i < MAX_WEAPONS; i++)
+			{
+				CWeapon *p = m_theWeapons[i].getWeaponInfo();
+
+				if (!p)
+					continue;
+
+				if (strcmp(p->getWeaponName(), szWeaponName) == 0)
+				{
+					toReturn = &m_theWeapons[i];
+					break;
+				}
+			}
+
+			if (pWeaponUpdate && toReturn)
+			{
+				toReturn->setWeaponEntity(pWeaponUpdate, bOverrideAmmoTypes);
+			}
+		}
 	}
 
-	return NULL;
+	return toReturn;
 }
 /*
 bool CBotWeaponGravGun ::outOfAmmo (CBot *pBot)

@@ -66,8 +66,6 @@ public:
 
 	virtual unsigned int maxEntityIndex ( ) { return gpGlobals->maxEntities; }
 
-	void fixWeapons ();
-
 	void enemyLost (edict_t *pEnemy);
 
 	inline void setFailedObject ( edict_t *pent ) 

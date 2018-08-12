@@ -667,7 +667,7 @@ public:
 		return m_pWeaponInfo->getPreference();
 	}
 
-	virtual bool outOfAmmo (CBot *pBot);
+	bool outOfAmmo (CBot *pBot);
 
 	bool needToReload (CBot *pBot);
 
@@ -739,11 +739,11 @@ public:
 /////////////////////////////////////
 	CBotWeapon *getBestWeapon ( edict_t *pEnemy, bool bAllowMelee = true, bool bAllowMeleeFallback = true, bool bMeleeOnly = false, bool bExplosivesOnly = false, bool bIgnorePrimaryMinimum = false );
 
-	void addWeapon ( int iId, edict_t *pent = NULL, bool bOverrideAll = true );
+	CBotWeapon *addWeapon(CWeapon *pWeaponInfo, int iId, edict_t *pent, bool bOverrideAll = true);
 
-	CBotWeapon *getWeapon ( CWeapon *pWeapon );
+	CBotWeapon *getWeapon(CWeapon *pWeapon);
 
-	CBotWeapon *getActiveWeapon ( const char *szWeaponName );
+	CBotWeapon *getActiveWeapon(const char *szWeaponName, edict_t *pWeaponUpdate = NULL, bool bOverrideAmmoTypes = true);
 
 	CBotWeapon *getCurrentWeaponInSlot ( int iSlot );
 
@@ -774,12 +774,12 @@ public:
 	bool update ( bool bOverrideAllFromEngine = true ); // update from sendprop
 
 	CBotWeapon *getPrimaryWeapon (); // return the most important weapon bot is holding if if out o ammo
-
+	inline void resetSignature() { m_iWeaponsSignature = 0; }
 private:
 	// bot that has these weapons
 	CBot *m_pBot;
 
-	// mask of weapons bot already has so we know if we need to update or not
+	// checksum mask of weapons bot already has so we know if we need to update or not
 	unsigned int m_iWeaponsSignature;
 
 	// weapons local to the bot only 
