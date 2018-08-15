@@ -1893,8 +1893,8 @@ void CBot :: freeMapMemory ()
 
 void CBot :: updateStatistics ()
 {
-	bool bVisible;
-	bool bIsEnemy;
+	bool bVisible = false;
+	bool bIsEnemy = false;
 
 	extern ConVar rcbot_stats_inrange_dist;
 
@@ -1932,8 +1932,16 @@ void CBot :: updateStatistics ()
 	if ( !p || !p->IsConnected() || p->IsDead() || p->IsObserver() || !p->IsPlayer() )
 		return;
 
-	bVisible = isVisible(pPlayer);
-	bIsEnemy = isEnemy(pPlayer,false);
+	try
+	{
+		bVisible = isVisible(pPlayer);
+		bIsEnemy = isEnemy(pPlayer, false);
+	}
+
+	catch(...)
+	{
+		return;
+	}
 
 	if ( bIsEnemy )
 	{
@@ -2585,12 +2593,22 @@ void CBot :: getLookAtVector ()
 		break;
 	case LOOK_EDICT:
 		{
-			if ( m_pLookEdict )
-				setLookAt(getAimVector(m_pLookEdict));
+			try
+			{
+
+				if (m_pLookEdict.get() != NULL)
+					setLookAt(getAimVector(m_pLookEdict));
 				//setLookAt(CBotGlobals::entityOrigin(m_pLookEdict)+Vector(0,0,32));
 
-			if ( bDebug )
-				CClients::clientDebugMsg(BOT_DEBUG_LOOK,"LOOK_EDICT",this);
+				if (bDebug)
+					CClients::clientDebugMsg(BOT_DEBUG_LOOK, "LOOK_EDICT", this);
+
+			}
+			catch (...)
+			{
+				m_pLookEdict = NULL;
+				setLookAtTask(LOOK_NONE);
+			}
 		}
 		break;
 	case LOOK_GROUND:
@@ -2603,15 +2621,24 @@ void CBot :: getLookAtVector ()
 		break;
 	case LOOK_ENEMY:
 		{
-			if ( m_pEnemy )
+			try
 			{
-				setLookAt(getAimVector(m_pEnemy));
-			}
-			else if ( m_pLastEnemy )
-				setLookAt(m_vLastSeeEnemy);
 
-			if ( bDebug )
-				CClients::clientDebugMsg(BOT_DEBUG_LOOK,"LOOK_ENEMY",this);
+				if (m_pEnemy.get() != NULL)
+				{
+					setLookAt(getAimVector(m_pEnemy));
+				}
+				else if (m_pLastEnemy)
+					setLookAt(m_vLastSeeEnemy);
+
+				if (bDebug)
+					CClients::clientDebugMsg(BOT_DEBUG_LOOK, "LOOK_ENEMY", this);
+			}
+			catch (...)
+			{
+				m_pEnemy = NULL;
+				setLookAtTask(LOOK_NONE);
+			}
 		}		
 		break;
 	case LOOK_LAST_ENEMY:
