@@ -547,7 +547,7 @@ bool RCBotPluginMeta::givePlayerLoadOut(edict_t *pPlayer, CTF2Loadout *pLoadout,
 	int iSize = pLoadout->copyAttributesIntoArray(attribs, pVTable);
 	hScriptCreatedItem.m_AttributeList.m_Attributes.CopyArray(attribs, iSize);// pLoadout->m_Attributes, pLoadout->m_Attributes.size());
 	hScriptCreatedItem.m_bInitialized = true;
-	hScriptCreatedItem.m_bDoNotIterateStaticAttributes = true;
+	hScriptCreatedItem.m_bDoNotIterateStaticAttributes = false; // true breaks pyro bot flamethrowers
 
 	if (hScriptCreatedItem.m_iEntityQuality == 0 && iSize > 0)
 	{
