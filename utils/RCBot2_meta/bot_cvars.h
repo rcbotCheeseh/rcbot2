@@ -3,7 +3,7 @@
 
 extern ConVar rcbot_tf2_debug_spies_cloakdisguise;
 extern ConVar rcbot_tf2_medic_letgotime;
-extern ConVar rcbot_const_round_offset;
+//extern ConVar rcbot_const_round_offset;
 extern ConVar rcbot_const_point_master_offset;
 //extern ConVar rcbot_const_point_offset;
 //extern ConVar rcbot_const_point_data_offset;

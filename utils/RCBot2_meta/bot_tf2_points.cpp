@@ -255,7 +255,7 @@ void CTeamRoundTimer::reset()
 bool CTeamControlPointRound :: isPointInRound ( edict_t *point_pent )
 {
 	edict_t *pPoint;
-	extern ConVar rcbot_const_point_offset;
+	//extern ConVar rcbot_const_point_master_offset;
 
 	for ( int i = 0; i < m_ControlPoints.Size(); i ++ )
 	{
@@ -296,14 +296,14 @@ CTeamControlPointRound *CTeamControlPointMaster:: getCurrentRound ( )
 
 	//edict_t *p = servergameents->BaseEntityToEdict(pent);
 	
-	extern ConVar rcbot_const_round_offset;
+	extern ConVar rcbot_const_point_master_offset;
 	/*
 	CTeamControlPointRound *org = (CTeamControlPointRound*)((unsigned long)pent+(unsigned long)rcbot_const_round_offset.GetInt());
 	CTeamControlPointRound *fromunk = (CTeamControlPointRound*)p->GetUnknown();
 	CTeamControlPointRound *fromserverent = (CTeamControlPointRound*)p->GetIServerEntity();*/
 
 	// Fix for later TF2 2016 Engine? [APG]RoboCop[CL]
-	return (CTeamControlPointRound*)((unsigned long)pent+(unsigned long)rcbot_const_round_offset.GetInt());
+	return (CTeamControlPointRound*)((unsigned long)pent + (unsigned long)rcbot_const_point_master_offset.GetInt());
 }
 
 //////////////////

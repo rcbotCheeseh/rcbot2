@@ -875,7 +875,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 		rcbot_gamerules_offset.SetValue(val);
 	if (pKVL->getInt("mstr_offset_win", &val)) {
 		rcbot_const_point_master_offset.SetValue(val);
-		rcbot_const_round_offset.SetValue(val);
+		//rcbot_const_round_offset.SetValue(val);
 	}
 #else
 
@@ -897,7 +897,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 		rcbot_weaponequip_offset.SetValue(val);
 	if (pKVL->getInt("mstr_offset_linux", &val)) {
 		rcbot_const_point_master_offset.SetValue(val);
-		rcbot_const_round_offset.SetValue(val);
+		//rcbot_const_round_offset.SetValue(val);
 	}
 #endif
 

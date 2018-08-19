@@ -1763,7 +1763,7 @@ void CTeamFortress2Mod::updatePointMaster()
 			m_PointMasterResource = pMaster;
 #endif
 
-			extern ConVar rcbot_const_round_offset;
+			//extern ConVar rcbot_const_round_offset;
 
 			int idx = m_PointMaster->m_iCurrentRoundIndex;
 			int size = m_PointMaster->m_ControlPointRounds.Size();
@@ -1778,7 +1778,7 @@ void CTeamFortress2Mod::updatePointMaster()
 					{
 						CBaseEntity *pent = m_PointMaster->m_ControlPointRounds[r];
 
-						CTeamControlPointRound* pointRound = (CTeamControlPointRound*)((unsigned long)pent + (unsigned long)rcbot_const_round_offset.GetInt());
+						CTeamControlPointRound* pointRound = (CTeamControlPointRound*)((unsigned long)pent + (unsigned long)rcbot_const_point_master_offset.GetInt());
 
 						CBotGlobals::botMessage(NULL, 0, "Control Points for Round %d", r);
 
