@@ -1,6 +1,0 @@
-"Metamod Plugin"
-{
-	"alias"			"rcbot2"
-	"file"			"addons/rcbot2/bin/RCBot2Meta"
-	"rcbot2path"		"addons/rcbot2/"
-}
