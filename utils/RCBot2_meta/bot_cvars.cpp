@@ -116,6 +116,7 @@ ConVar rcbot_bot_quota_interval("rcbot_bot_quota_interval", "10", 0, "Interval b
 //ConVar rcbot_bot_add_cmd("rcbot_bot_add_cmd","bot",0,"command to add puppet bots");
 //ConVar rcbot_bot_add_cmd("rcbot_hook_engine","1",0,"command to add puppet bots");
 ConVar rcbot_show_welcome_msg("rcbot_show_welcome_msg", "1", 0, "Show welcome message on player connect");
+ConVar rcbot_force_class("rcbot_force_class", "0", 0, "Force bots to choose specified class on respawn (1 - 9, set to 0 for none)");
 
 ConVar *sv_gravity = NULL;
 ConVar *sv_cheats = NULL;//("sv_cheats");
