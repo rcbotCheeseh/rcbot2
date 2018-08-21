@@ -1,11 +1,16 @@
 # vim: sts=2 ts=8 sw=2 tw=99 et ft=python:
 
-lib = builder.compiler.StaticLibrary("version")
-lib.compiler.sourcedeps += MMS.generated_headers
-lib.sources += [
-  'versionlib.cpp'
-]
-cmd = builder.Add(lib)
+rvalue = {}
+for arch in MMS.archs:
+  libname = 'version'
+  lib = MMS.StaticLibrary(builder, libname, arch)
+  lib.compiler.defines.remove('MMS_USE_VERSIONLIB')
+  lib.compiler.sourcedeps += MMS.generated_headers
+  lib.sources += [
+    'versionlib.cpp'
+  ]
 
-rvalue = cmd.binary
+  cmd = builder.Add(lib)
+
+  rvalue[arch] = cmd.binary
 

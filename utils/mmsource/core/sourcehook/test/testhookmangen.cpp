@@ -1,4 +1,5 @@
 #include <string>
+#include <cstdlib>
 #include "sourcehook.h"
 #include "sourcehook_test.h"
 #include "testevents.h"
@@ -326,8 +327,8 @@ namespace
 
 	THGM_MAKE_TEST2_void(11, Object<3>, Object<600>&);
 	THGM_SETUP_PI2(11,
-		Object<3>, SourceHook::PassInfo::PassType_Object, SourceHook::PassInfo::PassFlag_ByVal | SourceHook::PassInfo::PassFlag_OCtor | SourceHook::PassInfo::PassFlag_ODtor | SourceHook::PassInfo::PassFlag_CCtor,
-		Object<600> &, SourceHook::PassInfo::PassType_Object, SourceHook::PassInfo::PassFlag_ByRef | SourceHook::PassInfo::PassFlag_OCtor | SourceHook::PassInfo::PassFlag_ODtor | SourceHook::PassInfo::PassFlag_CCtor
+		Object<3>, SourceHook::PassInfo::PassType_Object, (SourceHook::PassInfo::PassFlag_ByVal | SourceHook::PassInfo::PassFlag_OCtor | SourceHook::PassInfo::PassFlag_ODtor | SourceHook::PassInfo::PassFlag_CCtor),
+		Object<600> &, SourceHook::PassInfo::PassType_Object, (SourceHook::PassInfo::PassFlag_ByRef | SourceHook::PassInfo::PassFlag_OCtor | SourceHook::PassInfo::PassFlag_ODtor | SourceHook::PassInfo::PassFlag_CCtor)
 		);
 
 	THGM_MAKE_TEST0(101, char);
@@ -385,8 +386,8 @@ namespace
 		int, SourceHook::PassInfo::PassType_Basic, SourceHook::PassInfo::PassFlag_ByVal
 		);
 	THGM_SETUP_RI(110, ObjRet13, SourceHook::PassInfo::PassType_Object,
-		SourceHook::PassInfo::PassFlag_ByVal | SourceHook::PassInfo::PassFlag_OCtor | SourceHook::PassInfo::PassFlag_ODtor |
-		SourceHook::PassInfo::PassFlag_CCtor | SourceHook::PassInfo::PassFlag_AssignOp);
+		(SourceHook::PassInfo::PassFlag_ByVal | SourceHook::PassInfo::PassFlag_OCtor | SourceHook::PassInfo::PassFlag_ODtor |
+		 SourceHook::PassInfo::PassFlag_CCtor | SourceHook::PassInfo::PassFlag_AssignOp));
 
 	MAKE_OBJRET(111);
 	ObjRet111 g_O111_0;
@@ -419,8 +420,8 @@ namespace
 	THGM_MAKE_TEST0(111, ObjRet111& );
 	THGM_SETUP_PI0(111);
 	THGM_SETUP_RI(111, ObjRet111& , SourceHook::PassInfo::PassType_Object,
-		SourceHook::PassInfo::PassFlag_ByRef | SourceHook::PassInfo::PassFlag_OCtor | SourceHook::PassInfo::PassFlag_ODtor |
-		SourceHook::PassInfo::PassFlag_CCtor | SourceHook::PassInfo::PassFlag_AssignOp);
+		(SourceHook::PassInfo::PassFlag_ByRef | SourceHook::PassInfo::PassFlag_OCtor | SourceHook::PassInfo::PassFlag_ODtor |
+		 SourceHook::PassInfo::PassFlag_CCtor | SourceHook::PassInfo::PassFlag_AssignOp));
 
 
 	THGM_MAKE_TEST3_void(150, int, double, int);
@@ -480,8 +481,8 @@ namespace
 
 	THGM_MAKE_TEST1_vafmt_void(214, Object<133>);
 	THGM_SETUP_PI1(214, Object<133>, SourceHook::PassInfo::PassType_Object,
-		SourceHook::PassInfo::PassFlag_ByVal | SourceHook::PassInfo::PassFlag_OCtor | SourceHook::PassInfo::PassFlag_ODtor |
-		SourceHook::PassInfo::PassFlag_CCtor | SourceHook::PassInfo::PassFlag_AssignOp);
+		(SourceHook::PassInfo::PassFlag_ByVal | SourceHook::PassInfo::PassFlag_OCtor | SourceHook::PassInfo::PassFlag_ODtor |
+		 SourceHook::PassInfo::PassFlag_CCtor | SourceHook::PassInfo::PassFlag_AssignOp));
 
 
 	MAKE_STATE(State_Hello_Func4_Called);
@@ -1093,7 +1094,7 @@ namespace
 	}
 }
 
-
+#if !defined( _M_AMD64 ) && !defined( __amd64__ ) && !defined(__x86_64__)
 bool TestHookManGen(std::string &error)
 {
 	GET_SHPTR(g_SHPtr);
@@ -1133,6 +1134,7 @@ bool TestHookManGen(std::string &error)
 
 	return true;
 }
+#endif
 
 bool TestCPageAlloc(std::string &error)
 {
@@ -1179,13 +1181,13 @@ bool TestCPageAlloc(std::string &error)
 		test4[i] = (char*) alloc.AllocIsolated(ps / 4);
 
 	// -> The difference is at least one page
-	CHECK_COND(static_cast<size_t>(abs(test4[1] - test4[0])) >= ps, "Part 3.1");
-	CHECK_COND(static_cast<size_t>(abs(test4[2] - test4[1])) >= ps, "Part 3.2");
-	CHECK_COND(static_cast<size_t>(abs(test4[3] - test4[2])) >= ps, "Part 3.3");
+	CHECK_COND(static_cast<size_t>(std::abs(test4[1] - test4[0])) >= ps, "Part 3.1");
+	CHECK_COND(static_cast<size_t>(std::abs(test4[2] - test4[1])) >= ps, "Part 3.2");
+	CHECK_COND(static_cast<size_t>(std::abs(test4[3] - test4[2])) >= ps, "Part 3.3");
 
-	CHECK_COND(static_cast<size_t>(abs(test4[5] - test4[4])) >= ps, "Part 3.4");
-	CHECK_COND(static_cast<size_t>(abs(test4[6] - test4[5])) >= ps, "Part 3.5");
-	CHECK_COND(static_cast<size_t>(abs(test4[7] - test4[6])) >= ps, "Part 3.6");
+	CHECK_COND(static_cast<size_t>(std::abs(test4[5] - test4[4])) >= ps, "Part 3.4");
+	CHECK_COND(static_cast<size_t>(std::abs(test4[6] - test4[5])) >= ps, "Part 3.5");
+	CHECK_COND(static_cast<size_t>(std::abs(test4[7] - test4[6])) >= ps, "Part 3.6");
 
 	// Thus i can set everything except for test4[2] to RE and still write to test4[2]
 

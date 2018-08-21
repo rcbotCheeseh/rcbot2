@@ -129,13 +129,20 @@ namespace SourceHook
 #elif SH_SYS == SH_SYS_APPLE
 		vm_size_t ignoreSize;
 		vm_address_t vmaddr = (vm_address_t)addr;
+		memory_object_name_t obj;
+#if defined(__i386__)
 		vm_region_basic_info_data_t info;
 		vm_region_flavor_t flavor = VM_REGION_BASIC_INFO;
-		memory_object_name_t obj;
-
 		mach_msg_type_number_t count = VM_REGION_BASIC_INFO_COUNT;
 		kern_return_t kr = vm_region(mach_task_self(), &vmaddr, &ignoreSize, flavor,
 		                             (vm_region_info_t)&info, &count, &obj);
+#elif defined(__x86_64__)
+		vm_region_basic_info_data_64_t info;
+		vm_region_flavor_t flavor = VM_REGION_BASIC_INFO_64;
+		mach_msg_type_number_t count = VM_REGION_BASIC_INFO_COUNT_64;
+		kern_return_t kr = vm_region_64(mach_task_self(), &vmaddr, &ignoreSize, flavor,
+		                                (vm_region_info_64_t)&info, &count, &obj);
+#endif
 		if (kr != KERN_SUCCESS)
 			return false;
 		*bits = 0;
@@ -248,7 +255,7 @@ namespace SourceHook
 	*/
 	namespace
 	{
-		bool ModuleInMemory(char *addr, size_t len)
+		static inline bool ModuleInMemory(char *addr, size_t len)
 		{
 #if SH_SYS == SH_SYS_LINUX
 			// On linux, first check /proc/self/maps
@@ -326,6 +333,7 @@ namespace SourceHook
 
 			for (size_t i = 0; i < len; i++)
 				dummy = p[i];
+			(void)dummy; // silence unused var, we must read from p
 
 			g_BadReadCalled = false;
 
@@ -333,7 +341,7 @@ namespace SourceHook
 
 			return false;
 #elif SH_SYS == SH_SYS_APPLE
-			struct sigaction sa, osa;
+			struct sigaction sa, osa, osa2;
 			sa.sa_sigaction = BadReadHandler;
 			sa.sa_flags = SA_SIGINFO | SA_RESTART;
 
@@ -344,16 +352,20 @@ namespace SourceHook
 
 			if (sigaction(SIGBUS, &sa, &osa) == -1)
 				return false;
+			if (sigaction(SIGSEGV, &sa, &osa2) == -1)
+				return false;
 
 			volatile const char *p = reinterpret_cast<const char *>(addr);
 			char dummy;
 
 			for (size_t i = 0; i < len; i++)
 				dummy = p[i];
+			(void)dummy; // silence unused var, we must read from p
 
 			g_BadReadCalled = false;
 
 			sigaction(SIGBUS, &osa, NULL);
+			sigaction(SIGSEGV, &osa2, NULL);
 
 			return true;
 #elif SH_XP == SH_XP_WINAPI

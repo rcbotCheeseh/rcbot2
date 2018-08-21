@@ -38,6 +38,18 @@
 #include "metamod_console.h"
 #include <filesystem.h>
 #include "metamod.h"
+#include <tier1/KeyValues.h>
+#if SOURCE_ENGINE == SE_DOTA
+#include <iserver.h>
+#endif
+
+#if SOURCE_ENGINE == SE_DOTA && defined( _WIN32 )
+SH_DECL_HOOK1(ISource2ServerConfig, AllowDedicatedServers, const, 0, bool, EUniverse);
+bool BaseProvider::AllowDedicatedServers(EUniverse universe) const
+{
+	RETURN_META_VALUE(MRES_SUPERCEDE, true);
+}
+#endif
 
 /* Types */
 typedef void (*CONPRINTF_FUNC)(const char *, ...);
@@ -54,22 +66,27 @@ struct UsrMsgInfo
 };
 
 /* Imports */
-#if SOURCE_ENGINE == SE_DARKMESSIAH
+#if SOURCE_ENGINE < SE_ORANGEBOX
 #undef CommandLine
 DLL_IMPORT ICommandLine *CommandLine();
 #endif
 
 /* Functions */
 void CacheUserMessages();
+bool KVLoadFromFile(KeyValues *kv, IBaseFileSystem *filesystem, const char *resourceName, const char *pathID = NULL);
 void Detour_Error(const tchar *pMsg, ...);
+
 #if SOURCE_ENGINE == SE_DOTA
 void ClientCommand(CEntityIndex index, const CCommand &args);
-void LocalCommand_Meta(const CCommandContext &context, const CCommand &args);
 #elif SOURCE_ENGINE >= SE_ORANGEBOX
 void ClientCommand(edict_t *pEdict, const CCommand &args);
-void LocalCommand_Meta(const CCommand &args);
 #else
 void ClientCommand(edict_t *pEdict);
+#endif
+
+#if SOURCE_ENGINE >= SE_ORANGEBOX
+void LocalCommand_Meta(const CCommand &args);
+#else
 void LocalCommand_Meta();
 #endif
 
@@ -79,12 +96,19 @@ static BaseProvider g_Ep1Provider;
 static List<ConCommandBase *> conbases_unreg;
 static CVector<UsrMsgInfo> usermsgs_list;
 static jmp_buf usermsg_end;
+static bool g_bOriginalEngine = false;
 
 ICvar *icvar = NULL;
 IFileSystem *baseFs = NULL;
 IServerGameDLL *server = NULL;
+#if SOURCE_ENGINE == SE_DOTA
+static ISource2ServerConfig *serverconfig = NULL;
+INetworkServerService *netservice = NULL;
+IEngineServiceMgr *enginesvcmgr = NULL;
+#endif
 IVEngineServer *engine = NULL;
 IServerGameClients *gameclients = NULL;
+CGlobalVars *gpGlobals = NULL;
 IMetamodSourceProvider *provider = &g_Ep1Provider;
 ConCommand meta_local_cmd("meta", LocalCommand_Meta, "Metamod:Source control options");
 
@@ -127,6 +151,12 @@ void BaseProvider::Notify_DLLInit_Pre(CreateInterfaceFn engineFactory,
 		DisplayError("Could not find IVEngineServer! Metamod cannot load.");
 		return;
 	}
+#if SOURCE_ENGINE == SE_DOTA
+	gpGlobals = engine->GetServerGlobals();
+	serverconfig = (ISource2ServerConfig *) ((serverFactory) (INTERFACEVERSION_SERVERCONFIG, NULL));
+	netservice = (INetworkServerService *) ((engineFactory) (NETWORKSERVERSERVICE_INTERFACE_VERSION, NULL));
+	enginesvcmgr = (IEngineServiceMgr *) ((engineFactory) (ENGINESERVICEMGR_INTERFACE_VERSION, NULL));
+#endif
 #if SOURCE_ENGINE >= SE_ORANGEBOX
 	icvar = (ICvar *)((engineFactory)(CVAR_INTERFACE_VERSION, NULL));
 #else
@@ -138,12 +168,15 @@ void BaseProvider::Notify_DLLInit_Pre(CreateInterfaceFn engineFactory,
 		return;
 	}
 
-
+#if SOURCE_ENGINE == SE_DOTA
+	gameclients = (IServerGameClients *)(serverFactory(INTERFACEVERSION_SERVERGAMECLIENTS, NULL));
+#else
 	if ((gameclients = (IServerGameClients *)(serverFactory("ServerGameClients003", NULL)))
 		== NULL)
 	{
 		gameclients = (IServerGameClients *)(serverFactory("ServerGameClients004", NULL));
 	}
+#endif
 
 	baseFs = (IFileSystem *)((engineFactory)(FILESYSTEM_INTERFACE_VERSION, NULL));
 	if (baseFs == NULL)
@@ -151,15 +184,55 @@ void BaseProvider::Notify_DLLInit_Pre(CreateInterfaceFn engineFactory,
 		mm_LogMessage("Unable to find \"%s\": .vdf files will not be parsed", FILESYSTEM_INTERFACE_VERSION);
 	}
 
+#if SOURCE_ENGINE == SE_DOTA
+	// Since we have to be added as a Game path (cannot add GameBin directly), we
+	// automatically get added to other paths as well, including having the MM:S
+	// dir become the default write path for logs and more. We can fix some of these.
+
+	char searchPath[260];
+	baseFs->GetSearchPath("GAME", (GetSearchPathTypes_t)0, searchPath, sizeof(searchPath));
+	for (size_t i = 0; i < sizeof(searchPath); ++i)
+	{
+		if (searchPath[i] == ';')
+		{
+			searchPath[i] = '\0';
+			break;
+		}
+	}
+	baseFs->RemoveSearchPath(searchPath, "GAME");
+
+	// TODO: figure out why these calls get ignored and path remains
+	//baseFs->RemoveSearchPath(searchPath, "CONTENT");
+	//baseFs->RemoveSearchPath(searchPath, "SHADER_SOURCE");
+	//baseFs->RemoveSearchPath(searchPath, "SHADER_SOURCE_MOD");
+
+	baseFs->RemoveSearchPaths("DEFAULT_WRITE_PATH");
+	baseFs->GetSearchPath("GAME", (GetSearchPathTypes_t)0, searchPath, sizeof(searchPath));
+	for (size_t i = 0; i < sizeof(searchPath); ++i)
+	{
+		if (searchPath[i] == ';')
+		{
+			searchPath[i] = '\0';
+			break;
+		}
+	}
+	baseFs->AddSearchPath(searchPath, "DEFAULT_WRITE_PATH");
+#endif
+
 #if SOURCE_ENGINE >= SE_ORANGEBOX
 	g_pCVar = icvar;
 #endif
 
 	g_SMConVarAccessor.RegisterConCommandBase(&meta_local_cmd);
+	
+#if SOURCE_ENGINE == SE_EPISODEONE
+	/* The Ship is the only game known at this time that uses the pre-Episode One engine */
+	g_bOriginalEngine = strcmp(CommandLine()->ParmValue("-game", "hl2"), "ship") == 0;
+#endif
 
 	CacheUserMessages();
 
-#if SOURCE_ENGINE == SE_DARKMESSIAH
+#if SOURCE_ENGINE < SE_ORANGEBOX
 	if (!g_SMConVarAccessor.InitConCommandBaseList())
 	{
 		/* This is very unlikely considering it's old engine */
@@ -172,13 +245,17 @@ void BaseProvider::Notify_DLLInit_Pre(CreateInterfaceFn engineFactory,
 	{
 		SH_ADD_HOOK_STATICFUNC(IServerGameClients, ClientCommand, gameclients, ClientCommand, false);
 	}
+
+#if SOURCE_ENGINE == SE_DOTA && defined( _WIN32 )
+	SH_ADD_VPHOOK(ISource2ServerConfig, AllowDedicatedServers, serverconfig, SH_MEMBER(this, &BaseProvider::AllowDedicatedServers), false);
+#endif
 }
 
 void BaseProvider::Notify_DLLShutdown_Pre()
 {
 	g_SMConVarAccessor.RemoveMetamodCommands();
 
-#if SOURCE_ENGINE == SE_DARKMESSIAH
+#if SOURCE_ENGINE < SE_ORANGEBOX
 	if (g_Metamod.IsLoadedAsGameDLL())
 	{
 		icvar->UnlinkVariables(FCVAR_GAMEDLL);
@@ -194,7 +271,7 @@ bool BaseProvider::IsRemotePrintingAvailable()
 void BaseProvider::ClientConsolePrint(edict_t *pEdict, const char *message)
 {
 #if SOURCE_ENGINE == SE_DOTA
-	int client = (int)(pEdict - g_Metamod.GetCGlobals()->pEdicts);
+	int client = (int)(pEdict - gpGlobals->pEdicts);
 	engine->ClientPrintf(client, message);
 #else
 	engine->ClientPrintf(pEdict, message);
@@ -277,6 +354,31 @@ bool BaseProvider::LogMessage(const char *buffer)
 
 bool BaseProvider::GetHookInfo(ProvidedHooks hook, SourceHook::MemFuncInfo *pInfo)
 {
+#if SOURCE_ENGINE == SE_DOTA
+	SourceHook::MemFuncInfo mfi = {true, -1, 0, 0};
+
+	switch (hook)
+	{
+	case ProvidedHook_StartupServer:
+		SourceHook::GetFuncInfo(&INetworkServerService::StartupServer, mfi);
+		break;
+	case ProvidedHook_StartChangeLevel:
+		SourceHook::GetFuncInfo(&INetworkGameServer::StartChangeLevel, mfi);
+		break;
+	case ProvidedHook_Init:
+		SourceHook::GetFuncInfo(&INetworkGameServer::Init, mfi);
+		break;
+	case ProvidedHook_SwitchToLoop:
+		SourceHook::GetFuncInfo(&IEngineServiceMgr::SwitchToLoop, mfi);
+		break;
+	default:
+		return false;
+	}
+
+	*pInfo = mfi;
+
+	return (mfi.thisptroffs >= 0);
+#else
 	SourceHook::MemFuncInfo mfi = {true, -1, 0, 0};
 
 	if (hook == ProvidedHook_LevelInit)
@@ -295,6 +397,7 @@ bool BaseProvider::GetHookInfo(ProvidedHooks hook, SourceHook::MemFuncInfo *pInf
 	*pInfo = mfi;
 
 	return (mfi.thisptroffs >= 0);
+#endif
 }
 
 void BaseProvider::DisplayError(const char *fmt, ...)
@@ -384,7 +487,11 @@ void BaseProvider::GetGamePath(char *pszBuffer, int len)
 
 const char *BaseProvider::GetGameDescription()
 {
+#if SOURCE_ENGINE == SE_DOTA
+	return serverconfig->GetGameDescription();
+#else
 	return server->GetGameDescription();
+#endif
 }
 
 int BaseProvider::DetermineSourceEngine()
@@ -431,6 +538,8 @@ int BaseProvider::DetermineSourceEngine()
 	return SOURCE_ENGINE_DOTA;
 #elif SOURCE_ENGINE == SE_BMS
 	return SOURCE_ENGINE_BMS;
+#elif SOURCE_ENGINE == SE_EPISODEONE
+	return g_bOriginalEngine ? SOURCE_ENGINE_ORIGINAL : SOURCE_ENGINE_EPISODEONE;
 #else
 #error "SOURCE_ENGINE not defined to a known value"
 #endif
@@ -466,11 +575,22 @@ bool BaseProvider::ProcessVDF(const char *file, char path[], size_t path_len, ch
 	}
 
 	KeyValues *pValues;
+	bool bKVLoaded = false;
 	const char *plugin_file, *p_alias;
 
 	pValues = new KeyValues("Metamod Plugin");
 
-	if (!pValues->LoadFromFile(baseFs, file))
+	if (g_bOriginalEngine)
+	{
+		/* The Ship must use a special version of this function */
+		bKVLoaded = KVLoadFromFile(pValues, baseFs, file);
+	}
+	else
+	{
+		bKVLoaded = pValues->LoadFromFile(baseFs, file);
+	}
+	
+	if (!bKVLoaded)
 	{
 		pValues->deleteThis();
 		return false;
@@ -496,6 +616,64 @@ bool BaseProvider::ProcessVDF(const char *file, char path[], size_t path_len, ch
 	pValues->deleteThis();
 
 	return true;
+}
+
+const char *BaseProvider::GetEngineDescription() const
+{
+#if SOURCE_ENGINE == SE_BLOODYGOODTIME
+	return "Bloody Good Time (2010)";
+#elif SOURCE_ENGINE == SE_ALIENSWARM
+	return "Alien Swarm (2010)";
+#elif SOURCE_ENGINE == SE_LEFT4DEAD2
+	return "Left 4 Dead 2 (2009)";
+#elif SOURCE_ENGINE == SE_NUCLEARDAWN
+	return "Nuclear Dawn (2011)";
+#elif SOURCE_ENGINE == SE_CONTAGION
+	return "Contagion (2013)";
+#elif SOURCE_ENGINE == SE_LEFT4DEAD
+	return "Left 4 Dead (2008)";
+#elif SOURCE_ENGINE == SE_ORANGEBOX
+	return "Episode 2 (Orange Box, 2007)";
+#elif SOURCE_ENGINE == SE_CSS
+	return "Counter-Strike: Source (Valve Orange Box)";
+#elif SOURCE_ENGINE == SE_HL2DM
+	return "Half-Life 2 Deathmatch (Valve Orange Box)";
+#elif SOURCE_ENGINE == SE_DODS
+	return "Day of Defeat: Source (Valve Orange Box)";
+#elif SOURCE_ENGINE == SE_SDK2013
+	return "Source SDK 2013 (2013)";
+#elif SOURCE_ENGINE == SE_BMS
+	return "Black Mesa (2015)";
+#elif SOURCE_ENGINE == SE_TF2
+	return "Team Fortress 2 (Valve Orange Box)";
+#elif SOURCE_ENGINE == SE_DARKMESSIAH
+	return "Dark Messiah (2006)";
+#elif SOURCE_ENGINE == SE_EYE
+	return "E.Y.E. Divine Cybermancy (2011)";
+#elif SOURCE_ENGINE == SE_PORTAL2
+	return "Portal 2 (2011)";
+#elif SOURCE_ENGINE == SE_BLADE
+	return "Blade Symphony (2013)";
+#elif SOURCE_ENGINE == SE_INSURGENCY
+	return "Insurgency (2013)";
+#elif SOURCE_ENGINE == SE_DOI
+	return "Day of Infamy (2016)";
+#elif SOURCE_ENGINE == SE_CSGO
+	return "Counter-Strike: Global Offensive (2012)";
+#elif SOURCE_ENGINE == SE_DOTA
+	return "Dota 2 (2013)";
+#elif SOURCE_ENGINE == SE_EPISODEONE
+	if (g_bOriginalEngine)
+	{
+		return "Original (pre-Episode 1)";
+	}
+	else
+	{
+		return "Episode 1 (2004)";
+	}
+#else
+#error "SOURCE_ENGINE not defined to a known value"
+#endif
 }
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
@@ -544,11 +722,7 @@ public:
 };
 #endif
 
-#if SOURCE_ENGINE == SE_DOTA
-void LocalCommand_Meta(const CCommandContext &context, const CCommand &args)
-{
-	GlobCommand cmd(&args);
-#elif SOURCE_ENGINE >= SE_ORANGEBOX
+#if SOURCE_ENGINE >= SE_ORANGEBOX
 void LocalCommand_Meta(const CCommand &args)
 {
 	GlobCommand cmd(&args);
@@ -649,3 +823,33 @@ void CacheUserMessages()
 }
 
 #endif
+
+bool KVLoadFromFile(KeyValues *kv, IBaseFileSystem *filesystem, const char *resourceName, const char *pathID)
+{
+	Assert(filesystem);
+#ifdef _MSC_VER
+	Assert(_heapchk() == _HEAPOK);
+#endif
+
+	FileHandle_t f = filesystem->Open(resourceName, "rb", pathID);
+	if (!f)
+		return false;
+
+	// load file into a null-terminated buffer
+	int fileSize = filesystem->Size(f);
+	char *buffer = (char *)MemAllocScratch(fileSize + 1);
+	
+	Assert(buffer);
+	
+	filesystem->Read(buffer, fileSize, f); // read into local buffer
+
+	buffer[fileSize] = 0; // null terminate file as EOF
+
+	filesystem->Close( f );	// close file after reading
+
+	bool retOK = kv->LoadFromBuffer( resourceName, buffer, filesystem );
+
+	MemFreeScratch();
+
+	return retOK;
+}

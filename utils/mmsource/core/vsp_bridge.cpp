@@ -30,7 +30,7 @@
 #include <iplayerinfo.h>
 #include <assert.h>
 #include <loader_bridge.h>
-#include <versionlib.h>
+#include <metamod_version.h>
 #include <sh_string.h>
 #include "provider/provider_ep2.h"
 
@@ -164,11 +164,14 @@ public:
 
 	virtual void Unload()
 	{
+		// Source2 doesn't have the Error function (nor VSP support).
+#if SOURCE_ENGINE != SE_DOTA
 		if (g_bIsTryingToUnload)
 		{
 			Error("Metamod:Source cannot be unloaded from VSP mode.  Use \"meta unload\" to unload specific plugins.\n");
 			return;
 		}
+#endif
 		if (g_plugin_unload != NULL)
 		{
 			SH_REMOVE_HOOK_STATICFUNC(ConCommand, Dispatch, g_plugin_unload, InterceptPluginUnloads, false);
