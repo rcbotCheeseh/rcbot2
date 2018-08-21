@@ -3047,7 +3047,7 @@ void CBotTF2::modThink()
 		// Change class if not same class as forced one or class was forced but not anymore
 		if (m_iClass != _forcedClass && ((_forcedClass > 0 && _forcedClass < 10) || (m_classWasForced && (_forcedClass < 1 || _forcedClass > 9))))
 		{
-			m_classWasForced = _forcedClass < 1 || _forcedClass > 9;
+			m_classWasForced = _forcedClass > 0 && _forcedClass < 10;
 			chooseClass();
 			selectClass();
 		}
