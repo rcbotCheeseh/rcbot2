@@ -2242,7 +2242,8 @@ void CBotTF2 :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 
 			if ( pWeapon && (pWeapon->getID() == TF2_WEAPON_SENTRYGUN) )
 			{
-				addVoiceCommand(TF_VC_SENTRYAHEAD);
+                if (!isDisguised && !isCloaked)
+                    addVoiceCommand(TF_VC_SENTRYAHEAD);
 				updateCondition(CONDITION_COVERT);
 				m_fCurrentDanger += 100.0f;
 				m_pLastEnemySentry = CTeamFortress2Mod::getMySentryGun(pKiller);
@@ -2257,7 +2258,8 @@ void CBotTF2 :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 			}
 			else 
 			{
-				addVoiceCommand(TF_VC_INCOMING);
+                if (!isDisguised && !isCloaked)
+                    addVoiceCommand(TF_VC_INCOMING);
 				updateCondition(CONDITION_COVERT);
 				m_fCurrentDanger += 50.0f;
 			}

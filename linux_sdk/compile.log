@@ -1,0 +1,138 @@
+make: 'vcpm' is up to date.
+./vcpm ../utils/RCBot2_meta/HPB_Bot2.vcproj
+Valve Software - vcprojtomake.exe (Jul 24 2018)
+Modified for VS2010 Support by Killer Monkey
+<killermonkey01@gmail.com>
+.\bot.cpp
+.\bot_accessclient.cpp
+.\bot_buttons.cpp
+.\bot_client.cpp
+.\bot_commands.cpp
+.\bot_configfile.cpp
+.\bot_coop.cpp
+.\bot_css_bot.cpp
+.\bot_dod_bot.cpp
+.\bot_dod_mod.cpp
+.\bot_events.cpp
+.\bot_fortress.cpp
+.\bot_ga.cpp
+.\bot_ga_ind.cpp
+.\bot_getprop.cpp
+.\bot_globals.cpp
+.\bot_hl1dmsrc.cpp
+.\bot_hldm_bot.cpp
+.\bot_kv.cpp
+.\bot_menu.cpp
+.\bot_mods.cpp
+.\bot_mtrand.cpp
+.\bot_navmesh.cpp
+.\bot_perceptron.cpp
+.\bot_profile.cpp
+.\bot_profiling.cpp
+.\bot_schedule.cpp
+.\bot_tf2_points.cpp
+.\bot_som.cpp
+.\bot_squads.cpp
+.\bot_strings.cpp
+.\bot_task.cpp
+.\bot_tf2_mod.cpp
+.\bot_usercmd.cpp
+.\bot_utility.cpp
+.\bot_visibles.cpp
+.\bot_waypoint.cpp
+.\bot_waypoint_locations.cpp
+.\bot_waypoint_visibility.cpp
+.\bot_weapons.cpp
+.\bot_wpt_dist.cpp
+.\bot_zombie.cpp
+.\bot_sigscan.cpp
+.\bot_cvars.cpp
+.\bot_plugin_meta.cpp
+.\bot.h
+.\bot_accessclient.h
+.\bot_belief.h
+.\bot_buttons.h
+.\bot_client.h
+.\bot_commands.h
+.\bot_config.h
+.\bot_configfile.h
+.\bot_const.h
+.\bot_coop.h
+.\bot_css_bot.h
+.\bot_dod_bot.h
+.\bot_ehandle.h
+.\bot_event.h
+.\bot_fortress.h
+.\bot_ga.h
+.\bot_ga_ind.h
+.\bot_genclass.h
+.\bot_getprop.h
+.\bot_globals.h
+.\bot_hl1dmsrc_bot.h
+.\bot_hldm_bot.h
+.\bot_kv.h
+.\bot_menu.h
+.\bot_mods.h
+.\bot_mtrand.h
+.\bot_navigator.h
+.\bot_perceptron.h
+.\bot_profile.h
+.\bot_profiling.h
+.\bot_rb.h
+.\bot_recipients.h
+.\bot_schedule.h
+.\bot_tf2_points.h
+.\bot_som.h
+.\bot_squads.h
+.\bot_strings.h
+.\bot_task.h
+.\bot_utility.h
+.\bot_visibles.h
+.\bot_waypoint.h
+.\bot_waypoint_locations.h
+.\bot_waypoint_visibility.h
+.\bot_weapons.h
+.\bot_wpt_color.h
+.\bot_wpt_dist.h
+.\bot_zombie.h
+..\..\public\Color.h
+..\..\public\const.h
+..\..\public\tier0\dbg.h
+..\..\public\dt_send.h
+..\..\Public\eiface.h
+..\..\Public\FileSystem.h
+..\..\public\tier0\icommandline.h
+..\..\public\icvar.h
+..\..\public\igameevents.h
+..\..\public\tier1\interface.h
+..\..\public\game\server\iplayerinfo.h
+..\..\public\engine\iserverplugin.h
+..\..\public\tier1\KeyValues.h
+..\..\public\mathlib\mathlib.h
+..\..\public\tier0\mem.h
+..\..\public\tier0\memalloc.h
+..\..\public\tier0\memdbgon.h
+..\..\public\server_class.h
+..\..\public\tier1\strtools.h
+..\..\public\tier1\utlbuffer.h
+..\..\public\tier1\utlmemory.h
+..\..\public\tier1\utlvector.h
+..\..\public\mathlib\vector.h
+..\..\public\vstdlib\vstdlib.h
+.\update.txt
+if [ -z "/usr/bin/gcc-4.8" ]; then echo "Compiler not defined."; exit; fi
+# if [ ! -f "libtier0.so" ]; then ln -s ./gamedir/bin/libtier0.so .; fi
+if [ ! -d . ];then mkdir .;fi
+# if [ ! -f "libvstdlib.so" ]; then ln -s ./gamedir/bin/libvstdlib.so .; fi
+cd .
+#    if [ ! -f "libsteam_api.so" ]; then ln -s ./gamedir/bin/libsteam_api.so .; fi
+# When running over samba we need to copy the files because symlinking isn't possible.
+#    cp -f ./gamedir/bin/tier0_i486.so .
+#    cp -f ./gamedir/bin/vstdlib_i486.so .
+#    cp -f ./gamedir/bin/steam_api_i486.so .
+make -f Makefile.server CC=/usr/bin/gcc-4.8 CPLUS=/usr/bin/g++-4.8 CPP_LIB="/usr/lib/gcc/i586-linux-gnu/4.8/libstdc++.a /usr/lib/gcc/i586-linux-gnu/4.8/libgcc_eh.a" BUILD_DIR=. BUILD_OBJ_DIR=./obj SRC_DIR=~/Documents/rcbot-svn/rcbot2-code-468 SHLIBLDFLAGS=-shared -Wl,-Map,server_map.txt -Wl SHLIBEXT=so CLINK=/usr/bin/gcc-4.8 CFLAGS="-std=c++11 -w -D__linux  -mtune=generic -march=i686 -mfpmath=sse -msse -msse2 -m32 -s -pipe -O1 -fomit-frame-pointer -fforce-addr -fthread-jumps -fcrossjumping -foptimize-sibling-calls -fcse-follow-jumps -fcse-skip-blocks -fgcse -fgcse-lm -frerun-cse-after-loop -fcaller-saves -fpeephole2 -fschedule-insns2 -fsched-interblock -fsched-spec -fregmove -fdelete-null-pointer-checks -freorder-blocks -freorder-functions -falign-functions -falign-jumps -falign-loops -falign-labels -ftree-vrp -ftree-pre -finline-functions -funswitch-loops -fgcse-after-reload -funsafe-math-optimizations -DVPROF_LEVEL=1 -DSWDS -D_LINUX -DLINUX -DNDEBUG -fpermissive -Dstricmp=strcasecmp -D_stricmp=strcasecmp -D_strnicmp=strncasecmp -Dstrnicmp=strncasecmp -D_snprintf=snprintf -D_vsnprintf=vsnprintf -D_alloca=alloca -Dstrcmpi=strcasecmp -D__linux__ -DSOURCE_ENGINE=4 -DSE_EPISODEONE=1 -DSE_DARKMESSIAH=2 -DSE_ORANGEBOX=3 -DSE_ORANGEBOXVALVE=4 -DSE_LEFT4DEAD=5 -DSE_LEFT4DEAD2=6 -DSE_ALIENSWARM=7 -Usprintf=use_Q_snprintf_instead_of_sprintf -Ustrncpy=use_Q_strncpy_instead -Ufopen=dont_use_fopen -UPROTECTED_THINGS_ENABLE" LDFLAGS="-m32 -lm -ldl -Wl,-no-undefined -L. -L../lib/linux -Wl,-soname -Wl,--no-as-needed -l:mathlib_i486.a -l:libtier0_srv.so -l:tier1_i486.a -l:tier2_i486.a -l:tier3_i486.a -l:libvstdlib_srv.so -lpthread" DBG_CFLAGS="-std=c++11 -w -D__linux  -mtune=generic -march=i686 -mfpmath=sse -msse -msse2 -m32 -s -pipe -O1 -fomit-frame-pointer -fforce-addr -fthread-jumps -fcrossjumping -foptimize-sibling-calls -fcse-follow-jumps -fcse-skip-blocks -fgcse -fgcse-lm -frerun-cse-after-loop -fcaller-saves -fpeephole2 -fschedule-insns2 -fsched-interblock -fsched-spec -fregmove -fdelete-null-pointer-checks -freorder-blocks -freorder-functions -falign-functions -falign-jumps -falign-loops -falign-labels -ftree-vrp -ftree-pre -finline-functions -funswitch-loops -fgcse-after-reload -funsafe-math-optimizations -DVPROF_LEVEL=1 -DSWDS -D_LINUX -DLINUX -DNDEBUG -fpermissive -Dstricmp=strcasecmp -D_stricmp=strcasecmp -D_strnicmp=strncasecmp -Dstrnicmp=strncasecmp -D_snprintf=snprintf -D_vsnprintf=vsnprintf -D_alloca=alloca -Dstrcmpi=strcasecmp -D__linux__ -DSOURCE_ENGINE=4 -DSE_EPISODEONE=1 -DSE_DARKMESSIAH=2 -DSE_ORANGEBOX=3 -DSE_ORANGEBOXVALVE=4 -DSE_LEFT4DEAD=5 -DSE_LEFT4DEAD2=6 -DSE_ALIENSWARM=7 -Usprintf=use_Q_snprintf_instead_of_sprintf -Ustrncpy=use_Q_strncpy_instead -Ufopen=dont_use_fopen -UPROTECTED_THINGS_ENABLE" ARCH=i486 GAME_DIR=./gamedir MOD_CONFIG=HPB_bot2_Release_NonHomeFolderWin32 NAME=RCBot2Meta XERCES_INC_DIR=/opt/include XERCES_LIB_DIR=/opt/lib SOURCE_DIR=..
+make[1]: Entering directory '/mnt/d/Projects/tf2_server_files/cheeseh_rcbot2_repo/linux_sdk'
+mkdir -p obj/RCBot2Meta_i486/us/RCBot2_metmeta
+/usr/bin/g++-4.8 -I../utils/RCBot2_meta/../../public/mathlib -I../utils/RCBot2_meta/../../public -I../utils/RCBot2_meta/../../public/engine -I../utils/RCBot2_meta/../../public/tier0 -I../utils/RCBot2_meta/../../public/tier1 -I../utils/RCBot2_meta/../../dlls -I../utils/RCBot2_meta/../../game_shared -I../utils/RCBot2_meta/../../game/shared -I../utils/RCBot2_meta/../../game/server -I../utils/RCBot2_meta/../../public/game/server -I../utils/RCBot2_meta/../mmsource/public -I../utils/RCBot2_meta/../mmsource/core -I../utils/RCBot2_meta/../mmsource/core/sourcehook -DNDEBUG  -DARCH=i486 -std=c++11 -w -D__linux  -mtune=generic -march=i686 -mfpmath=sse -msse -msse2 -m32 -s -pipe -O1 -fomit-frame-pointer -fforce-addr -fthread-jumps -fcrossjumping -foptimize-sibling-calls -fcse-follow-jumps -fcse-skip-blocks -fgcse -fgcse-lm -frerun-cse-after-loop -fcaller-saves -fpeephole2 -fschedule-insns2 -fsched-interblock -fsched-spec -fregmove -fdelete-null-pointer-checks -freorder-blocks -freorder-functions -falign-functions -falign-jumps -falign-loops -falign-labels -ftree-vrp -ftree-pre -finline-functions -funswitch-loops -fgcse-after-reload -funsafe-math-optimizations -DVPROF_LEVEL=1 -DSWDS -D_LINUX -DLINUX -DNDEBUG -fpermissive -Dstricmp=strcasecmp -D_stricmp=strcasecmp -D_strnicmp=strncasecmp -Dstrnicmp=strncasecmp -D_snprintf=snprintf -D_vsnprintf=vsnprintf -D_alloca=alloca -Dstrcmpi=strcasecmp -D__linux__ -DSOURCE_ENGINE=4 -DSE_EPISODEONE=1 -DSE_DARKMESSIAH=2 -DSE_ORANGEBOX=3 -DSE_ORANGEBOXVALVE=4 -DSE_LEFT4DEAD=5 -DSE_LEFT4DEAD2=6 -DSE_ALIENSWARM=7 -Usprintf=use_Q_snprintf_instead_of_sprintf -Ustrncpy=use_Q_strncpy_instead -Ufopen=dont_use_fopen -UPROTECTED_THINGS_ENABLE -o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_fortress.o -c ../utils/RCBot2_meta/bot_fortress.cpp
+/usr/bin/gcc-4.8 -shared  -o ./RCBot2Meta_i486.so obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_accessclient.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_buttons.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_client.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_commands.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_configfile.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_coop.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_css_bot.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_dod_bot.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_dod_mod.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_events.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_fortress.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_ga.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_ga_ind.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_getprop.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_globals.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_hl1dmsrc.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_hldm_bot.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_kv.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_menu.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_mods.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_mtrand.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_navmesh.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_perceptron.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_profile.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_profiling.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_schedule.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_tf2_points.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_som.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_squads.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_strings.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_task.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_tf2_mod.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_usercmd.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_utility.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_visibles.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_waypoint.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_waypoint_locations.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_waypoint_visibility.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_weapons.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_wpt_dist.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_zombie.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_sigscan.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_cvars.o obj/RCBot2Meta_i486/us/RCBot2_metmeta/bot_plugin_meta.o  -m32 -lm -ldl -Wl,-no-undefined -L. -L../lib/linux -Wl,-soname -Wl,--no-as-needed -l:mathlib_i486.a -l:libtier0_srv.so -l:tier1_i486.a -l:tier2_i486.a -l:tier3_i486.a -l:libvstdlib_srv.so -lpthread /usr/lib/gcc/i586-linux-gnu/4.8/libstdc++.a /usr/lib/gcc/i586-linux-gnu/4.8/libgcc_eh.a
+make[1]: Leaving directory '/mnt/d/Projects/tf2_server_files/cheeseh_rcbot2_repo/linux_sdk'
