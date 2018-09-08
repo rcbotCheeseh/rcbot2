@@ -2896,7 +2896,7 @@ void CBotTF2::modThink()
 
 				extern ConVar *mp_stalemate_meleeonly;
 
-				if (!mp_stalemate_meleeonly || !mp_stalemate_meleeonly->GetBool() || !CTeamFortress2Mod::isSuddenDeath())
+				if ((!mp_stalemate_meleeonly || !mp_stalemate_meleeonly->GetBool()) && !CTeamFortress2Mod::isSuddenDeath() && !CTeamFortress2Mod::isMedievalMode())
 				{
 					// only add primary / secondary weapons if they are given them by the map
 					/*if (RCBotPluginMeta::TF2_getPlayerWeaponSlot(m_pEdict, TF2_SLOT_PRMRY) &&
@@ -3078,7 +3078,7 @@ void CBotTF2::modThink()
 					m_fChangeClassTime = engine->Time() + randomFloat(bot_min_cc_time.GetFloat() / 2, bot_max_cc_time.GetFloat() / 2);
 				}
 
-				const int _forcedClass = rcbot_force_class.GetInt();
+				//const int _forcedClass = rcbot_force_class.GetInt();
 				// Change class if either I think I could do better
 				if (randomFloat(0.0f, 1.0f) > (scoreValue / CTeamFortress2Mod::getHighestScore()))
 				{
