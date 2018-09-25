@@ -69,6 +69,7 @@ extern ConVar rcbot_tf2_protect_cap_percent;
 extern ConVar rcbot_tf2_spy_kill_on_cap_dist;
 extern ConVar rcbot_speed_boost;
 extern ConVar rcbot_projectile_tweak;
+extern ConVar rcbot_force_class;
 
 extern IVDebugOverlay *debugoverlay;
 
@@ -985,8 +986,6 @@ void CBotFortress :: spawnInit ()
 	m_bSentryGunVectorValid = false;
 	m_bDispenserVectorValid = false;
 	m_bTeleportExitVectorValid = false;
-
-	
 }
 
 bool CBotFortress :: isBuilding ( edict_t *pBuilding )
@@ -1539,46 +1538,45 @@ void CBotFortress :: selectClass ()
 		_class = (TF_Class)m_iDesiredClass;
 
 	m_iClass = _class;
-
-	if ( _class == TF_CLASS_SCOUT )
+	if (_class == TF_CLASS_SCOUT)
 	{
-		sprintf(buffer,"joinclass scout");
+		sprintf(buffer, "joinclass scout");
 	}
-	else if ( _class == TF_CLASS_ENGINEER )
+	else if (_class == TF_CLASS_ENGINEER)
 	{
-		sprintf(buffer,"joinclass engineer");
+		sprintf(buffer, "joinclass engineer");
 	}
-	else if ( _class == TF_CLASS_DEMOMAN )
+	else if (_class == TF_CLASS_DEMOMAN)
 	{
-		sprintf(buffer,"joinclass demoman");
+		sprintf(buffer, "joinclass demoman");
 	}
-	else if ( _class == TF_CLASS_SOLDIER )
+	else if (_class == TF_CLASS_SOLDIER)
 	{
-		sprintf(buffer,"joinclass soldier");
+		sprintf(buffer, "joinclass soldier");
 	}
-	else if ( _class == TF_CLASS_HWGUY )
+	else if (_class == TF_CLASS_HWGUY)
 	{
-		sprintf(buffer,"joinclass heavyweapons");
+		sprintf(buffer, "joinclass heavyweapons");
 	}
-	else if ( _class == TF_CLASS_MEDIC )
+	else if (_class == TF_CLASS_MEDIC)
 	{
-		sprintf(buffer,"joinclass medic");
+		sprintf(buffer, "joinclass medic");
 	}
-	else if ( _class == TF_CLASS_SPY )
+	else if (_class == TF_CLASS_SPY)
 	{
-		sprintf(buffer,"joinclass spy");
+		sprintf(buffer, "joinclass spy");
 	}
-	else if ( _class == TF_CLASS_PYRO )
+	else if (_class == TF_CLASS_PYRO)
 	{
-		sprintf(buffer,"joinclass pyro");
+		sprintf(buffer, "joinclass pyro");
 	}
 	else
 	{
-		sprintf(buffer,"joinclass sniper");
+		sprintf(buffer, "joinclass sniper");
 	}
-	helpers->ClientCommand(m_pEdict,buffer);
+	helpers->ClientCommand(m_pEdict, buffer);
 
-	m_fChangeClassTime = engine->Time() + randomFloat(bot_min_cc_time.GetFloat(),bot_max_cc_time.GetFloat());
+	m_fChangeClassTime = engine->Time() + randomFloat(bot_min_cc_time.GetFloat(), bot_max_cc_time.GetFloat());
 }
 
 bool CBotFortress :: waitForFlag ( Vector *vOrigin, float *fWait, bool bFindFlag )
@@ -2238,13 +2236,15 @@ void CBotTF2 :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 {
 	if ( pKiller && !m_pEnemy && !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) )
 	{
+		bool shouldReact = !isDisguised() && !isCloaked();
 		//if ( pWeapon )
 		//{
 		//	DOD_Class pclass = (DOD_Class)CClassInterface::getPlayerClassDOD(pKiller);
 
 			if ( pWeapon && (pWeapon->getID() == TF2_WEAPON_SENTRYGUN) )
 			{
-				addVoiceCommand(TF_VC_SENTRYAHEAD);
+                if (shouldReact)
+                    addVoiceCommand(TF_VC_SENTRYAHEAD);
 				updateCondition(CONDITION_COVERT);
 				m_fCurrentDanger += 100.0f;
 				m_pLastEnemySentry = CTeamFortress2Mod::getMySentryGun(pKiller);
@@ -2259,7 +2259,8 @@ void CBotTF2 :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 			}
 			else 
 			{
-				addVoiceCommand(TF_VC_INCOMING);
+                if (shouldReact)
+                    addVoiceCommand(TF_VC_INCOMING);
 				updateCondition(CONDITION_COVERT);
 				m_fCurrentDanger += 50.0f;
 			}
@@ -2622,96 +2623,133 @@ void CBotTF2 ::spyCloak()
 
 void CBotFortress::chooseClass()
 {
-	float fClassFitness[10];
-	float fTotalFitness = 0;
-	float fRandom;
-
-	int iNumMedics = 0;
-	int i = 0;
-	int iTeam = getTeam();
-	int iClass;
-	edict_t *pPlayer;
-
-	for ( i = 1; i < 10; i ++ )
-		fClassFitness[i] = 1.0f;
-
-	if ( (m_iClass >= 0) && (m_iClass < 10) )
-		fClassFitness[m_iClass] = 0.1f;
-
-	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
+	const int _forcedClass = rcbot_force_class.GetInt();
+	if (_forcedClass > 0 && _forcedClass < 10)
 	{
-		pPlayer = INDEXENT(i);
-		
-		if ( CBotGlobals::entityIsValid(pPlayer) && (CTeamFortress2Mod::getTeam(pPlayer) == iTeam))
+		switch (_forcedClass)
 		{
-			iClass = CClassInterface::getTF2Class(pPlayer);
-
-			if ( iClass == TF_CLASS_MEDIC )
-				iNumMedics ++;
-
-			if ( (iClass >= 0) && (iClass < 10) )
-				fClassFitness [iClass] *= 0.6f; 
+		case 1:
+			m_iDesiredClass = TF_CLASS_SCOUT;
+			break;
+		case 2:
+			m_iDesiredClass = TF_CLASS_SOLDIER;
+			break;
+		case 3:
+			m_iDesiredClass = TF_CLASS_PYRO;
+			break;
+		case 4:
+			m_iDesiredClass = TF_CLASS_DEMOMAN;
+			break;
+		case 5:
+			m_iDesiredClass = TF_CLASS_HWGUY;
+			break;
+		case 6:
+			m_iDesiredClass = TF_CLASS_ENGINEER;
+			break;
+		case 7:
+			m_iDesiredClass = TF_CLASS_MEDIC;
+			break;
+		case 8:
+			m_iDesiredClass = TF_CLASS_SNIPER;
+			break;
+		case 9:
+			m_iDesiredClass = TF_CLASS_SPY;
+			break;
 		}
 	}
+	else
+	{
+		float fClassFitness[10];
+		float fTotalFitness = 0;
+		float fRandom;
 
-	if ( CTeamFortress2Mod::isMapType(TF_MAP_MVM) )
-	{
-		fClassFitness[TF_CLASS_ENGINEER] *= 1.5;
-		fClassFitness[TF_CLASS_SPY] *= 0.6;
-		fClassFitness[TF_CLASS_SCOUT] *= 0.6;
-		fClassFitness[TF_CLASS_HWGUY] *= 1.5;
-		fClassFitness[TF_CLASS_MEDIC] *= 1.1;
-		fClassFitness[TF_CLASS_SOLDIER] *= 1.5;
-		fClassFitness[TF_CLASS_DEMOMAN] *= 1.4;
-		fClassFitness[TF_CLASS_PYRO] *= 1.6;
-	// attacking team?
-	}
-	else if ( CTeamFortress2Mod::isAttackDefendMap() )
-	{
-		if ( getTeam() == TF2_TEAM_BLUE )
+		int iNumMedics = 0;
+		int i = 0;
+		int iTeam = getTeam();
+		int iClass;
+		edict_t *pPlayer;
+
+		for (i = 1; i < 10; i++)
+			fClassFitness[i] = 1.0f;
+
+		if ((m_iClass >= 0) && (m_iClass < 10))
+			fClassFitness[m_iClass] = 0.1f;
+
+		for (i = 1; i <= gpGlobals->maxClients; i++)
 		{
-			fClassFitness[TF_CLASS_ENGINEER] *= 0.75;
-			fClassFitness[TF_CLASS_SPY] *= 1.25;
-			fClassFitness[TF_CLASS_SCOUT] *= 1.05;
+			pPlayer = INDEXENT(i);
+
+			if (CBotGlobals::entityIsValid(pPlayer) && (CTeamFortress2Mod::getTeam(pPlayer) == iTeam))
+			{
+				iClass = CClassInterface::getTF2Class(pPlayer);
+
+				if (iClass == TF_CLASS_MEDIC)
+					iNumMedics++;
+
+				if ((iClass >= 0) && (iClass < 10))
+					fClassFitness[iClass] *= 0.6f;
+			}
 		}
-		else
+
+		if (CTeamFortress2Mod::isMapType(TF_MAP_MVM))
 		{
-			fClassFitness[TF_CLASS_ENGINEER] *= 2.0;
-			fClassFitness[TF_CLASS_SCOUT] *= 0.5;
+			fClassFitness[TF_CLASS_ENGINEER] *= 1.5;
+			fClassFitness[TF_CLASS_SPY] *= 0.6;
+			fClassFitness[TF_CLASS_SCOUT] *= 0.6;
 			fClassFitness[TF_CLASS_HWGUY] *= 1.5;
 			fClassFitness[TF_CLASS_MEDIC] *= 1.1;
+			fClassFitness[TF_CLASS_SOLDIER] *= 1.5;
+			fClassFitness[TF_CLASS_DEMOMAN] *= 1.4;
+			fClassFitness[TF_CLASS_PYRO] *= 1.6;
+			// attacking team?
 		}
-	}
-	else if ( CTeamFortress2Mod::isMapType(TF_MAP_CP) )
-		fClassFitness[TF_CLASS_SCOUT] *= 1.2f;
-
-	if ( m_pLastEnemySentry.get() != NULL )
-	{
-		fClassFitness[TF_CLASS_SPY] *= 1.25;
-		fClassFitness[TF_CLASS_DEMOMAN] *= 1.3;
-	}
-
-	if ( iNumMedics == 0 )
-		fClassFitness[TF_CLASS_MEDIC] *= 2.0f;
-
-
-	for ( int i = 1; i < 10; i ++ )
-		fTotalFitness += fClassFitness[i];
-
-	fRandom = randomFloat(0,fTotalFitness);
-
-	fTotalFitness = 0;
-
-	m_iDesiredClass = 0;
-
-	for ( int i = 1; i < 10; i ++ )
-	{
-		fTotalFitness += fClassFitness[i];
-
-		if ( fRandom <= fTotalFitness )
+		else if (CTeamFortress2Mod::isAttackDefendMap())
 		{
-			m_iDesiredClass = i;
-			break;
+			if (getTeam() == TF2_TEAM_BLUE)
+			{
+				fClassFitness[TF_CLASS_ENGINEER] *= 0.75;
+				fClassFitness[TF_CLASS_SPY] *= 1.25;
+				fClassFitness[TF_CLASS_SCOUT] *= 1.05;
+			}
+			else
+			{
+				fClassFitness[TF_CLASS_ENGINEER] *= 2.0;
+				fClassFitness[TF_CLASS_SCOUT] *= 0.5;
+				fClassFitness[TF_CLASS_HWGUY] *= 1.5;
+				fClassFitness[TF_CLASS_MEDIC] *= 1.1;
+			}
+		}
+		else if (CTeamFortress2Mod::isMapType(TF_MAP_CP))
+			fClassFitness[TF_CLASS_SCOUT] *= 1.2f;
+
+		if (m_pLastEnemySentry.get() != NULL)
+		{
+			fClassFitness[TF_CLASS_SPY] *= 1.25;
+			fClassFitness[TF_CLASS_DEMOMAN] *= 1.3;
+		}
+
+		if (iNumMedics == 0)
+			fClassFitness[TF_CLASS_MEDIC] *= 2.0f;
+
+
+		for (int i = 1; i < 10; i++)
+			fTotalFitness += fClassFitness[i];
+
+		fRandom = randomFloat(0, fTotalFitness);
+
+		fTotalFitness = 0;
+
+		m_iDesiredClass = 0;
+
+		for (int i = 1; i < 10; i++)
+		{
+			fTotalFitness += fClassFitness[i];
+
+			if (fRandom <= fTotalFitness)
+			{
+				m_iDesiredClass = i;
+				break;
+			}
 		}
 	}
 }
@@ -2828,6 +2866,7 @@ void CBotTF2::upgradeWeapon(int iSlot)
 	RCBotPluginMeta::givePlayerLoadOut(m_pEdict, &copy, iSlot, m_pVTable, m_pVTable_Attributes);
 }
 
+bool m_classWasForced = false;
 
 void CBotTF2::modThink()
 {
@@ -2857,7 +2896,7 @@ void CBotTF2::modThink()
 
 				extern ConVar *mp_stalemate_meleeonly;
 
-				if (!mp_stalemate_meleeonly || !mp_stalemate_meleeonly->GetBool() || !CTeamFortress2Mod::isSuddenDeath())
+				if ((!mp_stalemate_meleeonly || !mp_stalemate_meleeonly->GetBool()) && !CTeamFortress2Mod::isSuddenDeath() && !CTeamFortress2Mod::isMedievalMode())
 				{
 					// only add primary / secondary weapons if they are given them by the map
 					/*if (RCBotPluginMeta::TF2_getPlayerWeaponSlot(m_pEdict, TF2_SLOT_PRMRY) &&
@@ -3005,37 +3044,48 @@ void CBotTF2::modThink()
 	}
 
 	// when respawned -- check if I should change class
-	if (m_bCheckClass && !m_pPlayerInfo->IsDead())
+	if (!m_pPlayerInfo->IsDead())
 	{
-		m_bCheckClass = false;
-
-		if (bot_change_class.GetBool() && (m_fChangeClassTime < engine->Time()) && (!CTeamFortress2Mod::isMapType(TF_MAP_MVM) || !CTeamFortress2Mod::hasRoundStarted()))
+		const int _forcedClass = rcbot_force_class.GetInt();
+		// Change class if not same class as forced one or class was forced but not anymore
+		if (m_iClass != _forcedClass && ((_forcedClass > 0 && _forcedClass < 10) || (m_classWasForced && (_forcedClass < 1 || _forcedClass > 9))))
 		{
-			// get score for this class
-			float scoreValue = CClassInterface::getTF2Score(m_pEdict);
+			m_classWasForced = _forcedClass > 0 && _forcedClass < 10;
+			chooseClass();
+			selectClass();
+		}
+		else if (m_bCheckClass)
+		{
+			m_bCheckClass = false;
 
-			if (m_iClass == TF_CLASS_ENGINEER)
+			if (bot_change_class.GetBool() && (m_fChangeClassTime < engine->Time()) && (!CTeamFortress2Mod::isMapType(TF_MAP_MVM) || !CTeamFortress2Mod::hasRoundStarted()))
 			{
-				if (m_pSentryGun.get())
+				// get score for this class
+				float scoreValue = CClassInterface::getTF2Score(m_pEdict);
+
+				if (m_iClass == TF_CLASS_ENGINEER)
 				{
-					scoreValue *= 2.0f * CTeamFortress2Mod::getSentryLevel(m_pSentryGun);
-					scoreValue *= ((m_fLastSentryEnemyTime + 15.0f) < engine->Time()) ? 2.0f : 1.0f;
+					if (m_pSentryGun.get())
+					{
+						scoreValue *= 2.0f * CTeamFortress2Mod::getSentryLevel(m_pSentryGun);
+						scoreValue *= ((m_fLastSentryEnemyTime + 15.0f) < engine->Time()) ? 2.0f : 1.0f;
+					}
+					if (m_pTeleEntrance.get() && m_pTeleExit.get())
+						scoreValue *= CTeamFortress2Mod::isAttackDefendMap() ? 2.0f : 1.5f;
+					if (m_pDispenser.get())
+						scoreValue *= 1.25f;
+					// less chance of changing class if bot has these up
+					m_fChangeClassTime = engine->Time() + randomFloat(bot_min_cc_time.GetFloat() / 2, bot_max_cc_time.GetFloat() / 2);
 				}
-				if (m_pTeleEntrance.get() && m_pTeleExit.get())
-					scoreValue *= CTeamFortress2Mod::isAttackDefendMap() ? 2.0f : 1.5f;
-				if (m_pDispenser.get())
-					scoreValue *= 1.25f;
-				// less chance of changing class if bot has these up
-				m_fChangeClassTime = engine->Time() + randomFloat(bot_min_cc_time.GetFloat() / 2, bot_max_cc_time.GetFloat() / 2);
-			}
 
-			// if I think I could do better
-			if (randomFloat(0.0f, 1.0f) > (scoreValue / CTeamFortress2Mod::getHighestScore()))
-			{
-				chooseClass(); // edits m_iDesiredClass
+				// Change class if either I think I could do better
+				if (randomFloat(0.0f, 1.0f) > (scoreValue / CTeamFortress2Mod::getHighestScore()))
+				{
+					chooseClass(); // edits m_iDesiredClass
 
-				// change class
-				selectClass();
+					// change class
+					selectClass();
+				}
 			}
 		}
 	}
