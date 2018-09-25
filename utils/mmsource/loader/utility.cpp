@@ -2,7 +2,7 @@
  * vim: set ts=4 :
  * ======================================================
  * Metamod:Source
- * Copyright (C) 2004-2015 AlliedModders LLC and authors.
+ * Copyright (C) 2004-2008 AlliedModders LLC and authors.
  * All rights reserved.
  * ======================================================
  *
@@ -225,30 +225,6 @@ mm_KeySplit(const char *str, char *buf1, size_t len1, char *buf2, size_t len2)
 bool
 mm_PathCmp(const char *path1, const char *path2)
 {
-#ifdef _WIN32
-	char szFullPath1[PLATFORM_MAX_PATH];
-	char szFullPath2[PLATFORM_MAX_PATH];
-	if (GetFullPathName(path1, sizeof(szFullPath1), szFullPath1, nullptr) != 0)
-	{
-		path1 = szFullPath1;
-	}
-	if (GetFullPathName(path2, sizeof(szFullPath2), szFullPath2, nullptr) != 0)
-	{
-		path2 = szFullPath2;
-	}
-#else
-	char szFullPath1[PATH_MAX + 1];
-	char szFullPath2[PATH_MAX + 1];
-	if (realpath(path1, szFullPath1))
-	{
-		path1 = szFullPath1;
-	}
-	if (realpath(path2, szFullPath2))
-	{
-		path2 = szFullPath2;
-	}
-#endif
-
 	size_t pos1 = 0, pos2 = 0;
 
 	while (true)
@@ -299,14 +275,8 @@ mm_PathCmp(const char *path1, const char *path2)
 }
 
 bool
-mm_ResolvePath(const char *path, char *buffer, size_t maxlength, bool bSource2)
+mm_ResolvePath(const char *path, char *buffer, size_t maxlength)
 {
-	char tmp[PLATFORM_MAX_PATH];
-	if (bSource2)
-	{
-		mm_Format(tmp, sizeof(tmp), "../../%s", path);
-		path = tmp;
-	}
 #if defined _WIN32
 	return _fullpath(buffer, path, maxlength) != NULL;
 #elif defined __linux__ || defined __APPLE__

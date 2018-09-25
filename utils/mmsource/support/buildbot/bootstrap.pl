@@ -31,7 +31,6 @@ print "Attempting to reconfigure...\n";
 
 my @conf_argv = (
 	'--enable-optimize',
-	'--breakpad-dump',
 	'--no-color',
 	'--symbol-files'
 );
@@ -42,12 +41,6 @@ if ($^O =~ /darwin/) {
 	push(@conf_argv, '--hl2sdk-root=/hgshare');
 } elsif ($^O =~ /MSWin/) {
 	push(@conf_argv, '--hl2sdk-root=H:\\');
-}
-
-if ($^O !~ /MSWin/) {
-	push(@conf_argv, '--target-arch=x86,x64');
-} else {
-	push(@conf_argv, '--target-arch=x86');
 }
 
 my $conf_args = join(' ', @conf_argv);

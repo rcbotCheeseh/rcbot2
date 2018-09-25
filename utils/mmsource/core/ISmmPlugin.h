@@ -40,14 +40,8 @@
 #include <ISmmPluginExt.h>
 
 #ifndef META_NO_HL2SDK
-#if SOURCE_ENGINE == SE_DOTA
-#include <interfaces/interfaces.h>
-#else
 #include <tier1/interface.h>
 #endif
-#endif
-
-class IServerPluginCallbacks;
 
 // Interface return status, binary-compatible with HL2SDK's IFACE_OK and IFACE_FAILED.
 enum 
@@ -506,7 +500,11 @@ using namespace SourceMM;
 #if defined __WIN32__ || defined _WIN32 || defined WIN32
 	#define SMM_API extern "C" __declspec(dllexport)
 #elif defined __GNUC__
-	#define SMM_API extern "C" __attribute__ ((visibility("default")))	
+	#if (__GNUC__ == 4) && (__GNUC_MINOR__ >= 1)
+		#define SMM_API extern "C" __attribute__ ((visibility("default")))	
+	#else
+		#define SMM_API	extern "C" 
+	#endif	
 #endif
 #endif //!defined SMM_API
 

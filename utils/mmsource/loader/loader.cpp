@@ -2,7 +2,7 @@
  * vim: set ts=4 sw=4 tw=99 noet :
  * ======================================================
  * Metamod:Source
- * Copyright (C) 2004-2015 AlliedModders LLC and authors.
+ * Copyright (C) 2004-2010 AlliedModders LLC and authors.
  * All rights reserved.
  * ======================================================
  *
@@ -68,7 +68,7 @@ mm_LogFatal(const char *message, ...)
 
 static const char *backend_names[] =
 {
-	"2.ep1",
+	"1.ep1",
 	"2.darkm",
 	"2.ep2",
 	"2.bgt",
@@ -115,12 +115,7 @@ mm_LoadMetamodLibrary(MetamodBackend backend, char *buffer, size_t maxlength)
 		return false;
 
 	len = strlen(mm_path);
-	
-	const char *pLastSlash = strrchr(mm_path, PATH_SEP_CHAR);
-	if (!pLastSlash)
-		return false;
-
-	temp_len = strlen(&pLastSlash[1]);
+	temp_len = strlen("server" LIBRARY_EXT);
 	if (len < temp_len)
 		return false;
 
@@ -152,7 +147,11 @@ mm_UnloadMetamodLibrary()
 #if defined _WIN32
 #define EXPORT extern "C" __declspec(dllexport)
 #elif defined __GNUC__
+#if __GNUC__ >= 4
 #define EXPORT extern "C" __attribute__ ((visibility("default")))
+#else
+#define EXPORT extern "C"
+#endif
 #endif
 
 EXPORT void *
@@ -199,7 +198,6 @@ void
 mm_GetGameName(char *buffer, size_t size)
 {
 	buffer[0] = '\0';
-	bool bHasDedicated = false;
 
 #if defined _WIN32
 	static char game[128];
@@ -209,18 +207,15 @@ mm_GetGameName(char *buffer, size_t size)
 	LPWSTR *wargv = CommandLineToArgvW(pCmdLine, &argc);
 	for (int i = 0; i < argc; ++i)
 	{
-		if (wcscmp(wargv[i], L"-game") == 0)
-		{
-			if (++i >= argc)
-				break;
+		if (wcscmp(wargv[i], L"-game") != 0)
+			continue;
 
-			wcstombs(buffer, wargv[i], size);
-			buffer[size-1] = '\0';
-		}
-		else if (wcscmp(wargv[i], L"-dedicated") == 0)
-		{
-			bHasDedicated = true;
-		}
+		if (++i >= argc)
+			break;
+
+		wcstombs(buffer, wargv[i], size);
+		buffer[size-1] = '\0';
+		break;
 	}
 
 	LocalFree(wargv);
@@ -230,18 +225,15 @@ mm_GetGameName(char *buffer, size_t size)
 	char **argv = *_NSGetArgv();
 	for (int i = 0; i < argc; ++i)
 	{
-		if (strcmp(argv[i], "-game") == 0)
-		{
-			if (++i >= argc)
-				break;
+		if (strcmp(argv[i], "-game") != 0)
+			continue;
 
-			strncpy(buffer, argv[i], size);
-			buffer[size-1] = '\0';
-		}
-		else if (strcmp(argv[i], "-dedicated") == 0)
-		{
-			bHasDedicated = true;
-		}
+		if (++i >= argc)
+			break;
+
+		strncpy(buffer, argv[i], size);
+		buffer[size-1] = '\0';
+		break;
 	}
 
 #elif defined __linux__
@@ -258,16 +250,12 @@ mm_GetGameName(char *buffer, size_t size)
 			{
 				strncpy(buffer, arg, size);
 				buffer[size-1] = '\0';
-				bNextIsGame = false;
+				break;
 			}
 
 			if (strcmp(arg, "-game") == 0)
 			{
 				bNextIsGame = true;
-			}
-			else if (strcmp(arg, "-dedicated") == 0)
-			{
-				bHasDedicated = true;
 			}
 		}
 
@@ -280,26 +268,18 @@ mm_GetGameName(char *buffer, size_t size)
 
 	if (buffer[0] == 0)
 	{
-		// HackHackHack - Different engines have different defaults if -game isn't specified
-		// we only use this for game detection, and not even in all cases. Old behavior was to 
-		// give back ".", which was only really accurate for Dark Messiah. We'll add a special 
-		// case for Source2 / Dota as well, since it only supports gameinfo loading, which relies
-		// on accuracy here more than VSP loading.
-		if (bHasDedicated)
-		{
-			strncpy(buffer, "dota", size);
-		}
-		else
-		{
-			strncpy(buffer, ".", size);
-		}
+		strncpy(buffer, ".", size);
 	}
 }
 
 MetamodBackend
 mm_DetermineBackend(QueryValveInterface engineFactory, QueryValveInterface serverFactory, const char *game_name)
 {
-	if (engineFactory("VEngineServer023", NULL) != NULL)
+	if (engineFactory("VEngineServer024", NULL) != NULL)
+	{
+		return MMBackend_DOTA;
+	}
+	else if (engineFactory("VEngineServer023", NULL) != NULL)
 	{
 		if (engineFactory("EngineTraceServer004", NULL) == NULL)
 		{

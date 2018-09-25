@@ -40,7 +40,7 @@ public:
 	bool Register(ConCommandBase *pCommand);
 	void Unregister(ConCommandBase *pCommand);
 	void RemoveMetamodCommands();
-#if SOURCE_ENGINE < SE_ORANGEBOX
+#if SOURCE_ENGINE == SE_DARKMESSIAH
 	bool InitConCommandBaseList();
 private:
 	ConCommandBase **m_TopConCommandBase;
