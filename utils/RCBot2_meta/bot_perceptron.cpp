@@ -358,7 +358,9 @@ void CBotNeuralNet :: execute ( ga_nn_value *inputs, ga_nn_value *outputs, ga_nn
 	memset(m_layeroutput,0,sizeof(ga_nn_value)*m_numInputs);
 	memcpy(m_layerinput,inputs,sizeof(ga_nn_value)*m_numInputs);
 
-	//pLayer = m_pHidden;
+	// Missing inputs!!!
+	for (i = 0; i < m_numInputs; i++)
+		m_layerinput[i] = inputs[i];
 
 	for ( l = 0; l < m_numHiddenLayers; l ++ )
 	{

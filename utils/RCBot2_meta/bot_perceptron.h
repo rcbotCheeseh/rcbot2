@@ -279,7 +279,7 @@ class CBotNeuralNet
 {
 public:
 
-	CBotNeuralNet ( unsigned short int numinputs, unsigned short int hiddenlayers, unsigned short int hiddenlayer, unsigned short int outputlayer, ga_nn_value learnrate );
+	CBotNeuralNet(unsigned short int numinputs, unsigned short int numhiddenlayers, unsigned short int neuronsperhiddenlayer, unsigned short int numoutputs, ga_nn_value learnrate);
 
 	CBotNeuralNet ()
 	{
