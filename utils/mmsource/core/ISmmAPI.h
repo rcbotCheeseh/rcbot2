@@ -39,6 +39,7 @@
 
 #if defined META_NO_HL2SDK
 class CGlobalVars;
+class IServerPluginCallbacks;
 struct edict_t;
 class ConCommandBase;
 #else
@@ -48,14 +49,18 @@ class ConCommandBase;
 #include <ISmmPlugin.h>
 #include <ISmmPluginExt.h>
 
+#if defined __GNUC__
+#if ((__GNUC__ == 3) && (__GNUC_MINOR__ < 4)) || (__GNUC__ < 3)
+#error "You must compile with at least GCC 3.4! If you know what you are doing, you can remove this message."
+#endif //version check
+#endif //__GNUC__
+
 #define	MMIFACE_SOURCEHOOK		"ISourceHook"			/**< ISourceHook Pointer */
 #define	MMIFACE_PLMANAGER		"IPluginManager"		/**< SourceMM Plugin Functions */
 #define MMIFACE_SH_HOOKMANAUTOGEN	"IHookManagerAutoGen"		/**< SourceHook::IHookManagerAutoGen Pointer */
 #define IFACE_MAXNUM			999						/**< Maximum interface version */
 
 typedef void* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
-
-class IServerPluginCallbacks;
 
 namespace SourceMM
 {

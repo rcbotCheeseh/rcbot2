@@ -61,7 +61,7 @@
 #define SOURCE_ENGINE_BMS				23				/**< Black Mesa Multiplayer */
 #define SOURCE_ENGINE_DOI				24				/**< Day of Infamy */
 
-#define METAMOD_PLAPI_VERSION			16				/**< Version of this header file */
+#define METAMOD_PLAPI_VERSION			15				/**< Version of this header file */
 #define METAMOD_PLAPI_NAME				"ISmmPlugin"	/**< Name of the plugin interface */
 
 namespace SourceMM

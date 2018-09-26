@@ -1538,7 +1538,7 @@ const char *RCBotPluginMeta::GetLicense()
 
 const char *RCBotPluginMeta::GetVersion()
 {
-	return "1.01 (r487-apg-ch)";
+	return "1.04 (r490-apg-ch)";
 }
 
 const char *RCBotPluginMeta::GetDate()
@@ -1553,7 +1553,7 @@ const char *RCBotPluginMeta::GetLogTag()
 
 const char *RCBotPluginMeta::GetAuthor()
 {
-	return "Cheeseh, RoboCop";
+	return "Cheeseh, RoboCop, Ducky";
 }
 
 const char *RCBotPluginMeta::GetDescription()

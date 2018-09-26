@@ -25,23 +25,8 @@
 #ifndef _INCLUDE_METAMOD_VERSIONLIB_H_
 #define _INCLUDE_METAMOD_VERSIONLIB_H_
 
-#if !defined(MMS_USE_VERSIONLIB)
-// These get defined in metamod_version.h since
-// versionlib does not use versionlib.
-# undef METAMOD_LOCAL_REV
-# undef METAMOD_CSET
-# undef METAMOD_VERSION
-# undef METAMOD_BUILD_TIME
-#endif
-
-#ifdef __cplusplus
-# define EXTERN_C extern "C"
-#else
-# define EXTERN_C extern
-#endif
-EXTERN_C const char *METAMOD_LOCAL_REV;
-EXTERN_C const char *METAMOD_SHA;
-EXTERN_C const char *METAMOD_VERSION;
-EXTERN_C const char *METAMOD_BUILD_TIME;
+extern "C" const char *METAMOD_BUILD_LOCAL_REV;
+extern "C" const char *METAMOD_BUILD_SHA;
+extern "C" const char *METAMOD_VERSION;
 
 #endif // _INCLUDE_METAMOD_VERSIONLIB_H_

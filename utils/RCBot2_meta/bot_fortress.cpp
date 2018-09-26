@@ -3078,7 +3078,6 @@ void CBotTF2::modThink()
 					m_fChangeClassTime = engine->Time() + randomFloat(bot_min_cc_time.GetFloat() / 2, bot_max_cc_time.GetFloat() / 2);
 				}
 
-				//const int _forcedClass = rcbot_force_class.GetInt();
 				// Change class if either I think I could do better
 				if (randomFloat(0.0f, 1.0f) > (scoreValue / CTeamFortress2Mod::getHighestScore()))
 				{

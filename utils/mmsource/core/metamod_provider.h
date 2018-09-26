@@ -37,16 +37,9 @@ namespace SourceMM
 
 	enum ProvidedHooks
 	{
-#if SOURCE_ENGINE == SE_DOTA
-		ProvidedHook_StartChangeLevel = 0,
-		ProvidedHook_Init = 1,
-		ProvidedHook_StartupServer = 2,
-		ProvidedHook_SwitchToLoop = 3,
-#else
 		ProvidedHook_LevelInit = 0,			/**< IServerGameDLL::LevelInit */
 		ProvidedHook_LevelShutdown = 1,		/**< IServerGameDLL::LevelShutdown */
 		ProvidedHook_GameInit = 4,			/**< IServerGameDLL::GameInit */
-#endif
 	};
 
 	/**
@@ -303,13 +296,6 @@ namespace SourceMM
 		 *
 		 */
 		virtual bool ProcessVDF(const char *file, char path[], size_t path_len, char alias[], size_t alias_len) =0;
-		
-		/**
-		 * @brief				Returns string that describes engine version.
-		 *
-		 * @return				Description.
-		 */
-		virtual const char *GetEngineDescription() const =0;
 	};
 };
 
