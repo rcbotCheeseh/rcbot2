@@ -1,10 +1,10 @@
 # RCBot2 for Windows and Linux (TF2, HL2:DM, DOD:S)
 
 ## Information
-This is a fork of Cheeseh's RCBot2 repository. This aims to build on top of it to add features along with possible stability fixes.
-Note that this is mainly intended for TF2.
 
-[Installation](http://rcbot.bots-united.com/forums/index.php?showtopic=1967)
+[Installation Windows](http://rcbot.bots-united.com/forums/index.php?showtopic=2222)
+
+[Installation Linux](http://rcbot.bots-united.com/forums/index.php?showtopic=1967)
 
 ## Building
 ### Windows
