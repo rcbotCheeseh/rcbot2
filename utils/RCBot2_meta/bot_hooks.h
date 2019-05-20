@@ -13,6 +13,12 @@
 #undef GetClassName
 #endif
 
+//Required for RCBot2? [APG]RoboCop[CL]
+#include <iserverentity.h>
+#include <usercmd.h>
+#include "bot_fortress.h"
+#include <edict.h>
+
 DWORD VirtualTableHook( DWORD* pdwNewInterface, int vtable, DWORD newInterface );
 
 extern DWORD* player_vtable;

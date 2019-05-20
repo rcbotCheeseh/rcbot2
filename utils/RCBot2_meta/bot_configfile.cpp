@@ -192,7 +192,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 
 	 init();
 
-	 for ( iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = (eTF2UtilType)((int)iFile+1) )
+	 for ( iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = static_cast<eTF2UtilType>(static_cast<int>(iFile) + 1) )
 	 {
 		 if ( iFile == BOT_ATT_UTIL )
 		 {
@@ -208,7 +208,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 
 		if ( fp )
 		{
-			eBotAction iUtil = (eBotAction)0;
+			eBotAction iUtil = static_cast<eBotAction>(0);
 
 			while ( fgets(line,255,fp) != NULL )
 			{
@@ -240,7 +240,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 
 						addUtilPerturbation(iUtil,iFile,iClassList);
 
-						iUtil = (eBotAction)((int)iUtil+1);
+						iUtil = static_cast<eBotAction>((int)iUtil + 1);
 
 						if ( iUtil >= BOT_UTIL_MAX )
 							break;

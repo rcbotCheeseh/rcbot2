@@ -376,3 +376,6 @@ utils/RCBot2_meta/.vs/HPB_Bot2/v15/Browse.VC.opendb
 utils/RCBot2_meta/.vs/HPB_Bot2/v15/.suo
 utils/RCBot2_meta/.vs/HPB_Bot2/v15/Browse.VC.db
 utils/RCBot2_meta/.vs/HPB_Bot2/v15/ipch/AutoPCH/5d5e72717a175a61/BOT_GLOBALS.ipch
+*.HPB_bot2_ReleaseWin32
+*.HPB_bot2_Release_NonHomeFolderWin32
+*.HPB_bot2_DebugWin32

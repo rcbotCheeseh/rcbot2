@@ -232,7 +232,7 @@ CBaseHandle *CClassInterfaceValue :: getEntityHandle ( edict_t *edict )
 { 
 	getData(edict); 
 
-	return (CBaseHandle *)m_data;
+	return static_cast<CBaseHandle *>(m_data);
 }
 
 edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict ) 
@@ -247,7 +247,7 @@ edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict )
 	if (m_berror)
 		return NULL;
 
-	hndl = (CBaseHandle *)m_data; 
+	hndl = static_cast<CBaseHandle *>(m_data); 
 
 	if ( hndl )
 		return INDEXENT(hndl->GetEntryIndex());
@@ -560,7 +560,7 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 	{
 		edict_t *pEdict = reinterpret_cast<edict_t*>(edict);
 
-		pUnknown = (IServerUnknown *)pEdict->GetUnknown();
+		pUnknown = static_cast<IServerUnknown *>(pEdict->GetUnknown());
 
 		if (!pUnknown)
 		{
@@ -571,12 +571,12 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 
 		pEntity = pUnknown->GetBaseEntity();
 
-		m_data = (void *)((char *)pEntity + m_offset);
+		m_data = static_cast<void *>(reinterpret_cast<char *>(pEntity) + m_offset);
 	}
 	else
 	{
 		// raw
-		m_data = (void *)((char *)edict + m_offset);
+		m_data = static_cast<void *>(static_cast<char *>(edict) + m_offset);
 	}
 
 }
@@ -588,7 +588,7 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 	float fDist;
 	const char *pszClassname;
 	// speed up loop by by using smaller ints in register
-	register short int max = (short int)gpGlobals->maxEntities;
+	register short int max = static_cast<short int>(gpGlobals->maxEntities);
 
 	for (register short int i = 0; i < max; i++)
 	{

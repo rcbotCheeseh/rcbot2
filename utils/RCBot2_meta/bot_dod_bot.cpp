@@ -70,7 +70,7 @@ const char *g_DODClassCmd[2][6] =
 // could be a bomb 
 void CBroadcastBombEvent :: execute (CBot *pBot) 
 {
-	CDODBot *pDODBot = (CDODBot*)pBot;
+	CDODBot *pDODBot = static_cast<CDODBot*>(pBot);
 
 	pDODBot->bombEvent(DOD_BOMB_PLANT,m_iCP,m_iTeam);
 }
@@ -450,7 +450,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 		
 		if ( pWeapon )
 		{
-			DOD_Class pclass = (DOD_Class)CClassInterface::getPlayerClassDOD(pKiller);
+			DOD_Class pclass = static_cast<DOD_Class>(CClassInterface::getPlayerClassDOD(pKiller));
 
 			if ( (pclass == DOD_CLASS_SNIPER) && pWeapon->isZoomable() )
 			{
@@ -464,7 +464,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 				m_fCurrentDanger += 100.0f; // sniper danger
 				//bInvestigate = false;
 				// Find Hide Spot
-				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_SNIPE_POINT,!hasEnemy() && (m_iClass == DOD_CLASS_SNIPER) && getSniperRifle() && !getSniperRifle()->outOfAmmo(this),1.0f,(unsigned int)pKiller,vecEnemy);
+				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_SNIPE_POINT,!hasEnemy() && (m_iClass == DOD_CLASS_SNIPER) && getSniperRifle() && !getSniperRifle()->outOfAmmo(this),1.0f,reinterpret_cast<unsigned int>(pKiller),vecEnemy);
 			}
 			else if ( (pclass == DOD_CLASS_MACHINEGUNNER) && pWeapon->isDeployable() )
 			{
@@ -479,7 +479,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 				m_fCurrentDanger = MAX_BELIEF; // machine gun danger
 				//bInvestigate = false;
 
-				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_SNIPE_POINT,!hasEnemy() && (m_iClass == DOD_CLASS_SNIPER) && getSniperRifle() && !getSniperRifle()->outOfAmmo(this),1.0f,(unsigned int)pKiller,vecEnemy);
+				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_SNIPE_POINT,!hasEnemy() && (m_iClass == DOD_CLASS_SNIPER) && getSniperRifle() && !getSniperRifle()->outOfAmmo(this),1.0f,reinterpret_cast<unsigned int>(pKiller),vecEnemy);
 				//ADD_UTILITY_DATA_VECTOR(BOT_UTIL_MOVEUP_MG,!hasEnemy() && (m_iClass == DOD_CLASS_MACHINEGUNNER) && getMG() && !getMG()->outOfAmmo(this),1.0f,1,vecEnemy);
 			}
 			else
@@ -498,7 +498,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 				{
 					//bFollow = false;
 
-					ADD_UTILITY_DATA_VECTOR(BOT_UTIL_COVER_POINT,m_pCurrentWeapon != NULL,0.8f,((unsigned int)pKiller),(vecEnemy));
+					ADD_UTILITY_DATA_VECTOR(BOT_UTIL_COVER_POINT,m_pCurrentWeapon != NULL,0.8f,(reinterpret_cast<unsigned int>(pKiller)),(vecEnemy));
 				}
 			}
 			/*else if ( CBotGlobals::isPlayer(pDied) )
@@ -593,7 +593,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 
 			if ( !m_pSchedules->isCurrentSchedule(SCHED_INVESTIGATE_NOISE) )
 			{
-				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_INVESTIGATE_POINT,!m_pSchedules->hasSchedule(SCHED_DEPLOY_MACHINE_GUN)&&!m_pSchedules->hasSchedule(SCHED_SNIPE),0.5f,(unsigned int)pDied,m_vListenPosition);
+				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_INVESTIGATE_POINT,!m_pSchedules->hasSchedule(SCHED_DEPLOY_MACHINE_GUN)&&!m_pSchedules->hasSchedule(SCHED_SNIPE),0.5f,reinterpret_cast<unsigned int>(pDied),m_vListenPosition);
 
 				//m_pSchedules->removeSchedule(SCHED_INVESTIGATE_NOISE);
 				//m_pSchedules->addFront(new CBotInvestigateNoiseSched(CBotGlobals::entityOrigin(pDied),m_vListenPosition));
@@ -657,7 +657,7 @@ void CDODBot :: seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *p
 
 		if ( pWeapon )
 		{
-			DOD_Class pclass = (DOD_Class)CClassInterface::getPlayerClassDOD(pTeamMate);
+			DOD_Class pclass = static_cast<DOD_Class>(CClassInterface::getPlayerClassDOD(pTeamMate));
 			//DOD_Class pclassdead = (DOD_Class)CClassInterface::getPlayerClassDOD(pDied);
 
 			pCurrentWeapon = getCurrentWeapon();
@@ -1174,7 +1174,7 @@ void CDODBot :: modThink ()
 
 	setMoveSpeed(fMaxSpeed);
 	
-	m_iClass = (DOD_Class)CClassInterface::getPlayerClassDOD(m_pEdict);	
+	m_iClass = static_cast<DOD_Class>(CClassInterface::getPlayerClassDOD(m_pEdict));	
 	m_iTeam = getTeam();
 
 	m_bHasBomb = m_pWeapons->hasWeapon(DOD_WEAPON_BOMB);
@@ -1929,7 +1929,7 @@ void CDODBot :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
 		break;
 	}
 
-	m_LastHearVoiceCommand = (eDODVoiceCMD)cmd;
+	m_LastHearVoiceCommand = static_cast<eDODVoiceCMD>(cmd);
 
 	// don't say the same command for a second or two
 	if ( cmd < MAX_VOICE_CMDS )
@@ -2093,16 +2093,16 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 	{
 	case  BOT_UTIL_INVESTIGATE_POINT:
 		m_pSchedules->removeSchedule(SCHED_INVESTIGATE_NOISE);
-		m_pSchedules->addFront(new CBotInvestigateNoiseSched(CBotGlobals::entityOrigin((edict_t*)util->getIntData()),util->getVectorData()));
+		m_pSchedules->addFront(new CBotInvestigateNoiseSched(CBotGlobals::entityOrigin(reinterpret_cast<edict_t*>(util->getIntData())),util->getVectorData()));
 		return true;
 	case BOT_UTIL_COVER_POINT:
 		m_pSchedules->removeSchedule(SCHED_CROUCH_AND_HIDE);
-		m_pSchedules->addFront(new CCrouchHideSched((edict_t*)util->getIntData()));
+		m_pSchedules->addFront(new CCrouchHideSched(reinterpret_cast<edict_t*>(util->getIntData())));
 		return true;
 	case BOT_UTIL_SNIPE_POINT:
 		// find sniper point facing the enemy
 		{
-			edict_t *pEnemy = (edict_t*)util->getIntData();
+			edict_t *pEnemy = reinterpret_cast<edict_t*>(util->getIntData());
 
 			Vector vEnemyOrigin = CBotGlobals::entityOrigin(pEnemy);
 
@@ -2357,7 +2357,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 					{
 						// attack the bomb point -- less chance if owned many bomb points already
 						if ( randomFloat(0.0f,1.0f) < 
-							((float)CDODMod::m_Flags.getNumPlantableBombs(m_iTeam)/
+							(static_cast<float>(CDODMod::m_Flags.getNumPlantableBombs(m_iTeam))/
 							 CDODMod::m_Flags.getNumBombsOnMap(m_iTeam)) ) 
 						{
 								pWaypoint = CWaypoints::randomWaypointGoal(iWaypointType,m_iTeam,CDODMod::getBombPointArea(m_iTeam),true,this);
@@ -3189,15 +3189,15 @@ void CDODBot :: getTasks (unsigned int iIgnore)
 		fDefendUtil = 0.4f;
 
 		if ( iNumEnemyBombsOnMap > 0 )
-			fDefendUtil = 0.8f - ((float)iNumEnemyBombsStillToPlant/iNumEnemyBombsOnMap)*0.4f;
+			fDefendUtil = 0.8f - (static_cast<float>(iNumEnemyBombsStillToPlant)/iNumEnemyBombsOnMap)*0.4f;
 
 		if ( CDODMod::isFlagMap() && (iNumBombsToPlant>0) )
-			fPlantUtil = 0.3f + ((((float)iFlagsOwned/iNumBombsToPlant)*0.6f)/iNumFlags);
+			fPlantUtil = 0.3f + (((static_cast<float>(iFlagsOwned)/iNumBombsToPlant)*0.6f)/iNumFlags);
 		else
-			fPlantUtil = 0.4f + (((float)iNumBombsToPlant/iNumBombsOnMap)*0.4f);
+			fPlantUtil = 0.4f + ((static_cast<float>(iNumBombsToPlant)/iNumBombsOnMap)*0.4f);
 		
 		fDefuseBombUtil = fDefendUtil * 2;
-		fDefendBombUtil = 0.8f - (((float)iNumBombsToDefend/iNumBombsOnMap)*0.8f);
+		fDefendBombUtil = 0.8f - ((static_cast<float>(iNumBombsToDefend)/iNumBombsOnMap)*0.8f);
 
 		
 		fPlantUtil += randomFloat(-0.25f,0.25f); // add some fuzz

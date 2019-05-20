@@ -1,6 +1,8 @@
 #ifndef __RCBOT_RB_H__
 #define __RCBOT_RB_H__
 
+class CBotOperator;
+
 class CBotRule
 {
 public:

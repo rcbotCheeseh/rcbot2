@@ -148,14 +148,14 @@ int UTIL_ListAttributesOnEntity(edict_t *pEdict)
 		return 0;
 
 	//local variable is initialized but not referenced - [APG]RoboCop[CL]
-	int *pAttribList1 = (int*)((unsigned int)pAttributeList + 4);
+	int *pAttribList1 = reinterpret_cast<int*>(reinterpret_cast<unsigned int>(pAttributeList) + 4);
 
-	int *pAttribList = (int*)((unsigned int)pEntity + offset + 4);
+	int *pAttribList = reinterpret_cast<int*>(reinterpret_cast<unsigned int>(pEntity) + offset + 4);
 
-	if ((unsigned int)pAttribList < 0x10000)
+	if (reinterpret_cast<unsigned int>(pAttribList) < 0x10000)
 		return 0;
 
-	int iNumAttribs = *(int*)((unsigned int)pAttributeList + 16);
+	int iNumAttribs = *reinterpret_cast<int*>(reinterpret_cast<unsigned int>(pAttributeList) + 16);
 	short int iAttribIndices[16];
 
 	CBotGlobals::botMessage(NULL, 0, "There are %d attributes on %s entity", iNumAttribs, pEdict->GetClassName());

@@ -217,7 +217,7 @@ public:
 		m_fNearestDist = 0;
 	}
 
-	void execute ( CBot *pBot )
+	void execute ( CBot *pBot ) override
 	{
 		if ( (pBot->getEdict() != m_pPlayer) && (pBot->getTeam() == m_iTeam) && pBot->isVisible(m_pPlayer) )
 		{
@@ -286,7 +286,7 @@ void CClient :: think ()
 
 				if ( pBot != NULL )
 				{
-					((CBotTF2*)pBot)->highFivePlayer(m_pPlayer,CClassInterface::getTF2TauntYaw(m_pPlayer));
+					static_cast<CBotTF2*>(pBot)->highFivePlayer(m_pPlayer,CClassInterface::getTF2TauntYaw(m_pPlayer));
 					m_fMonitorHighFiveTime = engine->Time() + 3.0f;
 				}				
 
@@ -423,7 +423,7 @@ void CClient :: think ()
 					if ( msg[i] == 0 )
 						break;
 					i++;
-				}while ( 1 ) ;
+				}while ( true ) ;
 				//int ent_index, int line_offset, float duration, int r, int g, int b, int a, const char *format, ...
 			//	debugoverlay->AddEntityTextOverlay();
 #endif
@@ -832,8 +832,8 @@ void CClient :: think ()
 #ifndef __linux__
 					if ( m_bDebugAutoWaypoint && !engine->IsDedicatedServer() )
 					{
-						debugoverlay->AddLineOverlay(vCheckOrigin+Vector(0,0,16),vCheckOrigin-Vector(0,0,16),255,255,255,0,2);
-						debugoverlay->AddLineOverlay(vPlayerOrigin,vCheckOrigin,255,255,255,0,2);
+						debugoverlay->AddLineOverlay(vCheckOrigin+Vector(0,0,16),vCheckOrigin-Vector(0,0,16),255,255,255,false,2);
+						debugoverlay->AddLineOverlay(vPlayerOrigin,vCheckOrigin,255,255,255,false,2);
 					}
 #endif					
 					if ( tr->fraction < 1.0 )
@@ -1004,7 +1004,7 @@ void CClient :: clientActive ()
 	if ( playerinfo )
 	{
 		// store steam id
-		m_szSteamID = (char*)playerinfo->GetNetworkIDString();
+		m_szSteamID = const_cast<char*>(playerinfo->GetNetworkIDString());
 	
 		// check my access levels
 		CAccessClients::checkClientAccess(this);

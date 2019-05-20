@@ -219,17 +219,17 @@ eBotCommandResult CSetProp :: execute ( CClient *pClient, const char *pcmd, cons
 						static CBaseEntity *pEntity;
 						Vector vdata;
 
-						pUnknown = (IServerUnknown *)pNearest->GetUnknown();
+						pUnknown = static_cast<IServerUnknown *>(pNearest->GetUnknown());
 					 
 						pEntity = pUnknown->GetBaseEntity();
 
-						data = (void *)((char *)pEntity + m_offset);
+						data = static_cast<void *>(reinterpret_cast<char *>(pEntity) + m_offset);
 
 						if ( data )
 						{
-							bool *booldata = (bool*)data;
-							int *intdata = (int*)data;
-							float *floatdata = (float*)data;
+							bool *booldata = static_cast<bool*>(data);
+							int *intdata = static_cast<int*>(data);
+							float *floatdata = static_cast<float*>(data);
 
 							if ( strcmp(arg2,"int")==0)
 								*intdata = atoi(arg3);
@@ -296,7 +296,7 @@ eBotCommandResult CGetProp :: execute ( CClient *pClient, const char *pcmd, cons
 						static CBaseEntity *pEntity;
 						Vector vdata;
 
-						pUnknown = (IServerUnknown *)pNearest->GetUnknown();
+						pUnknown = static_cast<IServerUnknown *>(pNearest->GetUnknown());
 					 
 						pEntity = pUnknown->GetBaseEntity();
 
@@ -307,13 +307,13 @@ eBotCommandResult CGetProp :: execute ( CClient *pClient, const char *pcmd, cons
 							preoffs = atoi(arg2);	
 						}
 
-						data = (void *)((char *)pEntity + m_offset);
+						data = static_cast<void *>(reinterpret_cast<char *>(pEntity) + m_offset);
 
 						if ( data )
 						{
-							vdata = *((Vector*)data+preoffs);
+							vdata = *(static_cast<Vector*>(data)+preoffs);
 	
-							CBotGlobals::botMessage(pPlayer,0,"int = %d, float = %f, bool = %s, Vector = (%0.4f,%0.4f,%0.4f)",*((int*)data + preoffs),*((float*)data+preoffs),*((bool*)data+preoffs) ? ("true"):("false"),vdata.x,vdata.y,vdata.z );
+							CBotGlobals::botMessage(pPlayer,0,"int = %d, float = %f, bool = %s, Vector = (%0.4f,%0.4f,%0.4f)",*(static_cast<int*>(data) + preoffs),*(static_cast<float*>(data)+preoffs),*(static_cast<bool*>(data)+preoffs) ? ("true"):("false"),vdata.x,vdata.y,vdata.z );
 						}
 						else
 							CBotGlobals::botMessage(pPlayer,0,"NULL");
@@ -786,13 +786,13 @@ eBotCommandResult CWaypointGiveTypeCommand :: execute ( CClient *pClient, const 
 			for ( int i = 0; i < 4; i ++ )
 			{
 				if ( i == 0 )
-					type = (char*)pcmd;
+					type = const_cast<char*>(pcmd);
 				else if ( i == 1 )
-					type = (char*)arg1;
+					type = const_cast<char*>(arg1);
 				else if ( i == 2 )
-					type = (char*)arg2;
+					type = const_cast<char*>(arg2);
 				else if ( i == 3 )
-					type = (char*)arg3;
+					type = const_cast<char*>(arg3);
 
 				if ( !type || !*type )
 					break;
@@ -1048,7 +1048,7 @@ eBotCommandResult CBotTaskCommand::execute ( CClient *pClient, const char *pcmd,
 					CBotUtility util = CBotUtility(pBot,BOT_UTIL_PIPE_LAST_ENEMY,true,1.0f);
 					pBot->setLastEnemy(pClient->getPlayer());
 					pBot->getSchedule()->freeMemory();
-					((CBotTF2*)pBot)->executeAction(&util);
+					static_cast<CBotTF2*>(pBot)->executeAction(&util);
 				}
 				// 71
 				else if ( !strcmp(pcmd,"gren") )
@@ -1678,7 +1678,7 @@ eBotCommandResult CWaypointLoadCommand :: execute ( CClient *pClient, const char
 	if ( pcmd && *pcmd )
 	{
 		bLoadOK = CWaypoints::load(pcmd);
-		szMapName = (char*)pcmd;
+		szMapName = const_cast<char*>(pcmd);
 	}
 	else
 		bLoadOK = CWaypoints::load();
@@ -1715,11 +1715,11 @@ eBotCommandResult CDebugMemoryCheckCommand:: execute ( CClient *pClient, const c
 
 	if ( ( strcmp(arg2,"bool") == 0 ) || ( strcmp(arg2,"byte") == 0 ))
 	{
-		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(byte) = %d",pcmd,offset,*(byte*)(((unsigned long)pent) + offset));
+		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(byte) = %d",pcmd,offset,*reinterpret_cast<byte*>(reinterpret_cast<unsigned long>(pent) + offset));
 	}
 	else if ( strcmp(arg2,"int") == 0 )
 	{
-		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(int) = %d",pcmd,offset,*(int*)(((unsigned long)pent) + offset));
+		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(int) = %d",pcmd,offset,*reinterpret_cast<int*>(reinterpret_cast<unsigned long>(pent) + offset));
 		/*
 		if ( strcmp(pcmd,"team_control_point_master") == 0 )
 		{
@@ -1743,10 +1743,10 @@ eBotCommandResult CDebugMemoryCheckCommand:: execute ( CClient *pClient, const c
 
 	}
 	else if ( strcmp(arg2,"float") == 0 )
-		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(float) = %0.6f",pcmd,offset,*(float*)(((unsigned long)pent) + offset));
+		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(float) = %0.6f",pcmd,offset,*reinterpret_cast<float*>(reinterpret_cast<unsigned long>(pent) + offset));
 	else if ( strcmp(arg2,"string") == 0 )
 	{
-		string_t *str = (string_t*)(((unsigned long)pent) + offset);
+		string_t *str = reinterpret_cast<string_t*>(reinterpret_cast<unsigned long>(pent) + offset);
 		if ( str )
 			CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(string) = %s",pcmd,offset,STRING(*str));
 		else
@@ -1805,8 +1805,8 @@ eBotCommandResult CDebugMemoryScanCommand:: execute ( CClient *pClient, const ch
 	// begin memory scan
 	CBaseEntity *pent = pEdict->GetUnknown()->GetBaseEntity();
 
-	byte *mempoint = (byte*)pent;
-	byte value = (byte)atoi(arg1);
+	byte *mempoint = reinterpret_cast<byte*>(pent);
+	byte value = static_cast<byte>(atoi(arg1));
 	int ivalue = (atoi(arg1));
 	float fvalue = (atof(arg1));
 
@@ -1819,14 +1819,14 @@ eBotCommandResult CDebugMemoryScanCommand:: execute ( CClient *pClient, const ch
 		if ( m_size == MEMSEARCH_BYTE )
 			bfound = (value == *mempoint);
 		else if ( m_size == MEMSEARCH_INT )
-			bfound = (ivalue == *(int*)mempoint);
+			bfound = (ivalue == *reinterpret_cast<int*>(mempoint));
 		else if ( m_size == MEMSEARCH_FLOAT )
-			bfound = (fvalue == *(float*)mempoint);
+			bfound = (fvalue == *reinterpret_cast<float*>(mempoint));
 		else if ( m_size == MEMSEARCH_STRING )
 		{
 			try
 			{
-				string_t *str = (string_t*) mempoint;
+				string_t *str = reinterpret_cast<string_t*>(mempoint);
 
 				if ( str != NULL )
 				{			
@@ -2386,7 +2386,7 @@ eBotCommandResult CSearchCommand :: execute ( CClient *pClient, const char *pcmd
 
 						model = pEdict->GetIServerEntity()->GetModelName();
 				
-						CBotGlobals::botMessage(pPlayer,0,"(%d) D:%0.2f C:'%s', Mid:%d, Mn:'%s' Health=%d, Tm:%d, Fl:%d, Spd=%0.2f",i,fDistance,pEdict->GetClassName(),pEdict->GetIServerEntity()->GetModelIndex(),model.ToCStr(),(int)CClassInterface::getPlayerHealth(pEdict),(int)CClassInterface::getTeam(pEdict),pEdict->m_fStateFlags,fVelocity );
+						CBotGlobals::botMessage(pPlayer,0,"(%d) D:%0.2f C:'%s', Mid:%d, Mn:'%s' Health=%d, Tm:%d, Fl:%d, Spd=%0.2f",i,fDistance,pEdict->GetClassName(),pEdict->GetIServerEntity()->GetModelIndex(),model.ToCStr(),static_cast<int>(CClassInterface::getPlayerHealth(pEdict)),static_cast<int>(CClassInterface::getTeam(pEdict)),pEdict->m_fStateFlags,fVelocity );
 					}
 				}
 			}

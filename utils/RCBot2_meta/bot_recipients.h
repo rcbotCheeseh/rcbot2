@@ -32,6 +32,8 @@
 #define __BOT_RECIPIENTS_H__
 
 #include "irecipientfilter.h"
+#include <edict.h>
+#include "bot_const.h"
 
 class CEdictRecipient : public IRecipientFilter
 {

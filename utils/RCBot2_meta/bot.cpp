@@ -1330,7 +1330,7 @@ int CBot :: getHealth ()
 
 float CBot :: getHealthPercent ()
 {
-	return (((float)m_pPlayerInfo->GetHealth())/m_pPlayerInfo->GetMaxHealth());
+	return (static_cast<float>(m_pPlayerInfo->GetHealth())/m_pPlayerInfo->GetMaxHealth());
 }
 
 bool CBot ::isOnLift()
@@ -1618,7 +1618,7 @@ bool CBot :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 	if ( m_fUpdateDamageTime < fTime )
 	{
 		m_fUpdateDamageTime = fTime + 0.5;
-		m_fCurrentDanger += (((float)m_iAccumulatedDamage)/m_pPlayerInfo->GetMaxHealth())*MAX_BELIEF;
+		m_fCurrentDanger += (static_cast<float>(m_iAccumulatedDamage)/m_pPlayerInfo->GetMaxHealth())*MAX_BELIEF;
 		m_iAccumulatedDamage = 0;
 	}
 
@@ -1815,7 +1815,7 @@ int CBot :: nearbyFriendlies (float fDistance)
 {
 	int num = 0;
 	register short int i = 0;
-	register short int maxclients = (short int)CBotGlobals::maxClients();
+	register short int maxclients = static_cast<short int>(CBotGlobals::maxClients());
 	edict_t *pEdict;
 
 	for ( i = 0; i <= maxclients; i ++ )
@@ -2387,7 +2387,7 @@ Vector CBot::getAimVector ( edict_t *pEntity )
 	v_size = pEntity->GetCollideable()->OBBMaxs() - pEntity->GetCollideable()->OBBMins();
 	v_size = v_size * 0.5f;
 
-	fSensitivity = (float)m_pProfile->m_iSensitivity/20;
+	fSensitivity = static_cast<float>(m_pProfile->m_iSensitivity)/20;
 
 	v_origin = CBotGlobals::entityOrigin(pEntity);
 
@@ -2890,7 +2890,7 @@ void CBot :: doLook ()
 		if ( rcbot_supermode.GetBool() || m_bIncreaseSensitivity || onLadder() )
 			fSensitivity = 15.0f;
 		else
-			fSensitivity = (float)m_pProfile->m_iSensitivity;
+			fSensitivity = static_cast<float>(m_pProfile->m_iSensitivity);
 
 		QAngle requiredAngles;
 
@@ -3190,7 +3190,7 @@ bool CBots :: createBot (const char *szClass, const char *szTeam, const char *sz
 		{
 			if ( /*bot_cmd_nocheats.GetBool() &&*/ puppet_bot_cmd->IsFlagSet(FCVAR_CHEAT) )
 			{
-				int *m_nFlags = (int*)((unsigned long)puppet_bot_cmd + BOT_CONVAR_FLAGS_OFFSET); // 20 is offset to flags
+				int *m_nFlags = reinterpret_cast<int*>(reinterpret_cast<unsigned long>(puppet_bot_cmd) + BOT_CONVAR_FLAGS_OFFSET); // 20 is offset to flags
 				//nPrevFlags = *m_nFlags;
 				*m_nFlags &= ~FCVAR_CHEAT;
 				//bChangedFlags = true;
@@ -3206,7 +3206,7 @@ bool CBots :: createBot (const char *szClass, const char *szTeam, const char *sz
 
 		// CCommand *com = new CCommand(1,pparg);
 
-		int *m_nFlags = (int*)((unsigned long)sv_cheats + BOT_CONVAR_FLAGS_OFFSET); // 20 is offset to flags
+		int *m_nFlags = reinterpret_cast<int*>(reinterpret_cast<unsigned long>(sv_cheats) + BOT_CONVAR_FLAGS_OFFSET); // 20 is offset to flags
 
 		if ( sv_cheats->IsFlagSet(FCVAR_NOTIFY) )
 			*m_nFlags &= ~FCVAR_NOTIFY;
@@ -3658,7 +3658,7 @@ void CBots :: handleAutomaticControl ()
 {
 	if ( !m_ControlQueue.empty() )
 	{
-		edict_t *pEdict = (edict_t*)m_ControlQueue.front();
+		edict_t *pEdict = static_cast<edict_t*>(m_ControlQueue.front());
 
 		IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEdict);
 
