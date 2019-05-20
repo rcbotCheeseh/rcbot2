@@ -9,7 +9,7 @@ Note that this is mainly intended for TF2.
 ## Building
 ### Windows
 Make sure you have Visual Studio 2013 installed.
-Other than that it should compile fine, even with the latest Visual Studio 2017.
+Other than that it should compile fine, even with the latest Visual Studio 2019 - as long you only use the VS2013 C++ compiler.
 
 ### Linux
 * Go to `linux_sdk`
@@ -19,4 +19,4 @@ Other than that it should compile fine, even with the latest Visual Studio 2017.
 And a `RCBot2Meta_i486.so` should appear in the folder.
 ---
 
-Make sure to check out the [bots-united.com discord](https://discord.gg/BbxR5wY) for support and to stay updated.
+Make sure to check out the [Bots United Discord](https://discord.gg/BbxR5wY) for support and to stay updated.
