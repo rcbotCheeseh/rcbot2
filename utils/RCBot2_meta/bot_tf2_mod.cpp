@@ -1748,7 +1748,7 @@ void CTeamFortress2Mod::updatePointMaster()
 
 			CBaseEntity *pMasterEntity = servergameents->EdictToBaseEntity(pMaster);
 
-			//local variable is initialized but not referenced - [APG]RoboCop[CL]
+			//full_size is initialized but not referenced - [APG]RoboCop[CL]
 			unsigned long full_size = sizeof(pMasterEntity);
 			unsigned long mempoint = reinterpret_cast<unsigned long>(pMasterEntity) + rcbot_const_point_master_offset.GetInt();
 

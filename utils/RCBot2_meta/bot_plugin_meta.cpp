@@ -147,7 +147,7 @@ int UTIL_ListAttributesOnEntity(edict_t *pEdict)
 	if (!pAttributeList)
 		return 0;
 
-	//local variable is initialized but not referenced - [APG]RoboCop[CL]
+	//pAttribList1 is initialized but not referenced - [APG]RoboCop[CL]
 	int *pAttribList1 = reinterpret_cast<int*>(reinterpret_cast<unsigned int>(pAttributeList) + 4);
 
 	int *pAttribList = reinterpret_cast<int*>(reinterpret_cast<unsigned int>(pEntity) + offset + 4);
