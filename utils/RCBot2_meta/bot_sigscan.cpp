@@ -261,7 +261,7 @@ void *CSignatureFunction::findSignature(void *addrInBase, const char *signature)
 
 	if (real_bytes >= 1)
 	{
-		return findPattern(addrInBase, (char*)real_sig, real_bytes);
+		return findPattern(addrInBase, reinterpret_cast<char*>(real_sig), real_bytes);
 	}
 
 	return NULL;
@@ -414,7 +414,7 @@ CEconItemAttributeDefinition *CGetAttributeDefinitionByID::callme(CEconItemSchem
 #endif
 	}
 
-	return (CEconItemAttributeDefinition*)pret;
+	return static_cast<CEconItemAttributeDefinition*>(pret);
 }
 
 
@@ -449,7 +449,7 @@ CEconItemAttributeDefinition *CGetAttributeDefinitionByName::callme(CEconItemSch
 #endif
 	}
 
-	return (CEconItemAttributeDefinition*)pret;
+	return static_cast<CEconItemAttributeDefinition*>(pret);
 }
 
 
@@ -484,7 +484,7 @@ CEconItemAttribute *CAttributeList_GetAttributeByID::callme(CAttributeList *list
 #endif
 	}
 
-	return (CEconItemAttribute*)pret;
+	return static_cast<CEconItemAttribute*>(pret);
 }
 
 // TF2 Attributes - Flamin Sarge
@@ -509,7 +509,7 @@ bool TF2_SetAttrib(edict_t *pedict, const char *strAttrib, float flVal)
 
 	CEconItemAttributeDefinition *pAttribDef = g_pGetAttributeDefinitionByID->callme(pSchema, id);
 
-	if ((unsigned int)pAttribDef < 0x10000)
+	if (reinterpret_cast<unsigned int>(pAttribDef) < 0x10000)
 	{
 		return false;
 	}
@@ -543,7 +543,7 @@ CEconItemAttribute *TF2Attrib_GetByName(edict_t *entity, const char *strAttrib)
 	if (pList == NULL)
 		return NULL;
 
-	if (*(int*)((unsigned long)pList + 4) == 0x0)
+	if (*reinterpret_cast<int*>(reinterpret_cast<unsigned long>(pList) + 4) == 0x0)
 	{
 		throw "Invalid Attribute List?";
 
@@ -559,14 +559,14 @@ CEconItemAttribute *TF2Attrib_GetByName(edict_t *entity, const char *strAttrib)
 		return NULL;
 	CEconItemAttributeDefinition *pAttribDef = g_pGetAttributeDefinitionByName->callme(pSchema, strAttrib);
 
-	if ((unsigned int)pAttribDef < 0x10000)
+	if (reinterpret_cast<unsigned int>(pAttribDef) < 0x10000)
 		return NULL;
 
-	unsigned short int iDefIndex = *(unsigned short int*)(((unsigned long)pAttribDef) + 4);
+	unsigned short int iDefIndex = *reinterpret_cast<unsigned short int*>(reinterpret_cast<unsigned long>(pAttribDef) + 4);
 
 	CEconItemAttribute *pAttrib = g_pAttribList_GetAttributeByID->callme(pList, iDefIndex);
 
-	if ((unsigned int)pAttrib < 0x10000)
+	if (reinterpret_cast<unsigned int>(pAttrib) < 0x10000)
 		pAttrib = NULL;
 
 	return pAttrib;
@@ -588,7 +588,7 @@ bool TF2_setAttribute(edict_t *pEdict, const char *szName, float flVal)
 			return false;
 	}
 
-	if (((unsigned int)pAttrib) < 0x10000)
+	if (reinterpret_cast<unsigned int>(pAttrib) < 0x10000)
 	{
 		return TF2_SetAttrib(pEdict, szName, flVal);
 	}

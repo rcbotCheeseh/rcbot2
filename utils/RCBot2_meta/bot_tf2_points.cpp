@@ -14,7 +14,7 @@ public:
 	void execute ( CBot *pBot )
 	{
 		if ( pBot->getTeam() == iTeam )
-			((CBotTF2*)pBot)->updateAttackPoints();
+			static_cast<CBotTF2*>(pBot)->updateAttackPoints();
 	}
 private:
 	int iTeam;	
@@ -27,7 +27,7 @@ public:
 	void execute ( CBot *pBot )
 	{
 		if ( pBot->getTeam() == iTeam )
-			((CBotTF2*)pBot)->updateDefendPoints();
+			static_cast<CBotTF2*>(pBot)->updateDefendPoints();
 	}
 private:
 	int iTeam;	
@@ -39,7 +39,7 @@ class CBotFuncPointsUpdated : public IBotFunction
 public:
 	void execute ( CBot *pBot )
 	{
-		((CBotTF2*)pBot)->pointsUpdated();
+		static_cast<CBotTF2*>(pBot)->pointsUpdated();
 	}	
 };
 
@@ -261,7 +261,7 @@ bool CTeamControlPointRound :: isPointInRound ( edict_t *point_pent )
 	{
 		CBaseHandle *hndl;
 
-		hndl = (CBaseHandle *)&(m_ControlPoints[i]); 
+		hndl = static_cast<CBaseHandle *>(&(m_ControlPoints[i])); 
 
 		if ( hndl )
 		{ 
@@ -303,7 +303,9 @@ CTeamControlPointRound *CTeamControlPointMaster:: getCurrentRound ( )
 	CTeamControlPointRound *fromserverent = (CTeamControlPointRound*)p->GetIServerEntity();*/
 
 	// Fix for later TF2 2016 Engine? [APG]RoboCop[CL]
-	return (CTeamControlPointRound*)((unsigned long)pent + (unsigned long)rcbot_const_point_master_offset.GetInt());
+	return reinterpret_cast<CTeamControlPointRound*>(reinterpret_cast<unsigned long>(pent) + static_cast<unsigned long>(
+		rcbot_const_point_master_offset.
+		GetInt()));
 }
 
 //////////////////
@@ -748,7 +750,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 	for ( int i = 0; i < *m_iNumControlPoints; i ++ )
 	{
 		byte j;
-		byte *barr = (byte*)&(arr[i]);
+		byte *barr = reinterpret_cast<byte*>(&(arr[i]));
 
 		for ( j = 0; j < sizeof(TF2PointProb_t); j ++ )
 			signature = signature + ((barr[j]*(i+1))+j);
@@ -1021,7 +1023,7 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 	for ( int i = 0; i < *m_iNumControlPoints; i ++ )
 	{
 		byte j;
-		byte *barr = (byte*)&(arr[i]);
+		byte *barr = reinterpret_cast<byte*>(&(arr[i]));
 
 		for ( j = 0; j < sizeof(TF2PointProb_t); j ++ )
 			signature = signature + ((barr[j]*(i+1))+j);

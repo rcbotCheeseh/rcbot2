@@ -20,6 +20,8 @@ public:
 	{		
 	}
 
+	CBotOperator();
+
 	virtual bool operate ( bool bVal, CBotOperator *pNext )
 	{
 		switch (m_op)
@@ -38,7 +40,7 @@ public:
 
 	virtual bool value()
 	{
-		return -1;
+		return true;
 	}
 private:
 	CBotFactOperator m_op;
@@ -47,7 +49,7 @@ private:
 class CBotFact : public CBotOperator
 {
 public:
-	CBotFact ( unsigned int iFactId ) : m_fid(iFactId)
+	CBotFact ( unsigned int iFactId ) : CBotOperator(), m_fid(iFactId)
 	{
 	}
 

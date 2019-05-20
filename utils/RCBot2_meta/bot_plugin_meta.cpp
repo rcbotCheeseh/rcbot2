@@ -162,7 +162,7 @@ int UTIL_ListAttributesOnEntity(edict_t *pEdict)
 
 	for (int i = 0; i < iNumAttribs; i++)	//THIS IS HOW YOU GET THE ATTRIBUTES ON AN ITEM!
 	{
-		iAttribIndices[i] = *(short int*)((unsigned int)pAttribList + (i * 16) + 4);
+		iAttribIndices[i] = *reinterpret_cast<short int*>(reinterpret_cast<unsigned int>(pAttribList) + (i * 16) + 4);
 
 		CBotGlobals::botMessage(NULL, 0, "%d) %d", i, iAttribIndices[i]);
 	}
@@ -289,7 +289,7 @@ void RCBotPluginMeta::TF2_equipWearable(edict_t *pPlayer, CBaseEntity *pWearable
 {
 	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pPlayer);
 
-	SH_MCALL(pEnt, MHook_EquipWearable)((CEconWearable*)pWearable);
+	SH_MCALL(pEnt, MHook_EquipWearable)(reinterpret_cast<CEconWearable*>(pWearable));
 }
 /*			
 "CAttributeManager::OnAttributeValuesChanged"	//use instead of ClearCache/NotifyManagerOfAttributeValueChanges
@@ -303,19 +303,19 @@ bool RCBotPluginMeta::TF2_ClearAttributeCache(edict_t *pEdict)
 {
 	CAttributeList *pList = CClassInterface::getAttributeList(pEdict);
 
-	CAttributeManager *pManager = (CAttributeManager*)(((unsigned int)pList) + 24);
+	CAttributeManager *pManager = reinterpret_cast<CAttributeManager*>(reinterpret_cast<unsigned int>(pList) + 24);
 
 	if (!pManager)
 		return false;
 
-	unsigned int *mem = (unsigned int*)*(unsigned int*)pManager;
+	unsigned int *mem = reinterpret_cast<unsigned int*>(*reinterpret_cast<unsigned int*>(pManager));
 
 	if (!mem)
 		return false;
 
 	int offset = 12;
 	
-	*(unsigned int*)&OnAttributeValuesChanged = mem[offset];
+	*reinterpret_cast<unsigned int*>(&OnAttributeValuesChanged) = mem[offset];
 
 	if (!OnAttributeValuesChanged)
 		return false;
@@ -595,7 +595,7 @@ void RCBotPluginMeta::Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper)
 		ucmd->tick_count = cmd->tick_count;
 		ucmd->command_number = cmd->command_number;
 
-		g_pLastBot = (CBotTF2*)pBot;
+		g_pLastBot = static_cast<CBotTF2*>(pBot);
 	}
 
 //g_pSM->LogMessage(NULL, "H %i %i %f %f %f %f %i", ucmd->command_number, ucmd->tick_count, ucmd->viewangles.x, ucmd->viewangles.y, ucmd->viewangles.z, ucmd->forwardmove, ucmd->buttons); 
@@ -639,7 +639,7 @@ CBaseEntity *RCBotPluginMeta::Hook_GiveNamedItem( const char *name, int subtype,
 
 	if (rcbot_customloadouts.GetBool() && ((pBot = CBots::getBotPointer(pEdict)) != NULL) && cscript)
 	{
-		((CBotTF2*)pBot)->PostGiveNamedItem(cscript);
+		static_cast<CBotTF2*>(pBot)->PostGiveNamedItem(cscript);
 	}
 	
 	RETURN_META_VALUE(MRES_IGNORED, NULL); 
@@ -767,7 +767,7 @@ void RCBotPluginMeta::Hook_MessageEnd()
 	RETURN_META(MRES_IGNORED);
 }
 
-bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxlen, bool late)
+auto RCBotPluginMeta::Load(PluginId id, ISmmAPI* ismm, char* error, size_t maxlen, bool late) -> bool
 {
 	extern MTRand_int32 irand;
 
@@ -954,8 +954,8 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	//ConVar_Register( 0 );
 	//InitCVars( interfaceFactory ); // register any cvars we have defined
 
-	srand( (unsigned)time(NULL) );  // initialize the random seed
-	irand.seed( (unsigned)time(NULL) );
+	srand( static_cast<unsigned>(time(NULL)) );  // initialize the random seed
+	irand.seed( static_cast<unsigned>(time(NULL)) );
 
 	// Find the RCBOT2 Path from metamod VDF
 	extern IFileSystem *filesystem;
@@ -1052,7 +1052,7 @@ bool RCBotPluginMeta::FireGameEvent(IGameEvent * pevent, bool bDontBroadcast)
 	static char szKey[128];
 	static char szValue[128];
 
-	CBotEvents::executeEvent((void*)pevent,TYPE_IGAMEEVENT);	
+	CBotEvents::executeEvent(static_cast<void*>(pevent),TYPE_IGAMEEVENT);	
 
 RETURN_META_VALUE(MRES_IGNORED, true);
 }
@@ -1104,7 +1104,7 @@ bool RCBotPluginMeta::Unload(char *error, size_t maxlen)
 	{
 		if ( !puppet_bot_cmd->IsFlagSet(FCVAR_CHEAT) )
 		{
-			int *m_nFlags = (int*)((unsigned long)puppet_bot_cmd + BOT_CONVAR_FLAGS_OFFSET); // 20 is offset to flags
+			int *m_nFlags = reinterpret_cast<int*>(reinterpret_cast<unsigned long>(puppet_bot_cmd) + BOT_CONVAR_FLAGS_OFFSET); // 20 is offset to flags
 			
 			*m_nFlags |= FCVAR_CHEAT;
 		}
@@ -1538,7 +1538,7 @@ const char *RCBotPluginMeta::GetLicense()
 
 const char *RCBotPluginMeta::GetVersion()
 {
-	return "1.04 (r490-apg-ch)";
+	return "1.04 (r491-apg-ch)";
 }
 
 const char *RCBotPluginMeta::GetDate()

@@ -147,7 +147,7 @@ bool CWaypointNavigator :: beliefLoad ( )
 
    // convert from short int to float
    
-   num = (unsigned short int)CWaypoints::numWaypoints();
+   num = static_cast<unsigned short int>(CWaypoints::numWaypoints());
 
    // quick loop
    for ( i = 0; i < num; i ++ )
@@ -218,12 +218,12 @@ bool CWaypointNavigator :: beliefSave ( bool bOverride )
 
    // convert from short int to float
    
-   num = (unsigned short int)CWaypoints::numWaypoints();
+   num = static_cast<unsigned short int>(CWaypoints::numWaypoints());
 
    // quick loop
    for ( i = 0; i < num; i ++ )
    {
-	   filebelief[i] = (filebelief[i]/2) + ((unsigned short int)((m_fBelief[i]/MAX_BELIEF) * 16383)); 
+	   filebelief[i] = (filebelief[i]/2) + static_cast<unsigned short int>((m_fBelief[i] / MAX_BELIEF) * 16383); 
    }
 
    fseek (bfp, 0, SEEK_SET); // seek at start
@@ -1587,10 +1587,10 @@ void CWaypoint :: draw ( edict_t *pEdict, bool bDrawPaths, unsigned short int iD
 
 	//////////////////////////////////////////
 
-	unsigned char r = (unsigned char)colour.r;
-	unsigned char g = (unsigned char)colour.g;
-	unsigned char b = (unsigned char)colour.b;
-	unsigned char a = (unsigned char)colour.a;
+	unsigned char r = static_cast<unsigned char>(colour.r);
+	unsigned char g = static_cast<unsigned char>(colour.g);
+	unsigned char b = static_cast<unsigned char>(colour.b);
+	unsigned char a = static_cast<unsigned char>(colour.a);
 
 	qAim = QAngle(0,m_iAimYaw,0);
 
@@ -2418,11 +2418,13 @@ int CWaypoints :: addWaypoint ( CClient *pClient, const char *type1, const char 
 
 	if ( bUseTemplate )
 	{
-		iIndex = addWaypoint(pClient->getPlayer(),vWptOrigin,pClient->getWptCopyFlags(),pClient->isAutoPathOn(),(int)playerAngles.y,iArea,pClient->getWptCopyRadius()); // sort flags out
+		iIndex = addWaypoint(pClient->getPlayer(), vWptOrigin, pClient->getWptCopyFlags(), pClient->isAutoPathOn(),
+		                     (int)playerAngles.y, iArea, pClient->getWptCopyRadius()); // sort flags out
 	}
 	else
 	{
-		iIndex = addWaypoint(pClient->getPlayer(),vWptOrigin,iFlags,pClient->isAutoPathOn(),(int)playerAngles.y,iArea,(iFlags!=iPrevFlags) ? (fMaxDistance/2) : 0); // sort flags out	
+		iIndex = addWaypoint(pClient->getPlayer(), vWptOrigin, iFlags, pClient->isAutoPathOn(), (int)playerAngles.y,
+		                     iArea, (iFlags != iPrevFlags) ? (fMaxDistance / 2) : 0); // sort flags out	
 	}
 
 	pClient->playSound("weapons/crossbow/hit1");
@@ -2525,7 +2527,7 @@ CWaypoint *CWaypoints :: randomRouteWaypoint ( CBot *pBot, Vector vOrigin, Vecto
 	static CWaypoint *pWpt;
 	static CWaypointNavigator *pNav;
 	
-	pNav = (CWaypointNavigator*)pBot->getNavigator();
+	pNav = static_cast<CWaypointNavigator*>(pBot->getNavigator());
 
 	size = numWaypoints();
 
@@ -2634,7 +2636,7 @@ CWaypoint *CWaypoints :: nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, i
 	// 2 : loop through waypoints find visible waypoints to vTarget
 	// 3 : loop through visible waypoints find another waypoint invisible to vTarget but visible to waypoint 2
 
-	short int iTarget = (short int)CWaypointLocations::NearestWaypoint(vTarget,BLAST_RADIUS,-1,true,true);
+	short int iTarget = static_cast<short int>(CWaypointLocations::NearestWaypoint(vTarget,BLAST_RADIUS, -1, true, true));
 	CWaypoint *pTarget = CWaypoints::getWaypoint(iTarget);
 	//vector<short int> waypointlist;
 	int inearest = -1;
@@ -2644,7 +2646,7 @@ CWaypoint *CWaypoints :: nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, i
 
 	CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();	
 
-	register short int numwaypoints = (short int)numWaypoints();
+	register short int numwaypoints = static_cast<short int>(numWaypoints());
 
 	float finearestdist = 9999.0f;
 	float fjnearestdist = 9999.0f;
@@ -2801,7 +2803,7 @@ CWaypoint *CWaypoints :: randomWaypointGoalNearestArea ( int iFlags, int iTeam, 
 		{
 			CWaypointNavigator *pNav;
 		
-			pNav = (CWaypointNavigator*)pBot->getNavigator();
+			pNav = static_cast<CWaypointNavigator*>(pBot->getNavigator());
 
 			pWpt = pNav->chooseBestFromBeliefBetweenAreas(&goals,bHighDanger,bIgnoreBelief);
 		}
@@ -2885,7 +2887,7 @@ CWaypoint *CWaypoints :: randomWaypointGoalBetweenArea ( int iFlags, int iTeam, 
 		{
 			CWaypointNavigator *pNav;
 		
-			pNav = (CWaypointNavigator*)pBot->getNavigator();
+			pNav = static_cast<CWaypointNavigator*>(pBot->getNavigator());
 
 			pWpt = pNav->chooseBestFromBeliefBetweenAreas(&goals,bHighDanger,bIgnoreBelief);
 		}
@@ -2948,7 +2950,7 @@ CWaypoint *CWaypoints :: randomWaypointGoal ( int iFlags, int iTeam, int iArea, 
 		{
 			CWaypointNavigator *pNav;
 
-			pNav = (CWaypointNavigator*)pBot->getNavigator();
+			pNav = static_cast<CWaypointNavigator*>(pBot->getNavigator());
 
 			pWpt = pNav->chooseBestFromBelief(&goals,bHighDanger,iSearchFlags);
 		}

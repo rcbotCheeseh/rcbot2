@@ -45,7 +45,7 @@ void CWaypointVisibilityTable :: workVisibility ()
 {		
 	int percent;
 	int iTicks = 0;
-	register unsigned short int iSize = (unsigned short int) CWaypoints::numWaypoints();
+	register unsigned short int iSize = static_cast<unsigned short int>(CWaypoints::numWaypoints());
 
 	for ( iCurFrom = iCurFrom; iCurFrom < iSize; iCurFrom ++ )
 	{
@@ -62,7 +62,7 @@ void CWaypointVisibilityTable :: workVisibility ()
 			{
 				if ( m_fNextShowMessageTime < engine->Time() )
 				{
-					percent = (int)(((float)iCurFrom / iSize) * 100);
+					percent = static_cast<int>(((float)iCurFrom / iSize) * 100);
 
 					if ( m_iPrevPercent != percent )
 					{
@@ -117,7 +117,7 @@ void CWaypointVisibilityTable :: workVisibilityForWaypoint ( int i, int iNumWayp
 	{
 		if ( i == j )
 		{
-			SetVisibilityFromTo(i,j,1);
+			SetVisibilityFromTo(i,j,true);
 			continue;
 		}
 

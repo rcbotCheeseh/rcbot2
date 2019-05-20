@@ -1492,7 +1492,7 @@ int CTeamFortress2Mod ::getHighestScore ()
 
 		if ( edict && CBotGlobals::entityIsValid(edict) )
 		{
-			score = (short int)CClassInterface::getTF2Score(edict);
+			score = static_cast<short int>(CClassInterface::getTF2Score(edict));
 		
 			if ( score > highest )
 			{
@@ -1750,9 +1750,9 @@ void CTeamFortress2Mod::updatePointMaster()
 
 			//local variable is initialized but not referenced - [APG]RoboCop[CL]
 			unsigned long full_size = sizeof(pMasterEntity);
-			unsigned long mempoint = ((unsigned long)pMasterEntity) + rcbot_const_point_master_offset.GetInt();
+			unsigned long mempoint = reinterpret_cast<unsigned long>(pMasterEntity) + rcbot_const_point_master_offset.GetInt();
 
-			m_PointMaster = (CTeamControlPointMaster*)mempoint;
+			m_PointMaster = reinterpret_cast<CTeamControlPointMaster*>(mempoint);
 			m_PointMasterResource = pMaster;
 #else
 			extern ConVar rcbot_const_point_master_offset;
@@ -1778,7 +1778,9 @@ void CTeamFortress2Mod::updatePointMaster()
 					{
 						CBaseEntity *pent = m_PointMaster->m_ControlPointRounds[r];
 
-						CTeamControlPointRound* pointRound = (CTeamControlPointRound*)((unsigned long)pent + (unsigned long)rcbot_const_point_master_offset.GetInt());
+						CTeamControlPointRound* pointRound = reinterpret_cast<CTeamControlPointRound*>(reinterpret_cast<
+								unsigned long>(pent) + static_cast<unsigned long>(rcbot_const_point_master_offset.
+							GetInt()));
 
 						CBotGlobals::botMessage(NULL, 0, "Control Points for Round %d", r);
 

@@ -246,7 +246,7 @@ void CWaypointLocations :: AutoPathInBucket ( edict_t *pPlayer, int i, int j, in
 
 	//while ( !tempStack.IsEmpty() )
 	dataUnconstArray<int> *arr = &(m_iLocations[i][j][k]);
-	short int size = (short int)arr->Size();
+	short int size = static_cast<short int>(arr->Size());
 	
 	for ( int l = 0; l < size; l ++ )
 	{
@@ -383,7 +383,7 @@ void CWaypointLocations :: FindNearestCoverWaypointInBucket ( int i, int j, int 
 	int iSelectedIndex;
 	float fDist;
 	dataUnconstArray<int> *arr = &(m_iLocations[i][j][k]);
-	short int size = (short int)arr->Size();
+	short int size = static_cast<short int>(arr->Size());
 	//CBotMod *curmod = CBotGlobals::getCurrentMod();
 
 	for ( int l = 0; l < size; l ++ )
@@ -493,7 +493,7 @@ void CWaypointLocations :: FindNearestBlastInBucket ( int i, int j, int k, const
 	bool bAdd;
 	
 	dataUnconstArray<int> *arr = &(m_iLocations[i][j][k]);
-	short int size = (short int)arr->Size();
+	short int size = static_cast<short int>(arr->Size());
 	CBotMod *curmod = CBotGlobals::getCurrentMod();
 
 	for ( register short int l = 0; l < size; l ++ )
@@ -575,7 +575,7 @@ void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vect
 	CBotMod *curmod = CBotGlobals::getCurrentMod();
 	
 	dataUnconstArray<int> *arr = &(m_iLocations[i][j][k]);
-	short int size = (short int)arr->Size();
+	short int size = static_cast<short int>(arr->Size());
 	
 	for ( int l = 0; l < size; l ++ )
 	//while ( !tempStack.IsEmpty() )
@@ -779,7 +779,7 @@ void CWaypointLocations :: DrawWaypoints ( CClient *pClient, float fDist )
 			for ( k = iMinLock; k <= iMaxLock; k++ )
 			{
 				arr = &(m_iLocations[i][j][k]);
-				size = (short int)arr->Size();
+				size = static_cast<short int>(arr->Size());
 				
 				for ( short int l = 0; l < size; l ++ )
 				//while ( !tempStack.IsEmpty() )

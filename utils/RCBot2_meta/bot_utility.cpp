@@ -195,7 +195,7 @@ void CBotUtilities :: execute ()
 			temp = m_pBest.head;
 
 			// put in correct order by making a linked list
-			pnew = (util_node_t*)malloc(sizeof(util_node_t));
+			pnew = static_cast<util_node_t*>(malloc(sizeof(util_node_t)));
 
 			if ( pnew != NULL )
 			{

@@ -200,7 +200,7 @@ public:
 		
 		try
 		{
-			return *((bool*)m_data); 
+			return *static_cast<bool*>(m_data); 
 		}
 
 		catch(...)
@@ -216,7 +216,7 @@ public:
 		if ( !m_data ) 
 			return NULL; 
 
-		return ((bool*)m_data); 
+		return static_cast<bool*>(m_data); 
 	}
 
 	inline void *getVoidPointer ( edict_t *edict ) 
@@ -236,7 +236,7 @@ public:
 		if ( !m_data ) 
 			return defaultvalue; 
 		
-		return *((float*)m_data); 
+		return *static_cast<float*>(m_data); 
 	}
 
 	inline float *getFloatPointer ( edict_t *edict ) 
@@ -246,14 +246,14 @@ public:
 		if ( !m_data ) 
 			return NULL; 
 		
-		return ((float*)m_data); 
+		return static_cast<float*>(m_data); 
 	}
 
 	inline char *getString (edict_t *edict ) 
 	{ 
 		getData(edict); 
 
-		return (char*)m_data; 
+		return static_cast<char*>(m_data); 
 	}
 
 	inline Vector *getVectorPointer ( edict_t *edict )
@@ -262,7 +262,7 @@ public:
 
 		if ( m_data )
 		{
-			return (Vector*)m_data;
+			return static_cast<Vector*>(m_data);
 		}
 
 		return NULL;
@@ -276,7 +276,7 @@ public:
 
 		if ( m_data )
 		{
-			x = (float*)m_data;
+			x = static_cast<float*>(m_data);
 			*v = Vector(*x,*(x+1),*(x+2));
 
 			return true;
@@ -294,7 +294,7 @@ public:
 
 		try
 		{
-			return *((int*)m_data);
+			return *static_cast<int*>(m_data);
 		}
 
 		catch ( ... )
@@ -307,14 +307,14 @@ public:
 	{ 
 		getData(edict); 
 
-		return (int*)m_data; 
+		return static_cast<int*>(m_data); 
 	}
 
 	inline byte *getBytePointer ( edict_t *edict ) 
 	{ 
 		getData(edict); 
 
-		return (byte*)m_data; 
+		return static_cast<byte*>(m_data); 
 	}
 
 	inline float getFloatFromInt ( edict_t *edict, float defaultvalue )
@@ -324,7 +324,7 @@ public:
 		if ( !m_data ) 
 			return defaultvalue; 
 
-		return (float)(*(int *)m_data);
+		return static_cast<float>(*static_cast<int *>(m_data));
 	}
 
 	static void resetError () { m_berror = false; }
@@ -419,7 +419,7 @@ public:
 	}
 	//end Jrob
 	inline static bool TF2_IsMedievalMode(void*gamerules) { return g_GetProps[GETPROP_TF2_MEDIEVALMODE].getBool(gamerules, false, false);}
-	inline static int TF2_getRoundState(void *gamerules) { return g_GetProps[GETPROP_TF2_ROUNDSTATE].getInt(gamerules, 0, 0); }
+	inline static int TF2_getRoundState(void *gamerules) { return g_GetProps[GETPROP_TF2_ROUNDSTATE].getInt(gamerules, 0, false); }
 	inline static float getTF2SpyCloakMeter ( edict_t *edict ) { return g_GetProps[GETPROP_TF2SPYMETER].getFloat(edict,0); }
 	inline static int getWaterLevel ( edict_t *edict ) { return g_GetProps[GETPROP_WATERLEVEL].getInt(edict,0); }
 	inline static void updateSimulationTime ( edict_t *edict )
@@ -521,7 +521,7 @@ public:
 	inline static int getDODBombTeam ( edict_t *pBombTarget ) { return g_GetProps[GETPROP_DOD_BOMB_TEAM].getInt(pBombTarget,0); }
 	inline static int *getWeaponClip1Pointer ( edict_t *pgun ) { return g_GetProps[GETPROP_WEAPONCLIP1].getIntPointer(pgun); }
 	inline static int *getWeaponClip2Pointer ( edict_t *pgun ) { return g_GetProps[GETPROP_WEAPONCLIP2].getIntPointer(pgun); }
-	inline static CAttributeList *getAttributeList ( edict_t *player ) { return (CAttributeList*)g_GetProps[GETPROP_TF2_ATTRIBUTELIST].getVoidPointer(player); }
+	inline static CAttributeList *getAttributeList ( edict_t *player ) { return static_cast<CAttributeList*>(g_GetProps[GETPROP_TF2_ATTRIBUTELIST].getVoidPointer(player)); }
 	inline static int getOffset(int id) { return g_GetProps[id].getOffset(); }
 	inline static void getWeaponClip ( edict_t *pgun, int *iClip1, int *iClip2 ) { *iClip1 = g_GetProps[GETPROP_WEAPONCLIP1].getInt(pgun,0); *iClip2 = g_GetProps[GETPROP_WEAPONCLIP2].getInt(pgun,0); }
 	inline static void getAmmoTypes ( edict_t *pgun, int *iAmmoType1, int *iAmmoType2 ) { *iAmmoType1 = g_GetProps[GETPROP_WEAPON_AMMOTYPE1].getInt(pgun,-1); *iAmmoType2 = g_GetProps[GETPROP_WEAPON_AMMOTYPE2].getInt(pgun,-1);} 
