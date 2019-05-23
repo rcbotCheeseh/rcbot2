@@ -43,9 +43,11 @@
 #include "vplane.h"
 #include "eiface.h"
 #include "igameevents.h"
+
 #ifdef __linux__
 #include "shareddefs.h" //bir3yk
 #endif
+
 #include "usercmd.h"
 #include "bitbuf.h"
 

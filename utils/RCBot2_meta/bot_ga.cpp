@@ -30,11 +30,9 @@
  */
 
 #include "bot_mtrand.h"
-
 #include "bot.h"
 #include "bot_ga.h"
 #include "bot_globals.h"
-
 
 const int CGA :: g_iDefaultMaxPopSize = 16;
 const float CGA :: g_fCrossOverRate = 0.7f;

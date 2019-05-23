@@ -22,6 +22,7 @@
 #ifdef __linux__
 #include "shake.h"    //bir3yk
 #endif
+
 #include "IEffects.h"
 #include "igameevents.h"
 #include "IEngineTrace.h"
@@ -966,7 +967,7 @@ auto RCBotPluginMeta::Load(PluginId id, ISmmAPI* ismm, char* error, size_t maxle
 	
 	mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD");
 	
-	mainkv = mainkv->FindKey("Metamod Plugin");
+	mainkv = mainkv->FindKey("Metamod Plugin");//A possible memory leak? [APG]RoboCop[CL]
 
 	if (mainkv)
 		rcbot2path = mainkv->GetString("rcbot2path", "\0");

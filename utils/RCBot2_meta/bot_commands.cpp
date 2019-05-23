@@ -1259,12 +1259,15 @@ CWaypointAutoWaypointCommand :: CWaypointAutoWaypointCommand()
 	setAccessLevel(CMD_ACCESS_WAYPOINT);
 }
 
-eBotCommandResult CWaypointAutoWaypointCommand :: execute ( CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5 )
+eBotCommandResult CWaypointAutoWaypointCommand::execute(CClient* pClient, const char* pcmd, const char* arg1,
+                                                        const char* arg2, const char* arg3, const char* arg4,
+                                                        const char* arg5)
 {
 	if ( pClient )
 	{
 		pClient->setAutoWaypointMode(atoi(pcmd)>0,atoi(pcmd)==2);
-		CBotGlobals::botMessage(pClient->getPlayer(),0,"Autowaypointing Mode %s, Debug %s",(atoi(pcmd)>0)?"ON":"OFF",(atoi(pcmd)==2)?"ON":"OFF");
+		CBotGlobals::botMessage(pClient->getPlayer(), 0, "Autowaypointing Mode %s, Debug %s",
+		                        (atoi(pcmd) > 0) ? "ON" : "OFF", (atoi(pcmd) == 2) ? "ON" : "OFF");
 	}
 
 	return COMMAND_ACCESSED;

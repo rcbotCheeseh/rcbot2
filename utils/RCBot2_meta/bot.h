@@ -1142,7 +1142,7 @@ public:
 
 	CAddbot ()
 	{
-		memset(this,sizeof(CAddbot),0);
+		memset(this, 0, sizeof(CAddbot));
 	};
 
 	const char *m_szClass;

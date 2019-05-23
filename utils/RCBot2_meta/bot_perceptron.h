@@ -281,7 +281,7 @@ public:
 
 	CBotNeuralNet(unsigned short int numinputs, unsigned short int numhiddenlayers, unsigned short int neuronsperhiddenlayer, unsigned short int numoutputs, ga_nn_value learnrate);
 
-	CBotNeuralNet ()
+	CBotNeuralNet (): m_pHidden(nullptr)
 	{
 		m_pOutputs = NULL;
 		//m_transferFunction = NULL;

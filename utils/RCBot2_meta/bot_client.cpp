@@ -159,7 +159,8 @@ void CClient :: playSound ( const char *pszSound )
 	}
 }
 
-void CClient :: autoEventWaypoint ( int iType, float fRadius, bool bAtOtherOrigin, int iTeam, Vector vOrigin, bool bIgnoreTeam, bool bAutoType )
+void CClient::autoEventWaypoint(int iType, float fRadius, bool bAtOtherOrigin, int iTeam, Vector vOrigin,
+                                bool bIgnoreTeam, bool bAutoType)
 {
 	m_iAutoEventWaypoint = iType;
 	m_fAutoEventWaypointRadius = fRadius;
@@ -187,7 +188,7 @@ void CClient :: autoEventWaypoint ( int iType, float fRadius, bool bAtOtherOrigi
 	}	
 }
 
-void CClient :: teleportTo (Vector vOrigin)
+void CClient :: teleportTo (const Vector vOrigin)
 {
 	m_bIsTeleporting = true;
 	m_fTeleportTime = engine->Time()+0.1f;

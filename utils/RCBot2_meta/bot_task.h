@@ -139,7 +139,7 @@ protected:
 class CFindPathTask : public CBotTask
 {
 public:
-	CFindPathTask ()
+	CFindPathTask (): m_iInt(0)
 	{
 		m_pEdict = NULL;
 		m_LookTask = LOOK_WAYPOINT;
@@ -150,7 +150,7 @@ public:
 		m_bGetPassedIntAsWaypointId = false;
 	}
 
-	CFindPathTask ( Vector vOrigin, eLookTask looktask = LOOK_WAYPOINT )
+	CFindPathTask ( Vector vOrigin, eLookTask looktask = LOOK_WAYPOINT ): m_iInt(0)
 	{
 		m_vVector = vOrigin;
 		m_pEdict = NULL; // no edict
@@ -396,13 +396,13 @@ private:
 class CBotGravGunPickup : public CBotTask
 {
 public:
-	CBotGravGunPickup ( edict_t *pWeapon, edict_t *pProp )
+	CBotGravGunPickup ( edict_t *pWeapon, edict_t *pProp ): m_fSecAttTime(0)
 	{
 		m_Weapon = pWeapon;
 		m_Prop = pProp;
 		m_fTime = 0;
 	}
-	
+
 	void execute (CBot *pBot,CBotSchedule *pSchedule);
 
 	void debugString ( char *string )
@@ -644,7 +644,8 @@ private:
 class CBotInvestigateTask : public CBotTask
 {
 public:
-	CBotInvestigateTask ( Vector vOrigin, float fRadius, Vector vPOV, bool bHasPOV, float fMaxTime = 0, int iInterrupt = CONDITION_SEE_CUR_ENEMY ) 
+	CBotInvestigateTask(Vector vOrigin, float fRadius, Vector vPOV, bool bHasPOV, float fMaxTime = 0,
+	                    int iInterrupt = CONDITION_SEE_CUR_ENEMY) 
 	{ 
 		m_fMaxTime = fMaxTime; 
 		m_vOrigin = vOrigin; 
@@ -869,12 +870,13 @@ private:
 class CDODWaitForBombTask : public CBotTask
 {
 public:
-	CDODWaitForBombTask ( edict_t *pBombTarget, CWaypoint *pBlocking )
+	CDODWaitForBombTask ( edict_t *pBombTarget, CWaypoint *pBlocking ): m_pRunTo(nullptr)
 	{
 		m_pBombTarget = pBombTarget;
 		m_fTime = 0.0f;
 		m_pBlocking = pBlocking;
 	}
+
 	virtual void debugString ( char *string );
 	void execute (CBot *pBot,CBotSchedule *pSchedule);
 
@@ -1186,7 +1188,7 @@ private:
 class CTF2_TauntTask : public CBotTask
 {
 public:
-	CTF2_TauntTask ( Vector vPlayer, Vector vOrigin, float fDist )
+	CTF2_TauntTask ( Vector vPlayer, Vector vOrigin, float fDist ): m_fTime(0)
 	{
 		m_vPlayer = vPlayer;
 		m_vOrigin = vOrigin;
@@ -1339,7 +1341,12 @@ private:
 class CSpyCheckAir : public CBotTask
 {
 public:
-	CSpyCheckAir () { m_fTime = 0.0f; m_pUnseenBefore = NULL; m_bHitPlayer = false; }
+	CSpyCheckAir (): m_fNextCheckUnseen(0)
+	{
+		m_fTime = 0.0f;
+		m_pUnseenBefore = NULL;
+		m_bHitPlayer = false;
+	}
 
 	void execute ( CBot *pBot, CBotSchedule *pSchedule );
 

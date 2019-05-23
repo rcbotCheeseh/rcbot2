@@ -194,7 +194,7 @@ bool CBotGlobals::dirExists(const char *path)
 
 void CBotGlobals::readRCBotFolder()
 {
-	KeyValues *mainkv = new KeyValues("Metamod Plugin");
+	KeyValues *mainkv = new KeyValues("Metamod Plugin");//A possible memory leak? [APG]RoboCop[CL]
 
 	if (mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD")) {
 		char folder[256] = "\0";
@@ -278,7 +278,7 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 
 		if( pent && CBotGlobals::isNetworkable(pent) )
 		{
-			int length = strlen(name);						 
+			int length = strlen(name);//strlen called too often resulting lag? [APG]RoboCop[CL]					 
 
 			char arg_lwr[128];
 			char pent_lwr[128];

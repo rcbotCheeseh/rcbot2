@@ -45,7 +45,7 @@ class IGameEvent;
 class CBotEvent
 {
 public:
-	CBotEvent()
+	CBotEvent(): m_pActivator(nullptr)
 	{
 		m_iEventId = -1;
 		m_szType = NULL;

@@ -31,7 +31,6 @@
 
 #include "bot_plugin_meta.h"
 
-
 #include "igameevents.h"
 #include "bot.h"
 #include "bot_event.h"

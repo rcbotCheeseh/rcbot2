@@ -46,9 +46,11 @@
 #include "vector.h"
 #include "vplane.h"
 #include "eiface.h"
+
 #ifdef __linux__
 #include "shareddefs.h" //bir3yk
 #endif
+
 #include "usercmd.h"
 #include "bitbuf.h"
 #include "in_buttons.h"
@@ -57,6 +59,7 @@
 #include "vstdlib/vstdlib.h"
 #include "vstdlib/random.h" // for random functions
 #include "iservernetworkable.h" // may come in handy
+
 #ifdef __linux__
 #include "shake.h"    //bir3yk
 #endif
@@ -351,7 +354,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	engine->SetFakeClientConVarValue(pEdict,"tf_medigun_autoheal","0");	
 
 	// joining name not the same as the profile name, change name
-	if (strcmp(m_szBotName,pProfile->m_szName) )
+	if (strcmp(m_szBotName,pProfile->m_szName) != 0)
 	{
 		engine->SetFakeClientConVarValue(pEdict,"name",pProfile->m_szName);
 		strcpy(m_szBotName,pProfile->m_szName);
@@ -1414,7 +1417,6 @@ void CBot :: spawnInit ()
 	m_bThinkStuck = false;
 	m_pLookEdict = NULL;
 	m_fLookAroundTime = 0.0f;
-	m_pAvoidEntity = NULL;
 	m_bLookedForEnemyLast = false;
 	////////////////////////
 	m_iPrevHealth = 0;    // 
@@ -1909,7 +1911,7 @@ void CBot :: updateStatistics ()
 
 		if ( !m_uSquadDetail.b1.said_area_clear && (m_StatsCanUse.stats.m_iEnemiesInRange == 0) && (m_StatsCanUse.stats.m_iEnemiesVisible == 0) && (m_StatsCanUse.stats.m_iTeamMatesInRange > 0))
 		{
-			if ( !inSquad() || isSquadLeader() && (m_fLastSeeEnemy && ((m_fLastSeeEnemy + 10.0f)<engine->Time())) )
+			if ( isSquadLeader() && (m_fLastSeeEnemy && m_fLastSeeEnemy + 10.0f<engine->Time()) || !inSquad() )
 				areaClear();
 
 			m_uSquadDetail.b1.said_area_clear = true;

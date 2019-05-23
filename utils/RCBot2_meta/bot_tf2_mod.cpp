@@ -318,7 +318,7 @@ bool CTeamFortress2Mod::isSuddenDeath()
 void CTeamFortress2Mod::setupLoadOutWeapons()
 {
 	extern IFileSystem *filesystem;
-	KeyValues *mainkv = new KeyValues("tfweapons");
+	KeyValues *mainkv = new KeyValues("tfweapons");//A possible memory leak? [APG]RoboCop[CL]
 
 	KeyValues *kv;
 	KeyValues *usedbyclass;
@@ -1226,11 +1226,11 @@ edict_t *CTeamFortress2Mod :: getTeleporterExit ( edict_t *pTele )
 				return pExit;
 			}
 
-			return false;
+			return 0;
 		}
 	}
 
-	return false;
+	return 0;
 }
 
 // check if the entity is a health kit

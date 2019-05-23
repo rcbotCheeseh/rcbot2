@@ -614,7 +614,7 @@ void CDODWaitForBombTask :: debugString ( char *string )
 
 //////////
 
-CBotDODAttackPoint :: CBotDODAttackPoint ( int iFlagID, Vector vOrigin, float fRadius )
+CBotDODAttackPoint :: CBotDODAttackPoint ( int iFlagID, Vector vOrigin, float fRadius ): m_bProne(false)
 {
 	m_vOrigin = vOrigin;
 	m_fAttackTime = 0;
@@ -4102,7 +4102,7 @@ void CCrouchHideTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 
 }
 ////////////////////////////////////////////////////////
-CHideTask :: CHideTask( Vector vHideFrom )
+CHideTask :: CHideTask( Vector vHideFrom ): m_fHideTime(0)
 {
 	m_vHideFrom = vHideFrom;
 }
@@ -4654,12 +4654,12 @@ CBotTF2Spam :: CBotTF2Spam ( CBot *pBot, Vector vStart, int iYaw, CBotWeapon *pW
 	m_fTime = 0.0f;
 }
 
-CBotTF2Spam :: CBotTF2Spam ( Vector vStart, Vector vTarget, CBotWeapon *pWeapon )
+CBotTF2Spam :: CBotTF2Spam ( Vector vStart, Vector vTarget, CBotWeapon *pWeapon ): m_fNextAttack(0)
 {
 	m_vTarget = vTarget;
 	m_pWeapon = pWeapon;
 	m_vStart = vStart;
-	
+
 	m_fTime = 0.0f;
 }
 

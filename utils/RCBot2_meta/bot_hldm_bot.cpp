@@ -28,6 +28,7 @@
  *    version.
  *
  */
+ 
 #include "in_buttons.h"
 #include "bot.h"
 #include "bot_hldm_bot.h"
@@ -40,12 +41,10 @@
 #include "bot_utility.h"
 #include "bot_task.h"
 #include "bot_schedule.h"
-#include "bot_waypoint.h"
 #include "bot_weapons.h"
 #include "bot_mtrand.h"
 #include "bot_waypoint_locations.h"
 #include "bot_getprop.h"
-
 
 extern ConVar rcbot_jump_obst_dist;
 extern ConVar rcbot_jump_obst_speed;

@@ -1,4 +1,3 @@
-
 #include "engine_wrappers.h"
 #include "server_class.h"
 #include "bot_const.h"

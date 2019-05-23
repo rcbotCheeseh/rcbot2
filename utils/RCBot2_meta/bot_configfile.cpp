@@ -40,9 +40,11 @@
 #include "interface.h"
 #include "engine/iserverplugin.h"
 #include "iplayerinfo.h"
+
 #ifdef __linux__
 #include "shake.h"    //bir3yk
 #endif
+
 #include "IEngineTrace.h" // for traceline functions
 #include "tier2/tier2.h"
 #include "IEffects.h"
@@ -56,6 +58,7 @@
 #include "ndebugoverlay.h"
 #include "server_class.h"
 #include "time.h"
+
 #include "bot.h"
 #include "bot_commands.h"
 #include "bot_client.h"

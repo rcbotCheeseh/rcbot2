@@ -168,9 +168,9 @@ void UTIL_FindPropPrint(const char *prop_name);
 class CClassInterfaceValue
 {
 public:
-	CClassInterfaceValue ()
+	CClassInterfaceValue (): m_preoffset(0)
 	{
-		m_data = NULL; 
+		m_data = NULL;
 		m_class = NULL;
 		m_value = NULL;
 		m_offset = 0;

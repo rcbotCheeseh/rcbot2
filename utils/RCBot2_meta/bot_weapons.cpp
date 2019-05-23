@@ -690,7 +690,7 @@ void CWeapons::loadWeapons(const char *szWeaponListName, WeaponsData_t *pDefault
 {
 	if ((szWeaponListName != NULL) && (szWeaponListName[0] != 0))
 	{
-		KeyValues *kv = new KeyValues("Weapons");
+		KeyValues *kv = new KeyValues("Weapons");//A possible memory leak? [APG]RoboCop[CL]
 		char szFilename[1024];
 
 		CBotGlobals::buildFileName(szFilename, "weapons", BOT_CONFIG_FOLDER, "ini", false);

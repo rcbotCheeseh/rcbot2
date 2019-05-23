@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #endif
+
 #include "bot_som.h"
 #include "bot_mtrand.h"
 

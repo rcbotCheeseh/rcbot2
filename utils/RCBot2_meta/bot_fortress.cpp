@@ -30,6 +30,7 @@
  *    version.
  *
  */
+ 
 #include "bot_plugin_meta.h"
 #include "bot.h"
 
@@ -755,7 +756,8 @@ void CBotFortress :: medicCalled(edict_t *pPlayer )
 		return; // nothing to do
 	if ( distanceFrom(pPlayer) > 1024 ) // a bit far away
 		return; // ignore
-	if ( (CBotGlobals::getTeam(pPlayer) == getTeam()) || (CClassInterface::getTF2Class(pPlayer) == TF_CLASS_SPY) && thinkSpyIsEnemy(pPlayer,CTeamFortress2Mod::getSpyDisguise(pPlayer)) )
+	if (CClassInterface::getTF2Class(pPlayer) == TF_CLASS_SPY &&
+		thinkSpyIsEnemy(pPlayer, CTeamFortress2Mod::getSpyDisguise(pPlayer)) || CBotGlobals::getTeam(pPlayer) == getTeam())
 	{
 		
 		m_pLastCalledMedic = pPlayer;
@@ -2339,7 +2341,7 @@ bool CBotTF2 :: hasEngineerBuilt ( eEngiBuild iBuilding )
 }
 
 // ENEMY Flag dropped
-void CBotFortress :: flagDropped ( Vector vOrigin )
+void CBotFortress :: flagDropped (const Vector vOrigin )
 { 
 	m_vLastKnownFlagPoint = vOrigin; 
 	m_fLastKnownFlagTime = engine->Time() + 60.0f;
@@ -2348,7 +2350,7 @@ void CBotFortress :: flagDropped ( Vector vOrigin )
 		m_pSchedules->removeSchedule(SCHED_RETURN_TO_INTEL);
 }
 
-void CBotFortress :: teamFlagDropped ( Vector vOrigin )
+void CBotFortress :: teamFlagDropped (const Vector vOrigin )
 {
 	m_vLastKnownTeamFlagPoint = vOrigin; 
 
@@ -3326,7 +3328,7 @@ void CBotTF2::modThink()
 			{
 				spyCloak();
 			}
-			else if (bIsCloaked || isDisguised() && !hasEnemy())
+			else if (isDisguised() && !hasEnemy() || bIsCloaked)
 			{
 				updateCondition(CONDITION_COVERT);
 			}
@@ -5263,10 +5265,12 @@ bool CBotTF2 :: canDeployStickies ()
 #define STICKY_SELECTWEAP	1
 #define STICKY_RELOAD		2
 #define STICKY_FACEVECTOR   3
-#define IN_RANGE(x,low,high) ((x>low)&&(x<high))
+#define IN_RANGE(x,low,high) (((x)>(low))&&((x)<(high)))
 
 // returns true when finished
-bool CBotTF2::deployStickies(eDemoTrapType type, Vector vStand, Vector vLocation, Vector vSpread, Vector *vPoint, int *iState, int *iStickyNum, bool *bFail, float *fTime, int wptindex)
+bool CBotTF2::deployStickies(eDemoTrapType type, const Vector vStand, const Vector vLocation, const Vector vSpread,
+                             Vector* vPoint,
+                             int* iState, int* iStickyNum, bool* bFail, float* fTime, int wptindex)
 {
 	CBotWeapon *pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_PIPEBOMBS));
 	int iPipesLeft = 0;
@@ -5703,7 +5707,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 								{
 									CFindPathTask *path = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
 								
-									CBotSchedule *newSched = new CBotSchedule();
+									CBotSchedule *newSched = new CBotSchedule();//A possible memory leak? [APG]RoboCop[CL]
 
 									newSched->passVector(spam->getTarget());
 
@@ -7388,7 +7392,6 @@ void CBotTF2::roundReset(bool bFullReset)
 	m_bSentryGunVectorValid = false;
 	m_bDispenserVectorValid = false;
 	m_bTeleportExitVectorValid = false;
-	m_pPrevSpy = NULL;
 	m_pHeal = NULL;
 	m_pSentryGun = NULL;
 	m_pDispenser = NULL;
@@ -7522,7 +7525,7 @@ void CBotTF2::pointCaptured(int iPoint, int iTeam, const char *szPointName)
 // take a pEdict entity to check if its an enemy
 // return TRUE to "OPEN FIRE" (Attack)
 // return FALSE to ignore
-#define RCBOT_ISENEMY_UNDEF -1
+#define RCBOT_ISENEMY_UNDEF (-1)
 #define RCBOT_ISENEMY_TRUE 1
 #define RCBOT_ISENEMY_FALSE 0
 
@@ -8049,11 +8052,6 @@ CBotTF2::CBotTF2()
 		m_fCheckHealTime = 0;
 		
 		m_fAttackPointTime  = 0; // used in cart maps
-
-		m_prevSentryHealth = 0;
-		m_prevDispHealth = 0;
-		m_prevTeleExtHealth = 0;
-		m_prevTeleEntHealth = 0;
 
 		m_iSentryArea = 0;
 		m_iDispenserArea = 0;

@@ -379,3 +379,6 @@ utils/RCBot2_meta/.vs/HPB_Bot2/v15/ipch/AutoPCH/5d5e72717a175a61/BOT_GLOBALS.ipc
 *.HPB_bot2_ReleaseWin32
 *.HPB_bot2_Release_NonHomeFolderWin32
 *.HPB_bot2_DebugWin32
+*.cmd
+*.cfg
+*.i

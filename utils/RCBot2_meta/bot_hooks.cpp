@@ -1,10 +1,9 @@
-
-
 #include "filesystem.h"
 
 #ifdef __linux__
 #include "shake.h"    //bir3yk
 #endif
+
 #include "enginecallback.h"
 
 #include "bot_const.h"

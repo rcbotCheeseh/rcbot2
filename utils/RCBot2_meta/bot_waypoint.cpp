@@ -30,11 +30,8 @@
  */
 
 #include "engine_wrappers.h"
-
 #include "filesystem.h"
-
 #include "iplayerinfo.h"
-
 #include "convar.h"
 #include "ndebugoverlay.h"
 
@@ -54,7 +51,6 @@
 #include "bot_getprop.h"
 #include "bot_fortress.h"
 #include "bot_wpt_dist.h"
-
 
 #include <vector>    //bir3yk
 using namespace std;    //bir3yk
@@ -1991,7 +1987,6 @@ void CWaypoint :: init ()
 	m_bUsed = true;
 	m_fNextCheckGroundTime = 0;
 	m_bHasGround = false;
-	m_fRadius = 0;
 	m_OpensLaterInfo.Clear();
 	m_bIsReachable = true; 
 	m_fCheckReachableTime = 0;

@@ -141,7 +141,7 @@ void CDODBot :: freeMapMemory ()
 	CBot::freeMapMemory();
 }
 
-bool CDODBot::canGotoWaypoint(Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev )
+bool CDODBot::canGotoWaypoint(const Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev )
 {
 	if ( CBot::canGotoWaypoint(vPrevWaypoint,pWaypoint,pPrev) )
 	{
@@ -825,7 +825,8 @@ bool CDODBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 				}
 				//else if ( (m_fLastSeeEnemy + 5.0f) > engine->Time() )
 				else if ( DotProductFromOrigin(CBotGlobals::entityOrigin(pEdict)) > rcbot_shoot_breakable_cos.GetFloat() )
-					return ((m_fLastSeeEnemyPlayer+3.0f) < engine->Time()) && (distanceFrom(pEdict) < rcbot_shoot_breakable_dist.GetFloat()) && (CClassInterface::getPlayerHealth(pEdict) > 0);
+					return ((m_fLastSeeEnemyPlayer + 3.0f) < engine->Time()) && (distanceFrom(pEdict) <
+						rcbot_shoot_breakable_dist.GetFloat()) && (CClassInterface::getPlayerHealth(pEdict) > 0);
 			}
 		}
 

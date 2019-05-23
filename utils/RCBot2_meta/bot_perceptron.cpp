@@ -150,7 +150,7 @@ ga_nn_value CLogisticalNeuron :: execute (  )//, bool usebias )
 	static ga_nn_value *w;
 	static ga_nn_value *x;
 
-	m_netinput = 0;
+	m_netinput = 0; //Two m_netinput values? [APG]RoboCop[CL]
 	w = m_weights;
 	x = m_inputs;
 
