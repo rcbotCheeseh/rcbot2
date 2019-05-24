@@ -371,3 +371,6 @@ linux_sdk/RCBot2MetaDebug_i486.so
 *.cfg
 *.i
 linux_sdk/vcpm
+linux_sdk/Makefile.HPB_bot2_ReleaseWin32
+linux_sdk/Makefile.HPB_bot2_Release_NonHomeFolderWin32
+linux_sdk/Makefile.HPB_bot2_DebugWin32

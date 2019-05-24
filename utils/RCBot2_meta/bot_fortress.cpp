@@ -7665,7 +7665,7 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 				{
 					// let my sentry gun do the work
 					bValid = false; // don't attack
-				}
+				}//CBotGlobals::entityOrigin triggers crash occasionally for TF2 [APG]RoboCop[CL]
 				else if ( (CBotGlobals::entityOrigin(pSentryEnemy) - CBotGlobals::entityOrigin(pEdict)).Length() < 200 )
 					bValid = false; // sentry gun already shooting near this guy -- don't attack - let sentry gun do it
 				else
