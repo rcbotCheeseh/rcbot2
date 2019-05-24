@@ -370,3 +370,4 @@ linux_sdk/RCBot2MetaDebug_i486.so
 *.cmd
 *.cfg
 *.i
+linux_sdk/vcpm

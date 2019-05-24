@@ -52,7 +52,7 @@ CLINK=/usr/bin/gcc-4.8
 OPTFLAGS=-O2 -fomit-frame-pointer -fforce-addr -foptimize-sibling-calls -fgcse -fcaller-saves -fschedule-insns2 -fsched-interblock -fdelete-null-pointer-checks -freorder-blocks -falign-functions -falign-jumps -falign-loops -falign-labels -ftree-vrp -finline-functions -funswitch-loops -fgcse-after-reload -funsafe-math-optimizations
 
 # put any compiler flags you want passed here
-USER_CFLAGS= -std=c++11 -w -D__linux# -g -D_DEBUG -DDEBUG -DSH_DEBUG# -DTF2_HOOKS
+USER_CFLAGS= -std=c++11 -w -D__linux__ #-g -D_DEBUG -DDEBUG -DSH_DEBUG #-DTF2_HOOKS
 
 # Link Libraries
 #LIBFILES= \
@@ -67,7 +67,6 @@ USER_CFLAGS= -std=c++11 -w -D__linux# -g -D_DEBUG -DDEBUG -DSH_DEBUG# -DTF2_HOOK
 #  $(LIB_DIR)/lib/linux/tier2_486.a \
 #  $(LIB_DIR)/lib/linux/tier1_486.a \
 #  $(LIB_DIR)/lib/linux/mathlib_486.a \
-
 
 # link flags for your mod, make sure to include any special libraries here
 #NOTE: YES we want to include the lib files 2 times. We've run into problems with the 1-pass linker not bringing in symbols it should.
