@@ -222,10 +222,8 @@ int CBotWeapon :: getAmmo (CBot *pBot, int type )
 	if ( type == AMMO_SEC )
 		return pBot->getAmmo(m_pWeaponInfo->getAmmoIndex2());
 
-
 	return 0;
 }
-
 
 bool CBotWeapons::hasExplosives( void )
 {
@@ -245,7 +243,6 @@ bool CBotWeapons::hasExplosives( void )
 	return false;
 }
 
-
 bool CBotWeapons::hasWeapon(int id)
 {
 	for (int i = 0; i < MAX_WEAPONS; i++)
@@ -262,6 +259,7 @@ bool CBotWeapons::hasWeapon(int id)
 	}
 	return false;
 }
+
 // Bot Weapons
 CBotWeapons::CBotWeapons(CBot *pBot)
 {
@@ -300,7 +298,6 @@ edict_t *CWeapons :: findWeapon ( edict_t *pPlayer, const char *pszWeaponName )
 
 	return NULL;
 }
-
 
 bool CBotWeapons::update(bool bOverrideAllFromEngine)
 {

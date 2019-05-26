@@ -52,7 +52,7 @@ CLINK=/usr/bin/gcc-4.8
 OPTFLAGS=-O2 -fomit-frame-pointer -fforce-addr -foptimize-sibling-calls -fgcse -fcaller-saves -fschedule-insns2 -fsched-interblock -fdelete-null-pointer-checks -freorder-blocks -falign-functions -falign-jumps -falign-loops -falign-labels -ftree-vrp -finline-functions -funswitch-loops -fgcse-after-reload -funsafe-math-optimizations
 
 # put any compiler flags you want passed here
-USER_CFLAGS= -std=c++11 -w -D__linux__ #-g -D_DEBUG -DDEBUG -DSH_DEBUG #-DTF2_HOOKS
+USER_CFLAGS= -std=c++11 -w -D__linux__# -g -D_DEBUG -DDEBUG -DSH_DEBUG# -DTF2_HOOKS
 
 # Link Libraries
 #LIBFILES= \
@@ -99,7 +99,7 @@ SRC_DIR=~/Documents/rcbot-svn/rcbot2-code-468
 
 # the CPU target for the build, must be i486 for now
 ARCH=i486
-ARCH_CFLAGS=-mtune=generic -march=i686 -mfpmath=sse -msse -msse2 -m32 -s -pipe
+ARCH_CFLAGS=-mtune=generic -march=i686 -mfpmath=sse -msse2 -m32 -s -pipe
 
 # -fpermissive is so gcc 3.4.x doesn't complain about some template stuff
 BASE_CFLAGS=-DVPROF_LEVEL=1 -DSWDS -D_LINUX -DLINUX -DNDEBUG -fpermissive -Dstricmp=strcasecmp -D_stricmp=strcasecmp -D_strnicmp=strncasecmp -Dstrnicmp=strncasecmp -D_snprintf=snprintf -D_vsnprintf=vsnprintf -D_alloca=alloca -Dstrcmpi=strcasecmp -D__linux__ -DSOURCE_ENGINE=4 -DSE_EPISODEONE=1 -DSE_DARKMESSIAH=2 -DSE_ORANGEBOX=3 -DSE_ORANGEBOXVALVE=4 -DSE_LEFT4DEAD=5 -DSE_LEFT4DEAD2=6 -DSE_ALIENSWARM=7

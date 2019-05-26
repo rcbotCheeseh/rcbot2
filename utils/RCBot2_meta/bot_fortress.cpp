@@ -55,6 +55,7 @@
 #include "bot_mtrand.h"
 #include "bot_wpt_dist.h"
 #include "bot_squads.h"
+#include "bot_cvars.h"
 //#include "bot_hooks.h"
 
 extern ConVar bot_beliefmulti;
@@ -2571,9 +2572,7 @@ void CBotFortress ::waitCloak()
 }
 
 bool CBotFortress:: wantToCloak()
-{	
-	extern ConVar rcbot_tf2_debug_spies_cloakdisguise;
-
+{
 	if ( rcbot_tf2_debug_spies_cloakdisguise.GetBool() )
 	{		
 		if ( ( m_fFrenzyTime < engine->Time() ) && (!m_pEnemy || !hasSomeConditions(CONDITION_SEE_CUR_ENEMY))  )
@@ -2887,7 +2886,6 @@ void CBotTF2::modThink()
 		{	
 			if (isDesiredClass(m_iClass))
 			{
-				extern ConVar rcbot_melee_only;
 				bool bAdded = false;
 
 				if ((m_iClass == TF_CLASS_ENGINEER) && !CTeamFortress2Mod::isMedievalMode())
@@ -3302,8 +3300,6 @@ void CBotTF2::modThink()
 	case TF_CLASS_SPY:
 		if (!hasFlag())
 		{
-			extern ConVar rcbot_tf2_debug_spies_cloakdisguise;
-
 			if (rcbot_tf2_debug_spies_cloakdisguise.GetBool() && (m_fSpyDisguiseTime < engine->Time()))
 			{
 				// if previously detected or isn't disguised
@@ -5645,8 +5641,6 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 						}
 						else // no where near the capture point 
 						{
-							extern ConVar bot_defrate;
-
 							fprob = bot_defrate.GetFloat();
 						}
 					}
@@ -6968,7 +6962,6 @@ void CBotTF2 :: modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_o
 				case TF2_WEAPON_FLAREGUN:
 				case TF2_WEAPON_GRENADELAUNCHER:
 				{
-					extern ConVar *sv_gravity;
 					CClient *pClient = CClients::get(pEntity);
 					Vector vVelocity;
 
@@ -7450,11 +7443,7 @@ void CBotTF2 :: pointsUpdated()
 {
 	if ( m_iClass == TF_CLASS_ENGINEER )
 	{
-		extern ConVar rcbot_move_sentry_time;
-		extern ConVar rcbot_move_disp_time;
-		extern ConVar rcbot_move_tele_time;
-
-//m_pPayloadBomb = NULL;
+		//m_pPayloadBomb = NULL;
 		bool bMoveSentry = (m_iSentryArea!=m_iCurrentAttackArea)&&(m_iSentryArea!=m_iCurrentDefendArea)&&((m_iTeam==TF2_TEAM_BLUE)||!CTeamFortress2Mod::isAttackDefendMap());
 		bool bMoveTeleEntrance = (m_iTeam==TF2_TEAM_BLUE)||!CTeamFortress2Mod::isAttackDefendMap();
 		bool bMoveTeleExit = (m_iTeleExitArea!=m_iCurrentAttackArea)&&(m_iTeleExitArea!=m_iCurrentDefendArea)&&((m_iTeam==TF2_TEAM_BLUE)||!CTeamFortress2Mod::isAttackDefendMap());
@@ -7530,8 +7519,6 @@ void CBotTF2::pointCaptured(int iPoint, int iTeam, const char *szPointName)
 
 bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 {
-	extern ConVar rcbot_notarget;
-
 	static short int iEnemyTeam;
 	static bool bIsPipeBomb;
 	static bool bIsRocket;

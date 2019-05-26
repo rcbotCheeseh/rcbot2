@@ -34,14 +34,11 @@
 #include <vector>
 using namespace std;
 
-
-
 extern const char *g_szTF2Weapons[];
 
 #include "shareddefs.h"
 
 class CBot;
-
 
 extern int m_TF2AmmoIndices[];
 
@@ -197,7 +194,6 @@ enum
 	DOD_WEAPON_BOMB,
 	DOD_WEAPON_MAX
 };
-
 
 #define WEAP_FL_NONE			0
 #define WEAP_FL_PRIM_ATTACK		1
@@ -435,12 +431,12 @@ public:
 		m_fSecMaxWeaponShootDist = fMaxRange;
 	}
 
-	inline int getAmmoIndex1 ()
+	inline int getAmmoIndex1 () const
 	{
 		return m_iAmmoIndex1;
 	}
 
-	inline int getAmmoIndex2 ()
+	inline int getAmmoIndex2 () const
 	{
 		return m_iAmmoIndex2;
 	}
