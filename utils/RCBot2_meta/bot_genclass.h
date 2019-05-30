@@ -106,7 +106,7 @@ class dataStack
 			this->Destroy();
 		}
 
-		bool IsMember ( const T pObj )
+		bool IsMember ( const T &pObj )
 		{
 			dataNode<T> *tempNode = m_Head;
 
@@ -165,7 +165,7 @@ class dataStack
 			return false;
 		}
 
-		bool Remove ( const T pObj )
+		bool Remove ( const T &pObj )
 		{
 			dataNode<T> *tempNode = m_Head;			
 			dataNode<T> *deleteNode;
@@ -228,7 +228,7 @@ class dataStack
 			return ( m_Head == NULL );
 		}
 
-		void Push ( const T pObj )
+		void Push ( const T &pObj )
 		{
 			dataNode<T> *newNode = new dataNode<T>;
 
@@ -725,7 +725,7 @@ class dataUnconstArray
 			return array[randomInt(0,array.size()-1)];
 		}
 
-		void Add ( const T pObj )
+		void Add ( const T &pObj )
 		{
 			array.push_back(pObj);
 		}

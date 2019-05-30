@@ -600,7 +600,7 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBelief ( dataUnconstArray<CWaypoi
 }
 
 // get the covering waypoint vector vCover
-bool CWaypointNavigator :: getCoverPosition ( Vector vCoverOrigin, Vector *vCover )
+bool CWaypointNavigator :: getCoverPosition ( const Vector vCoverOrigin, Vector *vCover )
 {
 	int iWpt;
 
@@ -777,7 +777,7 @@ bool CWaypointNavigator :: getCrouchHideSpot ( Vector vCoverOrigin, Vector *vCov
 }
 */
 // get the hide spot position (vCover) from origin vCoverOrigin
-bool CWaypointNavigator :: getHideSpotPosition ( Vector vCoverOrigin, Vector *vCover )
+bool CWaypointNavigator :: getHideSpotPosition ( const Vector vCoverOrigin, Vector *vCover )
 {
 	int iWpt;
 
@@ -844,7 +844,7 @@ void CWaypointNavigator :: failMove ()
 	}
 }
 
-float CWaypointNavigator :: distanceTo ( Vector vOrigin )
+float CWaypointNavigator :: distanceTo ( const Vector vOrigin )
 {
 	int iGoal;
 
@@ -1261,7 +1261,7 @@ bool CWaypointNavigator :: getNextRoutePoint ( Vector *point )
 	return false;
 }
 
-bool CWaypointNavigator :: canGetTo ( Vector vOrigin )
+bool CWaypointNavigator :: canGetTo ( const Vector vOrigin )
 {
 	int iwpt = CWaypointLocations::NearestWaypoint(vOrigin,100,-1,true,false,true,NULL,false,m_pBot->getTeam());
 
@@ -1516,7 +1516,7 @@ bool CWaypoint :: touched ( edict_t *pEdict )
 	return touched(pEdict->m_pNetworkable->GetPVSInfo()->
 }*/
 // checks if a waypoint is touched
-bool CWaypoint :: touched ( Vector vOrigin, Vector vOffset, float fTouchDist, bool onground )
+bool CWaypoint :: touched ( Vector vOrigin, const Vector vOffset, float fTouchDist, bool onground )
 {
 	static Vector v_dynamic;
 	extern ConVar rcbot_ladder_offs;
@@ -2146,7 +2146,7 @@ void CWaypoints :: precacheWaypointTexture ()
 
 ///////////////////////////////////////////////////////
 // return nearest waypoint not visible to pinch point
-CWaypoint *CWaypoints :: getPinchPointFromWaypoint ( Vector vPlayerOrigin, Vector vPinchOrigin )
+CWaypoint *CWaypoints :: getPinchPointFromWaypoint ( const Vector vPlayerOrigin, Vector vPinchOrigin )
 {
 	int iWpt = CWaypointLocations::GetCoverWaypoint(vPlayerOrigin,vPinchOrigin,NULL,&vPinchOrigin);
 
@@ -2427,7 +2427,7 @@ int CWaypoints :: addWaypoint ( CClient *pClient, const char *type1, const char 
 	return iIndex;
 }
 
-int CWaypoints :: addWaypoint ( edict_t *pPlayer, Vector vOrigin, int iFlags, bool bAutoPath, int iYaw, int iArea, float fRadius )
+int CWaypoints :: addWaypoint ( edict_t *pPlayer, const Vector vOrigin, int iFlags, bool bAutoPath, int iYaw, int iArea, float fRadius )
 {
 	int iIndex = freeWaypointIndex();
 	extern ConVar rcbot_wpt_autoradius;
@@ -2625,7 +2625,7 @@ CWaypoint *CWaypoints::getNextCoverPoint ( CBot *pBot, CWaypoint *pCurrent, CWay
 	return CWaypoints::getWaypoint(iMaxDist);
 }
 
-CWaypoint *CWaypoints :: nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, int *iAiming )
+CWaypoint *CWaypoints :: nearestPipeWaypoint ( const Vector vTarget, const Vector vOrigin, int *iAiming )
 {
 	// 1 : find nearest waypoint to vTarget
 	// 2 : loop through waypoints find visible waypoints to vTarget
@@ -3024,7 +3024,7 @@ int CWaypoint :: getPath ( int i )
 	return m_thePaths.ReturnValueFromIndex(i);
 }
 
-bool CWaypoint :: isPathOpened ( Vector vPath )
+bool CWaypoint :: isPathOpened ( const Vector vPath )
 {
 	wpt_opens_later_t *info;
 

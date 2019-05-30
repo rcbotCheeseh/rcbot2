@@ -159,7 +159,7 @@ void CClient :: playSound ( const char *pszSound )
 	}
 }
 
-void CClient::autoEventWaypoint(int iType, float fRadius, bool bAtOtherOrigin, int iTeam, Vector vOrigin,
+void CClient::autoEventWaypoint(int iType, float fRadius, bool bAtOtherOrigin, int iTeam, const Vector vOrigin,
                                 bool bIgnoreTeam, bool bAutoType)
 {
 	m_iAutoEventWaypoint = iType;

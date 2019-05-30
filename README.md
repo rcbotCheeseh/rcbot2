@@ -12,6 +12,8 @@ Make sure you have Visual Studio 2013 installed.
 Other than that it should compile fine, even with the latest Visual Studio 2019 - as long you only use the VS2013 C++ compiler.
 
 ### Linux
+Make sure you have GCC 4.8 as well as G++ 4.8 installed - newer versions are not compatible.
+
 * Go to `linux_sdk`
 * `make -f Makefile.rcbot2 vcpm`
 * `make -f Makefile.rcbot2 genmf` (this will generate the Makefiles)

@@ -1024,7 +1024,7 @@ public:
 
 	void detonateStickies (bool isJumping = false);
 
-	void setStickyTrapType ( Vector vLocation, eDemoTrapType iTrapType ) { m_vStickyLocation = vLocation; m_iTrapType = iTrapType; }
+	void setStickyTrapType ( const Vector vLocation, eDemoTrapType iTrapType ) { m_vStickyLocation = vLocation; m_iTrapType = iTrapType; }
 
 	bool canDeployStickies ();
 

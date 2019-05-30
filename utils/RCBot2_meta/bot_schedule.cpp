@@ -863,7 +863,7 @@ void CBotSchedule :: passFloat(float f)
 	fPass = f;
 	m_bitsPass |= BITS_SCHED_PASS_FLOAT;
 }
-void CBotSchedule :: passVector(Vector v)
+void CBotSchedule :: passVector(const Vector v)
 {
 	vPass = v;
 	m_bitsPass |= BITS_SCHED_PASS_VECTOR;

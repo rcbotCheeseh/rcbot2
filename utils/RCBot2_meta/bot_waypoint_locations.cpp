@@ -311,7 +311,7 @@ void CWaypointLocations :: DeleteWptLocation ( int iIndex, const float *fOrigin 
 
 ///////////////
 // return nearest waypoint that can be used to cover from vCoverFrom vector
-int CWaypointLocations :: GetCoverWaypoint ( Vector vPlayerOrigin, Vector vCoverFrom, 
+int CWaypointLocations :: GetCoverWaypoint ( const Vector vPlayerOrigin, const Vector vCoverFrom, 
 											dataUnconstArray<int> *iIgnoreWpts, Vector *vGoalOrigin, 
 											int iTeam, float fMinDist, float fMaxDist )
 {
@@ -675,7 +675,7 @@ int CWaypointLocations :: NearestWaypoint ( const Vector &vOrigin, float fNeares
 										   int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, 
 										   bool bIsBot, dataUnconstArray<int> *iFailedWpts, 
 										   bool bNearestAimingOnly, int iTeam, bool bCheckArea,
-										   bool bGetVisibleFromOther, Vector vOther, int iFlagsOnly, 
+										   bool bGetVisibleFromOther, const Vector vOther, int iFlagsOnly, 
 										   edict_t *pPlayer, bool bIgnorevOther, float fIgnoreSize )
 {
 	int iNearestIndex = -1;

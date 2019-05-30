@@ -82,7 +82,7 @@ void getGrenadeAngle ( float v, float g, float desx, float desy, float *fa1, flo
 	return;
 }
 
-float getGrenadeZ ( edict_t *pShooter, edict_t *pTarget, Vector vOrigin, Vector vTarget, float fInitialSpeed ) 
+float getGrenadeZ ( edict_t *pShooter, edict_t *pTarget, const Vector vOrigin, const Vector vTarget, float fInitialSpeed ) 
 {
 	float fAngle1,fAngle2;
 

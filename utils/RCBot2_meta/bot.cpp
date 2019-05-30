@@ -1041,7 +1041,7 @@ void CBot :: think ()
 	// deal with it here
 	if ( (m_fNextVoiceCommand < engine->Time()) && !m_nextVoicecmd.empty() )
 	{
-		byte cmd = m_nextVoicecmd.front();
+		const byte cmd = m_nextVoicecmd.front();
 
 		m_fNextVoiceCommand = engine->Time() + randomFloat(0.4f,1.2f);
 		
@@ -1271,7 +1271,7 @@ void CBot :: updateConditions ()
 }
 
 // Called when working out route
-bool CBot :: canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev )
+bool CBot :: canGotoWaypoint ( const Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev )
 {
 	if ( pWaypoint->hasFlag(CWaypointTypes::W_FL_UNREACHABLE) ) 
 		return false;
@@ -1744,7 +1744,7 @@ void CBot :: clearSquad ()
 	m_pSquad = NULL;
 }
 
-bool CBot :: isFacing ( Vector vOrigin )
+bool CBot :: isFacing ( const Vector vOrigin )
 {
 	return (DotProductFromOrigin(vOrigin) > 0.97f);
 }
@@ -2207,7 +2207,7 @@ void CBot :: doMove ()
 			{
 				extern ConVar bot_avoid_strength;
 
-				Vector m_vAvoidOrigin = CBotGlobals::entityOrigin(m_pAvoidEntity);
+				const Vector m_vAvoidOrigin = CBotGlobals::entityOrigin(m_pAvoidEntity);
 
 				//m_vMoveTo = getOrigin() + ((m_vMoveTo-getOrigin())-((m_vAvoidOrigin-getOrigin())*bot_avoid_strength.GetFloat()));
 				//float fAvoidDist = distanceFrom(m_pAvoidEntity);
@@ -2342,7 +2342,7 @@ bool CBot :: FInViewCone ( edict_t *pEntity )
 	return ( ((origin - getEyePosition()).Length()>1) && (DotProductFromOrigin(origin) > 0) ); // 90 degree !! 0.422618f ); // 65 degree field of view   
 }
 
-float CBot :: DotProductFromOrigin ( Vector pOrigin )
+float CBot :: DotProductFromOrigin ( const Vector pOrigin )
 {
 	static Vector vecLOS;
 	static float flDot;
@@ -2902,7 +2902,7 @@ void CBot :: doLook ()
 		if ( m_iLookTask == LOOK_GROUND )
 			requiredAngles.x = 89.0f;
 
-		CBotCmd cmd = m_pPlayerInfo->GetLastUserCommand();
+		const CBotCmd cmd = m_pPlayerInfo->GetLastUserCommand();
 
 		m_vViewAngles = cmd.viewangles;
 

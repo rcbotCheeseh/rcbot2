@@ -97,7 +97,7 @@ protected:
 class CAutoWaypointCheck : public CTypeVector<vec_t>
 {
 public:
-	void SetPoint (const Vector vec, int iFlags )
+	void SetPoint (const Vector &vec, int iFlags )
 	{
 		m_iFlags = iFlags;
 

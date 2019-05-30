@@ -221,7 +221,8 @@ void CBotGlobals::readRCBotFolder()
 	mainkv->deleteThis();
 }
 
-float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fProjSpeed, float fGrenadePrimeTime, float *fAngle )
+float CBotGlobals::grenadeWillLand(const Vector vOrigin, const Vector vEnemy, float fProjSpeed, float fGrenadePrimeTime,
+                                   float* fAngle)
 {
 	static float g;
 	extern ConVar *sv_gravity;
@@ -359,7 +360,7 @@ private:
 	int m_collisionGroup;
 };
 
-bool CBotGlobals :: checkOpensLater ( Vector vSrc, Vector vDest )
+bool CBotGlobals :: checkOpensLater ( const Vector vSrc, const Vector vDest )
 {
 	CTraceFilterSimple traceFilter( NULL, NULL, MASK_PLAYERSOLID );
 
@@ -369,7 +370,7 @@ bool CBotGlobals :: checkOpensLater ( Vector vSrc, Vector vDest )
 }
 
 
-bool CBotGlobals :: isVisibleHitAllExceptPlayer ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest )
+bool CBotGlobals :: isVisibleHitAllExceptPlayer ( edict_t *pPlayer, const Vector vSrc, const Vector vDest, edict_t *pDest )
 {
 	const IHandleEntity *ignore = pPlayer->GetIServerEntity();
 
@@ -380,7 +381,7 @@ bool CBotGlobals :: isVisibleHitAllExceptPlayer ( edict_t *pPlayer, Vector vSrc,
 	return (traceVisible(pDest));
 }
 
-bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest)
+bool CBotGlobals :: isVisible ( edict_t *pPlayer, const Vector vSrc, const Vector vDest)
 {
 	CTraceFilterWorldAndPropsOnly filter;
 
@@ -389,7 +390,7 @@ bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest)
 	return (traceVisible(NULL));
 }
 
-bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest )
+bool CBotGlobals :: isVisible ( edict_t *pPlayer, const Vector vSrc, edict_t *pDest )
 {
 	//CTraceFilterWorldAndPropsOnly filter;//	CTraceFilterHitAll filter;
 
@@ -400,7 +401,7 @@ bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest )
 	return (traceVisible(pDest));
 }
 
-bool CBotGlobals :: isShotVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest )
+bool CBotGlobals :: isShotVisible ( edict_t *pPlayer, const Vector vSrc, const Vector vDest, edict_t *pDest )
 {
 	//CTraceFilterWorldAndPropsOnly filter;//	CTraceFilterHitAll filter;
 
@@ -411,7 +412,7 @@ bool CBotGlobals :: isShotVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest,
 	return (traceVisible(pDest));
 }
 
-bool CBotGlobals :: isVisible (Vector vSrc, Vector vDest)
+bool CBotGlobals :: isVisible (const Vector vSrc, const Vector vDest)
 {
 	CTraceFilterWorldAndPropsOnly filter;
 
@@ -420,7 +421,7 @@ bool CBotGlobals :: isVisible (Vector vSrc, Vector vDest)
 	return traceVisible(NULL);
 }
 
-void CBotGlobals :: traceLine (Vector vSrc, Vector vDest, unsigned int mask, ITraceFilter *pFilter)
+void CBotGlobals :: traceLine (const Vector vSrc, const Vector vDest, unsigned int mask, ITraceFilter *pFilter)
 {
 	Ray_t ray;
 	memset(&m_TraceResult,0,sizeof(trace_t));
@@ -428,7 +429,7 @@ void CBotGlobals :: traceLine (Vector vSrc, Vector vDest, unsigned int mask, ITr
 	enginetrace->TraceRay( ray, mask, pFilter, &m_TraceResult );
 }
 
-float CBotGlobals :: quickTraceline (edict_t *pIgnore,Vector vSrc, Vector vDest)
+float CBotGlobals :: quickTraceline (edict_t *pIgnore, const Vector vSrc, const Vector vDest)
 {
 	CTraceFilterVis filter = CTraceFilterVis(pIgnore);
 
@@ -439,7 +440,7 @@ float CBotGlobals :: quickTraceline (edict_t *pIgnore,Vector vSrc, Vector vDest)
 	return m_TraceResult.fraction;
 }
 
-float CBotGlobals :: DotProductFromOrigin ( edict_t *pEnemy, Vector pOrigin )
+float CBotGlobals :: DotProductFromOrigin ( edict_t *pEnemy, const Vector pOrigin )
 {
 	static Vector vecLOS;
 	static float flDot;
@@ -467,7 +468,7 @@ float CBotGlobals :: DotProductFromOrigin ( edict_t *pEnemy, Vector pOrigin )
 }
 
 
-float CBotGlobals :: DotProductFromOrigin ( Vector vPlayer, Vector vFacing, QAngle eyes )
+float CBotGlobals :: DotProductFromOrigin ( const Vector vPlayer, const Vector vFacing, const QAngle eyes )
 {
 	static Vector vecLOS;
 	static float flDot;
@@ -1132,7 +1133,7 @@ void CBotGlobals :: fixFloatDegrees360 ( float *pFloat )
 		*pFloat += 360;
 }
 
-float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity,Vector vOrigin)
+float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity, const Vector vOrigin)
 {
 	/*
 	float fAngle;
@@ -1175,7 +1176,7 @@ float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity,Vector vOrigin)
 
 }
 
-void CBotGlobals::teleportPlayer ( edict_t *pPlayer, Vector v_dest )
+void CBotGlobals::teleportPlayer ( edict_t *pPlayer, const Vector v_dest )
 {
 	CClient *pClient = CClients::get(pPlayer);
 	

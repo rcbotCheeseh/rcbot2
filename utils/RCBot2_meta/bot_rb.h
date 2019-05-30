@@ -1,6 +1,7 @@
 #ifndef __RCBOT_RB_H__
 #define __RCBOT_RB_H__
 #include <vector>
+#include "bot_tf2_points.h"
 
 class CBotOperator;
 
@@ -17,7 +18,7 @@ private:
 class CBotOperator
 {
 public:
-	CBotOperator ( CBotFactOpertor op ) : m_op(op)
+	CBotOperator ( CBotFactOperator op ) : m_op(op)
 	{		
 	}
 
@@ -63,6 +64,7 @@ public:
 	{
 		return m_bVal;
 	}
+
 private:
 	unsigned int m_fid;
 	bool m_bVal;

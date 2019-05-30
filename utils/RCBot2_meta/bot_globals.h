@@ -169,6 +169,8 @@ public:
 	////////
 	static inline Vector entityOrigin ( edict_t *pEntity ) 
 	{ 
+		//This may need further investigation as it linked to few crashes
+		//Dereferencing of the null pointer might take place - [APG]RoboCop[CL]
 		return pEntity->GetIServerEntity()->GetCollideable()->GetCollisionOrigin(); 
 	}
 	static int getTeam ( edict_t *pEntity );

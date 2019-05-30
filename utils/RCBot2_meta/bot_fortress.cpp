@@ -2369,7 +2369,7 @@ void CBotFortress :: callMedic ()
 	helpers->ClientCommand (m_pEdict,"saveme");
 }
 
-bool CBotTF2 :: canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev)
+bool CBotTF2 :: canGotoWaypoint (const Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev)
 {
 	static edict_t *pSentry;
 
@@ -7781,7 +7781,7 @@ void CBotTF2::MannVsMachineWaveComplete()
 	}
 }
 
-void CBotTF2::MannVsMachineAlarmTriggered(Vector vLoc)
+void CBotTF2::MannVsMachineAlarmTriggered(const Vector vLoc)
 {
 	if (m_iClass == TF_CLASS_ENGINEER)
 	{

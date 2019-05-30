@@ -446,7 +446,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 	{
 		//bool bInvestigate = true;
 		//bool bFollow = true;
-		Vector vecEnemy = CBotGlobals::entityOrigin(pKiller);
+		const Vector vecEnemy = CBotGlobals::entityOrigin(pKiller);
 		
 		if ( pWeapon )
 		{
@@ -1446,7 +1446,7 @@ void CDODBot ::defending()
 	// check to go prone or not
 }
 
-void CDODBot ::voiceCommand ( int cmd )
+void CDODBot ::voiceCommand (const int cmd )
 {
 	// find voice command
 	extern eDODVoiceCommand_t g_DODVoiceCommands[DOD_VC_INVALID];

@@ -124,7 +124,7 @@ IIndividual *CBotGAValues :: copy ()
 	return individual;
 }
 
-void CBotGAValues :: setVector ( vector<float> values )
+void CBotGAValues :: setVector ( const vector<float> values )
 {
 	for ( unsigned int i = 0; i < values.size(); i ++ )
 		m_theValues.push_back(values[i]);
