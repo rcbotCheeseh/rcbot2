@@ -1022,11 +1022,16 @@ public:
 	
 	bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL ) override;
 
-	bool deployStickies ( eDemoTrapType type, Vector vStand, Vector vLocation, Vector vSpread, Vector *vPoint, int *iState, int *iStickyNum, bool *bFail, float *fTime, int wptindex );
+	bool deployStickies(eDemoTrapType type, Vector vStand, Vector vLocation, Vector vSpread, Vector* vPoint,
+	                    int* iState, int* iStickyNum, bool* bFail, float* fTime, int wptindex);
 
 	void detonateStickies (bool isJumping = false);
 
-	void setStickyTrapType ( const Vector vLocation, eDemoTrapType iTrapType ) { m_vStickyLocation = vLocation; m_iTrapType = iTrapType; }
+	void setStickyTrapType(const Vector vLocation, const eDemoTrapType iTrapType)
+	{
+		m_vStickyLocation = vLocation;
+		m_iTrapType = iTrapType;
+	}
 
 	bool canDeployStickies ();
 

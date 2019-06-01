@@ -143,7 +143,7 @@ void CBotTF2FunctionEnemyAtIntel :: execute (CBot *pBot)
 		static_cast<CBotTF2*>(pBot)->teamFlagPickup();
 }
 
-void CBotTF2 :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
+void CBotTF2 :: hearVoiceCommand ( edict_t *pPlayer, const byte cmd )
 {
 	switch ( cmd )
 	{
@@ -1298,7 +1298,8 @@ bool CBotFortress :: needAmmo ()
 bool CBotFortress :: needHealth ()
 {
 	// don't need health if I'm being ubered or healed
-	return !m_bIsBeingHealed && !CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict) && ((getHealthPercent() < 0.7) || CTeamFortress2Mod::TF2_IsPlayerOnFire(m_pEdict));
+	return !m_bIsBeingHealed && !CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict) && ((getHealthPercent() < 0.7) ||
+		CTeamFortress2Mod::TF2_IsPlayerOnFire(m_pEdict));
 }
 
 bool CBotTF2 :: needAmmo()
@@ -1624,7 +1625,7 @@ bool CBotFortress :: waitForFlag ( Vector *vOrigin, float *fWait, bool bFindFlag
 		//taunt();
 }
 
-void CBotFortress :: foundSpy (edict_t *pEdict,TF_Class iDisguise) 
+void CBotFortress :: foundSpy (edict_t *pEdict, const TF_Class iDisguise) 
 {
 	m_pPrevSpy = pEdict;
 	m_fSeeSpyTime = engine->Time() + randomFloat(9.0f,18.0f);
@@ -1637,7 +1638,7 @@ void CBotFortress :: foundSpy (edict_t *pEdict,TF_Class iDisguise)
 };
 
 // got shot by someone
-bool CBotTF2 :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
+bool CBotTF2 :: hurt ( edict_t *pAttacker, const int iHealthNow, const bool bDontHide )
 {
 	extern ConVar rcbot_spy_runaway_health;
 
@@ -1665,7 +1666,7 @@ bool CBotTF2 :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 
 					// run at flank while shooting	
 					CFindPathTask *pHideGoalPoint = new CFindPathTask();
-					Vector vOrigin = CBotGlobals::entityOrigin(pAttacker);
+					const Vector vOrigin = CBotGlobals::entityOrigin(pAttacker);
 					
 
 					pSchedule->addTask(new CFindGoodHideSpot(vOrigin));
@@ -1823,18 +1824,19 @@ void CBotTF2 :: setClass ( TF_Class _class )
 	m_iClass = _class;
 }
 
-void CBotTF2 :: highFivePlayer ( edict_t *pPlayer, float fYaw )
+void CBotTF2 :: highFivePlayer ( edict_t *pPlayer, const float fYaw )
 {
 	if ( !m_pSchedules->isCurrentSchedule(SCHED_TAUNT) )
 		m_pSchedules->addFront(new CBotTauntSchedule(pPlayer,fYaw));
 }
 
 // bOverride will be true in messaround mode
-void CBotTF2 :: taunt ( bool bOverride )
+void CBotTF2 :: taunt (const bool bOverride )
 {
 	extern ConVar rcbot_taunt;
 	// haven't taunted for a while, no emeny, not ubered, OK! Taunt!
-	if ( bOverride || (!m_bHasFlag && rcbot_taunt.GetBool() && !CTeamFortress2Mod::TF2_IsPlayerOnFire(m_pEdict) && !m_pEnemy && (m_fTauntTime < engine->Time()) && (!CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict))) )
+	if (bOverride || (!m_bHasFlag && rcbot_taunt.GetBool() && !CTeamFortress2Mod::TF2_IsPlayerOnFire(m_pEdict) && !
+		m_pEnemy && (m_fTauntTime < engine->Time()) && (!CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict))))
 	{
 		helpers->ClientCommand(m_pEdict,"taunt");
 		m_fTauntTime = engine->Time() + randomFloat(40.0,100.0); // Don't taunt for another minute or two
@@ -3746,10 +3748,10 @@ bool CBotTF2 :: wantToFollowEnemy()
 		return false; // Enemy is UBERED  -- don't follow
 	else if ( (m_iCurrentDefendArea != 0) && (pEnemy != NULL) && CTeamFortress2Mod::isMapType(TF_MAP_CP) && (CTeamFortress2Mod::m_ObjectiveResource.GetNumControlPoints() > 0) )
 	{
-		Vector vDefend = CTeamFortress2Mod::m_ObjectiveResource.GetCPPosition(CTeamFortress2Mod::m_ObjectiveResource.m_WaypointAreaToIndexTranslation[m_iCurrentDefendArea]);
+		const Vector vDefend = CTeamFortress2Mod::m_ObjectiveResource.GetCPPosition(CTeamFortress2Mod::m_ObjectiveResource.m_WaypointAreaToIndexTranslation[m_iCurrentDefendArea]);
 
-		Vector vEnemyOrigin = CBotGlobals::entityOrigin(pEnemy);
-		Vector vOrigin = getOrigin();
+		const Vector vEnemyOrigin = CBotGlobals::entityOrigin(pEnemy);
+		const Vector vOrigin = getOrigin();
 
 		// He's trying to cap the point? Maybe! Go after him!
 		if ( ((vDefend-vEnemyOrigin).Length()+80.0f) < (vDefend-vOrigin).Length() )
@@ -3760,10 +3762,10 @@ bool CBotTF2 :: wantToFollowEnemy()
 	}
 	else if ( (m_fLastKnownTeamFlagTime > 0) && (pEnemy != NULL) && (CTeamFortress2Mod::isMapType(TF_MAP_CTF)||CTeamFortress2Mod::isMapType(TF_MAP_MVM)) )
 	{
-		Vector vDefend = m_vLastKnownTeamFlagPoint;
+		const Vector vDefend = m_vLastKnownTeamFlagPoint;
 
-		Vector vEnemyOrigin = CBotGlobals::entityOrigin(pEnemy);
-		Vector vOrigin = getOrigin();
+		const Vector vEnemyOrigin = CBotGlobals::entityOrigin(pEnemy);
+		const Vector vOrigin = getOrigin();
 
 		// He's trying to get the flag? Maybe! Go after him!
 		if ( ((vDefend-vEnemyOrigin).Length()+80.0f) < (vDefend-vOrigin).Length() )
@@ -4315,7 +4317,8 @@ bool CBotTF2::healPlayer()
 	{
 		// Simple UBER check : healing player not ubered already
 		if (!CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pHeal) && !CTeamFortress2Mod::isFlagCarrier(m_pHeal) &&
-			(m_pEnemy&&isVisible(m_pEnemy)) || (((static_cast<float>(m_pPlayerInfo->GetHealth()) / m_pPlayerInfo->GetMaxHealth()) < 0.33) || (getHealthPercent() < 0.33)))
+			(m_pEnemy && isVisible(m_pEnemy)) || (((static_cast<float>(m_pPlayerInfo->GetHealth()) / m_pPlayerInfo->
+				GetMaxHealth()) < 0.33) || (getHealthPercent() < 0.33)))
 		{
 			if (CTeamFortress2Mod::hasRoundStarted())
 			{
@@ -5266,9 +5269,9 @@ bool CBotTF2 :: canDeployStickies ()
 #define IN_RANGE(x,low,high) (((x)>(low))&&((x)<(high)))
 
 // returns true when finished
-bool CBotTF2::deployStickies(eDemoTrapType type, const Vector vStand, const Vector vLocation, const Vector vSpread,
-                             Vector* vPoint,
-                             int* iState, int* iStickyNum, bool* bFail, float* fTime, int wptindex)
+bool CBotTF2::deployStickies(const eDemoTrapType type, const Vector vStand, const Vector vLocation,
+                             const Vector vSpread, Vector* vPoint, int* iState, int* iStickyNum, bool* bFail,
+                             float* fTime, const int wptindex)
 {
 	CBotWeapon *pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_PIPEBOMBS));
 	int iPipesLeft = 0;
@@ -5336,7 +5339,7 @@ bool CBotTF2::deployStickies(eDemoTrapType type, const Vector vStand, const Vect
 	return false;
 }
 
-void CBotTF2::detonateStickies(bool isJumping)
+void CBotTF2::detonateStickies(const bool isJumping)
 {
 	// don't try to blow myself up unless i'm jumping
 	if ( isJumping || (distanceFrom(m_vStickyLocation) > (BLAST_RADIUS/2)) )
@@ -7973,7 +7976,7 @@ void CBotTF2 :: enemyAtIntel ( Vector vPos, int type, int iArea )
 	
 }
 
-void CBotTF2 :: buildingSapped ( eEngiBuild building, edict_t *pSapper, edict_t *pSpy )
+void CBotTF2 :: buildingSapped (const eEngiBuild building, edict_t *pSapper, edict_t *pSpy )
 {
 	static edict_t *pBuilding;
 
@@ -7997,7 +8000,6 @@ void CBotTF2 :: buildingSapped ( eEngiBuild building, edict_t *pSapper, edict_t 
 		
 	}
 
-
 }
 
 void CBotTF2 :: sapperDestroyed ( edict_t *pSapper )
@@ -8017,11 +8019,12 @@ CBotTF2::CBotTF2()
 		m_pVTable = m_pVTable_Attributes = NULL;
 		m_bHatEquipped = false;
 		m_fEquipHatTime = 0.0f;
+		
 		m_fDispenserPlaceTime = 0.0f;
 		m_fDispenserHealAmount = 0.0f;
-	 m_fTeleporterEntPlacedTime = 0;
-	 m_fTeleporterExtPlacedTime = 0;
-	 m_iTeleportedPlayers = 0;
+		m_fTeleporterEntPlacedTime = 0;
+		m_fTeleporterExtPlacedTime = 0;
+		m_iTeleportedPlayers = 0;
 		m_fDoubleJumpTime = 0;
 		m_fSpySapTime = 0;
 		m_iCurrentDefendArea = 0;
@@ -8055,7 +8058,7 @@ CBotTF2::CBotTF2()
 		memset(m_fClassDisguiseTime,0,sizeof(float)*10);
 }
 
-void CBotTF2 ::init(bool bVarInit)
+void CBotTF2 ::init(const bool bVarInit)
 {
 	if( bVarInit )
 	{
@@ -8093,7 +8096,7 @@ bool CBotFortress :: getIgnoreBox ( Vector *vLoc, float *fSize )
 	return false;
 }
 
-CAttribute :: CAttribute ( const char *name, float fval )
+CAttribute :: CAttribute ( const char *name, const float fval )
 {
 	m_name = CStrings::getString(name);
 	m_fval = fval;

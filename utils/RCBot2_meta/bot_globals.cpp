@@ -723,14 +723,14 @@ bool CBotGlobals :: setWaypointDisplayType ( int iType )
 	return false;
 }
 // work on this
-bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_dest)
+bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, const Vector v_src, const Vector v_dest)
 {   
 	extern ConVar rcbot_wptplace_width;
 	CTraceFilterVis filter = CTraceFilterVis(pPlayer);
 	float fDistance = sqrt((v_dest - v_src).LengthSqr());
 	CClient *pClient = CClients::get(pPlayer);
 	Vector vcross = v_dest - v_src;
-	Vector vleftsrc,vleftdest, vrightsrc,vrightdest;
+	Vector vleftsrc, vleftdest, vrightsrc, vrightdest;
 	float fWidth = rcbot_wptplace_width.GetFloat();
 
 	if ( v_dest == v_src )

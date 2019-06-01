@@ -1516,7 +1516,7 @@ bool CWaypoint :: touched ( edict_t *pEdict )
 	return touched(pEdict->m_pNetworkable->GetPVSInfo()->
 }*/
 // checks if a waypoint is touched
-bool CWaypoint :: touched ( Vector vOrigin, const Vector vOffset, float fTouchDist, bool onground )
+bool CWaypoint :: touched (const Vector vOrigin, const Vector vOffset, const float fTouchDist, const bool onground )
 {
 	static Vector v_dynamic;
 	extern ConVar rcbot_ladder_offs;

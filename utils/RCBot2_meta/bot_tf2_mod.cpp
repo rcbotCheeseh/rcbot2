@@ -385,6 +385,7 @@ void CTeamFortress2Mod::setupLoadOutWeapons()
 						// search prefabs for "valve"
 					}
 				}
+				// NULL used in arithmetic in *szPrefab - [APG]RoboCop[CL]
 				else if ((szPrefab != NULL) && (*szPrefab != NULL))
 				{
 					prefab = prefabs->FindKey(szPrefab);
@@ -1040,7 +1041,7 @@ int CTeamFortress2Mod :: getSentryLevel ( edict_t *pSentry )
 
 int CTeamFortress2Mod :: getDispenserLevel ( edict_t *pDispenser )
 {
-	string_t model = pDispenser->GetIServerEntity()->GetModelName();
+	const string_t model = pDispenser->GetIServerEntity()->GetModelName();
 	const char *szmodel = model.ToCStr();
 
 	if ( strcmp(szmodel,"models/buildables/dispenser_light.mdl") == 0 )
@@ -1063,7 +1064,7 @@ int CTeamFortress2Mod :: getEnemyTeam ( int iTeam )
 
 */
 
-bool CTeamFortress2Mod :: isDispenser ( edict_t *pEntity, int iTeam, bool checkcarrying )
+bool CTeamFortress2Mod :: isDispenser ( edict_t *pEntity, const int iTeam, const bool checkcarrying )
 {
 	return (!iTeam || (iTeam == getTeam(pEntity))) && (strcmp(pEntity->GetClassName(),"obj_dispenser")==0) && (checkcarrying||!CClassInterface::isSentryGunBeingPlaced(pEntity));
 }
@@ -1630,7 +1631,7 @@ edict_t *CTeamFortress2Mod ::getBuildingOwner (eEngiBuild object, short index)
 	return NULL;
 }
 
-edict_t *CTeamFortress2Mod :: nearestDispenser ( Vector vOrigin, int team )
+edict_t *CTeamFortress2Mod :: nearestDispenser (const Vector vOrigin, const int team )
 {
 	edict_t *pNearest = NULL;
 	edict_t *pDisp;
@@ -1961,7 +1962,7 @@ bool CTeamFortress2Mod::isSentryGun (edict_t *pEdict )
 	return false;
 }
 
-void CTeamFortress2Mod::dispenserBuilt(edict_t *pOwner, eEngiBuild type, edict_t *pBuilding )
+void CTeamFortress2Mod::dispenserBuilt(edict_t *pOwner, const eEngiBuild type, edict_t *pBuilding )
 {
 	static short int index;
 	static tf_disp_t *temp;

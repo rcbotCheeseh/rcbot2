@@ -71,7 +71,7 @@ unsigned char *CWaypointLocations :: resetFailedWaypoints (dataUnconstArray<int>
 #define CLAMP_TO_ZERO(x) x=((x)<0)?0:x
 #define CLAMP_TO(x,clamp) x=((x)>(clamp))?(clamp):x
 
-void CWaypointLocations :: getMinMaxs ( int iLoc, int jLoc, int kLoc, 
+void CWaypointLocations :: getMinMaxs (const int iLoc, const int jLoc, const int kLoc, 
 									    int *iMinLoci, int *iMinLocj, int *iMinLock,
 									    int *iMaxLoci, int *iMaxLocj, int *iMaxLock )
 {
@@ -622,7 +622,8 @@ void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vect
 
 		if ( bIsBot )
 		{
-			if ( curr_wpt->getFlags() & (CWaypointTypes::W_FL_DOUBLEJUMP | CWaypointTypes::W_FL_ROCKET_JUMP | CWaypointTypes::W_FL_JUMP | CWaypointTypes::W_FL_OPENS_LATER) ) // fix : bit OR
+			if (curr_wpt->getFlags() & (CWaypointTypes::W_FL_DOUBLEJUMP | CWaypointTypes::W_FL_ROCKET_JUMP |
+				CWaypointTypes::W_FL_JUMP | CWaypointTypes::W_FL_OPENS_LATER)) // fix : bit OR
 				continue;
 		}
 
