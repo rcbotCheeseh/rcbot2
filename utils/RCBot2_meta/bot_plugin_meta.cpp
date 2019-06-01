@@ -35,6 +35,7 @@
 
 #include "KeyValues.h"
 
+#include "bot_const.h"
 #include "bot_cvars.h"
 
 // for IServerTools
@@ -57,6 +58,7 @@
 #include "bot_sigscan.h"
 
 //#include "ndebugoverlay.h"
+
 CBotTF2 *g_pLastBot;
 
 SH_DECL_HOOK6(IServerGameDLL, LevelInit, SH_NOATTRIB, 0, bool, char const *, char const *, char const *, char const *, bool, bool);
@@ -137,7 +139,6 @@ RCBotPluginMeta g_RCBotPluginMeta;
 PLUGIN_EXPOSE(RCBotPluginMeta, g_RCBotPluginMeta);
 
 static ConVar rcbot2_ver_cvar(BOT_VER_CVAR, BOT_VER, FCVAR_REPLICATED, BOT_NAME_VER);
-
 
 int UTIL_ListAttributesOnEntity(edict_t *pEdict)
 {
@@ -768,7 +769,7 @@ void RCBotPluginMeta::Hook_MessageEnd()
 	RETURN_META(MRES_IGNORED);
 }
 
-auto RCBotPluginMeta::Load(PluginId id, ISmmAPI* ismm, char* error, size_t maxlen, bool late) -> bool
+bool RCBotPluginMeta::Load(PluginId id, ISmmAPI* ismm, char* error, size_t maxlen, bool late)
 {
 	extern MTRand_int32 irand;
 

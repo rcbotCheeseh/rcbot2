@@ -37,7 +37,10 @@ public:
 		case OP_OR:
 		case OP_AND_NOT:
 		case OP_OR_NOT:
+		
+		default: ;
 		}
+		return false;
 	}
 
 	virtual bool value()

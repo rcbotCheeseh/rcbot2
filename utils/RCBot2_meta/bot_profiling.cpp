@@ -69,7 +69,7 @@ inline unsigned __int64 RDTSC(void)
    }
 #endif
 
-CProfileTimer :: CProfileTimer (const char *szFunction)
+CProfileTimer :: CProfileTimer (const char *szFunction): start_cycle(0), end_cycle(0), m_last(0)
 {
 	m_szFunction = CStrings::getString(szFunction);
 	m_min = 9999999999;

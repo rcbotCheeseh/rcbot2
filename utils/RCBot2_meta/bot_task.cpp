@@ -3868,6 +3868,7 @@ void CBotInvestigateHidePoint:: execute (CBot *pBot,CBotSchedule *pSchedule)
 			pBot->setLookAtTask(LOOK_VECTOR);
 
 			break;
+		default: ;
 		}
 
 	}

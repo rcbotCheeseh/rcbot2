@@ -7,8 +7,8 @@ class CRCBotConfig //: public CConfigFile
 public:
 	void loadConfig ();
 private:
-	int m_iMaxBots;
-	int m_iMinBots;
+	int m_iMaxBots = 0;
+	int m_iMinBots = 0;
 };
 
 #endif

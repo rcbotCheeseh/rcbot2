@@ -401,7 +401,9 @@ class CAttributeManager;
 class CEconItemAttribute
 {
 public:
-	CEconItemAttribute() {};
+	CEconItemAttribute(): m_pVTable(nullptr), m_iAttributeDefinitionIndex(0), m_flValue(0), m_nRefundableCurrency(0)
+	{
+	} ;
 
 	CEconItemAttribute(uint16 iAttributeDefinitionIndex, float flValue/* = -1.0*/)
 	{

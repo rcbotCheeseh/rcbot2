@@ -41,7 +41,7 @@ typedef enum
 
 
 typedef int QueryCvarCookie_t;
-#define InvalidQueryCvarCookie -1
+#define InvalidQueryCvarCookie (-1)
 
 
 #define INTERFACEVERSION_ISERVERPLUGINCALLBACKS_VERSION_1	"ISERVERPLUGINCALLBACKS001"

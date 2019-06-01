@@ -1181,8 +1181,8 @@ public:
 	void execute (CBot *pBot,CBotSchedule *pSchedule);
 
 private:
-	float m_fTime;
-	bool m_bTimeset;
+	float m_fTime = 0;
+	bool m_bTimeset = false;
 };
 //////////////////////
 class CTF2_TauntTask : public CBotTask

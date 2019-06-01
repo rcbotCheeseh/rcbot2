@@ -78,6 +78,8 @@ extern int SignbitsForPlane( cplane_t *out );
 class Frustum_t
 {
 public:
+	Frustum_t() = default;
+
 	void SetPlane( int i, int nType, const Vector &vecNormal, float dist )
 	{
 		m_Plane[i].normal = vecNormal;
@@ -180,7 +182,7 @@ struct matrix3x4_t
 #define	SIDE_FRONT	0
 #define	SIDE_BACK	1
 #define	SIDE_ON		2
-#define SIDE_CROSS  -2      // necessary for polylib.c
+#define SIDE_CROSS  (-2)      // necessary for polylib.c
 
 #define ON_VIS_EPSILON  0.01    // necessary for vvis (flow.c) -- again look into moving later!
 #define	EQUAL_EPSILON	0.001   // necessary for vbsp (faces.c) -- should look into moving it there?
@@ -193,7 +195,7 @@ extern	const Quaternion quat_identity;
 extern const Vector vec3_invalid;
 extern	const int nanmask;
 
-#define	IS_NAN(x) (((*(int *)&x)&nanmask)==nanmask)
+#define	IS_NAN(x) (((*(int *)&(x))&nanmask)==nanmask)
 
 FORCEINLINE vec_t DotProduct(const vec_t *v1, const vec_t *v2)
 {
@@ -621,7 +623,7 @@ template <class T> FORCEINLINE T AVG(T a, T b)
 }
 
 // number of elements in an array of static size
-#define NELEMS(x) ((sizeof(x))/sizeof(x[0]))
+#define NELEMS(x) ((sizeof(x))/sizeof((x)[0]))
 
 // XYZ macro, for printf type functions - ex printf("%f %f %f",XYZ(myvector));
 #define XYZ(v) (v).x,(v).y,(v).z
@@ -1310,11 +1312,11 @@ inline int Ceil2Int( float a )
 
 // Regular signed area of triangle
 #define TriArea2D( A, B, C ) \
-	( 0.5f * ( ( B.x - A.x ) * ( C.y - A.y ) - ( B.y - A.y ) * ( C.x - A.x ) ) )
+	( 0.5f * ( ( (B).x - (A).x ) * ( (C).y - (A).y ) - ( (B).y - (A).y ) * ( (C).x - (A).x ) ) )
 
 // This version doesn't premultiply by 0.5f, so it's the area of the rectangle instead
 #define TriArea2DTimesTwo( A, B, C ) \
-	( ( ( B.x - A.x ) * ( C.y - A.y ) - ( B.y - A.y ) * ( C.x - A.x ) ) )
+	( ( ( (B).x - (A).x ) * ( (C).y - (A).y ) - ( (B).y - (A).y ) * ( (C).x - (A).x ) ) )
 
 
 // Get the barycentric coordinates of "pt" in triangle [A,B,C].

@@ -148,7 +148,7 @@ CSomNeuron :: ~CSomNeuron ()
 	fWeights.clear();
 }
 
-CSomNeuron :: CSomNeuron ()
+CSomNeuron :: CSomNeuron (): m_iX(0), m_iY(0)
 {
 	m_iId = 0;
 	return;

@@ -115,7 +115,7 @@ public:
 		m_iFlags = 0;
 	}
 private:
-	int m_iFlags;
+	int m_iFlags = 0;
 };
 
 class CToolTip

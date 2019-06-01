@@ -247,9 +247,9 @@ class CWaypointRadiusMenu : public CBotMenu
 public:
 	CWaypointRadiusMenu( CBotMenu *pParent )
 	{
-		addMenuItem(new CWaypointRadiusIncrease());
-		addMenuItem(new CWaypointRadiusDecrease());
-		addMenuItem(new CBotGotoMenuItem("Back",pParent));
+		CBotMenu::addMenuItem(new CWaypointRadiusIncrease());
+		CBotMenu::addMenuItem(new CWaypointRadiusDecrease());
+		CBotMenu::addMenuItem(new CBotGotoMenuItem("Back",pParent));
 	}
 
 	const char *getCaption ( CClient *pClient, WptColor &color );
@@ -278,9 +278,9 @@ class CWaypointAreaMenu : public CBotMenu
 public:
 	CWaypointAreaMenu( CBotMenu *pParent )
 	{
-		addMenuItem(new CWaypointAreaIncrease());
-		addMenuItem(new CWaypointAreaDecrease());
-		addMenuItem(new CBotGotoMenuItem("Back",pParent));
+		CBotMenu::addMenuItem(new CWaypointAreaIncrease());
+		CBotMenu::addMenuItem(new CWaypointAreaDecrease());
+		CBotMenu::addMenuItem(new CBotGotoMenuItem("Back",pParent));
 	}
 
 	const char *getCaption ( CClient *pClient, WptColor &color );
@@ -333,9 +333,9 @@ class CPathWaypointMenu : public CBotMenu
 public:
 	CPathWaypointMenu (CBotMenu *pParent)
 	{
-		addMenuItem(new CPathWaypointDeleteFromMenuItem());
-		addMenuItem(new CPathWaypointDeleteToMenuItem());
-		addMenuItem(new CBotGotoMenuItem("Back",pParent));
+		CBotMenu::addMenuItem(new CPathWaypointDeleteFromMenuItem());
+		CBotMenu::addMenuItem(new CPathWaypointDeleteToMenuItem());
+		CBotMenu::addMenuItem(new CBotGotoMenuItem("Back",pParent));
 		setCaption("Edit Path Options");
 	}
 };
@@ -345,10 +345,10 @@ class CWaypointEditMenu : public CBotMenu
 public:
 	CWaypointEditMenu (CBotMenu *pParent)
 	{
-		addMenuItem(new CWaypointCutMenuItem());
-		addMenuItem(new CWaypointCopyMenuItem());
-		addMenuItem(new CWaypointPasteMenuItem());
-		addMenuItem(new CBotGotoMenuItem("Back",pParent));
+		CBotMenu::addMenuItem(new CWaypointCutMenuItem());
+		CBotMenu::addMenuItem(new CWaypointCopyMenuItem());
+		CBotMenu::addMenuItem(new CWaypointPasteMenuItem());
+		CBotMenu::addMenuItem(new CBotGotoMenuItem("Back",pParent));
 		setCaption("Edit Waypoint Options");
 	}
 };
@@ -370,14 +370,14 @@ public:
 	// 9 Exit
 	CWaypointMenu ()
 	{
-		addMenuItem(new CWaypointFlagMenu(this));
-		addMenuItem(new CWaypointAreaMenu(this));
-		addMenuItem(new CWaypointRadiusMenu(this));
-		addMenuItem(new CWaypointYawMenuItem());
-		addMenuItem(new CWaypointEditMenu(this));
-		addMenuItem(new CPathWaypointMenu(this));
-		addMenuItem(new CWaypointFlagShowMenu(this));
-		addMenuItem(new CBotGotoMenuItem("Exit",NULL));
+		CBotMenu::addMenuItem(new CWaypointFlagMenu(this));
+		CBotMenu::addMenuItem(new CWaypointAreaMenu(this));
+		CBotMenu::addMenuItem(new CWaypointRadiusMenu(this));
+		CBotMenu::addMenuItem(new CWaypointYawMenuItem());
+		CBotMenu::addMenuItem(new CWaypointEditMenu(this));
+		CBotMenu::addMenuItem(new CPathWaypointMenu(this));
+		CBotMenu::addMenuItem(new CWaypointFlagShowMenu(this));
+		CBotMenu::addMenuItem(new CBotGotoMenuItem("Exit",NULL));
 	}
 
 	//CWaypointFlagMenu ( int iShow );

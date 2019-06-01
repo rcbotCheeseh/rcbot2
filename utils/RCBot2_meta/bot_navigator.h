@@ -31,15 +31,13 @@
 #ifndef __RCBOT_NAVIGATOR_H__
 #define __RCBOT_NAVIGATOR_H__
 
-#include "bot_genclass.h"
-
 #include <vector>
 #include <queue>
 using namespace std;
 
 #include "bot.h"
 #include "bot_waypoint.h"
-
+#include "bot_genclass.h"
 #include "bot_belief.h"
 
 class CNavMesh;
@@ -141,13 +139,13 @@ public:
 
 protected:
 	Vector m_vGoal;
-	float m_fGoalDistance;
+	float m_fGoalDistance = 0;
 	Vector m_vPreviousPoint;
 	Vector m_vDangerPoint;
-	bool m_bDangerPoint;
-	short int m_iBeliefTeam;
-	bool m_bBeliefChanged;
-	bool m_bLoadBelief;
+	bool m_bDangerPoint = false;
+	short int m_iBeliefTeam = 0;
+	bool m_bBeliefChanged = false;
+	bool m_bLoadBelief = false;
 };
 
 #define FL_ASTAR_CLOSED		1
@@ -366,8 +364,8 @@ class CWaypointNavigator : public IBotNavigator
 {
 public:
 	CWaypointNavigator ( CBot *pBot ) 
-	{ 
-		init();
+	{
+		CWaypointNavigator::init();
 		m_pBot = pBot; 
 		m_fNextClearFailedGoals = 0;
 		m_bDangerPoint = false;

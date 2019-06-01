@@ -156,6 +156,6 @@ private:
 
 extern RCBotPluginMeta g_RCBotPluginMeta;
 
-PLUGIN_GLOBALVARS();
+PLUGIN_GLOBALVARS()
 
 #endif //_INCLUDE_METAMOD_SOURCE_STUB_PLUGIN_H_

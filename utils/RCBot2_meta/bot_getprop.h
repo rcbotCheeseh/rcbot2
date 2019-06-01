@@ -391,6 +391,7 @@ public:
 	{
 		CBaseHandle *pHandle = g_GetProps[GETPROP_TF2_ACTIVEWEAPON].getEntityHandle(edict);
 		pHandle->Set(pWeapon->GetNetworkable()->GetEntityHandle());
+		return false;
 	}
 	inline static void TF2_SetBuilderType(edict_t *pBuilder, int itype)
 	{

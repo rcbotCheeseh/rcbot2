@@ -1070,7 +1070,9 @@ eBotCommandResult CBotTaskCommand::execute ( CClient *pClient, const char *pcmd,
 					if ( pClient )
 					{
 						
-						CWaypoint *pWaypoint = CWaypoints::getWaypoint(CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_SNIPER,pClient->getOrigin(),200.0f,pBot->getTeam()));
+						CWaypoint* pWaypoint = CWaypoints::getWaypoint(
+							CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_SNIPER, pClient->getOrigin(), 200.0f,
+							                                pBot->getTeam()));
 					
 						if ( pWaypoint )
 						{
@@ -2417,7 +2419,7 @@ void CBotCommand :: setAccessLevel ( int iAccessLevel )
 	m_iAccessLevel = iAccessLevel;
 }
 
-CBotCommand :: CBotCommand ( char *szCommand, int iAccessLevel )
+CBotCommand :: CBotCommand ( char *szCommand, int iAccessLevel ): m_szHelp(nullptr)
 {
 	m_szCommand = CStrings::getString(szCommand);
 	m_iAccessLevel = iAccessLevel;

@@ -56,8 +56,8 @@ void CBotMods :: parseFile ()
 	unsigned int i,j;
 	char val[256];
 
-	eModId modtype;
-	eBotType bottype;
+	eModId modtype = {};
+	eBotType bottype = {};
 	char steamfolder[256];
 	char gamefolder[256];
 	char weaponlist[64];

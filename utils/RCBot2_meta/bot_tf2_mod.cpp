@@ -1582,6 +1582,7 @@ edict_t *CTeamFortress2Mod::getBuilding (eEngiBuild object, edict_t *pOwner)
 		if ( m_Teleporters[i].entrance.get() != NULL )
 			return m_Teleporters[i].entrance.get();
 		return m_Teleporters[i].exit.get();
+	default: ;
 	}
 
 	return NULL;
@@ -1623,6 +1624,7 @@ edict_t *CTeamFortress2Mod ::getBuildingOwner (eEngiBuild object, short index)
 			tele++;
 		}
 		break;
+	default: ;
 	}
 
 	return NULL;

@@ -53,7 +53,7 @@ public:
 	// sub classes return their class with own values
 	virtual IIndividual *copy () = 0;
 private:
-	ga_nn_value m_fFitness;
+	ga_nn_value m_fFitness = 0;
 };
 
 class CGA;
@@ -87,7 +87,7 @@ public:
 
 private:
 	vector<IIndividual*> m_theIndividuals;
-	CGA *m_ga;
+	CGA * m_ga = nullptr;
 };
 
 // selection function interface

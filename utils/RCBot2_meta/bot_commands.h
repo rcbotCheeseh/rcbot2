@@ -44,7 +44,7 @@ typedef enum
 	COMMAND_REQUIRE_ACCESS // dont have access to command
 }eBotCommandResult;
 
-#define NEED_ARG(x) if ( !x || !*x ) return COMMAND_ERROR;
+#define NEED_ARG(x) if ( !(x) || !*(x) ) return COMMAND_ERROR;
 
 
 #define CMD_ACCESS_NONE				0

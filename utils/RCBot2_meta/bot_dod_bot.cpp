@@ -111,7 +111,7 @@ void CDODBot :: bombEvent ( int iEvent, int iCP, int iTeam )
 CDODBot :: CDODBot()
 {
 	CBot();
-	init(true);
+	CDODBot::init(true);
 }
 
 void CDODBot :: init (bool bVarInit)
@@ -190,10 +190,10 @@ bool CDODBot::canGotoWaypoint(const Vector vPrevWaypoint, CWaypoint *pWaypoint, 
 	return false;
 }
 
-#define UPDATE_VISIBLE_OBJECT(visobj,pent) if ( !visobj.get() || (distanceFrom(pent)<distanceFrom(visobj)) ) { visobj = pent; }
-#define UPDATE_VISIBLE_OBJECT_CONDITION(visobj,pent,condition)  if ( !visobj.get() || (distanceFrom(pent)<distanceFrom(visobj)) ) { if ( condition ) { visobj = pent; }  }
-#define NULLIFY_VISIBLE(visobj,pent,distance)  if ( visobj == pent ) { if ( !bValid || (distanceFrom(visobj)>distance) ) { visobj = NULL; } }
-#define NULLIFY_VISIBLE_CONDITION(visobj,pent,distance,condition) if ( visobj == pent ) { if ( !bValid || (distanceFrom(visobj)>distance) || (condition) ) { visobj = NULL; } }
+#define UPDATE_VISIBLE_OBJECT(visobj,pent) if ( !(visobj).get() || (distanceFrom(pent)<distanceFrom(visobj)) ) { (visobj) = pent; }
+#define UPDATE_VISIBLE_OBJECT_CONDITION(visobj,pent,condition)  if ( !(visobj).get() || (distanceFrom(pent)<distanceFrom(visobj)) ) { if ( condition ) { (visobj) = pent; }  }
+#define NULLIFY_VISIBLE(visobj,pent,distance)  if ( (visobj) == (pent) ) { if ( !bValid || (distanceFrom(visobj)>(distance)) ) { (visobj) = NULL; } }
+#define NULLIFY_VISIBLE_CONDITION(visobj,pent,distance,condition) if ( (visobj) == (pent) ) { if ( !bValid || (distanceFrom(visobj)>(distance)) || (condition) ) { (visobj) = NULL; } }
 
 bool CDODBot :: setVisible ( edict_t *pEntity, bool bVisible )
 {

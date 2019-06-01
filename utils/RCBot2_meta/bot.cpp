@@ -97,8 +97,8 @@
 #include "bot_getprop.h"
 #include "bot_profiling.h"
 
-#define DEG_TO_RAD(x) (x)*0.0174533
-#define RAD_TO_DEG(x) (x)*57.29578
+#define DEG_TO_RAD(x) ((x)*0.0174533)
+#define RAD_TO_DEG(x) ((x)*57.29578)
 
 // for critical sections
 CThreadMutex g_MutexAddBot;
@@ -1101,7 +1101,7 @@ void CBot :: handleWeapons ()
 
 CBot :: CBot()
 {
-	init(true);
+	CBot::init(true);
 }
 /*
 * init()
@@ -3091,8 +3091,8 @@ bool CBots :: controlBot ( edict_t *pEdict )
 	return true;
 }
 
-#define SET_PROFILE_DATA_INT(varname,membername) if ( varname && *varname ) { pBotProfile->membername = atoi(varname); }
-#define SET_PROFILE_STRING(varname,localname,membername) if ( varname && *varname ) { localname = (char*)varname; } else { localname = pBotProfile->membername; }
+#define SET_PROFILE_DATA_INT(varname,membername) if ( (varname) && *(varname) ) { pBotProfile->membername = atoi(varname); }
+#define SET_PROFILE_STRING(varname,localname,membername) if ( (varname) && *(varname) ) { (localname) = (char*)(varname); } else { (localname) = pBotProfile->membername; }
 
 bool CBots :: controlBot ( const char *szOldName, const char *szName, const char *szTeam, const char *szClass )
 {

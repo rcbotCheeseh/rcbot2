@@ -46,7 +46,7 @@ float CWaypointLocations :: m_fIgnoreSize = 0;
 Vector CWaypointLocations :: m_vIgnoreLoc = Vector(0,0,0);
 bool CWaypointLocations :: m_bIgnoreBox = false;
 
-#define READ_LOC(loc) abs((int)((int)(loc + HALF_MAX_MAP_SIZE) / BUCKET_SPACING));
+#define READ_LOC(loc) abs((int)((int)((loc) + HALF_MAX_MAP_SIZE) / BUCKET_SPACING));
 
 unsigned char *CWaypointLocations :: resetFailedWaypoints (dataUnconstArray<int> *iIgnoreWpts)
 {
@@ -68,8 +68,8 @@ unsigned char *CWaypointLocations :: resetFailedWaypoints (dataUnconstArray<int>
 	return g_iFailedWaypoints;
 }
 
-#define CLAMP_TO_ZERO(x) x=(x<0)?0:x
-#define CLAMP_TO(x,clamp) x=(x>clamp)?clamp:x
+#define CLAMP_TO_ZERO(x) x=((x)<0)?0:x
+#define CLAMP_TO(x,clamp) x=((x)>(clamp))?(clamp):x
 
 void CWaypointLocations :: getMinMaxs ( int iLoc, int jLoc, int kLoc, 
 									    int *iMinLoci, int *iMinLocj, int *iMinLock,

@@ -862,6 +862,7 @@ void CBotTF2 :: buildingDestroyed ( int iType, edict_t *pAttacker, edict_t *pEdi
 			m_bTeleportExitVectorValid = false;
 			m_iTeleExitArea = 0;
 			break;
+		default: ;
 	}
 
 	m_pSchedules->freeMemory();
@@ -1250,6 +1251,7 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 				return 1;
 		}
 		break;
+	default: ;
 	}
 
 	return 2;
@@ -2335,6 +2337,7 @@ bool CBotTF2 :: hasEngineerBuilt ( eEngiBuild iBuilding )
 	case ENGI_EXIT:
 		return m_pTeleExit!=NULL; // TODO
 		break;
+	default: ;
 	}	
 
 	return false;
@@ -7004,6 +7007,7 @@ void CBotTF2 :: modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_o
 						}
 				}
 			break;
+			default: ;
 			}
 		}
 	}
@@ -7149,6 +7153,7 @@ eBotFuncState CBotTF2 :: rocketJump(int *iState,float *fTime)
 			}
 		}
 		break;
+	default: ;
 	}
 
 	return BOT_FUNC_CONTINUE;

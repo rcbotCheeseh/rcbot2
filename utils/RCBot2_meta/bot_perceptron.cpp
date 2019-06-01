@@ -37,7 +37,7 @@
 ga_nn_value CPerceptron::m_fDefaultLearnRate = 0.5f;
 ga_nn_value CPerceptron::m_fDefaultBias = 1.0f;
 
-CNeuron :: CNeuron ()
+CNeuron :: CNeuron (): m_iInputs(0), m_LearnRate(0), m_output(0), m_Bias(0)
 {
 	m_weights = NULL;
 	m_inputs = NULL;
