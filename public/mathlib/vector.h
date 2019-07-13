@@ -44,14 +44,11 @@
 #define Y_INDEX	1
 #define Z_INDEX	2
 
+
 #ifdef VECTOR_PARANOIA
 #define CHECK_VALID( _v)	Assert( (_v).IsValid() )
 #else
-#ifdef GNUC
 #define CHECK_VALID( _v)
-#else
-#define CHECK_VALID( _v)	0
-#endif
 #endif
 
 #define VecToString(v)	(static_cast<const char *>(CFmtStr("(%f, %f, %f)", (v).x, (v).y, (v).z))) // ** Note: this generates a temporary, don't hold reference!
@@ -205,6 +202,8 @@ private:
 #endif
 };
 
+
+
 #define USE_M64S ( ( !defined( _X360 ) ) && ( ! defined( _LINUX) ) )
 
 
@@ -330,7 +329,7 @@ public:
 	// Construction/destruction:
 	VectorByValue(void) : Vector() {} 
 	VectorByValue(vec_t X, vec_t Y, vec_t Z) : Vector( X, Y, Z ) {}
-	VectorByValue(const VectorByValue& vOther) : Vector(vOther) { *this = vOther; }
+	VectorByValue(const VectorByValue& vOther) { *this = vOther; }
 };
 
 
@@ -889,6 +888,7 @@ FORCEINLINE ShortVector ShortVector::operator*(float fl) const
 
 
 
+
 //-----------------------------------------------------------------------------
 //
 // Inlined Integer Vector methods
@@ -1038,6 +1038,7 @@ FORCEINLINE IntVector4D IntVector4D::operator*(float fl) const
 
 // =======================
 
+
 FORCEINLINE void VectorAdd( const Vector& a, const Vector& b, Vector& c )
 {
 	CHECK_VALID(a);
@@ -1074,7 +1075,7 @@ FORCEINLINE void VectorMultiply( const Vector& a, const Vector& b, Vector& c )
 	c.z = a.z * b.z;
 }
 
-// for backwards compatibility
+// for backwards compatability
 inline void VectorScale ( const Vector& in, vec_t scale, Vector& result )
 {
 	VectorMultiply( in, scale, result );
@@ -1110,7 +1111,7 @@ FORCEINLINE void VectorDivide( const Vector& a, const Vector& b, Vector& c )
 }
 
 // FIXME: Remove
-// For backwards compatibility
+// For backwards compatability
 inline void	Vector::MulAdd(const Vector& a, const Vector& b, float scalar)
 {
 	CHECK_VALID(a);
@@ -1165,7 +1166,7 @@ FORCEINLINE vec_t DotProduct(const Vector& a, const Vector& b)
 	return( a.x*b.x + a.y*b.y + a.z*b.z ); 
 }
 
-// for backwards compatibility
+// for backwards compatability
 inline vec_t Vector::Dot( const Vector& vOther ) const
 {
 	CHECK_VALID(vOther);
@@ -1797,7 +1798,7 @@ public:
 	// Construction/destruction:
 	QAngleByValue(void) : QAngle() {} 
 	QAngleByValue(vec_t X, vec_t Y, vec_t Z) : QAngle( X, Y, Z ) {}
-	QAngleByValue(const QAngleByValue& vOther) : QAngle(vOther) { *this = vOther; }
+	QAngleByValue(const QAngleByValue& vOther) { *this = vOther; }
 };
 
 

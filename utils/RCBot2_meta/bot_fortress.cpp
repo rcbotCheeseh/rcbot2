@@ -93,7 +93,7 @@ void CBroadcastCapturedPoint :: execute ( CBot *pBot )
 	static_cast<CBotTF2*>(pBot)->pointCaptured(m_iPoint,m_iTeam,m_szName);
 }
 
-CBroadcastCapturedPoint :: CBroadcastCapturedPoint ( int iPoint, int iTeam, const char *szName )
+CBroadcastCapturedPoint :: CBroadcastCapturedPoint (const int iPoint, const int iTeam, const char *szName )
 {
 	m_iPoint = iPoint;
 	m_iTeam = iTeam;
@@ -289,14 +289,13 @@ void CBotFortress :: checkDependantEntities ()
 	CBot::checkDependantEntities();
 }
 
-void CBotFortress :: init (bool bVarInit)
+void CBotFortress :: init (const bool bVarInit)
 {
 	CBot::init(bVarInit);
 
 	m_bCheckClass = false;
 	m_bHasFlag = false;
 	m_iClass = TF_CLASS_MAX; // important
-
 }
 
 void CBotFortress :: setup ()
@@ -524,7 +523,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 // 
 // bVisible = true when pEntity is Visible
 // bVisible = false when pEntity becomes inVisible
-bool CBotFortress :: setVisible ( edict_t *pEntity, bool bVisible )
+bool CBotFortress :: setVisible ( edict_t *pEntity, const bool bVisible )
 {
 	bool bValid = CBot::setVisible(pEntity,bVisible);
 
@@ -876,7 +875,7 @@ void CBotTF2 :: buildingDestroyed ( int iType, edict_t *pAttacker, edict_t *pEdi
 	}
 }
 
-void CBotFortress ::wantToDisguise(bool bSet)
+void CBotFortress ::wantToDisguise(const bool bSet)
 {
 	extern ConVar rcbot_tf2_debug_spies_cloakdisguise;
 
@@ -892,7 +891,7 @@ void CBotFortress ::wantToDisguise(bool bSet)
 
 }
 
-void CBotFortress :: detectedAsSpy( edict_t *pDetector, bool bDisguiseComprimised )
+void CBotFortress :: detectedAsSpy( edict_t *pDetector, const bool bDisguiseComprimised )
 {
 	if ( bDisguiseComprimised )
 	{
@@ -1000,7 +999,7 @@ bool CBotFortress :: isBuilding ( edict_t *pBuilding )
 // return 1 : built ok
 // return 2 : next state
 // return 3 : another try -- restart
-int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTime, int *iTries )
+int CBotFortress :: engiBuildObject (int *iState, const eEngiBuild iObject, float *fTime, int *iTries )
 {
 	// can't build while standing on my building!
 	if ( isBuilding(CClassInterface::getGroundEntity(m_pEdict)) )
@@ -1257,12 +1256,12 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 	return 2;
 }
 
-void CBotFortress :: setClass ( TF_Class _class )
+void CBotFortress :: setClass (const TF_Class _class)
 {
 	m_iClass = _class;
 }
 
-bool CBotFortress :: thinkSpyIsEnemy ( edict_t *pEdict, TF_Class iDisguise )
+bool CBotFortress :: thinkSpyIsEnemy ( edict_t *pEdict, const TF_Class iDisguise )
 {
 	return ( (m_fSeeSpyTime > engine->Time()) &&  // if bot is in spy check mode
 		(m_pPrevSpy == pEdict) &&				 // and its the last spy we saw
@@ -1270,7 +1269,7 @@ bool CBotFortress :: thinkSpyIsEnemy ( edict_t *pEdict, TF_Class iDisguise )
 		((m_iPrevSpyDisguise == iDisguise)||((engine->Time()-m_fLastSeeSpyTime)<3.0f)) );
 }
 
-bool CBotTF2 ::thinkSpyIsEnemy(edict_t *pEdict, TF_Class iDisguise)
+bool CBotTF2 ::thinkSpyIsEnemy(edict_t *pEdict, const TF_Class iDisguise)
 {
 	return CBotFortress::thinkSpyIsEnemy(pEdict,iDisguise) || 
 		(m_pCloakedSpy && (m_pCloakedSpy == pEdict) && !CTeamFortress2Mod::TF2_IsPlayerCloaked(m_pCloakedSpy)); // maybe i put him on fire
@@ -1584,7 +1583,7 @@ void CBotFortress :: selectClass ()
 	m_fChangeClassTime = engine->Time() + randomFloat(bot_min_cc_time.GetFloat(), bot_max_cc_time.GetFloat());
 }
 
-bool CBotFortress :: waitForFlag ( Vector *vOrigin, float *fWait, bool bFindFlag )
+bool CBotFortress :: waitForFlag ( Vector *vOrigin, float *fWait, const bool bFindFlag )
 {
 	// job calls!
 	if ( someoneCalledMedic() )
@@ -1819,7 +1818,7 @@ bool CBotTF2 ::checkAttackPoint()
 	return false;
 }
 
-void CBotTF2 :: setClass ( TF_Class _class )
+void CBotTF2 :: setClass ( const TF_Class _class )
 {
 	m_iClass = _class;
 }
@@ -1844,7 +1843,7 @@ void CBotTF2 :: taunt (const bool bOverride )
 	}
 }
 
-void CBotTF2::healedPlayer(edict_t *pPlayer, float fAmount)
+void CBotTF2::healedPlayer(edict_t *pPlayer, const float fAmount)
 {
 	if ( m_iClass == TF_CLASS_ENGINEER ) // my dispenser was used
 	{
@@ -1905,7 +1904,7 @@ NEW COMMAND SYNTAX:
 - "build 1 0" - Build teleporter entrance
 - "build 1 1" - Build teleporter exit
 */
-void CBotTF2 :: engineerBuild ( eEngiBuild iBuilding, eEngiCmd iEngiCmd )
+void CBotTF2 :: engineerBuild ( const eEngiBuild iBuilding, const eEngiCmd iEngiCmd )
 {
 	//char buffer[16];
 	//char cmd[256];
@@ -2047,7 +2046,7 @@ void CBotTF2 :: checkBuildingsValid (bool bForce) // force check carrying
 }
 
 // Find the EDICT_T of the building that the engineer just built...
-edict_t *CBotTF2 :: findEngineerBuiltObject ( eEngiBuild iBuilding, int index )
+edict_t *CBotTF2 :: findEngineerBuiltObject ( eEngiBuild iBuilding, const int index )
 {
 	int team = getTeam();
 
@@ -2141,7 +2140,7 @@ void CBotTF2 :: capturedFlag ()
 	taunt();
 }
 
-void CBotTF2 :: spyDisguise ( int iTeam, int iClass )
+void CBotTF2 :: spyDisguise ( const int iTeam, const int iClass )
 {
 	//char cmd[256];
 
@@ -2290,7 +2289,7 @@ void CBotTF2 :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 }
 
 
-void CBotTF2 :: engiBuildSuccess ( eEngiBuild iBuilding, int index )
+void CBotTF2 :: engiBuildSuccess ( const eEngiBuild iBuilding, const int index )
 {
 	edict_t *pEntity = findEngineerBuiltObject(iBuilding, index);
 
@@ -2323,7 +2322,7 @@ void CBotTF2 :: engiBuildSuccess ( eEngiBuild iBuilding, int index )
 	}
 }
 
-bool CBotTF2 :: hasEngineerBuilt ( eEngiBuild iBuilding )
+bool CBotTF2 :: hasEngineerBuilt ( const eEngiBuild iBuilding )
 {
 	switch ( iBuilding )
 	{
@@ -2842,7 +2841,7 @@ void CBotTF2 :: addLoadoutWeapon ( CTF2Loadout *weap )
 	m_LoadoutsApplyAttributes.Push(weap);
 }
 */
-void CBotTF2::upgradeWeapon(int iSlot)
+void CBotTF2::upgradeWeapon(const int iSlot)
 {
 	CTF2Loadout *wep = NULL;
 	// (const char *pszClassname, int iIndex, int iQuality, int iMinLevel, int iMaxLevel)
@@ -3713,7 +3712,7 @@ void CBotTF2::checkStuckonSpy(void)
 	}
 }
 
-bool CBotFortress :: isClassOnTeam ( int iClass, int iTeam )
+bool CBotFortress :: isClassOnTeam (const int iClass, const int iTeam)
 {
 	int i = 0;
 	edict_t *pPlayer;
@@ -3824,7 +3823,7 @@ bool CBotFortress :: wantToFollowEnemy ()
 	return CBot::wantToFollowEnemy();
 }
 
-void CBotTF2 ::voiceCommand ( int cmd )
+void CBotTF2 ::voiceCommand ( const int cmd )
 {
 	char scmd[64];
 	u_VOICECMD vcmd;
@@ -3851,7 +3850,7 @@ bool CBotTF2 ::checkStuck(void)
 	return false;
 }
 
-void CBotTF2 :: foundSpy (edict_t *pEdict,TF_Class iDisguise)
+void CBotTF2 :: foundSpy (edict_t *pEdict, const TF_Class iDisguise)
 {
 	CBotFortress::foundSpy(pEdict,iDisguise);
 
@@ -3863,7 +3862,7 @@ void CBotTF2 :: foundSpy (edict_t *pEdict,TF_Class iDisguise)
 	}
 }
 
-int CBotFortress :: getSpyDisguiseClass ( int iTeam )
+int CBotFortress :: getSpyDisguiseClass ( const int iTeam )
 {
 	int i = 0;
 	edict_t *pPlayer;
@@ -3916,7 +3915,7 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 	return m_classes.Random();
 }
 
-bool CBotFortress :: incomingRocket ( float fRange )
+bool CBotFortress :: incomingRocket (const float fRange)
 {
 	edict_t *pRocket = m_NearestEnemyRocket;
 
@@ -3979,7 +3978,7 @@ void CBotFortress :: enemyLost(edict_t *pEnemy)
 	//CBot::enemyLost(pEnemy);
 }
 
-bool CBotTF2 :: setVisible ( edict_t *pEntity, bool bVisible )
+bool CBotTF2 :: setVisible ( edict_t *pEntity, const bool bVisible )
 {
 	bool bValid = CBotFortress::setVisible(pEntity,bVisible);
 
@@ -6880,7 +6879,8 @@ void CBotTF2 :: touchedWpt ( CWaypoint *pWaypoint , int iNextWaypoint, int iPrev
 	}
 }
 
-void CBotTF2 :: modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset, Vector &v_size, float fDist, float fDist2D )
+void CBotTF2::modAim(edict_t* pEntity, Vector& v_origin, Vector* v_desired_offset, Vector& v_size, const float fDist,
+                     const float fDist2D)
 {
 	static CBotWeapon *pWp;
 	static float fTime;
@@ -7311,7 +7311,7 @@ int CBotFortress :: getMetal ()
 	return 0;
 }
 
-bool CBotTF2 :: upgradeBuilding ( edict_t *pBuilding, bool removesapper )
+bool CBotTF2 :: upgradeBuilding ( edict_t *pBuilding, const bool removesapper )
 {
 	Vector vOrigin = CBotGlobals::entityOrigin(pBuilding);
 
@@ -7361,7 +7361,7 @@ void CBotFortress::teamFlagPickup ()
 		m_pSchedules->removeSchedule(SCHED_TF2_GET_FLAG); 
 }
 
-void CBotTF2::roundWon(int iTeam, bool bFullRound )
+void CBotTF2::roundWon(int iTeam, const bool bFullRound )
 {
 	m_pSchedules->freeMemory();
 
@@ -7525,7 +7525,7 @@ void CBotTF2::pointCaptured(int iPoint, int iTeam, const char *szPointName)
 #define RCBOT_ISENEMY_TRUE 1
 #define RCBOT_ISENEMY_FALSE 0
 
-bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
+bool CBotTF2 :: isEnemy ( edict_t *pEdict, const bool bCheckWeapons )
 {
 	static short int iEnemyTeam;
 	static bool bIsPipeBomb;
@@ -7839,7 +7839,7 @@ void CBotTF2::MannVsMachineAlarmTriggered(const Vector vLoc)
 }
 
 // Go back to Cap/Flag to 
-void CBotTF2 :: enemyAtIntel ( Vector vPos, int type, int iArea )
+void CBotTF2 :: enemyAtIntel ( Vector vPos, const int type, const int iArea )
 {
 
 	if ( m_pSchedules->getCurrentSchedule() )

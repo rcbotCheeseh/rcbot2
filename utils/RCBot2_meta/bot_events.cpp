@@ -89,7 +89,7 @@ public:
 class CBotSeeFriendlyHurtEnemy : public IBotFunction
 {
 public:
-	CBotSeeFriendlyHurtEnemy ( edict_t *pTeammate, edict_t *pEnemy, int iWeaponID )
+	CBotSeeFriendlyHurtEnemy ( edict_t *pTeammate, edict_t *pEnemy, const int iWeaponID )
 	{
 		m_pTeammate = pTeammate;
 		m_pEnemy = pEnemy;
@@ -116,7 +116,7 @@ private:
 class CBroadcastMVMAlarm : public IBotFunction
 {
 public:
-	CBroadcastMVMAlarm(float fRadius)
+	CBroadcastMVMAlarm(const float fRadius)
 	{
 		m_bValid = CTeamFortress2Mod::getMVMCapturePoint(&m_vLoc);
 		m_fRadius = fRadius;
@@ -137,7 +137,7 @@ private:
 class CBotSeeEnemyHurtFriendly : public IBotFunction
 {
 public:
-	CBotSeeEnemyHurtFriendly ( edict_t *pEnemy, edict_t *pTeammate, int iWeaponID )
+	CBotSeeEnemyHurtFriendly ( edict_t *pEnemy, edict_t *pTeammate, const int iWeaponID )
 	{
 		m_pTeammate = pTeammate;
 		m_pEnemy = pEnemy;
@@ -191,7 +191,7 @@ private:
 class CBotHearPlayerAttack : public IBotFunction
 {
 public:
-	CBotHearPlayerAttack ( edict_t *pAttacker, int iWeaponID )
+	CBotHearPlayerAttack ( edict_t *pAttacker, const int iWeaponID )
 	{
 		m_pAttacker = pAttacker;
 		m_iWeaponID = iWeaponID;
@@ -218,7 +218,7 @@ private:
 class CTF2BroadcastRoundWin : public IBotFunction
 {
 public:
-	CTF2BroadcastRoundWin ( int iTeamWon, bool bFullRound )
+	CTF2BroadcastRoundWin (const int iTeamWon, const bool bFullRound )
 	{
 		m_iTeam = iTeamWon;
 		m_bFullRound = bFullRound;
@@ -1281,7 +1281,7 @@ void CBotEvents :: freeMemory ()
 	m_theEvents.clear();
 }
 
-void CBotEvents :: executeEvent( void *pEvent, eBotEventType iType )
+void CBotEvents :: executeEvent( void *pEvent, const eBotEventType iType )
 {
 	CBotEvent *pFound;
 	int iEventId = -1; 

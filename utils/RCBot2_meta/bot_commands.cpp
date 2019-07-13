@@ -2414,12 +2414,12 @@ void CBotCommand :: setHelp ( char *szHelp )
 	m_szHelp = CStrings::getString(szHelp);
 }
 
-void CBotCommand :: setAccessLevel ( int iAccessLevel )
+void CBotCommand :: setAccessLevel ( const int iAccessLevel )
 {
 	m_iAccessLevel = iAccessLevel;
 }
 
-CBotCommand :: CBotCommand ( char *szCommand, int iAccessLevel ): m_szHelp(nullptr)
+CBotCommand :: CBotCommand ( char *szCommand, const int iAccessLevel ): m_szHelp(nullptr)
 {
 	m_szCommand = CStrings::getString(szCommand);
 	m_iAccessLevel = iAccessLevel;
@@ -2517,7 +2517,7 @@ eBotCommandResult CPrintCommands ::execute ( CClient *pClient, const char *pcmd,
 
 ///////////////////////////////////////////
 
-void CBotCommand :: printCommand ( edict_t *pPrintTo, int indent )
+void CBotCommand :: printCommand ( edict_t *pPrintTo, const int indent )
 {
 	if ( indent )
 	{
@@ -2555,7 +2555,7 @@ void CBotCommand :: printHelp ( edict_t *pPrintTo )
 	return;
 }
 
-void CBotCommandContainer :: printCommand ( edict_t *pPrintTo, int indent )
+void CBotCommandContainer :: printCommand ( edict_t *pPrintTo, const int indent )
 {
 	//char cmd1[512];
 	//char cmd2[512];

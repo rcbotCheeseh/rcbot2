@@ -337,7 +337,8 @@ void CBotMods :: readMods()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void CBotMod :: setup ( const char *szModFolder, const char *szSteamFolder, eModId iModId, eBotType iBotType, const char *szWeaponListName )
+void CBotMod::setup(const char* szModFolder, const char* szSteamFolder, const eModId iModId, const eBotType iBotType,
+                    const char* szWeaponListName)
 {
 	m_szModFolder = CStrings::getString(szModFolder);
 	m_szSteamFolder = CStrings::getString(szSteamFolder);

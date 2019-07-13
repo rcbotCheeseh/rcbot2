@@ -324,13 +324,13 @@ bool CWaypointNavigator :: randomDangerPath (Vector *vec)
 
 }
 
-Vector CWaypointNavigator :: getPath ( int pathid )
+Vector CWaypointNavigator :: getPath (const int pathid)
 {
 	 return CWaypoints::getWaypoint(CWaypoints::getWaypoint(m_iCurrentWaypoint)->getPath(pathid))->getOrigin();
 }
 
 
-int CWaypointNavigator ::  getPathFlags ( int iPath )
+int CWaypointNavigator ::  getPathFlags (const int iPath)
 {
 	CWaypoint *pWpt = CWaypoints::getWaypoint(m_iCurrentWaypoint);
 
@@ -361,7 +361,8 @@ float CWaypointNavigator :: getNextYaw ()
 }
 
 // best waypoints are those with lowest danger
-CWaypoint *CWaypointNavigator :: chooseBestFromBeliefBetweenAreas ( dataUnconstArray<AStarNode*> *goals, bool bHighDanger, bool bIgnoreBelief )
+CWaypoint* CWaypointNavigator::chooseBestFromBeliefBetweenAreas(dataUnconstArray<AStarNode*>* goals,
+                                                                const bool bHighDanger, const bool bIgnoreBelief)
 {
 	int i;
 	CWaypoint *pWpt = NULL;
@@ -868,13 +869,9 @@ float CWaypointNavigator :: distanceTo ( CWaypoint *pWaypoint )
 }
 
 // find route using A* algorithm
-bool CWaypointNavigator :: workRoute ( Vector vFrom, 
-									  Vector vTo, 
-									  bool *bFail, 
-									  bool bRestart, 
-									  bool bNoInterruptions, 
-									  int iGoalId,
-									  int iConditions, int iDangerId )
+bool CWaypointNavigator::workRoute(const Vector vFrom, const Vector vTo, bool* bFail, const bool bRestart,
+                                   const bool bNoInterruptions, const int iGoalId, const int iConditions,
+                                   const int iDangerId)
 {
 	extern ConVar bot_pathrevs;
 	extern ConVar rcbot_debug_show_route;
@@ -1460,7 +1457,7 @@ bool CWaypointNavigator :: routeFound ()
 /////////////////////////////////////////////////////////
 
 // draw paths from this waypoint (if waypoint drawing is on)
-void CWaypoint :: drawPaths ( edict_t *pEdict, unsigned short int iDrawType )
+void CWaypoint :: drawPaths ( edict_t *pEdict, const unsigned short int iDrawType )
 {
 	int iPaths;
 	int iWpt;
@@ -1478,7 +1475,7 @@ void CWaypoint :: drawPaths ( edict_t *pEdict, unsigned short int iDrawType )
 	}
 }
 // draws one path beam
-void CWaypoint :: drawPathBeam ( CWaypoint *to, unsigned short int iDrawType )
+void CWaypoint :: drawPathBeam ( CWaypoint *to, const unsigned short int iDrawType )
 {
 	static int r,g,b;
 
@@ -1546,7 +1543,7 @@ bool CWaypoint :: touched (const Vector vOrigin, const Vector vOffset, const flo
 	return false;
 }
 // get the colour of this waypoint in WptColor format
-WptColor CWaypointTypes ::getColour ( int iFlags )
+WptColor CWaypointTypes ::getColour (const int iFlags)
 {
 	WptColor colour = WptColor(0,0,255); // normal waypoint
 

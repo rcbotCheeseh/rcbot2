@@ -306,7 +306,7 @@ void CBotTF2ShootLastEnemyPosition :: debugString ( char *string )
 
 /////////////
 
-CBotTF2WaitHealthTask :: CBotTF2WaitHealthTask ( Vector vOrigin )
+CBotTF2WaitHealthTask :: CBotTF2WaitHealthTask (const Vector vOrigin )
 {
 	m_vOrigin = vOrigin;
 	m_fWaitTime = 0;
@@ -355,7 +355,7 @@ void CBotTF2WaitHealthTask :: debugString ( char *string )
 }
 
 
-CBotTF2WaitFlagTask :: CBotTF2WaitFlagTask ( Vector vOrigin, bool bFind )
+CBotTF2WaitFlagTask :: CBotTF2WaitFlagTask (const Vector vOrigin, const bool bFind )
 {
 	m_vOrigin = vOrigin;
 	m_fWaitTime = 0;
@@ -401,7 +401,7 @@ void CBotTF2WaitFlagTask :: debugString ( char *string )
 	sprintf(string,"CBotTF2WaitFlagTask\nm_vOrigin = (%0.4f,%0.4f,%0.4f)",m_vOrigin.x,m_vOrigin.y,m_vOrigin.z);
 }
 //////////
-CBotDODBomb :: CBotDODBomb ( int iBombType, int iBombID, edict_t *pBomb, Vector vPosition, int iPrevOwner )
+CBotDODBomb :: CBotDODBomb (const int iBombType, const int iBombID, edict_t *pBomb, const Vector vPosition, const int iPrevOwner)
 {
 	m_iType = iBombType;
 	m_iBombID = iBombID; 
@@ -614,7 +614,7 @@ void CDODWaitForBombTask :: debugString ( char *string )
 
 //////////
 
-CBotDODAttackPoint :: CBotDODAttackPoint ( int iFlagID, Vector vOrigin, float fRadius ): m_bProne(false)
+CBotDODAttackPoint :: CBotDODAttackPoint (const int iFlagID, const Vector vOrigin, const float fRadius): m_bProne(false)
 {
 	m_vOrigin = vOrigin;
 	m_fAttackTime = 0;
@@ -711,7 +711,7 @@ void CBotDODAttackPoint :: debugString ( char *string )
 
 ///////////
 
-CBotTF2AttackPoint :: CBotTF2AttackPoint ( int iArea, Vector vOrigin, int iRadius )
+CBotTF2AttackPoint :: CBotTF2AttackPoint (const int iArea, const Vector vOrigin, const int iRadius)
 {
 	m_vOrigin = vOrigin;
 	m_fAttackTime = 0;
@@ -918,7 +918,7 @@ void CBotTF2DefendPayloadBombTask :: debugString ( char *string )
 	sprintf(string,"CBotTF2DefendPayloadBombTask (%0.1f,%0.1f,%0.1f)",m_vOrigin.x,m_vOrigin.y,m_vOrigin.z);
 }
 //////////////////////
-CBotTF2DefendPoint :: CBotTF2DefendPoint ( int iArea, Vector vOrigin, int iRadius )
+CBotTF2DefendPoint :: CBotTF2DefendPoint (const int iArea, const Vector vOrigin, const int iRadius)
 {
 	m_vOrigin = vOrigin;
 	m_fDefendTime = 0;
@@ -1265,11 +1265,9 @@ void CBotTFEngiTankSentry :: execute (CBot *pBot,CBotSchedule *pSchedule)
 */
 
 ////////////////////////
-
 ////////////////////////
 
-
-CBotTF2WaitAmmoTask :: CBotTF2WaitAmmoTask ( Vector vOrigin )
+CBotTF2WaitAmmoTask :: CBotTF2WaitAmmoTask (const Vector vOrigin )
 {
 	m_vOrigin = vOrigin;
 	m_fWaitTime = 0.0f;
@@ -1365,7 +1363,7 @@ void CBotTaskEngiPickupBuilding :: debugString ( char *string )
 }
 
 /////////////////
-CBotTaskEngiPlaceBuilding :: CBotTaskEngiPlaceBuilding ( eEngiBuild iObject, Vector vOrigin )
+CBotTaskEngiPlaceBuilding :: CBotTaskEngiPlaceBuilding (const eEngiBuild iObject, const Vector vOrigin)
 {
 	m_vOrigin = vOrigin;
 	m_fTime = 0.0f;
@@ -1817,7 +1815,7 @@ void CBotTF2EngiLookAfter :: execute (CBot *pBot,CBotSchedule *pSchedule)
 }
 
 ////////////////////////
-CBotTFEngiBuildTask :: CBotTFEngiBuildTask ( eEngiBuild iObject, CWaypoint *pWaypoint )
+CBotTFEngiBuildTask :: CBotTFEngiBuildTask (const eEngiBuild iObject, CWaypoint *pWaypoint)
 {
 	m_iObject = iObject;
 	m_vOrigin = pWaypoint->getOrigin()+pWaypoint->applyRadius();
@@ -1987,7 +1985,7 @@ CFindGoodHideSpot :: CFindGoodHideSpot ( edict_t *pEntity )
 	m_vHideFrom = CBotGlobals::entityOrigin(pEntity);
 }
 
-CFindGoodHideSpot :: CFindGoodHideSpot ( Vector vec )
+CFindGoodHideSpot :: CFindGoodHideSpot (const Vector vec)
 {
 	m_vHideFrom = vec;
 }
@@ -2011,7 +2009,7 @@ void CFindGoodHideSpot :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 	}
 }
 
-CFindPathTask :: CFindPathTask ( int iWaypointId, eLookTask looktask )
+CFindPathTask :: CFindPathTask (const int iWaypointId, const eLookTask looktask)
 {
 	m_iWaypointId = iWaypointId;
 	m_LookTask = looktask;
@@ -2197,7 +2195,7 @@ void CFindPathTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 		fail();
 }
 
-CBotTF2FindPipeWaypoint:: CBotTF2FindPipeWaypoint ( Vector vOrigin, Vector vTarget )
+CBotTF2FindPipeWaypoint:: CBotTF2FindPipeWaypoint (const Vector vOrigin, const Vector vTarget)
 {
 	m_vOrigin = vOrigin;
 	m_vTarget = vTarget;
@@ -2736,7 +2734,7 @@ void CSpyCheckAir :: debugString (char *string)
 }
 
 /////////////////////////////////////////////
-CBotRemoveSapper :: CBotRemoveSapper ( edict_t *pBuilding, eEngiBuild id )
+CBotRemoveSapper :: CBotRemoveSapper ( edict_t *pBuilding, const eEngiBuild id )
 {
 	m_fTime = 0.0f;
 	m_pBuilding = MyEHandle(pBuilding);
@@ -2848,7 +2846,7 @@ void CBotRemoveSapper :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 ////////////////////////////////////////////////////
 
-CBotTF2SnipeCrossBow::CBotTF2SnipeCrossBow(Vector vOrigin, int iWpt)
+CBotTF2SnipeCrossBow::CBotTF2SnipeCrossBow(const Vector vOrigin, const int iWpt)
 {
 	CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
 	m_iSnipeWaypoint = iWpt;
@@ -3136,7 +3134,7 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 	}
 }
 ///////////////////////////////////////////
-CBotTF2Snipe :: CBotTF2Snipe ( Vector vOrigin, int iWpt )
+CBotTF2Snipe :: CBotTF2Snipe (const Vector vOrigin, const int iWpt)
 {
 	CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
 	m_iSnipeWaypoint = iWpt;
@@ -3428,7 +3426,7 @@ void CBotTF2Snipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 /////////////////////////////////////////////////////
 
-CBotTF2SpySap :: CBotTF2SpySap ( edict_t *pBuilding, eEngiBuild id )
+CBotTF2SpySap :: CBotTF2SpySap ( edict_t *pBuilding, const eEngiBuild id )
 {
 	m_pBuilding = MyEHandle(pBuilding);
 	m_fTime = 0.0f;
@@ -3673,7 +3671,7 @@ void CAttackEntityTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 }
 
 ///
-CThrowGrenadeTask :: CThrowGrenadeTask (CBotWeapon *pWeapon, int ammo, Vector vLoc )
+CThrowGrenadeTask :: CThrowGrenadeTask (CBotWeapon *pWeapon, const int ammo, const Vector vLoc)
 {
 	m_pWeapon = pWeapon;
 	m_fTime = 0;
@@ -3769,7 +3767,7 @@ void CThrowGrenadeTask ::execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 }
 ///
-CBotInvestigateHidePoint :: CBotInvestigateHidePoint ( int iWaypointIndexToInvestigate, int iOriginalWaypointIndex )
+CBotInvestigateHidePoint :: CBotInvestigateHidePoint (const int iWaypointIndexToInvestigate, const int iOriginalWaypointIndex)
 {
 	CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWaypointIndexToInvestigate);
 	CWaypoint *pOriginalWpt = CWaypoints::getWaypoint(iOriginalWaypointIndex);
@@ -3901,7 +3899,7 @@ void CAutoBuy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 }
 
-CFindLastEnemy::CFindLastEnemy (Vector vLast,Vector vVelocity)
+CFindLastEnemy::CFindLastEnemy (const Vector vLast, const Vector vVelocity)
 {
 	setCompleteInterrupt(CONDITION_SEE_CUR_ENEMY);
 	m_vLast = vLast+(vVelocity*10);
@@ -4103,11 +4101,10 @@ void CCrouchHideTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 
 }
 ////////////////////////////////////////////////////////
-CHideTask :: CHideTask( Vector vHideFrom ): m_fHideTime(0)
+CHideTask :: CHideTask(const Vector vHideFrom): m_fHideTime(0)
 {
 	m_vHideFrom = vHideFrom;
 }
-
 
 void CHideTask :: debugString ( char *string )
 {
@@ -4133,9 +4130,9 @@ void CHideTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 		complete();
 }
 ///////////////////////////////////////////
-CBotTF2DemomanPipeJump :: CBotTF2DemomanPipeJump ( CBot *pBot, Vector vWaypointGround, 
-						Vector vWaypointNext, 
-						CBotWeapon *pWeapon )
+CBotTF2DemomanPipeJump :: CBotTF2DemomanPipeJump ( CBot *pBot, const Vector vWaypointGround,
+													const Vector vWaypointNext, 
+													CBotWeapon *pWeapon )
 {
 	m_iStartingAmmo = pWeapon->getClip1(pBot);
 	m_vStart = vWaypointGround - Vector(0,0,48.0);
@@ -4318,7 +4315,7 @@ void CBotTF2DemomanPipeJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 }
 
 //////////////////////////////////////////
-CBotTF2DemomanPipeEnemy :: CBotTF2DemomanPipeEnemy ( CBotWeapon *pPipeLauncher, Vector vEnemy, edict_t *pEnemy )
+CBotTF2DemomanPipeEnemy :: CBotTF2DemomanPipeEnemy ( CBotWeapon *pPipeLauncher, const Vector vEnemy, edict_t *pEnemy )
 {
 	m_vEnemy = vEnemy;
 	m_pEnemy = MyEHandle(pEnemy);
@@ -4462,7 +4459,8 @@ void CBotTF2DemomanPipeEnemy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 
 //////////////////////////////////////////
-CBotTF2DemomanPipeTrap :: CBotTF2DemomanPipeTrap ( eDemoTrapType type, Vector vStand, Vector vLoc, Vector vSpread, bool bAutoDetonate, int wptarea )
+CBotTF2DemomanPipeTrap::CBotTF2DemomanPipeTrap(const eDemoTrapType type, const Vector vStand, const Vector vLoc,
+                                               const Vector vSpread, const bool bAutoDetonate, const int wptarea)
 {
 	m_vPoint = vLoc;
 	m_vLocation = vLoc;
@@ -4510,7 +4508,7 @@ void CBotTF2DemomanPipeTrap :: execute (CBot *pBot,CBotSchedule *pSchedule)
 }
 /////////
 
-CMessAround::CMessAround ( edict_t *pFriendly, int iMaxVoiceCmd )
+CMessAround::CMessAround ( edict_t *pFriendly, const int iMaxVoiceCmd )
 {
 	m_fTime = 0.0f;
 	m_pFriendly = pFriendly;
@@ -4640,7 +4638,7 @@ void CMessAround::execute ( CBot *pBot, CBotSchedule *pSchedule )
 ///////////
 //defensive technique
 
-CBotTF2Spam :: CBotTF2Spam ( CBot *pBot, Vector vStart, int iYaw, CBotWeapon *pWeapon )
+CBotTF2Spam :: CBotTF2Spam ( CBot *pBot, const Vector vStart, const int iYaw, CBotWeapon *pWeapon )
 {
 	Vector forward;
 	QAngle angle = QAngle(0,iYaw,0);
@@ -4655,7 +4653,7 @@ CBotTF2Spam :: CBotTF2Spam ( CBot *pBot, Vector vStart, int iYaw, CBotWeapon *pW
 	m_fTime = 0.0f;
 }
 
-CBotTF2Spam :: CBotTF2Spam ( Vector vStart, Vector vTarget, CBotWeapon *pWeapon ): m_fNextAttack(0)
+CBotTF2Spam :: CBotTF2Spam (const Vector vStart, const Vector vTarget, CBotWeapon *pWeapon ): m_fNextAttack(0)
 {
 	m_vTarget = vTarget;
 	m_pWeapon = pWeapon;
@@ -5021,7 +5019,8 @@ void CBotFollowSquadLeader :: execute (CBot *pBot,CBotSchedule *pSchedule)
 }
 ////////////////////////////////////////////////////
 
-CBotDODSnipe :: CBotDODSnipe ( CBotWeapon *pWeaponToUse, Vector vOrigin, float fYaw, bool bUseZ, float z, int iWaypointType )
+CBotDODSnipe::CBotDODSnipe(CBotWeapon* pWeaponToUse, const Vector vOrigin, const float fYaw, const bool bUseZ,
+                           const float z, const int iWaypointType)
 {
 	QAngle angle;
 	m_fEnemyTime = 0.0f;
@@ -5276,18 +5275,19 @@ void CBotHL2DMSnipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		return;
 	}
 
-	// refrain from proning
-	pBot->updateCondition(CONDITION_RUN);
+// refrain from proning
+    pBot->updateCondition(CONDITION_RUN);
 
-	if ( pCurrentWeapon != m_pWeaponToUse )
-	{
-		if ( !pBot->select_CWeapon(CWeapons::getWeapon(m_pWeaponToUse->getID())) )
-		{
-			fail();
-		}
+    if ( m_pWeaponToUse && pCurrentWeapon != m_pWeaponToUse )
+    {
+		// Fix by Cheeseh
+        if ( !pBot->select_CWeapon(CWeapons::getWeapon(m_pWeaponToUse->getID())) )
+        {
+            fail();
+        }
 
-		return;
-	}
+        return;
+    }
 
 	if ( pCurrentWeapon->getAmmo(pBot) < 1 )
 	{
@@ -5521,13 +5521,13 @@ void CBotTask :: setEdict ( edict_t *pEdict )
 }
 */
 // if this condition is true it will complete, if bUnset is true, the condition must be false to be complete
-void CBotTask :: setCompleteInterrupt ( int iInterruptHave, int iInterruptDontHave )
+void CBotTask :: setCompleteInterrupt (const int iInterruptHave, const int iInterruptDontHave)
 {
 	m_iCompleteInterruptConditionsHave = iInterruptHave;
 	m_iCompleteInterruptConditionsDontHave = iInterruptDontHave;
 }
 
-void CBotTask :: setFailInterrupt ( int iInterruptHave, int iInterruptDontHave )
+void CBotTask :: setFailInterrupt (const int iInterruptHave, const int iInterruptDontHave)
 {
 	m_iFailInterruptConditionsHave = iInterruptHave;
 	m_iFailInterruptConditionsDontHave = iInterruptDontHave;

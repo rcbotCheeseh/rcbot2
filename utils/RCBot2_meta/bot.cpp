@@ -396,7 +396,7 @@ bool CBot :: FVisible ( Vector &vOrigin, edict_t *pDest )
 
 }
 
-bool CBot :: FVisible ( edict_t *pEdict, bool bCheckHead )
+bool CBot :: FVisible ( edict_t *pEdict, const bool bCheckHead )
 {
 	static Vector eye;
 
@@ -665,7 +665,7 @@ void CBot :: reachedCoverSpot (int flags)
 }
 
 // something now visiable or not visible anymore
-bool CBot :: setVisible ( edict_t *pEntity, bool bVisible )
+bool CBot :: setVisible ( edict_t *pEntity, const bool bVisible )
 {
 	bool bValid = CBotGlobals::entityIsValid(pEntity);
 
@@ -722,7 +722,7 @@ void CBot :: selectWeaponName ( const char *szWeapon )
 	m_pController->SetActiveWeapon(szWeapon);
 }
 
-void CBot :: selectWeaponSlot ( int iSlot )
+void CBot :: selectWeaponSlot (const int iSlot )
 {
 	char cmd[16];
 
@@ -732,7 +732,8 @@ void CBot :: selectWeaponSlot ( int iSlot )
 	//m_iSelectWeapon = iSlot;
 }
 
-CBotWeapon *CBot :: getBestWeapon (edict_t *pEnemy,bool bAllowMelee, bool bAllowMeleeFallback, bool bMeleeOnly, bool bExplosivesOnly )
+CBotWeapon* CBot::getBestWeapon(edict_t* pEnemy, const bool bAllowMelee, const bool bAllowMeleeFallback,
+                                const bool bMeleeOnly, const bool bExplosivesOnly)
 {
 	return m_pWeapons->getBestWeapon(pEnemy,bAllowMelee,bAllowMeleeFallback,bMeleeOnly,bExplosivesOnly);
 }
@@ -742,7 +743,7 @@ bool CBot::isHoldingPrimaryAttack()
 	return m_pButtons->holdingButton(IN_ATTACK);
 }
 
-void CBot :: debugMsg ( int iLev, const char *szMsg )
+void CBot :: debugMsg (const int iLev, const char *szMsg )
 {
 	if ( CClients::clientsDebugging () )
 	{
@@ -1059,7 +1060,7 @@ void CBot :: think ()
 	m_bInitAlive = false;
 }
 
-void CBot :: addVoiceCommand ( int cmd ) 
+void CBot :: addVoiceCommand (const int cmd ) 
 {
 	if ( bot_use_vc_commands.GetBool() && (m_fLastVoiceCommand[cmd] < engine->Time()) )
 	{
@@ -1109,7 +1110,7 @@ CBot :: CBot()
 * initialize all bot variables 
 * (this is called when bot is made for the first time)
 */
-void CBot :: init (bool bVarInit)
+void CBot :: init (const bool bVarInit)
 {
 	//m_bNeedToInit = false; // doing this now
 	m_fLastHurtTime = 0.0f;
@@ -1351,7 +1352,7 @@ bool CBot::wantToInvestigateSound ()
 	return ((m_fSpawnTime + 10.0f) < engine->Time()) && !hasEnemy() && m_bWantToInvestigateSound; 
 }
 
-bool CBot :: recentlyHurt ( float fTime )
+bool CBot :: recentlyHurt (const float fTime )
 {
 	return (m_fLastHurtTime>0) && (m_fLastHurtTime>(engine->Time()-fTime));
 }
@@ -1534,7 +1535,7 @@ void CBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWayp
 	updateDanger(m_pNavigator->getBelief(CWaypoints::getWaypointIndex(pWaypoint)));
 }
 
-void CBot :: updateDanger ( float fBelief ) 
+void CBot :: updateDanger (const float fBelief ) 
 { 
 	m_fCurrentDanger = (m_fCurrentDanger * m_pProfile->m_fBraveness) + (fBelief * (1.0f-m_pProfile->m_fBraveness)); 
 }
@@ -1598,7 +1599,7 @@ void CBot :: shot ( edict_t *pEnemy )
 
 }
 // got shot by someone
-bool CBot :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
+bool CBot :: hurt ( edict_t *pAttacker, const int iHealthNow, const bool bDontHide )
 {
 	if ( !pAttacker )
 		return false;
@@ -1813,7 +1814,7 @@ void CBot ::debugBot(char *msg)
 
 }
 
-int CBot :: nearbyFriendlies (float fDistance)
+int CBot :: nearbyFriendlies (const float fDistance)
 {
 	int num = 0;
 	register short int i = 0;
@@ -2068,7 +2069,7 @@ void CBot :: hearPlayerAttack( edict_t *pAttacker, int iWeaponID )
 		listenToPlayer(pAttacker,false,true);
 }
 
-void CBot :: listenToPlayer ( edict_t *pPlayer, bool bIsEnemy, bool bIsAttacking )
+void CBot :: listenToPlayer ( edict_t *pPlayer, bool bIsEnemy, const bool bIsAttacking )
 {
 	bool bIsVisible = isVisible(pPlayer);
 
@@ -2171,7 +2172,7 @@ void CBot :: freeAllMemory ()
 	return;
 }
 
-void CBot :: forceGotoWaypoint ( int wpt )
+void CBot :: forceGotoWaypoint (const int wpt )
 {
 	if ( wpt != -1 )
 	{
@@ -2328,7 +2329,7 @@ void CBot :: doMove ()
 	}
 }
 
-bool CBot :: recentlySpawned ( float fTime )
+bool CBot :: recentlySpawned (const float fTime )
 {
 	return ( ( m_fSpawnTime + fTime ) > engine->Time());
 }
@@ -2363,7 +2364,7 @@ float CBot :: DotProductFromOrigin ( const Vector pOrigin )
 	return flDot; 
 }
 
-void CBot :: updateUtilTime ( int util )
+void CBot :: updateUtilTime ( const int util )
 {
 	m_fUtilTimes[util] = engine->Time() + 0.5f;	
 }
@@ -2445,7 +2446,8 @@ Vector CBot::getAimVector ( edict_t *pEntity )
 	return m_vAimVector;
 }
 
-void CBot::modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset, Vector &v_size, float fDist, float fDist2D )
+void CBot::modAim(edict_t* pEntity, Vector& v_origin, Vector* v_desired_offset, Vector& v_size, const float fDist,
+                  float fDist2D)
 {
 	static Vector vel;
 	static Vector myvel;
@@ -2800,12 +2802,12 @@ int CBot :: getPlayerID ()
 	return m_pPlayerInfo->GetUserID();
 }
 
-void CBot :: letGoOfButton ( int button )
+void CBot :: letGoOfButton ( const int button )
 {
 	m_pButtons->letGo(button);
 }
 
-void CBot :: changeAngles ( float fSpeed, float *fIdeal, float *fCurrent, float *fUpdate )
+void CBot :: changeAngles ( const float fSpeed, float *fIdeal, float *fCurrent, float *fUpdate )
 {
 	float current = *fCurrent;
 	float ideal = *fIdeal;
@@ -2936,7 +2938,7 @@ void CBot :: doButtons ()
 	m_iButtons = m_pButtons->getBitMask();
 }
 
-void CBot :: secondaryAttack ( bool bHold )
+void CBot :: secondaryAttack ( const bool bHold )
 {
 	float fLetGoTime = 0.15;
 	float fHoldTime = 0.12;
@@ -2960,7 +2962,7 @@ void CBot :: secondaryAttack ( bool bHold )
 	}
 }
 
-void CBot :: primaryAttack ( bool bHold, float fTime )
+void CBot :: primaryAttack ( const bool bHold, const float fTime )
 {
 	float fLetGoTime = 0.15f;
 	float fHoldTime = 0.12f;
@@ -2988,7 +2990,7 @@ void CBot :: primaryAttack ( bool bHold, float fTime )
 	}
 }
 
-void CBot :: tapButton ( int iButton )
+void CBot :: tapButton ( const int iButton )
 {
 	m_pButtons->tap(iButton);
 }
@@ -3013,7 +3015,7 @@ void CBot :: jump ()
 	}
 }
 
-void CBot :: duck ( bool hold )
+void CBot :: duck ( const bool hold )
 {
 	if ( hold || m_pButtons->canPressButton(IN_DUCK) )
 		m_pButtons->holdButton(IN_DUCK,0.0/* time to press*/,1.0/* hold time*/,0.5/*let go time*/); 
@@ -3604,7 +3606,7 @@ void CBots :: kickRandomBot ()
 	engine->ServerCommand(szCommand);
 }
 
-void CBots :: kickRandomBotOnTeam ( int team )
+void CBots :: kickRandomBotOnTeam ( const int team )
 {
 	dataUnconstArray<int> list;
 	int index;
@@ -3707,7 +3709,7 @@ void CBotLastSee :: update ()
 	}
 }
 
-bool CBotLastSee :: hasSeen ( float fTime )
+bool CBotLastSee :: hasSeen ( const float fTime )
 {
 	return (m_pLastSee.get() != NULL) && ((m_fLastSeeTime + fTime) > engine->Time());
 }

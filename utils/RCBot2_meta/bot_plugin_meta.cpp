@@ -272,7 +272,7 @@ bool RCBotPluginMeta :: ClearAttributeCache(edict_t *pedict)
 }*/
 
 
-CBaseEntity *RCBotPluginMeta::TF2_getPlayerWeaponSlot(edict_t *pPlayer, int iSlot)
+CBaseEntity *RCBotPluginMeta::TF2_getPlayerWeaponSlot(edict_t *pPlayer, const int iSlot)
 {
 	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pPlayer);
 
@@ -483,7 +483,7 @@ void RCBotPluginMeta::BroadcastTextMessage(const char *szMessage)
 	delete filter;
 }
 
-void RCBotPluginMeta::TF2_RemoveWeaponSlot(edict_t *pPlayer, int iSlot)
+void RCBotPluginMeta::TF2_RemoveWeaponSlot(edict_t *pPlayer, const int iSlot)
 {
 	CBaseEntity *pWeaponInSlot = RCBotPluginMeta::TF2_getPlayerWeaponSlot(pPlayer, iSlot);
 
@@ -517,7 +517,8 @@ void RCBotPluginMeta::TF2_RemoveWeaponSlot(edict_t *pPlayer, int iSlot)
 	}
 }
 
-void RCBotPluginMeta::giveRandomLoadout(edict_t *pPlayer, int iClass, int iSlot, void *pVTable, void *pVTable_Attributes)
+void RCBotPluginMeta::giveRandomLoadout(edict_t* pPlayer, const int iClass, const int iSlot, void* pVTable,
+                                        void* pVTable_Attributes)
 {
 	CTF2Loadout *p = CTeamFortress2Mod::findRandomWeaponLoadOutInSlot(iClass, iSlot);
 
@@ -528,7 +529,8 @@ void RCBotPluginMeta::giveRandomLoadout(edict_t *pPlayer, int iClass, int iSlot,
 }
 
 // TF2 Items
-bool RCBotPluginMeta::givePlayerLoadOut(edict_t *pPlayer, CTF2Loadout *pLoadout, int iSlot, void *pVTable, void *pVTable_Attributes)
+bool RCBotPluginMeta::givePlayerLoadOut(edict_t* pPlayer, CTF2Loadout* pLoadout, const int iSlot, void* pVTable,
+                                        void* pVTable_Attributes)
 {
 	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pPlayer);
 	// first remove any thing from the slot
@@ -769,7 +771,7 @@ void RCBotPluginMeta::Hook_MessageEnd()
 	RETURN_META(MRES_IGNORED);
 }
 
-bool RCBotPluginMeta::Load(PluginId id, ISmmAPI* ismm, char* error, size_t maxlen, bool late)
+bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const size_t maxlen, bool late)
 {
 	extern MTRand_int32 irand;
 
@@ -1122,7 +1124,7 @@ void RCBotPluginMeta::OnVSPListening(IServerPluginCallbacks *iface)
 	vsp_callbacks = iface;
 }
 
-void RCBotPluginMeta::Hook_ServerActivate(edict_t *pEdictList, int edictCount, int clientMax)
+void RCBotPluginMeta::Hook_ServerActivate(edict_t *pEdictList, const int edictCount, const int clientMax)
 {
 	META_LOG(g_PLAPI, "ServerActivate() called: edictCount = %d, clientMax = %d", edictCount, clientMax);
 
@@ -1138,7 +1140,7 @@ void RCBotPluginMeta::AllPluginsLoaded()
 	 */
 }
 
-void RCBotPluginMeta::Hook_ClientActive(edict_t *pEntity, bool bLoadGame)
+void RCBotPluginMeta::Hook_ClientActive(edict_t *pEntity, const bool bLoadGame)
 {
 	META_LOG(g_PLAPI, "Hook_ClientActive(%d, %d)", IndexOfEdict(pEntity), bLoadGame);
 
@@ -1314,7 +1316,7 @@ void RCBotPluginMeta::Hook_ClientDisconnect(edict_t *pEntity)
 	META_LOG(g_PLAPI, "Hook_ClientDisconnect(%d)", IndexOfEdict(pEntity));
 }
 
-void RCBotPluginMeta::Hook_GameFrame(bool simulating)
+void RCBotPluginMeta::Hook_GameFrame(const bool simulating)
 {
 	/**
 	 * simulating:
@@ -1518,7 +1520,7 @@ void RCBotPluginMeta::Hook_LevelShutdown()
 	CBotEvents::freeMemory();
 }
 
-void RCBotPluginMeta::Hook_SetCommandClient(int index)
+void RCBotPluginMeta::Hook_SetCommandClient(const int index)
 {
 	META_LOG(g_PLAPI, "Hook_SetCommandClient(%d)", index);
 }

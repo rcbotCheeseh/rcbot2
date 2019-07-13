@@ -89,7 +89,7 @@ float CDODBot :: getEnemyFactor ( edict_t *pEnemy )
 
 
 // could be a bomb or flag capture event
-void CDODBot :: bombEvent ( int iEvent, int iCP, int iTeam )
+void CDODBot :: bombEvent ( int iEvent, const int iCP, const int iTeam )
 {
 	int iWaypoint = CDODMod::m_Flags.getWaypointAtFlag(iCP);
 
@@ -114,7 +114,7 @@ CDODBot :: CDODBot()
 	CDODBot::init(true);
 }
 
-void CDODBot :: init (bool bVarInit)
+void CDODBot :: init (const bool bVarInit)
 {
 	CBot::init(bVarInit);
 
@@ -195,7 +195,7 @@ bool CDODBot::canGotoWaypoint(const Vector vPrevWaypoint, CWaypoint *pWaypoint, 
 #define NULLIFY_VISIBLE(visobj,pent,distance)  if ( (visobj) == (pent) ) { if ( !bValid || (distanceFrom(visobj)>(distance)) ) { (visobj) = NULL; } }
 #define NULLIFY_VISIBLE_CONDITION(visobj,pent,distance,condition) if ( (visobj) == (pent) ) { if ( !bValid || (distanceFrom(visobj)>(distance)) || (condition) ) { (visobj) = NULL; } }
 
-bool CDODBot :: setVisible ( edict_t *pEntity, bool bVisible )
+bool CDODBot :: setVisible ( edict_t *pEntity, const bool bVisible )
 {
 	//static float fDist;
 	static const char *szClassname;
@@ -305,7 +305,7 @@ bool CDODBot :: setVisible ( edict_t *pEntity, bool bVisible )
 	return bValid;
 }
 
-void CDODBot :: selectedClass ( int iClass )
+void CDODBot :: selectedClass ( const int iClass )
 {
 	m_iSelectedClass = iClass;
 }
@@ -792,7 +792,7 @@ void CDODBot :: spawnInit ()
 	m_LastHearVoiceCommand = DOD_VC_INVALID;
 }
 
-bool CDODBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
+bool CDODBot :: isEnemy ( edict_t *pEdict, const bool bCheckWeapons )
 {
 	extern ConVar rcbot_notarget;
 	int entity_index = ENTINDEX(pEdict);
@@ -906,7 +906,7 @@ void CDODBot :: handleWeapons ()
 	}
 }
 
-void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWaypoint )
+void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, const int iNextWaypoint, const int iPrevWaypoint )
 {
 	static int wptindex;
 
@@ -1075,7 +1075,7 @@ void CDODBot :: changeClass ()
 	m_fChangeClassTime = engine->Time() + randomFloat(bot_min_cc_time.GetFloat(),bot_max_cc_time.GetFloat());
 }
 
-void CDODBot :: chooseClass ( bool bIsChangingClass )
+void CDODBot :: chooseClass ( const bool bIsChangingClass )
 {
 	float fClassFitness[6]; // 6 classes
 	float fTotalFitness = 0;
@@ -2770,7 +2770,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 	return false;
 }
 
-void CDODBot :: reachedCoverSpot (int flags)
+void CDODBot :: reachedCoverSpot (const int flags)
 {
 	// reached cover
 	// dont need to run there any more
@@ -3433,8 +3433,8 @@ bool CDODBot :: walkingTowardsWaypoint ( CWaypoint *pWaypoint, bool *bOffsetAppl
 
 
 void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin, 
-						Vector *v_desired_offset, Vector &v_size, 
-						float fDist, float fDist2D )
+						Vector *v_desired_offset, Vector &v_size,
+						const float fDist, const float fDist2D )
 {
 	//static Vector vAim;
 	static short int iSlot;

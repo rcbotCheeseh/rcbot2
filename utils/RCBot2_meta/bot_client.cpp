@@ -159,8 +159,9 @@ void CClient :: playSound ( const char *pszSound )
 	}
 }
 
-void CClient::autoEventWaypoint(int iType, float fRadius, bool bAtOtherOrigin, int iTeam, const Vector vOrigin,
-                                bool bIgnoreTeam, bool bAutoType)
+void CClient::autoEventWaypoint(const int iType, const float fRadius, const bool bAtOtherOrigin, int iTeam,
+                                const Vector vOrigin,
+                                const bool bIgnoreTeam, const bool bAutoType)
 {
 	m_iAutoEventWaypoint = iType;
 	m_fAutoEventWaypointRadius = fRadius;
@@ -210,7 +211,7 @@ void CClient :: teleportTo (const Vector vOrigin)
 class CBotFunc_HighFiveSearch : public IBotFunction
 {
 public:
-	CBotFunc_HighFiveSearch ( edict_t *pPlayer, int iTeam )
+	CBotFunc_HighFiveSearch ( edict_t *pPlayer, const int iTeam )
 	{
 		m_pPlayer = pPlayer;
 		m_iTeam = iTeam;
@@ -943,7 +944,7 @@ void CClient :: think ()
 	}
 }
 
-void CClient::giveMessage(char *msg,float fTime)
+void CClient::giveMessage(char *msg, const float fTime)
 {
 	extern ConVar rcbot_tooltips;
 
@@ -954,7 +955,7 @@ void CClient::giveMessage(char *msg,float fTime)
 	}
 }
 
-void CClients::giveMessage(char *msg,float fTime, edict_t *pPlayer )
+void CClients::giveMessage( char *msg, const float fTime, edict_t *pPlayer )
 {
 	CClient *pClient;
 
@@ -1148,7 +1149,7 @@ CClient *CClients :: findClientBySteamID ( char *szSteamID )
 	return NULL;
 }
 
-void CClients::clientDebugMsg(CBot *pBot, int iLev, const char *fmt, ... )
+void CClients::clientDebugMsg(CBot *pBot, const int iLev, const char *fmt, ... )
 {
 	va_list argptr; 
 	static char string[1024];
@@ -1180,7 +1181,7 @@ const char *g_szDebugTags[15] =
 };
 
 
-void CClients :: clientDebugMsg ( int iLev, const char *szMsg, CBot *pBot )
+void CClients :: clientDebugMsg ( const int iLev, const char *szMsg, CBot *pBot )
 {
 	CClient *pClient;
 
@@ -1211,7 +1212,7 @@ int CClients :: slotOfEdict ( edict_t *pPlayer )
 	return ENTINDEX(pPlayer)-1;
 }
 
-bool CClients :: clientsDebugging (int iLev)
+bool CClients :: clientsDebugging (const int iLev)
 {
 	if ( iLev == 0 )
 		return m_bClientsDebugging;

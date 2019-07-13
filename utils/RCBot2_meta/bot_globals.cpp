@@ -221,13 +221,14 @@ void CBotGlobals::readRCBotFolder()
 	mainkv->deleteThis();
 }
 
-float CBotGlobals::grenadeWillLand(const Vector vOrigin, const Vector vEnemy, float fProjSpeed, float fGrenadePrimeTime,
+float CBotGlobals::grenadeWillLand(const Vector vOrigin, const Vector vEnemy, const float fProjSpeed,
+                                   const float fGrenadePrimeTime,
                                    float* fAngle)
 {
 	static float g;
 	extern ConVar *sv_gravity;
 	Vector v_comp = vEnemy-vOrigin;
-	float fDistance = v_comp.Length();
+	const float fDistance = v_comp.Length();
 
 	v_comp = v_comp/fDistance;
 
@@ -255,7 +256,7 @@ float CBotGlobals::grenadeWillLand(const Vector vOrigin, const Vector vEnemy, fl
 		// within one second of going off
 		if ( fabs(t-fGrenadePrimeTime) < 1.0f )
 		{
-			float ffinaly =  vOrigin.z + (vvert*t) - ((g*0.5)*(t*t));
+			const float ffinaly =  vOrigin.z + (vvert*t) - ((g*0.5)*(t*t));
 
 			return ( fabs(ffinaly - vEnemy.z) < BLAST_RADIUS ); // ok why not
 		}

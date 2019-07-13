@@ -43,7 +43,7 @@ const float CGA :: g_fMaxPerturbation = 0.3f;
 // POPULATION
 ////////////////////
 
-IIndividual *CPopulation :: get ( int iIndex )
+IIndividual *CPopulation :: get ( const int iIndex )
 {
 	return m_theIndividuals[iIndex];
 }

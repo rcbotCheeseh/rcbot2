@@ -572,7 +572,6 @@ public:
 		return m_pWeaponInfo->isGravGun();
 	}
 
-
 	inline bool isExplosive ()
 	{
 		return m_pWeaponInfo->isExplosive();

@@ -50,15 +50,15 @@ CBotProfile :: CBotProfile ( CBotProfile &other )
 
 CBotProfile :: CBotProfile (
 		const char *szName, 
-		const char *szModel, 
-		int iTeam, 
-		int iVisionTicks, 
-		int iPathTicks, 
-		int iVisionTicksClients,
-		int iSensitivity,
-		float fBraveness,
-		float fAimSkill,
-		int iClass )
+		const char *szModel,
+		const int iTeam,
+		const int iVisionTicks,
+		const int iPathTicks,
+		const int iVisionTicksClients,
+		const int iSensitivity,
+		const float fBraveness,
+		const float fAimSkill,
+		const int iClass )
 { 
 	m_iVisionTicksClients = iVisionTicksClients;
 	m_iSensitivity = iSensitivity;

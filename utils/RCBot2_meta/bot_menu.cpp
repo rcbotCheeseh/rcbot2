@@ -403,7 +403,7 @@ void CBotMenuList :: render ( CClient *pClient ) // render
 	//m_MenuList[iMenu]->render(pClient);
 }
 
-void CBotMenuList :: selectedMenu ( CClient *pClient, unsigned int iMenu )
+void CBotMenuList :: selectedMenu ( CClient *pClient, const unsigned int iMenu )
 {
 	CBotMenu *pMenu = pClient->getCurrentMenu();
 
@@ -415,7 +415,7 @@ void CBotMenu :: activate ( CClient *pClient )
 	pClient->setCurrentMenu(this);
 }
 
-void CBotMenu :: selectedMenu ( CClient *pClient, unsigned int iMenu )
+void CBotMenu :: selectedMenu ( CClient *pClient, const unsigned int iMenu )
 {
 	if ( iMenu < m_MenuItems.size() )
 		m_MenuItems[iMenu]->activate(pClient);
