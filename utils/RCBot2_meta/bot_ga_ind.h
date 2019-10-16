@@ -38,39 +38,39 @@ class CBotGAValues : public IIndividual
 public:
 	CBotGAValues();
 
-	CBotGAValues( vector<float> values );
+	CBotGAValues(vector<float> values);
 
-	void init (void);
+	void init(void);
 
 	// crossover with other individual
-	void crossOver ( IIndividual *other );
+	void crossOver(IIndividual* other);
 
 	// mutate some values
-	void mutate ();
+	void mutate();
 
 	// get new copy of this
 	// sub classes return their class with own values
-	virtual IIndividual *copy ();
+	virtual IIndividual* copy();
 
-	void setVector ( vector<float> values );
+	void setVector(vector<float> values);
 
-	float get ( int iIndex );
+	float get(int iIndex);
 
-	void set ( int iIndex, float fVal );
+	void set(int iIndex, float fVal);
 
-	void clear ();
+	void clear();
 
-	inline void add ( float val ) { m_theValues.push_back(val); }
+	inline void add(float val) { m_theValues.push_back(val); }
 
-	void addRnd ();
+	void addRnd();
 
-	void setup ( int iValues )
+	void setup(int iValues)
 	{
-		for ( int i = 0; i < iValues; i ++ )
+		for (int i = 0; i < iValues; i++)
 			addRnd();
 	}
 
-	void freeMemory ();
+	void freeMemory();
 
 protected:
 	vector<float> m_theValues;
@@ -85,32 +85,31 @@ public:
 		setup(5);
 	}
 
-	float getJumpTime ()
+	float getJumpTime()
 	{
 		return m_theValues[0];
 	}
 
-	float getFailTime ()
+	float getFailTime()
 	{
 		return m_theValues[1];
 	}
 
-	virtual IIndividual *copy ()
+	virtual IIndividual* copy()
 	{
-		CBotStuckValues *p = new CBotStuckValues();
+		CBotStuckValues* p = new CBotStuckValues();
 		p->setVector(m_theValues);
 		p->setFitness(getFitness());
 		return p;
 	}
 
-	void getStuckWeights ( vector<ga_nn_value> *weights )
+	void getStuckWeights(vector<ga_nn_value>* weights)
 	{
 		weights->clear();
 		weights->push_back(m_theValues[2]);
 		weights->push_back(m_theValues[3]);
 		weights->push_back(m_theValues[4]);
 	}
-
 };
 
 #endif

@@ -113,15 +113,14 @@ extern ConVar rcbot_bot_quota_interval;
 extern ConVar rcbot_show_welcome_msg;
 extern ConVar rcbot_force_class;
 
-extern ConVar *sv_gravity;
-extern ConVar *sv_cheats;
-extern ConVar *mp_teamplay;
-extern ConVar *sv_tags;
-extern ConVar *mp_friendlyfire;
+extern ConVar* sv_gravity;
+extern ConVar* sv_cheats;
+extern ConVar* mp_teamplay;
+extern ConVar* sv_tags;
+extern ConVar* mp_friendlyfire;
 
-extern ConCommandBase *puppet_bot_cmd;
+extern ConCommandBase* puppet_bot_cmd;
 
-
-void RCBOT2_Cvar_setup (ICvar *cvar);
+void RCBOT2_Cvar_setup(ICvar* cvar);
 
 #endif

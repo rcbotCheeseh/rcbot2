@@ -38,27 +38,27 @@
 class CEdictRecipient : public IRecipientFilter
 {
 public:
-	CEdictRecipient ( edict_t *pEdict, bool bReliable )
+	CEdictRecipient(edict_t* pEdict, bool bReliable)
 	{
 		m_pEdict = pEdict;
 		m_bReliable = bReliable;
 	}
 
 	// require destructor
-	~CEdictRecipient ()
+	~CEdictRecipient()
 	{
 		m_pEdict = NULL;
 		m_bReliable = false;
 	}
 
-	bool	IsReliable( void ) const { return m_bReliable; }
+	bool	IsReliable(void) const { return m_bReliable; }
 
-	bool	IsInitMessage( void ) const { return false; }
+	bool	IsInitMessage(void) const { return false; }
 
-	int		GetRecipientCount( void ) const { return 1; }
-	int		GetRecipientIndex( int slot ) const { return ENTINDEX(m_pEdict); } // only 1 stored
+	int		GetRecipientCount(void) const { return 1; }
+	int		GetRecipientIndex(int slot) const { return ENTINDEX(m_pEdict); } // only 1 stored
 private:
-	edict_t *m_pEdict;
+	edict_t* m_pEdict;
 	bool m_bReliable;
 };
 #endif

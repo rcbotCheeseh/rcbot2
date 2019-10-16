@@ -45,52 +45,52 @@ class IGameEvent;
 class CBotEvent
 {
 public:
-	CBotEvent(): m_pActivator(nullptr)
+	CBotEvent() : m_pActivator(nullptr)
 	{
 		m_iEventId = -1;
 		m_szType = NULL;
 		m_iModId = MOD_ANY;
 	}
 
-	void setMod ( eModId iModId )
+	void setMod(eModId iModId)
 	{
 		m_iModId = iModId;
 	}
 
-	bool forCurrentMod ();
+	bool forCurrentMod();
 
-	void setType ( char *szType );
+	void setType(char* szType);
 
-	inline bool isType ( const char *szType );
+	inline bool isType(const char* szType);
 
-	inline void setActivator ( edict_t *pEdict ) { m_pActivator = pEdict;}
+	inline void setActivator(edict_t* pEdict) { m_pActivator = pEdict; }
 
-	virtual void execute ( IBotEventInterface *pEvent ) { return; }
+	virtual void execute(IBotEventInterface* pEvent) { return; }
 
-	inline void setEventId ( int iEventId )
+	inline void setEventId(int iEventId)
 	{
 		m_iEventId = iEventId;
 	}
 
-	inline bool isEventId ( int iEventId )
+	inline bool isEventId(int iEventId)
 	{
 		return forCurrentMod() && (m_iEventId == iEventId);
 	}
 
-	inline bool hasEventId ()
+	inline bool hasEventId()
 	{
 		return (m_iEventId != -1);
 	}
 
-	const char *getName ()
+	const char* getName()
 	{
 		return m_szType;
 	}
 protected:
-	edict_t *m_pActivator;
+	edict_t* m_pActivator;
 private:
-	char *m_szType;
-	int m_iEventId;	
+	char* m_szType;
+	int m_iEventId;
 	eModId m_iModId;
 };
 
@@ -103,7 +103,7 @@ public:
 		setMod(MOD_CSS);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 class CPostInventoryApplicationTF2 : public CBotEvent
 {
@@ -114,7 +114,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2RoundWinEvent : public CBotEvent
@@ -126,7 +126,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CPlayerHurtEvent : public CBotEvent
@@ -137,7 +137,7 @@ public:
 		setType("player_hurt");
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CPlayerDeathEvent : public CBotEvent
@@ -148,7 +148,7 @@ public:
 		setType("player_death");
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CBombPickupEvent : public CBotEvent
@@ -160,7 +160,7 @@ public:
 		setMod(MOD_CSS);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CPlayerFootstepEvent : public CBotEvent
@@ -171,7 +171,7 @@ public:
 		setType("player_footstep");
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CPlayerSpawnEvent : public CBotEvent
@@ -182,8 +182,8 @@ public:
 		setType("player_spawn");
 		setMod(MOD_ANY);
 	}
-	
-	void execute ( IBotEventInterface *pEvent );
+
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CBombDroppedEvent : public CBotEvent
@@ -195,7 +195,7 @@ public:
 		setMod(MOD_CSS);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class COverTimeBegin : public CBotEvent
@@ -207,7 +207,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CPlayerHealed : public CBotEvent
@@ -219,7 +219,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CPlayerTeleported : public CBotEvent
@@ -231,7 +231,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CWeaponFireEvent : public CBotEvent
@@ -242,7 +242,7 @@ public:
 		setType("weapon_fire");
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2ObjectSapped : public CBotEvent
@@ -254,7 +254,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2ObjectDestroyed : public CBotEvent
@@ -266,7 +266,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2PointCaptured : public CBotEvent
@@ -278,7 +278,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2RoundActive : public CBotEvent
@@ -290,10 +290,8 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
-
-	
 
 class CTF2PointStopCapture : public CBotEvent
 {
@@ -304,7 +302,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2PointBlockedCapture : public CBotEvent
@@ -316,7 +314,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2PointStartCapture : public CBotEvent
@@ -328,9 +326,8 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
-
 
 class CTF2MVMWaveFailedEvent : public CBotEvent
 {
@@ -341,7 +338,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2MVMWaveCompleteEvent : public CBotEvent
@@ -353,7 +350,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2PointStartTouch : public CBotEvent
@@ -365,7 +362,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2PointEndTouch : public CBotEvent
@@ -377,7 +374,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2RoundStart : public CBotEvent
@@ -389,7 +386,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2SetupFinished : public CBotEvent
@@ -401,7 +398,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CBulletImpactEvent : public CBotEvent
@@ -413,7 +410,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2ObjectDestroyedEvent : public CBotEvent
@@ -425,7 +422,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2BuiltObjectEvent : public CBotEvent
@@ -437,7 +434,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2UpgradeObjectEvent : public CBotEvent
@@ -449,7 +446,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2ChangeClass : public CBotEvent
@@ -460,30 +457,29 @@ public:
 		setType("player_changeclass");
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CBossSummonedEvent : public CBotEvent
 {
 public:
-	CBossSummonedEvent(char *psztype)
+	CBossSummonedEvent(char* psztype)
 	{
 		setType(psztype);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CBossKilledEvent : public CBotEvent
 {
 public:
-	CBossKilledEvent(char *psztype)
+	CBossKilledEvent(char* psztype)
 	{
 		setType(psztype);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
-
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2PointLocked : public CBotEvent
@@ -495,7 +491,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2PointUnlocked : public CBotEvent
@@ -507,7 +503,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CTF2MannVsMachineAlarm : public CBotEvent
@@ -519,9 +515,8 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
-
 
 class CFlagEvent : public CBotEvent
 {
@@ -532,7 +527,7 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CFlagCaptured : public CBotEvent
@@ -544,14 +539,14 @@ public:
 		setMod(MOD_TF2);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
-	/*
-	[RCBot] [DEBUG GAME_EVENT] [BEGIN "dod_stats_weapon_attack"]
-	[RCBot] [DEBUG GAME_EVENT] 	attacker = 5
-	[RCBot] [DEBUG GAME_EVENT] 	weapon = 14
-	[RCBot] [DEBUG GAME_EVENT] [END "dod_stats_weapon_attack"]*/
+/*
+[RCBot] [DEBUG GAME_EVENT] [BEGIN "dod_stats_weapon_attack"]
+[RCBot] [DEBUG GAME_EVENT] 	attacker = 5
+[RCBot] [DEBUG GAME_EVENT] 	weapon = 14
+[RCBot] [DEBUG GAME_EVENT] [END "dod_stats_weapon_attack"]*/
 class CDODFireWeaponEvent : public CBotEvent
 {
 public:
@@ -561,7 +556,7 @@ public:
 		setMod(MOD_DOD);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CDODBombExploded : public CBotEvent
@@ -573,7 +568,7 @@ public:
 		setMod(MOD_DOD);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CDODBombPlanted : public CBotEvent
@@ -585,7 +580,7 @@ public:
 		setMod(MOD_DOD);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CDODBombDefused : public CBotEvent
@@ -597,7 +592,7 @@ public:
 		setMod(MOD_DOD);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CDODPointCaptured : public CBotEvent
@@ -609,7 +604,7 @@ public:
 		setMod(MOD_DOD);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CDODChangeClass : public CBotEvent
@@ -621,7 +616,7 @@ public:
 		setMod(MOD_DOD);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CDODRoundStart : public CBotEvent
@@ -633,7 +628,7 @@ public:
 		setMod(MOD_DOD);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CDODRoundActive : public CBotEvent
@@ -645,7 +640,7 @@ public:
 		setMod(MOD_DOD);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CDODRoundWin : public CBotEvent
@@ -657,7 +652,7 @@ public:
 		setMod(MOD_DOD);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 class CDODRoundOver : public CBotEvent
@@ -669,7 +664,7 @@ public:
 		setMod(MOD_DOD);
 	}
 
-	void execute ( IBotEventInterface *pEvent );
+	void execute(IBotEventInterface* pEvent);
 };
 
 typedef enum
@@ -681,89 +676,89 @@ typedef enum
 class IBotEventInterface
 {
 public:
-	virtual float getFloat ( const char *keyName = 0, float defaultValue = 0 ) = 0;
-	virtual int getInt ( const char *keyName = 0, int defaultValue = 0 ) = 0;
-	virtual const char *getString ( const char *keyName = 0, const char *defaultValue = 0 ) = 0;
-	virtual const char *getName () = 0;
-	virtual void setInt ( const char *keyName, int value ) = 0;
+	virtual float getFloat(const char* keyName = 0, float defaultValue = 0) = 0;
+	virtual int getInt(const char* keyName = 0, int defaultValue = 0) = 0;
+	virtual const char* getString(const char* keyName = 0, const char* defaultValue = 0) = 0;
+	virtual const char* getName() = 0;
+	virtual void setInt(const char* keyName, int value) = 0;
 };
 
 class CGameEventInterface1 : public IBotEventInterface
 {
 public:
-	CGameEventInterface1 ( KeyValues *pEvent )
+	CGameEventInterface1(KeyValues* pEvent)
 	{
 		m_pEvent = pEvent;
 	}
 
-	float getFloat ( const char *keyName = 0, float defaultValue = 0 )
+	float getFloat(const char* keyName = 0, float defaultValue = 0)
 	{
-		return m_pEvent->GetFloat(keyName,defaultValue);
+		return m_pEvent->GetFloat(keyName, defaultValue);
 	}
-	int getInt ( const char *keyName = 0, int defaultValue = 0 )
+	int getInt(const char* keyName = 0, int defaultValue = 0)
 	{
-		return m_pEvent->GetInt(keyName,defaultValue);
+		return m_pEvent->GetInt(keyName, defaultValue);
 	}
-	void setInt ( const char *keyName, int value )
+	void setInt(const char* keyName, int value)
 	{
-		m_pEvent->SetInt(keyName,value);
+		m_pEvent->SetInt(keyName, value);
 	}
-	const char *getString ( const char *keyName = 0, const char *defaultValue = 0 )
+	const char* getString(const char* keyName = 0, const char* defaultValue = 0)
 	{
-		return m_pEvent->GetString(keyName,defaultValue);
+		return m_pEvent->GetString(keyName, defaultValue);
 	}
-	const char *getName ()
+	const char* getName()
 	{
 		return m_pEvent->GetName();
 	}
 
 private:
-	KeyValues *m_pEvent;
+	KeyValues* m_pEvent;
 };
 
 class CGameEventInterface2 : public IBotEventInterface
 {
 public:
-	CGameEventInterface2 ( IGameEvent *pEvent )
+	CGameEventInterface2(IGameEvent* pEvent)
 	{
 		m_pEvent = pEvent;
 	}
 
-	float getFloat ( const char *keyName = 0, float defaultValue = 0 )
+	float getFloat(const char* keyName = 0, float defaultValue = 0)
 	{
-		return m_pEvent->GetFloat(keyName,defaultValue);
+		return m_pEvent->GetFloat(keyName, defaultValue);
 	}
-	int getInt ( const char *keyName = 0, int defaultValue = 0 )
+	int getInt(const char* keyName = 0, int defaultValue = 0)
 	{
-		return m_pEvent->GetInt(keyName,defaultValue);
+		return m_pEvent->GetInt(keyName, defaultValue);
 	}
-	void setInt ( const char *keyName, int value )
+	void setInt(const char* keyName, int value)
 	{
-		m_pEvent->SetInt(keyName,value);
+		m_pEvent->SetInt(keyName, value);
 	}
-	const char *getString ( const char *keyName = 0, const char *defaultValue = 0 )
+	const char* getString(const char* keyName = 0, const char* defaultValue = 0)
 	{
-		return m_pEvent->GetString(keyName,defaultValue);
+		return m_pEvent->GetString(keyName, defaultValue);
 	}
 	//Arguments needing filled? [APG]RoboCop[CL]
-	const char *getName ()
+	const char* getName()
 	{
 		return m_pEvent->GetName();
 	}
 private:
-	IGameEvent *m_pEvent;
+	IGameEvent* m_pEvent;
 };
 
 class CBotEvents
 {
 public:
-	static void setupEvents ();
+	static void setupEvents();
 
-	static void executeEvent( void *pEvent, eBotEventType iType );
+	static void executeEvent(void* pEvent, eBotEventType iType);
 
-	static void freeMemory ();
+	static void freeMemory();
 
-	static void addEvent ( CBotEvent *pEvent );
+	static void addEvent(CBotEvent* pEvent);
 
 private:
 	static vector<CBotEvent*> m_theEvents;

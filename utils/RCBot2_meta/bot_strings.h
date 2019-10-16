@@ -53,14 +53,14 @@ using namespace std;
 class CStrings
 {
 public:
-	CStrings ();
+	CStrings();
 	static void freeAllMemory();
-	static char *getString ( const char *szString );
+	static char* getString(const char* szString);
 
 private:
-	// dataStack is like a linked list, dont want 
+	// dataStack is like a linked list, dont want
 	// to use an array for lots of stuff like this
-	static vector<char *> m_Strings[MAX_STRINGS_HASH];
+	static vector<char*> m_Strings[MAX_STRINGS_HASH];
 };
 
 #endif

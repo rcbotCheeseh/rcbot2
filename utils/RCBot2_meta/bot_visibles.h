@@ -38,89 +38,88 @@
 class CVisibleFunc
 {
 public:
-	virtual void execute ( edict_t *pEntity ) { return; }
+	virtual void execute(edict_t* pEntity) { return; }
 };
 
 class CTF2FindFlagFunc : public CVisibleFunc
 {
 public:
-	CTF2FindFlagFunc ( CBot *pBot ): m_pBot(nullptr)
+	CTF2FindFlagFunc(CBot* pBot) : m_pBot(nullptr)
 	{
 		m_pFlag = NULL;
 	}
 
-	edict_t *getFlag ( Vector &vOrigin )
+	edict_t* getFlag(Vector& vOrigin)
 	{
 		return m_pFlag;
 	}
 
-	void init ();
+	void init();
 
-	void execute ( edict_t *pEntity );
+	void execute(edict_t* pEntity);
 private:
-	CBot *m_pBot;
-	edict_t *m_pFlag;
+	CBot* m_pBot;
+	edict_t* m_pFlag;
 };
-
 
 class CFindEnemyFunc : public CVisibleFunc
 {
 public:
-	CFindEnemyFunc ( CBot *pBot ) 
-	{ 
-		m_pBot = pBot; 
+	CFindEnemyFunc(CBot* pBot)
+	{
+		m_pBot = pBot;
 		m_fBestFactor = 0;
 		m_pBest = NULL;
 	}
 
-	edict_t *getBestEnemy ()
+	edict_t* getBestEnemy()
 	{
 		return m_pBest;
 	}
 
-	float getFactor ( edict_t *pEntity );
-	void setOldEnemy ( edict_t *pEntity );
-	void init ();
+	float getFactor(edict_t* pEntity);
+	void setOldEnemy(edict_t* pEntity);
+	void init();
 
-	void execute ( edict_t *pEntity );
+	void execute(edict_t* pEntity);
 private:
-	CBot *m_pBot;
+	CBot* m_pBot;
 	float m_fBestFactor;
-	edict_t *m_pBest;
+	edict_t* m_pBest;
 };
 
 class CBotVisibles
-{	
+{
 public:
-	CBotVisibles ( CBot *pBot );
-	~CBotVisibles ();
+	CBotVisibles(CBot* pBot);
+	~CBotVisibles();
 
-	void reset ();
-	void updateVisibles ();
+	void reset();
+	void updateVisibles();
 
-	bool isVisible ( edict_t *pEdict );
-	void setVisible ( edict_t *pEdict, bool bVisible );
+	bool isVisible(edict_t* pEdict);
+	void setVisible(edict_t* pEdict, bool bVisible);
 
-	void eachVisible ( CVisibleFunc *pFunc );
+	void eachVisible(CVisibleFunc* pFunc);
 
-	void checkVisible ( edict_t *pEntity, int *iTicks, bool *bVisible, int &iIndex, bool bCheckHead = false );
+	void checkVisible(edict_t* pEntity, int* iTicks, bool* bVisible, int& iIndex, bool bCheckHead = false);
 
-	void debugString ( char *string );
+	void debugString(char* string);
 
 	static const int DEFAULT_MAX_TICKS = 10; // max number of PVS checks fired every visible check
 
 private:
 	//static const int NUM_BYTES = 4; // 32 entities
 	//static const int MAX_INDEX = NUM_BYTES*8;
-	
-	static byte m_bPvs[MAX_MAP_CLUSTERS/8];
 
-	CBot *m_pBot;
+	static byte m_bPvs[MAX_MAP_CLUSTERS / 8];
+
+	CBot* m_pBot;
 	// current entity index we are checking
 	int m_iCurrentIndex;
 	// current player index we are checking -- updated more often
 	int m_iCurPlayer;
-	unsigned char *m_iIndicesVisible;//[NUM_BYTES];
+	unsigned char* m_iIndicesVisible;//[NUM_BYTES];
 	int m_iMaxSize;
 	int m_iMaxIndex;
 

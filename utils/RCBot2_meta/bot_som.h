@@ -39,35 +39,35 @@ using namespace std;
 class CSomNeuron
 {
 public:
-	~CSomNeuron ();
+	~CSomNeuron();
 
-	CSomNeuron ();
+	CSomNeuron();
 
-	CSomNeuron ( unsigned short id, int iInp, int iX, int iY );
+	CSomNeuron(unsigned short id, int iInp, int iX, int iY);
 
 	inline float getX()
 	{
 		return m_iX;
 	}
 
-	inline float getY()	
+	inline float getY()
 	{
 		return m_iY;
 	}
 
-	void update ( vector<float> *inputs, float inf );
+	void update(vector<float>* inputs, float inf);
 
-	float distance ( vector <float> *inputs );
-	
-	vector <float> *weights ();
+	float distance(vector <float>* inputs);
 
-	void displayWeights ();
-	
-	float neighbourDistance ( CSomNeuron *other );
+	vector <float>* weights();
 
-	inline void setClassID ( unsigned short iId ) { m_iId = iId; }
+	void displayWeights();
 
-	inline unsigned short getClassID () { return m_iId; }
+	float neighbourDistance(CSomNeuron* other);
+
+	inline void setClassID(unsigned short iId) { m_iId = iId; }
+
+	inline unsigned short getClassID() { return m_iId; }
 
 private:
 	vector<float> fWeights;
@@ -81,23 +81,23 @@ class CSom
 public:
 	static float m_fLearnRate;
 
-	CSom ( int iW, int iH, int iIn );
+	CSom(int iW, int iH, int iIn);
 
-	~CSom ();
+	~CSom();
 
-	CSomNeuron *getBMU ( vector <float> *inputs );
+	CSomNeuron* getBMU(vector <float>* inputs);
 
-	void updateAround ( vector<float> *inputs, CSomNeuron *bmu );
+	void updateAround(vector<float>* inputs, CSomNeuron* bmu);
 
-	CSomNeuron *input ( vector < vector <float> > *inputs );
+	CSomNeuron* input(vector < vector <float> >* inputs);
 
-	CSomNeuron *inputOne ( vector < float > *inputs );
+	CSomNeuron* inputOne(vector < float >* inputs);
 
-	void input ( vector < vector <float> > *inputs, int epochs );
+	void input(vector < vector <float> >* inputs, int epochs);
 
-	void display ();
+	void display();
 
-	inline unsigned int epochs ()
+	inline unsigned int epochs()
 	{
 		return m_iEpochs;
 	}

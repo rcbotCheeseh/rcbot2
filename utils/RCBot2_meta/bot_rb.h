@@ -8,7 +8,7 @@ class CBotOperator;
 class CBotRule
 {
 public:
-	CBotRule ()
+	CBotRule()
 	{
 	}
 private:
@@ -18,13 +18,13 @@ private:
 class CBotOperator
 {
 public:
-	CBotOperator ( CBotFactOperator op ) : m_op(op)
-	{		
+	CBotOperator(CBotFactOperator op) : m_op(op)
+	{
 	}
 
 	CBotOperator();
 
-	virtual bool operate ( bool bVal, CBotOperator *pNext )
+	virtual bool operate(bool bVal, CBotOperator* pNext)
 	{
 		switch (m_op)
 		{
@@ -37,8 +37,8 @@ public:
 		case OP_OR:
 		case OP_AND_NOT:
 		case OP_OR_NOT:
-		
-		default: ;
+
+		default:;
 		}
 		return false;
 	}
@@ -54,11 +54,11 @@ private:
 class CBotFact : public CBotOperator
 {
 public:
-	CBotFact ( unsigned int iFactId ) : CBotOperator(), m_fid(iFactId)
+	CBotFact(unsigned int iFactId) : CBotOperator(), m_fid(iFactId)
 	{
 	}
 
-	bool operate ( bVal, CBotOperator *pNext )
+	bool operate(bVal, CBotOperator* pNext)
 	{
 		return m_bVal;
 	}
@@ -73,7 +73,7 @@ private:
 	bool m_bVal;
 };
 
-typedef enum 
+typedef enum
 {
 	OP_NONE = 0,
 	OP_PRE_NORM,

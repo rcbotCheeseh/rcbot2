@@ -28,11 +28,11 @@
  *    version.
  *
  */
-//====================================================================================//
-//
-// HPB_bot2_usercmd.cpp - bot source code file (Copyright 2004, Jeffrey "botman" Broome)
-//
-//====================================================================================//
+ //====================================================================================//
+ //
+ // HPB_bot2_usercmd.cpp - bot source code file (Copyright 2004, Jeffrey "botman" Broome)
+ //
+ //====================================================================================//
 
 #include <stdio.h>
 
@@ -56,39 +56,39 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-void WriteUsercmd( bf_write *buf, CUserCmd *cmd )
+void WriteUsercmd(bf_write* buf, CUserCmd* cmd)
 {
-	buf->WriteOneBit( 0 );  // command_number
+	buf->WriteOneBit(0);  // command_number
 
-	buf->WriteOneBit( 0 );  // tick_count
+	buf->WriteOneBit(0);  // tick_count
 
-	buf->WriteOneBit( 1 );
-	buf->WriteBitAngle( cmd->viewangles.x, 16 );  // viewangles[0]
-	buf->WriteOneBit( 1 );
-	buf->WriteBitAngle( cmd->viewangles.y, 16 );  // viewangles[1]
-	buf->WriteOneBit( 1 );
-	buf->WriteBitAngle( cmd->viewangles.z, 8 );  // viewangles[2]
+	buf->WriteOneBit(1);
+	buf->WriteBitAngle(cmd->viewangles.x, 16);  // viewangles[0]
+	buf->WriteOneBit(1);
+	buf->WriteBitAngle(cmd->viewangles.y, 16);  // viewangles[1]
+	buf->WriteOneBit(1);
+	buf->WriteBitAngle(cmd->viewangles.z, 8);  // viewangles[2]
 
-	buf->WriteOneBit( 1 );
-	buf->WriteSBitLong( cmd->forwardmove, 16 );
+	buf->WriteOneBit(1);
+	buf->WriteSBitLong(cmd->forwardmove, 16);
 
-	buf->WriteOneBit( 1 );
-	buf->WriteSBitLong( cmd->sidemove, 16 );
+	buf->WriteOneBit(1);
+	buf->WriteSBitLong(cmd->sidemove, 16);
 
-	buf->WriteOneBit( 1 );
-	buf->WriteSBitLong( cmd->upmove, 16 );
+	buf->WriteOneBit(1);
+	buf->WriteSBitLong(cmd->upmove, 16);
 
-	buf->WriteOneBit( 1 );
-  	buf->WriteUBitLong( cmd->buttons, 32 );
+	buf->WriteOneBit(1);
+	buf->WriteUBitLong(cmd->buttons, 32);
 
-	buf->WriteOneBit( 1 );
-    buf->WriteUBitLong( cmd->impulse, 8 );
+	buf->WriteOneBit(1);
+	buf->WriteUBitLong(cmd->impulse, 8);
 
-	buf->WriteOneBit( 1 );
-	buf->WriteUBitLong( cmd->weaponselect, MAX_EDICT_BITS );
+	buf->WriteOneBit(1);
+	buf->WriteUBitLong(cmd->weaponselect, MAX_EDICT_BITS);
 
-	buf->WriteOneBit( 0 );  // weaponsubtype
+	buf->WriteOneBit(0);  // weaponsubtype
 
-	buf->WriteOneBit( 0 );  // mousedx
-	buf->WriteOneBit( 0 );  // mousedy
+	buf->WriteOneBit(0);  // mousedx
+	buf->WriteOneBit(0);  // mousedy
 }

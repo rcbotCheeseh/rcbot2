@@ -28,7 +28,7 @@
  *    version.
  *
  */
- 
+
 #include "bot.h"
 #include "bot_hl1dmsrc_bot.h"
 #include "bot_buttons.h"
@@ -37,81 +37,79 @@
 
 #include "bot_mtrand.h"
 
-void CHL1DMSrcBot :: init ()
+void CHL1DMSrcBot::init()
 {
 	CBot::init();
 }
 
-void CHL1DMSrcBot :: setup ()
+void CHL1DMSrcBot::setup()
 {
 	CBot::setup();
 }
 
-
-bool CHL1DMSrcBot :: startGame ()
+bool CHL1DMSrcBot::startGame()
 {
 	return true;
 }
 
-void CHL1DMSrcBot :: killed ( edict_t *pVictim )
+void CHL1DMSrcBot::killed(edict_t* pVictim)
 {
 	return;
 }
 
-void CHL1DMSrcBot :: died ( edict_t *pKiller )
+void CHL1DMSrcBot::died(edict_t* pKiller)
 {
 	spawnInit();
 
-	if ( randomInt(0,1) )
+	if (randomInt(0, 1))
 		m_pButtons->attack();
 }
 
-void CHL1DMSrcBot :: spawnInit ()
+void CHL1DMSrcBot::spawnInit()
 {
 	CBot::spawnInit();
 }
 
-bool CHL1DMSrcBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
+bool CHL1DMSrcBot::isEnemy(edict_t* pEdict, bool bCheckWeapons)
 {
-	if ( !pEdict )
+	if (!pEdict)
 		return false;
 
-	if ( pEdict == m_pEdict )
+	if (pEdict == m_pEdict)
 		return false;
 
-	if ( !ENTINDEX(pEdict) )
+	if (!ENTINDEX(pEdict))
 		return false;
 
-	if ( ENTINDEX(pEdict) > CBotGlobals::maxClients() ) // monster
+	if (ENTINDEX(pEdict) > CBotGlobals::maxClients()) // monster
 	{
-		const char *cname = ((IServerNetworkable*)pEdict->GetNetworkable())->GetClassName();
+		const char* cname = ((IServerNetworkable*)pEdict->GetNetworkable())->GetClassName();
 
-		if ( strncmp("monster_",cname,8) == 0 )
+		if (strncmp("monster_", cname, 8) == 0)
 		{
-			if ( strcmp(cname,"monster_barney") == 0 )
+			if (strcmp(cname, "monster_barney") == 0)
 				return false;
-			else if ( strcmp(cname,"monster_scientist") == 0 )
+			else if (strcmp(cname, "monster_scientist") == 0)
 				return false;
-			else if ( strcmp(cname,"monster_gman") == 0 )
+			else if (strcmp(cname, "monster_gman") == 0)
 				return false;
-			else if ( strcmp(cname,"monster_furniture") == 0 )
+			else if (strcmp(cname, "monster_furniture") == 0)
 				return false;
 
 			return true;
 		}
 	}
 
-	if ( CBotGlobals::getTeamplayOn() )
+	if (CBotGlobals::getTeamplayOn())
 	{
-		if ( CBotGlobals::getTeam(pEdict) == getTeam() )
+		if (CBotGlobals::getTeam(pEdict) == getTeam())
 			return false;
 	}
 
-	return true;	
+	return true;
 }
 
-void CHL1DMSrcBot :: modThink ()
+void CHL1DMSrcBot::modThink()
 {
 	// find weapons and neat stuff
-
 }

@@ -34,8 +34,8 @@
 #include "bot_strings.h"
 #include "bot_client.h"
 
-// List of all timers
-CProfileTimer CProfileTimers :: m_Timers[PROFILING_TIMERS] = 
+ // List of all timers
+CProfileTimer CProfileTimers::m_Timers[PROFILING_TIMERS] =
 {
 CProfileTimer("CBots::botThink()"), // BOTS_THINK_TIMER
 CProfileTimer("CBot::think()"), // BOT_THINK_TIMER
@@ -49,10 +49,10 @@ float CProfileTimers::m_fNextUpdate = 0;
 // if windows USE THE QUERYPERFORMANCECOUNTER
 #ifdef _WIN32
 inline unsigned __int64 RDTSC(void)
-    {
-            _asm    _emit 0x0F
-            _asm    _emit 0x31
-    }
+{
+	_asm    _emit 0x0F
+	_asm    _emit 0x31
+}
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #else
@@ -61,15 +61,15 @@ inline unsigned __int64 RDTSC(void)
 //    __asm__ volatile (".byte 0x0f, 0x31" : "=A" (void));
 //    {
 //    }
-   extern __inline__ unsigned long long int rdtsc()
-   {
-     unsigned long long int x;
-     __asm__ volatile (".byte 0x0f, 0x31" : "=A" (x));
-     return x;
-   }
+extern __inline__ unsigned long long int rdtsc()
+{
+	unsigned long long int x;
+	__asm__ volatile (".byte 0x0f, 0x31" : "=A" (x));
+	return x;
+}
 #endif
 
-CProfileTimer :: CProfileTimer (const char *szFunction): start_cycle(0), end_cycle(0), m_last(0)
+CProfileTimer::CProfileTimer(const char* szFunction) : start_cycle(0), end_cycle(0), m_last(0)
 {
 	m_szFunction = CStrings::getString(szFunction);
 	m_min = 9999999999;
@@ -80,60 +80,57 @@ CProfileTimer :: CProfileTimer (const char *szFunction): start_cycle(0), end_cyc
 }
 
 // "Begin" Timer i.e. update time
-void CProfileTimer :: Start()
+void CProfileTimer::Start()
 {
 #ifdef _WIN32
-    QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&start_cycle));
+	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&start_cycle));
 #else
-        start_cycle = rdtsc();
+	start_cycle = rdtsc();
 #endif
-
 }
 // Stop Timer, work out min/max values and set invoked
-void CProfileTimer :: Stop()
+void CProfileTimer::Stop()
 {
 #ifdef _WIN32
-    unsigned __int64 end_cycle;
-    QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&end_cycle));
+	unsigned __int64 end_cycle;
+	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&end_cycle));
 #else
-    unsigned long long end_cycle;
-    end_cycle = rdtsc();
+	unsigned long long end_cycle;
+	end_cycle = rdtsc();
 #endif
 
 	m_last = end_cycle - start_cycle;
 
-	if ( m_last > m_max )
+	if (m_last > m_max)
 		m_max = m_last;
-	if ( (m_iInvoked==0) || (m_last < m_min) )
+	if ((m_iInvoked == 0) || (m_last < m_min))
 		m_min = m_last;
 
 	m_overall = m_overall + m_last;
 
-	m_iInvoked ++;
+	m_iInvoked++;
 }
 
-
-
-// print the values, first work out average (use max/min/previous values), 
+// print the values, first work out average (use max/min/previous values),
 // and work out percentage of power
-void CProfileTimer :: print (double *high)
+void CProfileTimer::print(double* high)
 {
-	if ((m_iInvoked>0) && m_szFunction )
+	if ((m_iInvoked > 0) && m_szFunction)
 	{
 		char str[256];
 		float percent = 1;
 
-		m_average = m_overall/m_iInvoked;
+		m_average = m_overall / m_iInvoked;
 
-		percent = (((double)m_overall)/(*high))*100.0f;
-		
-		sprintf(str,"%17s|%13lld|%10lld|%10lld|%10lld|%6.1f",m_szFunction,m_overall,m_min,m_max,m_average,percent);			
+		percent = (((double)m_overall) / (*high)) * 100.0f;
 
-		CClients::clientDebugMsg(BOT_DEBUG_PROFILE,str);
+		sprintf(str, "%17s|%13lld|%10lld|%10lld|%10lld|%6.1f", m_szFunction, m_overall, m_min, m_max, m_average, percent);
+
+		CClients::clientDebugMsg(BOT_DEBUG_PROFILE, str);
 
 		// uninvoke now
 		m_iInvoked = 0;
-	
+
 		// reset max
 		m_max = 0;
 
@@ -142,31 +139,31 @@ void CProfileTimer :: print (double *high)
 }
 
 // get the required timer
-CProfileTimer *CProfileTimers::getTimer (int id)
+CProfileTimer* CProfileTimers::getTimer(int id)
 {
-	if ( id >= 0 && id < PROFILING_TIMERS )
+	if (id >= 0 && id < PROFILING_TIMERS)
 		return &m_Timers[id];
 
 	return NULL;
 }
 // do this every map start
-void CProfileTimers :: reset ()
+void CProfileTimers::reset()
 {
 	m_fNextUpdate = 0;
 }
 // update and show every x seconds
 void CProfileTimers::updateAndDisplay()
 {
-	if ( CClients::clientsDebugging(BOT_DEBUG_PROFILE) )
+	if (CClients::clientsDebugging(BOT_DEBUG_PROFILE))
 	{
-		if ( m_fNextUpdate < engine->Time() )
+		if (m_fNextUpdate < engine->Time())
 		{
 			int i = 0;
 
 			double highest = 1.0;
 
-			for ( i = 0; i < PROFILING_TIMERS; i ++ )
-			{		
+			for (i = 0; i < PROFILING_TIMERS; i++)
+			{
 				if (m_Timers[i].getOverall() > highest)
 					highest = m_Timers[i].getOverall();
 			}
@@ -174,10 +171,10 @@ void CProfileTimers::updateAndDisplay()
 			// next update in 1 second
 			m_fNextUpdate = engine->Time() + 1.0f;
 
-			CClients::clientDebugMsg(BOT_DEBUG_PROFILE,"|----------------PROFILING---UPDATE---------------------------------|");
-			CClients::clientDebugMsg(BOT_DEBUG_PROFILE,"|------name------|---overall---|---min----|---max----|----avg---|-prct-|");
+			CClients::clientDebugMsg(BOT_DEBUG_PROFILE, "|----------------PROFILING---UPDATE---------------------------------|");
+			CClients::clientDebugMsg(BOT_DEBUG_PROFILE, "|------name------|---overall---|---min----|---max----|----avg---|-prct-|");
 
-			for ( i = 0; i < PROFILING_TIMERS; i ++ )
+			for (i = 0; i < PROFILING_TIMERS; i++)
 			{
 				m_Timers[i].print(&highest);
 			}

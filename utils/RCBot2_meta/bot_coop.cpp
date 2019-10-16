@@ -6,31 +6,30 @@
 
 #include "vstdlib/random.h" // for random functions
 
-
-void CBotCoop :: modThink ()
+void CBotCoop::modThink()
 {
 	// find enemies and health stations / objectives etc
 }
 
-bool CBotCoop :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
+bool CBotCoop::isEnemy(edict_t* pEdict, bool bCheckWeapons)
 {
-	const char *classname;
+	const char* classname;
 
-	if ( ENTINDEX(pEdict) == 0 ) 
+	if (ENTINDEX(pEdict) == 0)
 		return false;
 
 	// no shooting players
-	if ( ENTINDEX(pEdict) <= CBotGlobals::maxClients() )
+	if (ENTINDEX(pEdict) <= CBotGlobals::maxClients())
 	{
 		return false;
 	}
 
 	classname = pEdict->GetClassName();
 
-	if ( strncmp(classname,"npc_",4) == 0 )
+	if (strncmp(classname, "npc_", 4) == 0)
 	{
-		if ( !strcmp(classname,"npc_antlionguard") || !strcmp(classname,"npc_citizen") || 
-			 !strcmp(classname,"npc_barney") || !strcmp(classname,"npc_kliener") || !strcmp(classname,"npc_alyx") )
+		if (!strcmp(classname, "npc_antlionguard") || !strcmp(classname, "npc_citizen") ||
+			!strcmp(classname, "npc_barney") || !strcmp(classname, "npc_kliener") || !strcmp(classname, "npc_alyx"))
 		{
 			return false; // ally
 		}
@@ -41,8 +40,7 @@ bool CBotCoop :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 	return false;
 }
 
-bool CBotCoop :: startGame ()
+bool CBotCoop::startGame()
 {
 	return true;
 }
-
