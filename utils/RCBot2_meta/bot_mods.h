@@ -1014,7 +1014,7 @@ public:
 		return false;
 	}
 
-	static void flagDropped(int iTeam, const Vector vLoc)
+	static void flagDropped(int iTeam, const Vector &vLoc)
 	{
 		if (iTeam == TF2_TEAM_BLUE)
 		{

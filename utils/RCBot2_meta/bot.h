@@ -600,7 +600,7 @@ public:
 	inline bool hasEnemy() { return m_pEnemy && hasSomeConditions(CONDITION_SEE_CUR_ENEMY); }
 	inline edict_t* getEnemy() { return m_pEnemy; }
 
-	inline void setMoveTo(const Vector vNew)
+	inline void setMoveTo(const Vector &vNew)
 	{
 		if (m_iMoveLookPriority >= m_iMovePriority)
 		{
@@ -771,11 +771,11 @@ public:
 
 	virtual void touchedWpt(CWaypoint* pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1);
 
-	inline void setAiming(const Vector aiming) { m_vWaypointAim = aiming; }
+	inline void setAiming(const Vector &aiming) { m_vWaypointAim = aiming; }
 
 	inline Vector getAiming() { return m_vWaypointAim; }
 
-	inline void setLookVector(const Vector vLook) { m_vLookVector = vLook; }
+	inline void setLookVector(const Vector &vLook) { m_vLookVector = vLook; }
 
 	inline Vector getLookVector() { return m_vLookVector; }
 
@@ -911,7 +911,7 @@ public:
 
 protected:
 
-	inline void setLookAt(const Vector vNew)
+	inline void setLookAt(const Vector &vNew)
 	{
 		m_vLookAt = vNew;
 		m_bLookAtIsValid = true;

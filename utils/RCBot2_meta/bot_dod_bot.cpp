@@ -132,8 +132,7 @@ void CDODBot::setup()
 
 void CDODBot::freeMapMemory()
 {
-	if (m_pWantToProne)
-		delete m_pWantToProne;
+	delete m_pWantToProne;
 
 	m_pWantToProne = NULL;
 

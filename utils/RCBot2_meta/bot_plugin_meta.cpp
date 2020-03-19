@@ -1038,8 +1038,8 @@ bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const 
 
 bool RCBotPluginMeta::FireGameEvent(IGameEvent* pevent, bool bDontBroadcast)
 {
-	static char szKey[128];
-	static char szValue[128];
+	//static char szKey[128];
+	//static char szValue[128];
 
 	CBotEvents::executeEvent(static_cast<void*>(pevent), TYPE_IGAMEEVENT);
 
