@@ -200,7 +200,7 @@ public:
 
 		try
 		{
-			return *static_cast<bool*>(m_data);
+			return *(bool*)(m_data);
 		}
 
 		catch (...)
@@ -216,7 +216,7 @@ public:
 		if (!m_data)
 			return NULL;
 
-		return static_cast<bool*>(m_data);
+		return (bool*)(m_data);
 	}
 
 	inline void* getVoidPointer(edict_t* edict)
@@ -294,7 +294,7 @@ public:
 
 		try
 		{
-			return *static_cast<int*>(m_data);
+			return *(int*)(m_data);
 		}
 
 		catch (...)
@@ -307,7 +307,7 @@ public:
 	{
 		getData(edict);
 
-		return static_cast<int*>(m_data);
+		return (int*)(m_data);
 	}
 
 	inline byte* getBytePointer(edict_t* edict)
@@ -324,7 +324,7 @@ public:
 		if (!m_data)
 			return defaultvalue;
 
-		return static_cast<float>(*static_cast<int*>(m_data));
+		return static_cast<float>(*(int*)(m_data));
 	}
 
 	static void resetError() { m_berror = false; }

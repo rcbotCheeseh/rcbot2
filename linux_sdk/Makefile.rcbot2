@@ -32,7 +32,7 @@ GAME_DIR=./gamedir
 #MOD_DIR=$(GAME_DIR)/SampleMod
 MOD_DIR=$(GAME_DIR)/
 
-# compiler options (gcc 3.4.1 will work - 4.8 recommended)
+# compiler options (gcc 3.4.1 will work - Debian i386 GCC 4.8 recommended)
 #CC=/usr/local/bin/gcc
 #CPLUS=/usr/local/bin/g++
 #CLINK=/usr/local/bin/gcc
@@ -52,7 +52,7 @@ CPP_LIB="/usr/lib/gcc/i586-linux-gnu/4.8/libstdc++.a /usr/lib/gcc/i586-linux-gnu
 OPTFLAGS=-O2 -fomit-frame-pointer -fforce-addr -foptimize-sibling-calls -fgcse -fcaller-saves -fschedule-insns2 -fsched-interblock -fdelete-null-pointer-checks -freorder-blocks -falign-functions -falign-jumps -falign-loops -falign-labels -ftree-vrp -finline-functions -funswitch-loops -fgcse-after-reload -funsafe-math-optimizations
 
 # put any compiler flags you want passed here
-USER_CFLAGS= -std=c++11 -w# -g -D_DEBUG -DDEBUG -DSH_DEBUG# -DTF2_HOOKS
+USER_CFLAGS= -std=c++11 -Wno-write-strings# -g -D_DEBUG -DDEBUG -DSH_DEBUG# -DTF2_HOOKS
 
 # Link Libraries
 #LIBFILES= \
