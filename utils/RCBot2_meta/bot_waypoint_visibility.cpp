@@ -36,6 +36,10 @@
 #include "bot_globals.h"
 #include <stdio.h>
 
+#ifdef _WIN32
+#define strncpy strncpy_s
+#endif
+
  /*unsigned char *CWaypointVisibilityTable :: m_VisTable = NULL;
  bool CWaypointVisibilityTable :: bWorkVisibility = false;
  int CWaypointVisibilityTable :: iCurFrom = 0;
@@ -47,9 +51,9 @@ void CWaypointVisibilityTable::workVisibility()
 	int iTicks = 0;
 	register unsigned short int iSize = static_cast<unsigned short int>(CWaypoints::numWaypoints());
 
-	for (iCurFrom = iCurFrom; iCurFrom < iSize; iCurFrom++)
+	for (iCurFrom; iCurFrom < iSize; iCurFrom++)
 	{
-		for (iCurTo = iCurTo; iCurTo < iSize; iCurTo++)
+		for (iCurTo; iCurTo < iSize; iCurTo++)
 		{
 			CWaypoint* pWaypoint1 = CWaypoints::getWaypoint(iCurFrom);
 			CWaypoint* pWaypoint2 = CWaypoints::getWaypoint(iCurTo);
@@ -62,7 +66,7 @@ void CWaypointVisibilityTable::workVisibility()
 			{
 				if (m_fNextShowMessageTime < engine->Time())
 				{
-					percent = static_cast<int>(((float)iCurFrom / iSize) * 100);
+					percent = static_cast<int>((float(iCurFrom) / iSize) * 100);
 
 					if (m_iPrevPercent != percent)
 					{

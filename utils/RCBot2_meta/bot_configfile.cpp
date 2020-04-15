@@ -79,6 +79,12 @@
 
 #include "bot_fortress.h"
 
+#ifdef _WIN32
+#define sscanf sscanf_s
+#define sprintf sprintf_s
+#define _snprintf _snprintf_s
+#endif
+
 vector <char*> CBotConfigFile::m_Commands;
 unsigned int CBotConfigFile::m_iCmd = 0; // current command (time delayed)
 float CBotConfigFile::m_fNextCommandTime = 0.0f;

@@ -49,6 +49,11 @@
 
 #ifdef __linux__
 #include "shareddefs.h" //bir3yk
+#elif _WIN32
+#define strncpy strncpy_s
+#define strcpy strcpy_s
+#define strcat strcat_s
+#define sscanf sscanf_s
 #endif
 
 #include "usercmd.h"

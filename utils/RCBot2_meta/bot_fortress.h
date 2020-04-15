@@ -729,10 +729,10 @@ protected:
 
 	float m_fCallMedic;
 	float m_fTauntTime;
-	float m_fTaunting;
-	float m_fDefendTime;
+	float m_fTaunting{};
+	float m_fDefendTime{};
 
-	float m_fHealFactor;
+	float m_fHealFactor{};
 
 	MyEHandle m_pHeal;
 	MyEHandle m_pLastHeal;
@@ -756,15 +756,15 @@ protected:
 	MyEHandle m_pFlag;
 	MyEHandle m_pPrevSpy;
 
-	float m_fFrenzyTime;
-	float m_fSpyCloakTime;
-	float m_fSpyUncloakTime;
+	float m_fFrenzyTime{};
+	float m_fSpyCloakTime{};
+	float m_fSpyUncloakTime{};
 	float m_fSeeSpyTime;
-	float m_fLastSeeSpyTime;
-	float m_fSpyDisguiseTime;
-	float m_fLastSaySpy;
-	float m_fPickupTime;
-	float m_fLookAfterSentryTime;
+	float m_fLastSeeSpyTime{};
+	float m_fSpyDisguiseTime{};
+	float m_fLastSaySpy{};
+	float m_fPickupTime{};
+	float m_fLookAfterSentryTime{};
 
 	TF_Class m_iPrevSpyDisguise;
 
@@ -777,30 +777,30 @@ protected:
 	Vector m_vTeleportEntrance;
 	bool m_bEntranceVectorValid;
 	Vector m_vSentryGun;
-	bool m_bSentryGunVectorValid;
+	bool m_bSentryGunVectorValid{};
 	Vector m_vDispenser;
-	bool m_bDispenserVectorValid;
+	bool m_bDispenserVectorValid{};
 	Vector m_vTeleportExit;
-	bool m_bTeleportExitVectorValid;
+	bool m_bTeleportExitVectorValid{};
 
 	// 1 minute wait
 	float m_fLastKnownFlagTime;
-	float m_fLastKnownTeamFlagTime;
+	float m_fLastKnownTeamFlagTime{};
 
-	float m_fBackstabTime;
+	float m_fBackstabTime{};
 
 	TF_Class m_iClass;
 
-	float m_fUpdateClass;
-	float m_fUseTeleporterTime;
+	float m_fUpdateClass{};
+	float m_fUseTeleporterTime{};
 
 	bool m_bHasFlag;
 	float m_fSnipeAttackTime;
 
 	// time left before the bot decides if it wants to change class
-	float m_fChangeClassTime;
+	float m_fChangeClassTime{};
 	// bot should check if he can change class now
-	bool m_bCheckClass;
+	bool m_bCheckClass{};
 	MyEHandle m_pLastCalledMedic;
 	CBotLastSee m_pLastSeeMedic;
 	/*MyEHandle m_pLastSeeMedic;
@@ -808,29 +808,29 @@ protected:
 	float m_fLastSeeMedicTime;*/
 	float m_fLastCalledMedicTime;
 	bool m_bIsBeingHealed;
-	float m_fMedicUpdatePosTime;
+	float m_fMedicUpdatePosTime{};
 	Vector m_vMedicPosition;
 
 	bool m_bCanBeUbered;
-	float m_fCheckHealTime;
+	float m_fCheckHealTime{};
 
 	float m_fClassDisguiseFitness[10]; // classes disguised as fitness
 	float m_fClassDisguiseTime[10];
-	float m_fDisguiseTime;
-	unsigned short m_iDisguiseClass;
+	float m_fDisguiseTime{};
+	unsigned short m_iDisguiseClass{};
 	float m_fSentryPlaceTime;
 	unsigned int m_iSentryKills;
-	float m_fTeleporterEntPlacedTime;
-	float m_fTeleporterExtPlacedTime;
-	unsigned m_iTeleportedPlayers;
+	float m_fTeleporterEntPlacedTime{};
+	float m_fTeleporterExtPlacedTime{};
+	unsigned m_iTeleportedPlayers{};
 
 	// list of spies who I saw were attacked by my team-mates recently
 	// for use with spy checking
 	float m_fSpyList[MAX_PLAYERS];
 
-	int m_iTeam;
+	int m_iTeam{};
 
-	float m_fWaitTurnSentry;			// amount of time to wait before engineer turns their sentry before building
+	float m_fWaitTurnSentry{};			// amount of time to wait before engineer turns their sentry before building
 
 	// currently unused
 	float m_fCallMedicTime[MAX_PLAYERS]; // for every player ID is kept the last time they called medic
@@ -840,13 +840,13 @@ protected:
 
 	MyEHandle m_pHealer;
 
-	float m_fHealingMoveTime;
+	float m_fHealingMoveTime{};
 
 	MyEHandle m_pLastEnemySentry;
 	MyEHandle m_NearestEnemyRocket;
 	MyEHandle m_NearestEnemyGrenade;
 
-	float m_fLastSentryEnemyTime;
+	float m_fLastSentryEnemyTime{};
 	//bool m_bWantToZoom;
 };
 //
@@ -1094,14 +1094,14 @@ private:
 	// and it can deploy stickies again
 	//bool m_bDeployedStickies;
 	eDemoTrapType m_iTrapType;
-	int m_iTrapCPIndex;
+	int m_iTrapCPIndex{};
 	Vector m_vStickyLocation;
-	float m_fRemoveSapTime;
-	float m_fRevMiniGunTime;
-	float m_fNextRevMiniGunTime;
+	float m_fRemoveSapTime{};
+	float m_fRevMiniGunTime{};
+	float m_fNextRevMiniGunTime{};
 
-	float m_fRevMiniGunBelief;
-	float m_fCloakBelief;
+	float m_fRevMiniGunBelief{};
+	float m_fCloakBelief{};
 
 	//
 	MyEHandle m_pCloakedSpy;
@@ -1123,15 +1123,15 @@ private:
 
 	eTFVoiceCMD m_nextVoicecmd;
 
-	bool m_bIsCarryingTeleExit;
-	bool m_bIsCarryingSentry;
-	bool m_bIsCarryingDisp;
-	bool m_bIsCarryingTeleEnt;
-	bool m_bIsCarryingObj;
+	bool m_bIsCarryingTeleExit{};
+	bool m_bIsCarryingSentry{};
+	bool m_bIsCarryingDisp{};
+	bool m_bIsCarryingTeleEnt{};
+	bool m_bIsCarryingObj{};
 
-	float m_fCarryTime;
+	float m_fCarryTime{};
 
-	float m_fCheckNextCarrying;
+	float m_fCheckNextCarrying{};
 	float m_fEquipHatTime;
 
 	bool m_bHatEquipped;
@@ -1141,7 +1141,7 @@ private:
 	void* m_pVTable;
 	void* m_pVTable_Attributes;
 
-	float m_fUseBuffItemTime;
+	float m_fUseBuffItemTime{};
 
 	CTF2Loadout* m_pHat;
 	CTF2Loadout* m_pMisc;

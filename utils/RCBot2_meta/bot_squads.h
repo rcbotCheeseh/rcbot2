@@ -225,14 +225,14 @@ private:
 	dataStack<MyEHandle> m_theSquad;
 
 	eSquadForm m_theDesiredFormation;
-	float m_fDesiredSpread;
-	bool bCanFire;
+	float m_fDesiredSpread{};
+	bool bCanFire{};
 
 	eCombatType m_CombatType;
 
 	QAngle m_vLeaderAngle;
 	eTacticType m_Tactics;
-	bool m_bIsWaitingForOther;
+	bool m_bIsWaitingForOther{};
 };
 
 //-------------------

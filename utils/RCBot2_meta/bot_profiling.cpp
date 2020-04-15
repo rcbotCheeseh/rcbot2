@@ -34,6 +34,10 @@
 #include "bot_strings.h"
 #include "bot_client.h"
 
+#ifdef _WIN32
+#define sprintf sprintf_s
+#endif
+
  // List of all timers
 CProfileTimer CProfileTimers::m_Timers[PROFILING_TIMERS] =
 {

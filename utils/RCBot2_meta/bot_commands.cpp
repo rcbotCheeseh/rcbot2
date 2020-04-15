@@ -45,6 +45,10 @@
 
 #include "bot_tf2_points.h"
 
+#ifdef _WIN32
+#define sprintf sprintf_s
+#endif
+
 CBotCommandContainer* CBotGlobals::m_pCommands = new CRCBotCommand();
 extern IVDebugOverlay* debugoverlay;
 ///////////////////////////////////////////////////

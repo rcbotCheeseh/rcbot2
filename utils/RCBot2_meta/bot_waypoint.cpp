@@ -52,6 +52,13 @@
 #include "bot_fortress.h"
 #include "bot_wpt_dist.h"
 
+#ifdef _WIN32
+#define sprintf sprintf_s
+#define strncpy strncpy_s
+#define strcpy strcpy_s
+#define strcat strcat_s
+#endif
+
 #include <vector>    //bir3yk
 using namespace std;    //bir3yk
 
