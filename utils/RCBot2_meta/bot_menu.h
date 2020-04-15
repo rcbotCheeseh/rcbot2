@@ -47,10 +47,6 @@
 #ifndef __BOT_MENU_H__
 #define __BOT_MENU_H__
 
-#ifdef _WIN32
-#define strncpy strncpy_s
-#endif
-
 #include <vector>
 using namespace std;
 

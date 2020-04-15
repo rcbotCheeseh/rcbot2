@@ -58,10 +58,6 @@
 #include "bot_cvars.h"
  //#include "bot_hooks.h"
 
-#ifdef _WIN32
-#define sprintf sprintf_s
-#endif
-
 extern ConVar bot_beliefmulti;
 extern ConVar bot_spyknifefov;
 extern ConVar bot_use_vc_commands;

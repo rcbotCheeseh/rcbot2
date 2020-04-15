@@ -35,10 +35,6 @@
 #include "bot_weapons.h"
 #include "bot_getprop.h"
 
-#ifdef _WIN32
-#define strncpy strncpy_s
-#endif
-
 const char* g_szDODWeapons[] =
 {
 	"weapon_amerknife",

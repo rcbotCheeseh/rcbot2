@@ -34,8 +34,6 @@
 #include <windows.h>
 #define WIN32_LEAN_AND_MEAN
 
-#define strncpy strncpy_s
-
 #include <conio.h>
 
 #endif

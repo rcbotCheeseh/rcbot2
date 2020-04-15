@@ -51,8 +51,8 @@ public:
 	// get new copy of this
 	// sub classes return their class with own values
 	virtual IIndividual* copy();
-	
-	void setVector(const vector<float>& values);
+
+	void setVector(vector<float> values);
 
 	float get(int iIndex);
 

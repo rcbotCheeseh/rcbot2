@@ -37,10 +37,6 @@
 #include "bot_navigator.h"
 #include "bot_kv.h"
 
-#ifdef _WIN32
-#define sprintf sprintf_s
-#endif
-
 vector <CBotProfile*> CBotProfiles::m_Profiles;
 CBotProfile* CBotProfiles::m_pDefaultProfile = NULL;
 

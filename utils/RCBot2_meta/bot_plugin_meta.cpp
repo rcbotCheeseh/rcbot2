@@ -57,11 +57,6 @@
 #include "bot_kv.h"
 #include "bot_sigscan.h"
 
-#ifdef _WIN32
-#define _snprintf _snprintf_s
-#define sscanf sscanf_s
-#endif
-
 //#include "ndebugoverlay.h"
 
 CBotTF2* g_pLastBot;

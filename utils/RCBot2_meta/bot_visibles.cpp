@@ -41,10 +41,6 @@
 
 #include "ndebugoverlay.h"
 
-#ifdef _WIN32
-#define sprintf sprintf_s
-#endif
-
 extern IVDebugOverlay* debugoverlay;
 extern ConVar bot_visrevs;
 extern ConVar bot_visrevs_clients;

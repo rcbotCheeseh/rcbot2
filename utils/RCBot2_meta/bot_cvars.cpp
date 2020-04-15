@@ -4,11 +4,6 @@
 
 #include "bot_cvars.h"
 
-#ifdef _WIN32
-#define strcpy strcpy_s
-#define strcat strcat_s
-#endif
-
 static ICvar* s_pCVar;
 
 ConVar rcbot_tf2_debug_spies_cloakdisguise("rcbot_tf2_debug_spies_cloakdisguise", "1", 0, "Debug command : allow spy bots to cloak and disguise");

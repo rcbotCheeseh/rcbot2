@@ -32,8 +32,6 @@
 #include "bot_mtrand.h"
 #include "bot_ga.h"
 #include "bot_ga_ind.h"
-
-#include <utility>
 #include "bot_mtrand.h"
 
 CBotGAValues::CBotGAValues()
@@ -52,7 +50,7 @@ CBotGAValues::CBotGAValues(vector<float> values)
 	clear();
 	setFitness(0);
 
-	setVector(std::move(values));
+	setVector(values);
 }
 
 void CBotGAValues::clear()
@@ -125,7 +123,7 @@ IIndividual* CBotGAValues::copy()
 	return individual;
 }
 
-void CBotGAValues::setVector(const vector<float>& values)
+void CBotGAValues::setVector(const vector<float> values)
 {
 	for (unsigned int i = 0; i < values.size(); i++)
 		m_theValues.push_back(values[i]);

@@ -40,11 +40,6 @@
 #include "bot_globals.h"
 #include "bot_client.h"
 
-#ifdef _WIN32
-#define strcpy strcpy_s
-#define sprintf sprintf_s
-#endif
-
 extern IVDebugOverlay* debugoverlay;
 
 CBotMenu* CBotMenuList::m_MenuList[BOT_MENU_MAX];
