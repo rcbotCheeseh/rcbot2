@@ -42,12 +42,15 @@ ChunkFileResult_t LoadEntityKeyCallback(const char *szKey, const char *szValue, 
 	{
 		// UNDONE: flag entity errors by ID instead of index
 		//g_MapError.EntityState( atoi( szValue ) );
+		// rename this field since DME code uses this name
+		SetKeyValue( pLoadEntity->pEntity, "hammerid", szValue );
 		return(ChunkFile_Ok);
 	}
 	else if( !stricmp( szKey, "mapversion" ) )
 	{
 		// .vmf map revision number
 		g_MapRevision = atoi( szValue );
+		SetKeyValue( pLoadEntity->pEntity, szKey, szValue );
 		return ( ChunkFile_Ok );
 	}
 

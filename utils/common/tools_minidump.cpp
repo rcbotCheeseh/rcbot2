@@ -11,7 +11,7 @@
 
 
 static bool g_bToolsWriteFullMinidumps = false;
-static ToolsExceptionHandler g_pCustomExceptionHandler = false;
+static ToolsExceptionHandler g_pCustomExceptionHandler = NULL;
 
 
 // --------------------------------------------------------------------------------- //
@@ -33,7 +33,7 @@ static LONG __stdcall ToolsExceptionFilter( struct _EXCEPTION_POINTERS *Exceptio
 static LONG __stdcall ToolsExceptionFilter_Custom( struct _EXCEPTION_POINTERS *ExceptionInfo )
 {
 	// Run their custom handler.
-	g_pCustomExceptionHandler( ExceptionInfo->ExceptionRecord->ExceptionCode );
+	g_pCustomExceptionHandler( ExceptionInfo->ExceptionRecord->ExceptionCode, ExceptionInfo );
 	return EXCEPTION_EXECUTE_HANDLER; // (never gets here anyway)
 }
 

@@ -154,9 +154,9 @@ public:
 //  and have a good answer for a bunch of perf question related to player simulation, thinking logic, tracelines, networking overhead, etc.
 // But if you are brave or are doing something interesting, go for it...   ywb 9/22/03
 #if defined( CSTRIKE_DLL )
-	#define MAX_PLAYERS				65  // Absolute max players supported
+	#define MAX_PLAYERS				64  // Absolute max players supported
 #else
-	#define MAX_PLAYERS				33  // Absolute max players supported
+	#define MAX_PLAYERS				32  // Absolute max players supported
 #endif
 
 #define MAX_PLACE_NAME_LENGTH		18
@@ -695,7 +695,6 @@ struct EmitSound_t
 		m_SoundLevel( SNDLVL_NONE ),
 		m_nFlags( 0 ),
 		m_nPitch( PITCH_NORM ),
-		m_nSpecialDSP( 0 ),
 		m_pOrigin( 0 ),
 		m_flSoundTime( 0.0f ),
 		m_pflSoundDuration( 0 ),
@@ -716,7 +715,6 @@ struct EmitSound_t
 	soundlevel_t				m_SoundLevel;
 	int							m_nFlags;
 	int							m_nPitch;
-	int							m_nSpecialDSP;
 	const Vector				*m_pOrigin;
 	float						m_flSoundTime; ///< NOT DURATION, but rather, some absolute time in the future until which this sound should be delayed
 	float						*m_pflSoundDuration;

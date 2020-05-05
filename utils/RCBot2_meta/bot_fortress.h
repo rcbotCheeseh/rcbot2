@@ -1019,7 +1019,7 @@ public:
 
 	void detonateStickies(bool isJumping = false);
 
-	void setStickyTrapType(const Vector &vLocation, const eDemoTrapType iTrapType)
+	void setStickyTrapType(const Vector& vLocation, const eDemoTrapType iTrapType)
 	{
 		m_vStickyLocation = vLocation;
 		m_iTrapType = iTrapType;

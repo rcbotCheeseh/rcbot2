@@ -8,7 +8,7 @@
 //=============================================================================//
 
 #include "cmdlib.h"
-#include "mathlib.h"
+#include "mathlib/mathlib.h"
 #include "polylib.h"
 #include "worldsize.h"
 #include "threads.h"

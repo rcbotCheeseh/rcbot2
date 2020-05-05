@@ -57,7 +57,7 @@ inline bool FIsStripCW(const STRIPVERTS &stripvertices)
 // return length of strip
 inline int StripLen(const STRIPVERTS &stripvertices)
 {
-    return stripvertices.size() - 1;
+    return (int)stripvertices.size() - 1;
 }
 
 // free all stripverts and clear the striplist
@@ -298,6 +298,9 @@ int CStripper::CreateStrip(int tri, int vert, int maxlen, int *pswaps,
 STRIPLIST::iterator FindBestCachedStrip(STRIPLIST *pstriplist,
     const CVertCache &vertcachestate)
 {
+    if(pstriplist->empty())
+		return pstriplist->end();
+
     bool fFlipStrip = false;
     int maxcachehits = -1;
     STRIPLIST::iterator istriplistbest = pstriplist->begin();
@@ -375,7 +378,7 @@ STRIPLIST::iterator FindBestCachedStrip(STRIPLIST *pstriplist,
 int CStripper::CreateManyStrips(STRIPLIST *pstriplist, WORD **ppstripindices)
 {
     // allow room for each of the strips size plus the final 0
-    int indexcount = pstriplist->size() + 1;
+    int indexcount = (int)pstriplist->size() + 1;
 
     // we're storing the strips in [size1 i1 i2 i3][size2 i4 i5 i6][0] format
 	STRIPLIST::iterator istriplist;
@@ -436,7 +439,7 @@ int CStripper::CreateLongStrip(STRIPLIST *pstriplist, WORD **ppstripindices)
 {
     // allow room for one strip length plus a possible 3 extra indices per
     // concatenated strip list plus the final 0
-    int indexcount = (pstriplist->size() * 3) + 2;
+    int indexcount = ((int)pstriplist->size() * 3) + 2;
 
     // we're storing the strips in [size1 i1 i2 i3][size2 i4 i5 i6][0] format
 	STRIPLIST::iterator istriplist;
@@ -529,8 +532,8 @@ void CStripper::BuildStrips(STRIPLIST *pstriplist, int maxlen, bool flookahead)
     bool fstartcw = true;
     for(;;)
     {
-        int besttri;
-        int bestvert;
+        int besttri = 0;
+        int bestvert = 0;
         float bestratio = 2.0f;
         int bestneighborcount = INT_MAX;
 
@@ -561,7 +564,6 @@ void CStripper::BuildStrips(STRIPLIST *pstriplist, int maxlen, bool flookahead)
                     fstartcw, pstriptris, pstripverts);
                 assert(len);
 
-                int striplen = len - swaps;
                 float ratio = (len == 3) ? 1.0f : (float)swaps / len;
 
                 // check if this ratio is better than what we've already got for
@@ -633,7 +635,7 @@ int EstimateStripCost(STRIPLIST *pstriplist)
     }
 
     // assume 2 indices per strip to tack all these guys together
-    return count + (pstriplist->size() - 1) * 2;
+    return count + ((int)pstriplist->size() - 1) * 2;
 }
 
 //=========================================================================

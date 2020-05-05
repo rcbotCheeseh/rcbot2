@@ -24,7 +24,7 @@
 #include "tier0/vcr_shared.h"
 #include "tier0/dbg.h"
 
-#if defined _LINUX || defined __APPLE__
+#ifdef _LINUX
 DBG_INTERFACE void BuildCmdLine( int argc, tchar **argv );
 tchar *GetCommandLine();
 #endif

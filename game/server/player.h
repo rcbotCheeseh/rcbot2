@@ -218,7 +218,6 @@ public:
 	virtual void SetLastUserCommand( const CBotCmd &cmd );
 
 	virtual CBotCmd GetLastUserCommand();
-	virtual bool IsReplay();
 
 private:
 	CBasePlayer *m_pParent; 

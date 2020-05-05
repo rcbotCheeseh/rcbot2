@@ -260,11 +260,6 @@ void IGameSystem::LevelInitPostEntityAllSystems( void )
 	InvokeMethod( &IGameSystem::LevelInitPostEntity, "LevelInitPostEntity" );
 }
 
-void IGameSystem::LevelShutdownPreClearSteamAPIContextAllSystems()
-{
-	InvokeMethodReverseOrder( &IGameSystem::LevelShutdownPreClearSteamAPIContext );
-}
-
 void IGameSystem::LevelShutdownPreEntityAllSystems()
 {
 	InvokeMethodReverseOrder( &IGameSystem::LevelShutdownPreEntity );

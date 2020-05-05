@@ -133,7 +133,7 @@ public:
 	MTRand(const unsigned long* seed, int size) : MTRand_int32(seed, size) {}
 	~MTRand() {}
 	double operator()() {
-		return static_cast<double>(rand_int32())* (1. / 4294967296.);
+		return static_cast<double>(rand_int32()) * (1. / 4294967296.);
 	} // divided by 2^32
 private:
 	MTRand(const MTRand&); // copy constructor not defined
@@ -148,7 +148,7 @@ public:
 	MTRand_closed(const unsigned long* seed, int size) : MTRand_int32(seed, size) {}
 	~MTRand_closed() {}
 	double operator()() {
-		return static_cast<double>(rand_int32())* (1. / 4294967295.);
+		return static_cast<double>(rand_int32()) * (1. / 4294967295.);
 	} // divided by 2^32 - 1
 private:
 	MTRand_closed(const MTRand_closed&); // copy constructor not defined
@@ -163,7 +163,7 @@ public:
 	MTRand_open(const unsigned long* seed, int size) : MTRand_int32(seed, size) {}
 	~MTRand_open() {}
 	double operator()() {
-		return (static_cast<double>(rand_int32()) + .5)* (1. / 4294967296.);
+		return (static_cast<double>(rand_int32()) + .5) * (1. / 4294967296.);
 	} // divided by 2^32
 private:
 	MTRand_open(const MTRand_open&); // copy constructor not defined
@@ -179,7 +179,7 @@ public:
 	~MTRand53() {}
 	double operator()() {
 		return (static_cast<double>(rand_int32() >> 5) * 67108864. +
-			static_cast<double>(rand_int32() >> 6))* (1. / 9007199254740992.);
+			static_cast<double>(rand_int32() >> 6)) * (1. / 9007199254740992.);
 	}
 private:
 	MTRand53(const MTRand53&); // copy constructor not defined

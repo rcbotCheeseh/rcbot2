@@ -1,6 +1,6 @@
 //========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
 //
-// Purpose:
+// Purpose: 
 //
 // $NoKeywords: $
 //
@@ -14,10 +14,10 @@
 
 // Versioning
 // There are two versioning cases that are handled by this:
-// 1. You add functions to the end of an interface, so it is binary compatible with the previous interface. In this case,
+// 1. You add functions to the end of an interface, so it is binary compatible with the previous interface. In this case, 
 //    you need two EXPOSE_INTERFACEs: one to expose your class as the old interface and one to expose it as the new interface.
-// 2. You update an interface so it's not compatible anymore (but you still want to be able to expose the old interface
-//    for legacy code). In this case, you need to make a new version name for your new interface, and make a wrapper interface and
+// 2. You update an interface so it's not compatible anymore (but you still want to be able to expose the old interface 
+//    for legacy code). In this case, you need to make a new version name for your new interface, and make a wrapper interface and 
 //    expose it for the old interface.
 
 // Static Linking:
@@ -36,7 +36,7 @@
 #pragma once
 #endif
 
-#if defined _LINUX || defined __APPLE__
+#ifdef _LINUX
 #include <dlfcn.h> // dlopen,dlclose, et al
 #include <unistd.h>
 
@@ -70,21 +70,21 @@ public:
 #define CREATEINTERFACE_PROCNAME	((const char*)1)
 #endif
 
-typedef void* (*CreateInterfaceFn)(const char* pName, int* pReturnCode);
+typedef void* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
 typedef void* (*InstantiateInterfaceFn)();
 
 // Used internally to register classes.
 class InterfaceReg
 {
 public:
-	InterfaceReg(InstantiateInterfaceFn fn, const char* pName);
+	InterfaceReg(InstantiateInterfaceFn fn, const char *pName);
 
 public:
 	InstantiateInterfaceFn	m_CreateFn;
-	const char* m_pName;
+	const char				*m_pName;
 
-	InterfaceReg* m_pNext; // For the global list.
-	static InterfaceReg* s_pInterfaceRegs;
+	InterfaceReg			*m_pNext; // For the global list.
+	static InterfaceReg		*s_pInterfaceRegs;
 };
 
 // Use this to expose an interface that can have multiple instances.
@@ -155,7 +155,7 @@ public:
 class CSysModule;
 
 // interface return status
-enum
+enum 
 {
 	IFACE_OK = 0,
 	IFACE_FAILED
@@ -166,58 +166,61 @@ enum
 // if pReturnCode is set, it will return one of the following values (IFACE_OK, IFACE_FAILED)
 // extend this for other error conditions/code
 //-----------------------------------------------------------------------------
-DLL_EXPORT void* CreateInterface(const char* pName, int* pReturnCode);
+DLL_EXPORT void* CreateInterface(const char *pName, int *pReturnCode);
 
 #if defined( _X360 )
-DLL_EXPORT void* CreateInterfaceThunk(const char* pName, int* pReturnCode);
+DLL_EXPORT void *CreateInterfaceThunk( const char *pName, int *pReturnCode );
 #endif
 
 //-----------------------------------------------------------------------------
 // UNDONE: This is obsolete, use the module load/unload/get instead!!!
 //-----------------------------------------------------------------------------
-extern CreateInterfaceFn	Sys_GetFactory(CSysModule* pModule);
-extern CreateInterfaceFn	Sys_GetFactory(const char* pModuleName);
-extern CreateInterfaceFn	Sys_GetFactoryThis(void);
+extern CreateInterfaceFn	Sys_GetFactory( CSysModule *pModule );
+extern CreateInterfaceFn	Sys_GetFactory( const char *pModuleName );
+extern CreateInterfaceFn	Sys_GetFactoryThis( void );
 
 //-----------------------------------------------------------------------------
 // Load & Unload should be called in exactly one place for each module
 // The factory for that module should be passed on to dependent components for
 // proper versioning.
 //-----------------------------------------------------------------------------
-extern CSysModule* Sys_LoadModule(const char* pModuleName);
-extern void					Sys_UnloadModule(CSysModule* pModule);
+extern CSysModule			*Sys_LoadModule( const char *pModuleName );
+extern void					Sys_UnloadModule( CSysModule *pModule );
 
 // This is a helper function to load a module, get its factory, and get a specific interface.
 // You are expected to free all of these things.
 // Returns false and cleans up if any of the steps fail.
 bool Sys_LoadInterface(
-	const char* pModuleName,
-	const char* pInterfaceVersionName,
-	CSysModule** pOutModule,
-	void** pOutInterface);
+	const char *pModuleName,
+	const char *pInterfaceVersionName,
+	CSysModule **pOutModule,
+	void **pOutInterface );
 
 bool Sys_IsDebuggerPresent();
 
 //-----------------------------------------------------------------------------
-// Purpose: Place this as a singleton at module scope (e.g.) and use it to get the factory from the specified module name.
-//
+// Purpose: Place this as a singleton at module scope (e.g.) and use it to get the factory from the specified module name.  
+// 
 // When the singleton goes out of scope (.dll unload if at module scope),
-//  then it'll call Sys_UnloadModule on the module so that the refcount is decremented
+//  then it'll call Sys_UnloadModule on the module so that the refcount is decremented 
 //  and the .dll actually can unload from memory.
 //-----------------------------------------------------------------------------
 class CDllDemandLoader
 {
 public:
-	CDllDemandLoader(char const* pchModuleName);
+						CDllDemandLoader( char const *pchModuleName );
 	virtual				~CDllDemandLoader();
 	CreateInterfaceFn	GetFactory();
 	void				Unload();
 
 private:
 
-	char const* m_pchModuleName;
-	CSysModule* m_hModule;
+	char const	*m_pchModuleName;
+	CSysModule	*m_hModule;
 	bool		m_bLoadAttempted;
 };
 
 #endif
+
+
+

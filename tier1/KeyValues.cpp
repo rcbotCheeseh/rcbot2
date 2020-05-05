@@ -1,4 +1,4 @@
-//========= Copyright 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -8,7 +8,7 @@
 
 #if defined( _WIN32 ) && !defined( _X360 )
 #include <windows.h>		// for WideCharToMultiByte and MultiByteToWideChar
-#elif defined( _LINUX ) || defined( __APPLE__ )
+#elif defined(_LINUX)
 #include <wchar.h> // wcslen()
 #define _alloca alloca
 #endif
@@ -1279,18 +1279,11 @@ void KeyValues::SetColor( const char *keyName, Color value)
 
 void KeyValues::SetStringValue( char const *strValue )
 {
-	if ( m_sValue != NULL )
-	{
 	// delete the old value
 	delete [] m_sValue;
-	}
-
-	if ( m_wsValue != NULL )
-	{
 	// make sure we're not storing the WSTRING  - as we're converting over to STRING
 	delete [] m_wsValue;
 	m_wsValue = NULL;
-	}
 
 	if (!strValue)
 	{
@@ -1315,17 +1308,10 @@ void KeyValues::SetString( const char *keyName, const char *value )
 
 	if ( dat )
 	{
-		if ( dat->m_sValue != NULL )
-		{
 		// delete the old value
 		delete [] dat->m_sValue;
-		}
-
-		if ( dat->m_wsValue != NULL )
-		{
 		// make sure we're not storing the WSTRING  - as we're converting over to STRING
 		delete [] dat->m_wsValue;
-		}
 		dat->m_wsValue = NULL;
 
 		if (!value)
@@ -2362,13 +2348,9 @@ void *KeyValues::operator new( size_t iAllocSize )
 
 void *KeyValues::operator new( size_t iAllocSize, int nBlockUse, const char *pFileName, int nLine )
 {
-#ifndef NO_MALLOC_OVERRIDE
 	MemAlloc_PushAllocDbgInfo( pFileName, nLine );
-#endif
 	void *p = KeyValuesSystem()->AllocKeyValuesMemory(iAllocSize);
-#ifndef NO_MALLOC_OVERRIDE
 	MemAlloc_PopAllocDbgInfo();
-#endif
 	return p;
 }
 

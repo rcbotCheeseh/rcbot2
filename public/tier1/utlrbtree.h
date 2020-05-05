@@ -80,7 +80,7 @@ void SetDefLessFunc( RBTREE_T &RBTree )
 {
 #ifdef _WIN32
 	RBTree.SetLessFunc( DefLessFunc( RBTREE_T::KeyType_t ) );
-#elif defined _LINUX || defined __APPLE__
+#elif _LINUX
 	RBTree.SetLessFunc( DefLessFunc( typename RBTREE_T::KeyType_t ) );
 #endif
 }

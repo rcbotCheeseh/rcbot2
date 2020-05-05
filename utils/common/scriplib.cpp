@@ -8,13 +8,12 @@
 
 // scriplib.c
 
-#include "vstdlib/strtools.h"
+#include "tier1/strtools.h"
 #include "cmdlib.h"
 #include "scriplib.h"
-#ifdef STUDIOMDL
-#include "studiomdl.h"
+#if defined( _X360 )
+#include "xbox\xbox_win32stubs.h"
 #endif
-
 /*
 =============================================================================
 
@@ -45,6 +44,32 @@ char    token[MAXTOKEN];
 qboolean endofscript;
 qboolean tokenready;                     // only true if UnGetToken was just called
 
+typedef struct 
+{
+	char *param;
+	char *value;
+} variable_t;
+
+CUtlVector<variable_t> g_definevariable;
+
+/*
+Callback stuff
+*/
+
+void DefaultScriptLoadedCallback( char const *pFilenameLoaded, char const *pIncludedFromFileName, int nIncludeLineNumber )
+{
+	NULL;
+}
+
+SCRIPT_LOADED_CALLBACK g_pfnCallback = DefaultScriptLoadedCallback;
+
+SCRIPT_LOADED_CALLBACK SetScriptLoadedCallback( SCRIPT_LOADED_CALLBACK pfnNewScriptLoadedCallback )
+{
+	SCRIPT_LOADED_CALLBACK pfnCallback = g_pfnCallback;
+	g_pfnCallback = pfnNewScriptLoadedCallback;
+	return pfnCallback;
+}
+
 /*
 ==============
 AddScriptToStack
@@ -66,13 +91,13 @@ void AddScriptToStack (char *filename, ScriptPathMode_t pathMode = SCRIPT_USE_AB
 	size = LoadFile (script->filename, (void **)&script->buffer);
 
 	// printf ("entering %s\n", script->filename);
-#ifdef STUDIOMDL
-	extern bool g_bCreateMakefile;
-	if( g_bCreateMakefile )
+	if ( g_pfnCallback )
 	{
-		CreateMakefile_AddDependency( script->filename );
+		if ( script == scriptstack + 1 )
+			g_pfnCallback( script->filename, NULL, 0 );
+		else
+			g_pfnCallback( script->filename, script[-1].filename, script[-1].line );
 	}
-#endif
 
 	script->line = 1;
 
@@ -171,6 +196,21 @@ void DefineMacro( char *macroname )
 
 	script->script_p = cp;
 }
+
+
+void DefineVariable( char *variablename )
+{
+	variable_t v;
+
+	v.param = strdup( variablename );
+
+	GetToken( false );
+	
+	v.value = strdup( token );
+
+	g_definevariable.AddToTail( v );
+}
+
 
 
 /*
@@ -273,6 +313,65 @@ bool ExpandMacroToken( char *&token_p )
 		// paste token into 
 		len = strlen( script->macrovalue[index] );
 		strcpy( token_p, script->macrovalue[index] );
+		token_p += len;
+		
+		script->script_p = cp + 1;
+
+		if (script->script_p >= script->end_p)
+			Error ("Macro expand overflow\n");
+
+		if (token_p >= &token[MAXTOKEN])
+			Error ("Token too large on line %i\n",scriptline);
+
+		return true;
+	}
+	return false;
+}
+
+
+
+/*
+==============
+==============
+*/
+// FIXME: this should create a new script context so the individual tokens in the variable can be parsed
+bool ExpandVariableToken( char *&token_p )
+{
+	if ( *script->script_p == '$' )
+	{
+		char *cp = script->script_p + 1;
+
+		while ( *cp > 32 && *cp != '$' )
+		{
+			cp++;
+		}
+
+		// found a word with $'s on either end?
+		if (*cp != '$')
+			return false;
+
+		// get token pointer
+		char *tp = script->script_p + 1;
+		int len = (cp - tp);
+		*(tp + len) = '\0';
+
+		// lookup macro parameter
+
+		int index;
+		for (index = 0; index < g_definevariable.Count(); index++)
+		{
+			if (Q_strnicmp( g_definevariable[index].param, tp, len - 2 ) == 0)
+				break;
+		}
+	
+		if (index >= g_definevariable.Count() )
+		{
+			Error("unknown variable token \"%s\" in %s\n", tp, script->filename );
+		}
+
+		// paste token into 
+		len = strlen( g_definevariable[index].value );
+		strcpy( token_p, g_definevariable[index].value );
 		token_p += len;
 		
 		script->script_p = cp + 1;
@@ -463,11 +562,15 @@ skipspace:
 	{
 		if ( !ExpandMacroToken( token_p ) )
 		{
-			*token_p++ = *script->script_p++;
-			if (script->script_p == script->end_p)
-				break;
-			if (token_p == &token[MAXTOKEN])
-				Error ("Token too large on line %i\n",scriptline);
+			if ( !ExpandVariableToken( token_p ) )
+			{
+				*token_p++ = *script->script_p++;
+				if (script->script_p == script->end_p)
+					break;
+				if (token_p == &token[MAXTOKEN])
+					Error ("Token too large on line %i\n",scriptline);
+
+			}
 		}
 	}
 
@@ -485,6 +588,12 @@ skipspace:
 	{
 		GetToken (false);
 		DefineMacro(token);
+		return GetToken (crossline);
+	}
+	else if (!stricmp (token, "$definevariable"))
+	{
+		GetToken (false);
+		DefineVariable(token);
 		return GetToken (crossline);
 	}
 	else if (AddMacroToStack( token ))
@@ -667,4 +776,360 @@ qboolean GetTokenizerStatus( char **pFilename, int *pLine )
 		*pLine = script->line;
 	}
 	return true;
+}
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <direct.h>
+#include <io.h>
+#include <time.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/utime.h>
+#include "tier1/UtlBuffer.h"
+
+class CScriptLib : public IScriptLib
+{
+public:
+	virtual bool ReadFileToBuffer( const char *pSourceName, CUtlBuffer &buffer, bool bText = false, bool bNoOpenFailureWarning = false );
+	virtual bool WriteBufferToFile( const char *pTargetName, CUtlBuffer &buffer, DiskWriteMode_t writeMode );
+	virtual int	FindFiles( char* pFileMask, bool bRecurse, CUtlVector<fileList_t> &fileList );
+	virtual char *MakeTemporaryFilename( char const *pchModPath, char *pPath, int pathSize );
+	virtual void DeleteTemporaryFiles( const char *pFileMask );
+	virtual int CompareFileTime( const char *pFilenameA, const char *pFilenameB );
+	virtual bool DoesFileExist( const char *pFilename );
+
+private:
+
+	int GetFileList( const char* pDirPath, const char* pPattern, CUtlVector< fileList_t > &fileList );
+	void RecurseFileTree_r( const char* pDirPath, int depth, CUtlVector< CUtlString > &dirList );
+};
+
+static CScriptLib g_ScriptLib;
+IScriptLib *scriptlib = &g_ScriptLib;
+
+//-----------------------------------------------------------------------------
+// Existence check
+//-----------------------------------------------------------------------------
+bool CScriptLib::DoesFileExist( const char *pFilename )
+{
+	return g_pFullFileSystem->FileExists( pFilename );
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Helper utility, read file into buffer
+//-----------------------------------------------------------------------------
+bool CScriptLib::ReadFileToBuffer( const char *pSourceName, CUtlBuffer &buffer, bool bText, bool bNoOpenFailureWarning )
+{
+	bool bSuccess = true;
+
+	if ( !g_pFullFileSystem->ReadFile( pSourceName, NULL, buffer ) )
+	{
+		if ( !bNoOpenFailureWarning )
+		{
+			Msg( "ReadFileToBuffer(): Error opening %s: %s\n", pSourceName, strerror( errno ) );
+		}
+		return false;
+	}
+
+	if ( bText )
+	{
+		// force it into text mode
+		buffer.SetBufferType( true, true );
+	}
+	else
+	{
+		buffer.SetBufferType( false, false );
+	}
+
+	return bSuccess;
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Helper utility, Write buffer to file
+//-----------------------------------------------------------------------------
+bool CScriptLib::WriteBufferToFile( const char *pTargetName, CUtlBuffer &buffer, DiskWriteMode_t writeMode )
+{
+	char*	ptr;
+	char	dirPath[MAX_PATH];
+
+	bool bSuccess = true;
+
+	// create path
+	// prime and skip to first seperator
+	strcpy( dirPath, pTargetName );
+	ptr = strchr( dirPath, '\\' );
+	while ( ptr )
+	{		
+		ptr = strchr( ptr+1, '\\' );
+		if ( ptr )
+		{
+			*ptr = '\0';
+			mkdir( dirPath );
+			*ptr = '\\';
+		}
+	}
+
+	bool bDoWrite = false;
+	if ( writeMode == WRITE_TO_DISK_ALWAYS )
+	{
+		bDoWrite = true;
+	}
+	else if ( writeMode == WRITE_TO_DISK_UPDATE )
+	{
+		if ( DoesFileExist( pTargetName ) )
+		{
+			bDoWrite = true;
+		}
+	}
+
+	if ( bDoWrite )
+	{
+		bSuccess = g_pFullFileSystem->WriteFile( pTargetName, NULL, buffer );
+	}
+
+	return bSuccess;
+}
+
+//-----------------------------------------------------------------------------
+// Returns -1, 0, or 1.
+//-----------------------------------------------------------------------------
+int CScriptLib::CompareFileTime( const char *pFilenameA, const char *pFilenameB )
+{
+	int timeA = g_pFullFileSystem->GetFileTime( (char *)pFilenameA );
+	int timeB = g_pFullFileSystem->GetFileTime( (char *)pFilenameB );
+
+	if ( timeA == -1)
+	{
+		// file a not exist
+		timeA = 0;
+	}
+	if ( timeB == -1 )
+	{
+		// file b not exist
+		timeB = 0;
+	}
+
+	if ( (unsigned int)timeA < (unsigned int)timeB )
+	{
+		return -1;
+	}
+	else if ( (unsigned int)timeA > (unsigned int)timeB )
+	{
+		return 1;
+	}
+
+	return 0;
+}
+
+//-----------------------------------------------------------------------------
+// Make a temporary filename
+//-----------------------------------------------------------------------------
+char *CScriptLib::MakeTemporaryFilename( char const *pchModPath, char *pPath, int pathSize )
+{
+	char *pBuffer = _tempnam( pchModPath, "mgd_" );
+	if ( pBuffer[0] == '\\' )
+	{
+		pBuffer++;
+	}
+	if ( pBuffer[strlen( pBuffer )-1] == '.' )
+	{
+		pBuffer[strlen( pBuffer )-1] = '\0';
+	}
+	V_snprintf( pPath, pathSize, "%s.tmp", pBuffer );
+
+	free( pBuffer );
+
+	return pPath;
+}
+
+//-----------------------------------------------------------------------------
+// Delete temporary files
+//-----------------------------------------------------------------------------
+void CScriptLib::DeleteTemporaryFiles( const char *pFileMask )
+{
+#if !defined( _X360 )
+	const char *pEnv = getenv( "temp" );
+	if ( !pEnv )
+	{
+		pEnv = getenv( "tmp" );
+	}
+
+	if ( pEnv )
+	{
+		char tempPath[MAX_PATH];
+		strcpy( tempPath, pEnv );
+		V_AppendSlash( tempPath, sizeof( tempPath ) );
+		strcat( tempPath, pFileMask );
+
+		CUtlVector<fileList_t> fileList;
+		FindFiles( tempPath, false, fileList );
+		for ( int i=0; i<fileList.Count(); i++ )
+		{
+			_unlink( fileList[i].fileName.String() );
+		}
+	}
+#else
+	AssertOnce( !"CScriptLib::DeleteTemporaryFiles:  Not avail on 360\n" );
+#endif
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Get list of files from current path that match pattern
+//-----------------------------------------------------------------------------
+int CScriptLib::GetFileList( const char* pDirPath, const char* pPattern, CUtlVector< fileList_t > &fileList )
+{
+	char	sourcePath[MAX_PATH];
+	char	fullPath[MAX_PATH];
+	bool	bFindDirs;
+
+	fileList.Purge();
+
+	strcpy( sourcePath, pDirPath );
+	int len = (int)strlen( sourcePath );
+	if ( !len )
+	{
+		strcpy( sourcePath, ".\\" );
+	}
+	else if ( sourcePath[len-1] != '\\' )
+	{
+		sourcePath[len]   = '\\';
+		sourcePath[len+1] = '\0';
+	}
+
+	strcpy( fullPath, sourcePath );
+	if ( pPattern[0] == '\\' && pPattern[1] == '\0' )
+	{
+		// find directories only
+		bFindDirs = true;
+		strcat( fullPath, "*" );
+	}
+	else
+	{
+		// find files, use provided pattern
+		bFindDirs = false;
+		strcat( fullPath, pPattern );
+	}
+
+	struct _finddata_t findData;
+	intptr_t h = _findfirst( fullPath, &findData );
+	if ( h == -1 )
+	{
+		return 0;
+	}
+
+	do
+	{
+		// dos attribute complexities i.e. _A_NORMAL is 0
+		if ( bFindDirs )
+		{
+			// skip non dirs
+			if ( !( findData.attrib & _A_SUBDIR ) )
+				continue;
+		}
+		else
+		{
+			// skip dirs
+			if ( findData.attrib & _A_SUBDIR )
+				continue;
+		}
+
+		if ( !stricmp( findData.name, "." ) )
+			continue;
+
+		if ( !stricmp( findData.name, ".." ) )
+			continue;
+
+		char fileName[MAX_PATH];
+		strcpy( fileName, sourcePath );
+		strcat( fileName, findData.name );
+
+		int j = fileList.AddToTail();
+		fileList[j].fileName.Set( fileName );
+		fileList[j].timeWrite = findData.time_write;
+	}
+	while ( !_findnext( h, &findData ) );
+
+	_findclose( h );
+
+	return fileList.Count();
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Recursively determine directory tree
+//-----------------------------------------------------------------------------
+void CScriptLib::RecurseFileTree_r( const char* pDirPath, int depth, CUtlVector< CUtlString > &dirList )
+{
+	// recurse from source directory, get directories only
+	CUtlVector< fileList_t > fileList;
+	int dirCount = GetFileList( pDirPath, "\\", fileList );
+	if ( !dirCount )
+	{
+		// add directory name to search tree
+		int j = dirList.AddToTail();
+		dirList[j].Set( pDirPath );
+		return;
+	}
+
+	for ( int i=0; i<dirCount; i++ )
+	{
+		// form new path name, recurse into
+		RecurseFileTree_r( fileList[i].fileName.String(), depth+1, dirList );
+	}
+
+	int j = dirList.AddToTail();
+	dirList[j].Set( pDirPath );
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Generate a list of file matching mask
+//-----------------------------------------------------------------------------
+int CScriptLib::FindFiles( char* pFileMask, bool bRecurse, CUtlVector<fileList_t> &fileList )
+{
+	char	dirPath[MAX_PATH];
+	char	pattern[MAX_PATH];
+	char	extension[MAX_PATH];
+
+	// get path only
+	strcpy( dirPath, pFileMask );
+	V_StripFilename( dirPath );
+
+	// get pattern only
+	V_FileBase( pFileMask, pattern, sizeof( pattern ) );
+	V_ExtractFileExtension( pFileMask, extension, sizeof( extension ) );
+	if ( extension[0] )
+	{
+		strcat( pattern, "." );
+		strcat( pattern, extension );
+	}
+
+	if ( !bRecurse )
+	{
+		GetFileList( dirPath, pattern, fileList );
+	}
+	else
+	{
+		// recurse and get the tree
+		CUtlVector< fileList_t > tempList;
+		CUtlVector< CUtlString > dirList;
+		RecurseFileTree_r( dirPath, 0, dirList );
+		for ( int i=0; i<dirList.Count(); i++ )
+		{
+			// iterate each directory found
+			tempList.Purge();
+			tempList.EnsureCapacity( dirList.Count() );
+
+			GetFileList( dirList[i].String(), pattern, tempList );
+
+			int start = fileList.AddMultipleToTail( tempList.Count() );
+			for ( int j=0; j<tempList.Count(); j++ )
+			{
+				fileList[start+j] = tempList[j];
+			}
+		}	
+	}
+
+	return fileList.Count();
 }

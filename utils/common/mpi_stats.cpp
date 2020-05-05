@@ -7,7 +7,7 @@
 
 // Nasty headers!
 #include "MySqlDatabase.h"
-#include "vstdlib/strtools.h"
+#include "tier1/strtools.h"
 #include "vmpi.h"
 #include "vmpi_dispatch.h"
 #include "mpi_stats.h"
@@ -15,12 +15,28 @@
 #include "imysqlwrapper.h"
 #include "threadhelpers.h"
 #include "vmpi_tools_shared.h"
-#include "vstdlib/icommandline.h"
-
+#include "tier0/icommandline.h"
 
 /*
 
--- SQL code to (re)create the DB.
+-- MySQL code to create the databases, create the users, and set access privileges.
+-- You only need to ever run this once.
+
+create database vrad;
+
+use mysql;
+
+create user vrad_worker;
+create user vmpi_browser;
+
+-- This updates the "user" table, which is checked when someone tries to connect to the database.
+grant select,insert,update on vrad.* to vrad_worker;
+grant select on vrad.* to vmpi_browser;
+flush privileges;
+
+/*
+
+-- SQL code to (re)create the tables.
 
 -- Master generates a unique job ID (in job_master_start) and sends it to workers.
 -- Each worker (and the master) make a job_worker_start, link it to the primary job ID, 
@@ -30,6 +46,9 @@
 -- NOTE: do a "use vrad" or "use vvis" first, depending on the DB you want to create.
 
 
+use vrad;
+
+
 drop table job_master_start;
 create table job_master_start ( 
 	JobID					INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,	index id( JobID, MachineName(5) ),
@@ -37,7 +56,7 @@ create table job_master_start (
 	StartTime				TIMESTAMP NOT NULL,
 	MachineName				TEXT NOT NULL,
 	RunningTimeMS			INTEGER UNSIGNED NOT NULL,
-	NumWorkers				INTEGER UNSIGNED NOT NULL
+	NumWorkers				INTEGER UNSIGNED NOT NULL default 0
 	);
 
 drop table job_master_end;
@@ -56,15 +75,15 @@ create table job_worker_start (
 	
 	JobID					INTEGER UNSIGNED NOT NULL,				-- links to job_master_start::JobID
 	IsMaster				BOOL NOT NULL,							-- Set to 1 if this "worker" is the master process.
-	RunningTimeMS			INTEGER UNSIGNED NOT NULL,
+	RunningTimeMS			INTEGER UNSIGNED NOT NULL default 0,
 	MachineName				TEXT NOT NULL,
-	WorkerState				SMALLINT UNSIGNED NOT NULL,				-- 0 = disconnected, 1 = connected
-	NumWorkUnits			INTEGER UNSIGNED NOT NULL,				-- how many work units this worker has completed
+	WorkerState				SMALLINT UNSIGNED NOT NULL default 0,	-- 0 = disconnected, 1 = connected
+	NumWorkUnits			INTEGER UNSIGNED NOT NULL default 0,	-- how many work units this worker has completed
 	CurrentStage			TINYTEXT NOT NULL,				-- which compile stage is it on
-	Thread0WU				INTEGER NOT NULL,				-- which WU thread 0 is on
-	Thread1WU				INTEGER NOT NULL,				-- which WU thread 1 is on
-	Thread2WU				INTEGER NOT NULL,				-- which WU thread 2 is on
-	Thread3WU				INTEGER NOT NULL				-- which WU thread 3 is on
+	Thread0WU				INTEGER NOT NULL default 0,		-- which WU thread 0 is on
+	Thread1WU				INTEGER NOT NULL default 0,		-- which WU thread 1 is on
+	Thread2WU				INTEGER NOT NULL default 0,		-- which WU thread 2 is on
+	Thread3WU				INTEGER NOT NULL default 0		-- which WU thread 3 is on
 	);
 
 drop table text_messages;
@@ -79,8 +98,7 @@ create table graph_entry (
 	JobWorkerID				INTEGER UNSIGNED NOT NULL,					index id( JobWorkerID ),
 	MSSinceJobStart			INTEGER UNSIGNED NOT NULL,
 	BytesSent				INTEGER UNSIGNED NOT NULL,
-	BytesReceived			INTEGER UNSIGNED NOT NULL,
-	WorkUnitsCompleted		INTEGER UNSIGNED NOT NULL
+	BytesReceived			INTEGER UNSIGNED NOT NULL
 	);
 
 drop table events;
@@ -90,20 +108,6 @@ create table events (
 	);
 */
 
-
-/*
-
--- This code updates the access tables for VRAD.
-
-use mysql;
-
-
--- This updates the "user" table, which is checked when someone tries to connect to the database.
-grant select,insert,update on vrad.* to vrad_worker;
-grant select on vrad.* to vmpi_browser;
-flush privileges;
-
-*/
 
 
 // Stats set by the app.
@@ -133,9 +137,9 @@ DWORD	g_PerfThreadID = 0xFEFEFEFE;
 HANDLE	g_hPerfThreadExitEvent = NULL;
 
 // These are set by the app and they go into the database.
-extern int g_ThreadWUs[4];
+extern uint64 g_ThreadWUs[4];
 
-extern int VMPI_GetNumWorkUnitsCompleted( int iProc );
+extern uint64 VMPI_GetNumWorkUnitsCompleted( int iProc );
 
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -270,7 +274,7 @@ public:
 				Q_snprintf( query, sizeof( query ), "update "
 					"job_worker_start set WorkerState=%d, NumWorkUnits=%d where JobWorkerID=%lu",
 					VMPI_IsProcConnected( i ), 
-					VMPI_GetNumWorkUnitsCompleted( i ),
+					(int) VMPI_GetNumWorkUnitsCompleted( i ),
 					VMPI_GetJobWorkerID( i )
 					); 
 				g_pSQL->Execute( query );
@@ -311,10 +315,10 @@ void UpdateJobWorkerRunningTime()
 		"Thread0WU=%d, Thread1WU=%d, Thread2WU=%d, Thread3WU=%d where JobWorkerID=%lu", 
 		runningTimeMS, 
 		curStage,
-		g_ThreadWUs[0],
-		g_ThreadWUs[1],
-		g_ThreadWUs[2],
-		g_ThreadWUs[3],
+		(int) g_ThreadWUs[0],
+		(int) g_ThreadWUs[1],
+		(int) g_ThreadWUs[2],
+		(int) g_ThreadWUs[3],
 		g_JobWorkerID );
 	query.Execute( g_pSQL );
 }
@@ -412,7 +416,25 @@ void PerfThread_SendSpewText()
 		if ( g_SpewText.Count() > 0 )
 		{
 			g_SpewText.AddToTail( 0 );
-			g_pDB->AddCommandToQueue( new CSQLDBCommand_TextMessage( g_SpewText.Base() ), NULL );
+			
+			if ( g_bMPI_StatsTextOutput )
+			{
+				g_pDB->AddCommandToQueue( new CSQLDBCommand_TextMessage( g_SpewText.Base() ), NULL );
+			}
+			else
+			{
+				// Just show one message in the vmpi_job_watch window to let them know that they need
+				// to use a command line option to get the output.
+				static bool bFirst = true;
+				if ( bFirst )
+				{
+					char msg[512];
+					V_snprintf( msg, sizeof( msg ), "%s not enabled", VMPI_GetParamString( mpi_Stats_TextOutput ) );
+					bFirst = false;
+					g_pDB->AddCommandToQueue( new CSQLDBCommand_TextMessage( msg ), NULL );
+				}
+			}
+			
 			g_SpewText.RemoveAll();
 		}
 
@@ -594,7 +616,7 @@ bool VMPI_Stats_Init_Worker( const char *pHostName, const char *pDBName, const c
 	g_JobWorkerID = 0;
 
 	CMySQLQuery query;
-	query.Format( "insert into job_worker_start ( JobID, IsMaster, MachineName ) values ( %lu, %d, \"%s\" )",
+	query.Format( "insert into job_worker_start ( JobID, CurrentStage, IsMaster, MachineName ) values ( %lu, \"none\", %d, \"%s\" )",
 		g_JobPrimaryID, g_bMaster, g_MachineName );
 	query.Execute( g_pSQL );
 			
@@ -658,8 +680,8 @@ void VMPI_Stats_Term()
 
 static bool ReadStringFromFile( FILE *fp, char *pStr, int strSize )
 {
-	int i = 0;
-	for ( i=0; i < strSize-2; i++ )
+	int i=0;
+	for ( i; i < strSize-2; i++ )
 	{
 		if ( fread( &pStr[i], 1, 1, fp ) != 1 ||
 			pStr[i] == '\n' )
@@ -719,19 +741,33 @@ void RunJobWatchApp( char *pCmdLine )
 	PROCESS_INFORMATION pi;
 	memset( &pi, 0, sizeof( pi ) );
 
-	if ( !CreateProcess( 
-		NULL, 
-		pCmdLine, 
-		NULL,							// security
-		NULL,
-		TRUE,
-		0,			// flags
-		NULL,							// environment
-		NULL,							// current directory
-		&si,
-		&pi ) )
+	// Working directory should be the same as our exe's directory.
+	char dirName[512];
+	if ( GetModuleFileName( NULL, dirName, sizeof( dirName ) ) != 0 )
 	{
-		Warning( "-mpi_job_watch - error launching '%s'\n", pCmdLine );
+		char *s1 = V_strrchr( dirName, '\\' );
+		char *s2 = V_strrchr( dirName, '/' );
+		if ( s1 || s2 )
+		{
+			// Get rid of the last slash.
+			s1 = MAX( s1, s2 );
+			s1[0] = 0;
+		
+			if ( !CreateProcess( 
+				NULL, 
+				pCmdLine, 
+				NULL,							// security
+				NULL,
+				TRUE,
+				0,			// flags
+				NULL,							// environment
+				dirName,							// current directory
+				&si,
+				&pi ) )
+			{
+				Warning( "%s - error launching '%s'\n", VMPI_GetParamString( mpi_Job_Watch ), pCmdLine );
+			}
+		}
 	}
 }
 
@@ -741,6 +777,10 @@ void StatsDB_InitStatsDatabase(
 	char **argv, 
 	const char *pDBInfoFilename )
 {
+	// Did they disable the stats database?
+	if ( !g_bMPI_Stats && !VMPI_IsParamUsed( mpi_Job_Watch ) )
+		return;
+
 	unsigned long jobPrimaryID;
 
 	// Now open the DB.
@@ -762,7 +802,7 @@ void StatsDB_InitStatsDatabase(
 		
 		Msg( "\nTo watch this job, run this command line:\n%s\n\n", cmdLine );
 		
-		if ( CommandLine()->FindParm( "-mpi_job_watch" ) )
+		if ( VMPI_IsParamUsed( mpi_Job_Watch ) )
 		{
 			// Convenience thing to automatically launch the job watch for this job.
 			RunJobWatchApp( cmdLine );

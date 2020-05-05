@@ -16,7 +16,7 @@
 #pragma once
 
 #ifndef MATHLIB_H
-#include "mathlib.h"
+#include "mathlib/mathlib.h"
 #endif
 
 struct winding_t

@@ -23,7 +23,12 @@ void SetupDefaultToolsMinidumpHandler();
 
 
 // (Used by VMPI) - you specify your own crash handler.
-typedef void (*ToolsExceptionHandler)( unsigned long exceptionCode );
+// Arguments passed to ToolsExceptionHandler
+//		exceptionCode		- exception code
+//		pvExceptionInfo		- on Win32 platform points to "struct _EXCEPTION_POINTERS"
+//							  otherwise NULL
+//
+typedef void (*ToolsExceptionHandler)( unsigned long exceptionCode, void *pvExceptionInfo );
 void SetupToolsMinidumpHandler( ToolsExceptionHandler fn );
 
 

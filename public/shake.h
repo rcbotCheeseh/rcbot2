@@ -1,4 +1,4 @@
-//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: Network data for screen shake and screen fade.
 //
@@ -56,7 +56,7 @@ struct ScreenFade_t
 	unsigned short 	duration;		// FIXED 16 bit, with SCREENFADE_FRACBITS fractional, seconds duration
 	unsigned short 	holdTime;		// FIXED 16 bit, with SCREENFADE_FRACBITS fractional, seconds duration until reset (fade & hold)
 	short			fadeFlags;		// flags
-	unsigned char	r, g, b, a;		// fade to color ( max alpha )
+	byte			r, g, b, a;		// fade to color ( max alpha )
 };
 
 

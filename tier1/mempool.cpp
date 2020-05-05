@@ -4,14 +4,9 @@
 //
 //===========================================================================//
 
-#include "tier0/basetypes.h"
 #include "mempool.h"
 #include <stdio.h>
-#ifdef __APPLE__
-#include <sys/malloc.h>
-#else
 #include <malloc.h>
-#endif
 #include <memory.h>
 #include "tier0/dbg.h"
 #include <ctype.h>
@@ -227,7 +222,7 @@ void* CMemoryPool::AllocZero()
 // Purpose: Allocs a single block of memory from the pool.  
 // Input  : amount - 
 //-----------------------------------------------------------------------------
-void *CMemoryPool::Alloc( size_t amount )
+void *CMemoryPool::Alloc( unsigned int amount )
 {
 	void *returnBlock;
 
@@ -268,7 +263,7 @@ void *CMemoryPool::Alloc( size_t amount )
 // Purpose: Allocs a single block of memory from the pool, zeroes the memory before returning
 // Input  : amount - 
 //-----------------------------------------------------------------------------
-void *CMemoryPool::AllocZero( size_t amount )
+void *CMemoryPool::AllocZero( unsigned int amount )
 {
 	void *mem = Alloc( amount );
 	if ( mem )

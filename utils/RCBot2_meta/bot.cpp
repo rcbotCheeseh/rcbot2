@@ -1607,7 +1607,7 @@ bool CBot::hurt(edict_t* pAttacker, const int iHealthNow, const bool bDontHide)
 	if (m_fUpdateDamageTime < fTime)
 	{
 		m_fUpdateDamageTime = fTime + 0.5;
-		m_fCurrentDanger += (static_cast<float>(m_iAccumulatedDamage) / m_pPlayerInfo->GetMaxHealth())* MAX_BELIEF;
+		m_fCurrentDanger += (static_cast<float>(m_iAccumulatedDamage) / m_pPlayerInfo->GetMaxHealth()) * MAX_BELIEF;
 		m_iAccumulatedDamage = 0;
 	}
 
@@ -1795,7 +1795,7 @@ void CBot::debugBot(char* msg)
 		(pEnemy != NULL) ? pEnemy->GetClassName() : "none",
 		(p != NULL) ? p->GetName() : "none",
 		szConditions
-	);
+		);
 }
 
 int CBot::nearbyFriendlies(const float fDistance)
@@ -2929,7 +2929,7 @@ void CBot::secondaryAttack(const bool bHold)
 			0/* reaction time? (time to press)*/,
 			fHoldTime/* hold time*/,
 			fLetGoTime/*let go time*/
-		);
+			);
 	}
 }
 
@@ -2957,7 +2957,7 @@ void CBot::primaryAttack(const bool bHold, const float fTime)
 			0/* reaction time? (time to press)*/,
 			fHoldTime/* hold time*/,
 			fLetGoTime/*let go time*/
-		);
+			);
 	}
 }
 

@@ -1,9 +1,9 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
 // $NoKeywords: $
-//=============================================================================//
+//===========================================================================//
 
 #ifndef FILESYSTEM_TOOLS_H
 #define FILESYSTEM_TOOLS_H
@@ -45,6 +45,9 @@ enum FSInitType_t
 bool				FileSystem_Init( const char *pFilename, int maxMemoryUsage=0, FSInitType_t initType=FS_INIT_FULL, bool bOnlyUseFilename=false );
 void				FileSystem_Term();
 bool				FileSystem_SetGame( const char *szModDir );
+
+// Used to connect app-framework based console apps to the filesystem tools
+void				FileSystem_SetupStandardDirectories( const char *pFilename, const char *pGameInfoPath );
 
 CreateInterfaceFn	FileSystem_GetFactory( void );
 

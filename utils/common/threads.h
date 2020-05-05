@@ -18,8 +18,8 @@
 
 // Arrays that are indexed by thread should always be MAX_TOOL_THREADS+1
 // large so THREADINDEX_MAIN can be used from the main thread.
-#define MAX_TOOL_THREADS	4
-#define THREADINDEX_MAIN	4
+#define MAX_TOOL_THREADS	16
+#define THREADINDEX_MAIN	(MAX_TOOL_THREADS)
 
 
 extern	int		numthreads;
@@ -29,6 +29,15 @@ extern bool	g_bLowPriorityThreads;
 
 typedef void (*ThreadWorkerFn)( int iThread, int iWorkItem );
 typedef void (*RunThreadsFn)( int iThread, void *pUserData );
+
+
+enum ERunThreadsPriority
+{
+	k_eRunThreadsPriority_UseGlobalState=0,	// Default.. uses g_bLowPriorityThreads to decide what to set the priority to.
+	k_eRunThreadsPriority_Normal,			// Doesn't touch thread priorities.
+	k_eRunThreadsPriority_Idle				// Sets threads to idle priority.
+};
+
 
 // Put the process into an idle priority class so it doesn't hog the UI.
 void SetLowPriority();
@@ -41,7 +50,7 @@ void RunThreadsOnIndividual ( int workcnt, qboolean showpacifier, ThreadWorkerFn
 void RunThreadsOn ( int workcnt, qboolean showpacifier, RunThreadsFn fn, void *pUserData=NULL );
 
 // This version doesn't track work items - it just runs your function and waits for it to finish.
-void RunThreads_Start( RunThreadsFn fn, void *pUserData );
+void RunThreads_Start( RunThreadsFn fn, void *pUserData, ERunThreadsPriority ePriority=k_eRunThreadsPriority_UseGlobalState );
 void RunThreads_End();
 
 void ThreadLock (void);

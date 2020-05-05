@@ -174,7 +174,7 @@ DWORD WINAPI InternalRunThreadsFn( LPVOID pParameter )
 }
 
 
-void RunThreads_Start( RunThreadsFn fn, void *pUserData )
+void RunThreads_Start( RunThreadsFn fn, void *pUserData, ERunThreadsPriority ePriority )
 {
 	Assert( numthreads > 0 );
 	threaded = true;
@@ -197,8 +197,15 @@ void RunThreads_Start( RunThreadsFn fn, void *pUserData )
 		   0,			// DWORD fdwCreate,
 		   &dwDummy );
 
-		if( g_bLowPriorityThreads )
-			SetThreadPriority( g_ThreadHandles[i], THREAD_PRIORITY_LOWEST );
+		if ( ePriority == k_eRunThreadsPriority_UseGlobalState )
+		{
+			if( g_bLowPriorityThreads )
+				SetThreadPriority( g_ThreadHandles[i], THREAD_PRIORITY_LOWEST );
+		}
+		else if ( ePriority == k_eRunThreadsPriority_Idle )
+		{
+			SetThreadPriority( g_ThreadHandles[i], THREAD_PRIORITY_IDLE );
+		}
 	}
 }
 

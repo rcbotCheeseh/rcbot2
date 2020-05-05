@@ -235,7 +235,7 @@ bool CDODBot::setVisible(edict_t* pEntity, const bool bVisible)
 		// don't run away from smoke grenades
 		else if ((pEntity != m_pEnemyGrenade) && (szClassname[8] != 's') && (strncmp(szClassname, "grenade", 7) == 0) &&
 			((CClassInterface::getGrenadeThrower(pEntity) == m_pEdict) ||
-			((CClassInterface::getTeam(pEntity) == m_iEnemyTeam) || bFriendlyFire)))
+				((CClassInterface::getTeam(pEntity) == m_iEnemyTeam) || bFriendlyFire)))
 		{
 			UPDATE_VISIBLE_OBJECT(m_pEnemyGrenade, pEntity);
 		}

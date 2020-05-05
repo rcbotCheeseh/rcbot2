@@ -89,7 +89,7 @@ static MTRand drand;
 double randomOne()
 {
 	//irand is seeded
-	return static_cast<double>(irand())* (1. / 4294967296.);
+	return static_cast<double>(irand()) * (1. / 4294967296.);
 }
 
 int randomInt(int imin, int imax)

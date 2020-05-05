@@ -17,13 +17,25 @@
 
 #include "bspfile.h"
 #include "utlvector.h"
+#include "utlstring.h"
+#include "utllinkedlist.h"
+#include "byteswap.h"
+#ifdef ENGINE_DLL
+#include "zone.h"
+#endif
 
+#ifdef ENGINE_DLL
+typedef CUtlVector<unsigned char, CHunkMemory<unsigned char> > CDispLightmapSamplePositions;
+#else
+typedef CUtlVector<unsigned char> CDispLightmapSamplePositions;
+#endif
 
 class ISpatialQuery;
 struct Ray_t;
 class Vector2D;
 struct portal_t;
 class CUtlBuffer;
+class IZip;
 
 // this is only true in vrad
 extern bool g_bHDR;
@@ -32,7 +44,7 @@ extern bool g_bHDR;
 #define DEFAULT_LUXEL_SIZE ( 16.0f )
 
 #define	SINGLE_BRUSH_MAP	(MAX_BRUSH_LIGHTMAP_DIM_INCLUDING_BORDER*MAX_BRUSH_LIGHTMAP_DIM_INCLUDING_BORDER)
-#define	SINGLEMAP	(MAX_LIGHTMAP_DIM_INCLUDING_BORDER*MAX_LIGHTMAP_DIM_INCLUDING_BORDER)
+#define	SINGLEMAP			(MAX_LIGHTMAP_DIM_INCLUDING_BORDER*MAX_LIGHTMAP_DIM_INCLUDING_BORDER)
 
 struct entity_t
 {
@@ -47,6 +59,8 @@ struct entity_t
 	portal_t	*m_pPortalsLeadingIntoAreas[2];	// portals leading into portalareas
 };
 
+extern	int				num_entities;
+extern	entity_t		entities[MAX_MAP_ENTITIES];
 
 extern	int			    nummodels;
 extern	dmodel_t	    dmodels[MAX_MAP_MODELS];
@@ -61,8 +75,13 @@ extern	CUtlVector<byte> *pdlightdata;
 extern	CUtlVector<char> dentdata;
 
 extern	int			    numleafs;
+#if !defined( _X360 )
 extern	dleaf_t			dleafs[MAX_MAP_LEAFS];
-extern	CUtlVector<CompressedLightCube> *g_pLeafAmbientLighting;
+#else
+extern	dleaf_t			*dleafs;
+#endif
+extern	CUtlVector<dleafambientlighting_t> *g_pLeafAmbientLighting;
+extern	CUtlVector<dleafambientindex_t> *g_pLeafAmbientIndex;
 extern	unsigned short  g_LeafMinDistToWater[MAX_MAP_LEAFS];
 
 extern	int			    numplanes;
@@ -86,10 +105,10 @@ extern	int			    numtexdata;
 extern	dtexdata_t	    dtexdata[MAX_MAP_TEXDATA];
 
 // displacement map .bsp file info
-extern  CUtlVector<ddispinfo_t> g_dispinfo;
-extern  CUtlVector<CDispVert> g_DispVerts;
-extern  CUtlVector<CDispTri> g_DispTris;
-extern  CUtlVector<unsigned char> g_DispLightmapSamplePositions; // LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS
+extern  CUtlVector<ddispinfo_t>		g_dispinfo;
+extern  CUtlVector<CDispVert>		g_DispVerts;
+extern  CUtlVector<CDispTri>		g_DispTris;
+extern  CDispLightmapSamplePositions g_DispLightmapSamplePositions; // LUMP_DISP_LIGHTMAP_SAMPLE_POSITIONS
 
 extern  int             numorigfaces;
 extern  dface_t         dorigfaces[MAX_MAP_FACES];
@@ -105,6 +124,9 @@ extern	unsigned short	g_primindices[MAX_MAP_PRIMINDICES];
 
 extern	int			    numfaces;
 extern	dface_t		    dfaces[MAX_MAP_FACES];
+
+extern	int				numfaceids;
+extern	CUtlVector<dfaceid_t>	dfaceids;
 
 extern	int			    numfaces_hdr;
 extern	dface_t		    dfaces_hdr[MAX_MAP_FACES];
@@ -144,6 +166,7 @@ extern int				g_nCubemapSamples;
 
 extern int				g_nOverlayCount;
 extern doverlay_t		g_Overlays[MAX_MAP_OVERLAYS];
+extern doverlayfade_t	g_OverlayFades[MAX_MAP_OVERLAYS];	// Parallel array of fade info in a separate lump to avoid breaking backwards compat
 
 extern int				g_nWaterOverlayCount;
 extern dwateroverlay_t	g_WaterOverlays[MAX_MAP_WATEROVERLAYS];
@@ -151,92 +174,102 @@ extern dwateroverlay_t	g_WaterOverlays[MAX_MAP_WATEROVERLAYS];
 extern CUtlVector<char>	g_TexDataStringData;
 extern CUtlVector<int>	g_TexDataStringTable;
 
-// JAY: portals in the BSP file
-// These are the portal data structures (points to verts, leafs, planes)
-extern	int					numportals;
-extern	dportal_t			dportals[MAX_MAP_PORTALS];
-
-// These are the per-cluster data (currently only the portal list)
-extern	int					numclusters;
-extern	dcluster_t			dclusters[MAX_MAP_CLUSTERS];
-
 extern	int					numleafwaterdata;
 extern	dleafwaterdata_t	dleafwaterdata[MAX_MAP_LEAFWATERDATA]; 
 
-// This is a list of polygons.  Each set of portal verts define a portal polygon
-// These numbers are indices into the map's vertex list
-extern	int					numportalverts;
-extern	unsigned short		dportalverts[MAX_MAP_PORTALVERTS];
-
-// This is a list of portal indices.  Each portal is referenced twice (once by each cluster it separates)
-extern	int					numclusterportals;
-extern	unsigned short		dclusterportals[MAX_MAP_PORTALS*2];
-
 extern CUtlVector<CFaceMacroTextureInfo>	g_FaceMacroTextureInfos;
 
-extern CUtlVector<doccluderdata_t>	g_OccluderData;
+extern CUtlVector<doccluderdata_t>		g_OccluderData;
 extern CUtlVector<doccluderpolydata_t>	g_OccluderPolyData;
-extern CUtlVector<int>	g_OccluderVertexIndices;
+extern CUtlVector<int>					g_OccluderVertexIndices;
 
-extern CUtlVector<dlightmappage_t>		g_dLightmapPages;
-extern CUtlVector<dlightmappageinfo_t>	g_dLightmapPageInfos;
-
-// level flags
-extern uint32 g_LevelFlags;								// see LVLFLAGS_xxx in bspfile.h
-
-// ---------------------------------------------------------------   portals
+// level flags - see LVLFLAGS_xxx in bspfile.h
+extern uint32 g_LevelFlags;	
 
 // physics collision data
 extern	byte		*g_pPhysCollide;
 extern	int			g_PhysCollideSize;
+extern byte			*g_pPhysDisp;
+extern int			g_PhysDispSize;
 
 // Embedded pack/pak file
-void				ClearPackFile( void );
-void				AddFileToPack( const char *pRelativeName, const char *fullpath );
-void				AddBufferToPack( const char *pRelativeName, void *data, int length, bool bTextMode );
-bool				FileExistsInPack( const char *pRelativeName );
-bool				ReadFileFromPack( const char *pRelativeName, bool bTextMode, CUtlBuffer &buf );
-void				RemoveFileFromPack( const char *pRelativeName );
-int					GetNextFilename( int id, char *pBuffer, int bufferSize, int &fileSize );
-void				ForceAlignment( bool bAlign, unsigned int sectorSize );
+IZip				*GetPakFile( void );
+IZip				*GetSwapPakFile( void );
+void				ClearPakFile( IZip *pak );
+void				AddFileToPak( IZip *pak, const char *pRelativeName, const char *fullpath );
+void				AddBufferToPak( IZip *pak, const char *pRelativeName, void *data, int length, bool bTextMode );
+bool				FileExistsInPak( IZip *pak, const char *pRelativeName );
+bool				ReadFileFromPak( IZip *pak, const char *pRelativeName, bool bTextMode, CUtlBuffer &buf );
+void				RemoveFileFromPak( IZip *pak, const char *pRelativeName );
+int					GetNextFilename( IZip *pak, int id, char *pBuffer, int bufferSize, int &fileSize );
+void				ForceAlignment( IZip *pak, bool bAlign, bool bCompatibleFormat, unsigned int alignmentSize );
+
+typedef bool (*CompressFunc_t)( CUtlBuffer &inputBuffer, CUtlBuffer &outputBuffer );
+typedef bool (*VTFConvertFunc_t)( const char *pDebugName, CUtlBuffer &sourceBuf, CUtlBuffer &targetBuf, CompressFunc_t pCompressFunc );
+typedef bool (*VHVFixupFunc_t)( const char *pVhvFilename, const char *pModelName, CUtlBuffer &sourceBuf, CUtlBuffer &targetBuf );
+
+//-----------------------------------------------------------------------------
+// Game lump memory storage
+//-----------------------------------------------------------------------------
+// NOTE: This is not optimal at all; since I expect client lumps to
+// not be accessed all that often.
+
+struct GameLump_t
+{
+	GameLumpId_t	m_Id;
+	unsigned short	m_Flags;
+	unsigned short	m_Version;
+	CUtlMemory< unsigned char >	m_Memory;
+};
 
 //-----------------------------------------------------------------------------
 // Handle to a game lump
 //-----------------------------------------------------------------------------
 typedef unsigned short GameLumpHandle_t;
 
-
-//-----------------------------------------------------------------------------
-// Convert four-CC code to a handle	+ back
-//-----------------------------------------------------------------------------
-GameLumpHandle_t	GetGameLumpHandle( GameLumpId_t id );
-GameLumpId_t		GetGameLumpId( GameLumpHandle_t handle );
-int					GetGameLumpFlags( GameLumpHandle_t handle );
-int					GetGameLumpVersion( GameLumpHandle_t handle );
-
-
-//-----------------------------------------------------------------------------
-// Game lump accessor methods 
-//-----------------------------------------------------------------------------
-void*	GetGameLump( GameLumpHandle_t handle );
-int		GameLumpSize( GameLumpHandle_t handle );
+class CGameLump
+{
+public:
+	//-----------------------------------------------------------------------------
+	// Convert four-CC code to a handle	+ back
+	//-----------------------------------------------------------------------------
+	GameLumpHandle_t	GetGameLumpHandle( GameLumpId_t id );
+	GameLumpId_t		GetGameLumpId( GameLumpHandle_t handle );
+	int					GetGameLumpFlags( GameLumpHandle_t handle );
+	int					GetGameLumpVersion( GameLumpHandle_t handle );
+	void				ComputeGameLumpSizeAndCount( int& size, int& clumpCount );
+	void				ParseGameLump( dheader_t* pHeader );
+	void				SwapGameLump( GameLumpId_t id, int version, byte *dest, byte *src, int size );
 
 
-//-----------------------------------------------------------------------------
-// Game lump iteration methods 
-//-----------------------------------------------------------------------------
-GameLumpHandle_t	FirstGameLump();
-GameLumpHandle_t	NextGameLump( GameLumpHandle_t handle );
-GameLumpHandle_t	InvalidGameLump();
+	//-----------------------------------------------------------------------------
+	// Game lump accessor methods 
+	//-----------------------------------------------------------------------------
+	void*	GetGameLump( GameLumpHandle_t handle );
+	int		GameLumpSize( GameLumpHandle_t handle );
 
 
-//-----------------------------------------------------------------------------
-// Game lump creation/destruction method
-//-----------------------------------------------------------------------------
-GameLumpHandle_t	CreateGameLump( GameLumpId_t id, int size, int flags, int version );
-void				DestroyGameLump( GameLumpHandle_t handle );
-void				DestroyAllGameLumps();
+	//-----------------------------------------------------------------------------
+	// Game lump iteration methods 
+	//-----------------------------------------------------------------------------
+	GameLumpHandle_t	FirstGameLump();
+	GameLumpHandle_t	NextGameLump( GameLumpHandle_t handle );
+	GameLumpHandle_t	InvalidGameLump();
 
+
+	//-----------------------------------------------------------------------------
+	// Game lump creation/destruction method
+	//-----------------------------------------------------------------------------
+	GameLumpHandle_t	CreateGameLump( GameLumpId_t id, int size, int flags, int version );
+	void				DestroyGameLump( GameLumpHandle_t handle );
+	void				DestroyAllGameLumps();
+
+private:
+	CUtlLinkedList< GameLump_t, GameLumpHandle_t >	m_GameLumps;
+};
+
+extern CGameLump	g_GameLumps;
+extern CByteswap	g_Swap;
 
 //-----------------------------------------------------------------------------
 // Helper for the bspzip tool
@@ -250,41 +283,39 @@ void ExtractZipFileFromBSP( char *pBSPFileName, char *pZipFileName );
 const char *		TexDataStringTable_GetString( int stringID );
 int					TexDataStringTable_AddOrFindString( const char *pString );
 
-void DecompressVis (byte *in, byte *decompressed);
-int CompressVis (byte *vis, byte *dest);
+void	DecompressVis (byte *in, byte *decompressed);
+int		CompressVis (byte *vis, byte *dest);
 
-void	OpenBSPFile (char *filename);
-void	CloseBSPFile (void);
-void	LoadBSPFile (char *filename);
-void	LoadBSPFile_FileSystemOnly (char *filename);
-void	LoadBSPFileTexinfo (char *filename);	// just for qdata
-void	WriteBSPFile (char *filename, char* xzpLumpFilename = NULL);
-void	PrintBSPFileSizes (void);
+void	OpenBSPFile( const char *filename );
+void	CloseBSPFile(void);
+void	LoadBSPFile( const char *filename );
+void	LoadBSPFile_FileSystemOnly( const char *filename );
+void	LoadBSPFileTexinfo( const char *filename );
+void	WriteBSPFile( const char *filename, char *pUnused = NULL );
+void	PrintBSPFileSizes(void);
 void	PrintBSPPackDirectory(void);
-
+void	ReleasePakFileLumps(void);
+bool	SwapBSPFile( const char *filename, const char *swapFilename, bool bSwapOnLoad, VTFConvertFunc_t pVTFConvertFunc, VHVFixupFunc_t pVHVFixupFunc, CompressFunc_t pCompressFunc );
+bool	GetPakFileLump( const char *pBSPFilename, void **pPakData, int *pPakSize );
+bool	SetPakFileLump( const char *pBSPFilename, const char *pNewFilename, void *pPakData, int pakSize );
 void	WriteLumpToFile( char *filename, int lump );
-
-//===============
-
-extern	int			num_entities;
-extern	entity_t	entities[MAX_MAP_ENTITIES];
+bool	GetBSPDependants( const char *pBSPFilename, CUtlVector< CUtlString > *pList );
+void	UnloadBSPFile();
 
 void	ParseEntities (void);
 void	UnparseEntities (void);
+void	PrintEntity (entity_t *ent);
 
 void 	SetKeyValue (entity_t *ent, const char *key, const char *value);
 char 	*ValueForKey (entity_t *ent, char *key);
 // will return "" if not present
-
 int		IntForKey (entity_t *ent, char *key);
 vec_t	FloatForKey (entity_t *ent, char *key);
+vec_t	FloatForKeyWithDefault (entity_t *ent, char *key, float default_value);
 void 	GetVectorForKey (entity_t *ent, char *key, Vector& vec);
 void 	GetVector2DForKey (entity_t *ent, char *key, Vector2D& vec);
 void 	GetAnglesForKey (entity_t *ent, char *key, QAngle& vec);
-
 epair_t *ParseEpair (void);
-
-void PrintEntity (entity_t *ent);
 
 
 // Build a list of the face's vertices (index into dvertexes).
@@ -362,9 +393,9 @@ inline ColorRGBExp32* dface_AvgLightColor( dface_t *pFace, int nLightStyleIndex 
 	return (ColorRGBExp32*)&(*pdlightdata)[pFace->lightofs - (nLightStyleIndex+1) * 4];
 }
 
-inline const char* TexInfo_TexName( int iTexInto )
+inline const char* TexInfo_TexName( int iTexInfo )
 {
-	return TexDataStringTable_GetString( dtexdata[texinfo[iTexInto].texdata].nameStringTableID );
+	return TexDataStringTable_GetString( dtexdata[texinfo[iTexInfo].texdata].nameStringTableID );
 }
 
 

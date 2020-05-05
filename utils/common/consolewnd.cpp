@@ -9,6 +9,9 @@
 #include "consolewnd.h"
 
 
+#pragma warning( disable : 4311 ) // warning C4311: 'reinterpret_cast' : pointer truncation from 'CConsoleWnd *const ' to 'LONG'
+#pragma warning( disable : 4312 ) // warning C4312: 'type cast' : conversion from 'LONG' to 'CConsoleWnd *' of greater size
+
 #define EDITCONTROL_BORDER_SIZE	5
 
 
@@ -79,7 +82,6 @@ CConsoleWnd::~CConsoleWnd()
 	Term();
 }
 
-
 bool CConsoleWnd::Init( void *hInstance, int dialogResourceID, int editControlID, bool bVisible )
 {
 	// Create the window.
@@ -92,7 +94,7 @@ bool CConsoleWnd::Init( void *hInstance, int dialogResourceID, int editControlID
 	if ( !m_hWnd )
 		return false;
 
-	SetWindowLong( m_hWnd, GWL_USERDATA, (LONG)this );
+	SetWindowLong( m_hWnd, GWL_USERDATA, reinterpret_cast< LONG >( this ) );
 	if ( bVisible )
 		ShowWindow( m_hWnd, SW_SHOW );
 
@@ -129,9 +131,18 @@ void CConsoleWnd::SetVisible( bool bVisible )
 	ShowWindow( m_hWnd, bVisible ? SW_RESTORE : SW_HIDE );
 	
 	if ( bVisible )
-		SetWindowPos( m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW );
+	{
+		ShowWindow( m_hWnd, SW_SHOW );
+		SetWindowPos( m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
+		UpdateWindow( m_hWnd );
+		
+		int nLen = (int)SendMessage( m_hEditControl, EM_GETLIMITTEXT, 0, 0 );
+		SendMessage( m_hEditControl, EM_SETSEL, nLen, nLen );
+	}
 	else
+	{
 		SetWindowPos( m_hWnd, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW | SWP_NOOWNERZORDER );
+	}
 	
 	m_bVisible = bVisible;
 }
@@ -150,13 +161,13 @@ void CConsoleWnd::PrintToConsole( const char *pMsg )
 		// Clear the edit control otherwise it'll stop outputting anything.
 		m_nCurrentChars = 0;
 
-		int nLen = SendMessage( m_hEditControl, EM_GETLIMITTEXT, 0, 0 );
+		int nLen = (int)SendMessage( m_hEditControl, EM_GETLIMITTEXT, 0, 0 );
 		SendMessage( m_hEditControl, EM_SETSEL, 0, nLen );
 		SendMessage( m_hEditControl, EM_REPLACESEL, FALSE, (LPARAM)"" );
 	}		
 
 	FormatAndSendToEditControl( m_hEditControl, pMsg );
-	m_nCurrentChars += strlen( pMsg );
+	m_nCurrentChars += (int)strlen( pMsg );
 }
 
 
@@ -264,7 +275,7 @@ void CConsoleWnd::SetDeleteOnClose( bool bDelete )
 
 void SendToEditControl( HWND hEditControl, const char *pText )
 {
-	int nLen = SendMessage( hEditControl, EM_GETLIMITTEXT, 0, 0 );
+	int nLen = (int)SendMessage( hEditControl, EM_GETLIMITTEXT, 0, 0 );
 	SendMessage( hEditControl, EM_SETSEL, nLen, nLen );
 	SendMessage( hEditControl, EM_REPLACESEL, FALSE, (LPARAM)pText );
 }

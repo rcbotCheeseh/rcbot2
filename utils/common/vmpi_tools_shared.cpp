@@ -8,9 +8,10 @@
 #include "vmpi.h"
 #include "cmdlib.h"
 #include "vmpi_tools_shared.h"
-#include "vstdlib/strtools.h"
+#include "tier1/strtools.h"
 #include "mpi_stats.h"
 #include "iphelpers.h"
+#include "tier0/minidump.h"
 
 
 // ----------------------------------------------------------------------------- //
@@ -59,7 +60,71 @@ bool SharedDispatch( MessageBuffer *pBuf, int iSource, int iPacketID )
 
 		case VMPI_SUBPACKETID_CRASH:
 		{
-			Warning( "\nWorker '%s' dead: %s\n", VMPI_GetMachineName( iSource ), pInPos );
+			char const chCrashInfoType = *pInPos;
+			pInPos += 2;
+			switch ( chCrashInfoType )
+			{
+			case 't':
+				Warning( "\nWorker '%s' dead: %s\n", VMPI_GetMachineName( iSource ), pInPos );
+				break;
+			case 'f':
+				{
+					int iFileSize = * reinterpret_cast< int const * >( pInPos );
+					pInPos += sizeof( iFileSize );
+
+					// Temp folder
+					char const *szFolder = NULL;
+					if ( !szFolder ) szFolder = getenv( "TEMP" );
+					if ( !szFolder ) szFolder = getenv( "TMP" );
+					if ( !szFolder ) szFolder = "c:";
+
+					// Base module name
+					char chModuleName[_MAX_PATH], *pModuleName = chModuleName;
+					::GetModuleFileName( NULL, chModuleName, sizeof( chModuleName ) / sizeof( chModuleName[0] ) );
+
+					if ( char *pch = strrchr( chModuleName, '.' ) )
+						*pch = 0;
+					if ( char *pch = strrchr( chModuleName, '\\' ) )
+						*pch = 0, pModuleName = pch + 1;
+
+					// Current time
+					time_t currTime = ::time( NULL );
+					struct tm * pTime = ::localtime( &currTime );
+
+					// Number of minidumps this run
+					static int s_numMiniDumps = 0;
+					++ s_numMiniDumps;
+
+					// Prepare the filename
+					char chSaveFileName[ 2 * _MAX_PATH ] = { 0 };
+					sprintf( chSaveFileName, "%s\\vmpi_%s_on_%s_%d%.2d%2d%.2d%.2d%.2d_%d.mdmp",
+						szFolder,
+						pModuleName,
+						VMPI_GetMachineName( iSource ),
+						pTime->tm_year + 1900,	/* Year less 2000 */
+						pTime->tm_mon + 1,		/* month (0 - 11 : 0 = January) */
+						pTime->tm_mday,			/* day of month (1 - 31) */
+						pTime->tm_hour,			/* hour (0 - 23) */
+						pTime->tm_min,		    /* minutes (0 - 59) */
+						pTime->tm_sec,		    /* seconds (0 - 59) */
+						s_numMiniDumps
+						);
+
+					if ( FILE *fDump = fopen( chSaveFileName, "wb" ) )
+					{
+						fwrite( pInPos, 1, iFileSize, fDump );
+						fclose( fDump );
+
+						Warning( "\nSaved worker crash minidump '%s', size %d byte(s).\n",
+							chSaveFileName, iFileSize );
+					}
+					else
+					{
+						Warning( "\nReceived worker crash minidump size %d byte(s), failed to save.\n", iFileSize );
+					}
+				}
+				break;
+			}
 		}
 		return true;
 	}
@@ -114,8 +179,54 @@ void RecvDBInfo( CDBInfo *pInfo, unsigned long *pJobPrimaryID )
 	*pJobPrimaryID = g_JobPrimaryID;
 }
 
+// If the file is successfully opened, read and sent returns the size of the file in bytes
+// otherwise returns 0 and nothing is sent
+int VMPI_SendFileChunk( const void *pvChunkPrefix, int lenPrefix, tchar const *ptchFileName )
+{
+	HANDLE hFile = NULL;
+	HANDLE hMapping = NULL;
+	void const *pvMappedData = NULL;
+	int iResult = 0;
 
-void VMPI_HandleCrash( const char *pMessage, bool bAssert )
+	hFile = ::CreateFile( ptchFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+	if ( !hFile || ( hFile == INVALID_HANDLE_VALUE ) )
+		goto done;
+
+	hMapping = ::CreateFileMapping( hFile, NULL, PAGE_READONLY, 0, 0, NULL );
+	if ( !hMapping || ( hMapping == INVALID_HANDLE_VALUE ) )
+		goto done;
+
+	pvMappedData = ::MapViewOfFile( hMapping, FILE_MAP_READ, 0, 0, 0 );
+	if ( !pvMappedData )
+		goto done;
+
+	int iMappedFileSize = ::GetFileSize( hFile, NULL );
+	if ( INVALID_FILE_SIZE == iMappedFileSize )
+		goto done;
+
+	// Send the data over VMPI
+	if ( VMPI_Send3Chunks(
+		pvChunkPrefix, lenPrefix,
+		&iMappedFileSize, sizeof( iMappedFileSize ),
+		pvMappedData, iMappedFileSize,
+		VMPI_MASTER_ID ) )
+		iResult = iMappedFileSize;
+
+	// Fall-through for cleanup code to execute
+done:
+	if ( pvMappedData )
+		::UnmapViewOfFile( pvMappedData );
+
+	if ( hMapping && ( hMapping != INVALID_HANDLE_VALUE ) )
+		::CloseHandle( hMapping );
+
+	if ( hFile && ( hFile != INVALID_HANDLE_VALUE ) )
+		::CloseHandle( hFile );
+
+	return iResult;
+}
+
+void VMPI_HandleCrash( const char *pMessage, void *pvExceptionInfo, bool bAssert )
 {
 	static LONG crashHandlerCount = 0;
 	if ( InterlockedIncrement( &crashHandlerCount ) == 1 )
@@ -123,7 +234,7 @@ void VMPI_HandleCrash( const char *pMessage, bool bAssert )
 		Msg( "\nFAILURE: '%s' (assert: %d)\n", pMessage, bAssert );
 
 		// Send a message to the master.
-		char crashMsg[2] = { VMPI_SHARED_PACKET_ID, VMPI_SUBPACKETID_CRASH };
+		char crashMsg[4] = { VMPI_SHARED_PACKET_ID, VMPI_SUBPACKETID_CRASH, 't', ':' };
 
 		VMPI_Send2Chunks( 
 			crashMsg, 
@@ -131,6 +242,26 @@ void VMPI_HandleCrash( const char *pMessage, bool bAssert )
 			pMessage,
 			strlen( pMessage ) + 1,
 			VMPI_MASTER_ID );
+
+		// Now attempt to create a minidump with the given exception information
+		if ( pvExceptionInfo )
+		{
+			struct _EXCEPTION_POINTERS *pvExPointers = ( struct _EXCEPTION_POINTERS * ) pvExceptionInfo;
+			tchar tchMinidumpFileName[_MAX_PATH] = { 0 };
+			bool bSucceededWritingMinidump = WriteMiniDumpUsingExceptionInfo(
+				pvExPointers->ExceptionRecord->ExceptionCode,
+				pvExPointers,
+				( MINIDUMP_TYPE )( MiniDumpWithDataSegs | MiniDumpWithIndirectlyReferencedMemory | MiniDumpWithProcessThreadData ),
+				// ( MINIDUMP_TYPE )( MiniDumpWithDataSegs | MiniDumpWithFullMemory | MiniDumpWithHandleData | MiniDumpWithUnloadedModules | MiniDumpWithIndirectlyReferencedMemory | MiniDumpWithProcessThreadData | MiniDumpWithPrivateReadWriteMemory  ),
+				// ( MINIDUMP_TYPE )( MiniDumpNormal ),
+				tchMinidumpFileName );
+			if ( bSucceededWritingMinidump )
+			{
+				crashMsg[2] = 'f';
+				VMPI_SendFileChunk( crashMsg, sizeof( crashMsg ), tchMinidumpFileName );
+				::DeleteFile( tchMinidumpFileName );
+			}
+		}
 
 		// Let the messages go out.
 		Sleep( 500 );
@@ -148,7 +279,7 @@ LONG __stdcall VMPI_SecondExceptionFilter( struct _EXCEPTION_POINTERS *Exception
 }
 
 
-void VMPI_ExceptionFilter( unsigned long code )
+void VMPI_ExceptionFilter( unsigned long uCode, void *pvExceptionInfo )
 {
 	// This is called if we crash inside our crash handler. It just terminates the process immediately.
 	SetUnhandledExceptionFilter( VMPI_SecondExceptionFilter );
@@ -186,17 +317,22 @@ void VMPI_ExceptionFilter( unsigned long code )
 	};
 
 	int nErrors = sizeof( errors ) / sizeof( errors[0] );
-	int i = 0;
-	for ( i = 0; i < nErrors; i++ )
+	int i=0;
+	char *pchReason = NULL;
+	char chUnknownBuffer[32];
+	for ( i; ( i < nErrors ) && !pchReason; i++ )
 	{
-		if ( errors[i].code == code )
-			VMPI_HandleCrash( errors[i].pReason, true );
+		if ( errors[i].code == uCode )
+			pchReason = errors[i].pReason;
 	}
 
 	if ( i == nErrors )
 	{
-		VMPI_HandleCrash( "Unknown reason", true );
+		sprintf( chUnknownBuffer, "Error code 0x%08X", uCode );
+		pchReason = chUnknownBuffer;
 	}
+	
+	VMPI_HandleCrash( pchReason, pvExceptionInfo, true );
 
 	TerminateProcess( GetCurrentProcess(), 1 );
 }
@@ -206,8 +342,10 @@ void HandleMPIDisconnect( int procID, const char *pReason )
 {
 	int nLiveWorkers = VMPI_GetCurrentNumberOfConnections() - g_nDisconnects - 1;
 
+	// We ran into the size limit before and it wasn't readily apparent that the size limit had
+	// been breached, so make sure to show errors about invalid packet sizes..
 	bool bOldSuppress = g_bSuppressPrintfOutput;
-	g_bSuppressPrintfOutput = true;
+	g_bSuppressPrintfOutput = ( Q_stristr( pReason, "invalid packet size" ) == 0 );
 
 		Warning( "\n\n--- WARNING: lost connection to '%s' (%s).\n", VMPI_GetMachineName( procID ), pReason );
 		
@@ -225,6 +363,7 @@ void HandleMPIDisconnect( int procID, const char *pReason )
 		}
 		else
 		{
+			VMPI_HandleAutoRestart();
 			Error( "Worker quitting." );
 		}
 	

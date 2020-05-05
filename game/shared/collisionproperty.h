@@ -72,10 +72,8 @@ public:
 
 	// Methods of ICollideable
 	virtual IHandleEntity	*GetEntityHandle();
- 	virtual const Vector&	OBBMinsPreScaled() const { return m_vecMinsPreScaled.Get(); }
-	virtual const Vector&	OBBMaxsPreScaled() const { return m_vecMaxsPreScaled.Get(); }
-	virtual const Vector&	OBBMins() const { return m_vecMins.Get(); }
-	virtual const Vector&	OBBMaxs() const { return m_vecMaxs.Get(); }
+ 	virtual const Vector&	OBBMins( ) const;
+	virtual const Vector&	OBBMaxs( ) const;
 	virtual void			WorldSpaceTriggerBounds( Vector *pVecWorldMins, Vector *pVecWorldMaxs ) const;
 	virtual bool			TestCollision( const Ray_t &ray, unsigned int fContentsMask, trace_t& tr );
 	virtual bool			TestHitboxes( const Ray_t &ray, unsigned int fContentsMask, trace_t& tr );
@@ -103,9 +101,6 @@ public:
 
 	// Sets the collision bounds + the size (OBB)
 	void			SetCollisionBounds( const Vector& mins, const Vector &maxs );
-
-	// Rebuilds the scaled bounds from the pre-scaled bounds after a model's scale has changed
-	void			RefreshScaledCollisionBounds( void );
 
 	// Sets special trigger bounds. The bloat amount indicates how much bigger the 
 	// trigger bounds should be beyond the bounds set in SetCollisionBounds
@@ -168,12 +163,6 @@ public:
 
 	// Computes a bounding box in world space surrounding the collision bounds
 	void			WorldSpaceAABB( Vector *pWorldMins, Vector *pWorldMaxs ) const;
-
-	// Get the collision space mins directly
-	const Vector &	CollisionSpaceMins( void ) const;
-
-	// Get the collision space maxs directly
-	const Vector &	CollisionSpaceMaxs( void ) const;
 
 	// Computes a "normalized" point (range 0,0,0 - 1,1,1) in collision space
 	// Useful for things like getting a point 75% of the way along z on the OBB, for example
@@ -239,8 +228,6 @@ private:
 private:
 	CBaseEntity *m_pOuter;
 
-	CNetworkVector( m_vecMinsPreScaled );
-	CNetworkVector( m_vecMaxsPreScaled );
 	CNetworkVector( m_vecMins );
 	CNetworkVector( m_vecMaxs );
 	float m_flRadius;
@@ -258,8 +245,6 @@ private:
 	// SUCKY: We didn't use to have to store this previously
 	// but storing it here means that we can network it + avoid a ton of
 	// client-side mismatch problems
-	CNetworkVector( m_vecSpecifiedSurroundingMinsPreScaled );
-	CNetworkVector( m_vecSpecifiedSurroundingMaxsPreScaled );
 	CNetworkVector( m_vecSpecifiedSurroundingMins );
 	CNetworkVector( m_vecSpecifiedSurroundingMaxs );
 
@@ -453,19 +438,6 @@ inline const Vector & CCollisionProperty::WorldDirectionToCollisionSpace( const 
 inline void CCollisionProperty::WorldSpaceAABB( Vector *pWorldMins, Vector *pWorldMaxs ) const
 {
 	CollisionAABBToWorldAABB( m_vecMins, m_vecMaxs, pWorldMins, pWorldMaxs );
-}
-
-
-// Get the collision space mins directly
-inline const Vector & CCollisionProperty::CollisionSpaceMins( void ) const
-{
-	return m_vecMins;
-}
-
-// Get the collision space maxs directly
-inline const Vector & CCollisionProperty::CollisionSpaceMaxs( void ) const
-{
-	return m_vecMaxs;
 }
 
 

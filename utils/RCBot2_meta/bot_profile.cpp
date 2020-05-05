@@ -120,7 +120,7 @@ void CBotProfiles::setupProfiles()
 		0.5f, // braveness
 		0.5f, // aim skill
 		-1 // class
-	);
+		);
 
 	// read profiles
 	iId = 1;
