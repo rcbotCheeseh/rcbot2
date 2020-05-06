@@ -858,7 +858,7 @@ private:
 class CDODWaitForBombTask : public CBotTask
 {
 public:
-	CDODWaitForBombTask(edict_t* pBombTarget, CWaypoint* pBlocking) : m_pRunTo(nullptr)
+	CDODWaitForBombTask(edict_t* pBombTarget, CWaypoint* pBlocking)
 	{
 		m_pBombTarget = pBombTarget;
 		m_fTime = 0.0f;

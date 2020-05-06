@@ -44,7 +44,7 @@ public:
 class CTF2FindFlagFunc : public CVisibleFunc
 {
 public:
-	CTF2FindFlagFunc(CBot* pBot) : m_pBot(nullptr)
+	CTF2FindFlagFunc(CBot* pBot)
 	{
 		m_pFlag = NULL;
 	}

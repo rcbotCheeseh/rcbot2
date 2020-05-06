@@ -305,9 +305,7 @@ CTeamControlPointRound* CTeamControlPointMaster::getCurrentRound()
 	CTeamControlPointRound *fromserverent = (CTeamControlPointRound*)p->GetIServerEntity();*/
 
 	// Fix for later TF2 2016 Engine? [APG]RoboCop[CL]
-	return reinterpret_cast<CTeamControlPointRound*>(reinterpret_cast<unsigned long>(pent) + static_cast<unsigned long>(
-		rcbot_const_point_master_offset.
-		GetInt()));
+	return (CTeamControlPointRound*)((unsigned long)pent + (unsigned long)rcbot_const_point_master_offset.GetInt());
 }
 
 //////////////////

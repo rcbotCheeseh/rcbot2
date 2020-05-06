@@ -505,7 +505,7 @@ public:
 
 	static inline void addWeapon(CWeapon* pWeapon) { m_theWeapons.push_back(pWeapon); }
 
-	static CWeapon* getWeapon(const int iId);
+	static CWeapon* getWeapon(int iId);
 
 	static CWeapon* getWeapon(const char* szWeapon);
 

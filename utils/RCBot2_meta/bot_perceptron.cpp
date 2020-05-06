@@ -192,8 +192,8 @@ CBotNeuralNet::CBotNeuralNet(unsigned short int numinputs, unsigned short int nu
 	unsigned short int neuronsperhiddenlayer, unsigned short int numoutputs,
 	ga_nn_value learnrate)
 {
-	register unsigned short int i;
-	register unsigned short int j;
+	unsigned short int i;
+	unsigned short int j;
 
 	m_pOutputs = new CLogisticalNeuron[numoutputs];
 	m_pHidden = new CLogisticalNeuron * [numhiddenlayers];
@@ -234,10 +234,10 @@ void CBotNeuralNet::batch_train(CTrainingSet* tset, unsigned short int epochs)
 	ga_nn_value act_out; // actual
 	ga_nn_value out_error;
 	unsigned short int e; // epoch
-	register unsigned short int bi; // batch iterator
-	register unsigned short int i; // ith node
-	register unsigned short int j; //jth output
-	register signed short int l; // layer
+	unsigned short int bi; // batch iterator
+	unsigned short int i; // ith node
+	unsigned short int j; //jth output
+	signed short int l; // layer
 	CLogisticalNeuron* pNode, * pOutputNode;
 	unsigned short int numbatches = tset->getNumBatches();
 	training_batch_t* batches = tset->getBatches();

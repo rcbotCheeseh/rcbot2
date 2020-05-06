@@ -136,31 +136,7 @@ private:
 class CClient
 {
 public:
-	CClient() : m_pPlayer(nullptr), m_bWaypointOn(false), m_iCurrentWaypoint(0), m_iPathFrom(0), m_iPathTo(0),
-		m_iAccessLevel(0),
-		m_iWptArea(0),
-		m_bAutoPaths(false),
-		m_bPathWaypointOn(false),
-		m_iDebugLevels(0),
-		m_bShowMenu(false),
-		m_fCopyWptRadius(0),
-		m_iCopyWptFlags(0), m_iCopyWptArea(0),
-		m_fNextPrintDebugInfo(0), m_iPrevMenu(0),
-		m_vLastAutoWaypointCheckPos{},
-		m_bDebugAutoWaypoint(false),
-		m_bAutoWaypoint(false),
-		m_fLastAutoWaypointCheckTime(0),
-		m_bSetUpAutoWaypoint(false),
-		m_fCanPlaceJump(0), m_iLastButtons(0),
-		m_iLastJumpWaypointIndex(0),
-		m_iLastLadderWaypointIndex(0),
-		m_iLastMoveType(0),
-		m_fCanPlaceLadder(0),
-		m_iJoinLadderWaypointIndex(0),
-		m_iAutoEventWaypointTeamOn(0),
-		m_iAutoEventWaypointTeamOff(0),
-		m_iAutoEventWaypointTeam(0),
-		m_bIsTeleporting(false), m_fTeleportTime(0)
+	CClient()
 	{
 		m_szSteamID = NULL;
 		m_pPlayerInfo = NULL;

@@ -1730,7 +1730,7 @@ void CTeamFortress2Mod::updatePointMaster()
 
 			//full_size is initialized but not referenced - [APG]RoboCop[CL]
 			unsigned long full_size = sizeof(pMasterEntity);
-			unsigned long mempoint = reinterpret_cast<unsigned long>(pMasterEntity) + rcbot_const_point_master_offset.GetInt();
+			unsigned long mempoint = ((unsigned long)pMasterEntity) + rcbot_const_point_master_offset.GetInt();
 
 			m_PointMaster = reinterpret_cast<CTeamControlPointMaster*>(mempoint);
 			m_PointMasterResource = pMaster;
@@ -1745,7 +1745,7 @@ void CTeamFortress2Mod::updatePointMaster()
 
 			//extern ConVar rcbot_const_round_offset;
 
-			const int idx = m_PointMaster->m_iCurrentRoundIndex;
+			int idx = m_PointMaster->m_iCurrentRoundIndex;
 			int size = m_PointMaster->m_ControlPointRounds.Size();
 
 			if (idx >= 0 && size >= 0 && idx < 100 && size < 100)
@@ -1758,9 +1758,7 @@ void CTeamFortress2Mod::updatePointMaster()
 					{
 						CBaseEntity* pent = m_PointMaster->m_ControlPointRounds[r];
 
-						CTeamControlPointRound* pointRound = reinterpret_cast<CTeamControlPointRound*>(reinterpret_cast<
-							unsigned long>(pent) + static_cast<unsigned long>(rcbot_const_point_master_offset.
-								GetInt()));
+						CTeamControlPointRound* pointRound = (CTeamControlPointRound*)((unsigned long)pent + (unsigned long)rcbot_const_point_master_offset.GetInt());
 
 						CBotGlobals::botMessage(NULL, 0, "Control Points for Round %d", r);
 

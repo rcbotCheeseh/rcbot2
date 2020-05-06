@@ -2381,7 +2381,7 @@ void CBotCommand::setAccessLevel(const int iAccessLevel)
 	m_iAccessLevel = iAccessLevel;
 }
 
-CBotCommand::CBotCommand(char* szCommand, const int iAccessLevel) : m_szHelp(nullptr)
+CBotCommand::CBotCommand(char* szCommand, const int iAccessLevel)
 {
 	m_szCommand = CStrings::getString(szCommand);
 	m_iAccessLevel = iAccessLevel;

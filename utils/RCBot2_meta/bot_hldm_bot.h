@@ -88,7 +88,7 @@ private:
 	// blah blah
 	MyEHandle m_NearestPhysObj;
 	MyEHandle m_NearestBreakable;
-	edict_t* m_FailedPhysObj = nullptr;
+	edict_t* m_FailedPhysObj;
 	float m_flSprintTime = 0;
 	MyEHandle m_pHealthCharger;
 	MyEHandle m_pHealthKit;
@@ -99,7 +99,7 @@ private:
 	MyEHandle m_pNearestButton;
 	//MyEHandle m_pNearestBreakable;
 	MyEHandle m_pAmmoCrate;
-	edict_t* m_pCurrentWeapon = nullptr;
+	edict_t* m_pCurrentWeapon;
 
 	float m_fUseButtonTime = 0;
 	float m_fUseCrateTime = 0;
@@ -111,7 +111,7 @@ private:
 	int m_iClip1 = 0;
 	int m_iClip2 = 0;
 
-	edict_t* m_pCarryingObject = nullptr; // using grav gun
+	edict_t* m_pCarryingObject; // using grav gun
 };
 
 #endif

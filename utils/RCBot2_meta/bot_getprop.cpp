@@ -5,6 +5,10 @@
 #include "bot_globals.h"
 #include "bot_getprop.h"
 
+#ifdef WIN32
+#define strncpy strncpy_s
+#endif
+
 CClassInterfaceValue CClassInterface::g_GetProps[GET_PROPDATA_MAX];
 bool CClassInterfaceValue::m_berror = false;
 
@@ -580,9 +584,9 @@ edict_t* CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 	float fDist;
 	const char* pszClassname;
 	// speed up loop by by using smaller ints in register
-	register short int max = static_cast<short int>(gpGlobals->maxEntities);
+	short int max = static_cast<short int>(gpGlobals->maxEntities);
 
-	for (register short int i = 0; i < max; i++)
+	for (short int i = 0; i < max; i++)
 	{
 		current = engine->PEntityOfEntIndex(i);
 

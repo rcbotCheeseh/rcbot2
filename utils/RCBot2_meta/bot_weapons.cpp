@@ -35,6 +35,10 @@
 #include "bot_weapons.h"
 #include "bot_getprop.h"
 
+#ifdef WIN32
+#define strncpy strncpy_s
+#endif
+
 const char* g_szDODWeapons[] =
 {
 	"weapon_amerknife",
@@ -276,7 +280,7 @@ CBotWeapons::CBotWeapons(CBot* pBot)
 
 edict_t* CWeapons::findWeapon(edict_t* pPlayer, const char* pszWeaponName)
 {
-	register unsigned short int j;
+	unsigned short int j;
 	CBaseHandle* m_Weapons = CClassInterface::getWeaponList(pPlayer);
 	edict_t* pWeapon;
 	CBaseHandle* m_Weapon_iter = m_Weapons;
@@ -324,7 +328,7 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 		this->clearWeapons();
 
 		int iWeaponState;
-		register unsigned short int i;
+		unsigned short int i;
 		bool bFound;
 
 		const char* pszClassname;
@@ -543,7 +547,7 @@ void CBotWeapon::setWeaponEntity(edict_t* pent, bool bOverrideAmmoTypes)
 
 CBotWeapon* CBotWeapons::addWeapon(CWeapon* pWeaponInfo, int iId, edict_t* pent, bool bOverrideAll)
 {
-	register int i = 0;
+	int i = 0;
 	Vector origin;
 	const char* classname;
 	edict_t* pEnt = NULL;
@@ -634,7 +638,7 @@ return;
 }*/
 CBotWeapon* CBotWeapons::getWeapon(CWeapon* pWeapon)
 {
-	for (register unsigned int i = 0; i < MAX_WEAPONS; i++)
+	for (unsigned int i = 0; i < MAX_WEAPONS; i++)
 	{
 		if (m_theWeapons[i].getWeaponInfo() == pWeapon)
 			return &(m_theWeapons[i]);
@@ -645,7 +649,7 @@ CBotWeapon* CBotWeapons::getWeapon(CWeapon* pWeapon)
 
 CBotWeapon* CBotWeapons::getCurrentWeaponInSlot(int iSlot)
 {
-	for (register unsigned int i = 0; i < MAX_WEAPONS; i++)
+	for (unsigned int i = 0; i < MAX_WEAPONS; i++)
 	{
 		if (m_theWeapons[i].hasWeapon() && m_theWeapons[i].getWeaponInfo() && (m_theWeapons[i].getWeaponInfo()->getSlot() == iSlot))
 			return &(m_theWeapons[i]);
@@ -766,7 +770,7 @@ void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault
 
 void CBotWeapons::clearWeapons()
 {
-	for (register unsigned short i = 0; i < MAX_WEAPONS; i++)
+	for (unsigned short i = 0; i < MAX_WEAPONS; i++)
 	{
 		memset(&m_theWeapons[i], 0, sizeof(CBotWeapon));
 		//m_theWeapons[i].setHasWeapon(false);
@@ -778,7 +782,7 @@ CBotWeapon* CBotWeapons::getPrimaryWeapon()
 {
 	CBotWeapon* pBest = NULL;
 
-	for (register unsigned short i = 0; i < MAX_WEAPONS; i++)
+	for (unsigned short i = 0; i < MAX_WEAPONS; i++)
 	{
 		CBotWeapon* pWeap = &(m_theWeapons[i]);
 
@@ -804,7 +808,7 @@ CBotWeapon* CBotWeapons::getActiveWeapon(const char* szWeaponName, edict_t* pWea
 
 		if (pWeapon)
 		{
-			register unsigned short int i;
+			unsigned short int i;
 
 			for (i = 0; i < MAX_WEAPONS; i++)
 			{

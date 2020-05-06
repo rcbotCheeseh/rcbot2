@@ -2,6 +2,12 @@
 #include "bot_kv.h"
 #include "bot_globals.h"
 
+#ifdef WIN32
+#define strcpy strcpy_s
+#define strncpy strncpy_s
+#define sprintf sprintf_s
+#endif
+
 void CRCBotKeyValueList::parseFile(FILE* fp)
 {
 	char buffer[2 * (RCBOT_MAX_KV_LEN)];

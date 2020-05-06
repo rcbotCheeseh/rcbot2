@@ -1229,7 +1229,7 @@ void CClient::setWaypointCut(CWaypoint* pWaypoint)
 {
 	if (pWaypoint)
 	{
-		register int i = 0;
+		int i = 0;
 
 		setWaypointCopy(pWaypoint);
 

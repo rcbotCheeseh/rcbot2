@@ -266,7 +266,7 @@ void* CSignatureFunction::findPattern(const void* libPtr, const char* pattern, s
 	while (ptr < end)
 	{
 		found = true;
-		for (register size_t i = 0; i < len; i++)
+		for (size_t i = 0; i < len; i++)
 		{
 			if (pattern[i] != '\x2A' && pattern[i] != ptr[i])
 			{

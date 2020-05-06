@@ -493,7 +493,7 @@ void CWaypointLocations::FindNearestBlastInBucket(int i, int j, int k, const Vec
 	short int size = static_cast<short int>(arr->Size());
 	CBotMod* curmod = CBotGlobals::getCurrentMod();
 
-	for (register short int l = 0; l < size; l++)
+	for (short int l = 0; l < size; l++)
 		//while ( !tempStack.IsEmpty() )
 	{
 		iSelectedIndex = arr->ReturnValueFromIndex(l);//tempStack.ChooseFromStack();

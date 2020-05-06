@@ -35,6 +35,10 @@
 #include "bot_genclass.h"
 #include "bot_ehandle.h"
 
+#ifdef WIN32
+#define strcpy strcpy_s
+#endif
+
 #define SQUAD_DEFAULT_SPREAD 80.0// say 50 units between each member...?
 
 typedef enum eSquadForm

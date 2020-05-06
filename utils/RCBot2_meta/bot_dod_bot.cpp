@@ -353,7 +353,7 @@ bool CDODBot::startGame()
 		//else
 		//	engine->ClientCommand(m_pEdict,"joinclass %d",m_iDesiredClass);
 
-		/*switch ( m_iDesiredClass )
+		switch ( m_iDesiredClass )
 		{
 		case 1:
 		case 2:
@@ -2003,7 +2003,7 @@ void CDODBot::listenForPlayers()
 
 	m_bListenPositionValid = false;
 
-	for (register short int i = 1; i <= gpGlobals->maxClients; i++)
+	for (short int i = 1; i <= gpGlobals->maxClients; i++)
 	{
 		pPlayer = INDEXENT(i);
 

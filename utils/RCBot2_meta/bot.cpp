@@ -47,6 +47,13 @@
 #include "vplane.h"
 #include "eiface.h"
 
+#ifdef WIN32
+#define strcpy strcpy_s
+#define strcat strcat_s
+#define strncpy strncpy_s
+#define strncat strncat_s
+#endif
+
 #ifdef __linux__
 #include "shareddefs.h" //bir3yk
 #endif
@@ -1378,7 +1385,7 @@ void CBot::spawnInit()
 	m_fLastUpdateLastSeeEnemy = 0;
 	m_fPercentMoved = 1.0f;
 
-	for (register short int i = 0; i < BOT_UTIL_MAX; i++)
+	for (short int i = 0; i < BOT_UTIL_MAX; i++)
 		m_fUtilTimes[i] = 0;
 
 	if (m_pSchedules != NULL)
@@ -1801,8 +1808,8 @@ void CBot::debugBot(char* msg)
 int CBot::nearbyFriendlies(const float fDistance)
 {
 	int num = 0;
-	register short int i = 0;
-	register short int maxclients = static_cast<short int>(CBotGlobals::maxClients());
+	short int i = 0;
+	short int maxclients = static_cast<short int>(CBotGlobals::maxClients());
 	edict_t* pEdict;
 
 	for (i = 0; i <= maxclients; i++)
@@ -1980,7 +1987,7 @@ void CBot::listenForPlayers()
 
 	m_bListenPositionValid = false;
 
-	for (register short int i = 1; i <= gpGlobals->maxClients; i++)
+	for (short int i = 1; i <= gpGlobals->maxClients; i++)
 	{
 		pPlayer = INDEXENT(i);
 
