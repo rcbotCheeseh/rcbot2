@@ -107,19 +107,19 @@ public:
 	CBotCommandContainer() {};
 
 	// call execute command
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 
-	void freeMemory();
+	void freeMemory() override;
 
 	void add(CBotCommand* newCommand) { m_theCommands.push_back(newCommand); }
 
-	void printCommand(edict_t* pPrintTo, int indent = 0);
+	void printCommand(edict_t* pPrintTo, int indent = 0) override;
 
-	bool isContainer() { return true; }
+	bool isContainer() override { return true; }
 
-	virtual void printHelp(edict_t* pPrintTo);
+	void printHelp(edict_t* pPrintTo) override;
 
-	virtual bool canbeUsedDedicated() { return true; }
+	bool canbeUsedDedicated() override { return true; }
 private:
 	vector<CBotCommand*> m_theCommands;
 };
@@ -172,7 +172,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 ///////////////////////
 // command
@@ -187,7 +187,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CFindClass : public CBotCommand
@@ -199,7 +199,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CFindClassname : public CBotCommand
@@ -211,7 +211,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 //clear bots schedules
 class CBotTaskCommand : public CBotCommand
@@ -224,7 +224,7 @@ public:
 		setHelp("gives a bot a task : usage <id> <entity name - for reference>");
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 //clear bots schedules
@@ -238,7 +238,7 @@ public:
 		setHelp("flush bot tasks");
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 //bot goto
 class CBotGoto : public CBotCommand
@@ -251,7 +251,7 @@ public:
 		setHelp("set a debug bot first and then stand near a waypoint to force your bot to go there");
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 ///////////////////////
 // command
@@ -264,7 +264,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 ///////////////////////
@@ -278,7 +278,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 class CGameEventVersion : public CBotCommand
 {
@@ -289,7 +289,7 @@ public:
 		setAccessLevel(CMD_ACCESS_CONFIG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CMaxBotsCommand : public CBotCommand
@@ -301,9 +301,9 @@ public:
 		setAccessLevel(CMD_ACCESS_CONFIG);
 	}
 
-	virtual bool canbeUsedDedicated() { return true; }
+	bool canbeUsedDedicated() override { return true; }
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CMinBotsCommand : public CBotCommand
@@ -315,9 +315,9 @@ public:
 		setAccessLevel(CMD_ACCESS_CONFIG);
 	}
 
-	virtual bool canbeUsedDedicated() { return true; }
+	bool canbeUsedDedicated() override { return true; }
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 ///////////////////////
@@ -327,7 +327,7 @@ class CWaypointSetRadiusCommand : public CBotCommand
 public:
 	CWaypointSetRadiusCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointShowVisCommand : public CBotCommand
@@ -335,7 +335,7 @@ class CWaypointShowVisCommand : public CBotCommand
 public:
 	CWaypointShowVisCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointSetAreaCommand : public CBotCommand
@@ -343,7 +343,7 @@ class CWaypointSetAreaCommand : public CBotCommand
 public:
 	CWaypointSetAreaCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointShiftAreas : public CBotCommand
@@ -351,7 +351,7 @@ class CWaypointShiftAreas : public CBotCommand
 public:
 	CWaypointShiftAreas();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointCopy : public CBotCommand
@@ -359,7 +359,7 @@ class CWaypointCopy : public CBotCommand
 public:
 	CWaypointCopy();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointCut : public CBotCommand
@@ -367,7 +367,7 @@ class CWaypointCut : public CBotCommand
 public:
 	CWaypointCut();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointPaste : public CBotCommand
@@ -375,7 +375,7 @@ class CWaypointPaste : public CBotCommand
 public:
 	CWaypointPaste();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointMenuCommand : public CBotCommand
@@ -383,7 +383,7 @@ class CWaypointMenuCommand : public CBotCommand
 public:
 	CWaypointMenuCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointCheckCommand : public CBotCommand
@@ -391,7 +391,7 @@ class CWaypointCheckCommand : public CBotCommand
 public:
 	CWaypointCheckCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointAreaSetToNearest : public CBotCommand
@@ -399,7 +399,7 @@ class CWaypointAreaSetToNearest : public CBotCommand
 public:
 	CWaypointAreaSetToNearest();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointAutoFix : public CBotCommand
@@ -407,7 +407,7 @@ class CWaypointAutoFix : public CBotCommand
 public:
 	CWaypointAutoFix();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointShowCommand : public CBotCommand
@@ -415,7 +415,7 @@ class CWaypointShowCommand : public CBotCommand
 public:
 	CWaypointShowCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointSetAngleCommand : public CBotCommand
@@ -423,7 +423,7 @@ class CWaypointSetAngleCommand : public CBotCommand
 public:
 	CWaypointSetAngleCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointAngleCommand : public CBotCommand
@@ -431,7 +431,7 @@ class CWaypointAngleCommand : public CBotCommand
 public:
 	CWaypointAngleCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointInfoCommand : public CBotCommand
@@ -439,7 +439,7 @@ class CWaypointInfoCommand : public CBotCommand
 public:
 	CWaypointInfoCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointDrawTypeCommand : public CBotCommand
@@ -447,7 +447,7 @@ class CWaypointDrawTypeCommand : public CBotCommand
 public:
 	CWaypointDrawTypeCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointGiveTypeCommand : public CBotCommand
@@ -459,7 +459,7 @@ public:
 		setAccessLevel(CMD_ACCESS_WAYPOINT);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointOnCommand : public CBotCommand
@@ -467,7 +467,7 @@ class CWaypointOnCommand : public CBotCommand
 public:
 	CWaypointOnCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointOffCommand : public CBotCommand
@@ -475,7 +475,7 @@ class CWaypointOffCommand : public CBotCommand
 public:
 	CWaypointOffCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointAddCommand : public CBotCommand
@@ -483,7 +483,7 @@ class CWaypointAddCommand : public CBotCommand
 public:
 	CWaypointAddCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointTeleportCommand : public CBotCommand
@@ -491,7 +491,7 @@ class CWaypointTeleportCommand : public CBotCommand
 public:
 	CWaypointTeleportCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointDeleteCommand : public CBotCommand
@@ -499,7 +499,7 @@ class CWaypointDeleteCommand : public CBotCommand
 public:
 	CWaypointDeleteCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 ///////////////
@@ -509,9 +509,9 @@ class CControlCommand : public CBotCommand
 public:
 	CControlCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 
-	virtual bool canbeUsedDedicated() { return true; }
+	bool canbeUsedDedicated() override { return true; }
 };
 
 ///////////////
@@ -521,9 +521,9 @@ class CAddBotCommand : public CBotCommand
 public:
 	CAddBotCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 
-	virtual bool canbeUsedDedicated() { return true; }
+	bool canbeUsedDedicated() override { return true; }
 };
 
 ///////////////
@@ -534,7 +534,7 @@ class CPathWaypointDeleteToCommand : public CBotCommand
 public:
 	CPathWaypointDeleteToCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CPathWaypointDeleteFromCommand : public CBotCommand
@@ -542,7 +542,7 @@ class CPathWaypointDeleteFromCommand : public CBotCommand
 public:
 	CPathWaypointDeleteFromCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CPathWaypointOnCommand : public CBotCommand
@@ -550,7 +550,7 @@ class CPathWaypointOnCommand : public CBotCommand
 public:
 	CPathWaypointOnCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CPathWaypointOffCommand : public CBotCommand
@@ -558,7 +558,7 @@ class CPathWaypointOffCommand : public CBotCommand
 public:
 	CPathWaypointOffCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointAutoWaypointCommand : public CBotCommand
@@ -566,7 +566,7 @@ class CWaypointAutoWaypointCommand : public CBotCommand
 public:
 	CWaypointAutoWaypointCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CPathWaypointAutoOnCommand : public CBotCommand
@@ -574,7 +574,7 @@ class CPathWaypointAutoOnCommand : public CBotCommand
 public:
 	CPathWaypointAutoOnCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CPathWaypointAutoOffCommand : public CBotCommand
@@ -582,7 +582,7 @@ class CPathWaypointAutoOffCommand : public CBotCommand
 public:
 	CPathWaypointAutoOffCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CPathWaypointCreateFromToCommand : public CBotCommand
@@ -590,7 +590,7 @@ class CPathWaypointCreateFromToCommand : public CBotCommand
 public:
 	CPathWaypointCreateFromToCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CPathWaypointRemoveFromToCommand : public CBotCommand
@@ -598,7 +598,7 @@ class CPathWaypointRemoveFromToCommand : public CBotCommand
 public:
 	CPathWaypointRemoveFromToCommand();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CPathWaypointCreate1Command : public CBotCommand
@@ -606,7 +606,7 @@ class CPathWaypointCreate1Command : public CBotCommand
 public:
 	CPathWaypointCreate1Command();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CPathWaypointCreate2Command : public CBotCommand
@@ -614,7 +614,7 @@ class CPathWaypointCreate2Command : public CBotCommand
 public:
 	CPathWaypointCreate2Command();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CPathWaypointRemove1Command : public CBotCommand
@@ -622,7 +622,7 @@ class CPathWaypointRemove1Command : public CBotCommand
 public:
 	CPathWaypointRemove1Command();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CPathWaypointRemove2Command : public CBotCommand
@@ -630,7 +630,7 @@ class CPathWaypointRemove2Command : public CBotCommand
 public:
 	CPathWaypointRemove2Command();
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 ////////
@@ -644,7 +644,7 @@ public:
 		setAccessLevel(CMD_ACCESS_WAYPOINT);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointSaveCommand : public CBotCommand
@@ -656,7 +656,7 @@ public:
 		setAccessLevel(CMD_ACCESS_WAYPOINT);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CWaypointLoadCommand : public CBotCommand
@@ -668,7 +668,7 @@ public:
 		setAccessLevel(CMD_ACCESS_WAYPOINT);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 /////////////////////////////////////////////////////
 class CDebugCommand : public CBotCommandContainer
@@ -687,7 +687,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugMemoryCheckCommand : public CBotCommand
@@ -700,7 +700,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 #define MAX_MEM_SEARCH 8192
@@ -729,7 +729,7 @@ public:
 		m_size = 0;
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 private:
 
 	u_MEMSEARCH stored_offsets[MAX_MEM_SEARCH];
@@ -746,7 +746,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugTaskCommand : public CBotCommand
@@ -759,7 +759,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CGodModeUtilCommand : public CBotCommand
@@ -772,7 +772,7 @@ public:
 		setAccessLevel(CMD_ACCESS_UTIL);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CSetTeleportUtilCommand : public CBotCommand
@@ -785,7 +785,7 @@ public:
 		setAccessLevel(CMD_ACCESS_UTIL);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CTeleportUtilCommand : public CBotCommand
@@ -798,7 +798,7 @@ public:
 		setAccessLevel(CMD_ACCESS_UTIL);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CNoTouchCommand : public CBotCommand
@@ -811,7 +811,7 @@ public:
 		setAccessLevel(CMD_ACCESS_UTIL);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CNoClipCommand : public CBotCommand
@@ -824,7 +824,7 @@ public:
 		setAccessLevel(CMD_ACCESS_UTIL);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugUtilCommand : public CBotCommand
@@ -837,7 +837,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugUsercmdCommand : public CBotCommand
@@ -850,7 +850,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugEdictsCommand : public CBotCommand
@@ -863,7 +863,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugSpeedCommand : public CBotCommand
@@ -876,7 +876,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugAimCommand : public CBotCommand
@@ -889,7 +889,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugChatCommand : public CBotCommand
@@ -902,7 +902,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugHudCommand : public CBotCommand
@@ -915,7 +915,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugButtonsCommand : public CBotCommand
@@ -928,7 +928,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugLookCommand : public CBotCommand
@@ -941,7 +941,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugThinkCommand : public CBotCommand
@@ -954,7 +954,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugVisCommand : public CBotCommand
@@ -967,7 +967,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugGameEventCommand : public CBotCommand
@@ -980,7 +980,7 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 class CDebugBotCommand : public CBotCommand
@@ -993,9 +993,9 @@ public:
 		setAccessLevel(CMD_ACCESS_DEBUG);
 	}
 
-	bool canbeUsedDedicated() { return false; }
+	bool canbeUsedDedicated() override { return false; }
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 //////////////////////////////////
 
@@ -1008,7 +1008,7 @@ public:
 		setAccessLevel(CMD_ACCESS_UTIL);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 };
 
 /////////////////////////////////
@@ -1022,9 +1022,9 @@ public:
 		setAccessLevel(CMD_ACCESS_BOT);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 
-	virtual bool canbeUsedDedicated() { return true; }
+	bool canbeUsedDedicated() override { return true; }
 };
 ////////////////////////////////////////
 class CShowUsersCommand : public CBotCommand
@@ -1036,9 +1036,9 @@ public:
 		setAccessLevel(CMD_ACCESS_USERS);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 
-	virtual bool canbeUsedDedicated() { return true; }
+	bool canbeUsedDedicated() override { return true; }
 };
 ///////////////////////////////////////
 class CPrintCommands : public CBotCommand
@@ -1050,9 +1050,9 @@ public:
 		setAccessLevel(0);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 
-	virtual bool canbeUsedDedicated() { return true; }
+	bool canbeUsedDedicated() override { return true; }
 };
 
 class CTestCommand : public CBotCommand
@@ -1064,8 +1064,8 @@ public:
 		setAccessLevel(0);
 	}
 
-	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5);
+	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
 
-	virtual bool canbeUsedDedicated() { return false; }
+	bool canbeUsedDedicated() override { return false; }
 };
 #endif

@@ -3,11 +3,11 @@
 
 class CBotZombie : public CBot
 {
-	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true);
+	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
 
-	void modThink(void);
+	void modThink(void) override;
 
-	void getTasks(unsigned int iIgnore);
+	void getTasks(unsigned int iIgnore) override;
 };
 
 #endif

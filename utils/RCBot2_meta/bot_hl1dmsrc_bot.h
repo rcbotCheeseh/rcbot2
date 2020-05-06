@@ -38,19 +38,19 @@ public:
 
 	bool isHL1DMSrc() { return true; }
 
-	void modThink();
+	void modThink() override;
 
 	void init();
-	void setup();
+	void setup() override;
 
-	bool startGame();
+	bool startGame() override;
 
 	void died(edict_t* pKiller);
 	void killed(edict_t* pVictim);
 
-	void spawnInit();
+	void spawnInit() override;
 
-	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true);
+	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
 private:
 	// blah blah
 };

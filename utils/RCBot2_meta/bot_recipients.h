@@ -51,12 +51,12 @@ public:
 		m_bReliable = false;
 	}
 
-	bool	IsReliable(void) const { return m_bReliable; }
+	bool	IsReliable(void) const override { return m_bReliable; }
 
-	bool	IsInitMessage(void) const { return false; }
+	bool	IsInitMessage(void) const override { return false; }
 
-	int		GetRecipientCount(void) const { return 1; }
-	int		GetRecipientIndex(int slot) const { return ENTINDEX(m_pEdict); } // only 1 stored
+	int		GetRecipientCount(void) const override { return 1; }
+	int		GetRecipientIndex(int slot) const override { return ENTINDEX(m_pEdict); } // only 1 stored
 private:
 	edict_t* m_pEdict;
 	bool m_bReliable;

@@ -372,92 +372,93 @@ public:
 		memset(&m_lastFailedPath, 0, sizeof(failedpath_t));
 	}
 
-	void init();
+	void init() override;
 
 	CWaypoint* chooseBestFromBelief(dataUnconstArray<CWaypoint*>* goals, bool bHighDanger = false, int iSearchFlags = 0, int iTeam = 0);
 	CWaypoint* chooseBestFromBeliefBetweenAreas(dataUnconstArray<AStarNode*>* goals, bool bHighDanger = false, bool bIgnoreBelief = false);
 
-	float getNextYaw();
+	float getNextYaw() override;
 
-	bool workRoute(Vector vFrom, Vector vTo, bool* bFail, bool bRestart = true, bool bNoInterruptions = false, int iGoalId = -1, int iConditions = 0, int iDangerId = -1);
+	bool workRoute(Vector vFrom, Vector vTo, bool* bFail, bool bRestart = true, bool bNoInterruptions = false, int iGoalId = -1, int iConditions = 0, int iDangerId = -1) override;
 
-	bool getNextRoutePoint(Vector* vPoint);
+	bool getNextRoutePoint(Vector* vPoint) override;
 
-	void clear();
+	void clear() override;
 
-	Vector getNextPoint();
+	Vector getNextPoint() override;
 
-	void updatePosition();
+	void updatePosition() override;
 
-	float getBelief(int index) { if (index >= 0) return m_fBelief[index]; return 0; }
+	float getBelief(int index) override
+	{ if (index >= 0) return m_fBelief[index]; return 0; }
 
-	void failMove();
+	void failMove() override;
 
-	bool hasNextPoint();
+	bool hasNextPoint() override;
 
-	void freeMapMemory();
+	void freeMapMemory() override;
 
-	void freeAllMemory();
+	void freeAllMemory() override;
 
-	bool canGetTo(Vector vOrigin);
+	bool canGetTo(Vector vOrigin) override;
 
-	bool routeFound();
+	bool routeFound() override;
 
-	void rollBackPosition();
+	void rollBackPosition() override;
 
-	bool nextPointIsOnLadder();
+	bool nextPointIsOnLadder() override;
 
 	void open(AStarNode* pNode);
 
 	AStarNode* nextNode();
 
-	float distanceTo(Vector vOrigin);
+	float distanceTo(Vector vOrigin) override;
 
-	float distanceTo(CWaypoint* pWaypoint);
+	float distanceTo(CWaypoint* pWaypoint) override;
 
 	Vector getCoverOrigin(Vector vCover);
 
 	void clearOpenList();
 
-	float getCurrentBelief();
+	float getCurrentBelief() override;
 
 	//virtual void goBack();
 
-	void belief(Vector origin, Vector vOther, float fBelief, float fStrength, BotBelief iType);
+	void belief(Vector origin, Vector vOther, float fBelief, float fStrength, BotBelief iType) override;
 
-	void beliefOne(int iWptIndex, BotBelief iBeliefType, float fDist);
+	void beliefOne(int iWptIndex, BotBelief iBeliefType, float fDist) override;
 
 	// nearest cover position to vOrigin only
-	bool getCoverPosition(Vector vCoverOrigin, Vector* vCover);
+	bool getCoverPosition(Vector vCoverOrigin, Vector* vCover) override;
 	// nearest cover postion to both vectors
-	bool getHideSpotPosition(Vector vCoverOrigin, Vector* vCover);
+	bool getHideSpotPosition(Vector vCoverOrigin, Vector* vCover) override;
 
-	void getFailedGoals(dataUnconstArray <int>** goals) { *goals = &m_iFailedGoals; }
+	void getFailedGoals(dataUnconstArray <int>** goals) override { *goals = &m_iFailedGoals; }
 
-	int numPaths();
+	int numPaths() override;
 
-	Vector getPath(int pathid);
+	Vector getPath(int pathid) override;
 
-	bool randomDangerPath(Vector* vec);
+	bool randomDangerPath(Vector* vec) override;
 
-	bool beliefLoad();
+	bool beliefLoad() override;
 
-	bool beliefSave(bool bOverride = false);
+	bool beliefSave(bool bOverride = false) override;
 
-	bool wantToSaveBelief();
+	bool wantToSaveBelief() override;
 
-	inline int getCurrentWaypointID()
+	inline int getCurrentWaypointID() override
 	{
 		return m_iCurrentWaypoint;
 	}
 
-	inline int getCurrentGoalID()
+	inline int getCurrentGoalID() override
 	{
 		return m_iGoalWaypoint;
 	}
 
-	int getCurrentFlags();
-	int getPathFlags(int iPath);
+	int getCurrentFlags() override;
+	int getPathFlags(int iPath) override;
 
 private:
 	CBot* m_pBot;
@@ -496,25 +497,25 @@ private:
 class CNavMeshNavigator : public IBotNavigator
 {
 public:
-	virtual bool workRoute(Vector vFrom, Vector vTo, bool* bFail, bool bRestart = true, bool bNoInterruptions = false, int iGoalId = -1, int iConditions = 0, int iDangerId = -1);
+	bool workRoute(Vector vFrom, Vector vTo, bool* bFail, bool bRestart = true, bool bNoInterruptions = false, int iGoalId = -1, int iConditions = 0, int iDangerId = -1) override;
 
-	virtual Vector getNextPoint();
+	Vector getNextPoint() override;
 
-	virtual void updatePosition();
+	void updatePosition() override;
 
-	void freeMapMemory();
+	void freeMapMemory() override;
 
-	void freeAllMemory();
+	void freeAllMemory() override;
 
-	bool routeFound();
+	bool routeFound() override;
 
-	bool hasNextPoint();
+	bool hasNextPoint() override;
 
-	void rollBackPosition() {};
+	void rollBackPosition() override {};
 
-	void init();
+	void init() override;
 
-	void belief(Vector origin, Vector facing, float fBelief, float fStrength, BotBelief iType) {}; //bir3yk
+	void belief(Vector origin, Vector facing, float fBelief, float fStrength, BotBelief iType) override {}; //bir3yk
 
 	//void rememberEnemyPosition ( Vector vOrigin );
 

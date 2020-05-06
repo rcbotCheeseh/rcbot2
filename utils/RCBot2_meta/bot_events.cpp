@@ -58,7 +58,7 @@ public:
 		m_pWeapon = CWeapons::getWeaponByShortName(szKillerWeapon);
 		m_pDied = pDied;
 	}
-	void execute(CBot* pBot)
+	void execute(CBot* pBot) override
 	{
 		if (CClassInterface::getTeam(m_pTeammate) != pBot->getTeam())
 			return;
@@ -79,7 +79,7 @@ class CBotWaveCompleteMVM : public IBotFunction
 {
 public:
 
-	void execute(CBot* pBot)
+	void execute(CBot* pBot) override
 	{
 		static_cast<CBotTF2*>(pBot)->MannVsMachineWaveComplete();
 	}
@@ -95,7 +95,7 @@ public:
 		m_pWeapon = CWeapons::getWeapon(iWeaponID);
 	}
 
-	void execute(CBot* pBot)
+	void execute(CBot* pBot) override
 	{
 		if (CClassInterface::getTeam(m_pTeammate) != pBot->getTeam())
 			return;
@@ -121,7 +121,7 @@ public:
 		m_fRadius = fRadius;
 	}
 
-	void execute(CBot* pBot)
+	void execute(CBot* pBot) override
 	{
 		if (m_bValid)
 			static_cast<CBotTF2*>(pBot)->MannVsMachineAlarmTriggered(m_vLoc + Vector(randomFloat(-m_fRadius, m_fRadius), randomFloat(-m_fRadius, m_fRadius), 0));
@@ -142,7 +142,7 @@ public:
 		m_pWeapon = CWeapons::getWeapon(iWeaponID);
 	}
 
-	void execute(CBot* pBot)
+	void execute(CBot* pBot) override
 	{
 		if (CClassInterface::getTeam(m_pTeammate) != pBot->getTeam())
 			return;
@@ -168,7 +168,7 @@ public:
 		m_pWeapon = CWeapons::getWeaponByShortName(szKillerWeapon);
 		m_pKiller = pKiller;
 	}
-	void execute(CBot* pBot)
+	void execute(CBot* pBot) override
 	{
 		if (CClassInterface::getTeam(m_pDied) != pBot->getTeam())
 			return;
@@ -194,7 +194,7 @@ public:
 		m_iWeaponID = iWeaponID;
 	}
 
-	void execute(CBot* pBot)
+	void execute(CBot* pBot) override
 	{
 		extern ConVar rcbot_listen_dist;
 
@@ -221,7 +221,7 @@ public:
 		m_bFullRound = bFullRound;
 	}
 
-	void execute(CBot* pBot)
+	void execute(CBot* pBot) override
 	{
 		static_cast<CBotTF2*>(pBot)->roundWon(m_iTeam, m_bFullRound);
 	}

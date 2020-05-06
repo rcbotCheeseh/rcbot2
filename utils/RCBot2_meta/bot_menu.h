@@ -121,9 +121,9 @@ public:
 		m_iFlag = iFlag;
 	}
 
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 
 private:
 	int m_iFlag;
@@ -139,7 +139,7 @@ public:
 		m_pPrevMenu = pPrevMenu;
 	}
 
-	void activate(CClient* pClient)
+	void activate(CClient* pClient) override
 	{
 		pClient->setCurrentMenu(m_pPrevMenu);
 	}
@@ -149,12 +149,12 @@ private:
 
 class CBotExitMenuItem : public CBotMenuItem
 {
-	const char* getCaption(CClient* pClient, WptColor& color)
+	const char* getCaption(CClient* pClient, WptColor& color) override
 	{
 		return "Exit";
 	}
 
-	void activate(CClient* pClient)
+	void activate(CClient* pClient) override
 	{
 		pClient->setCurrentMenu(NULL);
 	}
@@ -163,23 +163,23 @@ class CBotExitMenuItem : public CBotMenuItem
 class CWaypointAreaMenuItem : public CBotMenuItem
 {
 public:
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 };
 
 class CBotMenu : public CBotMenuItem
 {
 public:
 
-	void freeMemory();
+	void freeMemory() override;
 
-	virtual const char* getCaption(CClient* pClient, WptColor& color)
+	const char* getCaption(CClient* pClient, WptColor& color) override
 	{
 		return CBotMenuItem::getCaption(pClient, color);
 	}// returns the caption (may be dynamic)
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 
 	Color getColor(CClient* pClient); // gets the colour of the caption
 
@@ -201,7 +201,7 @@ class CWaypointFlagMenu : public CBotMenu
 public:
 	CWaypointFlagMenu(CBotMenu* pParent);
 	//CWaypointFlagMenu ( int iShow );
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 };
 
 class CWaypointFlagShowMenu : public CBotMenu
@@ -209,7 +209,7 @@ class CWaypointFlagShowMenu : public CBotMenu
 public:
 	CWaypointFlagShowMenu(CBotMenu* pParent);
 	//CWaypointFlagMenu ( int iShow );
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 };
 
 class CWaypointFlagShowMenuItem : public CBotMenuItem
@@ -220,9 +220,9 @@ public:
 		m_iFlag = iFlag;
 	}
 
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 
 private:
 	int m_iFlag;
@@ -233,7 +233,7 @@ class CWaypointRadiusIncrease : public CBotMenuItem
 public:
 	CWaypointRadiusIncrease() { setCaption("Increase Radius (+)"); }
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 	//const char *getCaption(CClient *pClient, WptColor &color);
 };
 
@@ -242,7 +242,7 @@ class CWaypointRadiusDecrease : public CBotMenuItem
 public:
 	CWaypointRadiusDecrease() { setCaption("Decrease Radius (-)"); }
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 	//const char *getCaption(CClient *pClient, WptColor &color);
 };
 
@@ -256,7 +256,7 @@ public:
 		CBotMenu::addMenuItem(new CBotGotoMenuItem("Back", pParent));
 	}
 
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 };
 
 class CWaypointAreaIncrease : public CBotMenuItem
@@ -264,7 +264,7 @@ class CWaypointAreaIncrease : public CBotMenuItem
 public:
 	CWaypointAreaIncrease() { setCaption("Increase Area (+)"); }
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 	//const char *getCaption(CClient *pClient, WptColor &color);
 };
 
@@ -273,7 +273,7 @@ class CWaypointAreaDecrease : public CBotMenuItem
 public:
 	CWaypointAreaDecrease() { setCaption("Decrease Area (-)"); }
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 	//const char *getCaption(CClient *pClient, WptColor &color);
 };
 
@@ -287,49 +287,49 @@ public:
 		CBotMenu::addMenuItem(new CBotGotoMenuItem("Back", pParent));
 	}
 
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 };
 
 class CWaypointYawMenuItem : public CBotMenuItem
 {
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 };
 
 class CWaypointCutMenuItem : public CBotMenuItem
 {
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 };
 
 class CWaypointCopyMenuItem : public CBotMenuItem
 {
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 };
 
 class CWaypointPasteMenuItem : public CBotMenuItem
 {
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 };
 
 class CPathWaypointDeleteToMenuItem : public CBotMenuItem
 {
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 };
 
 class CPathWaypointDeleteFromMenuItem : public CBotMenuItem
 {
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 
-	void activate(CClient* pClient);
+	void activate(CClient* pClient) override;
 };
 
 class CPathWaypointMenu : public CBotMenu
@@ -384,7 +384,7 @@ public:
 	}
 
 	//CWaypointFlagMenu ( int iShow );
-	const char* getCaption(CClient* pClient, WptColor& color);
+	const char* getCaption(CClient* pClient, WptColor& color) override;
 };
 
 ////////////////////////////////////////

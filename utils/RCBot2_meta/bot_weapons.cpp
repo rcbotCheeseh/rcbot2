@@ -333,13 +333,13 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 
 		const char* pszClassname;
 
-		CBaseHandle* m_Weapons = CClassInterface::getWeaponList(m_pBot->getEdict());
+		CBaseHandle* weapons = CClassInterface::getWeaponList(m_pBot->getEdict());
 		CBotWeapon* m_BotWeapon_iter = m_theWeapons;
 
 		// loop through the weapons array and see if it is in the CBaseCombatCharacter
 		for (i = 0; i < MAX_WEAPONS; i++)
 		{
-			m_Weapon_iter = &m_Weapons[i];
+			m_Weapon_iter = &weapons[i];
 			iWeaponState = 0;
 			bFound = false;
 
@@ -877,7 +877,7 @@ public:
 		m_pFound = NULL;
 	}
 
-	void execute(CWeapon* pWeapon)
+	void execute(CWeapon* pWeapon) override
 	{
 		if (m_iId == pWeapon->getID())
 			m_pFound = pWeapon;
@@ -902,7 +902,7 @@ public:
 		m_szWeapon = szWeapon;
 	}
 
-	void execute(CWeapon* pWeapon)
+	void execute(CWeapon* pWeapon) override
 	{
 		if (pWeapon->isWeaponName(m_szWeapon))
 			m_pFound = pWeapon;
@@ -926,7 +926,7 @@ public:
 		m_szWeapon = szWeapon;
 	}
 
-	void execute(CWeapon* pWeapon)
+	void execute(CWeapon* pWeapon) override
 	{
 		if (pWeapon->isShortWeaponName(m_szWeapon))
 			m_pFound = pWeapon;

@@ -348,11 +348,11 @@ public:
 		m_iPlayerSlot = ENTINDEX(pPlayer);
 	}
 
-	bool IsReliable(void) const { return false; }
-	bool IsInitMessage(void) const { return false; }
+	bool IsReliable(void) const override { return false; }
+	bool IsInitMessage(void) const override { return false; }
 
-	int	GetRecipientCount(void) const { return 1; }
-	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot; }
+	int	GetRecipientCount(void) const override { return 1; }
+	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot; }
 
 private:
 	int m_iPlayerSlot;
@@ -379,11 +379,11 @@ public:
 		}
 	}
 
-	bool IsReliable(void) const { return false; }
-	bool IsInitMessage(void) const { return false; }
+	bool IsReliable(void) const override { return false; }
+	bool IsInitMessage(void) const override { return false; }
 
-	int	GetRecipientCount(void) const { return m_iMaxCount; }
-	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot[slot] + 1; }
+	int	GetRecipientCount(void) const override { return m_iMaxCount; }
+	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot[slot] + 1; }
 
 private:
 
@@ -651,7 +651,7 @@ CBaseEntity* RCBotPluginMeta::Hook_GiveNamedItem(const char* name, int subtype, 
 class BaseAccessor : public IConCommandBaseAccessor
 {
 public:
-	bool RegisterConCommandBase(ConCommandBase* pCommandBase)
+	bool RegisterConCommandBase(ConCommandBase* pCommandBase) override
 	{
 		/* Always call META_REGCVAR instead of going through the engine. */
 		return META_REGCVAR(pCommandBase);

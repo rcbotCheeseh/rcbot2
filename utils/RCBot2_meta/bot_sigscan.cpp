@@ -260,7 +260,7 @@ void* CSignatureFunction::findPattern(const void* libPtr, const char* pattern, s
 		return NULL;
 	}
 
-	ptr = reinterpret_cast<char*>(lib.baseAddress);
+	ptr = static_cast<char*>(lib.baseAddress);
 	end = ptr + lib.memorySize - len;
 
 	while (ptr < end)
@@ -331,7 +331,7 @@ CCreateGameRulesObject::CCreateGameRulesObject(CRCBotKeyValueList* list, void* p
 
 void** CCreateGameRulesObject::getGameRules()
 {
-	char* addr = reinterpret_cast<char*>(m_func);
+	char* addr = static_cast<char*>(m_func);
 	extern ConVar rcbot_gamerules_offset;
 
 	return *reinterpret_cast<void***>(addr + rcbot_gamerules_offset.GetInt());

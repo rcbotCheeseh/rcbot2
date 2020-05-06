@@ -36,20 +36,20 @@ class CCSSBot : public CBot
 {
 public:
 
-	bool isCSS() { return true; }
+	bool isCSS() override { return true; }
 
 	void init();
-	void setup();
+	void setup() override;
 
-	bool startGame();
+	bool startGame() override;
 
 	void died();
 
-	void spawnInit();
+	void spawnInit() override;
 
-	bool isAlive();
+	bool isAlive() override;
 
-	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true);
+	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
 private:
 	// blah blah
 };

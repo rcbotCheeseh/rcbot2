@@ -1709,7 +1709,7 @@ float CWaypoint::distanceFrom(Vector vOrigin)
 ///////////////////////////////////////////////////
 void CWaypoints::updateWaypointPairs(vector<edict_wpt_pair_t>* pPairs, int iWptFlag, const char* szClassname)
 {
-	register short int iSize = numWaypoints();
+	short int iSize = numWaypoints();
 	CWaypoint* pWpt;
 	edict_wpt_pair_t pair;
 	CTraceFilterWorldAndPropsOnly filter;
@@ -2624,7 +2624,7 @@ CWaypoint* CWaypoints::nearestPipeWaypoint(const Vector vTarget, const Vector vO
 
 	CWaypointVisibilityTable* pTable = CWaypoints::getVisiblity();
 
-	register short int numwaypoints = static_cast<short int>(numWaypoints());
+	short int numwaypoints = static_cast<short int>(numWaypoints());
 
 	float finearestdist = 9999.0f;
 	float fjnearestdist = 9999.0f;

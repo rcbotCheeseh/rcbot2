@@ -58,12 +58,12 @@ public:
 	{
 	}
 
-	bool operate(bVal, CBotOperator* pNext)
+	bool operate(bVal, CBotOperator* pNext) override
 	{
 		return m_bVal;
 	}
 
-	bool value()
+	bool value() override
 	{
 		return m_bVal;
 	}

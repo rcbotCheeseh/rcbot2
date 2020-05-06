@@ -50,7 +50,7 @@ public:
 
 	bool found() { return m_func != NULL; }
 
-	void** getGameRules() { return reinterpret_cast<void**>(m_func); }
+	void** getGameRules() { return static_cast<void**>(m_func); }
 };
 
 class CCreateGameRulesObject : public CSignatureFunction

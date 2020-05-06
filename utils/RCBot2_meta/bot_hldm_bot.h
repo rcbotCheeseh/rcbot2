@@ -37,36 +37,36 @@
 class CHLDMBot : public CBot
 {
 public:
-	bool handleAttack(CBotWeapon* pWeapon, edict_t* pEnemy);
+	bool handleAttack(CBotWeapon* pWeapon, edict_t* pEnemy) override;
 
-	void handleWeapons();
+	void handleWeapons() override;
 
-	bool isHLDM() { return true; }
+	bool isHLDM() override { return true; }
 
-	void modThink();
+	void modThink() override;
 
 	void init();
-	void setup();
+	void setup() override;
 
-	bool startGame();
+	bool startGame() override;
 
-	void died(edict_t* pKiller, const char* pszWeapon);
-	void killed(edict_t* pVictim, char* weapon);
+	void died(edict_t* pKiller, const char* pszWeapon) override;
+	void killed(edict_t* pVictim, char* weapon) override;
 
-	void spawnInit();
+	void spawnInit() override;
 
-	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true);
+	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
 
-	void getTasks(unsigned int iIgnore = 0);
+	void getTasks(unsigned int iIgnore = 0) override;
 	bool executeAction(eBotAction iAction);
 
 	float getArmorPercent() { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
 
-	bool setVisible(edict_t* pEntity, bool bVisible);
+	bool setVisible(edict_t* pEntity, bool bVisible) override;
 
-	virtual unsigned int maxEntityIndex() { return gpGlobals->maxEntities; }
+	unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
 
-	void enemyLost(edict_t* pEnemy);
+	void enemyLost(edict_t* pEnemy) override;
 
 	inline void setFailedObject(edict_t* pent)
 	{
@@ -76,7 +76,7 @@ public:
 			m_NearestPhysObj = NULL;
 	}
 
-	bool checkStuck();
+	bool checkStuck() override;
 
 	bool willCollide(edict_t* pEntity, bool* bCanJump, float* fTime);
 

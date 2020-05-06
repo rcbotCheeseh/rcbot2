@@ -43,14 +43,14 @@ public:
 	void init(void);
 
 	// crossover with other individual
-	void crossOver(IIndividual* other);
+	void crossOver(IIndividual* other) override;
 
 	// mutate some values
-	void mutate();
+	void mutate() override;
 
 	// get new copy of this
 	// sub classes return their class with own values
-	virtual IIndividual* copy();
+	IIndividual* copy() override;
 
 	void setVector(vector<float> values);
 
@@ -95,7 +95,7 @@ public:
 		return m_theValues[1];
 	}
 
-	virtual IIndividual* copy()
+	IIndividual* copy() override
 	{
 		CBotStuckValues* p = new CBotStuckValues();
 		p->setVector(m_theValues);
