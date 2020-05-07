@@ -47,6 +47,13 @@
 #include "vplane.h"
 #include "eiface.h"
 
+#ifdef WIN32
+#define strcpy strcpy_s
+#define strcat strcat_s
+#define strncpy strncpy_s
+#define strncat strncat_s
+#endif
+
 #ifdef __linux__
 #include "shareddefs.h" //bir3yk
 #endif

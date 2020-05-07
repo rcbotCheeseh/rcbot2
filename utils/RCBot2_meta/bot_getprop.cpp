@@ -5,6 +5,10 @@
 #include "bot_globals.h"
 #include "bot_getprop.h"
 
+#ifdef WIN32
+#define strncpy strncpy_s
+#endif
+
 CClassInterfaceValue CClassInterface::g_GetProps[GET_PROPDATA_MAX];
 bool CClassInterfaceValue::m_berror = false;
 

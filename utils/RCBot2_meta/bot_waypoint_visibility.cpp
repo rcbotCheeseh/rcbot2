@@ -36,6 +36,10 @@
 #include "bot_globals.h"
 #include <stdio.h>
 
+#ifdef WIN32
+#define strncpy strncpy_s
+#endif
+
  /*unsigned char *CWaypointVisibilityTable :: m_VisTable = NULL;
  bool CWaypointVisibilityTable :: bWorkVisibility = false;
  int CWaypointVisibilityTable :: iCurFrom = 0;
