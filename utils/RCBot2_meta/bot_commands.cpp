@@ -45,6 +45,10 @@
 
 #include "bot_tf2_points.h"
 
+#ifdef WIN32
+#define sprintf sprintf_s
+#endif
+
 CBotCommandContainer* CBotGlobals::m_pCommands = new CRCBotCommand();
 extern IVDebugOverlay* debugoverlay;
 ///////////////////////////////////////////////////
@@ -720,6 +724,7 @@ CDebugCommand::CDebugCommand()
 	add(new CFindProp());
 	add(new CDebugMemoryScanCommand());
 	add(new CDebugMemoryCheckCommand());
+	add(new CDebugMstrOffsetSearch());
 }
 /////////////////////
 CWaypointOnCommand::CWaypointOnCommand()
@@ -1670,6 +1675,62 @@ eBotCommandResult CWaypointLoadCommand::execute(CClient* pClient, const char* pc
 		CBotGlobals::botMessage(NULL, 0, "error: could not load %s waypoints", szMapName);
 
 	return COMMAND_ACCESSED;
+}
+
+//usage \"memorycheck <classname> <offset> <type>\"");
+eBotCommandResult CDebugMstrOffsetSearch::execute(CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5)
+{
+	if (strcmp("cp_dustbowl", STRING(gpGlobals->mapname)) != 0)
+	{
+		CBotGlobals::botMessage(pClient->getPlayer(), 0, "Command can only be used on cp_dustbowl -- change the map first");
+		return COMMAND_ERROR;
+	}
+
+	edict_t *pMaster = CClassInterface::FindEntityByClassnameNearest(Vector(0, 0, 0), "team_control_point_master", 65535);
+
+	if (pMaster == NULL)
+	{
+		CBotGlobals::botMessage(pClient->getPlayer(), 0, "pMaster not found -- have you started the game yet?");
+		return COMMAND_ERROR;
+	}
+
+	extern IServerGameEnts *servergameents;
+
+	CBaseEntity *pMasterEntity = servergameents->EdictToBaseEntity(pMaster);
+
+	//local variable is initialized but not referenced - [APG]RoboCop[CL]
+	unsigned long full_size = sizeof(pMasterEntity);
+	unsigned long offset = 800;
+	
+
+	while (offset < 1000)
+	{
+		unsigned long mempoint = ((unsigned long)pMasterEntity) + offset;
+		CTeamControlPointMaster* PointMaster = (CTeamControlPointMaster*)mempoint;
+
+#ifdef WIN32
+		__try
+		{
+			if (PointMaster->m_iTeamBaseIcons[0] == 0 && PointMaster->m_iTeamBaseIcons[2] == 5 && PointMaster->m_iTeamBaseIcons[3] == 6)
+			{
+				if (strcmp(PointMaster->m_iszTeamBaseIcons[3].ToCStr(), "sprites/obj_icons/icon_base_blu") == 0)
+				{
+					CBotGlobals::botMessage(pClient->getPlayer(), 0, "pMaster offset is %d", offset);
+					return COMMAND_ACCESSED;
+				}
+			}
+		}
+		
+		__except (0)
+		{
+			// SEH handling 
+		}
+		offset++;
+#endif
+		
+	}
+
+	return COMMAND_ERROR;
 }
 
 //usage \"memorycheck <classname> <offset> <type>\"");

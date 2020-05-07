@@ -7,6 +7,7 @@
 #ifdef WIN32
 #define strcpy strcpy_s
 #define strcat strcat_s
+#define sprintf sprintf_s
 #endif
 
 static ICvar* s_pCVar;

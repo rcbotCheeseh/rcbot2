@@ -39,6 +39,7 @@ using namespace std;
 class IIndividual
 {
 public:
+	virtual ~IIndividual() = default;
 	// get fitness for this individual
 	inline ga_nn_value getFitness() { return m_fFitness; }
 	inline void setFitness(float fVal) { m_fFitness = fVal; }
@@ -94,6 +95,7 @@ private:
 class ISelection
 {
 public:
+	virtual ~ISelection() = default;
 	virtual IIndividual* select(CPopulation* population) = 0;
 };
 

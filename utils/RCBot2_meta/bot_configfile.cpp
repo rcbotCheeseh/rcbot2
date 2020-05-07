@@ -42,7 +42,9 @@
 #include "iplayerinfo.h"
 
 #ifdef WIN32
-#define strcpy strcpy_s
+#define sccanf sscanf_s
+#define sprintf sprintf_s
+#define _snprintf _snprintf_s
 #endif
 
 #ifdef __linux__

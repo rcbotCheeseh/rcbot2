@@ -44,6 +44,12 @@
 #include "in_buttons.h"
 #include "bot_plugin_meta.h"
 
+#ifdef WIN32
+#define sprintf sprintf_s
+#define vsprintf vsprintf_s
+#define _snprintf _snprintf_s
+#endif
+
 // setup static client array
 CClient CClients::m_Clients[MAX_PLAYERS];
 CClient* CClients::m_pListenServerClient = NULL;

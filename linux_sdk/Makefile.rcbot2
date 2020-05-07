@@ -10,8 +10,8 @@
 # the name of the mod binary (_i486.so is appended to the end)
 #NAME=server
 #NAME=HPB_bot2_meta
-NAME=RCBot2Meta
-#NAME=RCBot2MetaDebug
+#NAME=RCBot2Meta
+NAME=RCBot2MetaDebug
 
 # the location of the vcproj that builds the mod
 #MOD_PROJ=../game/server/server_hl2mp-2005.vcproj
@@ -19,8 +19,8 @@ MOD_PROJ=../utils/RCBot2_meta/HPB_Bot2.vcproj
 
 # the name of the mod configuration (typically <proj name>_<build type><build target>)
 #MOD_CONFIG=ServerHL2MP_ReleaseWin32
-MOD_CONFIG=HPB_bot2_Release_NonHomeFolderWin32
-#MOD_CONFIG=HPB_bot2_DebugWin32
+#MOD_CONFIG=HPB_bot2_Release_NonHomeFolderWin32
+MOD_CONFIG=HPB_bot2_DebugWin32
 
 # the directory the base binaries (tier0_i486.so, etc) are located
 # this should point to your orange box subfolder of where you have srcds installed.
@@ -49,10 +49,10 @@ CPP_LIB="/usr/lib/gcc/i586-linux-gnu/4.8/libstdc++.a /usr/lib/gcc/i586-linux-gnu
 # GCC 4.2.2 optimization flags, if you're using anything below, don't use these!
 #OPTFLAGS=-O2 -fomit-frame-pointer -fforce-addr -fthread-jumps -fcrossjumping -foptimize-sibling-calls -fcse-follow-jumps -fcse-skip-blocks -fgcse -fgcse-lm -frerun-cse-after-loop -fcaller-saves -fpeephole2 -fschedule-insns2 -fsched-interblock -fsched-spec -fregmove -fdelete-null-pointer-checks -freorder-blocks -freorder-functions -falign-functions -falign-jumps -falign-loops -falign-labels -ftree-vrp -ftree-pre -finline-functions -funswitch-loops -fgcse-after-reload -funsafe-math-optimizations
 
-OPTFLAGS=-O2 -fomit-frame-pointer -fforce-addr -foptimize-sibling-calls -fgcse -fcaller-saves -fschedule-insns2 -fsched-interblock -fdelete-null-pointer-checks -freorder-blocks -falign-labels -ftree-vrp -fgcse-after-reload -funsafe-math-optimizations
+#OPTFLAGS=-O2 -fomit-frame-pointer -fforce-addr -foptimize-sibling-calls -fgcse -fcaller-saves -fschedule-insns2 -fsched-interblock -fdelete-null-pointer-checks -freorder-blocks -falign-labels -ftree-vrp -fgcse-after-reload -funsafe-math-optimizations
 
 # put any compiler flags you want passed here
-USER_CFLAGS= -std=c++11 -Wno-write-strings# -g -D_DEBUG -DDEBUG -DSH_DEBUG# -DTF2_HOOKS
+USER_CFLAGS= -std=c++11 -Wno-write-strings -g -D_DEBUG -DDEBUG -DSH_DEBUG# -DTF2_HOOKS
 
 # Link Libraries
 #LIBFILES= \

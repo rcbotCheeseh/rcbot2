@@ -66,6 +66,7 @@ protected:
 		m_szHelp = NULL;
 	}
 public:
+	virtual ~CBotCommand() = default;
 	// initialise
 	CBotCommand(char* szCommand, int iAccessLevel = 0);
 
@@ -688,6 +689,19 @@ public:
 	}
 
 	eBotCommandResult execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5) override;
+};
+
+class CDebugMstrOffsetSearch : public CBotCommand
+{
+public:
+	CDebugMstrOffsetSearch()
+	{
+		setName("mstr_offset_search");
+		setHelp("usage \"mstr_offset_search\" must be run on cp_dustbowl only");
+		setAccessLevel(CMD_ACCESS_DEBUG);
+	}
+
+	eBotCommandResult execute(CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5);
 };
 
 class CDebugMemoryCheckCommand : public CBotCommand

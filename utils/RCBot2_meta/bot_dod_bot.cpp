@@ -47,6 +47,10 @@
 #include "bot_perceptron.h"
 #include "bot_waypoint_visibility.h"
 
+#ifdef WIN32
+#define sprintf sprintf_s
+#endif
+
 extern ConVar bot_beliefmulti;
 extern ConVar bot_max_cc_time;
 extern ConVar bot_min_cc_time;

@@ -51,7 +51,6 @@ public:
 	void spawnInit() override;
 
 	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
-private:
 	// blah blah
 };
 

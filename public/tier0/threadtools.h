@@ -1523,10 +1523,10 @@ inline bool CThreadSpinRWLock::TryLockForWrite( const uint32 threadId )
 
 inline bool CThreadSpinRWLock::TryLockForWrite()
 {
-	m_nWriters++;
+	++m_nWriters;
 	if ( !TryLockForWrite( ThreadGetCurrentId() ) )
 	{
-		m_nWriters--;
+		--m_nWriters;
 		return false;
 	}
 	return true;
@@ -1561,7 +1561,7 @@ inline void CThreadSpinRWLock::LockForWrite()
 {
 	const uint32 threadId = ThreadGetCurrentId();
 
-	m_nWriters++;
+	++m_nWriters;
 
 	if ( !TryLockForWrite( threadId ) )
 	{

@@ -84,6 +84,8 @@ extern IVDebugOverlay* debugoverlay;
 class CTraceFilterVis : public CTraceFilter
 {
 public:
+	virtual ~CTraceFilterVis() = default;
+
 	CTraceFilterVis(edict_t* pPlayer, edict_t* pHit = NULL)
 	{
 		m_pPlayer = pPlayer;
@@ -285,7 +287,7 @@ edict_t* CBotGlobals::findPlayerByTruncName(const char* name)
 
 		if (pent && CBotGlobals::isNetworkable(pent))
 		{
-			int length = strlen(name);//strlen called too often resulting lag? [APG]RoboCop[CL]
+			//int length = strlen(name);//strlen called too often resulting lag? [APG]RoboCop[CL]
 
 			char arg_lwr[128];
 			char pent_lwr[128];
@@ -302,6 +304,7 @@ edict_t* CBotGlobals::findPlayerByTruncName(const char* name)
 			__strlow(arg_lwr);
 			__strlow(pent_lwr);
 
+			const size_t length = 0;
 			if (strncmp(arg_lwr, pent_lwr, length) == 0)
 			{
 				return pent;
@@ -315,6 +318,8 @@ edict_t* CBotGlobals::findPlayerByTruncName(const char* name)
 class CTraceFilterHitAllExceptPlayers : public CTraceFilter
 {
 public:
+	virtual ~CTraceFilterHitAllExceptPlayers() = default;
+
 	bool ShouldHitEntity(IHandleEntity* pServerEntity, int contentsMask) override
 	{
 		return pServerEntity->GetRefEHandle().GetEntryIndex() <= gpGlobals->maxClients;
@@ -327,6 +332,7 @@ public:
 class CTraceFilterSimple : public CTraceFilter
 {
 public:
+	virtual ~CTraceFilterSimple() = default;
 
 	CTraceFilterSimple(const IHandleEntity* passentity1, const IHandleEntity* passentity2, int collisionGroup)
 	{

@@ -1531,7 +1531,7 @@ const char* RCBotPluginMeta::GetLicense()
 
 const char* RCBotPluginMeta::GetVersion()
 {
-	return "1.04 (r491-apg-ch)";
+	return "1.04 (r493-apg)";
 }
 
 const char* RCBotPluginMeta::GetDate()

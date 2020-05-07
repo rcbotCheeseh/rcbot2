@@ -106,6 +106,8 @@ private:
 class CBotMod
 {
 public:
+	virtual ~CBotMod() = default;
+
 	CBotMod()
 	{
 		m_szModFolder = NULL;
@@ -1384,8 +1386,6 @@ public:
 		setup("tf", "source dedicated server", MOD_TF2, BOTTYPE_TF2, "TF2");
 #endif
 	}
-
-private:
 };
 
 class CHalfLifeDeathmatchMod : public CBotMod
@@ -1431,7 +1431,6 @@ public:
 	//void mapInit ();
 
 	//void entitySpawn ( edict_t *pEntity );
-protected:
 };
 /*
 class CNaturalSelection2Mod : public CBotMod

@@ -555,7 +555,7 @@ void CClassInterfaceValue::getData(void* edict, bool bIsEdict)
 
 	if (bIsEdict)
 	{
-		edict_t* pEdict = reinterpret_cast<edict_t*>(edict);
+		edict_t* pEdict = static_cast<edict_t*>(edict);
 
 		pUnknown = static_cast<IServerUnknown*>(pEdict->GetUnknown());
 

@@ -92,6 +92,8 @@ typedef enum
 class CBotMenuItem
 {
 public:
+	virtual ~CBotMenuItem() = default;
+
 	CBotMenuItem()
 	{
 		m_szCaption[0] = 0;
