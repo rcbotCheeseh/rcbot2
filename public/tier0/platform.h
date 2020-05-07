@@ -36,7 +36,7 @@
 // feature enables
 #define NEW_SOFTWARE_LIGHTING
 
-#ifdef _LINUX
+#if defined(_LINUX) || defined(__APPLE__)
 // need this for _alloca
 #include <alloca.h>
 #endif // _LINUX
@@ -90,7 +90,7 @@
 		#define IsX360() true
 		#define IsPS3() false
 	#endif
-#elif defined(_LINUX)
+#elif defined(_LINUX) || defined(__APPLE__)
 	#define IsPC() true
 	#define IsConsole() false
 	#define IsX360() false
@@ -239,7 +239,7 @@ FIXME: Enable this when we no longer fear change =)
 #define __i386__	1
 #endif
 
-#elif _LINUX
+#elif defined(_LINUX) || defined(__APPLE__)
 typedef unsigned int DWORD;
 typedef unsigned short WORD;
 typedef void * HINSTANCE;
@@ -251,17 +251,6 @@ typedef void * HINSTANCE;
 #ifndef MAX_PATH
 #define MAX_PATH  260
 #endif
-
-
-#ifdef GNUC
-#undef offsetof
-//#define offsetof( type, var ) __builtin_offsetof( type, var ) 
-#define offsetof(s,m)	(size_t)&(((s *)0)->m)
-#else
-#undef offsetof
-#define offsetof(s,m)	(size_t)&(((s *)0)->m)
-#endif
-
 
 #define ALIGN_VALUE( val, alignment ) ( ( val + alignment - 1 ) & ~( alignment - 1 ) ) //  need macro for constant expression
 
@@ -294,7 +283,7 @@ typedef void * HINSTANCE;
 #ifdef _WIN32
         #define DECL_ALIGN(x) __declspec(align(x))
 
-#elif _LINUX
+#elif defined(_LINUX) || defined(__APPLE__)
 	#define DECL_ALIGN(x) __attribute__((aligned(x)))
 #else
         #define DECL_ALIGN(x) /* */
@@ -308,7 +297,7 @@ typedef void * HINSTANCE;
 
 // Linux had a few areas where it didn't construct objects in the same order that Windows does.
 // So when CVProfile::CVProfile() would access g_pMemAlloc, it would crash because the allocator wasn't initalized yet.
-#ifdef _LINUX
+#if defined(_LINUX) || defined(__APPLE__)
 	#define CONSTRUCT_EARLY __attribute__((init_priority(101)))
 #else
 	#define CONSTRUCT_EARLY
@@ -316,7 +305,7 @@ typedef void * HINSTANCE;
 
 #ifdef _WIN32
 	#define SELECTANY __declspec(selectany)
-#elif _LINUX
+#elif defined(_LINUX) || defined(__APPLE__)
 	#define SELECTANY __attribute__((weak))
 #else
 	#define SELECTANY static
@@ -336,7 +325,7 @@ typedef void * HINSTANCE;
 #define  DLL_GLOBAL_EXPORT   extern __declspec( dllexport )
 #define  DLL_GLOBAL_IMPORT   extern __declspec( dllimport )
 
-#elif defined _LINUX
+#elif defined(_LINUX) || defined(__APPLE__)
 // Used for dll exporting and importing
 #define  DLL_EXPORT   extern "C" __attribute__ ((visibility("default")))
 #define  DLL_IMPORT   extern "C"
@@ -411,7 +400,7 @@ typedef void * HINSTANCE;
 // Alloca defined for this platform
 #define  stackalloc( _size ) _alloca( ALIGN_VALUE( _size, 16 ) )
 #define  stackfree( _p )
-#elif _LINUX
+#elif defined(_LINUX) || defined(__APPLE__)
 // Alloca defined for this platform
 #define  stackalloc( _size ) _alloca( ALIGN_VALUE( _size, 16 ) )
 #define  stackfree( _p )

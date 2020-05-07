@@ -50,10 +50,6 @@
 #include <vector>
 using namespace std;
 
-#ifdef WIN32
-#define strncpy strncpy_s
-#endif
-
 class CClient;
 class CBotMenu;
 class CBotMenuItem;

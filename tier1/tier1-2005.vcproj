@@ -68,6 +68,7 @@
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
 				CompileAs="2"
+				OmitDefaultLibName="true"
 				ErrorReporting="1"
 			/>
 			<Tool

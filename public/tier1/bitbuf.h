@@ -1492,7 +1492,7 @@ public:
 #endif
 
 
-#ifdef _LINUX
+#if defined _LINUX || defined __APPLE__
 WRAP_READ( old_bf_read );
 #else
 WRAP_READ( CBitRead );

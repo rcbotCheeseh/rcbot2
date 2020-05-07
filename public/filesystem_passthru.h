@@ -122,6 +122,7 @@ public:
 	virtual void			FindClose( FileFindHandle_t handle )												{ m_pFileSystemPassThru->FindClose( handle ); }
 	virtual const char		*GetLocalPath( const char *pFileName, char *pLocalPath, int localPathBufferSize )	{ return m_pFileSystemPassThru->GetLocalPath( pFileName, pLocalPath, localPathBufferSize ); }
 	virtual bool			FullPathToRelativePath( const char *pFullpath, char *pRelative, int maxlen )		{ return m_pFileSystemPassThru->FullPathToRelativePath( pFullpath, pRelative, maxlen ); }
+	virtual bool			GetCaseCorrectFullPath_Ptr( const char *pFullPath, char *pDest, int maxLenInChars ) { return m_pFileSystemPassThru->GetCaseCorrectFullPath_Ptr(pFullPath, pDest, maxLenInChars ); }
 	virtual bool			GetCurrentDirectory( char* pDirectory, int maxlen )									{ return m_pFileSystemPassThru->GetCurrentDirectory( pDirectory, maxlen ); }
 	virtual void			PrintOpenedFiles( void )															{ m_pFileSystemPassThru->PrintOpenedFiles(); }
 	virtual void			PrintSearchPaths( void )															{ m_pFileSystemPassThru->PrintSearchPaths(); }
@@ -172,6 +173,9 @@ public:
 	virtual FSAsyncStatus_t	AsyncSetPriority(FSAsyncControl_t hControl, int newPriority)						{ return m_pFileSystemPassThru->AsyncSetPriority(hControl, newPriority); }
 	virtual bool			AsyncSuspend()																		{ return m_pFileSystemPassThru->AsyncSuspend(); }
 	virtual bool			AsyncResume()																		{ return m_pFileSystemPassThru->AsyncResume(); }
+	// Next two functions each take an IAsyncFileFetch ptr.
+	virtual void			AsyncAddFetcher( void *pFetch )														{ return m_pFileSystemPassThru->AsyncAddFetcher(pFetch); }
+	virtual void			AsyncRemoveFetcher( void *pFetch )													{ return m_pFileSystemPassThru->AsyncRemoveFetcher(pFetch); }
 	virtual const char		*RelativePathToFullPath( const char *pFileName, const char *pPathID, char *pLocalPath, int localPathBufferSize, PathTypeFilter_t pathFilter = FILTER_NONE, PathTypeQuery_t *pPathType = NULL ) { return m_pFileSystemPassThru->RelativePathToFullPath( pFileName, pPathID, pLocalPath, localPathBufferSize, pathFilter, pPathType ); }
 	virtual int				GetSearchPath( const char *pathID, bool bGetPackFiles, char *pPath, int nMaxLen	)	{ return m_pFileSystemPassThru->GetSearchPath( pathID, bGetPackFiles, pPath, nMaxLen ); }
 
@@ -212,23 +216,50 @@ public:
 
 	virtual DVDMode_t		GetDVDMode() { return m_pFileSystemPassThru->GetDVDMode(); }
 
-	virtual void EnableWhitelistFileTracking( bool bEnable )
-		{ m_pFileSystemPassThru->EnableWhitelistFileTracking( bEnable ); }
-	virtual void RegisterFileWhitelist( IFileList *pForceMatchList, IFileList *pAllowFromDiskList, IFileList **pFilesToReload )
-		{ m_pFileSystemPassThru->RegisterFileWhitelist( pForceMatchList, pAllowFromDiskList, pFilesToReload ); }
+	virtual void EnableWhitelistFileTracking( bool bEnable, bool bCacheAllVPKHashes, bool bRecalculateAndCheckHashes )
+		{ m_pFileSystemPassThru->EnableWhitelistFileTracking( bEnable, bCacheAllVPKHashes, bRecalculateAndCheckHashes ); }
+	virtual void RegisterFileWhitelist( IPureServerWhitelist *pPureList, IFileList **pFilesToReload )
+		{ m_pFileSystemPassThru->RegisterFileWhitelist( pPureList, pFilesToReload ); }
 	virtual void MarkAllCRCsUnverified()
 		{ m_pFileSystemPassThru->MarkAllCRCsUnverified(); }
 	virtual void CacheFileCRCs( const char *pPathname, ECacheCRCType eType, IFileList *pFilter )
 		{ return m_pFileSystemPassThru->CacheFileCRCs( pPathname, eType, pFilter ); }
-	virtual EFileCRCStatus CheckCachedFileCRC( const char *pPathID, const char *pRelativeFilename, CRC32_t *pCRC )
-		{ return m_pFileSystemPassThru->CheckCachedFileCRC( pPathID, pRelativeFilename, pCRC ); }
-	virtual int GetUnverifiedCRCFiles( CUnverifiedCRCFile *pFiles, int nMaxFiles )
-		{ return m_pFileSystemPassThru->GetUnverifiedCRCFiles( pFiles, nMaxFiles ); }
+	virtual EFileCRCStatus CheckCachedFileHash( const char *pPathID, const char *pRelativeFilename, int nFileFraction, FileHash_t *pFileHash )
+		{ return m_pFileSystemPassThru->CheckCachedFileHash( pPathID, pRelativeFilename, nFileFraction, pFileHash ); }
+	virtual int GetUnverifiedFileHashes( CUnverifiedFileHash *pFiles, int nMaxFiles )
+		{ return m_pFileSystemPassThru->GetUnverifiedFileHashes( pFiles, nMaxFiles ); }
 	virtual int GetWhitelistSpewFlags()
 		{ return m_pFileSystemPassThru->GetWhitelistSpewFlags(); }
 	virtual void SetWhitelistSpewFlags( int spewFlags )
 		{ m_pFileSystemPassThru->SetWhitelistSpewFlags( spewFlags ); }
 	virtual void InstallDirtyDiskReportFunc( FSDirtyDiskReportFunc_t func ) { m_pFileSystemPassThru->InstallDirtyDiskReportFunc( func ); }
+
+	// This looks to return a "CFileCacheObject" object.
+	virtual void			*CreateFileCache()
+		{ return m_pFileSystemPassThru->CreateFileCache(); }
+	
+	// Assuming that the first param in each of these is also a CFileCacheObject ptr.
+	virtual void			AddFilesToFileCache( void *pFileCache, const char **pszUnk1, int size, const char *szUnk2 )
+		{ m_pFileSystemPassThru->AddFilesToFileCache( pFileCache, pszUnk1, size, szUnk2 ); }
+	virtual bool			IsFileCacheFileLoaded( void *pFileCache, const char *szFile )
+		{ return m_pFileSystemPassThru->IsFileCacheFileLoaded( pFileCache, szFile ); }
+	virtual bool			IsFileCacheLoaded( void *pFileCache )
+		{ return m_pFileSystemPassThru->IsFileCacheLoaded( pFileCache ); }
+	virtual void			DestroyFileCache( void *pFileCache )
+		{ m_pFileSystemPassThru->DestroyFileCache( pFileCache ); }
+
+	virtual bool RegisterMemoryFile( void *pFile, void **ppExistingFileWithRef )
+		{ return m_pFileSystemPassThru->RegisterMemoryFile( pFile, ppExistingFileWithRef ); }
+	virtual void UnregisterMemoryFile( void *pFile )
+		{ m_pFileSystemPassThru->UnregisterMemoryFile( pFile ); }
+
+	virtual void CacheAllVPKFileHashes( bool bCacheAllVPKHashes, bool bRecalculateAndCheckHashes )
+		{ m_pFileSystemPassThru->CacheAllVPKFileHashes( bCacheAllVPKHashes, bRecalculateAndCheckHashes ); }
+	virtual bool CheckVPKFileHash( int PackFileID, int nPackFileNumber, int nFileFraction, MD5Value_t &md5Value )
+		{ return m_pFileSystemPassThru->CheckVPKFileHash( PackFileID, nPackFileNumber, nFileFraction, md5Value ); }
+
+	virtual void NotifyFileUnloaded( const char *pFileName, const char *pPathId )
+		{ m_pFileSystemPassThru->NotifyFileUnloaded( pFileName, pPathId ); }
 
 protected:
 	IFileSystem *m_pFileSystemPassThru;
