@@ -1323,9 +1323,9 @@ inline bool QuickBoxSphereTest(
 	const Vector& bbMin,
 	const Vector& bbMax)
 {
-	return vOrigin.x - flRadius < bbMax.x && vOrigin.x + flRadius > bbMin.x &&
-		vOrigin.y - flRadius < bbMax.y && vOrigin.y + flRadius > bbMin.y &&
-		vOrigin.z - flRadius < bbMax.z && vOrigin.z + flRadius > bbMin.z;
+	return vOrigin.x - flRadius < bbMax.x&& vOrigin.x + flRadius > bbMin.x &&
+		vOrigin.y - flRadius < bbMax.y&& vOrigin.y + flRadius > bbMin.y &&
+		vOrigin.z - flRadius < bbMax.z&& vOrigin.z + flRadius > bbMin.z;
 }
 
 // Return true of the boxes intersect (but not if they just touch).
@@ -1336,9 +1336,9 @@ inline bool QuickBoxIntersectTest(
 	const Vector& vBox2Max)
 {
 	return
-		vBox1Min.x < vBox2Max.x && vBox1Max.x > vBox2Min.x &&
-		vBox1Min.y < vBox2Max.y && vBox1Max.y > vBox2Min.y &&
-		vBox1Min.z < vBox2Max.z && vBox1Max.z > vBox2Min.z;
+		vBox1Min.x < vBox2Max.x&& vBox1Max.x > vBox2Min.x &&
+		vBox1Min.y < vBox2Max.y&& vBox1Max.y > vBox2Min.y &&
+		vBox1Min.z < vBox2Max.z&& vBox1Max.z > vBox2Min.z;
 }
 
 extern float GammaToLinearFullRange(float gamma);

@@ -150,8 +150,8 @@ public:
 
 	//Vector getAimVector ( edict_t *pEntity );
 	void modAim(edict_t* pEntity, Vector& v_origin,
-	            Vector* v_desired_offset, Vector& v_size,
-	            float fDist, float fDist2D) override;
+		Vector* v_desired_offset, Vector& v_size,
+		float fDist, float fDist2D) override;
 
 	bool startGame() override;
 

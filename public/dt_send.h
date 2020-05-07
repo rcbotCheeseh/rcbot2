@@ -560,23 +560,23 @@ inline void SendTable::SetHasPropsEncodedAgainstTickcount(bool bState)
 #define SENDINFO(varName)					#varName, offsetof(currentSendDTClass::MakeANetworkVar_##varName, varName), sizeof(((currentSendDTClass*)0)->varName)
 #define SENDINFO_ARRAY(varName)				#varName, offsetof(currentSendDTClass::MakeANetworkVar_##varName, varName), sizeof(((currentSendDTClass*)0)->varName[0])
 #define SENDINFO_ARRAY3(varName)			#varName, offsetof(currentSendDTClass::MakeANetworkVar_##varName, varName), sizeof(((currentSendDTClass*)0)->varName[0]), sizeof(((currentSendDTClass*)0)->varName)/sizeof(((currentSendDTClass*)0)->varName[0])
-#define SENDINFO_ARRAYELEM(varName, i)		#varName "[" #i "]", offsetof(currentSendDTClass::MakeANetworkVar_##varName, (varName)[i]), sizeof(((currentSendDTClass*)0)->varName[0])
+#define SENDINFO_ARRAYELEM(varName, i)		#varName "[" #i "]", offsetof(currentSendDTClass::MakeANetworkVar_##varName, varName[i]), sizeof(((currentSendDTClass*)0)->varName[0])
 #define SENDINFO_ARRAYELEM2(varName, i)		#varName "[" #i "]", offsetof(currentSendDTClass::MakeANetworkVar_##varName, varName) + offsetof(currentSendDTClass::MakeANetworkVar_##varName::NetworkVar_##varName, m_Value[i]), sizeof(((currentSendDTClass*)0)->varName[0])
-#define SENDINFO_NETWORKARRAYELEM(varName, i)#varName "[" #i "]", offsetof(currentSendDTClass::MakeANetworkVar_##varName, (varName).m_Value[i]), sizeof(((currentSendDTClass*)0)->varName.m_Value[0])
+#define SENDINFO_NETWORKARRAYELEM(varName, i)#varName "[" #i "]", offsetof(currentSendDTClass::MakeANetworkVar_##varName, varName.m_Value[i]), sizeof(((currentSendDTClass*)0)->varName.m_Value[0])
 
 // NOTE: Be VERY careful to specify any other vector elems for the same vector IN ORDER and
 // right after each other, otherwise it might miss the Y or Z component in SP.
 //
 // Note: this macro specifies a negative offset so the engine can detect it and setup m_pNext
-#define SENDINFO_VECTORELEM(varName, i)		#varName "[" #i "]", -(int)offsetof(currentSendDTClass::MakeANetworkVar_##varName, (varName).m_Value[i]), sizeof(((currentSendDTClass*)0)->varName.m_Value[0])
-#define SENDINFO_VECTORELEM2(varName, i, which)	#varName "[" #i "]", -(int)offsetof(currentSendDTClass::MakeANetworkVar_##varName, (varName).m_Value.which), sizeof(((currentSendDTClass*)0)->varName.m_Value[0])
+#define SENDINFO_VECTORELEM(varName, i)		#varName "[" #i "]", -(int)offsetof(currentSendDTClass::MakeANetworkVar_##varName, varName.m_Value[i]), sizeof(((currentSendDTClass*)0)->varName.m_Value[0])
+#define SENDINFO_VECTORELEM2(varName, i, which)	#varName "[" #i "]", -(int)offsetof(currentSendDTClass::MakeANetworkVar_##varName, varName.m_Value.which), sizeof(((currentSendDTClass*)0)->varName.m_Value[0])
 
 #define SENDINFO_STRUCTELEM(varName)		#varName, offsetof(currentSendDTClass, varName), sizeof(((currentSendDTClass*)0)->varName.m_Value)
-#define SENDINFO_STRUCTARRAYELEM(varName, i)#varName "[" #i "]", offsetof(currentSendDTClass, (varName).m_Value[i]), sizeof(((currentSendDTClass*)0)->varName.m_Value[0])
+#define SENDINFO_STRUCTARRAYELEM(varName, i)#varName "[" #i "]", offsetof(currentSendDTClass, varName.m_Value[i]), sizeof(((currentSendDTClass*)0)->varName.m_Value[0])
 
 // Use this when you're not using a CNetworkVar to represent the data you're sending.
 #define SENDINFO_NOCHECK(varName)						#varName, offsetof(currentSendDTClass, varName), sizeof(((currentSendDTClass*)0)->varName)
-#define SENDINFO_NOCHECK_VECTORELEM(varName, i, which)	#varName "[" #i "]", offsetof(currentSendDTClass, (varName).which), sizeof(((currentSendDTClass*)0)->varName.which)
+#define SENDINFO_NOCHECK_VECTORELEM(varName, i, which)	#varName "[" #i "]", offsetof(currentSendDTClass, varName.which), sizeof(((currentSendDTClass*)0)->varName.which)
 #define SENDINFO_STRING_NOCHECK(varName)				#varName, offsetof(currentSendDTClass, varName)
 #define SENDINFO_DT(varName)							#varName, offsetof(currentSendDTClass, varName)
 #define SENDINFO_DT_NAME(varName, remoteVarName)		#remoteVarName, offsetof(currentSendDTClass, varName)
@@ -620,7 +620,7 @@ SendProp SendPropFloat(
 	float fLowValue = 0.0f,			// For floating point, low and high values.
 	float fHighValue = HIGH_DEFAULT,	// High value. If HIGH_DEFAULT, it's (1<<nBits).
 	SendVarProxyFn varProxy = SendProxy_FloatToFloat
-);
+	);
 
 SendProp SendPropVector(
 	const char* pVarName,
@@ -631,7 +631,7 @@ SendProp SendPropVector(
 	float fLowValue = 0.0f,			// For floating point, low and high values.
 	float fHighValue = HIGH_DEFAULT,	// High value. If HIGH_DEFAULT, it's (1<<nBits).
 	SendVarProxyFn varProxy = SendProxy_VectorToVector
-);
+	);
 
 #if 0 // We can't ship this since it changes the size of DTVariant to be 20 bytes instead of 16 and that breaks MODs!!!
 SendProp SendPropQuaternion(
@@ -643,7 +643,7 @@ SendProp SendPropQuaternion(
 	float fLowValue = 0.0f,			// For floating point, low and high values.
 	float fHighValue = HIGH_DEFAULT,	// High value. If HIGH_DEFAULT, it's (1<<nBits).
 	SendVarProxyFn varProxy = SendProxy_QuaternionToQuaternion
-);
+	);
 #endif
 
 SendProp SendPropAngle(
@@ -653,7 +653,7 @@ SendProp SendPropAngle(
 	int nBits = 32,
 	int flags = 0,
 	SendVarProxyFn varProxy = SendProxy_AngleToFloat
-);
+	);
 
 SendProp SendPropQAngles(
 	const char* pVarName,
@@ -662,7 +662,7 @@ SendProp SendPropQAngles(
 	int nBits = 32,
 	int flags = 0,
 	SendVarProxyFn varProxy = SendProxy_QAngles
-);
+	);
 
 SendProp SendPropInt(
 	const char* pVarName,
@@ -671,7 +671,7 @@ SendProp SendPropInt(
 	int nBits = -1,					// Set to -1 to automatically pick (max) number of bits based on size of element.
 	int flags = 0,
 	SendVarProxyFn varProxy = 0
-);
+	);
 
 inline SendProp SendPropModelIndex(const char* pVarName, int offset, int sizeofVar = SIZEOF_IGNORE)
 {
@@ -691,7 +691,7 @@ SendProp SendPropDataTable(
 	int offset,
 	SendTable* pTable,
 	SendTableProxyFn varProxy = SendProxy_DataTableToDataTable
-);
+	);
 
 SendProp SendPropArray3(
 	const char* pVarName,
@@ -700,7 +700,7 @@ SendProp SendPropArray3(
 	int elements,
 	SendProp pArrayProp,
 	SendTableProxyFn varProxy = SendProxy_DataTableToDataTable
-);
+	);
 
 // Use the macro to let it automatically generate a table name. You shouldn't
 // ever need to reference the table name. If you want to exclude this array, then
@@ -710,7 +710,7 @@ SendProp InternalSendPropArray(
 	const int elementStride,
 	const char* pName,
 	ArrayLengthSendProxyFn proxy
-);
+	);
 
 // Use this and pass the array name and it will figure out the count and stride automatically.
 #define SendPropArray( varTemplate, arrayName )			\
@@ -740,8 +740,8 @@ SendProp InternalSendPropArray(
 #define SendPropVariableLengthArray( arrayLengthSendProxy, varTemplate, arrayName )	\
 	varTemplate,										\
 	InternalSendPropArray(								\
-		sizeof(((currentSendDTClass*)0)->arrayName) / PROPSIZEOF(currentSendDTClass, (arrayName)[0]), \
-		PROPSIZEOF(currentSendDTClass, (arrayName)[0]),	\
+		sizeof(((currentSendDTClass*)0)->arrayName) / PROPSIZEOF(currentSendDTClass, arrayName[0]), \
+		PROPSIZEOF(currentSendDTClass, arrayName[0]),	\
 		#arrayName,										\
 		arrayLengthSendProxy							\
 		)
@@ -756,6 +756,6 @@ SendProp InternalSendPropArray(
 SendProp SendPropExclude(
 	const char* pDataTableName,	// Data table name (given to BEGIN_SEND_TABLE and BEGIN_RECV_TABLE).
 	const char* pPropName		// Name of the property to exclude.
-);
+	);
 
 #endif // DATATABLE_SEND_H

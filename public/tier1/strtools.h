@@ -136,7 +136,7 @@ int V_snprintf(char* pDest, int destLen, const char* pFormat, ...);
 void V_wcsncpy(wchar_t* pDest, wchar_t const* pSrc, int maxLenInBytes);
 int V_snwprintf(wchar_t* pDest, int destLen, const wchar_t* pFormat, ...);
 
-#define COPY_ALL_CHARACTERS (-1)
+#define COPY_ALL_CHARACTERS -1
 char* V_strncat(char*, const char*, size_t destBufferSize, int max_chars_to_copy = COPY_ALL_CHARACTERS);
 char* V_strnlwr(char*, size_t);
 

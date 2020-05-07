@@ -87,7 +87,7 @@ public:
 
 private:
 	vector<IIndividual*> m_theIndividuals;
-	CGA *m_ga;
+	CGA* m_ga;
 };
 
 // selection function interface

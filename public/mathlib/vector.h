@@ -121,8 +121,8 @@ public:
 	// return true if this vector is (0,0,0) within tolerance
 	bool IsZero(float tolerance = 0.01f) const
 	{
-		return (x > -tolerance && x < tolerance &&
-			y > -tolerance && y < tolerance &&
+		return (x > -tolerance && x < tolerance&&
+			y > -tolerance && y < tolerance&&
 			z > -tolerance && z < tolerance);
 	}
 
@@ -2136,7 +2136,7 @@ inline vec_t Vector::NormalizeInPlace()
 
 inline bool Vector::IsLengthGreaterThan(float val) const
 {
-	return LengthSqr() > val* val;
+	return LengthSqr() > val * val;
 }
 
 inline bool Vector::IsLengthLessThan(float val) const
