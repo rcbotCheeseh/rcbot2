@@ -1379,7 +1379,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 			if (bot != NULL && bot->getEdict() != NULL && bot->inUse()) {
 				IPlayerInfo* p = playerinfomanager->GetPlayerInfo(bot->getEdict());
 
-				if (p->IsConnected() && p->IsFakeClient()) {
+				if (p->IsConnected() && p->IsFakeClient() && !p->IsHLTV()) {
 					bot_count++;
 				}
 			}
@@ -1387,7 +1387,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 			if (client != NULL && client->getPlayer() != NULL && client->isUsed()) {
 				IPlayerInfo* p = playerinfomanager->GetPlayerInfo(client->getPlayer());
 
-				if (p->IsConnected() && !p->IsFakeClient()) {
+				if (p->IsConnected() && !p->IsFakeClient() && !p->IsHLTV()) {
 					human_count++;
 				}
 			}
@@ -1508,10 +1508,11 @@ void RCBotPluginMeta::Hook_LevelShutdown()
 	CBotEvents::freeMemory();
 }
 
-void RCBotPluginMeta::Hook_SetCommandClient(const int index)
+//This causes log flood spam - [APG]RoboCop[CL]
+/*void RCBotPluginMeta::Hook_SetCommandClient(const int index)
 {
 	META_LOG(g_PLAPI, "Hook_SetCommandClient(%d)", index);
-}
+}*/
 
 bool RCBotPluginMeta::Pause(char* error, size_t maxlen)
 {

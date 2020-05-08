@@ -621,11 +621,15 @@ int CBotGlobals::numClients()
 	{
 		edict_t* pEdict = INDEXENT(i);
 
-		if (pEdict)
-		{
-			if (engine->GetPlayerUserId(pEdict) > 0)
-				iCount++;
-		}
+		if ( !pEdict )
+			continue;
+
+		IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEdict);
+		if (!p || p->IsHLTV())
+			continue;
+
+		if ( engine->GetPlayerUserId(pEdict) > 0 )
+			iCount++;
 	}
 
 	return iCount;
