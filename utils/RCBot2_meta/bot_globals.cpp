@@ -47,12 +47,6 @@
 
 #include "ndebugoverlay.h"
 
-#ifdef WIN32
-#define _snprintf _snprintf_s
-#define strncpy strncpy_s
-#define strncat strncat_s
-#endif
-
 #ifndef __linux__
 #include <direct.h> // for mkdir
 #include <sys/stat.h>

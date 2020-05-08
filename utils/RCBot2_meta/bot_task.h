@@ -40,10 +40,6 @@ struct edict_t;
 #include "bot_const.h"
 #include "bot_fortress.h"
 
-#ifdef WIN32
-#define sprintf_s sprintf
-#endif
-
 class CWaypointVisibilityTable;
 
 class IBotTaskInterrupt

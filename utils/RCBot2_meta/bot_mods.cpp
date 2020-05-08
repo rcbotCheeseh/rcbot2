@@ -46,10 +46,6 @@
 #include "bot_waypoint_locations.h"
 #include "bot_perceptron.h"
 
-#ifdef WIN32
-#define strncpy strncpy_s
-#endif
-
 std::vector<edict_wpt_pair_t> CHalfLifeDeathmatchMod::m_LiftWaypoints;
 
 void CBotMods::parseFile()

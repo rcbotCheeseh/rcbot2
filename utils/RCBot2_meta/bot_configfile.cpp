@@ -46,11 +46,6 @@
 #include "engine/iserverplugin.h"
 #include "iplayerinfo.h"
 
-#ifdef WIN32
-#define sccanf sscanf_s
-#define _snprintf _snprintf_s
-#endif
-
 #ifdef __linux__
 #include "shake.h"    //bir3yk
 #endif

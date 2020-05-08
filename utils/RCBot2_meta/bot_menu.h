@@ -48,11 +48,6 @@
 #define __BOT_MENU_H__
 
 #include <vector>
-using namespace std;
-
-#ifdef WIN32
-#define strncpy strncpy_s
-#endif
 
 class CClient;
 class CBotMenu;
@@ -193,7 +188,7 @@ public:
 	void selectedMenu(CClient* pClient, unsigned int iMenu);
 
 private:
-	vector<CBotMenuItem*> m_MenuItems;
+	std::vector<CBotMenuItem*> m_MenuItems;
 };
 
 class CWaypointFlagMenu : public CBotMenu
