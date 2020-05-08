@@ -91,7 +91,7 @@ public: //hooks
 	void Hook_ClientDisconnect(edict_t* pEntity);
 	void Hook_ClientPutInServer(edict_t* pEntity, char const* playername);
 	//void Hook_SetCommandClient(int index);
-	void Hook_ClientSettingsChanged(edict_t* pEdict);
+	//void Hook_ClientSettingsChanged(edict_t* pEdict);
 	//Called for a game event.  Same definition as server plugins???
 	bool FireGameEvent(IGameEvent* pevent, bool bDontBroadcast);
 	void Hook_PlayerRunCmd(CUserCmd* ucmd, IMoveHelper* moveHelper);

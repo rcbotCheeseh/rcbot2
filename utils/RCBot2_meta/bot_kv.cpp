@@ -5,7 +5,6 @@
 #ifdef WIN32
 #define strcpy strcpy_s
 #define strncpy strncpy_s
-#define sprintf sprintf_s
 #endif
 
 void CRCBotKeyValueList::parseFile(FILE* fp)

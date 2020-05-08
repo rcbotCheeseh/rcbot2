@@ -1657,14 +1657,14 @@ inline float CalcDistanceToAABB(const Vector& mins, const Vector& maxs, const Ve
 // calculate the shortest distance from P to the line.
 // If you pass in a value for t, it will tell you the t for (A + (B-A)t) to get the closest point.
 // If the closest point lies on the segment between A and B, then 0 <= t <= 1.
-void  CalcClosestPointOnLine(const Vector& P, const Vector& vLineA, const Vector& vLineB, Vector& vClosest, float* t = 0);
-float CalcDistanceToLine(const Vector& P, const Vector& vLineA, const Vector& vLineB, float* t = 0);
-float CalcDistanceSqrToLine(const Vector& P, const Vector& vLineA, const Vector& vLineB, float* t = 0);
+void  CalcClosestPointOnLine(const Vector& P, const Vector& vLineA, const Vector& vLineB, Vector& vClosest, float* t = nullptr);
+float CalcDistanceToLine(const Vector& P, const Vector& vLineA, const Vector& vLineB, float* t = nullptr);
+float CalcDistanceSqrToLine(const Vector& P, const Vector& vLineA, const Vector& vLineB, float* t = nullptr);
 
 // The same three functions as above, except now the line is closed between A and B.
-void  CalcClosestPointOnLineSegment(const Vector& P, const Vector& vLineA, const Vector& vLineB, Vector& vClosest, float* t = 0);
-float CalcDistanceToLineSegment(const Vector& P, const Vector& vLineA, const Vector& vLineB, float* t = 0);
-float CalcDistanceSqrToLineSegment(const Vector& P, const Vector& vLineA, const Vector& vLineB, float* t = 0);
+void  CalcClosestPointOnLineSegment(const Vector& P, const Vector& vLineA, const Vector& vLineB, Vector& vClosest, float* t = nullptr);
+float CalcDistanceToLineSegment(const Vector& P, const Vector& vLineA, const Vector& vLineB, float* t = nullptr);
+float CalcDistanceSqrToLineSegment(const Vector& P, const Vector& vLineA, const Vector& vLineB, float* t = nullptr);
 
 // A function to compute the closes line segment connnection two lines (or false if the lines are parallel, etc.)
 bool CalcLineToLineIntersectionSegment(
@@ -1672,12 +1672,12 @@ bool CalcLineToLineIntersectionSegment(
 	float* t1, float* t2);
 
 // The above functions in 2D
-void  CalcClosestPointOnLine2D(Vector2D const& P, Vector2D const& vLineA, Vector2D const& vLineB, Vector2D& vClosest, float* t = 0);
-float CalcDistanceToLine2D(Vector2D const& P, Vector2D const& vLineA, Vector2D const& vLineB, float* t = 0);
-float CalcDistanceSqrToLine2D(Vector2D const& P, Vector2D const& vLineA, Vector2D const& vLineB, float* t = 0);
-void  CalcClosestPointOnLineSegment2D(Vector2D const& P, Vector2D const& vLineA, Vector2D const& vLineB, Vector2D& vClosest, float* t = 0);
-float CalcDistanceToLineSegment2D(Vector2D const& P, Vector2D const& vLineA, Vector2D const& vLineB, float* t = 0);
-float CalcDistanceSqrToLineSegment2D(Vector2D const& P, Vector2D const& vLineA, Vector2D const& vLineB, float* t = 0);
+void  CalcClosestPointOnLine2D(Vector2D const& P, Vector2D const& vLineA, Vector2D const& vLineB, Vector2D& vClosest, float* t = nullptr);
+float CalcDistanceToLine2D(Vector2D const& P, Vector2D const& vLineA, Vector2D const& vLineB, float* t = nullptr);
+float CalcDistanceSqrToLine2D(Vector2D const& P, Vector2D const& vLineA, Vector2D const& vLineB, float* t = nullptr);
+void  CalcClosestPointOnLineSegment2D(Vector2D const& P, Vector2D const& vLineA, Vector2D const& vLineB, Vector2D& vClosest, float* t = nullptr);
+float CalcDistanceToLineSegment2D(Vector2D const& P, Vector2D const& vLineA, Vector2D const& vLineB, float* t = nullptr);
+float CalcDistanceSqrToLineSegment2D(Vector2D const& P, Vector2D const& vLineA, Vector2D const& vLineB, float* t = nullptr);
 
 // Init the mathlib
 void MathLib_Init(float gamma = 2.2f, float texGamma = 2.2f, float brightness = 0.0f, int overbright = 2.0f, bool bAllow3DNow = true, bool bAllowSSE = true, bool bAllowSSE2 = true, bool bAllowMMX = true);

@@ -48,7 +48,6 @@
 
 #ifdef WIN32
 #define sccanf sscanf_s
-#define sprintf sprintf_s
 #define _snprintf _snprintf_s
 #endif
 

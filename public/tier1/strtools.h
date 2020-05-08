@@ -118,8 +118,8 @@ const char* V_strnchr(const char* pStr, char c, int n);
 // returns string immediately following prefix, (ie str+strlen(prefix)) or NULL if prefix not found
 const char* StringAfterPrefix(const char* str, const char* prefix);
 const char* StringAfterPrefixCaseSensitive(const char* str, const char* prefix);
-inline bool	StringHasPrefix(const char* str, const char* prefix) { return StringAfterPrefix(str, prefix) != NULL; }
-inline bool	StringHasPrefixCaseSensitive(const char* str, const char* prefix) { return StringAfterPrefixCaseSensitive(str, prefix) != NULL; }
+inline bool	StringHasPrefix(const char* str, const char* prefix) { return StringAfterPrefix(str, prefix) != nullptr; }
+inline bool	StringHasPrefixCaseSensitive(const char* str, const char* prefix) { return StringAfterPrefixCaseSensitive(str, prefix) != nullptr; }
 
 // Normalizes a float string in place.
 // (removes leading zeros, trailing zeros after the decimal point, and the decimal point itself where possible)
@@ -234,7 +234,7 @@ bool V_RemoveDotSlashes(char* pFilename, char separator = CORRECT_PATH_SEPARATOR
 // If pPath is a relative path, this function makes it into an absolute path
 // using the current working directory as the base, or pStartingDir if it's non-NULL.
 // Returns false if it runs out of room in the string, or if pPath tries to ".." past the root directory.
-void V_MakeAbsolutePath(char* pOut, int outLen, const char* pPath, const char* pStartingDir = NULL);
+void V_MakeAbsolutePath(char* pOut, int outLen, const char* pPath, const char* pStartingDir = nullptr);
 
 // Creates a relative path given two full paths
 // The first is the full path of the file to make a relative path for.
@@ -313,7 +313,7 @@ inline void V_strcat(char* dest, const char* src, int cchDest)
 template < class NameArray >
 int V_GenerateUniqueNameIndex(const char* prefix, const NameArray& nameArray, int startindex = 0)
 {
-	if (prefix == NULL)
+	if (prefix == nullptr)
 		return 0;
 
 	int freeindex = startindex;
@@ -343,10 +343,10 @@ int V_GenerateUniqueNameIndex(const char* prefix, const NameArray& nameArray, in
 template < class NameArray >
 bool V_GenerateUniqueName(char* name, int memsize, const char* prefix, const NameArray& nameArray)
 {
-	if (name == NULL || memsize == 0)
+	if (name == nullptr || memsize == 0)
 		return false;
 
-	if (prefix == NULL)
+	if (prefix == nullptr)
 	{
 		name[0] = '\0';
 		return false;

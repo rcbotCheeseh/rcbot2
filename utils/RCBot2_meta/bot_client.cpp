@@ -45,7 +45,6 @@
 #include "bot_plugin_meta.h"
 
 #ifdef WIN32
-#define sprintf sprintf_s
 #define vsprintf vsprintf_s
 #define _snprintf _snprintf_s
 #endif

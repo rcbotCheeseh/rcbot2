@@ -486,7 +486,7 @@ void CClassInterface::init()
 	DEFINE_GETPROP(GETPROP_TF2_BUILDER_MODE, "CTFWeaponBuilder", "m_iObjectMode", 0);
 	DEFINE_GETPROP(GETPROP_TF2_CHARGE_RESIST_TYPE, "CWeaponMedigun", "m_nChargeResistType", 0);
 	DEFINE_GETPROP(GETPROP_TF2_ROUNDSTATE, "CTFGameRulesProxy", "m_iRoundState", 0);
-	DEFINE_GETPROP(GETPROP_TF2DESIREDCLASS, "CTFPlayer", "m_iDesiredClass", 0);
+	DEFINE_GETPROP(GETPROP_TF2DESIREDCLASS, "CTFPlayer", "m_iDesiredPlayerClass", 0);
 
 	for (unsigned int i = 0; i < GET_PROPDATA_MAX; i++)
 	{
