@@ -1604,7 +1604,7 @@ void CBotInvestigateTask::execute(CBot* pBot, CBotSchedule* pSchedule)
 		if (pWaypoint->numPaths() > 0)
 		{
 			for (int i = 0; i < pWaypoint->numPaths(); i++)
-				m_InvPoints.push_back(CWaypoints::getWaypoint(pWaypoint->getPath(i))->getOrigin());
+				m_InvPoints.emplace_back(CWaypoints::getWaypoint(pWaypoint->getPath(i))->getOrigin());
 
 			m_iCurPath = randomInt(0, pWaypoint->numPaths() - 1);
 		}
@@ -3734,7 +3734,7 @@ CBotInvestigateHidePoint::CBotInvestigateHidePoint(const int iWaypointIndexToInv
 		if (pWaypointOther == pOriginalWpt)
 			continue;
 
-		m_CheckPoints.push_back(pWaypointOther->getOrigin());
+		m_CheckPoints.emplace_back(pWaypointOther->getOrigin());
 	}
 
 	m_iCurrentCheckPoint = 0;
