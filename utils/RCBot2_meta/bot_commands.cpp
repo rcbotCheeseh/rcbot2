@@ -1722,7 +1722,7 @@ eBotCommandResult CDebugMstrOffsetSearch::execute(CClient *pClient, const char *
 		unsigned long mempoint = ((unsigned long)pMasterEntity) + offset;
 		CTeamControlPointMaster* PointMaster = (CTeamControlPointMaster*)mempoint;
 
-		__try
+		try
 		{
 			if (PointMaster->m_iTeamBaseIcons[0] == 0 && PointMaster->m_iTeamBaseIcons[2] == 5 && PointMaster->m_iTeamBaseIcons[3] == 6)
 			{
@@ -1734,7 +1734,7 @@ eBotCommandResult CDebugMstrOffsetSearch::execute(CClient *pClient, const char *
 			}
 		}
 		
-		__except (0)
+		catch (...)
 		{
 			// SEH handling 
 		}

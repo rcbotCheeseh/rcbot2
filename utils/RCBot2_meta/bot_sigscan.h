@@ -10,6 +10,7 @@ class CEconItemAttributeDefinition;
 class CEconItemSchema;
 class CEconWearable;
 
+typedef CEconItemAttributeDefinition* (*FUNC_SCHEMA_GET_ATTRIB_DEF_BY_ID)(CEconItemSchema*, int);
 typedef CEconItemAttribute* (*FUNC_ATTRIBLIST_GET_ATTRIB_BY_ID)(CAttributeList*, int);
 typedef CEconItemSchema* (*FUNC_GET_ECON_ITEM_SCHEMA)(void);
 typedef CEconItemAttributeDefinition* (*FUNC_GET_ATTRIB_BY_NAME)(CEconItemSchema*, const char*);
