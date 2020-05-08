@@ -107,14 +107,14 @@ public: //hooks
 		const char* pszAddress,
 		char* reject,
 		int maxrejectlen);
-	bf_write* Hook_MessageBegin(IRecipientFilter* filter, int msg_type);
+	/*bf_write* Hook_MessageBegin(IRecipientFilter* filter, int msg_type);
 	void Hook_MessageEnd();
 
 	void Hook_WriteChar(int val);
 	void Hook_WriteShort(int val);
 	void Hook_WriteByte(int val);
 	void Hook_WriteFloat(float val);
-	bool Hook_WriteString(const char* pStr);
+	bool Hook_WriteString(const char* pStr);*/
 
 	static CBaseEntity* TF2_getPlayerWeaponSlot(edict_t* pPlayer, int iSlot);
 	static void TF2_removeWearable(edict_t* pPlayer, CBaseEntity* pWearable);

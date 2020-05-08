@@ -659,9 +659,9 @@ public:
 } s_BaseAccessor;
 
 // --- you're going to take over message begin
-bf_write* RCBotPluginMeta::Hook_MessageBegin(IRecipientFilter* filter, int msg_type)
+/*bf_write* RCBotPluginMeta::Hook_MessageBegin(IRecipientFilter* filter, int msg_type)
 {
-	/*
+	
 	bool bfound = false;
 
 	for (int i = 0; i < filter->GetRecipientCount(); i++)
@@ -700,48 +700,48 @@ bf_write* RCBotPluginMeta::Hook_MessageBegin(IRecipientFilter* filter, int msg_t
 	}
 
 	//
-	RETURN_META_VALUE(MRES_SUPERCEDE, current_msg);*/
+	RETURN_META_VALUE(MRES_SUPERCEDE, current_msg);
 
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
 
 void RCBotPluginMeta::Hook_WriteChar(int val)
 {
-	/*char tocat[64];
+	char tocat[64];
 
 	sprintf(tocat, "\nWriteChar(%c)", (char)val);
-	strcat(current_msg_buffer, tocat);*/
+	strcat(current_msg_buffer, tocat);
 }
 void RCBotPluginMeta::Hook_WriteShort(int val)
 {
-	/*char tocat[64];
+	char tocat[64];
 
 	sprintf(tocat, "\nWriteShort(%d)", val);
-	strcat(current_msg_buffer, tocat);*/
+	strcat(current_msg_buffer, tocat);
 }
 void RCBotPluginMeta::Hook_WriteByte(int val)
 {
-	/*char tocat[64];
+	char tocat[64];
 
 	sprintf(tocat, "\nWriteByte(%d)", val);
-	strcat(current_msg_buffer, tocat);*/
+	strcat(current_msg_buffer, tocat);
 }
 void RCBotPluginMeta::Hook_WriteFloat(float val)
 {
-	/*char tocat[64];
+	char tocat[64];
 
 	sprintf(tocat, "\nWriteFloat(%0.1f)", val);
-	strcat(current_msg_buffer, tocat);*/
+	strcat(current_msg_buffer, tocat);
 }
 
 bool RCBotPluginMeta::Hook_WriteString(const char* pStr)
 {
-	/*char *tocat = new char[strlen(pStr) + 16];
+	char *tocat = new char[strlen(pStr) + 16];
 
 	sprintf(tocat, "\nWriteString(%s)", pStr);
 	strcat(current_msg_buffer, tocat);
 
-	delete tocat;*/
+	delete tocat;
 
 	RETURN_META_VALUE(MRES_IGNORED, false);
 }
@@ -752,7 +752,7 @@ void RCBotPluginMeta::Hook_MessageEnd()
 	// deep copy the data because it might free itself later
 	//strncpy(current_msg_buffer, (char*)current_msg->m_pData, BUF_SIZ - 1);
 	//current_msg_buffer[BUF_SIZ - 1] = 0;
-	/*if (current_msg)
+	if (current_msg)
 	{
 		SH_REMOVE_HOOK_MEMFUNC(bf_write, WriteString, current_msg, this, &RCBotPluginMeta::Hook_WriteString, true);
 		SH_REMOVE_HOOK_MEMFUNC(bf_write, WriteByte, current_msg, this, &RCBotPluginMeta::Hook_WriteByte, true);
@@ -761,11 +761,11 @@ void RCBotPluginMeta::Hook_MessageEnd()
 		SH_REMOVE_HOOK_MEMFUNC(bf_write, WriteFloat, current_msg, this, &RCBotPluginMeta::Hook_WriteFloat, true);
 	}
 
-	current_msg_buffer[0] = 0;*/
+	current_msg_buffer[0] = 0;
 
 	RETURN_META(MRES_IGNORED);
 }
-
+*/
 bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const size_t maxlen, bool late)
 {
 	extern MTRand_int32 irand;
