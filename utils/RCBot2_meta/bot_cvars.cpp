@@ -117,7 +117,7 @@ ConVar rcbot_removewearable_offset("rcbot_removewearable_offset", "427", 0, "off
 ConVar rcbot_weaponequip_offset("rcbot_weaponequip_offset", "261", 0, "offset for weapon equip function");
 ConVar rcbot_gamerules_offset("rcbot_gamerules_offset", "5", 0, "offset for gamerules object");
 ConVar rcbot_weaponswitch_offset("rcbot_weaponswitch_offset", "264", 0, "offset for weapon Switch function");
-ConVar rcbot_bot_quota_interval("rcbot_bot_quota_interval", "10", 0, "Interval between bot quota checks");
+ConVar rcbot_bot_quota_interval("rcbot_bot_quota_interval", "-1", 0, "Interval between bot quota checks");
 //ConVar rcbot_bot_add_cmd("rcbot_bot_add_cmd","bot",0,"command to add puppet bots");
 //ConVar rcbot_bot_add_cmd("rcbot_hook_engine","1",0,"command to add puppet bots");
 ConVar rcbot_show_welcome_msg("rcbot_show_welcome_msg", "1", 0, "Show welcome message on player connect");

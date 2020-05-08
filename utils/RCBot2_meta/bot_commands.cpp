@@ -1678,27 +1678,13 @@ eBotCommandResult CWaypointLoadCommand::execute(CClient* pClient, const char* pc
 }
 
 //usage \"memorycheck <classname> <offset> <type>\"");
-eBotCommandResult CDebugMstrOffsetSearch::execute(CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5)
+eBotCommandResult CDebugMstrOffsetSearch::execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5)
 {
-#ifdef __linux__ 
-	//linux code goes here
-	CBotGlobals::botMessage(pClient->getPlayer(), 0, "This command is not available in for linux.");
-	return COMMAND_ERROR;
-#elif _WIN32
-	
-	CBotMod* pMod = CBotGlobals::getCurrentMod();
-
-	if (pMod && pMod->getModId() != MOD_TF2)
-	{
-		CBotGlobals::botMessage(pClient->getPlayer(), 0, "This command is for Team Fortress 2 only.");
-		return COMMAND_ERROR;
-	}
-
 	if (strcmp("cp_dustbowl", STRING(gpGlobals->mapname)) != 0)
 	{
 		CBotGlobals::botMessage(pClient->getPlayer(), 0, "Command can only be used on cp_dustbowl -- change the map first");
 		return COMMAND_ERROR;
-	}
+}
 
 	edict_t* pMaster = CClassInterface::FindEntityByClassnameNearest(Vector(0, 0, 0), "team_control_point_master", 65535);
 
@@ -1715,11 +1701,11 @@ eBotCommandResult CDebugMstrOffsetSearch::execute(CClient *pClient, const char *
 	//local variable is initialized but not referenced - [APG]RoboCop[CL]
 	unsigned long full_size = sizeof(pMasterEntity);
 	unsigned long offset = 800;
-	
 
 	while (offset < 1000)
 	{
 		unsigned long mempoint = ((unsigned long)pMasterEntity) + offset;
+
 		CTeamControlPointMaster* PointMaster = (CTeamControlPointMaster*)mempoint;
 
 		try
@@ -1733,18 +1719,13 @@ eBotCommandResult CDebugMstrOffsetSearch::execute(CClient *pClient, const char *
 				}
 			}
 		}
-		
 		catch (...)
 		{
 			// SEH handling 
 		}
-		offset++;
-		
-		return COMMAND_ACCESSED;
-	}
-#else
 
-#endif
+		offset++;
+	}
 	return COMMAND_ACCESSED;
 }
 
