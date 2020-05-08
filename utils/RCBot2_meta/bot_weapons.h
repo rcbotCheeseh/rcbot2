@@ -32,7 +32,6 @@
 #define __BOT_WEAPONS_H__
 
 #include <vector>
-using namespace std;
 
 extern const char* g_szTF2Weapons[];
 
@@ -521,7 +520,7 @@ public:
 
 private:
 	// available weapons in game
-	static vector<CWeapon*> m_theWeapons;
+	static std::vector<CWeapon*> m_theWeapons;
 };
 #define AMMO_PRIM 1
 #define AMMO_SEC 2

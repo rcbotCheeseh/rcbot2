@@ -32,7 +32,6 @@
 #define __RCBOT_CLIENT_H__
 
 #include <vector>
-using namespace std;
 
 #include "bot_const.h"
 //#include "bot_ehandle.h"
@@ -317,7 +316,7 @@ private:
 	int m_iCopyWptFlags;
 	int m_iCopyWptArea;
 
-	vector<int> m_WaypointCutPaths;
+	std::vector<int> m_WaypointCutPaths;
 	eWptCopyType m_WaypointCopyType;
 	// TODO: tooltips queue
 	// vector<CToolTip*> tooltips
@@ -362,7 +361,7 @@ private:
 	int m_iAutoEventWaypointArea;
 	bool m_bAutoEventWaypointAutoType;
 	float m_fNextBotServerMessage;
-	queue<CToolTip*> m_NextTooltip;
+	std::queue<CToolTip*> m_NextTooltip;
 	bool m_bSentWelcomeMessage;
 
 	bool m_bTeleportVectorValid;

@@ -38,8 +38,6 @@
 #ifndef __BOT_PROFILING_H__
 #define __BOT_PROFILING_H__
 
-using namespace std;
-
 class CBot;
 
 class CProfileTimer

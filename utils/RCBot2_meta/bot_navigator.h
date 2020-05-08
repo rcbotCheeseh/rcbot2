@@ -33,7 +33,6 @@
 
 #include <vector>
 #include <queue>
-using namespace std;
 
 #include "bot.h"
 #include "bot_waypoint.h"
@@ -390,7 +389,9 @@ public:
 	void updatePosition() override;
 
 	float getBelief(int index) override
-	{ if (index >= 0) return m_fBelief[index]; return 0; }
+	{
+		if (index >= 0) return m_fBelief[index]; return 0;
+	}
 
 	void failMove() override;
 
@@ -475,7 +476,7 @@ private:
 	failedpath_t m_lastFailedPath;
 
 	dataStack<int> m_currentRoute;
-	queue<int> m_oldRoute;
+	std::queue<int> m_oldRoute;
 
 	int m_iLastFailedWpt;
 

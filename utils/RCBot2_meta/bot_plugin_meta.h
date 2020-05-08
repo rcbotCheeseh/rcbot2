@@ -44,6 +44,11 @@
 #ifndef __BOT_PLUGIN_META_H__
 #define __BOT_PLUGIN_META_H__
 
+ //Fix by nosoop
+#define swap V_swap
+#include "mathlib/mathlib.h"
+#undef swap
+
 #include <ISmmPlugin.h>
 #include <igameevents.h>
 #include <iplayerinfo.h>
@@ -145,10 +150,10 @@ public:
 	static CTF2Loadout* UTIL_TF2EquipRandomHat(edict_t* pEdict, void* vTable, void* vTableAttributes);
 
 private:
-	int m_iClientCommandIndex;
+	int m_iClientCommandIndex = 0;
 
 	// Bot Quota
-	float m_fBotQuotaTimer;
+	float m_fBotQuotaTimer = 0;
 	int m_iTargetBots[MAX_PLAYERS];
 
 	void BotQuotaCheck(void);

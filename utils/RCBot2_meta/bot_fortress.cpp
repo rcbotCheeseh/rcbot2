@@ -5102,7 +5102,7 @@ void CBotTF2::getTasks(unsigned int iIgnore)
 	{
 		ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_LASTENEMY, m_pLastEnemy &&
 		(m_iTrapType == TF_TRAP_TYPE_NONE),
-			randomFloat(min(fDefendFlagUtility, fGetFlagUtility), max(fDefendFlagUtility, fGetFlagUtility)));
+			randomFloat(std::min(fDefendFlagUtility, fGetFlagUtility), std::max(fDefendFlagUtility, fGetFlagUtility)));
 
 		ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_FLAG,
 			CTeamFortress2Mod::isMapType(TF_MAP_CTF) && !bHasFlag &&
@@ -7427,12 +7427,12 @@ void CBotTF2::updateDefendPoints()
 }
 
 /// TO DO : list of areas
-void CBotTF2::getDefendArea(vector<int>* m_iAreas)
+void CBotTF2::getDefendArea(std::vector<int>* m_iAreas)
 {
 	m_iCurrentDefendArea = CTeamFortress2Mod::m_ObjectiveResource.getRandomValidPointForTeam(m_iTeam, TF2_POINT_DEFEND);
 }
 
-void CBotTF2::getAttackArea(vector <int>* m_iAreas)
+void CBotTF2::getAttackArea(std::vector <int>* m_iAreas)
 {
 	m_iCurrentAttackArea = CTeamFortress2Mod::m_ObjectiveResource.getRandomValidPointForTeam(m_iTeam, TF2_POINT_ATTACK);
 }

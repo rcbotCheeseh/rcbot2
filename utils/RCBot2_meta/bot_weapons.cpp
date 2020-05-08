@@ -214,7 +214,7 @@ bool CBotWeapon::needToReload(CBot* pBot)
 }
 
 // static init (all weapons in game)
-vector<CWeapon*> CWeapons::m_theWeapons;
+std::vector<CWeapon*> CWeapons::m_theWeapons;
 
 int CBotWeapon::getAmmo(CBot* pBot, int type)
 {
@@ -865,6 +865,7 @@ bool CBotWeapon :: needToReload(CBot *pBot)
 class IWeaponFunc
 {
 public:
+	virtual ~IWeaponFunc() = default;
 	virtual void execute(CWeapon* pWeapon) = 0;
 };
 

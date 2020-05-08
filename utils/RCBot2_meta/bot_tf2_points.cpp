@@ -171,7 +171,7 @@ bool CTFObjectiveResource::isCPValid(const int iCPIndex, const int iTeam, const 
 int CTFObjectiveResource::getRandomValidPointForTeam(const int team, const ePointAttackDefend_s type)
 {
 	TF2PointProb_t* arr = NULL;
-	vector<int> points;
+	std::vector<int> points;
 	int iotherteam;
 
 	float fTotal = 0.0f;

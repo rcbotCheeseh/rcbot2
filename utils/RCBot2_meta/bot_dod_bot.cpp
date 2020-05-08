@@ -974,7 +974,7 @@ void CDODBot::touchedWpt(CWaypoint* pWaypoint, const int iNextWaypoint, const in
 			int i;
 			int iPath;
 			CWaypointVisibilityTable* pTable = CWaypoints::getVisiblity();
-			vector<int> m_InvisPaths;
+			std::vector<int> m_InvisPaths;
 			CWaypoint* pPath;
 			int iThisWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
 			//CWaypoint *pNextWaypoint = CWaypoints::getWaypoint(iNextWaypoint);
@@ -2092,7 +2092,7 @@ bool CDODBot::executeAction(CBotUtility* util)
 
 		int iEnemyWpt = CWaypointLocations::NearestWaypoint(CBotGlobals::entityOrigin(pEnemy), 200.0f, -1, true, true, false, NULL, false, 0, false);
 
-		vector <int> pWaypointList;
+		std::vector <int> pWaypointList;
 
 		Vector vOrigin = getOrigin();
 

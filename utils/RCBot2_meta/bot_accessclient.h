@@ -33,7 +33,6 @@
 #define __BOT_ACCESS_CLIENT_H__
 
 #include <vector>
-using namespace std;
 
 #include "bot_client.h"
 
@@ -73,7 +72,7 @@ public:
 
 	static void createFile(); // create file if it doesn't exist (and mention of creation etc)
 private:
-	static vector<CAccessClient*> m_Clients;
+	static std::vector<CAccessClient*> m_Clients;
 };
 
 #endif

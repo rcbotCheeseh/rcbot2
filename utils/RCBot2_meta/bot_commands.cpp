@@ -890,7 +890,7 @@ eBotCommandResult CWaypointDeleteCommand::execute(CClient* pClient, const char* 
 
 			if (radius > 0)
 			{
-				vector<int> pWpt;
+				std::vector<int> pWpt;
 				int numdeleted = 0;
 				Vector vOrigin = pClient->getOrigin();
 

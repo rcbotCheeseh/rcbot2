@@ -40,6 +40,10 @@ struct edict_t;
 #include "bot_const.h"
 #include "bot_fortress.h"
 
+#ifdef WIN32
+#define sprintf_s sprintf
+#endif
+
 class CWaypointVisibilityTable;
 
 class IBotTaskInterrupt
@@ -385,8 +389,8 @@ private:
 
 	CWaypointVisibilityTable* m_pTable;
 	CWaypoint* m_pTarget;
-	vector<int> m_WaypointsI;
-	vector<int> m_WaypointsJ;
+	std::vector<int> m_WaypointsI;
+	std::vector<int> m_WaypointsJ;
 };
 
 class CBotGravGunPickup : public CBotTask
@@ -664,7 +668,7 @@ private:
 	int m_iCurPath;
 	bool m_bHasPOV;
 	Vector m_vPOV;
-	vector<Vector> m_InvPoints; // investigation points (waypoint paths)
+	std::vector<Vector> m_InvPoints; // investigation points (waypoint paths)
 };
 
 class CBotTF2EngiLookAfter : public CBotTask
@@ -966,7 +970,7 @@ public:
 private:
 	Vector m_vOrigin;
 	Vector m_vMoveTo;
-	vector<Vector> m_CheckPoints;
+	std::vector<Vector> m_CheckPoints;
 	unsigned int m_iCurrentCheckPoint;
 	float m_fInvestigateTime;
 	float m_fTime;
@@ -1322,7 +1326,7 @@ private:
 class CSpyCheckAir : public CBotTask
 {
 public:
-	CSpyCheckAir() : m_fNextCheckUnseen(0)
+	CSpyCheckAir() : seenlist(0), m_fNextCheckUnseen(0)
 	{
 		m_fTime = 0.0f;
 		m_pUnseenBefore = NULL;

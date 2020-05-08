@@ -53,7 +53,6 @@
 class CBotNeuralNet;
 
 #include <vector>
-using namespace std;
 
 /*
 		CSS
@@ -100,7 +99,7 @@ public:
 	static int findAttributeID(const char* szAttrib);
 	static void freeMemory();
 private:
-	static vector<CAttributeID*> attributes;
+	static std::vector<CAttributeID*> attributes;
 };
 
 class CBotMod
@@ -645,8 +644,8 @@ protected:
 	static int m_iBombAreaAllies;
 	static int m_iBombAreaAxis;
 
-	static vector<edict_wpt_pair_t> m_BombWaypoints;
-	static vector<edict_wpt_pair_t> m_BreakableWaypoints;
+	static std::vector<edict_wpt_pair_t> m_BombWaypoints;
+	static std::vector<edict_wpt_pair_t> m_BreakableWaypoints;
 
 	// enemy			// team
 	static float fAttackProbLookUp[MAX_DOD_FLAGS + 1][MAX_DOD_FLAGS + 1];
@@ -677,9 +676,9 @@ public:
 	//void entitySpawn ( edict_t *pEntity );
 protected:
 	// storing mod specific info
-	vector<edict_t*> m_pHostages;
-	vector<edict_t*> m_pBombPoints;
-	vector<edict_t*> m_pRescuePoints;
+	std::vector<edict_t*> m_pHostages;
+	std::vector<edict_t*> m_pBombPoints;
+	std::vector<edict_t*> m_pRescuePoints;
 };
 
 class CCounterStrikeSourceModDedicated : public CCounterStrikeSourceMod
@@ -859,7 +858,7 @@ public:
 	int m_iMaxLevel;
 	const char* m_pszClassname;
 	//vector<CAttribute*> m_Attributes;
-	vector<CEconItemAttribute*> m_Attributes;
+	std::vector<CEconItemAttribute*> m_Attributes;
 	//CEconItemView m_ItemView;
 };
 
@@ -1368,7 +1367,7 @@ private:
 	static float m_fNearestTankDistance;
 	static Vector m_vNearestTankLocation;
 	// slots X nine classes
-	static vector<CTF2Loadout*> m_pLoadoutWeapons[TF2_SLOT_MAX][9];
+	static std::vector<CTF2Loadout*> m_pLoadoutWeapons[TF2_SLOT_MAX][9];
 	//static vector<CTF2Loadout*> m_pHats;
 	//static CTF2Loadout *m_StockWeapons[3][9]; //stock weapons
 };
@@ -1384,8 +1383,6 @@ public:
 		setup("tf", "source dedicated server", MOD_TF2, BOTTYPE_TF2, "TF2");
 #endif
 	}
-
-private:
 };
 
 class CHalfLifeDeathmatchMod : public CBotMod
@@ -1415,7 +1412,7 @@ public:
 
 	//void entitySpawn ( edict_t *pEntity );
 private:
-	static vector<edict_wpt_pair_t> m_LiftWaypoints;
+	static std::vector<edict_wpt_pair_t> m_LiftWaypoints;
 };
 
 class CHalfLifeDeathmatchModDedicated : public CHalfLifeDeathmatchMod
@@ -1431,7 +1428,6 @@ public:
 	//void mapInit ();
 
 	//void entitySpawn ( edict_t *pEntity );
-protected:
 };
 /*
 class CNaturalSelection2Mod : public CBotMod
@@ -1490,7 +1486,7 @@ public:
 	static CBotMod* getMod(char* szModFolder, char* szSteamFolder);
 
 private:
-	static vector<CBotMod*> m_Mods;
+	static std::vector<CBotMod*> m_Mods;
 };
 
 #endif

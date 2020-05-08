@@ -34,7 +34,6 @@
 #include <math.h>
 
 #include <vector>
-using namespace std;
 
 class CSomNeuron
 {
@@ -55,11 +54,11 @@ public:
 		return m_iY;
 	}
 
-	void update(vector<float>* inputs, float inf);
+	void update(std::vector<float>* inputs, float inf);
 
-	float distance(vector <float>* inputs);
+	float distance(std::vector <float>* inputs);
 
-	vector <float>* weights();
+	std::vector <float>* weights();
 
 	void displayWeights();
 
@@ -70,7 +69,7 @@ public:
 	inline unsigned short getClassID() { return m_iId; }
 
 private:
-	vector<float> fWeights;
+	std::vector<float> fWeights;
 	float m_iX;
 	float m_iY;
 	unsigned short m_iId;
@@ -85,15 +84,15 @@ public:
 
 	~CSom();
 
-	CSomNeuron* getBMU(vector <float>* inputs);
+	CSomNeuron* getBMU(std::vector <float>* inputs);
 
-	void updateAround(vector<float>* inputs, CSomNeuron* bmu);
+	void updateAround(std::vector<float>* inputs, CSomNeuron* bmu);
 
-	CSomNeuron* input(vector < vector <float> >* inputs);
+	CSomNeuron* input(std::vector < std::vector <float> >* inputs);
 
-	CSomNeuron* inputOne(vector < float >* inputs);
+	CSomNeuron* inputOne(std::vector < float >* inputs);
 
-	void input(vector < vector <float> >* inputs, int epochs);
+	void input(std::vector < std::vector <float> >* inputs, int epochs);
 
 	void display();
 
@@ -103,7 +102,7 @@ public:
 	}
 
 private:
-	vector<CSomNeuron*> m_Neurons;
+	std::vector<CSomNeuron*> m_Neurons;
 	int m_iH;
 	int m_iW;
 	float m_fNSize;

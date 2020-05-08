@@ -13,27 +13,29 @@ void CBotCoop::modThink()
 
 bool CBotCoop::isEnemy(edict_t* pEdict, bool bCheckWeapons)
 {
-	const char* classname;
+	extern ConVar rcbot_notarget;
 
 	if (ENTINDEX(pEdict) == 0)
 		return false;
+	// if no target on - listen sever player is a non target
+	if (rcbot_notarget.GetBool())
+		return false;
 
+	// not myself
+	if (pEdict == m_pEdict)
+		return false;
 	// no shooting players
 	if (ENTINDEX(pEdict) <= CBotGlobals::maxClients())
 	{
 		return false;
 	}
 
-	classname = pEdict->GetClassName();
+	const char* szclassname = pEdict->GetClassName();
 
-	if (strncmp(classname, "npc_", 4) == 0)
+	// todo: filter NPCs
+	if (strncmp(szclassname, "npc_", 4) == 0)
 	{
-		if (!strcmp(classname, "npc_antlionguard") || !strcmp(classname, "npc_citizen") ||
-			!strcmp(classname, "npc_barney") || !strcmp(classname, "npc_kliener") || !strcmp(classname, "npc_alyx"))
-		{
-			return false; // ally
-		}
-
+		CClients::clientDebugMsg(this, BOT_DEBUG_EDICTS, "IsEnemy found NPC: %s", szclassname);
 		return true;
 	}
 

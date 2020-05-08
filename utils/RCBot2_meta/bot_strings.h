@@ -32,7 +32,6 @@
 #define __BOT_STRINGS_H__
 
 #include <vector>
-using namespace std;
 
 #define MAX_STRINGS_HASH 26
 
@@ -60,7 +59,7 @@ public:
 private:
 	// dataStack is like a linked list, dont want
 	// to use an array for lots of stuff like this
-	static vector<char*> m_Strings[MAX_STRINGS_HASH];
+	static std::vector<char*> m_Strings[MAX_STRINGS_HASH];
 };
 
 #endif

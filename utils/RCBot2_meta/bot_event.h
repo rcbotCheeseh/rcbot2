@@ -34,7 +34,6 @@
 #include "bot_const.h"
 
 #include <vector>
-using namespace std;
 
 class CBotEventInterface;
 class IBotEventInterface;
@@ -761,6 +760,6 @@ public:
 	static void addEvent(CBotEvent* pEvent);
 
 private:
-	static vector<CBotEvent*> m_theEvents;
+	static std::vector<CBotEvent*> m_theEvents;
 };
 #endif

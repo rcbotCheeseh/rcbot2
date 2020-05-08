@@ -4,7 +4,6 @@
 #define RCBOT_MAX_KV_LEN 256
 
 #include <vector>
-using namespace std;
 
 class CRCBotKeyValue
 {
@@ -47,7 +46,7 @@ private:
 
 	CRCBotKeyValue* getKV(const char* key);
 
-	vector <CRCBotKeyValue*> m_KVs;
+	std::vector <CRCBotKeyValue*> m_KVs;
 };
 
 #endif

@@ -32,7 +32,6 @@
 #define __BOT_BUTTONS_H__
 
 #include <vector>
-using namespace std;
 
 class CBotButton
 {
@@ -117,7 +116,7 @@ public:
 	void duck(float fFor = 1.0, float fFrom = 0);
 
 private:
-	vector<CBotButton*> m_theButtons;
+	std::vector<CBotButton*> m_theButtons;
 	bool m_bLetGoAll;
 };
 #endif

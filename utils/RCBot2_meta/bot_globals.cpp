@@ -285,7 +285,7 @@ edict_t* CBotGlobals::findPlayerByTruncName(const char* name)
 
 		if (pent && CBotGlobals::isNetworkable(pent))
 		{
-			int length = strlen(name);//strlen called too often resulting lag? [APG]RoboCop[CL]
+			//int length = strlen(name);//strlen called too often resulting lag? [APG]RoboCop[CL]
 
 			char arg_lwr[128];
 			char pent_lwr[128];
@@ -302,6 +302,7 @@ edict_t* CBotGlobals::findPlayerByTruncName(const char* name)
 			__strlow(arg_lwr);
 			__strlow(pent_lwr);
 
+			const size_t length = 0;
 			if (strncmp(arg_lwr, pent_lwr, length) == 0)
 			{
 				return pent;
@@ -840,6 +841,12 @@ bool CBotGlobals::walkableFromTo(edict_t* pPlayer, const Vector v_src, const Vec
 
 	//return true;
 }
+
+#ifdef _LINUX
+// kludge for linux
+using std::min;
+using std::max;
+#endif
 
 bool CBotGlobals::boundingBoxTouch2d(
 	const Vector2D& a1, const Vector2D& a2,

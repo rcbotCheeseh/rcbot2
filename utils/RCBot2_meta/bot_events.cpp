@@ -45,7 +45,7 @@
 #include "bot_schedule.h"
 #include "bot_waypoint_locations.h"
 
-vector<CBotEvent*> CBotEvents::m_theEvents;
+std::vector<CBotEvent*> CBotEvents::m_theEvents;
 extern ConVar bot_use_vc_commands;
 ///////////////////////////////////////////////////////
 

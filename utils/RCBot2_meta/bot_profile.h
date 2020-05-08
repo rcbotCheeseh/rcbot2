@@ -2,7 +2,6 @@
 #define __RCBOT_PROFILE_H__
 
 #include <vector>
-using namespace std;
 
 class CBotProfile
 {
@@ -53,7 +52,7 @@ public:
 	static CBotProfile* getDefaultProfile();
 
 private:
-	static vector <CBotProfile*> m_Profiles;
+	static std::vector <CBotProfile*> m_Profiles;
 	static CBotProfile* m_pDefaultProfile;
 };
 

@@ -40,6 +40,11 @@
 #ifndef __RCBOT2_H__
 #define __RCBOT2_H__
 
+//Fix by nosoop
+#define swap V_swap
+#include "mathlib.h"
+#undef swap
+
 //#include "cbase.h"
 //#include "baseentity.h"
 #include "filesystem.h"
@@ -68,8 +73,6 @@
 #if defined WIN32 && !defined snprintf
 #define snprintf _snprintf
 #endif
-
-using namespace std;
 
 #define MAX_AMMO_TYPES 32
 #define MAX_VOICE_CMDS 32
@@ -1104,7 +1107,7 @@ protected:
 	//CBotNeuralNet *stucknet;
 	//CTrainingSet *stucknet_tset;
 
-	queue<int> m_nextVoicecmd;
+	std::queue<int> m_nextVoicecmd;
 	float m_fNextVoiceCommand;
 	float m_fLastVoiceCommand[MAX_VOICE_CMDS];
 
@@ -1225,9 +1228,9 @@ private:
 	// add or kick bot time
 	static float m_flAddKickBotTime;
 
-	static queue<edict_t*> m_ControlQueue;
+	static std::queue<edict_t*> m_ControlQueue;
 
-	static queue<CAddbot> m_AddBotQueue;
+	static std::queue<CAddbot> m_AddBotQueue;
 };
 
 class IEntityFactoryDictionary;

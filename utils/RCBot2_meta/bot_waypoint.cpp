@@ -59,14 +59,13 @@
 #endif
 
 #include <vector>    //bir3yk
-using namespace std;    //bir3yk
 
 int CWaypoints::m_iNumWaypoints = 0;
 CWaypoint CWaypoints::m_theWaypoints[CWaypoints::MAX_WAYPOINTS];
 float CWaypoints::m_fNextDrawWaypoints = 0;
 int CWaypoints::m_iWaypointTexture = 0;
 CWaypointVisibilityTable* CWaypoints::m_pVisibilityTable = NULL;
-vector<CWaypointType*> CWaypointTypes::m_Types;
+std::vector<CWaypointType*> CWaypointTypes::m_Types;
 char CWaypoints::m_szAuthor[32];
 char CWaypoints::m_szModifiedBy[32];
 char CWaypoints::m_szWelcomeMessage[128];
@@ -1707,7 +1706,7 @@ float CWaypoint::distanceFrom(Vector vOrigin)
 	return (m_vOrigin - vOrigin).Length();
 }
 ///////////////////////////////////////////////////
-void CWaypoints::updateWaypointPairs(vector<edict_wpt_pair_t>* pPairs, int iWptFlag, const char* szClassname)
+void CWaypoints::updateWaypointPairs(std::vector<edict_wpt_pair_t>* pPairs, int iWptFlag, const char* szClassname)
 {
 	short int iSize = numWaypoints();
 	CWaypoint* pWpt;

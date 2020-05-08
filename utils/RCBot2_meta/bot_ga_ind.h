@@ -38,7 +38,7 @@ class CBotGAValues : public IIndividual
 public:
 	CBotGAValues();
 
-	CBotGAValues(vector<float> values);
+	CBotGAValues(std::vector<float> values);
 
 	void init(void);
 
@@ -52,7 +52,7 @@ public:
 	// sub classes return their class with own values
 	IIndividual* copy() override;
 
-	void setVector(vector<float> values);
+	void setVector(std::vector<float> values);
 
 	float get(int iIndex);
 
@@ -73,7 +73,7 @@ public:
 	void freeMemory();
 
 protected:
-	vector<float> m_theValues;
+	std::vector<float> m_theValues;
 };
 
 class CBotStuckValues : public CBotGAValues
@@ -103,7 +103,7 @@ public:
 		return p;
 	}
 
-	void getStuckWeights(vector<ga_nn_value>* weights)
+	void getStuckWeights(std::vector<ga_nn_value>* weights)
 	{
 		weights->clear();
 		weights->push_back(m_theValues[2]);

@@ -38,7 +38,6 @@
 #include "bot_globals.h"
 
 #include <vector>    //bir3yk
-using namespace std;    //bir3yk
 
 unsigned char CWaypointLocations::g_iFailedWaypoints[CWaypoints::MAX_WAYPOINTS];
 dataUnconstArray<int> CWaypointLocations::m_iLocations[MAX_WPT_BUCKETS][MAX_WPT_BUCKETS][MAX_WPT_BUCKETS];
@@ -127,7 +126,7 @@ void CWaypointLocations::AutoPath(edict_t* pPlayer, int iWpt)
 }
 
 // @param iFrom waypoint number from a and b within distance
-void CWaypointLocations::GetAllInArea(Vector& vOrigin, vector <int>* pWaypointList, int iVisibleTo)
+void CWaypointLocations::GetAllInArea(Vector& vOrigin, std::vector <int>* pWaypointList, int iVisibleTo)
 {
 	int iLoc = READ_LOC(vOrigin.x);
 	int jLoc = READ_LOC(vOrigin.y);

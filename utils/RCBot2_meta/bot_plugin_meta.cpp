@@ -955,7 +955,6 @@ bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const 
 	extern IFileSystem* filesystem;
 	KeyValues* mainkv = new KeyValues("metamodplugin");
 
-	const char* rcbot2path;
 	CBotGlobals::botMessage(NULL, 0, "Reading rcbot2 path from VDF...");
 
 	mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD");
@@ -963,7 +962,7 @@ bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const 
 	mainkv = mainkv->FindKey("Metamod Plugin");//A possible memory leak? [APG]RoboCop[CL]
 
 	if (mainkv)
-		rcbot2path = mainkv->GetString("rcbot2path", "\0");
+		const char* rcbot2path = mainkv->GetString("rcbot2path", "\0");
 
 	mainkv->deleteThis();
 	//eventListener2 = new CRCBotEventListener();

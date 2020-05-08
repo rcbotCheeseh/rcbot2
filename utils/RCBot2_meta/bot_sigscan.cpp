@@ -35,6 +35,9 @@
 #include <Windows.h>
 #else
 
+#include <cstdint>
+#define byte uint8_t
+
 #include "shake.h" //bir3yk
 #include "elf.h"
 
@@ -45,6 +48,11 @@
 #include <errno.h>
 #include <unistd.h>
 #endif
+
+ //Fix by nosoop
+#define swap V_swap
+#include "mathlib/mathlib.h"
+#undef swap
 
  //#include "cbase.h"
  //#include "baseentity.h"

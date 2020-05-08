@@ -34,10 +34,10 @@
 #include "bot_globals.h"
 
 #include <vector>
-using namespace std;
+
 ///////////
 
-vector<CAccessClient*> CAccessClients::m_Clients;
+std::vector<CAccessClient*> CAccessClients::m_Clients;
 
 ///////////
 

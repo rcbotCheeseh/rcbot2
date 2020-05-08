@@ -44,7 +44,6 @@
 #define __RCBOT_GENERIC_CLASS_H__
 
 #include <vector>
-using namespace std;
 
 //#include "vstdlib/random.h" // for random functions
 
@@ -663,7 +662,7 @@ public:
 		}
 #elif defined(_DEBUG)
 		//SAFE REMOVE - SLOW
-		vector<T> newVec;
+		std::vector<T> newVec;
 
 		for (unsigned int i = 0; i < array.size(); i++)
 		{
@@ -674,7 +673,7 @@ public:
 		array.clear();
 		array = newVec;
 #else
-		typename vector<T> ::iterator it;
+		typename std::vector<T> ::iterator it;
 
 		for (it = array.begin(); it != array.end(); )
 		{
@@ -750,7 +749,7 @@ public:
 		return array[iIndex];
 	}
 private:
-	vector<T> array;
+	std::vector<T> array;
 };
 
 template <class T>

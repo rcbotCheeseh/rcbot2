@@ -35,7 +35,7 @@
 #include "bot_strings.h"
 #include <vector>    //bir3yk
 
-vector<char*> CStrings::m_Strings[MAX_STRINGS_HASH];
+std::vector<char*> CStrings::m_Strings[MAX_STRINGS_HASH];
 
 CStrings::CStrings()
 {

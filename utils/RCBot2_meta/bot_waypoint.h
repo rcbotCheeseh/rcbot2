@@ -191,7 +191,7 @@ public:
 	static CWaypointType* getTypeByFlags(int iFlags);
 
 private:
-	static vector<CWaypointType*> m_Types;
+	static std::vector<CWaypointType*> m_Types;
 };
 
 class CWaypointTest
@@ -477,7 +477,7 @@ public:
 	static CWaypoint* getPinchPointFromWaypoint(Vector vPlayerOrigin, Vector vPinchOrigin);
 	static CWaypoint* getNestWaypoint(int iTeam, int iArea, bool bForceArea = false, CBot* pBot = NULL);
 
-	static void updateWaypointPairs(vector<edict_wpt_pair_t>* pPairs, int iWptFlag, const char* szClassname);
+	static void updateWaypointPairs(std::vector<edict_wpt_pair_t>* pPairs, int iWptFlag, const char* szClassname);
 	static bool hasAuthor() { return (m_szAuthor[0] != 0); }
 	static const char* getAuthor() { return m_szAuthor; }
 	static bool isModified() { return (m_szModifiedBy[0] != 0); }

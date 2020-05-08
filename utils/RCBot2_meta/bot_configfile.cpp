@@ -34,6 +34,11 @@
 #include <stdio.h>
 #include <time.h>
 
+//Fix by nosoop
+#define swap V_swap
+#include "mathlib/mathlib.h"
+#undef swap
+
 //#include "cbase.h"
 //#include "baseentity.h"
 #include "filesystem.h"
@@ -85,7 +90,7 @@
 
 #include "bot_fortress.h"
 
-vector <char*> CBotConfigFile::m_Commands;
+std::vector <char*> CBotConfigFile::m_Commands;
 unsigned int CBotConfigFile::m_iCmd = 0; // current command (time delayed)
 float CBotConfigFile::m_fNextCommandTime = 0.0f;
 

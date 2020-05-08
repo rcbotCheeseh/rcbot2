@@ -908,9 +908,9 @@ public:
 
 	bool wantToInvestigateSound() override;
 
-	void getDefendArea(vector<int>* m_iAreas);
+	void getDefendArea(std::vector<int>* m_iAreas);
 
-	void getAttackArea(vector <int>* m_iAreas);
+	void getAttackArea(std::vector <int>* m_iAreas);
 
 	int getCurrentAttackArea() { return m_iCurrentAttackArea; }
 	int getCurrentDefendArea() { return m_iCurrentDefendArea; }
