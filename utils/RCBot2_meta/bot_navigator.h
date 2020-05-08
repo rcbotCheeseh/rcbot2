@@ -56,7 +56,6 @@ protected:
 class IBotNavigator
 {
 public:
-	virtual ~IBotNavigator() = default;
 	virtual void init() = 0;
 
 	// returns true when working out route finishes, not if successful
@@ -391,9 +390,7 @@ public:
 	void updatePosition() override;
 
 	float getBelief(int index) override
-	{
-		if (index >= 0) return m_fBelief[index]; return 0;
-	}
+	{ if (index >= 0) return m_fBelief[index]; return 0; }
 
 	void failMove() override;
 

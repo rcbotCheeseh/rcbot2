@@ -45,8 +45,6 @@ class IGameEvent;
 class CBotEvent
 {
 public:
-	virtual ~CBotEvent() = default;
-
 	CBotEvent()
 	{
 		m_iEventId = -1;
@@ -678,7 +676,6 @@ typedef enum
 class IBotEventInterface
 {
 public:
-	virtual ~IBotEventInterface() = default;
 	virtual float getFloat(const char* keyName = 0, float defaultValue = 0) = 0;
 	virtual int getInt(const char* keyName = 0, int defaultValue = 0) = 0;
 	virtual const char* getString(const char* keyName = 0, const char* defaultValue = 0) = 0;

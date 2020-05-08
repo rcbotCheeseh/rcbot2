@@ -50,7 +50,6 @@
 #ifdef WIN32
 #define strcpy strcpy_s
 #define strcat strcat_s
-#define sprintf sprintf_s
 #define strncpy strncpy_s
 #define strncat strncat_s
 #endif
@@ -1782,7 +1781,7 @@ void CBot::debugBot(char* msg)
 	if (hastask)
 		m_pSchedules->getCurrentTask()->debugString(task_string);
 
-	/*sprintf(msg, "Debugging bot: %s\n \
+	sprintf(msg, "Debugging bot: %s\n \
 		Current Util: %s \n \
 		Current Schedule: %s\n \
 		Current Task: {%s}\n \
@@ -1803,7 +1802,7 @@ void CBot::debugBot(char* msg)
 		(pEnemy != NULL) ? pEnemy->GetClassName() : "none",
 		(p != NULL) ? p->GetName() : "none",
 		szConditions
-		);*/
+		);
 }
 
 int CBot::nearbyFriendlies(const float fDistance)
@@ -2398,9 +2397,9 @@ Vector CBot::getAimVector(edict_t* pEntity)
 		m_vAimOffset.z = ((1.0f - fSensitivity) * m_vAimOffset.z) + fSensitivity * v_desired_offset.z;
 
 		// check for QNAN
-		if ((m_vAimOffset.x) ||
-			(m_vAimOffset.y) ||
-			(m_vAimOffset.z))
+		if ((m_vAimOffset.x != m_vAimOffset.x) ||
+			(m_vAimOffset.y != m_vAimOffset.y) ||
+			(m_vAimOffset.z != m_vAimOffset.z))
 		{
 			m_vAimOffset = Vector(1.0f, 1.0f, 1.0f);
 		}
@@ -2815,13 +2814,13 @@ void CBot::changeAngles(const float fSpeed, float* fIdeal, float* fCurrent, floa
 	delta = (diff * alpha) + (m_fAimMoment * alphaspeed);
 
 	//check for QNAN
-	if (delta)
+	if (delta != delta)
 		delta = 1.0f;
 
 	m_fAimMoment = (m_fAimMoment * alphaspeed) + (delta * (1.0f - alphaspeed));
 
 	//check for QNAN
-	if (m_fAimMoment)
+	if (m_fAimMoment != m_fAimMoment)
 		m_fAimMoment = 1.0f;
 
 	current = current + delta;

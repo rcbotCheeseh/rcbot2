@@ -100,8 +100,6 @@ typedef enum
 class CBotSchedule
 {
 public:
-	virtual ~CBotSchedule() = default;
-
 	CBotSchedule(CBotTask* pTask)
 	{
 		_init();

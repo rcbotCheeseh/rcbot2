@@ -40,16 +40,11 @@ struct edict_t;
 #include "bot_const.h"
 #include "bot_fortress.h"
 
-#ifdef WIN32
-#define sprintf_s sprintf
-#endif
-
 class CWaypointVisibilityTable;
 
 class IBotTaskInterrupt
 {
 public:
-	virtual ~IBotTaskInterrupt() = default;
 	virtual bool isInterrupted(CBot* pBot, bool* bFailed, bool* bCompleted) = 0;
 };
 
@@ -85,8 +80,7 @@ class CBotTask
 {
 public:
 	CBotTask();
-
-	virtual ~CBotTask()
+	~CBotTask()
 	{
 		if (m_pInterruptFunc != NULL)
 		{
@@ -1328,7 +1322,7 @@ private:
 class CSpyCheckAir : public CBotTask
 {
 public:
-	CSpyCheckAir() : seenlist(0), m_fNextCheckUnseen(0)
+	CSpyCheckAir() : m_fNextCheckUnseen(0)
 	{
 		m_fTime = 0.0f;
 		m_pUnseenBefore = NULL;

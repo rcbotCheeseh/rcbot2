@@ -18,8 +18,6 @@ private:
 class CBotOperator
 {
 public:
-	virtual ~CBotOperator() = default;
-
 	CBotOperator(CBotFactOperator op) : m_op(op)
 	{
 	}

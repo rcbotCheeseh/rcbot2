@@ -39,7 +39,6 @@ using namespace std;
 class IIndividual
 {
 public:
-	virtual ~IIndividual() = default;
 	// get fitness for this individual
 	inline ga_nn_value getFitness() { return m_fFitness; }
 	inline void setFitness(float fVal) { m_fFitness = fVal; }
@@ -88,14 +87,13 @@ public:
 
 private:
 	vector<IIndividual*> m_theIndividuals;
-	CGA* m_ga;
+	CGA *m_ga;
 };
 
 // selection function interface
 class ISelection
 {
 public:
-	virtual ~ISelection() = default;
 	virtual IIndividual* select(CPopulation* population) = 0;
 };
 

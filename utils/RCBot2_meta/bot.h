@@ -106,7 +106,6 @@ bool BotFunc_BreakableIsEnemy(edict_t* pBreakable, edict_t* pEdict);
 abstract_class IServerGameDLL_004
 {
 public:
-	virtual ~IServerGameDLL_004() = default;
 	// Initialize the game (one-time call when the DLL is first loaded )
 	// Return false if there is an error during startup.
 	virtual bool			DLLInit(CreateInterfaceFn engineFactory,
@@ -215,7 +214,6 @@ public:
 class IBotFunction
 {
 public:
-	virtual ~IBotFunction() = default;
 	virtual void execute(CBot* pBot) = 0;
 };
 
@@ -404,7 +402,6 @@ private:
 class CBot
 {
 public:
-	virtual ~CBot() = default;
 
 	static const float m_fAttackLowestHoldTime;
 	static const float m_fAttackHighestHoldTime;

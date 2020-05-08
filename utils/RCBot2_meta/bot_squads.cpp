@@ -71,7 +71,7 @@ void CBotSquads::FreeMemory(void)
 	{
 		pSquad = tempStack.ChooseFromStack();
 
-		//if (pSquad)
+		if (pSquad)
 			delete pSquad;
 		pSquad = NULL;
 	}
@@ -244,7 +244,7 @@ void CBotSquads::RemoveSquad(CBotSquad* pSquad)
 
 	m_theSquads.Remove(pSquad);
 
-	//if (pSquad != NULL)
+	if (pSquad != NULL)
 		delete pSquad;
 }
 

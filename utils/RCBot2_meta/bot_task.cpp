@@ -1604,7 +1604,7 @@ void CBotInvestigateTask::execute(CBot* pBot, CBotSchedule* pSchedule)
 		if (pWaypoint->numPaths() > 0)
 		{
 			for (int i = 0; i < pWaypoint->numPaths(); i++)
-				m_InvPoints.emplace_back(CWaypoints::getWaypoint(pWaypoint->getPath(i))->getOrigin());
+				m_InvPoints.push_back(CWaypoints::getWaypoint(pWaypoint->getPath(i))->getOrigin());
 
 			m_iCurPath = randomInt(0, pWaypoint->numPaths() - 1);
 		}
@@ -1987,7 +1987,7 @@ void CFindGoodHideSpot::execute(CBot* pBot, CBotSchedule* pSchedule)
 	}
 }
 
-CFindPathTask::CFindPathTask(const int iWaypointId, const eLookTask looktask): m_iInt(0)
+CFindPathTask::CFindPathTask(const int iWaypointId, const eLookTask looktask)
 {
 	m_iWaypointId = iWaypointId;
 	m_LookTask = looktask;
@@ -2008,7 +2008,7 @@ void CFindPathTask::init()
 	//setFailInterrupt(CONDITION_SEE_CUR_ENEMY);
 }
 
-CFindPathTask::CFindPathTask(edict_t* pEdict): m_iInt(0)
+CFindPathTask::CFindPathTask(edict_t* pEdict)
 {
 	m_iWaypointId = -1;
 	m_pEdict = pEdict;
@@ -2348,7 +2348,7 @@ void CMoveToTask::debugString(char* string)
 	sprintf(string, "CMoveToTask\nm_vVector =(%0.4f,%0.4f,%0.4f)", m_vVector.x, m_vVector.y, m_vVector.z);
 }
 
-CMoveToTask::CMoveToTask(edict_t* pEdict): fPrevDist(0)
+CMoveToTask::CMoveToTask(edict_t* pEdict)
 {
 	m_pEdict = pEdict;
 	m_vVector = CBotGlobals::entityOrigin(m_pEdict);
@@ -2808,10 +2808,7 @@ void CBotRemoveSapper::execute(CBot* pBot, CBotSchedule* pSchedule)
 
 ////////////////////////////////////////////////////
 
-CBotTF2SnipeCrossBow::CBotTF2SnipeCrossBow(const Vector vOrigin, const int iWpt): m_iHideWaypoint(0), m_fHideTime(0),
-                                                                                  m_iPrevClip(0),
-                                                                                  m_fCheckTime(0),
-                                                                                  m_fOriginDistance(0)
+CBotTF2SnipeCrossBow::CBotTF2SnipeCrossBow(const Vector vOrigin, const int iWpt)
 {
 	CWaypoint* pWaypoint = CWaypoints::getWaypoint(iWpt);
 	m_iSnipeWaypoint = iWpt;
@@ -3096,9 +3093,7 @@ void CBotTF2SnipeCrossBow::execute(CBot* pBot, CBotSchedule* pSchedule)
 	}
 }
 ///////////////////////////////////////////
-CBotTF2Snipe::CBotTF2Snipe(const Vector vOrigin, const int iWpt): m_iHideWaypoint(0), m_fHideTime(0), m_iPrevClip(0),
-                                                                  m_fCheckTime(0),
-                                                                  m_fOriginDistance(0)
+CBotTF2Snipe::CBotTF2Snipe(const Vector vOrigin, const int iWpt)
 {
 	CWaypoint* pWaypoint = CWaypoints::getWaypoint(iWpt);
 	m_iSnipeWaypoint = iWpt;
@@ -3739,7 +3734,7 @@ CBotInvestigateHidePoint::CBotInvestigateHidePoint(const int iWaypointIndexToInv
 		if (pWaypointOther == pOriginalWpt)
 			continue;
 
-		m_CheckPoints.emplace_back(pWaypointOther->getOrigin());
+		m_CheckPoints.push_back(pWaypointOther->getOrigin());
 	}
 
 	m_iCurrentCheckPoint = 0;
@@ -4580,7 +4575,7 @@ void CMessAround::execute(CBot* pBot, CBotSchedule* pSchedule)
 ///////////
 //defensive technique
 
-CBotTF2Spam::CBotTF2Spam(CBot* pBot, const Vector vStart, const int iYaw, CBotWeapon* pWeapon): m_fNextAttack(0)
+CBotTF2Spam::CBotTF2Spam(CBot* pBot, const Vector vStart, const int iYaw, CBotWeapon* pWeapon)
 {
 	Vector forward;
 	QAngle angle = QAngle(0, iYaw, 0);
@@ -4689,9 +4684,7 @@ void CBotTF2Spam::execute(CBot* pBot, CBotSchedule* pSchedule)
 
 ///////////
 
-CBotTF2AttackSentryGunTask::CBotTF2AttackSentryGunTask(edict_t* pSentryGun, CBotWeapon* pWeapon):
-	m_iStartingWaypoint(0), m_iSentryWaypoint(0),
-	m_fDist(0), m_fTime(0)
+CBotTF2AttackSentryGunTask::CBotTF2AttackSentryGunTask(edict_t* pSentryGun, CBotWeapon* pWeapon)
 {
 	m_pSentryGun = pSentryGun;
 	m_pWeapon = pWeapon;
