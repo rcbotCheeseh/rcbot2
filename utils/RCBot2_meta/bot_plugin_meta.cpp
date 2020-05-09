@@ -1129,7 +1129,7 @@ void RCBotPluginMeta::AllPluginsLoaded()
 
 void RCBotPluginMeta::Hook_ClientActive(edict_t* pEntity, const bool bLoadGame)
 {
-	META_LOG(g_PLAPI, "Hook_ClientActive(%d, %d)", IndexOfEdict(pEntity), bLoadGame);
+	//META_LOG(g_PLAPI, "Hook_ClientActive(%d, %d)", IndexOfEdict(pEntity), bLoadGame);
 
 	CClients::clientActive(pEntity);
 }
