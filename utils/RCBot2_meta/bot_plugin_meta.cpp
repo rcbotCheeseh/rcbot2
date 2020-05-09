@@ -777,7 +777,7 @@ bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const 
 
 	GET_V_IFACE_ANY(GetEngineFactory, filesystem, IFileSystem, FILESYSTEM_INTERFACE_VERSION)
 
-		GET_V_IFACE_ANY(GetServerFactory, servergameents, IServerGameEnts, INTERFACEVERSION_SERVERGAMEENTS);
+	GET_V_IFACE_ANY(GetServerFactory, servergameents, IServerGameEnts, INTERFACEVERSION_SERVERGAMEENTS);
 	GET_V_IFACE_ANY(GetServerFactory, server, IServerGameDLL, INTERFACEVERSION_SERVERGAMEDLL);
 	GET_V_IFACE_ANY(GetServerFactory, gameclients, IServerGameClients, INTERFACEVERSION_SERVERGAMECLIENTS);
 	GET_V_IFACE_ANY(GetServerFactory, playerinfomanager, IPlayerInfoManager, INTERFACEVERSION_PLAYERINFOMANAGER);
@@ -852,8 +852,8 @@ bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const 
 		rcbot_givenameditem_offset.SetValue(val);
 	if (pKVL->getInt("equipwearable_win", &val))
 		rcbot_equipwearable_offset.SetValue(val);
-	if (pKVL->getInt("runplayermove_tf2_win", &val))
-		rcbot_runplayercmd_tf2.SetValue(val);
+	//if (pKVL->getInt("runplayermove_tf2_win", &val))
+	//	rcbot_runplayercmd_tf2.SetValue(val);
 	if (pKVL->getInt("runplayermove_dods_win", &val))
 		rcbot_runplayercmd_dods.SetValue(val);
 	if (pKVL->getInt("getweaponslot_win", &val))
@@ -876,8 +876,8 @@ bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const 
 		rcbot_givenameditem_offset.SetValue(val);
 	if (pKVL->getInt("equipwearable_linux", &val))
 		rcbot_equipwearable_offset.SetValue(val);
-	if (pKVL->getInt("runplayermove_tf2_linux", &val))
-		rcbot_runplayercmd_tf2.SetValue(val);
+	//if (pKVL->getInt("runplayermove_tf2_linux", &val))
+	//	rcbot_runplayercmd_tf2.SetValue(val);
 	if (pKVL->getInt("runplayermove_dods_linux", &val))
 		rcbot_runplayercmd_dods.SetValue(val);
 	if (pKVL->getInt("getweaponslot_linux", &val))
@@ -915,9 +915,9 @@ bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const 
 	if (CBots::controlBots())
 	{
 		//No longer required for TF2? [APG]RoboCop[CL]
-		if (pMod->getModId() == MOD_TF2)
+		/*if (pMod->getModId() == MOD_TF2)
 			SH_MANUALHOOK_RECONFIGURE(MHook_PlayerRunCmd, rcbot_runplayercmd_tf2.GetInt(), 0, 0);
-		else if (pMod->getModId() == MOD_DOD)
+		else */if (pMod->getModId() == MOD_DOD)
 			SH_MANUALHOOK_RECONFIGURE(MHook_PlayerRunCmd, rcbot_runplayercmd_dods.GetInt(), 0, 0);
 	}
 	if (pMod->getModId() == MOD_TF2)

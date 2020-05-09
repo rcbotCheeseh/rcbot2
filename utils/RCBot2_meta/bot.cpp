@@ -387,7 +387,28 @@ bool CBot::createBotFromEdict(edict_t* pEdict, CBotProfile* pProfile)
 
 	engine->SetFakeClientConVarValue(pEdict, "cl_playermodel", szModel);
 	engine->SetFakeClientConVarValue(pEdict, "hud_fastswitch", "1");
-	/////////////////////////////
+
+	// TF2 Bot Manager support from nosoop
+	// TODO find the right place for this
+	if (CBotGlobals::isMod(MOD_TF2))
+	{
+		helpers->ClientCommand(pEdict, "jointeam auto");
+
+		char classNames[32][10] = {
+			"auto", "scout", "sniper", "soldier", "demoman", "medic", "heavy",
+			"pyro", "spy", "engineer"
+		};
+
+		char cmd[32];
+		if (m_iDesiredClass >= 0 && m_iDesiredClass < sizeof(classNames)) {
+			snprintf(cmd, sizeof(cmd), "joinclass %s", classNames[m_iDesiredClass]);
+		}
+		else {
+			snprintf(cmd, sizeof(cmd), "joinclass auto");
+		}
+
+		helpers->ClientCommand(pEdict, cmd);
+	}
 
 	return true;
 }
