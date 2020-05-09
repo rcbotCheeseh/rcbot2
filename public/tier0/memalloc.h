@@ -122,12 +122,12 @@ inline void* MemAlloc_AllocAligned(size_t size, size_t align)
 	unsigned char* pAlloc, * pResult;
 
 	if (!IsPowerOfTwo(uint(align)))
-		return nullptr;
+		return NULL;
 
 	align = (align > sizeof(void*) ? align : sizeof(void*)) - 1;
 
-	if ((pAlloc = (unsigned char*)g_pMemAlloc->Alloc(sizeof(void*) + align + size)) == (unsigned char*)nullptr)
-		return nullptr;
+	if ((pAlloc = (unsigned char*)g_pMemAlloc->Alloc(sizeof(void*) + align + size)) == (unsigned char*)NULL)
+		return NULL;
 
 	pResult = (unsigned char*)((size_t)(pAlloc + sizeof(void*) + align) & ~align);
 	((unsigned char**)(pResult))[-1] = pAlloc;
@@ -140,12 +140,12 @@ inline void* MemAlloc_AllocAligned(size_t size, size_t align, const char* pszFil
 	unsigned char* pAlloc, * pResult;
 
 	if (!IsPowerOfTwo(uint(align)))
-		return nullptr;
+		return NULL;
 
 	align = (align > sizeof(void*) ? align : sizeof(void*)) - 1;
 
-	if ((pAlloc = (unsigned char*)g_pMemAlloc->Alloc(sizeof(void*) + align + size, pszFile, nLine)) == (unsigned char*)nullptr)
-		return nullptr;
+	if ((pAlloc = (unsigned char*)g_pMemAlloc->Alloc(sizeof(void*) + align + size, pszFile, nLine)) == (unsigned char*)NULL)
+		return NULL;
 
 	pResult = (unsigned char*)((size_t)(pAlloc + sizeof(void*) + align) & ~align);
 	((unsigned char**)(pResult))[-1] = pAlloc;
@@ -156,11 +156,11 @@ inline void* MemAlloc_AllocAligned(size_t size, size_t align, const char* pszFil
 inline void* MemAlloc_ReallocAligned(void* ptr, size_t size, size_t align)
 {
 	if (!IsPowerOfTwo(uint(align)))
-		return nullptr;
+		return NULL;
 
 	// Don't change alignment between allocation + reallocation.
 	if (((size_t)ptr & (align - 1)) != 0)
-		return nullptr;
+		return NULL;
 
 	if (!ptr)
 		return MemAlloc_AllocAligned(size, align);
@@ -188,7 +188,7 @@ inline void MemAlloc_FreeAligned(void* pMemBlock)
 {
 	void* pAlloc;
 
-	if (pMemBlock == nullptr)
+	if (pMemBlock == NULL)
 		return;
 
 	pAlloc = pMemBlock;
@@ -205,7 +205,7 @@ inline size_t MemAlloc_GetSizeAligned(void* pMemBlock)
 {
 	void* pAlloc;
 
-	if (pMemBlock == nullptr)
+	if (pMemBlock == NULL)
 		return 0;
 
 	pAlloc = pMemBlock;

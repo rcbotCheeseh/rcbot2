@@ -92,14 +92,14 @@ public:
 
 	// File access. Set UsesEscapeSequences true, if resource file/buffer uses Escape Sequences (eg \n, \t)
 	void UsesEscapeSequences(bool state); // default false
-	bool LoadFromFile(IBaseFileSystem* filesystem, const char* resourceName, const char* pathID = nullptr);
-	bool SaveToFile(IBaseFileSystem* filesystem, const char* resourceName, const char* pathID = nullptr);
+	bool LoadFromFile(IBaseFileSystem* filesystem, const char* resourceName, const char* pathID = NULL);
+	bool SaveToFile(IBaseFileSystem* filesystem, const char* resourceName, const char* pathID = NULL);
 
 	// Read from a buffer...  Note that the buffer must be null terminated
-	bool LoadFromBuffer(char const* resourceName, const char* pBuffer, IBaseFileSystem* pFileSystem = nullptr, const char* pPathID = nullptr);
+	bool LoadFromBuffer(char const* resourceName, const char* pBuffer, IBaseFileSystem* pFileSystem = NULL, const char* pPathID = NULL);
 
 	// Read from a utlbuffer...
-	bool LoadFromBuffer(char const* resourceName, CUtlBuffer& buf, IBaseFileSystem* pFileSystem = nullptr, const char* pPathID = nullptr);
+	bool LoadFromBuffer(char const* resourceName, CUtlBuffer& buf, IBaseFileSystem* pFileSystem = NULL, const char* pPathID = NULL);
 
 	// Find a keyValue, create it if it is not found.
 	// Set bCreate to true to create the key if it doesn't already exist (which ensures a valid pointer will be returned)
@@ -138,21 +138,21 @@ public:
 	KeyValues* GetNextValue();
 
 	// Data access
-	int   GetInt(const char* keyName = nullptr, int defaultValue = 0);
-	uint64 GetUint64(const char* keyName = nullptr, uint64 defaultValue = 0);
-	float GetFloat(const char* keyName = nullptr, float defaultValue = 0.0f);
-	const char* GetString(const char* keyName = nullptr, const char* defaultValue = "");
-	const wchar_t* GetWString(const char* keyName = nullptr, const wchar_t* defaultValue = L"");
-	void* GetPtr(const char* keyName = nullptr, void* defaultValue = (void*)nullptr);
-	Color GetColor(const char* keyName = nullptr /* default value is all black */);
-	bool  IsEmpty(const char* keyName = nullptr);
+	int   GetInt(const char* keyName = NULL, int defaultValue = 0);
+	uint64 GetUint64(const char* keyName = NULL, uint64 defaultValue = 0);
+	float GetFloat(const char* keyName = NULL, float defaultValue = 0.0f);
+	const char* GetString(const char* keyName = NULL, const char* defaultValue = "");
+	const wchar_t* GetWString(const char* keyName = NULL, const wchar_t* defaultValue = L"");
+	void* GetPtr(const char* keyName = NULL, void* defaultValue = (void*)0);
+	Color GetColor(const char* keyName = NULL /* default value is all black */);
+	bool  IsEmpty(const char* keyName = NULL);
 
 	// Data access
 	int   GetInt(int keySymbol, int defaultValue = 0);
 	float GetFloat(int keySymbol, float defaultValue = 0.0f);
 	const char* GetString(int keySymbol, const char* defaultValue = "");
 	const wchar_t* GetWString(int keySymbol, const wchar_t* defaultValue = L"");
-	void* GetPtr(int keySymbol, void* defaultValue = (void*)nullptr);
+	void* GetPtr(int keySymbol, void* defaultValue = (void*)0);
 	Color GetColor(int keySymbol /* default value is all black */);
 	bool  IsEmpty(int keySymbol);
 
@@ -204,7 +204,7 @@ public:
 		TYPE_UINT64,
 		TYPE_NUMTYPES,
 	};
-	types_t GetDataType(const char* keyName = nullptr);
+	types_t GetDataType(const char* keyName = NULL);
 
 	// Virtual deletion function - ensures that KeyValues object is deleted from correct heap
 	void deleteThis();
@@ -311,31 +311,31 @@ struct KeyValuesUnpackStructure
 inline int   KeyValues::GetInt(int keySymbol, int defaultValue)
 {
 	KeyValues* dat = FindKey(keySymbol);
-	return dat ? dat->GetInt((const char*)nullptr, defaultValue) : defaultValue;
+	return dat ? dat->GetInt((const char*)NULL, defaultValue) : defaultValue;
 }
 
 inline float KeyValues::GetFloat(int keySymbol, float defaultValue)
 {
 	KeyValues* dat = FindKey(keySymbol);
-	return dat ? dat->GetFloat((const char*)nullptr, defaultValue) : defaultValue;
+	return dat ? dat->GetFloat((const char*)NULL, defaultValue) : defaultValue;
 }
 
 inline const char* KeyValues::GetString(int keySymbol, const char* defaultValue)
 {
 	KeyValues* dat = FindKey(keySymbol);
-	return dat ? dat->GetString((const char*)nullptr, defaultValue) : defaultValue;
+	return dat ? dat->GetString((const char*)NULL, defaultValue) : defaultValue;
 }
 
 inline const wchar_t* KeyValues::GetWString(int keySymbol, const wchar_t* defaultValue)
 {
 	KeyValues* dat = FindKey(keySymbol);
-	return dat ? dat->GetWString((const char*)nullptr, defaultValue) : defaultValue;
+	return dat ? dat->GetWString((const char*)NULL, defaultValue) : defaultValue;
 }
 
 inline void* KeyValues::GetPtr(int keySymbol, void* defaultValue)
 {
 	KeyValues* dat = FindKey(keySymbol);
-	return dat ? dat->GetPtr((const char*)nullptr, defaultValue) : defaultValue;
+	return dat ? dat->GetPtr((const char*)NULL, defaultValue) : defaultValue;
 }
 
 inline Color KeyValues::GetColor(int keySymbol)

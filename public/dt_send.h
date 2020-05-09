@@ -670,7 +670,7 @@ SendProp SendPropInt(
 	int sizeofVar = SIZEOF_IGNORE,	// Handled by SENDINFO macro.
 	int nBits = -1,					// Set to -1 to automatically pick (max) number of bits based on size of element.
 	int flags = 0,
-	SendVarProxyFn varProxy = nullptr
+	SendVarProxyFn varProxy = 0
 	);
 
 inline SendProp SendPropModelIndex(const char* pVarName, int offset, int sizeofVar = SIZEOF_IGNORE)

@@ -304,7 +304,7 @@ public:
 
 	inline void reset()
 	{
-		m_pLastSee = nullptr; // edict
+		m_pLastSee = NULL; // edict
 		m_fLastSeeTime = 0.0f; // time
 	}
 
@@ -546,14 +546,14 @@ public:
 	 */
 	inline bool inUse()
 	{
-		return (m_bUsed && (m_pEdict != nullptr));
+		return (m_bUsed && (m_pEdict != NULL));
 	}
 
 	edict_t* getEdict();
 
 	void setEdict(edict_t* pEdict);
 
-	bool FVisible(Vector& vOrigin, edict_t* pDest = nullptr);
+	bool FVisible(Vector& vOrigin, edict_t* pDest = NULL);
 
 	Vector getEyePosition();
 
@@ -623,7 +623,7 @@ public:
 		}
 	}
 
-	void findEnemy(edict_t* pOldEnemy = nullptr);
+	void findEnemy(edict_t* pOldEnemy = NULL);
 	virtual void enemyFound(edict_t* pEnemy);
 
 	virtual void checkDependantEntities();
@@ -674,7 +674,7 @@ public:
 			updateCondition(CONDITION_ENEMY_DEAD);
 		if (pEnemy == m_pLastEnemy)
 		{
-			m_pLastEnemy = nullptr;
+			m_pLastEnemy = NULL;
 		}
 	}
 	//////////////////////
@@ -751,7 +751,7 @@ public:
 
 	inline CBotProfile* getProfile() { return m_pProfile; }
 
-	virtual bool canGotoWaypoint(Vector vPrevWaypoint, CWaypoint* pWaypoint, CWaypoint* pPrev = nullptr);
+	virtual bool canGotoWaypoint(Vector vPrevWaypoint, CWaypoint* pWaypoint, CWaypoint* pPrev = NULL);
 
 	void tapButton(int iButton);
 
@@ -864,7 +864,7 @@ public:
 
 	inline bool inSquad(void)
 	{
-		return m_pSquad != nullptr;
+		return m_pSquad != NULL;
 	}
 
 	bool isSquadLeader(void);
@@ -885,7 +885,7 @@ public:
 	virtual void sayInPosition() { }
 	virtual void sayMoveOut() { }
 
-	bot_statistics_t* getStats() { if (m_bStatsCanUse) return &m_StatsCanUse; return nullptr; }
+	bot_statistics_t* getStats() { if (m_bStatsCanUse) return &m_StatsCanUse; return NULL; }
 
 	virtual void hearPlayerAttack(edict_t* pAttacker, int iWeaponID);
 
@@ -1245,11 +1245,11 @@ class IServerTools : public IBaseInterface
 {
 public:
 	virtual IServerEntity* GetIServerEntity(IClientEntity* pClientEntity) = 0;
-	virtual bool SnapPlayerToPosition(const Vector& org, const QAngle& ang, IClientEntity* pClientPlayer = nullptr) = 0;
-	virtual bool GetPlayerPosition(Vector& org, QAngle& ang, IClientEntity* pClientPlayer = nullptr) = 0;
-	virtual bool SetPlayerFOV(int fov, IClientEntity* pClientPlayer = nullptr) = 0;
-	virtual int GetPlayerFOV(IClientEntity* pClientPlayer = nullptr) = 0;
-	virtual bool IsInNoClipMode(IClientEntity* pClientPlayer = nullptr) = 0;
+	virtual bool SnapPlayerToPosition(const Vector& org, const QAngle& ang, IClientEntity* pClientPlayer = NULL) = 0;
+	virtual bool GetPlayerPosition(Vector& org, QAngle& ang, IClientEntity* pClientPlayer = NULL) = 0;
+	virtual bool SetPlayerFOV(int fov, IClientEntity* pClientPlayer = NULL) = 0;
+	virtual int GetPlayerFOV(IClientEntity* pClientPlayer = NULL) = 0;
+	virtual bool IsInNoClipMode(IClientEntity* pClientPlayer = NULL) = 0;
 
 	// entity searching
 	virtual CBaseEntity* FirstEntity(void) = 0;

@@ -245,7 +245,7 @@ bool CBotWeapons::hasWeapon(int id)
 {
 	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
-		if (m_theWeapons[i].getWeaponInfo() == nullptr)
+		if (m_theWeapons[i].getWeaponInfo() == NULL)
 			continue;
 		if (m_theWeapons[i].hasWeapon() == false)
 			continue;
@@ -282,7 +282,7 @@ edict_t* CWeapons::findWeapon(edict_t* pPlayer, const char* pszWeaponName)
 	CBaseHandle* m_Weapon_iter = m_Weapons;
 	// loop through the weapons array and see if it is in the CBaseCombatCharacter
 
-	pWeapon = nullptr;
+	pWeapon = NULL;
 
 	for (j = 0; j < MAX_WEAPONS; j++)
 	{
@@ -294,7 +294,7 @@ edict_t* CWeapons::findWeapon(edict_t* pPlayer, const char* pszWeaponName)
 		m_Weapon_iter++;
 	}
 
-	return nullptr;
+	return NULL;
 }
 
 bool CBotWeapons::update(bool bOverrideAllFromEngine)
@@ -311,8 +311,8 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 	for (i = 0; i < MAX_WEAPONS; i++)
 	{
 		// create a 'hash' of current weapons
-		pWeapon = (m_Weapon_iter == nullptr) ? nullptr : INDEXENT(m_Weapon_iter->GetEntryIndex());
-		iWeaponsSignature += reinterpret_cast<unsigned int>(pWeapon) + ((pWeapon == nullptr)
+		pWeapon = (m_Weapon_iter == NULL) ? NULL : INDEXENT(m_Weapon_iter->GetEntryIndex());
+		iWeaponsSignature += reinterpret_cast<unsigned int>(pWeapon) + ((pWeapon == NULL)
 			? 0
 			: static_cast<unsigned int>(CClassInterface::getWeaponState(pWeapon)));
 		m_Weapon_iter++;
@@ -352,7 +352,7 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 
 			CWeapon* pWeaponInfo = CWeapons::getWeapon(pszClassname);
 
-			if (pWeaponInfo != nullptr)
+			if (pWeaponInfo != NULL)
 			{
 				if (iWeaponState != WEAPON_NOT_CARRIED)
 				{
@@ -457,8 +457,8 @@ bool CBotWeapons ::update ( bool bOverrideAllFromEngine )
 
 CBotWeapon* CBotWeapons::getBestWeapon(edict_t* pEnemy, bool bAllowMelee, bool bAllowMeleeFallback, bool bMeleeOnly, bool bExplosivesOnly, bool bIgnorePrimaryMinimum)
 {
-	CBotWeapon* m_theBestWeapon = nullptr;
-	CBotWeapon* m_FallbackMelee = nullptr;
+	CBotWeapon* m_theBestWeapon = NULL;
+	CBotWeapon* m_FallbackMelee = NULL;
 	int iBestPreference = 0;
 	Vector vEnemyOrigin;
 
@@ -519,7 +519,7 @@ CBotWeapon* CBotWeapons::getBestWeapon(edict_t* pEnemy, bool bAllowMelee, bool b
 		}
 	}
 
-	if (bMeleeOnly || (bAllowMeleeFallback && ((m_theBestWeapon == nullptr) && (flDist < 400.0f) && (fabs(vEnemyOrigin.z - m_pBot->getOrigin().z) < BOT_JUMP_HEIGHT))))
+	if (bMeleeOnly || (bAllowMeleeFallback && ((m_theBestWeapon == NULL) && (flDist < 400.0f) && (fabs(vEnemyOrigin.z - m_pBot->getOrigin().z) < BOT_JUMP_HEIGHT))))
 		m_theBestWeapon = m_FallbackMelee;
 
 	return m_theBestWeapon;
@@ -546,13 +546,13 @@ CBotWeapon* CBotWeapons::addWeapon(CWeapon* pWeaponInfo, int iId, edict_t* pent,
 	int i = 0;
 	Vector origin;
 	const char* classname;
-	edict_t* pEnt = nullptr;
+	edict_t* pEnt = NULL;
 
 	m_theWeapons[iId].setHasWeapon(true);
 	m_theWeapons[iId].setWeapon(pWeaponInfo);
 
 	if (!m_theWeapons[iId].getWeaponInfo())
-		return nullptr;
+		return NULL;
 
 	classname = pWeaponInfo->getWeaponName();
 
@@ -640,7 +640,7 @@ CBotWeapon* CBotWeapons::getWeapon(CWeapon* pWeapon)
 			return &(m_theWeapons[i]);
 	}
 
-	return nullptr;
+	return NULL;
 }
 
 CBotWeapon* CBotWeapons::getCurrentWeaponInSlot(int iSlot)
@@ -651,7 +651,7 @@ CBotWeapon* CBotWeapons::getCurrentWeaponInSlot(int iSlot)
 			return &(m_theWeapons[i]);
 	}
 
-	return nullptr;
+	return NULL;
 }
 
 const char* szWeaponFlags[] = {
@@ -680,7 +680,7 @@ const char* szWeaponFlags[] = {
 
 void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault)
 {
-	if ((szWeaponListName != nullptr) && (szWeaponListName[0] != 0))
+	if ((szWeaponListName != NULL) && (szWeaponListName[0] != 0))
 	{
 		KeyValues* kv = new KeyValues("Weapons");//A possible memory leak? [APG]RoboCop[CL]
 		char szFilename[1024];
@@ -689,7 +689,7 @@ void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault
 
 		if (kv)
 		{
-			if (kv->LoadFromFile(filesystem, szFilename, nullptr))
+			if (kv->LoadFromFile(filesystem, szFilename, NULL))
 			{
 				kv = kv->FindKey(szWeaponListName);
 
@@ -700,7 +700,7 @@ void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault
 					if (false)
 						kv = kv->GetFirstTrueSubKey();
 
-					while (kv != nullptr)
+					while (kv != NULL)
 					{
 						WeaponsData_t newWeapon;
 
@@ -750,7 +750,7 @@ void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault
 		}
 	}
 
-	if (pDefault != nullptr)
+	if (pDefault != NULL)
 	{
 		// No weapons from INI file then add default
 		if (m_theWeapons.size() == 0)
@@ -776,7 +776,7 @@ void CBotWeapons::clearWeapons()
 // returns weapon with highest priority even if no ammo
 CBotWeapon* CBotWeapons::getPrimaryWeapon()
 {
-	CBotWeapon* pBest = nullptr;
+	CBotWeapon* pBest = NULL;
 
 	for (unsigned short i = 0; i < MAX_WEAPONS; i++)
 	{
@@ -785,7 +785,7 @@ CBotWeapon* CBotWeapons::getPrimaryWeapon()
 		if (!pWeap->hasWeapon())
 			continue;
 
-		if ((pBest == nullptr) || (pBest->getPreference() < pWeap->getPreference()))
+		if ((pBest == NULL) || (pBest->getPreference() < pWeap->getPreference()))
 		{
 			pBest = pWeap;
 		}
@@ -796,7 +796,7 @@ CBotWeapon* CBotWeapons::getPrimaryWeapon()
 
 CBotWeapon* CBotWeapons::getActiveWeapon(const char* szWeaponName, edict_t* pWeaponUpdate, bool bOverrideAmmoTypes)
 {
-	CBotWeapon* toReturn = nullptr;
+	CBotWeapon* toReturn = NULL;
 
 	if (szWeaponName && *szWeaponName)
 	{
@@ -841,7 +841,7 @@ bool CBotWeaponGravGun ::outOfAmmo (CBot *pBot)
 bool CBotWeapon::outOfAmmo(CBot* pBot)
 {
 	if (m_pWeaponInfo->isGravGun() && m_pEnt)
-		return (CClassInterface::gravityGunObject(m_pEnt) == nullptr);
+		return (CClassInterface::gravityGunObject(m_pEnt) == NULL);
 
 	// if I have something in my clip now
 	// I am okay, otherwise return ammo in list
@@ -871,7 +871,7 @@ public:
 	CGetWeapID(int iId)
 	{
 		m_iId = iId;
-		m_pFound = nullptr;
+		m_pFound = NULL;
 	}
 
 	void execute(CWeapon* pWeapon) override
@@ -895,7 +895,7 @@ class CGetWeapCName : public IWeaponFunc
 public:
 	CGetWeapCName(const char* szWeapon)
 	{
-		m_pFound = nullptr;
+		m_pFound = NULL;
 		m_szWeapon = szWeapon;
 	}
 
@@ -919,7 +919,7 @@ class CGetWeapShortName : public IWeaponFunc
 public:
 	CGetWeapShortName(const char* szWeapon)
 	{
-		m_pFound = nullptr;
+		m_pFound = NULL;
 		m_szWeapon = szWeapon;
 	}
 
@@ -972,7 +972,7 @@ void CWeapons::freeMemory()
 	for (unsigned int i = 0; i < m_theWeapons.size(); i++)
 	{
 		delete m_theWeapons[i];
-		m_theWeapons[i] = nullptr;
+		m_theWeapons[i] = NULL;
 	}
 
 	m_theWeapons.clear();

@@ -194,7 +194,7 @@ eBotCommandResult CSetProp::execute(CClient* pClient, const char* pcmd, const ch
 
 			edict_t* pPlayer = pClient->getPlayer();
 			//			edict_t *pEdict;
-			edict_t* pNearest = nullptr;
+			edict_t* pNearest = NULL;
 			//			float fDistance;
 			//			float fNearest = 400.0f;
 
@@ -202,7 +202,7 @@ eBotCommandResult CSetProp::execute(CClient* pClient, const char* pcmd, const ch
 
 			if (pNearest)
 			{
-				void* data = nullptr;
+				void* data = NULL;
 
 				extern bool g_PrintProps;
 				unsigned int m_offset = 0;
@@ -242,16 +242,16 @@ eBotCommandResult CSetProp::execute(CClient* pClient, const char* pcmd, const ch
 							CBotGlobals::botMessage(pPlayer, 0, "NULL");
 					}
 					else
-						CBotGlobals::botMessage(nullptr, 0, "OFFSET NOT FOUND");
+						CBotGlobals::botMessage(NULL, 0, "OFFSET NOT FOUND");
 				}
 				else
-					CBotGlobals::botMessage(nullptr, 0, "CLASS NOT FOUND");
+					CBotGlobals::botMessage(NULL, 0, "CLASS NOT FOUND");
 			}
 			else
-				CBotGlobals::botMessage(nullptr, 0, "EDICT NOT FOUND");
+				CBotGlobals::botMessage(NULL, 0, "EDICT NOT FOUND");
 		}
 		else
-			CBotGlobals::botMessage(nullptr, 0, "Usage: getprop CLASSNAME KEY TYPE(int,bool,float) VALUE");
+			CBotGlobals::botMessage(NULL, 0, "Usage: getprop CLASSNAME KEY TYPE(int,bool,float) VALUE");
 
 		return COMMAND_ACCESSED;
 	}
@@ -270,7 +270,7 @@ eBotCommandResult CGetProp::execute(CClient* pClient, const char* pcmd, const ch
 
 			edict_t* pPlayer = pClient->getPlayer();
 			//			edict_t *pEdict;
-			edict_t* pNearest = nullptr;
+			edict_t* pNearest = NULL;
 			//			float fDistance;
 			//			float fNearest = 400.0f;
 
@@ -278,7 +278,7 @@ eBotCommandResult CGetProp::execute(CClient* pClient, const char* pcmd, const ch
 
 			if (pNearest)
 			{
-				void* data = nullptr;
+				void* data = NULL;
 
 				extern bool g_PrintProps;
 				unsigned int m_offset = 0;
@@ -318,16 +318,16 @@ eBotCommandResult CGetProp::execute(CClient* pClient, const char* pcmd, const ch
 							CBotGlobals::botMessage(pPlayer, 0, "NULL");
 					}
 					else
-						CBotGlobals::botMessage(nullptr, 0, "OFFSET NOT FOUND");
+						CBotGlobals::botMessage(NULL, 0, "OFFSET NOT FOUND");
 				}
 				else
-					CBotGlobals::botMessage(nullptr, 0, "CLASS NOT FOUND");
+					CBotGlobals::botMessage(NULL, 0, "CLASS NOT FOUND");
 			}
 			else
-				CBotGlobals::botMessage(nullptr, 0, "EDICT NOT FOUND");
+				CBotGlobals::botMessage(NULL, 0, "EDICT NOT FOUND");
 		}
 		else
-			CBotGlobals::botMessage(nullptr, 0, "Usage: getprop CLASS CLASSNAME KEY");
+			CBotGlobals::botMessage(NULL, 0, "Usage: getprop CLASS CLASSNAME KEY");
 
 		return COMMAND_ACCESSED;
 	}
@@ -418,7 +418,7 @@ eBotCommandResult CWaypointPaste::execute(CClient* pClient, const char* pcmd, co
 {
 	if (pClient)
 	{
-		CWaypoints::addWaypoint(pClient, nullptr, nullptr, nullptr, nullptr, true);
+		CWaypoints::addWaypoint(pClient, NULL, NULL, NULL, NULL, true);
 		return COMMAND_ACCESSED;
 	}
 
@@ -771,7 +771,7 @@ eBotCommandResult CWaypointGiveTypeCommand::execute(CClient* pClient, const char
 			CBotGlobals::botMessage(pEntity, 0, "No waypoint nearby to give types (move closer to the waypoint you want to give types)");
 		else
 		{
-			char* type = nullptr;
+			char* type = NULL;
 
 			for (int i = 0; i < 4; i++)
 			{
@@ -951,7 +951,7 @@ CControlCommand::CControlCommand()
 
 eBotCommandResult CControlCommand::execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5)
 {
-	edict_t* pEntity = nullptr;
+	edict_t* pEntity = NULL;
 
 	if (pClient)
 		pEntity = pClient->getPlayer();
@@ -979,7 +979,7 @@ eBotCommandResult CAddBotCommand::execute(CClient* pClient, const char* pcmd, co
 {
 	//	bool bOkay = false;
 
-	edict_t* pEntity = nullptr;
+	edict_t* pEntity = NULL;
 
 	if (pClient)
 		pEntity = pClient->getPlayer();
@@ -1013,7 +1013,7 @@ eBotCommandResult CBotTaskCommand::execute(CClient* pClient, const char* pcmd, c
 {
 #ifndef __linux__
 
-	if (pClient && pClient->getDebugBot() != nullptr)
+	if (pClient && pClient->getDebugBot() != NULL)
 	{
 		edict_t* pEdict = pClient->getDebugBot();
 		CBot* pBot = CBots::getBotPointer(pEdict);
@@ -1092,11 +1092,11 @@ eBotCommandResult CBotTaskCommand::execute(CClient* pClient, const char* pcmd, c
 									pSched->add(snipe);
 								}
 								else
-									CBotGlobals::botMessage(nullptr, 0, "Bot is not a sniper");
+									CBotGlobals::botMessage(NULL, 0, "Bot is not a sniper");
 							}
 						}
 						else
-							CBotGlobals::botMessage(nullptr, 0, "Sniper waypoint not found");
+							CBotGlobals::botMessage(NULL, 0, "Sniper waypoint not found");
 					}
 				}
 			}
@@ -1111,7 +1111,7 @@ eBotCommandResult CBotTaskCommand::execute(CClient* pClient, const char* pcmd, c
 
 eBotCommandResult CBotFlush::execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5)
 {
-	if (pClient && pClient->getDebugBot() != nullptr)
+	if (pClient && pClient->getDebugBot() != NULL)
 	{
 		edict_t* pEdict = pClient->getDebugBot();
 		CBot* pBot = CBots::getBotPointer(pEdict);
@@ -1128,7 +1128,7 @@ eBotCommandResult CBotFlush::execute(CClient* pClient, const char* pcmd, const c
 ///////////////////////
 eBotCommandResult CBotGoto::execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5)
 {
-	if (pClient && pClient->getDebugBot() != nullptr)
+	if (pClient && pClient->getDebugBot() != NULL)
 	{
 		edict_t* pEdict = pClient->getDebugBot();
 		CBot* pBot = CBots::getBotPointer(pEdict);
@@ -1352,7 +1352,7 @@ eBotCommandResult CPathWaypointCreateFromToCommand::execute(CClient* pClient, co
 			if (pWaypoint2 && pWaypoint2->isUsed())
 			{
 				pWaypoint->addPathTo(atoi(arg1));
-				CBotGlobals::botMessage(pClient != nullptr ? pClient->getPlayer() : nullptr,
+				CBotGlobals::botMessage(pClient != NULL ? pClient->getPlayer() : NULL,
 					0, "Added path from <%d> to <%d>", atoi(pcmd), atoi(arg1));
 
 				pWaypoint->draw(pClient->getPlayer(), true, DRAWTYPE_DEBUGENGINE);
@@ -1365,15 +1365,15 @@ eBotCommandResult CPathWaypointCreateFromToCommand::execute(CClient* pClient, co
 				return COMMAND_ACCESSED;
 			}
 			else
-				CBotGlobals::botMessage(pClient != nullptr ? pClient->getPlayer() : nullptr,
+				CBotGlobals::botMessage(pClient != NULL ? pClient->getPlayer() : NULL,
 					0, "Waypoint id <%d> not found", atoi(arg1));
 		}
 		else
-			CBotGlobals::botMessage(pClient != nullptr ? pClient->getPlayer() : nullptr,
+			CBotGlobals::botMessage(pClient != NULL ? pClient->getPlayer() : NULL,
 				0, "Waypoint id <%d> not found", atoi(pcmd));
 	}
 	else
-		CBotGlobals::botMessage(pClient != nullptr ? pClient->getPlayer() : nullptr,
+		CBotGlobals::botMessage(pClient != NULL ? pClient->getPlayer() : NULL,
 			0, "missing args <id1> <id2>");
 
 	return COMMAND_ERROR;
@@ -1398,7 +1398,7 @@ eBotCommandResult CPathWaypointRemoveFromToCommand::execute(CClient* pClient, co
 			if (pWaypoint2 && pWaypoint2->isUsed())
 			{
 				pWaypoint->removePathTo(atoi(arg1));
-				CBotGlobals::botMessage(pClient != nullptr ? pClient->getPlayer() : nullptr,
+				CBotGlobals::botMessage(pClient != NULL ? pClient->getPlayer() : NULL,
 					0, "Removed path from <%d> to <%d>", atoi(pcmd), atoi(arg1));
 
 				pWaypoint->draw(pClient->getPlayer(), true, DRAWTYPE_DEBUGENGINE);
@@ -1411,15 +1411,15 @@ eBotCommandResult CPathWaypointRemoveFromToCommand::execute(CClient* pClient, co
 				return COMMAND_ACCESSED;
 			}
 			else
-				CBotGlobals::botMessage(pClient != nullptr ? pClient->getPlayer() : nullptr,
+				CBotGlobals::botMessage(pClient != NULL ? pClient->getPlayer() : NULL,
 					0, "Waypoint id <%d> not found", atoi(arg1));
 		}
 		else
-			CBotGlobals::botMessage(pClient != nullptr ? pClient->getPlayer() : nullptr,
+			CBotGlobals::botMessage(pClient != NULL ? pClient->getPlayer() : NULL,
 				0, "Waypoint id <%d> not found", atoi(pcmd));
 	}
 	else
-		CBotGlobals::botMessage(pClient != nullptr ? pClient->getPlayer() : nullptr,
+		CBotGlobals::botMessage(pClient != NULL ? pClient->getPlayer() : NULL,
 			0, "missing args <id1> <id2>");
 
 	return COMMAND_ERROR;
@@ -1509,7 +1509,7 @@ eBotCommandResult CWaypointAreaSetToNearest::execute(CClient* pClient, const cha
 
 		id = pClient->currentWaypoint();
 
-		if ((pWpt = CWaypoints::getWaypoint(id)) != nullptr)
+		if ((pWpt = CWaypoints::getWaypoint(id)) != NULL)
 		{
 			if (pWpt->isUsed())
 			{
@@ -1552,7 +1552,7 @@ eBotCommandResult CWaypointCheckCommand::execute(CClient* pClient, const char* p
 {
 	// loop through every waypoint and check the areas are not outside the number of control points
 
-	CWaypoints::checkAreas((pClient == nullptr) ? nullptr : pClient->getPlayer());
+	CWaypoints::checkAreas((pClient == NULL) ? NULL : pClient->getPlayer());
 
 	return COMMAND_ACCESSED;
 }
@@ -1572,7 +1572,7 @@ eBotCommandResult CWaypointTeleportCommand::execute(CClient* pClient, const char
 
 		id = atoi(pcmd);
 
-		if ((pWpt = CWaypoints::getWaypoint(id)) != nullptr)
+		if ((pWpt = CWaypoints::getWaypoint(id)) != NULL)
 		{
 			if (pWpt->isUsed())
 			{
@@ -1640,14 +1640,14 @@ eBotCommandResult CWaypointInfoCommand::execute(CClient* pClient, const char* pc
 
 eBotCommandResult CWaypointSaveCommand::execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5)
 {
-	if (CWaypoints::save(false, (pClient != nullptr) ? pClient->getPlayer() : nullptr, ((pcmd != nullptr) && (*pcmd != 0)) ? pcmd : nullptr, ((arg1 != nullptr) && (*arg1 != 0)) ? arg1 : nullptr))
+	if (CWaypoints::save(false, (pClient != NULL) ? pClient->getPlayer() : NULL, ((pcmd != NULL) && (*pcmd != 0)) ? pcmd : NULL, ((arg1 != NULL) && (*arg1 != 0)) ? arg1 : NULL))
 	{
-		CBotGlobals::botMessage(nullptr, 0, "waypoints saved");
+		CBotGlobals::botMessage(NULL, 0, "waypoints saved");
 		if (pClient)
 			pClient->giveMessage("Waypoints Saved");
 	}
 	else
-		CBotGlobals::botMessage(nullptr, 0, "error: could not save waypoints");
+		CBotGlobals::botMessage(NULL, 0, "error: could not save waypoints");
 
 	return COMMAND_ACCESSED;
 }
@@ -1666,9 +1666,9 @@ eBotCommandResult CWaypointLoadCommand::execute(CClient* pClient, const char* pc
 		bLoadOK = CWaypoints::load();
 
 	if (bLoadOK)
-		CBotGlobals::botMessage(nullptr, 0, "waypoints %s loaded", szMapName);
+		CBotGlobals::botMessage(NULL, 0, "waypoints %s loaded", szMapName);
 	else
-		CBotGlobals::botMessage(nullptr, 0, "error: could not load %s waypoints", szMapName);
+		CBotGlobals::botMessage(NULL, 0, "error: could not load %s waypoints", szMapName);
 
 	return COMMAND_ACCESSED;
 }
@@ -1684,7 +1684,7 @@ eBotCommandResult CDebugMstrOffsetSearch::execute(CClient* pClient, const char* 
 
 	edict_t* pMaster = CClassInterface::FindEntityByClassnameNearest(Vector(0, 0, 0), "team_control_point_master", 65535);
 
-	if (pMaster == nullptr)
+	if (pMaster == NULL)
 	{
 		CBotGlobals::botMessage(pClient->getPlayer(), 0, "pMaster not found -- have you started the game yet?");
 		return COMMAND_ERROR;
@@ -1737,7 +1737,7 @@ eBotCommandResult CDebugMemoryCheckCommand::execute(CClient* pClient, const char
 	// find edict
 	edict_t* pEdict = CClassInterface::FindEntityByClassnameNearest(pClient->getOrigin(), pcmd);
 
-	if (pEdict == nullptr)
+	if (pEdict == NULL)
 	{
 		CBotGlobals::botMessage(pClient->getPlayer(), 0, "Edict not found");
 		return COMMAND_ERROR;
@@ -1828,7 +1828,7 @@ eBotCommandResult CDebugMemoryScanCommand::execute(CClient* pClient, const char*
 	// find edict
 	edict_t* pEdict = CClassInterface::FindEntityByClassnameNearest(pClient->getOrigin(), pcmd);
 
-	if (pEdict == nullptr)
+	if (pEdict == NULL)
 	{
 		CBotGlobals::botMessage(pClient->getPlayer(), 0, "Edict not found");
 		return COMMAND_ERROR;
@@ -1860,7 +1860,7 @@ eBotCommandResult CDebugMemoryScanCommand::execute(CClient* pClient, const char*
 			{
 				string_t* str = reinterpret_cast<string_t*>(mempoint);
 
-				if (str != nullptr)
+				if (str != NULL)
 				{
 					const char* pszstr = STRING(*str);
 
@@ -2052,7 +2052,7 @@ eBotCommandResult CTeleportUtilCommand::execute(CClient* pClient, const char* pc
 
 		vTeleport = pClient->getTeleportVector();
 
-		if (vTeleport != nullptr)
+		if (vTeleport != NULL)
 		{
 			CBotGlobals::teleportPlayer(pClient->getPlayer(), *vTeleport);
 			//CRCBotPlugin::HudTextMessage(pClient->getPlayer(),"teleported to your remembered location");
@@ -2085,7 +2085,7 @@ eBotCommandResult CNoTouchCommand::execute(CClient* pClient, const char* pcmd, c
 					*playerflags |= FL_DONTTOUCH;
 
 				sprintf(msg, "notouch mode %s", (*playerflags & FL_DONTTOUCH) ? "enabled" : "disabled");
-				CBotGlobals::botMessage(nullptr, 0, msg);
+				CBotGlobals::botMessage(NULL, 0, msg);
 				//CRCBotPlugin::HudTextMessage(pEntity,msg);
 
 				return COMMAND_ACCESSED;
@@ -2098,7 +2098,7 @@ eBotCommandResult CNoTouchCommand::execute(CClient* pClient, const char* pcmd, c
 
 eBotCommandResult CNoClipCommand::execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5)
 {
-	edict_t* pEntity = nullptr;
+	edict_t* pEntity = NULL;
 
 	if (pClient)
 		pEntity = pClient->getPlayer();
@@ -2195,10 +2195,10 @@ eBotCommandResult CDebugBotCommand::execute(CClient* pClient, const char* pcmd, 
 		CBotGlobals::quickTraceline(pClient->getPlayer(), vOrigin, vOrigin + forward * 1024.0f);
 		CBaseEntity* pEntity;
 
-		if ((pEntity = CBotGlobals::getTraceResult()->m_pEnt) != nullptr)
+		if ((pEntity = CBotGlobals::getTraceResult()->m_pEnt) != NULL)
 		{
 			edict_t* pEdict = servergameents->BaseEntityToEdict(pEntity);
-			if (CBots::getBotPointer(pEdict) != nullptr)
+			if (CBots::getBotPointer(pEdict) != NULL)
 			{
 				pClient->setDebugBot(pEdict);
 				CBotGlobals::botMessage(pClient->getPlayer(), 0, "debug bot set to bot you are looking at");
@@ -2206,13 +2206,13 @@ eBotCommandResult CDebugBotCommand::execute(CClient* pClient, const char* pcmd, 
 			}
 			else
 			{
-				pClient->setDebugBot(nullptr);
+				pClient->setDebugBot(NULL);
 				CBotGlobals::botMessage(pClient->getPlayer(), 0, "debug bot cleared");
 			}
 		}
 		else
 		{
-			pClient->setDebugBot(nullptr);
+			pClient->setDebugBot(NULL);
 			CBotGlobals::botMessage(pClient->getPlayer(), 0, "debug bot cleared");
 		}
 		return COMMAND_ERROR;
@@ -2291,7 +2291,7 @@ eBotCommandResult CKickBotCommand::execute(CClient* pClient, const char* pcmd, c
 
 eBotCommandResult CShowUsersCommand::execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5)
 {
-	edict_t* pEntity = nullptr;
+	edict_t* pEntity = NULL;
 
 	if (pClient)
 		pEntity = pClient->getPlayer();
@@ -2303,7 +2303,7 @@ eBotCommandResult CShowUsersCommand::execute(CClient* pClient, const char* pcmd,
 
 eBotCommandResult CMaxBotsCommand::execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5)
 {
-	edict_t* pEntity = nullptr;
+	edict_t* pEntity = NULL;
 
 	if (pClient)
 		pEntity = pClient->getPlayer();
@@ -2340,7 +2340,7 @@ eBotCommandResult CMaxBotsCommand::execute(CClient* pClient, const char* pcmd, c
 
 eBotCommandResult CMinBotsCommand::execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5)
 {
-	edict_t* pEntity = nullptr;
+	edict_t* pEntity = NULL;
 
 	if (pClient)
 		pEntity = pClient->getPlayer();
@@ -2474,18 +2474,18 @@ eBotCommandResult CBotCommandContainer::execute(CClient* pClient, const char* pc
 				return COMMAND_REQUIRE_ACCESS;
 			if (!pClient && !canbeUsedDedicated())
 			{
-				CBotGlobals::botMessage(nullptr, 0, "Sorry, this command cannot be used on a dedicated server");
+				CBotGlobals::botMessage(NULL, 0, "Sorry, this command cannot be used on a dedicated server");
 				return COMMAND_ERROR;
 			}
 			// move arguments
-			eBotCommandResult iResult = pCommand->execute(pClient, arg1, arg2, arg3, arg4, arg5, nullptr);
+			eBotCommandResult iResult = pCommand->execute(pClient, arg1, arg2, arg3, arg4, arg5, NULL);
 
 			if (iResult == COMMAND_ERROR)
 			{
 				if (pClient)
 					pCommand->printHelp(pClient->getPlayer());
 				else
-					pCommand->printHelp(nullptr);
+					pCommand->printHelp(NULL);
 			}
 
 			return COMMAND_ACCESSED;
@@ -2495,7 +2495,7 @@ eBotCommandResult CBotCommandContainer::execute(CClient* pClient, const char* pc
 	if (pClient)
 		printHelp(pClient->getPlayer());
 	else
-		printHelp(nullptr);
+		printHelp(NULL);
 
 	return COMMAND_NOT_FOUND;
 }
@@ -2506,7 +2506,7 @@ void CBotCommandContainer::freeMemory()
 	{
 		m_theCommands[i]->freeMemory();
 		delete m_theCommands[i];
-		m_theCommands[i] = nullptr;
+		m_theCommands[i] = NULL;
 	}
 
 	m_theCommands.clear();
@@ -2515,15 +2515,15 @@ void CBotCommandContainer::freeMemory()
 
 eBotCommandResult CPrintCommands::execute(CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5)
 {
-	if (pClient != nullptr)
+	if (pClient != NULL)
 	{
 		CBotGlobals::botMessage(pClient->getPlayer(), 0, "All bot commands:");
 		CBotGlobals::m_pCommands->printCommand(pClient->getPlayer());
 	}
 	else
 	{
-		CBotGlobals::botMessage(nullptr, 0, "All bot commands:");
-		CBotGlobals::m_pCommands->printCommand(nullptr);
+		CBotGlobals::botMessage(NULL, 0, "All bot commands:");
+		CBotGlobals::m_pCommands->printCommand(NULL);
 	}
 
 	return COMMAND_ACCESSED;

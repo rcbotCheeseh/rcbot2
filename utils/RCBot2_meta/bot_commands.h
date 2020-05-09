@@ -61,8 +61,8 @@ protected:
 	CBotCommand()
 	{
 		m_iAccessLevel = 0;
-		m_szCommand = nullptr;
-		m_szHelp = nullptr;
+		m_szCommand = NULL;
+		m_szHelp = NULL;
 	}
 public:
 	virtual ~CBotCommand() = default;

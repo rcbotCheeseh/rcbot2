@@ -52,6 +52,7 @@
 #include "bot_fortress.h"
 #include "bot_wpt_dist.h"
 
+
 #include <vector>    //bir3yk
 
 int CWaypoints::m_iNumWaypoints = 0;

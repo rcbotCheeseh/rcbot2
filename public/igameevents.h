@@ -69,13 +69,13 @@ public:
 
 	virtual bool  IsReliable() const = 0; // if event handled reliable
 	virtual bool  IsLocal() const = 0; // if event is never networked
-	virtual bool  IsEmpty(const char* keyName = nullptr) = 0; // check if data field exists
+	virtual bool  IsEmpty(const char* keyName = NULL) = 0; // check if data field exists
 
 	// Data access
-	virtual bool  GetBool(const char* keyName = nullptr, bool defaultValue = false) = 0;
-	virtual int   GetInt(const char* keyName = nullptr, int defaultValue = 0) = 0;
-	virtual float GetFloat(const char* keyName = nullptr, float defaultValue = 0.0f) = 0;
-	virtual const char* GetString(const char* keyName = nullptr, const char* defaultValue = "") = 0;
+	virtual bool  GetBool(const char* keyName = NULL, bool defaultValue = false) = 0;
+	virtual int   GetInt(const char* keyName = NULL, int defaultValue = 0) = 0;
+	virtual float GetFloat(const char* keyName = NULL, float defaultValue = 0.0f) = 0;
+	virtual const char* GetString(const char* keyName = NULL, const char* defaultValue = "") = 0;
 
 	virtual void SetBool(const char* keyName, bool value) = 0;
 	virtual void SetInt(const char* keyName, int value) = 0;
@@ -181,7 +181,7 @@ public:
 	virtual bool FireEventClientOnly(KeyValues* event) = 0;
 
 	// write/read event to/from bitbuffer
-	virtual bool SerializeKeyValues(KeyValues* event, bf_write* buf, CGameEvent* eventtype = nullptr) = 0;
+	virtual bool SerializeKeyValues(KeyValues* event, bf_write* buf, CGameEvent* eventtype = NULL) = 0;
 	virtual KeyValues* UnserializeKeyValue(bf_read* msg) = 0; // create new KeyValues, must be deleted
 };
 

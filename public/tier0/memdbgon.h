@@ -143,15 +143,15 @@ inline char* MemAlloc_StrDup(const char* pString, const char* pFileName, unsigne
 	char* pMemory;
 
 	if (!pString)
-		return nullptr;
+		return NULL;
 
 	size_t len = strlen(pString) + 1;
-	if ((pMemory = (char*)g_pMemAlloc->Alloc(len, pFileName, nLine)) != nullptr)
+	if ((pMemory = (char*)g_pMemAlloc->Alloc(len, pFileName, nLine)) != NULL)
 	{
 		return strcpy(pMemory, pString);
 	}
 
-	return nullptr;
+	return NULL;
 }
 
 inline wchar_t* MemAlloc_WcStrDup(const wchar_t* pString, const char* pFileName, unsigned nLine)
@@ -159,15 +159,15 @@ inline wchar_t* MemAlloc_WcStrDup(const wchar_t* pString, const char* pFileName,
 	wchar_t* pMemory;
 
 	if (!pString)
-		return nullptr;
+		return NULL;
 
 	size_t len = (wcslen(pString) + 1);
-	if ((pMemory = (wchar_t*)g_pMemAlloc->Alloc(len * sizeof(wchar_t), pFileName, nLine)) != nullptr)
+	if ((pMemory = (wchar_t*)g_pMemAlloc->Alloc(len * sizeof(wchar_t), pFileName, nLine)) != NULL)
 	{
 		return wcscpy(pMemory, pString);
 	}
 
-	return nullptr;
+	return NULL;
 }
 
 #endif // DBMEM_DEFINED_STRDUP

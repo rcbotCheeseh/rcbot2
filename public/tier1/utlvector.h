@@ -86,8 +86,8 @@ public:
 
 	// Adds multiple elements, uses default constructor
 	int AddMultipleToHead(int num);
-	int AddMultipleToTail(int num, const T* pToCopy = nullptr);
-	int InsertMultipleBefore(int elem, int num, const T* pToCopy = nullptr);	// If pToCopy is set, then it's an array of length 'num' and
+	int AddMultipleToTail(int num, const T* pToCopy = NULL);
+	int InsertMultipleBefore(int elem, int num, const T* pToCopy = NULL);	// If pToCopy is set, then it's an array of length 'num' and
 	int InsertMultipleAfter(int elem, int num);
 
 	// Calls RemoveAll() then AddMultipleToTail.
