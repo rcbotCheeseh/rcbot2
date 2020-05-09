@@ -44,11 +44,6 @@
 #ifndef __BOT_PLUGIN_META_H__
 #define __BOT_PLUGIN_META_H__
 
- //Fix by nosoop
-#define swap V_swap
-#include "mathlib/mathlib.h"
-#undef swap
-
 #include <ISmmPlugin.h>
 #include <igameevents.h>
 #include <iplayerinfo.h>
@@ -66,16 +61,16 @@ class CEconWearable;
 #define snprintf _snprintf
 #endif
 
-class RCBotPluginMeta final : public ISmmPlugin, public IMetamodListener
+class RCBotPluginMeta : public ISmmPlugin, public IMetamodListener
 {
 public:
-	bool Load(PluginId id, ISmmAPI* ismm, char* error, size_t maxlen, bool late) override;
-	bool Unload(char* error, size_t maxlen) override;
-	bool Pause(char* error, size_t maxlen) override;
-	bool Unpause(char* error, size_t maxlen) override;
-	void AllPluginsLoaded() override;
+	bool Load(PluginId id, ISmmAPI* ismm, char* error, size_t maxlen, bool late);
+	bool Unload(char* error, size_t maxlen);
+	bool Pause(char* error, size_t maxlen);
+	bool Unpause(char* error, size_t maxlen);
+	void AllPluginsLoaded();
 public: //IMetamodListener stuff
-	void OnVSPListening(IServerPluginCallbacks* iface) override;
+	void OnVSPListening(IServerPluginCallbacks* iface);
 public: //hooks
 
 	void Hook_ServerActivate(edict_t* pEdictList, int edictCount, int clientMax);
@@ -90,8 +85,8 @@ public: //hooks
 	void Hook_ClientActive(edict_t* pEntity, bool bLoadGame);
 	void Hook_ClientDisconnect(edict_t* pEntity);
 	void Hook_ClientPutInServer(edict_t* pEntity, char const* playername);
-	//void Hook_SetCommandClient(int index);
-	//void Hook_ClientSettingsChanged(edict_t* pEdict);
+	void Hook_SetCommandClient(int index);
+	void Hook_ClientSettingsChanged(edict_t* pEdict);
 	//Called for a game event.  Same definition as server plugins???
 	bool FireGameEvent(IGameEvent* pevent, bool bDontBroadcast);
 	void Hook_PlayerRunCmd(CUserCmd* ucmd, IMoveHelper* moveHelper);
@@ -107,14 +102,14 @@ public: //hooks
 		const char* pszAddress,
 		char* reject,
 		int maxrejectlen);
-	/*bf_write* Hook_MessageBegin(IRecipientFilter* filter, int msg_type);
+	bf_write* Hook_MessageBegin(IRecipientFilter* filter, int msg_type);
 	void Hook_MessageEnd();
 
 	void Hook_WriteChar(int val);
 	void Hook_WriteShort(int val);
 	void Hook_WriteByte(int val);
 	void Hook_WriteFloat(float val);
-	bool Hook_WriteString(const char* pStr);*/
+	bool Hook_WriteString(const char* pStr);
 
 	static CBaseEntity* TF2_getPlayerWeaponSlot(edict_t* pPlayer, int iSlot);
 	static void TF2_removeWearable(edict_t* pPlayer, CBaseEntity* pWearable);
@@ -137,23 +132,23 @@ public: //hooks
 
 public:
 
-	const char* GetAuthor() override;
-	const char* GetName() override;
-	const char* GetDescription() override;
-	const char* GetURL() override;
-	const char* GetLicense() override;
-	const char* GetVersion() override;
-	const char* GetDate() override;
-	const char* GetLogTag() override;
+	const char* GetAuthor();
+	const char* GetName();
+	const char* GetDescription();
+	const char* GetURL();
+	const char* GetLicense();
+	const char* GetVersion();
+	const char* GetDate();
+	const char* GetLogTag();
 
 	static bool UTIL_TF2EquipHat(edict_t* pEdict, CTF2Loadout* pHat, void* vTable, void* vTableAttributes);
 	static CTF2Loadout* UTIL_TF2EquipRandomHat(edict_t* pEdict, void* vTable, void* vTableAttributes);
 
 private:
-	int m_iClientCommandIndex = 0;
+	int m_iClientCommandIndex;
 
 	// Bot Quota
-	float m_fBotQuotaTimer = 0;
+	float m_fBotQuotaTimer;
 	int m_iTargetBots[MAX_PLAYERS];
 
 	void BotQuotaCheck(void);

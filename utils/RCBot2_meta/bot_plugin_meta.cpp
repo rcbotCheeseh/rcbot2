@@ -69,7 +69,7 @@ SH_DECL_HOOK2_void(IServerGameClients, ClientActive, SH_NOATTRIB, 0, edict_t*, b
 SH_DECL_HOOK1_void(IServerGameClients, ClientDisconnect, SH_NOATTRIB, 0, edict_t*);
 SH_DECL_HOOK2_void(IServerGameClients, ClientPutInServer, SH_NOATTRIB, 0, edict_t*, char const*);
 SH_DECL_HOOK1_void(IServerGameClients, SetCommandClient, SH_NOATTRIB, 0, int);
-//SH_DECL_HOOK1_void(IServerGameClients, ClientSettingsChanged, SH_NOATTRIB, 0, edict_t*);
+SH_DECL_HOOK1_void(IServerGameClients, ClientSettingsChanged, SH_NOATTRIB, 0, edict_t*);
 SH_DECL_HOOK5(IServerGameClients, ClientConnect, SH_NOATTRIB, 0, bool, edict_t*, const char*, const char*, char*, int);
 SH_DECL_HOOK2(IGameEventManager2, FireEvent, SH_NOATTRIB, 0, bool, IGameEvent*, bool);
 
@@ -345,11 +345,11 @@ public:
 		m_iPlayerSlot = ENTINDEX(pPlayer);
 	}
 
-	bool IsReliable(void) const override { return false; }
-	bool IsInitMessage(void) const override { return false; }
+	bool IsReliable(void) const { return false; }
+	bool IsInitMessage(void) const { return false; }
 
-	int	GetRecipientCount(void) const override { return 1; }
-	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot; }
+	int	GetRecipientCount(void) const { return 1; }
+	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot; }
 
 private:
 	int m_iPlayerSlot;
@@ -376,11 +376,11 @@ public:
 		}
 	}
 
-	bool IsReliable(void) const override { return false; }
-	bool IsInitMessage(void) const override { return false; }
+	bool IsReliable(void) const { return false; }
+	bool IsInitMessage(void) const { return false; }
 
-	int	GetRecipientCount(void) const override { return m_iMaxCount; }
-	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot[slot] + 1; }
+	int	GetRecipientCount(void) const { return m_iMaxCount; }
+	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot[slot] + 1; }
 
 private:
 
@@ -648,7 +648,7 @@ CBaseEntity* RCBotPluginMeta::Hook_GiveNamedItem(const char* name, int subtype, 
 class BaseAccessor : public IConCommandBaseAccessor
 {
 public:
-	bool RegisterConCommandBase(ConCommandBase* pCommandBase) override
+	bool RegisterConCommandBase(ConCommandBase* pCommandBase)
 	{
 		/* Always call META_REGCVAR instead of going through the engine. */
 		return META_REGCVAR(pCommandBase);
@@ -813,8 +813,8 @@ bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const 
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientActive, gameclients, this, &RCBotPluginMeta::Hook_ClientActive, true);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientDisconnect, gameclients, this, &RCBotPluginMeta::Hook_ClientDisconnect, true);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientPutInServer, gameclients, this, &RCBotPluginMeta::Hook_ClientPutInServer, true);
-	//SH_ADD_HOOK_MEMFUNC(IServerGameClients, SetCommandClient, gameclients, this, &RCBotPluginMeta::Hook_SetCommandClient, true);
-	//SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientSettingsChanged, gameclients, this, &RCBotPluginMeta::Hook_ClientSettingsChanged, false);
+	SH_ADD_HOOK_MEMFUNC(IServerGameClients, SetCommandClient, gameclients, this, &RCBotPluginMeta::Hook_SetCommandClient, true);
+	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientSettingsChanged, gameclients, this, &RCBotPluginMeta::Hook_ClientSettingsChanged, false);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientConnect, gameclients, this, &RCBotPluginMeta::Hook_ClientConnect, false);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientCommand, gameclients, this, &RCBotPluginMeta::Hook_ClientCommand, false);
 	//Hook FireEvent to our function - unstable for TF2? [APG]RoboCop[CL]
@@ -953,6 +953,7 @@ bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const 
 	extern IFileSystem* filesystem;
 	KeyValues* mainkv = new KeyValues("metamodplugin");
 
+	const char* rcbot2path;
 	CBotGlobals::botMessage(NULL, 0, "Reading rcbot2 path from VDF...");
 
 	mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD");
@@ -960,7 +961,7 @@ bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const 
 	mainkv = mainkv->FindKey("Metamod Plugin");//A possible memory leak? [APG]RoboCop[CL]
 
 	if (mainkv)
-		const char* rcbot2path = mainkv->GetString("rcbot2path", "\0");
+		rcbot2path = mainkv->GetString("rcbot2path", "\0");
 
 	mainkv->deleteThis();
 	//eventListener2 = new CRCBotEventListener();
@@ -1056,8 +1057,8 @@ bool RCBotPluginMeta::Unload(char* error, size_t maxlen)
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameClients, ClientActive, gameclients, this, &RCBotPluginMeta::Hook_ClientActive, true);
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameClients, ClientDisconnect, gameclients, this, &RCBotPluginMeta::Hook_ClientDisconnect, true);
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameClients, ClientPutInServer, gameclients, this, &RCBotPluginMeta::Hook_ClientPutInServer, true);
-	//SH_REMOVE_HOOK_MEMFUNC(IServerGameClients, SetCommandClient, gameclients, this, &RCBotPluginMeta::Hook_SetCommandClient, true);
-	//SH_REMOVE_HOOK_MEMFUNC(IServerGameClients, ClientSettingsChanged, gameclients, this, &RCBotPluginMeta::Hook_ClientSettingsChanged, false);
+	SH_REMOVE_HOOK_MEMFUNC(IServerGameClients, SetCommandClient, gameclients, this, &RCBotPluginMeta::Hook_SetCommandClient, true);
+	SH_REMOVE_HOOK_MEMFUNC(IServerGameClients, ClientSettingsChanged, gameclients, this, &RCBotPluginMeta::Hook_ClientSettingsChanged, false);
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameClients, ClientConnect, gameclients, this, &RCBotPluginMeta::Hook_ClientConnect, false);
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameClients, ClientCommand, gameclients, this, &RCBotPluginMeta::Hook_ClientCommand, false);
 
@@ -1202,6 +1203,10 @@ void RCBotPluginMeta::Hook_ClientCommand(edict_t* pEntity)
 	pMod->clientCommand(pEntity, args.ArgC(), pcmd, args.Arg(1), args.Arg(2));
 
 	RETURN_META(MRES_IGNORED);
+}
+
+void RCBotPluginMeta::Hook_ClientSettingsChanged(edict_t* pEdict)
+{
 }
 
 bool RCBotPluginMeta::Hook_ClientConnect(edict_t* pEntity,
@@ -1503,10 +1508,10 @@ void RCBotPluginMeta::Hook_LevelShutdown()
 }
 
 //This causes log flood spam - [APG]RoboCop[CL]
-/*void RCBotPluginMeta::Hook_SetCommandClient(const int index)
+void RCBotPluginMeta::Hook_SetCommandClient(const int index)
 {
-	META_LOG(g_PLAPI, "Hook_SetCommandClient(%d)", index);
-}*/
+	//META_LOG(g_PLAPI, "Hook_SetCommandClient(%d)", index);
+}
 
 bool RCBotPluginMeta::Pause(char* error, size_t maxlen)
 {
