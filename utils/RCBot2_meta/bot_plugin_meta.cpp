@@ -915,9 +915,9 @@ bool RCBotPluginMeta::Load(const PluginId id, ISmmAPI* ismm, char* error, const 
 	if (CBots::controlBots())
 	{
 		//No longer required for TF2? [APG]RoboCop[CL]
-		/*if (pMod->getModId() == MOD_TF2)
+		if (pMod->getModId() == MOD_TF2)
 			SH_MANUALHOOK_RECONFIGURE(MHook_PlayerRunCmd, rcbot_runplayercmd_tf2.GetInt(), 0, 0);
-		else */if (pMod->getModId() == MOD_DOD)
+		else if (pMod->getModId() == MOD_DOD)
 			SH_MANUALHOOK_RECONFIGURE(MHook_PlayerRunCmd, rcbot_runplayercmd_dods.GetInt(), 0, 0);
 	}
 	if (pMod->getModId() == MOD_TF2)
