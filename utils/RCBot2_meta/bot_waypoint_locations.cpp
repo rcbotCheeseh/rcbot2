@@ -39,27 +39,27 @@
 
 #include <vector>    //bir3yk
 
-unsigned char CWaypointLocations::g_iFailedWaypoints[CWaypoints::MAX_WAYPOINTS];
-dataUnconstArray<int> CWaypointLocations::m_iLocations[MAX_WPT_BUCKETS][MAX_WPT_BUCKETS][MAX_WPT_BUCKETS];
-float CWaypointLocations::m_fIgnoreSize = 0;
-Vector CWaypointLocations::m_vIgnoreLoc = Vector(0, 0, 0);
-bool CWaypointLocations::m_bIgnoreBox = false;
+unsigned char CWaypointLocations :: g_iFailedWaypoints[CWaypoints::MAX_WAYPOINTS];
+dataUnconstArray<int> CWaypointLocations :: m_iLocations[MAX_WPT_BUCKETS][MAX_WPT_BUCKETS][MAX_WPT_BUCKETS];
+float CWaypointLocations :: m_fIgnoreSize = 0;
+Vector CWaypointLocations :: m_vIgnoreLoc = Vector(0,0,0);
+bool CWaypointLocations :: m_bIgnoreBox = false;
 
-#define READ_LOC(loc) abs((int)((int)((loc) + HALF_MAX_MAP_SIZE) / BUCKET_SPACING));
+#define READ_LOC(loc) abs((int)((int)(loc + HALF_MAX_MAP_SIZE) / BUCKET_SPACING));
 
-unsigned char* CWaypointLocations::resetFailedWaypoints(dataUnconstArray<int>* iIgnoreWpts)
+unsigned char *CWaypointLocations :: resetFailedWaypoints (dataUnconstArray<int> *iIgnoreWpts)
 {
-	Q_memset(g_iFailedWaypoints, 0, sizeof(unsigned char) * CWaypoints::MAX_WAYPOINTS);
-
-	if (iIgnoreWpts)
-	{
+	Q_memset(g_iFailedWaypoints,0,sizeof(unsigned char)*CWaypoints::MAX_WAYPOINTS);
+	
+	if ( iIgnoreWpts )
+	{   
 		//dataStack<int> ignoreWptStack = *iIgnoreWpts;
 		int iWpt;
-
+		
 		//while ( !ignoreWptStack.IsEmpty() )
-		for (int l = 0; l < iIgnoreWpts->Size(); l++)
+		for ( int l = 0; l < iIgnoreWpts->Size(); l ++ )
 		{
-			if ((iWpt = (*iIgnoreWpts)[l]) != -1)//(iWpt = ignoreWptStack.ChooseFromStack()) != -1 )
+			if ( (iWpt = (*iIgnoreWpts)[l]) != -1 )//(iWpt = ignoreWptStack.ChooseFromStack()) != -1 )
 				g_iFailedWaypoints[iWpt] = 1;
 		}
 	}
@@ -67,100 +67,101 @@ unsigned char* CWaypointLocations::resetFailedWaypoints(dataUnconstArray<int>* i
 	return g_iFailedWaypoints;
 }
 
-#define CLAMP_TO_ZERO(x) x=((x)<0)?0:x
-#define CLAMP_TO(x,clamp) x=((x)>(clamp))?(clamp):x
+#define CLAMP_TO_ZERO(x) x=(x<0)?0:x
+#define CLAMP_TO(x,clamp) x=(x>clamp)?clamp:x
 
-void CWaypointLocations::getMinMaxs(const int iLoc, const int jLoc, const int kLoc,
-	int* iMinLoci, int* iMinLocj, int* iMinLock,
-	int* iMaxLoci, int* iMaxLocj, int* iMaxLock)
+void CWaypointLocations :: getMinMaxs ( int iLoc, int jLoc, int kLoc, 
+									    int *iMinLoci, int *iMinLocj, int *iMinLock,
+									    int *iMaxLoci, int *iMaxLocj, int *iMaxLock )
 {
-	static const int iMaxLoc = MAX_WPT_BUCKETS - 1;
+	static const int iMaxLoc = MAX_WPT_BUCKETS-1;
 
 	// get current area
-	*iMinLoci = iLoc - 1;
-	*iMaxLoci = iLoc + 1;
+	*iMinLoci = iLoc-1;
+	*iMaxLoci = iLoc+1;
 
-	*iMinLocj = jLoc - 1;
-	*iMaxLocj = jLoc + 1;
+	*iMinLocj = jLoc-1;
+	*iMaxLocj = jLoc+1;
 
-	*iMinLock = kLoc - 1;
-	*iMaxLock = kLoc + 1;
+	*iMinLock = kLoc-1;
+	*iMaxLock = kLoc+1;
 
 	CLAMP_TO_ZERO(*iMinLoci);
 	CLAMP_TO_ZERO(*iMinLocj);
 	CLAMP_TO_ZERO(*iMinLock);
 
-	CLAMP_TO(*iMaxLoci, iMaxLoc);
-	CLAMP_TO(*iMaxLocj, iMaxLoc);
-	CLAMP_TO(*iMaxLock, iMaxLoc);
+	CLAMP_TO(*iMaxLoci,iMaxLoc);
+	CLAMP_TO(*iMaxLocj,iMaxLoc);
+	CLAMP_TO(*iMaxLock,iMaxLoc);
+
 }
 ///////////////
 // return nearest waypoint that can be used to cover from vCoverFrom vector
-void CWaypointLocations::AutoPath(edict_t* pPlayer, int iWpt)
+void CWaypointLocations :: AutoPath ( edict_t *pPlayer, int iWpt )
 {
-	CWaypoint* pWpt = CWaypoints::getWaypoint(iWpt);
+	CWaypoint *pWpt = CWaypoints::getWaypoint(iWpt);
 	Vector vOrigin = pWpt->getOrigin();
 
 	int iLoc = READ_LOC(vOrigin.x);
 	int jLoc = READ_LOC(vOrigin.y);
 	int kLoc = READ_LOC(vOrigin.z);
 
-	int i, j, k;
+	int i,j,k;
 
-	int iMinLoci, iMaxLoci, iMinLocj, iMaxLocj, iMinLock, iMaxLock;
+	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
-	getMinMaxs(iLoc, jLoc, kLoc, &iMinLoci, &iMinLocj, &iMinLock, &iMaxLoci, &iMaxLocj, &iMaxLock);
+	getMinMaxs(iLoc,jLoc,kLoc,&iMinLoci,&iMinLocj,&iMinLock,&iMaxLoci,&iMaxLocj,&iMaxLock);
 
-	for (i = iMinLoci; i <= iMaxLoci; i++)
+	for ( i = iMinLoci; i <= iMaxLoci; i++ )
 	{
-		for (j = iMinLocj; j <= iMaxLocj; j++)
-		{
-			for (k = iMinLock; k <= iMaxLock; k++)
-			{
+		for ( j = iMinLocj; j <= iMaxLocj; j++ )
+		{			
+			for ( k = iMinLock; k <= iMaxLock; k++ )
+			{		
 				// check each area around the current area
 				// for closer waypoints
-				AutoPathInBucket(pPlayer, i, j, k, iWpt);
+				AutoPathInBucket(pPlayer, i,j,k,iWpt);
 			}
 		}
 	}
 }
 
 // @param iFrom waypoint number from a and b within distance
-void CWaypointLocations::GetAllInArea(Vector& vOrigin, std::vector <int>* pWaypointList, int iVisibleTo)
+void CWaypointLocations :: GetAllInArea ( Vector &vOrigin, std::vector <int> *pWaypointList, int iVisibleTo )
 {
 	int iLoc = READ_LOC(vOrigin.x);
 	int jLoc = READ_LOC(vOrigin.y);
 	int kLoc = READ_LOC(vOrigin.z);
 
-	static dataUnconstArray<int>* arr;
+	static dataUnconstArray<int> *arr;
 
-	int i, j, k;
+	int i,j,k;
 	int iWpt;
 
-	CWaypointVisibilityTable* pTable = CWaypoints::getVisiblity();
+	CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 
-	int iMinLoci, iMaxLoci, iMinLocj, iMaxLocj, iMinLock, iMaxLock;
+	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
-	getMinMaxs(iLoc, jLoc, kLoc, &iMinLoci, &iMinLocj, &iMinLock, &iMaxLoci, &iMaxLocj, &iMaxLock);
+	getMinMaxs(iLoc,jLoc,kLoc,&iMinLoci,&iMinLocj,&iMinLock,&iMaxLoci,&iMaxLocj,&iMaxLock);
 
-	for (i = iMinLoci; i <= iMaxLoci; i++)
+	for ( i = iMinLoci; i <= iMaxLoci; i++ )
 	{
-		for (j = iMinLocj; j <= iMaxLocj; j++)
-		{
-			for (k = iMinLock; k <= iMaxLock; k++)
-			{
+		for ( j = iMinLocj; j <= iMaxLocj; j++ )	
+		{			
+			for ( k = iMinLock; k <= iMaxLock; k++ )
+			{		
 				//dataStack <int> tempStack = m_iLocations[i][j][k];
 
 				arr = &(m_iLocations[i][j][k]);
 				//while ( !tempStack.IsEmpty() )
-				for (int l = 0; l < m_iLocations[i][j][k].Size(); l++)
+				for (  int l = 0; l < m_iLocations[i][j][k].Size(); l ++ )
 				{
 					iWpt = arr->ReturnValueFromIndex(l);
 
-					if (iWpt == iVisibleTo)
+					if ( iWpt == iVisibleTo )
 						continue;
 
-					if ((iVisibleTo == -1) || pTable->GetVisibilityFromTo(iWpt, iVisibleTo))
+					if ( (iVisibleTo==-1) || pTable->GetVisibilityFromTo(iWpt,iVisibleTo) )
 						pWaypointList->push_back(iWpt);
 				}
 			}
@@ -168,56 +169,57 @@ void CWaypointLocations::GetAllInArea(Vector& vOrigin, std::vector <int>* pWaypo
 	}
 }
 
+
 // @param iFrom waypoint number from a and b within distance
-void CWaypointLocations::GetAllVisible(int iFrom, int iOther, Vector& vOrigin,
-	Vector& vOther, float fEDist, dataUnconstArray<int>* iVisible,
-	dataUnconstArray<int>* iInvisible)
+void CWaypointLocations :: GetAllVisible ( int iFrom, int iOther, Vector &vOrigin, 
+										  Vector &vOther, float fEDist, dataUnconstArray<int> *iVisible, 
+										  dataUnconstArray<int> *iInvisible )
 {
-	CWaypoint* pWpt;
+	CWaypoint *pWpt;
 	int iLoc = READ_LOC(vOrigin.x);
 	int jLoc = READ_LOC(vOrigin.y);
 	int kLoc = READ_LOC(vOrigin.z);
 
-	static dataUnconstArray<int>* arr;
+	static dataUnconstArray<int> *arr;
 
-	int i, j, k;
+	int i,j,k;
 	int iWpt;
 
-	int iMinLoci, iMaxLoci, iMinLocj, iMaxLocj, iMinLock, iMaxLock;
+	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
-	CWaypointVisibilityTable* pTable = CWaypoints::getVisiblity();
-
-	if ((iFrom == -1) || !pTable)
+	CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
+	
+	if ( (iFrom == -1) || !pTable)
 		return;
 
-	getMinMaxs(iLoc, jLoc, kLoc, &iMinLoci, &iMinLocj, &iMinLock, &iMaxLoci, &iMaxLocj, &iMaxLock);
+	getMinMaxs(iLoc,jLoc,kLoc,&iMinLoci,&iMinLocj,&iMinLock,&iMaxLoci,&iMaxLocj,&iMaxLock);
 
-	for (i = iMinLoci; i <= iMaxLoci; i++)
+	for ( i = iMinLoci; i <= iMaxLoci; i++ )
 	{
-		for (j = iMinLocj; j <= iMaxLocj; j++)
-		{
-			for (k = iMinLock; k <= iMaxLock; k++)
-			{
+		for ( j = iMinLocj; j <= iMaxLocj; j++ )
+		{			
+			for ( k = iMinLock; k <= iMaxLock; k++ )
+			{		
 				//dataStack <int> tempStack = m_iLocations[i][j][k];
 
 				arr = &(m_iLocations[i][j][k]);
 				//while ( !tempStack.IsEmpty() )
-				for (int l = 0; l < m_iLocations[i][j][k].Size(); l++)
+				for (  int l = 0; l < m_iLocations[i][j][k].Size(); l ++ )
 				{
 					iWpt = arr->ReturnValueFromIndex(l);
 					pWpt = CWaypoints::getWaypoint(iWpt);
 
 					//int iWpt = tempStack.ChooseFromStack();
-
+					
 					// within range only deal with these waypoints
-					if ((pWpt->distanceFrom(vOrigin) < fEDist) && (pWpt->distanceFrom(vOther) < fEDist))
+					if ( (pWpt->distanceFrom(vOrigin) < fEDist) && (pWpt->distanceFrom(vOther) < fEDist) )
 					{
 						// iFrom should be the enemy waypoint
-						if (pTable->GetVisibilityFromTo(iFrom, iWpt)) //|| pTable->GetVisibilityFromTo(iOther,iWpt) )
+						if ( pTable->GetVisibilityFromTo(iFrom,iWpt) ) //|| pTable->GetVisibilityFromTo(iOther,iWpt) )
 						{   //CBotGlobals::isVisible(vVisibleFrom,CWaypoints::getWaypoint(iWpt)->getOrigin()) )
 							iVisible->Add(iWpt);
 						}
-						else if (!iVisible->IsMember(iWpt))
+						else if ( !iVisible->IsMember(iWpt) )
 							iInvisible->Add(iWpt);
 					}
 				}
@@ -226,14 +228,14 @@ void CWaypointLocations::GetAllVisible(int iFrom, int iOther, Vector& vOrigin,
 	}
 }
 
-void CWaypointLocations::AutoPathInBucket(edict_t* pPlayer, int i, int j, int k, int iWptFrom)
+void CWaypointLocations :: AutoPathInBucket ( edict_t *pPlayer, int i, int j, int k, int iWptFrom )
 {
 	//dataStack <int> tempStack = m_iLocations[i][j][k];
 	int iWpt;
-	CWaypoint* pOtherWpt;
+	CWaypoint *pOtherWpt;
 	extern ConVar bot_waypointpathdist;
 
-	CWaypoint* pWpt = CWaypoints::getWaypoint(iWptFrom);
+	CWaypoint *pWpt = CWaypoints::getWaypoint(iWptFrom);
 	Vector vWptOrigin = pWpt->getOrigin();
 	Vector vOtherWptOrigin;
 
@@ -242,10 +244,10 @@ void CWaypointLocations::AutoPathInBucket(edict_t* pPlayer, int i, int j, int k,
 	//CTraceFilterWorldOnly filter;
 
 	//while ( !tempStack.IsEmpty() )
-	dataUnconstArray<int>* arr = &(m_iLocations[i][j][k]);
-	short int size = static_cast<short int>(arr->Size());
-
-	for (int l = 0; l < size; l++)
+	dataUnconstArray<int> *arr = &(m_iLocations[i][j][k]);
+	short int size = (short int)arr->Size();
+	
+	for ( int l = 0; l < size; l ++ )
 	{
 		iWpt = arr->ReturnValueFromIndex(l);
 
@@ -253,39 +255,39 @@ void CWaypointLocations::AutoPathInBucket(edict_t* pPlayer, int i, int j, int k,
 
 		pOtherWpt = CWaypoints::getWaypoint(iWpt);
 
-		if (!pOtherWpt->isUsed())
+		if ( !pOtherWpt->isUsed() )
 			continue;
 
-		if (pOtherWpt == pWpt)
+		if ( pOtherWpt == pWpt )
 			continue;
-
+		
 		vOtherWptOrigin = pOtherWpt->getOrigin();
 
-		//	if ( fabs(vOtherWptOrigin.z-vWptOrigin.z) > 128 )
-			//	continue;
+	//	if ( fabs(vOtherWptOrigin.z-vWptOrigin.z) > 128 )
+		//	continue;
 
-		if ((vWptOrigin - vOtherWptOrigin).Length() <= bot_waypointpathdist.GetFloat())
+		if ( (vWptOrigin-vOtherWptOrigin).Length() <= bot_waypointpathdist.GetFloat() )
 		{
-			if (CBotGlobals::isVisible(vWptOrigin, vOtherWptOrigin))
+			if ( CBotGlobals::isVisible(vWptOrigin,vOtherWptOrigin) )
 			{
-				if (CBotGlobals::walkableFromTo(pPlayer, vWptOrigin, vOtherWptOrigin))
+				if ( CBotGlobals::walkableFromTo(pPlayer, vWptOrigin,vOtherWptOrigin) )
 				{
-					pWpt->addPathTo(iWpt);
+					pWpt->addPathTo(iWpt);			
 				}
 
-				if (CBotGlobals::walkableFromTo(pPlayer, vOtherWptOrigin, vWptOrigin))
+				if ( CBotGlobals::walkableFromTo(pPlayer,vOtherWptOrigin,vWptOrigin) )
 				{
-					pOtherWpt->addPathTo(iWptFrom);
+					pOtherWpt->addPathTo(iWptFrom);		
 				}
 			}
 		}
 	}
 }
 
-void CWaypointLocations::AddWptLocation(int iIndex, const float* fOrigin)
+void CWaypointLocations :: AddWptLocation ( int iIndex, const float *fOrigin )
 {
-	// Add a waypoint with index and at origin (for quick insertion in the list)
-	//
+// Add a waypoint with index and at origin (for quick insertion in the list)
+//
 	int i = READ_LOC(fOrigin[0]);
 	int j = READ_LOC(fOrigin[1]);
 	int k = READ_LOC(fOrigin[2]);
@@ -294,7 +296,7 @@ void CWaypointLocations::AddWptLocation(int iIndex, const float* fOrigin)
 	//m_iLocations[i][j][k].Push(iIndex);
 }
 
-void CWaypointLocations::DeleteWptLocation(int iIndex, const float* fOrigin)
+void CWaypointLocations :: DeleteWptLocation ( int iIndex, const float *fOrigin )
 // Delete the waypoint index at the origin (for finding it quickly in the list)
 //
 {
@@ -308,55 +310,55 @@ void CWaypointLocations::DeleteWptLocation(int iIndex, const float* fOrigin)
 
 ///////////////
 // return nearest waypoint that can be used to cover from vCoverFrom vector
-int CWaypointLocations::GetCoverWaypoint(const Vector vPlayerOrigin, const Vector vCoverFrom,
-	dataUnconstArray<int>* iIgnoreWpts, Vector* vGoalOrigin,
-	int iTeam, float fMinDist, float fMaxDist)
+int CWaypointLocations :: GetCoverWaypoint ( Vector vPlayerOrigin, Vector vCoverFrom, 
+											dataUnconstArray<int> *iIgnoreWpts, Vector *vGoalOrigin, 
+											int iTeam, float fMinDist, float fMaxDist )
 {
 	int iWaypoint;
 
-	iWaypoint = CWaypointLocations::NearestWaypoint(vCoverFrom, REACHABLE_RANGE, -1, true, true, false, NULL, false, 0, false, true, vPlayerOrigin);
+	iWaypoint = CWaypointLocations::NearestWaypoint(vCoverFrom,REACHABLE_RANGE,-1,true,true,false,NULL,false,0,false,true,vPlayerOrigin);
 
-	if (iWaypoint == -1)
+	if ( iWaypoint == -1 )
 		return -1;
 
 	float fNearestDist = fMaxDist;
-
+	
 	int iNearestIndex = -1;
 
 	int iLoc = READ_LOC(vPlayerOrigin.x);
 	int jLoc = READ_LOC(vPlayerOrigin.y);
 	int kLoc = READ_LOC(vPlayerOrigin.z);
 
-	int i, j, k;
+	int i,j,k;
 
-	int iMinLoci, iMaxLoci, iMinLocj, iMaxLocj, iMinLock, iMaxLock;
+	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
-	getMinMaxs(iLoc, jLoc, kLoc, &iMinLoci, &iMinLocj, &iMinLock, &iMaxLoci, &iMaxLocj, &iMaxLock);
+	getMinMaxs(iLoc,jLoc,kLoc,&iMinLoci,&iMinLocj,&iMinLock,&iMaxLoci,&iMaxLocj,&iMaxLock);
 
-	Q_memset(g_iFailedWaypoints, 0, sizeof(unsigned char) * CWaypoints::MAX_WAYPOINTS);
-
-	if (iIgnoreWpts)
-	{
+	Q_memset(g_iFailedWaypoints,0,sizeof(unsigned char)*CWaypoints::MAX_WAYPOINTS);
+	
+	if ( iIgnoreWpts )
+	{   
 		//dataStack<int> ignoreWptStack = *iIgnoreWpts;
 		int iWpt;
-
+		
 		//while ( !ignoreWptStack.IsEmpty() )
-		for (int l = 0; l < iIgnoreWpts->Size(); l++)
+		for ( int l = 0; l < iIgnoreWpts->Size(); l ++ )
 		{
-			if ((iWpt = (*iIgnoreWpts)[l]) != -1)//(iWpt = ignoreWptStack.ChooseFromStack()) != -1 )
+			if ( (iWpt = (*iIgnoreWpts)[l]) != -1 )//(iWpt = ignoreWptStack.ChooseFromStack()) != -1 )
 				g_iFailedWaypoints[iWpt] = 1;
 		}
 	}
 
-	for (i = iMinLoci; i <= iMaxLoci; i++)
+	for ( i = iMinLoci; i <= iMaxLoci; i++ )
 	{
-		for (j = iMinLocj; j <= iMaxLocj; j++)
+		for ( j = iMinLocj; j <= iMaxLocj; j++ )
 		{
-			for (k = iMinLock; k <= iMaxLock; k++)
+			for ( k = iMinLock; k <= iMaxLock; k++ )
 			{
 				// check each area around the current area
 				// for closer waypoints
-				FindNearestCoverWaypointInBucket(i, j, k, vPlayerOrigin, &fNearestDist, &iNearestIndex, iIgnoreWpts, iWaypoint, vGoalOrigin, iTeam, fMinDist);
+				FindNearestCoverWaypointInBucket(i,j,k,vPlayerOrigin,&fNearestDist,&iNearestIndex,iIgnoreWpts,iWaypoint,vGoalOrigin,iTeam,fMinDist);
 			}
 		}
 	}
@@ -364,59 +366,60 @@ int CWaypointLocations::GetCoverWaypoint(const Vector vPlayerOrigin, const Vecto
 	return iNearestIndex;
 }
 
-void CWaypointLocations::FindNearestCoverWaypointInBucket(int i, int j, int k,
-	const Vector& vOrigin, float* pfMinDist,
-	int* piIndex,
-	dataUnconstArray<int>* iIgnoreWpts,
-	int iCoverFromWpt, Vector* vGoalOrigin,
-	int iTeam, float fMinDist)
-	// Search for the nearest waypoint : I.e.
-	// Find the waypoint that is closest to vOrigin from the distance pfMinDist
-	// And set the piIndex to the waypoint index if closer.
+void CWaypointLocations :: FindNearestCoverWaypointInBucket ( int i, int j, int k, 
+															 const Vector &vOrigin, float *pfMinDist, 
+															 int *piIndex, 
+															 dataUnconstArray<int> *iIgnoreWpts, 
+															 int iCoverFromWpt, Vector *vGoalOrigin, 
+															 int iTeam, float fMinDist )
+// Search for the nearest waypoint : I.e.
+// Find the waypoint that is closest to vOrigin from the distance pfMinDist
+// And set the piIndex to the waypoint index if closer.
 {
 	//dataStack <int> tempStack = m_iLocations[i][j][k];
-
-	CWaypoint* curr_wpt;
+	
+	CWaypoint *curr_wpt;
 	int iSelectedIndex;
 	float fDist;
-	dataUnconstArray<int>* arr = &(m_iLocations[i][j][k]);
-	short int size = static_cast<short int>(arr->Size());
+	dataUnconstArray<int> *arr = &(m_iLocations[i][j][k]);
+	short int size = (short int)arr->Size();
 	//CBotMod *curmod = CBotGlobals::getCurrentMod();
 
-	for (int l = 0; l < size; l++)
-		//while ( !tempStack.IsEmpty() )
+	for ( int l = 0; l < size; l ++ )
+	//while ( !tempStack.IsEmpty() )
 	{
 		iSelectedIndex = arr->ReturnValueFromIndex(l);//tempStack.ChooseFromStack();
 
-		if (iCoverFromWpt == iSelectedIndex)
+		if ( iCoverFromWpt == iSelectedIndex )
 			continue;
-		if (g_iFailedWaypoints[iSelectedIndex])
-			continue;
+		if ( g_iFailedWaypoints[iSelectedIndex] )
+		    continue;
 
 		curr_wpt = CWaypoints::getWaypoint(iSelectedIndex);
 
-		if (!curr_wpt->isUsed())
+		if ( !curr_wpt->isUsed() )
+			continue; 
+		if ( curr_wpt->hasFlag(CWaypointTypes::W_FL_UNREACHABLE) )
 			continue;
-		if (curr_wpt->hasFlag(CWaypointTypes::W_FL_UNREACHABLE))
-			continue;
-		if (!curr_wpt->forTeam(iTeam))
+	    if ( !curr_wpt->forTeam(iTeam) )
 		{
 			continue;
 		}
-		if (CWaypoints::getVisiblity()->GetVisibilityFromTo(iCoverFromWpt, iSelectedIndex))
+		if ( CWaypoints::getVisiblity()->GetVisibilityFromTo(iCoverFromWpt,iSelectedIndex) )
 			continue;
+
 
 		(fDist = curr_wpt->distanceFrom(vOrigin));
 
-		if (vGoalOrigin != NULL)
+		if ( vGoalOrigin != NULL )
 		{
 			fDist += curr_wpt->distanceFrom(*vGoalOrigin);
 		}
 
-		if ((fDist > fMinDist) && (fDist < *pfMinDist))
+		if ( (fDist > fMinDist) && (fDist < *pfMinDist) )
 		{
 			*piIndex = iSelectedIndex;
-			*pfMinDist = fDist;
+			*pfMinDist = fDist;			
 		}
 	}
 }
@@ -425,39 +428,39 @@ void CWaypointLocations::FindNearestCoverWaypointInBucket(int i, int j, int k,
 ////////////////////////////////////////////////
 /////////////////////////////
 // get the nearest waypoint INDEX from an origin
-int CWaypointLocations::NearestBlastWaypoint(const Vector& vOrigin, const Vector& vSrc,
-	float fNearestDist, int iIgnoreWpt,
-	bool bGetVisible, bool bGetUnReachable,
-	bool bIsBot, bool bNearestAimingOnly,
-	int iTeam, bool bCheckArea, float fBlastRadius)
+int CWaypointLocations :: NearestBlastWaypoint ( const Vector &vOrigin, const Vector &vSrc, 
+												float fNearestDist, int iIgnoreWpt, 
+												bool bGetVisible, bool bGetUnReachable, 
+												bool bIsBot, bool bNearestAimingOnly, 
+												int iTeam, bool bCheckArea, float fBlastRadius )
 {
 	int iNearestIndex = -1;
 	int iLoc;
 	int jLoc;
 	int kLoc;
-	int i, j, k;
+	int i,j,k;
 
 	Vector vMid = (vSrc - vOrigin);
 
 	vMid = (vMid / vMid.Length());
-	vMid = (vMid * ((vSrc - vOrigin).Length() / 2));
+	vMid = (vMid*((vSrc-vOrigin).Length()/2));
 	vMid = vOrigin + vMid;
 
 	iLoc = READ_LOC(vMid.x);
 	jLoc = READ_LOC(vMid.y);
 	kLoc = READ_LOC(vMid.z);
 
-	int iMinLoci, iMaxLoci, iMinLocj, iMaxLocj, iMinLock, iMaxLock;
+	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
-	getMinMaxs(iLoc, jLoc, kLoc, &iMinLoci, &iMinLocj, &iMinLock, &iMaxLoci, &iMaxLocj, &iMaxLock);
+	getMinMaxs(iLoc,jLoc,kLoc,&iMinLoci,&iMinLocj,&iMinLock,&iMaxLoci,&iMaxLocj,&iMaxLock);
 
-	for (i = iMinLoci; i <= iMaxLoci; i++)
+	for ( i = iMinLoci; i <= iMaxLoci; i++ )
 	{
-		for (j = iMinLocj; j <= iMaxLocj; j++)
+		for ( j = iMinLocj; j <= iMaxLocj; j++ )
 		{
-			for (k = iMinLock; k <= iMaxLock; k++)
+			for ( k = iMinLock; k <= iMaxLock; k++ )
 			{
-				FindNearestBlastInBucket(i, j, k, vOrigin, vSrc, &fNearestDist, &iNearestIndex, iIgnoreWpt, bGetVisible, bGetUnReachable, bIsBot, bNearestAimingOnly, iTeam, bCheckArea, fBlastRadius);
+				FindNearestBlastInBucket(i,j,k,vOrigin,vSrc,&fNearestDist,&iNearestIndex,iIgnoreWpt,bGetVisible,bGetUnReachable,bIsBot,bNearestAimingOnly,iTeam,bCheckArea,fBlastRadius);
 			}
 		}
 	}
@@ -467,48 +470,48 @@ int CWaypointLocations::NearestBlastWaypoint(const Vector& vOrigin, const Vector
 
 ///////////////////////////////////////////////
 // find a waypoint I can fire a blast (e.g. rpg or grenade to)
-void CWaypointLocations::FindNearestBlastInBucket(int i, int j, int k, const Vector& vOrigin,
-	const Vector& vSrc, float* pfMinDist,
-	int* piIndex, int iIgnoreWpt, bool bGetVisible,
-	bool bGetUnReachable, bool bIsBot,
-	bool bNearestAimingOnly, int iTeam,
-	bool bCheckArea, float fBlastRadius)
-	// Search for the nearest waypoint : I.e.
-	// Find the waypoint that is closest to vOrigin from the distance pfMinDist
-	// And set the piIndex to the waypoint index if closer.
+void CWaypointLocations :: FindNearestBlastInBucket ( int i, int j, int k, const Vector &vOrigin, 
+													 const Vector &vSrc, float *pfMinDist, 
+													 int *piIndex, int iIgnoreWpt, bool bGetVisible, 
+													 bool bGetUnReachable, bool bIsBot, 
+													 bool bNearestAimingOnly, int iTeam, 
+													 bool bCheckArea, float fBlastRadius )
+// Search for the nearest waypoint : I.e.
+// Find the waypoint that is closest to vOrigin from the distance pfMinDist
+// And set the piIndex to the waypoint index if closer.
 {
 	//dataStack <int> tempStack = m_iLocations[i][j][k];
 
-	CWaypoint* curr_wpt;
+	CWaypoint *curr_wpt;
 	int iSelectedIndex;
 	float fDist;
-	//	int iWptFlags;
+//	int iWptFlags;
 
 	trace_t tr;
-
+	
 	bool bAdd;
+	
+	dataUnconstArray<int> *arr = &(m_iLocations[i][j][k]);
+	short int size = (short int)arr->Size();
+	CBotMod *curmod = CBotGlobals::getCurrentMod();
 
-	dataUnconstArray<int>* arr = &(m_iLocations[i][j][k]);
-	short int size = static_cast<short int>(arr->Size());
-	CBotMod* curmod = CBotGlobals::getCurrentMod();
-
-	for (short int l = 0; l < size; l++)
-		//while ( !tempStack.IsEmpty() )
+	for ( register short int l = 0; l < size; l ++ )
+	//while ( !tempStack.IsEmpty() )
 	{
 		iSelectedIndex = arr->ReturnValueFromIndex(l);//tempStack.ChooseFromStack();
 
-		if (iSelectedIndex == iIgnoreWpt)
+		if ( iSelectedIndex == iIgnoreWpt )
 			continue;
 
 		curr_wpt = CWaypoints::getWaypoint(iSelectedIndex);
 
-		if (!bGetUnReachable && curr_wpt->hasFlag(CWaypointTypes::W_FL_UNREACHABLE))
+		if ( !bGetUnReachable && curr_wpt->hasFlag(CWaypointTypes::W_FL_UNREACHABLE) )
 			continue;
 
-		if (!curr_wpt->isUsed())
+		if ( !curr_wpt->isUsed() )
 			continue;
 
-		if (!curr_wpt->forTeam(iTeam))
+		if ( !curr_wpt->forTeam(iTeam) )
 		{
 			continue;
 		}
@@ -516,26 +519,26 @@ void CWaypointLocations::FindNearestBlastInBucket(int i, int j, int k, const Vec
 		if (bCheckArea && !curmod->isWaypointAreaValid(curr_wpt->getArea(), curr_wpt->getFlags()))
 			continue;
 
-		if (bIsBot)
+		if ( bIsBot )
 		{
-			if (curr_wpt->getFlags() & (CWaypointTypes::W_FL_DOUBLEJUMP | CWaypointTypes::W_FL_ROCKET_JUMP | CWaypointTypes::W_FL_JUMP)) // fix : BIT OR
+			if ( curr_wpt->getFlags() & (CWaypointTypes::W_FL_DOUBLEJUMP | CWaypointTypes::W_FL_ROCKET_JUMP | CWaypointTypes::W_FL_JUMP) ) // fix : BIT OR
 				continue;
 		}
 
-		if (curr_wpt->distanceFrom(vOrigin) < (fBlastRadius * 2))
+		if ( curr_wpt->distanceFrom(vOrigin) < (fBlastRadius*2) )
 		{
-			if ((fDist = (curr_wpt->distanceFrom(vSrc) + curr_wpt->distanceFrom(vOrigin))) < *pfMinDist)
+			if ( (fDist = (curr_wpt->distanceFrom(vSrc)+curr_wpt->distanceFrom(vOrigin))) < *pfMinDist )
 			{
 				bAdd = false;
-
-				if (bGetVisible == false)
+				
+				if ( bGetVisible == false )
 					bAdd = true;
 				else
 				{
-					bAdd = CBotGlobals::isVisible(vSrc, curr_wpt->getOrigin()) && CBotGlobals::isVisible(vOrigin, curr_wpt->getOrigin());
+					bAdd = CBotGlobals::isVisible(vSrc,curr_wpt->getOrigin()) && CBotGlobals::isVisible(vOrigin,curr_wpt->getOrigin());
 				}
-
-				if (bAdd)
+				
+				if ( bAdd )
 				{
 					*piIndex = iSelectedIndex;
 					*pfMinDist = fDist;
@@ -548,60 +551,60 @@ void CWaypointLocations::FindNearestBlastInBucket(int i, int j, int k, const Vec
 ///////////////////////////////////////////////
 //
 
-void CWaypointLocations::FindNearestInBucket(int i, int j, int k, const Vector& vOrigin,
-	float* pfMinDist, int* piIndex, int iIgnoreWpt,
-	bool bGetVisible, bool bGetUnReachable, bool bIsBot,
-	dataUnconstArray<int>* iFailedWpts, bool bNearestAimingOnly,
-	int iTeam, bool bCheckArea, bool bGetVisibleFromOther,
-	Vector vOther, int iFlagsOnly, edict_t* pPlayer)
-	// Search for the nearest waypoint : I.e.
-	// Find the waypoint that is closest to vOrigin from the distance pfMinDist
-	// And set the piIndex to the waypoint index if closer.
+void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vector &vOrigin,
+												float *pfMinDist, int *piIndex, int iIgnoreWpt, 
+												bool bGetVisible, bool bGetUnReachable, bool bIsBot, 
+												dataUnconstArray<int> *iFailedWpts, bool bNearestAimingOnly, 
+												int iTeam, bool bCheckArea, bool bGetVisibleFromOther, 
+												Vector vOther, int iFlagsOnly, edict_t *pPlayer )
+// Search for the nearest waypoint : I.e.
+// Find the waypoint that is closest to vOrigin from the distance pfMinDist
+// And set the piIndex to the waypoint index if closer.
 {
 	//dataStack <int> tempStack = m_iLocations[i][j][k];
 
-	CWaypoint* curr_wpt;
+	CWaypoint *curr_wpt;
 	int iSelectedIndex;
 	float fDist;
-	//	int iWptFlags;
+//	int iWptFlags;
 
 	trace_t tr;
-
+	
 	bool bAdd;
-	CBotMod* curmod = CBotGlobals::getCurrentMod();
-
-	dataUnconstArray<int>* arr = &(m_iLocations[i][j][k]);
-	short int size = static_cast<short int>(arr->Size());
-
-	for (int l = 0; l < size; l++)
-		//while ( !tempStack.IsEmpty() )
+	CBotMod *curmod = CBotGlobals::getCurrentMod();
+	
+	dataUnconstArray<int> *arr = &(m_iLocations[i][j][k]);
+	short int size = (short int)arr->Size();
+	
+	for ( int l = 0; l < size; l ++ )
+	//while ( !tempStack.IsEmpty() )
 	{
 		iSelectedIndex = arr->ReturnValueFromIndex(l);//tempStack.ChooseFromStack();
 
-		if (iSelectedIndex == iIgnoreWpt)
+		if ( iSelectedIndex == iIgnoreWpt )
 			continue;
-		if (g_iFailedWaypoints[iSelectedIndex] == 1)
+		if ( g_iFailedWaypoints[iSelectedIndex] == 1 )
 		{
-			g_iFailedWaypoints[iSelectedIndex] = 2; // flag this
+			g_iFailedWaypoints[iSelectedIndex] = 2; // flag this 
 			continue;
 		}
 
 		curr_wpt = CWaypoints::getWaypoint(iSelectedIndex);
 
-		if (!bGetUnReachable && curr_wpt->hasFlag(CWaypointTypes::W_FL_UNREACHABLE))
+		if ( !bGetUnReachable && curr_wpt->hasFlag(CWaypointTypes::W_FL_UNREACHABLE) )
 			continue;
 
-		if (!curr_wpt->isUsed())
+		if ( !curr_wpt->isUsed() )
 			continue;
 
-		if (bIsBot)
+		if ( bIsBot )
 		{
-			if (curr_wpt->hasFlag(CWaypointTypes::W_FL_OWNER_ONLY))
+			if ( curr_wpt->hasFlag(CWaypointTypes::W_FL_OWNER_ONLY) )
 			{
-				if (!curmod->isAreaOwnedByTeam(curr_wpt->getArea(), iTeam))
+				if ( !curmod->isAreaOwnedByTeam(curr_wpt->getArea(),iTeam) )
 					continue;
 			}
-			else if (!curr_wpt->forTeam(iTeam))
+			else if ( !curr_wpt->forTeam(iTeam) )
 			{
 				continue;
 			}
@@ -610,54 +613,53 @@ void CWaypointLocations::FindNearestInBucket(int i, int j, int k, const Vector& 
 		if (bCheckArea && !curmod->isWaypointAreaValid(curr_wpt->getArea(), curr_wpt->getFlags()))
 			continue;;
 
-		if (iFlagsOnly != 0)
+		if ( iFlagsOnly != 0 )
 		{
-			if (!curr_wpt->getFlags() || (!curr_wpt->hasSomeFlags(iFlagsOnly)))
+			if ( !curr_wpt->getFlags() || (!curr_wpt->hasSomeFlags(iFlagsOnly)) )
 				continue;
 		}
 
-		if (bIsBot)
+		if ( bIsBot )
 		{
-			if (curr_wpt->getFlags() & (CWaypointTypes::W_FL_DOUBLEJUMP | CWaypointTypes::W_FL_ROCKET_JUMP |
-				CWaypointTypes::W_FL_JUMP | CWaypointTypes::W_FL_OPENS_LATER)) // fix : bit OR
+			if ( curr_wpt->getFlags() & (CWaypointTypes::W_FL_DOUBLEJUMP | CWaypointTypes::W_FL_ROCKET_JUMP | CWaypointTypes::W_FL_JUMP | CWaypointTypes::W_FL_OPENS_LATER) ) // fix : bit OR
 				continue;
 		}
 
 		// Used to ignore waypoints where objects are e.g. Sentry guns
-		if (m_bIgnoreBox)
+		if ( m_bIgnoreBox )
 		{
 			Vector vcomp = curr_wpt->getOrigin() - vOrigin;
 			vcomp = vcomp / vcomp.Length();
-
-			if (curr_wpt->distanceFrom(m_vIgnoreLoc) < m_fIgnoreSize)
+			
+			if ( curr_wpt->distanceFrom(m_vIgnoreLoc) < m_fIgnoreSize )
 				continue;
-			else if (((vOrigin + (vcomp * ((vOther - vOrigin).Length()))) - vOther).Length() < m_fIgnoreSize)
+			else if ( ((vOrigin + (vcomp*((vOther-vOrigin).Length()))) - vOther).Length() < m_fIgnoreSize )
 				continue;
 		}
 
-		if ((fDist = curr_wpt->distanceFrom(vOrigin)) < *pfMinDist)
+		if ( (fDist = curr_wpt->distanceFrom(vOrigin)) < *pfMinDist )
 		{
 			bAdd = false;
-
-			if (bGetVisible == false)
+			
+			if ( bGetVisible == false )
 				bAdd = true;
 			else
 			{
-				if (bGetVisibleFromOther)
-					bAdd = CBotGlobals::isVisible(vOther, curr_wpt->getOrigin());
+				if ( bGetVisibleFromOther )
+					bAdd = CBotGlobals::isVisible(vOther,curr_wpt->getOrigin());
 				else
 				{
-					if (pPlayer != NULL)
+					if ( pPlayer != NULL )
 					{
-						CBotGlobals::quickTraceline(pPlayer, vOrigin, curr_wpt->getOrigin());
-						bAdd = CBotGlobals::getTraceResult()->fraction >= 1.0f;
+						CBotGlobals::quickTraceline(pPlayer,vOrigin,curr_wpt->getOrigin());
+						bAdd = CBotGlobals::getTraceResult()->fraction>=1.0f;
 					}
 					else
-						bAdd = CBotGlobals::isVisible(vOrigin, curr_wpt->getOrigin());
+						bAdd = CBotGlobals::isVisible(vOrigin,curr_wpt->getOrigin());
 				}
 			}
-
-			if (bAdd)
+			
+			if ( bAdd )
 			{
 				*piIndex = iSelectedIndex;
 				*pfMinDist = fDist;
@@ -668,65 +670,65 @@ void CWaypointLocations::FindNearestInBucket(int i, int j, int k, const Vector& 
 
 /////////////////////////////
 // get the nearest waypoint INDEX from an origin
-int CWaypointLocations::NearestWaypoint(const Vector& vOrigin, float fNearestDist,
-	int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable,
-	bool bIsBot, dataUnconstArray<int>* iFailedWpts,
-	bool bNearestAimingOnly, int iTeam, bool bCheckArea,
-	bool bGetVisibleFromOther, const Vector vOther, int iFlagsOnly,
-	edict_t* pPlayer, bool bIgnorevOther, float fIgnoreSize)
+int CWaypointLocations :: NearestWaypoint ( const Vector &vOrigin, float fNearestDist, 
+										   int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, 
+										   bool bIsBot, dataUnconstArray<int> *iFailedWpts, 
+										   bool bNearestAimingOnly, int iTeam, bool bCheckArea,
+										   bool bGetVisibleFromOther, Vector vOther, int iFlagsOnly, 
+										   edict_t *pPlayer, bool bIgnorevOther, float fIgnoreSize )
 {
 	int iNearestIndex = -1;
-
+	
 	int iLoc = READ_LOC(vOrigin.x);
 	int jLoc = READ_LOC(vOrigin.y);
 	int kLoc = READ_LOC(vOrigin.z);
 
-	int i, j, k;
+	int i,j,k;
 
-	int iMinLoci, iMaxLoci, iMinLocj, iMaxLocj, iMinLock, iMaxLock;
+	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
-	getMinMaxs(iLoc, jLoc, kLoc, &iMinLoci, &iMinLocj, &iMinLock, &iMaxLoci, &iMaxLocj, &iMaxLock);
+	getMinMaxs(iLoc,jLoc,kLoc,&iMinLoci,&iMinLocj,&iMinLock,&iMaxLoci,&iMaxLocj,&iMaxLock);
 
 	m_bIgnoreBox = bIgnorevOther;
 	m_vIgnoreLoc = vOther;
 	m_fIgnoreSize = fIgnoreSize;
 
-	if (!bNearestAimingOnly)
+	if ( !bNearestAimingOnly )
 	{
-		Q_memset(g_iFailedWaypoints, 0, sizeof(unsigned char) * CWaypoints::MAX_WAYPOINTS);
-
-		if (iFailedWpts)
-		{
+		Q_memset(g_iFailedWaypoints,0,sizeof(unsigned char)*CWaypoints::MAX_WAYPOINTS);
+		
+		if ( iFailedWpts )
+		{   
 			int iWpt;
-
-			for (int l = 0; l < iFailedWpts->Size(); l++)
+			
+			for ( int l = 0; l < iFailedWpts->Size(); l ++ )
 			{
-				if ((iWpt = (*iFailedWpts)[l]) != -1) //( (iWpt = tempStack.ChooseFromStack()) != -1 )
+				if ( (iWpt=(*iFailedWpts)[l]) != -1 ) //( (iWpt = tempStack.ChooseFromStack()) != -1 )
 					g_iFailedWaypoints[iWpt] = 1;
 			}
 		}
 	}
 
-	for (i = iMinLoci; i <= iMaxLoci; i++)
+	for ( i = iMinLoci; i <= iMaxLoci; i++ )
 	{
-		for (j = iMinLocj; j <= iMaxLocj; j++)
+		for ( j = iMinLocj; j <= iMaxLocj; j++ )
 		{
-			for (k = iMinLock; k <= iMaxLock; k++)
+			for ( k = iMinLock; k <= iMaxLock; k++ )
 			{
-				FindNearestInBucket(i, j, k, vOrigin, &fNearestDist, &iNearestIndex, iIgnoreWpt, bGetVisible, bGetUnReachable, bIsBot, iFailedWpts, bNearestAimingOnly, iTeam, bCheckArea, bGetVisibleFromOther, vOther, iFlagsOnly, pPlayer);
+				FindNearestInBucket(i,j,k,vOrigin,&fNearestDist,&iNearestIndex,iIgnoreWpt,bGetVisible,bGetUnReachable,bIsBot,iFailedWpts,bNearestAimingOnly,iTeam,bCheckArea,bGetVisibleFromOther,vOther,iFlagsOnly,pPlayer);
 			}
 		}
 	}
 
-	if (iFailedWpts)
-	{
+	if ( iFailedWpts )
+	{   
 		int iWpt;
-
-		for (int l = 0; l < iFailedWpts->Size(); l++)
+		
+		for ( int l = 0; l < iFailedWpts->Size(); l ++ )
 		{
-			if ((iWpt = (*iFailedWpts)[l]) != -1) //( (iWpt = tempStack.ChooseFromStack()) != -1 )
+			if ( (iWpt=(*iFailedWpts)[l]) != -1 ) //( (iWpt = tempStack.ChooseFromStack()) != -1 )
 			{
-				if (g_iFailedWaypoints[iWpt] == 2)
+				if ( g_iFailedWaypoints[iWpt] == 2 )
 				{
 					iFailedWpts->Remove(iWpt);
 				}
@@ -741,21 +743,21 @@ int CWaypointLocations::NearestWaypoint(const Vector& vOrigin, float fNearestDis
 
 //////////////////////////////////
 // Draw waypoints around a player
-void CWaypointLocations::DrawWaypoints(CClient* pClient, float fDist)
+void CWaypointLocations :: DrawWaypoints ( CClient *pClient, float fDist )
 {
-	static byte m_bPvs[MAX_MAP_CLUSTERS / 8];
+	static byte m_bPvs[MAX_MAP_CLUSTERS/8];
 	static int clusterIndex;
-	static dataUnconstArray<int>* arr;
+	static dataUnconstArray<int> *arr;
 	static short int size;
 	static int iWpt;
-	static CWaypoint* pWpt;
-	static int i, j, k;
+	static CWaypoint *pWpt;
+	static int i,j,k;
 	static Vector vWpt;
 	//static bool bDrawPaths;
 	static unsigned short int iDrawType;
 	static Vector vOrigin;
-	static edict_t* pEntity;
-	static int iMinLoci, iMaxLoci, iMinLocj, iMaxLocj, iMinLock, iMaxLock;
+	static edict_t *pEntity;
+	static int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
 	int iLoc = READ_LOC(vOrigin.x);
 	int jLoc = READ_LOC(vOrigin.y);
@@ -766,49 +768,50 @@ void CWaypointLocations::DrawWaypoints(CClient* pClient, float fDist)
 	//bDrawPaths = false;
 	iDrawType = pClient->getDrawType();
 
-	getMinMaxs(iLoc, jLoc, kLoc, &iMinLoci, &iMinLocj, &iMinLock, &iMaxLoci, &iMaxLocj, &iMaxLock);
+	getMinMaxs(iLoc,jLoc,kLoc,&iMinLoci,&iMinLocj,&iMinLock,&iMaxLoci,&iMaxLocj,&iMaxLock);
 
-	for (i = iMinLoci; i <= iMaxLoci; i++)
+
+	for ( i = iMinLoci; i <= iMaxLoci; i++ )
 	{
-		for (j = iMinLocj; j <= iMaxLocj; j++)
+		for ( j = iMinLocj; j <= iMaxLocj; j++ )
 		{
-			for (k = iMinLock; k <= iMaxLock; k++)
+			for ( k = iMinLock; k <= iMaxLock; k++ )
 			{
 				arr = &(m_iLocations[i][j][k]);
-				size = static_cast<short int>(arr->Size());
-
-				for (short int l = 0; l < size; l++)
-					//while ( !tempStack.IsEmpty() )
+				size = (short int)arr->Size();
+				
+				for ( short int l = 0; l < size; l ++ )
+				//while ( !tempStack.IsEmpty() )
 				{
 					iWpt = arr->ReturnValueFromIndex(l);//tempStack.ChooseFromStack();
 
 					pWpt = CWaypoints::getWaypoint(iWpt);//tempStack.ChooseFromStack());
 
-					if (!pWpt->isUsed()) // deleted
+					if ( !pWpt->isUsed() ) // deleted
 						continue;
 
-					if (!pClient->isShowingAllWaypoints())
+					if ( !pClient->isShowingAllWaypoints() )
 					{
-						if (pWpt->getFlags() == 0)
+						if ( pWpt->getFlags() == 0 )
 							continue; // hidden
-						else if (!pClient->isShowingWaypoint(pWpt->getFlags()))
+						else if ( !pClient->isShowingWaypoint(pWpt->getFlags()) )
 							continue;
 					}
 
 					vWpt = pWpt->getOrigin();
 
-					if (fabs(vWpt.z - vOrigin.z) <= 256.0) // also in z range
+					if ( fabs(vWpt.z - vOrigin.z) <= 256.0 ) // also in z range
 					{
 						//if ( CBotGlobals::FInViewCone(pEntity) )
 						{
 							// from Valve developer community wiki
 							// http://developer.valvesoftware.com/wiki/Transforming_the_Multiplayer_SDK_into_Coop
 
-							clusterIndex = engine->GetClusterForOrigin(vOrigin);
-							engine->GetPVSForCluster(clusterIndex, sizeof(m_bPvs), m_bPvs);
+							clusterIndex = engine->GetClusterForOrigin( vOrigin );
+							engine->GetPVSForCluster( clusterIndex, sizeof(m_bPvs), m_bPvs );							
 
-							if (engine->CheckOriginInPVS(vWpt, m_bPvs, sizeof(m_bPvs)))
-								pWpt->draw(pEntity, pClient->isPathWaypointOn() && (pClient->currentWaypoint() == iWpt), iDrawType);
+							if ( engine->CheckOriginInPVS( vWpt, m_bPvs, sizeof( m_bPvs ) ) )
+								pWpt->draw(pEntity,pClient->isPathWaypointOn()&&(pClient->currentWaypoint()==iWpt),iDrawType);
 						}
 					}
 				}
@@ -817,10 +820,10 @@ void CWaypointLocations::DrawWaypoints(CClient* pClient, float fDist)
 	}
 }
 
-void CWaypointLocations::AddWptLocation(CWaypoint* pWaypoint, int iIndex)
+void CWaypointLocations ::AddWptLocation (CWaypoint *pWaypoint, int iIndex)
 {
 	Vector vOrigin = pWaypoint->getOrigin();
 	float flOrigin[3] = { vOrigin.x, vOrigin.y, vOrigin.z };
 
-	AddWptLocation(iIndex, flOrigin);
+	AddWptLocation(iIndex,flOrigin);
 }

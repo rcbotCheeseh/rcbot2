@@ -38,20 +38,20 @@ class IIndividual
 {
 public:
 	// get fitness for this individual
-	inline ga_nn_value getFitness() { return m_fFitness; }
-	inline void setFitness(float fVal) { m_fFitness = fVal; }
+	inline ga_nn_value getFitness () { return m_fFitness; }
+	inline void setFitness ( float fVal ) { m_fFitness = fVal; }
 
 	// crossover with other individual
-	virtual void crossOver(IIndividual* other) = 0;
+	virtual void crossOver ( IIndividual *other ) = 0;
 
 	// mutate some values
-	virtual void mutate() = 0;
+	virtual void mutate () = 0;
 
 	// get new copy of this
 	// sub classes return their class with own values
-	virtual IIndividual* copy() = 0;
+	virtual IIndividual *copy () = 0;
 private:
-	ga_nn_value m_fFitness = 0;
+	ga_nn_value m_fFitness;
 };
 
 class CGA;
@@ -60,56 +60,56 @@ class CPopulation
 {
 public:
 
-	void freeMemory();
+	void freeMemory ();
 
-	inline void setGA(CGA* ga) { m_ga = ga; }
+	inline void setGA ( CGA *ga ) { m_ga = ga; }
 	// size of population
-	inline unsigned int size() { return m_theIndividuals.size(); };
+	inline unsigned int size () { return m_theIndividuals.size(); };
 
 	// get from population index
-	IIndividual* get(int iIndex);
+	IIndividual *get ( int iIndex );
 
 	// add individual to population
-	void add(IIndividual* individual);
+	void add ( IIndividual *individual );
 
-	void clear();
+	void clear ();
 
-	ga_nn_value totalFitness();
+	ga_nn_value totalFitness ();
 
-	ga_nn_value bestFitness();
+	ga_nn_value bestFitness ();
 
-	ga_nn_value averageFitness();
+	ga_nn_value averageFitness ();
 
 	// get back individual
-	IIndividual* pick();
+	IIndividual *pick ();
 
 private:
 	std::vector<IIndividual*> m_theIndividuals;
-	CGA* m_ga;
+	CGA *m_ga;
 };
 
 // selection function interface
 class ISelection
 {
 public:
-	virtual IIndividual* select(CPopulation* population) = 0;
+	virtual IIndividual *select ( CPopulation *population ) = 0;
 };
 
 class CRouletteSelection : public ISelection
 {
-	IIndividual* select(CPopulation* population) override;
+	IIndividual *select ( CPopulation *population );
 };
 
 class CGA
 {
 public:
 
-	CGA(int iMaxPopSize = 0)
+	CGA (int iMaxPopSize=0)
 	{
 		init(iMaxPopSize);
 	}
 
-	void init(int iMaxPopSize = 0)
+	void init (int iMaxPopSize=0)
 	{
 		m_theSelectFunction = new CRouletteSelection();
 
@@ -120,26 +120,26 @@ public:
 		m_fPrevAvgFitness = 0;
 
 		m_iMaxPopSize = iMaxPopSize;
-
-		if (m_iMaxPopSize == 0)
+		
+		if ( m_iMaxPopSize == 0 )
 			m_iMaxPopSize = g_iDefaultMaxPopSize;
 	}
 
 	// give GA a custom selection function
-	CGA(ISelection* selectFunction);
+	CGA ( ISelection *selectFunction );
 
 	void freeLocalMemory();
 	void freeGlobalMemory();
 
 	// make new generation
-	void epoch();
+	void epoch ();
 
-	void addToPopulation(IIndividual* individual);
+	void addToPopulation ( IIndividual *individual );
 
 	// can get an individual off new population
-	bool canPick();
+	bool canPick ();
 
-	IIndividual* pick();
+	IIndividual *pick ();
 
 	unsigned int m_iMaxPopSize;
 	static const int g_iDefaultMaxPopSize;
@@ -148,13 +148,13 @@ public:
 	static const float g_fMaxPerturbation;
 
 private:
-
+	
 	CPopulation m_thePopulation;
 	CPopulation m_theNewPopulation;
 
 	unsigned int m_iNumGenerations;
 	float m_fPrevAvgFitness;
 
-	ISelection* m_theSelectFunction;
+	ISelection *m_theSelectFunction;
 };
 #endif

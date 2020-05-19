@@ -39,7 +39,7 @@
 #include "bot_mods.h"
 #include "bot_fortress.h"
 
-const char* g_szUtils[BOT_UTIL_MAX + 1] =
+const char *g_szUtils[BOT_UTIL_MAX+1] =
 {
 	"BOT_UTIL_BUILDSENTRY",
 	"BOT_UTIL_BUILDDISP",
@@ -70,16 +70,16 @@ const char* g_szUtils[BOT_UTIL_MAX + 1] =
 	"BOT_UTIL_ATTACK_POINT",
 	"BOT_UTIL_DEFEND_POINT",
 	"BOT_UTIL_DEFEND_FLAG",
-	"BOT_UTIL_ENGI_LOOK_AFTER_SENTRY",
-	"BOT_UTIL_DEFEND_FLAG_LASTKNOWN",
-	"BOT_UTIL_PUSH_PAYLOAD_BOMB",
-	"BOT_UTIL_DEFEND_PAYLOAD_BOMB",
+    "BOT_UTIL_ENGI_LOOK_AFTER_SENTRY",
+    "BOT_UTIL_DEFEND_FLAG_LASTKNOWN",
+    "BOT_UTIL_PUSH_PAYLOAD_BOMB",
+    "BOT_UTIL_DEFEND_PAYLOAD_BOMB",
 	"BOT_UTIL_MEDIC_HEAL",
 	"BOT_UTIL_MEDIC_HEAL_LAST",
 	"BOT_UTIL_MEDIC_FINDPLAYER",
 	"BOT_UTIL_SAP_NEAREST_SENTRY",
-	"BOT_UTIL_SAP_ENEMY_SENTRY",
-	"BOT_UTIL_SAP_LASTENEMY_SENTRY",
+    "BOT_UTIL_SAP_ENEMY_SENTRY",
+    "BOT_UTIL_SAP_LASTENEMY_SENTRY",
 	"BOT_UTIL_SAP_DISP",
 	"BOT_UTIL_BACKSTAB",
 	"BOT_UTIL_REMOVE_SENTRY_SAPPER",
@@ -92,9 +92,9 @@ const char* g_szUtils[BOT_UTIL_MAX + 1] =
 	"BOT_UTIL_DEMO_STICKYTRAP_FLAG_LASTKNOWN",
 	"BOT_UTIL_DEMO_STICKYTRAP_PL",
 	"BOT_UTIL_REMOVE_TMTELE_SAPPER",
-	"BOT_UTIL_SAP_NEAREST_TELE",
-	"BOT_UTIL_SAP_ENEMY_TELE",
-	"BOT_UTIL_SAP_LASTENEMY_TELE",
+    "BOT_UTIL_SAP_NEAREST_TELE",
+    "BOT_UTIL_SAP_ENEMY_TELE",
+    "BOT_UTIL_SAP_LASTENEMY_TELE",
 	"BOT_UTIL_GOTO_NEST",
 	"BOT_UTIL_MESSAROUND",
 	 "BOT_UTIL_ENGI_MOVE_SENTRY",
@@ -149,7 +149,7 @@ const char* g_szUtils[BOT_UTIL_MAX + 1] =
 "BOT_UTIL_MAX"
 };
 
-CBotUtility::CBotUtility(CBot* pBot, eBotAction id, bool bCanDo, float fUtil, CBotWeapon* pWeapon, int iData, Vector vec)
+CBotUtility :: CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil, CBotWeapon *pWeapon, int iData, Vector vec )
 {
 	m_iData = iData;
 	m_fUtility = fUtil;
@@ -159,58 +159,58 @@ CBotUtility::CBotUtility(CBot* pBot, eBotAction id, bool bCanDo, float fUtil, CB
 	m_pWeapon = pWeapon;
 	m_vVector = vec;
 
-	if (m_pBot && m_pBot->isTF2())
+	if ( m_pBot && m_pBot->isTF2() )
 	{
 		int iClass = CClassInterface::getTF2Class(pBot->getEdict());
 
-		if (CTeamFortress2Mod::isAttackDefendMap() && (m_pBot->getTeam() == TF2_TEAM_BLUE))
-			m_fUtility += randomFloat(CRCBotTF2UtilFile::m_fUtils[BOT_ATT_UTIL][id][iClass].min, CRCBotTF2UtilFile::m_fUtils[BOT_ATT_UTIL][id][iClass].max);
+		if ( CTeamFortress2Mod::isAttackDefendMap() && (m_pBot->getTeam() == TF2_TEAM_BLUE) )
+			m_fUtility += randomFloat(CRCBotTF2UtilFile::m_fUtils[BOT_ATT_UTIL][id][iClass].min,CRCBotTF2UtilFile::m_fUtils[BOT_ATT_UTIL][id][iClass].max);
 		else
-			m_fUtility += randomFloat(CRCBotTF2UtilFile::m_fUtils[BOT_NORM_UTIL][id][iClass].min, CRCBotTF2UtilFile::m_fUtils[BOT_NORM_UTIL][id][iClass].max);
+			m_fUtility += randomFloat(CRCBotTF2UtilFile::m_fUtils[BOT_NORM_UTIL][id][iClass].min,CRCBotTF2UtilFile::m_fUtils[BOT_NORM_UTIL][id][iClass].max);
 	}
 }
 
 // Execute a list of possible actions and put them into order of available actions against utility
-void CBotUtilities::execute()
+void CBotUtilities :: execute ()
 {
 	unsigned int i = 0;
-	CBotUtility* pUtil;
+	CBotUtility *pUtil;
 	float fUtil;
 
-	util_node_t* temp;
-	util_node_t* pnew;
-	util_node_t* prev;
+	util_node_t *temp;
+	util_node_t *pnew;
+	util_node_t *prev;
 
 	m_pBest.head = NULL;
 
-	for (i = 0; i < m_Utilities.size(); i++)
+	for ( i = 0; i < m_Utilities.size(); i ++ )
 	{
 		pUtil = &(m_Utilities[i]);
 		fUtil = pUtil->getUtility();
 
 		// if bot can do this action
-		if (pUtil->canDo())
-		{
+		if ( pUtil->canDo() )
+		{			
 			// add to list
 			temp = m_pBest.head;
 
 			// put in correct order by making a linked list
-			pnew = static_cast<util_node_t*>(malloc(sizeof(util_node_t)));
+			pnew = (util_node_t*)malloc(sizeof(util_node_t));
 
-			if (pnew != NULL)
+			if ( pnew != NULL )
 			{
 				pnew->util = pUtil;
 				pnew->next = NULL;
 				prev = NULL;
 
-				if (temp)
+				if ( temp )
 				{
-					while (temp)
+					while ( temp )
 					{
 						// put into correct position
-						if (fUtil > temp->util->getUtility())
+						if ( fUtil > temp->util->getUtility() )
 						{
-							if (temp == m_pBest.head)
+							if ( temp == m_pBest.head )
 							{
 								pnew->next = temp;
 								m_pBest.head = pnew;
@@ -228,7 +228,7 @@ void CBotUtilities::execute()
 						temp = temp->next;
 					}
 
-					if (pnew->next == NULL)
+					if ( pnew->next == NULL )
 						prev->next = pnew;
 				}
 				else
@@ -240,26 +240,26 @@ void CBotUtilities::execute()
 	//return pBest;
 }
 
-void CBotUtilities::freeMemory()
+void CBotUtilities :: freeMemory ()
 {
-	util_node_t* temp;
+	util_node_t *temp;
 	m_Utilities.clear();
 
 	// FREE LIST
-	while ((temp = m_pBest.head) != NULL)
+	while ( (temp = m_pBest.head) != NULL )
 	{
 		temp = m_pBest.head;
 		m_pBest.head = m_pBest.head->next;
-		free(temp);
+		free(temp);		
 	}
 }
 
-CBotUtility* CBotUtilities::nextBest()
+CBotUtility *CBotUtilities :: nextBest ()
 {
-	CBotUtility* pBest;
-	util_node_t* temp;
+	CBotUtility *pBest;
+	util_node_t *temp;
 
-	if (m_pBest.head == NULL)
+	if ( m_pBest.head == NULL )
 		return NULL;
 
 	pBest = m_pBest.head->util;
@@ -271,4 +271,5 @@ CBotUtility* CBotUtilities::nextBest()
 	free(temp);
 
 	return pBest;
+	
 }

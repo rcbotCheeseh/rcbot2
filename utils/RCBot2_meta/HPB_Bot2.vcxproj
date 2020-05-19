@@ -27,19 +27,19 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NonHomeFolder|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -87,7 +87,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server;..\mmsource\core\;..\mmsource\core\sourcehook\;..\mmsource\public\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\alliedmodders\hl2sdk-orangebox\public\mathlib;..\..\alliedmodders\hl2sdk-orangebox\public;..\..\alliedmodders\hl2sdk-orangebox\public\engine;..\..\alliedmodders\hl2sdk-orangebox\public\tier0;..\..\alliedmodders\hl2sdk-orangebox\public\tier1;..\..\alliedmodders\hl2sdk-orangebox\game\shared;..\..\alliedmodders\hl2sdk-orangebox\game\server;..\..\alliedmodders\hl2sdk-orangebox\public\game\server;..\..\alliedmodders\mmsource-1.10\core\;..\..\alliedmodders\mmsource-1.10\core\sourcehook\;..\..\alliedmodders\mmsource-1.10\public\;..\..\sm_ext\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SOURCE_ENGINE=4;WIN32;_DEBUG;_WINDOWS;HOMEFOLDER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>

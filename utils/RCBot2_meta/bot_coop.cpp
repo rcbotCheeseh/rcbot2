@@ -6,43 +6,43 @@
 
 #include "vstdlib/random.h" // for random functions
 
-void CBotCoop::modThink()
+
+void CBotCoop :: modThink ()
 {
 	// find enemies and health stations / objectives etc
 }
 
-bool CBotCoop::isEnemy(edict_t* pEdict, bool bCheckWeapons)
+bool CBotCoop :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 {
-	extern ConVar rcbot_notarget;
+	const char *classname;
 
-	if (ENTINDEX(pEdict) == 0)
-		return false;
-	// if no target on - listen sever player is a non target
-	if (rcbot_notarget.GetBool())
+	if ( ENTINDEX(pEdict) == 0 ) 
 		return false;
 
-	// not myself
-	if (pEdict == m_pEdict)
-		return false;
 	// no shooting players
-	if (ENTINDEX(pEdict) <= CBotGlobals::maxClients())
+	if ( ENTINDEX(pEdict) <= CBotGlobals::maxClients() )
 	{
 		return false;
 	}
 
-	const char* szclassname = pEdict->GetClassName();
+	classname = pEdict->GetClassName();
 
-	// todo: filter NPCs
-	if (strncmp(szclassname, "npc_", 4) == 0)
+	if ( strncmp(classname,"npc_",4) == 0 )
 	{
-		CClients::clientDebugMsg(this, BOT_DEBUG_EDICTS, "IsEnemy found NPC: %s", szclassname);
+		if ( !strcmp(classname,"npc_antlionguard") || !strcmp(classname,"npc_citizen") || 
+			 !strcmp(classname,"npc_barney") || !strcmp(classname,"npc_kliener") || !strcmp(classname,"npc_alyx") )
+		{
+			return false; // ally
+		}
+
 		return true;
 	}
 
 	return false;
 }
 
-bool CBotCoop::startGame()
+bool CBotCoop :: startGame ()
 {
 	return true;
 }
+

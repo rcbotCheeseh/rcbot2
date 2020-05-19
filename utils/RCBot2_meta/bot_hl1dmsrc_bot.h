@@ -31,26 +31,26 @@
 #ifndef __HL1DMSRC_RCBOT_H__
 #define __HL1DMSRC_RCBOT_H__
 
- // bot for HLDM
+// bot for HLDM
 class CHL1DMSrcBot : public CBot
 {
 public:
 
-	bool isHL1DMSrc() { return true; }
+	bool isHL1DMSrc () { return true; }
 
-	void modThink() override;
+	void modThink ();
 
-	void init();
-	void setup() override;
+	void init ();
+	void setup ();
 
-	bool startGame() override;
+	bool startGame ();
 
-	void died(edict_t* pKiller);
-	void killed(edict_t* pVictim);
+	void died ( edict_t *pKiller );
+	void killed ( edict_t *pVictim );
 
-	void spawnInit() override;
+	void spawnInit ();
 
-	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
+	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true );
 private:
 	// blah blah
 };

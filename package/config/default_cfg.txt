@@ -1,0 +1,146 @@
+This is used as a backup in case your RCBot2 Profile Tools replaces the old config.ini
+
+######### General Settings ########
+#
+# General difficulty of the bots. 0.5 = stock, < 0.5 easier, > 0.5 = harder
+rcbot_skill 0.8
+#
+# If set to 1 will make every bot skill and reaction much higher
+rcbot_supermode 0
+#
+# The time in seconds for bots to be added after another
+rcbot_addbottime 3
+#
+# Free for all mode -- bots shoot everyone
+rcbot_ffa 0
+#
+# If 1 , bots will all move forward
+rcbot_dontmove 0
+#
+# Rate for bots to defend
+rcbot_defrate 0.24
+#
+# Smaller number will make bots turn slower (1 = instant turn but may overshoot)
+rcbot_anglespeed 0.25
+#
+# Radius in units for bots to avoid things
+rcbot_avoid_radius 80
+#
+# Strength of avoidance (0 = disable)
+rcbot_avoid_strength 100
+#
+# (0 = no smoothing)
+rcbot_aimsmoothing 1
+#
+# Bots change classes at random intervals
+rcbot_change_classes 1
+#
+# Enable/disable bots taunting
+rcbot_taunt 0
+#
+# Bots mess around at start up
+rcbot_messaround 1
+#
+# If 1 bots will only use melee weapons
+rcbot_melee_only 0
+#
+# Minimum time for bots to consider changing class (seconds)
+rcbot_min_cc_time 60
+#
+# Maximum time for bots to consider changing class (seconds)
+rcbot_max_cc_time 240
+#
+# Bots use voice commands e.g. medic/spy etc
+rcbot_voice_cmds 1
+#
+# Minimum distance to move objects to
+rcbot_move_dist 800
+#
+# Function will hook only once, if 0 it will unhook and rehook after every map
+rcbot_runplayer_hookonce 1
+#
+# Show welcome message on player connect
+rcbot_show_welcome_msg 1
+#
+######## TF2 Settings ########
+#
+# Debug command : allow spy bots to cloak and disguise
+rcbot_tf2_debug_spies_cloakdisguise 1
+#
+# Time for medic to let go of medigun to switch players
+rcbot_tf2_medic_letgotime 0.5
+#
+# Time that the bots will spend more attention to the cap point if attacked
+rcbot_tf2_prot_cap_time 12.5
+#
+# The percentage (0.25 = 25%) that bots defend the capture point by standing on the point
+rcbot_tf2_protect_cap_percent 0.25
+#
+# The distance for spy bots to attack players capturing a point
+rcbot_tf2_spy_kill_on_cap_dist 200.0
+#
+# Time to automatically update points in TF2 for any changes
+rcbot_tf2_autoupdate_point_time 60
+#
+# Distance for payload bomb to be greater than at cap before defend team retreats
+rcbot_tf2_payload_dist_retreat 512.0
+#
+# Health which spies run away after attacking
+rcbot_spy_runaway_health 70
+#
+# Fraction of how much the heavy aims at a diagonal offset
+rcbot_heavyaimoffset 0.1
+#
+# Seconds for bots to start thinking about moving sentries
+rcbot_move_sentry_time 120
+#
+# kpm = kills per minute, if less than this, bots will think about moving the sentry
+rcbot_move_sentry_kpm 1
+#
+# Seconds for bots to start thinking about moving dispensers
+rcbot_move_disp_time 120
+#
+# If dispenser heals less than this per minute, bot will move the dispensers
+rcbot_move_disp_healamount 100
+#
+# Seconds for bots to start thinking about moving teleporters
+rcbot_move_tele_time 120
+#
+# If no of players teleported per minute is less than this, bot will move the teleport
+rcbot_move_tele_tpm 1
+#
+# Time scout uses to double jump
+rcbot_scoutdj 0.5
+#
+# Time for soldier to fire rocket after jumping
+rcbot_rj 0.01
+#
+# If 1 bots can use custom weapons (broken
+rcbot_customloadouts 0
+#
+# If 1 rcbot engineers will move objects around
+rcbot_move_obj 1
+#
+# Allow bots to equip a random hat (unstable)
+rcbot_equiphats 0
+#
+# To enable "Auto Bot Quota" set the interval to a value above 0 (e.g. 5) (unit is seconds)
+# This interval is used to check the human/bot player count
+# For more information see bot_quota.ini
+rcbot_bot_quota_interval 10
+#
+# Or use these settings (but dont use them together with the above setting!)
+rcbotd config min_bots 0
+rcbotd config max_bots 12
+#
+# ADVANCED!! Those are complicated but are required for the bots to use those offsets
+rcbot_const_mstr_offset 876
+rcbot_const_round_offset 876
+#
+# This plugin blocks the TF2 bots from spawning. Please inform us for any plugins that
+# conflicts or prevents RCBot2 from working in rcbot.bots-united.com
+#
+sm plugins unload smac_cvars.smx
+#
+# This is a TF2 lag bot prevention fix that prevents causing rcbots to crash
+sv_quota_stringcmdspersecond 99999

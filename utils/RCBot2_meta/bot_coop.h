@@ -36,11 +36,11 @@
 class CBotCoop : public CBot
 {
 public:
-	void modThink() override;
+	virtual void modThink ();
 
-	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
+	virtual bool isEnemy ( edict_t *pEdict, bool bCheckWeapons = true  );
 
-	bool startGame() override;
+	virtual bool startGame ();
 };
 
 #endif

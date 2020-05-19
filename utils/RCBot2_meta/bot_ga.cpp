@@ -30,47 +30,49 @@
  */
 
 #include "bot_mtrand.h"
+
 #include "bot.h"
 #include "bot_ga.h"
 #include "bot_globals.h"
 
-const int CGA::g_iDefaultMaxPopSize = 16;
-const float CGA::g_fCrossOverRate = 0.7f;
-const float CGA::g_fMutateRate = 0.1f;
-const float CGA::g_fMaxPerturbation = 0.3f;
+
+const int CGA :: g_iDefaultMaxPopSize = 16;
+const float CGA :: g_fCrossOverRate = 0.7f;
+const float CGA :: g_fMutateRate = 0.1f;
+const float CGA :: g_fMaxPerturbation = 0.3f;
 
 ////////////////////
 // POPULATION
 ////////////////////
 
-IIndividual* CPopulation::get(const int iIndex)
+IIndividual *CPopulation :: get ( int iIndex )
 {
 	return m_theIndividuals[iIndex];
 }
 
-void CPopulation::add(IIndividual* individual)
-{
+void CPopulation :: add ( IIndividual *individual )
+{	
 	m_theIndividuals.push_back(individual);
 }
 
-void CPopulation::freeMemory()
+void CPopulation :: freeMemory ()
 {
-	for (unsigned int i = 0; i < m_theIndividuals.size(); i++)
+	for ( unsigned int i = 0; i < m_theIndividuals.size(); i ++ )
 		delete m_theIndividuals[i];
 
 	m_theIndividuals.clear();
 }
 
-void CPopulation::clear()
+void CPopulation :: clear ()
 {
 	m_theIndividuals.clear();
 }
 
-ga_nn_value CPopulation::totalFitness()
+ga_nn_value CPopulation :: totalFitness ()
 {
 	float fTotalFitness = 0.0f;
 
-	for (unsigned int i = 0; i < size(); i++)
+	for ( unsigned int i = 0; i < size(); i ++ )
 	{
 		fTotalFitness += m_theIndividuals[i]->getFitness();
 	}
@@ -78,17 +80,17 @@ ga_nn_value CPopulation::totalFitness()
 	return fTotalFitness;
 }
 
-ga_nn_value CPopulation::bestFitness()
+ga_nn_value CPopulation :: bestFitness ()
 {
 	float fFitness = 0.0f;
 	BOOL gotBestFitness = FALSE;
 	float fBestFitness = 0.0f;
 
-	for (unsigned int i = 0; i < size(); i++)
+	for ( unsigned int i = 0; i < size(); i ++ )
 	{
 		fFitness = m_theIndividuals[i]->getFitness();
 
-		if (!gotBestFitness || (fFitness > fBestFitness))
+		if ( !gotBestFitness || (fFitness > fBestFitness) )
 		{
 			fBestFitness = fFitness;
 			gotBestFitness = TRUE;
@@ -98,14 +100,14 @@ ga_nn_value CPopulation::bestFitness()
 	return fBestFitness;
 }
 
-ga_nn_value CPopulation::averageFitness()
+ga_nn_value CPopulation :: averageFitness ()
 {
-	return totalFitness() / m_theIndividuals.size();
+	return totalFitness()/m_theIndividuals.size();
 }
 
-IIndividual* CPopulation::pick()
+IIndividual *CPopulation :: pick ()
 {
-	IIndividual* to_return = m_theIndividuals.back();
+	IIndividual *to_return = m_theIndividuals.back();
 
 	m_theIndividuals.pop_back();
 
@@ -116,45 +118,45 @@ IIndividual* CPopulation::pick()
 // GENETIC ALGORITHM
 ////////////////////
 
-CGA::CGA(ISelection* selectFunction) : m_theSelectFunction(selectFunction)
+CGA :: CGA (ISelection *selectFunction) : m_theSelectFunction (selectFunction)
 {
 	init();
 	m_thePopulation.clear();
 	m_theNewPopulation.clear();
 }
 
-void CGA::addToPopulation(IIndividual* individual)
+void CGA :: addToPopulation ( IIndividual *individual )
 {
 	m_thePopulation.add(individual);
 
-	if (m_thePopulation.size() >= m_iMaxPopSize)
+	if ( m_thePopulation.size() >= m_iMaxPopSize )
 	{
 		epoch();
 		m_thePopulation.freeMemory();
 	}
 }
 
-void CGA::epoch()
+void CGA :: epoch ()
 {
 	m_theNewPopulation.freeMemory();
 
-	while (m_theNewPopulation.size() < m_iMaxPopSize)
+	while ( m_theNewPopulation.size() < m_iMaxPopSize )
 	{
-		IIndividual* mum = m_theSelectFunction->select(&m_thePopulation);
-		IIndividual* dad = m_theSelectFunction->select(&m_thePopulation);
+		IIndividual *mum = m_theSelectFunction->select(&m_thePopulation);
+		IIndividual *dad = m_theSelectFunction->select(&m_thePopulation);
 
-		IIndividual* baby1 = mum->copy();
-		IIndividual* baby2 = dad->copy();
+		IIndividual *baby1 = mum->copy();
+		IIndividual *baby2 = dad->copy();
 
-		if (randomFloat(0, 1) < g_fCrossOverRate)
+		if ( randomFloat(0,1) < g_fCrossOverRate )	
 			baby1->crossOver(baby2);
 
 		baby1->mutate();
 		baby2->mutate();
-
+		
 		m_theNewPopulation.add(baby1);
 		m_theNewPopulation.add(baby2);
-	}
+	}	
 
 	m_iNumGenerations++;
 
@@ -172,26 +174,26 @@ void CGA::epoch()
 	m_fPrevAvgFitness = fCurAvgFitness;
 }
 
-void CGA::freeLocalMemory()
+void CGA :: freeLocalMemory ()
 {
 	m_thePopulation.freeMemory();
 	m_theNewPopulation.freeMemory();
 	m_iNumGenerations = 0;
 }
 
-void CGA::freeGlobalMemory()
+void CGA :: freeGlobalMemory ()
 {
 	freeLocalMemory();
 	delete m_theSelectFunction;
 	m_theSelectFunction = NULL;
 }
 
-bool CGA::canPick()
+bool CGA :: canPick ()
 {
 	return (m_theNewPopulation.size() > 0);
 }
 
-IIndividual* CGA::pick()
+IIndividual *CGA :: pick ()
 {
 	return m_theNewPopulation.pick();
 }
@@ -200,18 +202,18 @@ IIndividual* CGA::pick()
 // SELECTION
 ///////////////
 
-IIndividual* CRouletteSelection::select(CPopulation* population)
+IIndividual *CRouletteSelection :: select ( CPopulation *population )
 {
-	ga_nn_value fFitnessSlice = randomFloat(0, population->totalFitness());
+	ga_nn_value fFitnessSlice = randomFloat(0,population->totalFitness());
 	ga_nn_value fFitnessSoFar = 0.0f;
 
-	for (unsigned int i = 0; i < population->size(); i++)
+	for ( unsigned int i = 0; i < population->size(); i ++ )
 	{
-		IIndividual* individual = population->get(i);
+		IIndividual *individual = population->get(i);
 
 		fFitnessSoFar += individual->getFitness();
 
-		if (fFitnessSoFar >= fFitnessSlice)
+		if ( fFitnessSoFar >= fFitnessSlice )
 			return individual;
 	}
 

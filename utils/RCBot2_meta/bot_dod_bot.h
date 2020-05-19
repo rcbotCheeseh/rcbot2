@@ -42,12 +42,12 @@
 class CBroadcastBombEvent : public IBotFunction
 {
 public:
-	CBroadcastBombEvent(int iEvent, int iCP, int iTeam)
-	{
-		m_iEvent = iEvent; m_iCP = iCP; m_iTeam = iTeam;
+	CBroadcastBombEvent ( int iEvent, int iCP, int iTeam ) 
+	{ 
+		m_iEvent = iEvent; m_iCP = iCP; m_iTeam = iTeam; 
 	};
 
-	void execute(CBot* pBot) override;
+	void execute (CBot *pBot);
 private:
 	int m_iCP;
 	int m_iTeam;
@@ -56,30 +56,30 @@ private:
 
 typedef enum
 {
-	DOD_VC_GOGOGO = 0,
+   DOD_VC_GOGOGO = 0,
 	DOD_VC_YES = 1,
 	DOD_VC_DROPWEAP = 2,
-	DOD_VC_HOLD = 3,
+    DOD_VC_HOLD = 3,
 	DOD_VC_NO = 4,
 	DOD_VC_DISPLACE = 5,
-	DOD_VC_GO_LEFT = 6,
-	DOD_VC_NEED_BACKUP = 7,
+    DOD_VC_GO_LEFT = 6,
+    DOD_VC_NEED_BACKUP = 7,
 	DOD_VC_MGAHEAD = 8,
-	DOD_VC_GO_RIGHT = 9,
-	DOD_VC_FIRE_IN_THE_HOLE = 10,
-	DOD_VC_ENEMY_BEHIND = 11,
-	DOD_VC_STICK_TOGETHER = 12,
+    DOD_VC_GO_RIGHT = 9,
+    DOD_VC_FIRE_IN_THE_HOLE =10,
+    DOD_VC_ENEMY_BEHIND = 11,
+    DOD_VC_STICK_TOGETHER = 12,
 	DOD_VC_USE_GRENADE = 13,
 	DOD_VC_ENEMY_DOWN = 14,
-	DOD_VC_COVERING_FIRE = 15,
-	DOD_VC_SNIPER = 16,
-	DOD_VC_NEED_MG = 17,
-	DOD_VC_SMOKE = 18,
-	DOD_VC_NICE_SHOT = 19,
-	DOD_VC_NEED_AMMO = 20,
-	DOD_VC_GRENADE2 = 21,
-	DOD_VC_THANKS = 22,
-	DOD_VC_USE_BAZOOKA = 23,
+    DOD_VC_COVERING_FIRE = 15,
+    DOD_VC_SNIPER = 16,
+    DOD_VC_NEED_MG = 17,
+    DOD_VC_SMOKE = 18,
+    DOD_VC_NICE_SHOT = 19,
+    DOD_VC_NEED_AMMO = 20,
+    DOD_VC_GRENADE2 = 21,
+    DOD_VC_THANKS = 22,
+    DOD_VC_USE_BAZOOKA = 23,
 	DOD_VC_CEASEFIRE = 24,
 	DOD_VC_AREA_CLEAR = 25,
 	DOD_VC_BAZOOKA = 26,
@@ -89,17 +89,17 @@ typedef enum
 typedef struct
 {
 	eDODVoiceCMD id;
-	char* pcmd;
+	char *pcmd;
 }eDODVoiceCommand_t;
 
 typedef enum
 {
-	DOD_CLASS_RIFLEMAN = 0,
-	DOD_CLASS_ASSAULT,
-	DOD_CLASS_SUPPORT,
-	DOD_CLASS_SNIPER,
-	DOD_CLASS_MACHINEGUNNER,
-	DOD_CLASS_ROCKET
+ DOD_CLASS_RIFLEMAN = 0,
+ DOD_CLASS_ASSAULT,
+ DOD_CLASS_SUPPORT,
+ DOD_CLASS_SNIPER,
+ DOD_CLASS_MACHINEGUNNER,
+ DOD_CLASS_ROCKET
 }DOD_Class;
 
 #define DOD_BOMB_STATE_UNAVAILABLE 0
@@ -131,109 +131,109 @@ public:
 
 	CDODBot();
 
-	bool isDOD() override { return true; }
+	bool isDOD () { return true; }
 
-	bool withinTeammate();
+	bool withinTeammate ( );
 
-	bool hasBomb() { return m_bHasBomb; }
-	void removeBomb() { m_bHasBomb = false; }
-	void bombEvent(int iEvent, int iCP, int iTeam);
+	bool hasBomb () { return m_bHasBomb; }
+	void removeBomb () { m_bHasBomb = false; }
+	void bombEvent ( int iEvent, int iCP, int iTeam );
 
-	void friendlyFire(edict_t* pEdict) override;
+	void friendlyFire ( edict_t *pEdict );
 
-	void modThink() override;
+	void modThink ();
 
-	void init(bool bVarInit = false) override;
-	void setup() override;
+	virtual void init (bool bVarInit=false);
+	void setup ();
 
-	void freeMapMemory() override;
+	virtual void freeMapMemory ();
 
 	//Vector getAimVector ( edict_t *pEntity );
-	void modAim(edict_t* pEntity, Vector& v_origin,
-		Vector* v_desired_offset, Vector& v_size,
-		float fDist, float fDist2D) override;
+	virtual void modAim ( edict_t *pEntity, Vector &v_origin, 
+		Vector *v_desired_offset, Vector &v_size,
+		float fDist, float fDist2D);
 
-	bool startGame() override;
+	bool startGame ();
 
-	void died(edict_t* pKiller, const char* pszWeapon) override;
-	void killed(edict_t* pVictim, char* weapon) override;
+	void died ( edict_t *pKiller, const char *pszWeapon );
+	void killed ( edict_t *pVictim, char *weapon );
 
-	void spawnInit() override;
+	void spawnInit ();
 
-	float getEnemyFactor(edict_t* pEnemy) override;
+	float getEnemyFactor ( edict_t *pEnemy );
 
-	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
+	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true );
 
-	float getArmorPercent() { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
+	float getArmorPercent () { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
 
-	void getTasks(unsigned int iIgnore) override;
+	void getTasks (unsigned int iIgnore);
 
-	bool executeAction(CBotUtility* util);
+	bool executeAction ( CBotUtility *util );
 
-	void updateConditions() override;
+	void updateConditions ();
 
-	void selectedClass(int iClass);
+	void selectedClass ( int iClass );
 
-	bool setVisible(edict_t* pEntity, bool bVisible) override;
+	bool setVisible ( edict_t *pEntity, bool bVisible );
 
-	bool select_CWeapon(CWeapon* pWeapon) override;
+	bool select_CWeapon ( CWeapon *pWeapon );
 
-	bool selectBotWeapon(CBotWeapon* pBotWeapon) override;
+	bool selectBotWeapon ( CBotWeapon *pBotWeapon );
 
-	bool canGotoWaypoint(Vector vPrevWaypoint, CWaypoint* pWaypoint, CWaypoint* pPrev = NULL) override;
+	bool canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL);
 
-	void defending() override;
+	void defending ();
 
-	bool handleAttack(CBotWeapon* pWeapon, edict_t* pEnemy) override;
+	bool handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy );
 
-	void hearVoiceCommand(edict_t* pPlayer, byte cmd) override;
+	void hearVoiceCommand ( edict_t *pPlayer, byte cmd );
 
-	void handleWeapons() override;
+	void handleWeapons ();
 
-	void reachedCoverSpot(int flags) override;
+	void reachedCoverSpot (int flags);
 
-	void touchedWpt(CWaypoint* pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1) override;
+	void touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1 );
 
-	bool checkStuck() override;
+	bool checkStuck ();
 
-	bool hasMG();
-	CBotWeapon* getMG();
-	CBotWeapon* getSniperRifle();
-	bool hasSniperRifle();
+	bool hasMG ();
+	CBotWeapon *getMG();
+	CBotWeapon *getSniperRifle ();
+	bool hasSniperRifle ();
 
-	void voiceCommand(int cmd) override;
+	void voiceCommand ( int cmd );
 
-	unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
+	virtual unsigned int maxEntityIndex ( ) { return gpGlobals->maxEntities; }
 
-	void seeFriendlyDie(edict_t* pDied, edict_t* pKiller, CWeapon* pKillerWeapon) override;
-	void seeFriendlyKill(edict_t* pTeamMate, edict_t* pDied, CWeapon* pWeapon) override;
+	void seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pKillerWeapon );
+	void seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *pWeapon );
 
-	bool isVisibleThroughSmoke(edict_t* pSmoke, edict_t* pCheck);
+	bool isVisibleThroughSmoke ( edict_t *pSmoke, edict_t *pCheck );
 
-	void grenadeThrown() override { addVoiceCommand(DOD_VC_FIRE_IN_THE_HOLE); }
+	void grenadeThrown () { addVoiceCommand(DOD_VC_FIRE_IN_THE_HOLE); }
 
-	void chooseClass(bool bIsChangingClass); // updates m_iDesiredClass
+	void chooseClass( bool bIsChangingClass ); // updates m_iDesiredClass
 	void changeClass(); // uses m_iDesiredClass
 
-	void setNearestBomb(edict_t* pBomb) { m_pNearestBomb = pBomb; }
-	void prone();
+	void setNearestBomb ( edict_t *pBomb ) { m_pNearestBomb = pBomb; }
+	void prone ();
 	void unProne();
 
-	bool wantToListenToPlayerAttack(edict_t* pPlayer, int iWeaponID = -1) override;
+	bool wantToListenToPlayerAttack ( edict_t *pPlayer, int iWeaponID = -1);
 
-	bool walkingTowardsWaypoint(CWaypoint* pWaypoint, bool* bOffsetApplied, Vector& vOffset) override;
+	bool walkingTowardsWaypoint ( CWaypoint *pWaypoint, bool *bOffsetApplied, Vector &vOffset );
 
-	void listenForPlayers() override;
+	void listenForPlayers ();
 
-	void signal(const char* signal);
+	void signal ( const char *signal );
 
-	void sayInPosition() override;
+	void sayInPosition ();
 
-	void sayMoveOut() override;
+	void sayMoveOut ();
 
-	void areaClear() override;
+	void areaClear();
 
-	void dropAmmo();
+	void dropAmmo ();
 
 private:
 
@@ -241,7 +241,7 @@ private:
 
 	MyEHandle m_pCurrentWeapon;
 
-	CBaseHandle* m_Weapons;
+	CBaseHandle *m_Weapons;
 
 	float m_fFixWeaponTime;
 	float m_flSprintTime;
@@ -284,7 +284,7 @@ private:
 	MyEHandle m_pNearestBreakable;
 	MyEHandle m_pNearestWeapon;
 
-	CPerceptron* m_pWantToProne;
+	CPerceptron *m_pWantToProne;
 
 	float m_fLastRunForCover;
 

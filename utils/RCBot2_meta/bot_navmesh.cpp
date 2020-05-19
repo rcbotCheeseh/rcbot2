@@ -32,41 +32,41 @@
 #include <stdlib.h>
 #include "bot_navigator.h"
 
- //#include "nav_mesh.h"
+//#include "nav_mesh.h"
 
-bool CNavMeshNavigator::workRoute(Vector vFrom, Vector vTo, bool* bFail, bool bRestart, bool bNoInterruptions, int iGoalId, int iConditions, int iDangerId)
+bool CNavMeshNavigator :: workRoute ( Vector vFrom, Vector vTo, bool *bFail, bool bRestart, bool bNoInterruptions, int iGoalId, int iConditions, int iDangerId )
 {
 	return true;
 }
 
-Vector CNavMeshNavigator::getNextPoint()
+Vector CNavMeshNavigator :: getNextPoint ()
 {
-	return Vector(0, 0, 0);
+	return Vector(0,0,0);
 }
 
-void CNavMeshNavigator::updatePosition()
-{
-}
-
-void CNavMeshNavigator::freeMapMemory()
+void CNavMeshNavigator :: updatePosition ()
 {
 }
 
-void CNavMeshNavigator::freeAllMemory()
+void CNavMeshNavigator :: freeMapMemory ()
 {
 }
 
-bool CNavMeshNavigator::routeFound()
+void CNavMeshNavigator :: freeAllMemory ()
 {
-	return false;
 }
 
-bool CNavMeshNavigator::hasNextPoint()
+bool CNavMeshNavigator :: routeFound ()
 {
 	return false;
 }
 
-void CNavMeshNavigator::init()
+bool CNavMeshNavigator :: hasNextPoint ()
+{
+	return false;
+}
+
+void CNavMeshNavigator :: init ()
 {
 	//m_theNavMesh->Reset();
 }

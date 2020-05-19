@@ -31,21 +31,21 @@
 #ifndef __RCBOT_EHANDLE_H__
 #define __RCBOT_EHANDLE_H__
 
- ////// entity handling in network
-class MyEHandle
+////// entity handling in network
+class MyEHandle 
 {
 public:
-	MyEHandle()
+	MyEHandle ()
 	{
 		m_pEnt = NULL;
 		m_iSerialNumber = 0;
 	}
 
-	MyEHandle(edict_t* pent)
+    MyEHandle ( edict_t *pent )
 	{
 		m_pEnt = pent;
 
-		if (pent)
+		if ( pent )
 		{
 			m_iSerialNumber = pent->m_NetworkSerialNumber;
 		}
@@ -53,60 +53,60 @@ public:
 			m_iSerialNumber = 0;
 	}
 
-	inline bool notValid() { return get() == NULL; }
-	inline bool isValid() { return get() != NULL; }
+	inline bool notValid () { return get() == NULL; }
+	inline bool isValid () { return get() != NULL; }
 
-	inline edict_t* get()
+	inline edict_t *get ()
 	{
-		if (m_iSerialNumber && m_pEnt)
+		if ( m_iSerialNumber && m_pEnt )
 		{
-			if (!m_pEnt->IsFree() && (m_iSerialNumber == m_pEnt->m_NetworkSerialNumber))
+			if ( !m_pEnt->IsFree() && (m_iSerialNumber == m_pEnt->m_NetworkSerialNumber) )
 				return m_pEnt;
 		}
-		else if (m_pEnt)
+		else if ( m_pEnt )
 			m_pEnt = NULL;
 
 		return NULL;
 	}
 
-	inline edict_t* get_old()
+	inline edict_t *get_old ()
 	{
 		return m_pEnt;
 	}
 
-	inline operator edict_t* const ()
+	inline operator edict_t * const ()
 	{ // same as get function (inlined for speed)
-		if (m_iSerialNumber && m_pEnt)
+		if ( m_iSerialNumber && m_pEnt )
 		{
-			if (!m_pEnt->IsFree() && (m_iSerialNumber == m_pEnt->m_NetworkSerialNumber))
+			if ( !m_pEnt->IsFree() && (m_iSerialNumber == m_pEnt->m_NetworkSerialNumber) )
 				return m_pEnt;
 		}
-		else if (m_pEnt)
+		else if ( m_pEnt )
 			m_pEnt = NULL;
 
 		return NULL;
 	}
 
-	inline bool operator == (int a)
+	inline bool operator == ( int a )
 	{
-		return (reinterpret_cast<int>(get()) == a);
+		return ((int)get() == a);
 	}
 
-	inline bool operator == (edict_t* pent)
+	inline bool operator == ( edict_t *pent )
 	{
 		return (get() == pent);
 	}
 
-	inline bool operator == (MyEHandle& other)
+	inline bool operator == ( MyEHandle &other )
 	{
 		return (get() == other.get());
 	}
 
-	inline edict_t* operator = (edict_t* pent)
+	inline edict_t * operator = ( edict_t *pent )
 	{
 		m_pEnt = pent;
 
-		if (pent)
+		if ( pent )
 		{
 			m_iSerialNumber = pent->m_NetworkSerialNumber;
 		}
@@ -117,7 +117,7 @@ public:
 	}
 private:
 	int m_iSerialNumber;
-	edict_t* m_pEnt;
+	edict_t *m_pEnt;
 };
 
 #endif

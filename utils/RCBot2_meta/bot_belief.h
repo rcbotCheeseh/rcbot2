@@ -33,9 +33,9 @@
 
 typedef enum
 {
-	BELIEF_NONE = 0,
-	BELIEF_DANGER = (1 << 0),
-	BELIEF_SAFETY = (1 << 1)
+    BELIEF_NONE = 0,
+	BELIEF_DANGER = (1<<0),
+	BELIEF_SAFETY = (1<<1)
 }BotBelief;
 
 #endif

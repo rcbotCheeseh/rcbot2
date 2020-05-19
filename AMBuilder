@@ -1,0 +1,160 @@
+# vim: set sts=2 ts=8 sw=2 tw=99 et ft=python:
+import os, sys
+
+projectName = 'rcbot'
+
+sourceFiles = [
+  "utils/RCBot2_meta/bot.cpp",
+  "utils/RCBot2_meta/bot_accessclient.cpp",
+  "utils/RCBot2_meta/bot_buttons.cpp",
+  "utils/RCBot2_meta/bot_client.cpp",
+  "utils/RCBot2_meta/bot_commands.cpp",
+  "utils/RCBot2_meta/bot_configfile.cpp",
+  "utils/RCBot2_meta/bot_coop.cpp",
+  "utils/RCBot2_meta/bot_css_bot.cpp",
+  "utils/RCBot2_meta/bot_dod_bot.cpp",
+  "utils/RCBot2_meta/bot_dod_mod.cpp",
+  "utils/RCBot2_meta/bot_events.cpp",
+  "utils/RCBot2_meta/bot_fortress.cpp",
+  "utils/RCBot2_meta/bot_ga.cpp",
+  "utils/RCBot2_meta/bot_ga_ind.cpp",
+  "utils/RCBot2_meta/bot_getprop.cpp",
+  "utils/RCBot2_meta/bot_globals.cpp",
+  "utils/RCBot2_meta/bot_hl1dmsrc.cpp",
+  "utils/RCBot2_meta/bot_hldm_bot.cpp",
+  "utils/RCBot2_meta/bot_kv.cpp",
+  "utils/RCBot2_meta/bot_menu.cpp",
+  "utils/RCBot2_meta/bot_mods.cpp",
+  "utils/RCBot2_meta/bot_mtrand.cpp",
+  "utils/RCBot2_meta/bot_navmesh.cpp",
+  "utils/RCBot2_meta/bot_perceptron.cpp",
+  "utils/RCBot2_meta/bot_profile.cpp",
+  "utils/RCBot2_meta/bot_profiling.cpp",
+  "utils/RCBot2_meta/bot_schedule.cpp",
+  "utils/RCBot2_meta/bot_tf2_points.cpp",
+  "utils/RCBot2_meta/bot_som.cpp",
+  "utils/RCBot2_meta/bot_squads.cpp",
+  "utils/RCBot2_meta/bot_strings.cpp",
+  "utils/RCBot2_meta/bot_task.cpp",
+  "utils/RCBot2_meta/bot_tf2_mod.cpp",
+  "utils/RCBot2_meta/bot_utility.cpp",
+  "utils/RCBot2_meta/bot_visibles.cpp",
+  "utils/RCBot2_meta/bot_waypoint.cpp",
+  "utils/RCBot2_meta/bot_waypoint_locations.cpp",
+  "utils/RCBot2_meta/bot_waypoint_visibility.cpp",
+  "utils/RCBot2_meta/bot_weapons.cpp",
+  "utils/RCBot2_meta/bot_wpt_dist.cpp",
+  "utils/RCBot2_meta/bot_zombie.cpp",
+  "utils/RCBot2_meta/bot_sigscan.cpp",
+  "utils/RCBot2_meta/bot_cvars.cpp",
+  "utils/RCBot2_meta/bot_plugin_meta.cpp"
+]
+
+include_paths = []
+
+compiler_defines = []
+
+# Build with SourceMod extension support if --sm-path was specified
+if builder.options.sm_path:
+  include_paths = [
+    os.path.join(builder.options.sm_path, 'sourcepawn', 'include'),
+    os.path.join(builder.options.sm_path, 'public', 'amtl'),
+    os.path.join(builder.options.sm_path, 'public', 'amtl', 'amtl'),
+    os.path.join(builder.options.sm_path, 'public'),
+    os.path.join(builder.currentSourcePath, 'sm_ext'),
+    os.path.join(builder.currentSourcePath, 'utils', 'RCBot2_meta'),
+  ]
+
+  sourceFiles += [
+    os.path.join(builder.currentSourcePath, 'sm_ext', 'smsdk_config.cpp'),
+    os.path.join(builder.currentSourcePath, 'sm_ext', 'bot_sm_ext.cpp'),
+    os.path.join(builder.currentSourcePath, 'sm_ext', 'bot_sm_natives.cpp'),
+  ]
+  
+  compiler_defines += [ 'SM_EXT', ]
+
+# List of SDK names that require hooks on runcmd
+mods_requiring_runcmd_overrides = [
+  # hack: DOD:S uses `Bot_Think`, which forces all `bot`-spawned entities to use Valve's
+  # default bot AI.  we'll hook into their RunPlayerMove for now, but for consistency across
+  # games it'd be better to supercede `Bot_Think` (or `Bot_RunAll` higher up the call stack)
+  'dods',
+]
+
+###############
+# Make sure to edit PackageScript, which copies your files to their appropriate locations
+# Simple extensions do not need to modify past this point.
+
+# set up the build info
+include_paths += [ os.path.join(builder.currentSourcePath, 'versioning'), ]
+sourceFiles += [ os.path.join(builder.currentSourcePath, 'versioning', 'build_info.cpp'), ]
+
+if os.path.isfile(os.path.join(builder.currentSourcePath, 'sdk', 'smsdk_ext.cpp')):
+  # Use the copy included in the project
+  # sourceFiles += [os.path.join('sdk', 'smsdk_ext.cpp')]
+  pass
+else:
+  # Use the copy included with SM 1.6 and newer
+  # sourceFiles += [os.path.join(MMS.sm_root, 'public', 'smsdk_ext.cpp')]
+  pass
+
+for sdk_name in MMS.sdks:
+  for arch in MMS.archs:
+    sdk = MMS.sdks[sdk_name]
+
+    if not arch in sdk.platformSpec[builder.target.platform]:
+      continue
+
+    name = projectName + '.' + sdk.ext
+    binary = MMS.HL2Library(builder, name, sdk, arch)
+
+    binary.sources += sourceFiles
+
+    cxx = binary.compiler
+    if (cxx.version >= 'gcc-4.0') or cxx.family == 'clang':
+      cxx.cflags += [ '-Dstrcmpi=strcasecmp', ]
+
+    if cxx.family == 'msvc':
+      # suppress macro redefinition of 'offsetof'
+      cxx.cflags += [ '/wd4005' ]
+
+    cxx.cxxincludes += include_paths
+    cxx.defines += compiler_defines
+
+    if sdk_name in mods_requiring_runcmd_overrides:
+      cxx.defines += [ 'OVERRIDE_RUNCMD' ]
+
+    # RCBot:  Library requires exceptions
+    if '-fno-exceptions' in cxx.cflags: cxx.cflags.remove('-fno-exceptions')
+
+    if builder.target.platform == 'linux':
+      if sdk.name == 'episode1':
+        lib_folder = os.path.join(sdk.path, 'linux_sdk')
+      elif sdk.name in ['sdk2013', 'bms']:
+        lib_folder = os.path.join(sdk.path, 'lib', 'public', 'linux32')
+      elif arch == 'x64':
+        lib_folder = os.path.join(sdk.path, 'lib', 'linux64')
+      else:
+        lib_folder = os.path.join(sdk.path, 'lib', 'linux')
+    elif builder.target.platform == 'mac':
+      if sdk.name in ['sdk2013', 'bms']:
+        lib_folder = os.path.join(sdk.path, 'lib', 'public', 'osx32')
+      elif arch == 'x64':
+        lib_folder = os.path.join(sdk.path, 'lib', 'osx64')
+      else:
+        lib_folder = os.path.join(sdk.path, 'lib', 'mac')
+
+    if builder.target.platform in ['linux', 'mac']:
+      ## RCBot2: link other dependencies
+      cxx.postlink += [
+        cxx.Dep(os.path.join(lib_folder, 'mathlib_i486.a')),
+        cxx.Dep(os.path.join(lib_folder, 'tier2_i486.a')),
+        cxx.Dep(os.path.join(lib_folder, 'tier3_i486.a')),
+        'libvstdlib_srv.so',
+        '-lm',
+        '-ldl',
+        '-lpthread'
+      ]
+
+    nodes = builder.Add(binary)
+    MMS.binaries += [nodes]

@@ -33,7 +33,7 @@
 
 #include "bot_waypoint.h"
 
-const int g_iMaxVisibilityByte = (CWaypoints::MAX_WAYPOINTS * CWaypoints::MAX_WAYPOINTS) / 8; // divide by 8 bits, need byte number
+const int g_iMaxVisibilityByte = (CWaypoints::MAX_WAYPOINTS*CWaypoints::MAX_WAYPOINTS)/8; // divide by 8 bits, need byte number
 
 typedef struct
 {
@@ -55,14 +55,14 @@ public:
 		m_fNextShowMessageTime = 0;
 	}
 
-	void workVisibility();
+	void workVisibility ();
 
-	void init()
+	void init ()
 	{
 		int iSize = g_iMaxVisibilityByte;
 
 		/////////////////////////////
-		// for "concurrent" reading of
+		// for "concurrent" reading of 
 		// visibility throughout frames
 		bWorkVisibility = false;
 		m_fNextShowMessageTime = 0;
@@ -74,40 +74,40 @@ public:
 		m_VisTable = new unsigned char[iSize];
 
 		m_iPrevPercent = 0;
-		memset(m_VisTable, 0, iSize);
+		memset(m_VisTable,0,iSize);
 	}
 
-	bool SaveToFile(void);
+	bool SaveToFile ( void );
 
-	bool ReadFromFile(int numwaypoints);
+	bool ReadFromFile ( int numwaypoints );
 
-	void workVisibilityForWaypoint(int i, int iNumWaypoints, bool bTwoway = false);
+	void workVisibilityForWaypoint ( int i, int iNumWaypoints, bool bTwoway = false );
 
-	bool GetVisibilityFromTo(int iFrom, int iTo)
+	bool GetVisibilityFromTo ( int iFrom, int iTo )
 	{
-		// work out the position
-		int iPosition = (iFrom * CWaypoints::MAX_WAYPOINTS) + iTo;
+		// work out the position 
+		int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
 
-		int iByte = (int)(iPosition / 8);
-		int iBit = iPosition % 8;
+		int iByte = (int)(iPosition/8);
+		int iBit = iPosition%8;
 
-		if (iByte < g_iMaxVisibilityByte)
-		{
-			unsigned char* ToReturn = (m_VisTable + iByte);
-
-			return ((*ToReturn & (1 << iBit)) > 0);
+		if ( iByte < g_iMaxVisibilityByte )
+		{			
+			unsigned char *ToReturn = (m_VisTable+iByte);
+			
+			return ( (*ToReturn & (1<<iBit)) > 0 );
 		}
 
 		return false;
 	}
 
-	void ClearVisibilityTable(void)
+	void ClearVisibilityTable ( void )
 	{
-		if (m_VisTable)
-			memset(m_VisTable, 0, g_iMaxVisibilityByte);
+		if ( m_VisTable )
+			memset(m_VisTable,0,g_iMaxVisibilityByte);
 
 		/////////////////////////////
-		// for "concurrent" reading of
+		// for "concurrent" reading of 
 		// visibility throughout frames
 		bWorkVisibility = false;
 		iCurFrom = 0;
@@ -115,16 +115,16 @@ public:
 		////////////////////////////
 	}
 
-	void FreeVisibilityTable(void)
+	void FreeVisibilityTable ( void )
 	{
-		if (m_VisTable != NULL)
+		if ( m_VisTable != NULL )
 		{
 			delete m_VisTable;
 			m_VisTable = NULL;
 		}
 
 		/////////////////////////////
-		// for "concurrent" reading of
+		// for "concurrent" reading of 
 		// visibility throughout frames
 		bWorkVisibility = false;
 		iCurFrom = 0;
@@ -132,28 +132,28 @@ public:
 		////////////////////////////
 	}
 
-	void SetVisibilityFromTo(int iFrom, int iTo, bool bVisible)
+	void SetVisibilityFromTo ( int iFrom, int iTo, bool bVisible )
 	{
-		int iPosition = (iFrom * CWaypoints::MAX_WAYPOINTS) + iTo;
+		int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
 
-		int iByte = (int)(iPosition / 8);
-		int iBit = iPosition % 8;
+		int iByte = (int)(iPosition/8);
+		int iBit = iPosition%8;
 
-		if (iByte < g_iMaxVisibilityByte)
+		if ( iByte < g_iMaxVisibilityByte )
 		{
-			unsigned char* ToChange = (m_VisTable + iByte);
-
-			if (bVisible)
-				*ToChange |= (1 << iBit);
+			unsigned char *ToChange = (m_VisTable+iByte);
+			
+			if ( bVisible )
+				*ToChange |= (1<<iBit);
 			else
-				*ToChange &= ~(1 << iBit);
+				*ToChange &= ~(1<<iBit);
 		}
 	}
 
-	void WorkOutVisibilityTable();
+	void WorkOutVisibilityTable ( );
 
 	inline bool needToWorkVisibility() { return bWorkVisibility; }
-	inline void setWorkVisiblity(bool bSet) { bWorkVisibility = bSet; }
+	inline void setWorkVisiblity ( bool bSet ) { bWorkVisibility = bSet; }
 
 private:
 
@@ -161,7 +161,7 @@ private:
 	unsigned short int iCurFrom;
 	unsigned short int iCurTo;
 	static const int WAYPOINT_VIS_TICKS = 64;
-	unsigned char* m_VisTable;
+	unsigned char *m_VisTable;
 	float m_fNextShowMessageTime;
 	int m_iPrevPercent;
 	// use a heap of 1 byte * size to keep things simple.

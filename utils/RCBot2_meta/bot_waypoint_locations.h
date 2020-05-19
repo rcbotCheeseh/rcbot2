@@ -31,8 +31,7 @@
 #ifndef __RCBOT_WAYPOINT_LOC_H__
 #define __RCBOT_WAYPOINT_LOC_H__
 
- //#include <dataUnconstArray>
- //using namespace std;
+//#include <dataUnconstArray>
 
 #include "bot_genclass.h"
 #include "bot_waypoint.h"
@@ -61,9 +60,9 @@
 class CWaypoint;
 
 class CWaypointLocations
-	// Hash table of waypoint indexes accross certian
-	// buckets in the map on X/Y Co-ords for quicker
-	// nearest waypoint finding and waypoint displaying.
+// Hash table of waypoint indexes accross certian
+// buckets in the map on X/Y Co-ords for quicker
+// nearest waypoint finding and waypoint displaying.
 {
 public:
 
@@ -78,28 +77,28 @@ public:
 	// want bucket spacing of 512 units
 	static const int MAX_WPT_BUCKETS = 64;
 
-	static const int BUCKET_SPACING = (HALF_MAX_MAP_SIZE * 2) / MAX_WPT_BUCKETS;
+	static const int BUCKET_SPACING = (HALF_MAX_MAP_SIZE*2)/MAX_WPT_BUCKETS;
 
-	static unsigned char g_iFailedWaypoints[CWaypoints::MAX_WAYPOINTS];
-
-	static void AddWptLocation(CWaypoint* pWaypoint, int iIndex);
+	static unsigned char g_iFailedWaypoints [ CWaypoints::MAX_WAYPOINTS ];
+	
+	static void AddWptLocation ( CWaypoint *pWaypoint, int iIndex );
 
 	CWaypointLocations()
 	{
 		Init();
 	}
 
-	static unsigned char* resetFailedWaypoints(dataUnconstArray<int>* iIgnoreWpts);
+	static unsigned char *resetFailedWaypoints (dataUnconstArray<int> *iIgnoreWpts);
 
 	static void Init()
 	{
-		int i, j, k;
+		int i,j,k;
 
-		for (i = 0; i < MAX_WPT_BUCKETS; i++)
+		for ( i = 0; i < MAX_WPT_BUCKETS; i ++ )
 		{
-			for (j = 0; j < MAX_WPT_BUCKETS; j++)
+			for ( j = 0; j < MAX_WPT_BUCKETS; j ++ )
 			{
-				for (k = 0; k < MAX_WPT_BUCKETS; k++)
+				for ( k = 0; k < MAX_WPT_BUCKETS; k ++ )
 				{
 					m_iLocations[i][j][k].Init();//.Init();
 				}
@@ -107,15 +106,15 @@ public:
 		}
 	}
 
-	static void Clear()
+	static void Clear ()
 	{
-		int i, j, k;
+		int i,j,k;
 
-		for (i = 0; i < MAX_WPT_BUCKETS; i++)
+		for ( i = 0; i < MAX_WPT_BUCKETS; i ++ )
 		{
-			for (j = 0; j < MAX_WPT_BUCKETS; j++)
+			for ( j = 0; j < MAX_WPT_BUCKETS; j ++ )
 			{
-				for (k = 0; k < MAX_WPT_BUCKETS; k++)
+				for ( k = 0; k < MAX_WPT_BUCKETS; k ++ )
 				{
 					m_iLocations[i][j][k].Destroy();//.Destroy();
 				}
@@ -123,47 +122,47 @@ public:
 		}
 	}
 
-	static void GetAllInArea(Vector& vOrigin, std::vector <int>* pWaypointList, int iVisibleTo);
+	static void GetAllInArea ( Vector &vOrigin, std::vector <int> *pWaypointList, int iVisibleTo );
+		
+	static void getMinMaxs ( int iLoc, int jLoc, int kLoc, 
+									    int *iMinLoc, int *jMinLoc, int *kMinLoc,
+									    int *iMaxLoc, int *jMaxLoc, int *kMaxLoc );
 
-	static void getMinMaxs(int iLoc, int jLoc, int kLoc,
-		int* iMinLoc, int* jMinLoc, int* kMinLoc,
-		int* iMaxLoc, int* jMaxLoc, int* kMaxLoc);
+	static int GetCoverWaypoint ( Vector vPlayerOrigin, Vector vCoverFrom, dataUnconstArray<int> *iIgnoreWpts, Vector *vGoalOrigin = NULL, int iTeam = 0, float fMinDist = MIN_COVER_MOVE_DIST, float fMaxDist = HALF_MAX_MAP_SIZE );
 
-	static int GetCoverWaypoint(Vector vPlayerOrigin, Vector vCoverFrom, dataUnconstArray<int>* iIgnoreWpts, Vector* vGoalOrigin = NULL, int iTeam = 0, float fMinDist = MIN_COVER_MOVE_DIST, float fMaxDist = HALF_MAX_MAP_SIZE);
+	static void FindNearestCoverWaypointInBucket ( int i, int j, int k, const Vector &vOrigin, float *pfMinDist, int *piIndex, dataUnconstArray<int> *iIgnoreWpts, int iCoverFromWpt, Vector *vGoalOrigin = NULL, int iTeam = 0, float fMinDist = MIN_COVER_MOVE_DIST );
 
-	static void FindNearestCoverWaypointInBucket(int i, int j, int k, const Vector& vOrigin, float* pfMinDist, int* piIndex, dataUnconstArray<int>* iIgnoreWpts, int iCoverFromWpt, Vector* vGoalOrigin = NULL, int iTeam = 0, float fMinDist = MIN_COVER_MOVE_DIST);
+	static void AddWptLocation ( int iIndex, const float *fOrigin );
 
-	static void AddWptLocation(int iIndex, const float* fOrigin);
+	static void FindNearestInBucket ( int i, int j, int k, const Vector &vOrigin, float *pfMinDist, int *piIndex,int iIgnoreWpt, bool bGetVisible = true, bool bGetUnreachable = false, bool bIsBot = false, dataUnconstArray<int> *iFailedWpts = NULL, bool bNearestAimingOnly = false, int iTeam = 0, bool bCheckArea = false, bool bGetVisibleFromOther = false, Vector vOther = Vector(0,0,0), int iFlagsOnly = 0, edict_t *pPlayer = NULL );
+	static void DrawWaypoints ( CClient *pClient, float fDist );
+	
+	static void DeleteWptLocation ( int iIndex, const float *fOrigin );
+	
+	static int NearestWaypoint ( const Vector &vOrigin, float fDist, int iIgnoreWpt, bool bGetVisible = true, 
+		bool bGetUnreachable = false, bool bIsBot = false, dataUnconstArray<int> *iFailedWpts = NULL, 
+		bool bNearestAimingOnly = false, int iTeam = 0, bool bCheckArea = false, 
+		bool bGetVisibleFromOther = false, Vector vOther = Vector(0,0,0), int FlagsOnly = 0, 
+		edict_t *pPlayer = NULL, bool bIgnorevOther = false, float fIgnoreSize = 0.0f );
 
-	static void FindNearestInBucket(int i, int j, int k, const Vector& vOrigin, float* pfMinDist, int* piIndex, int iIgnoreWpt, bool bGetVisible = true, bool bGetUnreachable = false, bool bIsBot = false, dataUnconstArray<int>* iFailedWpts = NULL, bool bNearestAimingOnly = false, int iTeam = 0, bool bCheckArea = false, bool bGetVisibleFromOther = false, Vector vOther = Vector(0, 0, 0), int iFlagsOnly = 0, edict_t* pPlayer = NULL);
-	static void DrawWaypoints(CClient* pClient, float fDist);
-
-	static void DeleteWptLocation(int iIndex, const float* fOrigin);
-
-	static int NearestWaypoint(const Vector& vOrigin, float fDist, int iIgnoreWpt, bool bGetVisible = true,
-		bool bGetUnreachable = false, bool bIsBot = false, dataUnconstArray<int>* iFailedWpts = NULL,
-		bool bNearestAimingOnly = false, int iTeam = 0, bool bCheckArea = false,
-		bool bGetVisibleFromOther = false, Vector vOther = Vector(0, 0, 0), int FlagsOnly = 0,
-		edict_t* pPlayer = NULL, bool bIgnorevOther = false, float fIgnoreSize = 0.0f);
-
-	static void GetAllVisible(int iFrom, int iOther, Vector& vOrigin, Vector& vOther, float fEDist, dataUnconstArray<int>* iVisible, dataUnconstArray<int>* iInvisible);
+	static void GetAllVisible( int iFrom, int iOther, Vector &vOrigin, Vector &vOther, float fEDist, dataUnconstArray<int> *iVisible, dataUnconstArray<int> *iInvisible );
 
 	///////////
 
-	static void AutoPath(edict_t* pPlayer, int iWpt);
+	static void AutoPath ( edict_t *pPlayer, int iWpt );
 
-	static void AutoPathInBucket(edict_t* pPlayer, int i, int j, int k, int iWpt);
+	static void AutoPathInBucket ( edict_t *pPlayer, int i, int j, int k, int iWpt );
+	
+	static int NearestBlastWaypoint ( const Vector &vOrigin, const Vector &vSrc, float fNearestDist, int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, bool bIsBot, bool bNearestAimingOnly, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS );
 
-	static int NearestBlastWaypoint(const Vector& vOrigin, const Vector& vSrc, float fNearestDist, int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, bool bIsBot, bool bNearestAimingOnly, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS);
+	static void FindNearestBlastInBucket ( int i, int j, int k, const Vector &vOrigin, const Vector &vSrc, float *pfMinDist, int *piIndex, int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, bool bIsBot, bool bNearestAimingOnly, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS );
 
-	static void FindNearestBlastInBucket(int i, int j, int k, const Vector& vOrigin, const Vector& vSrc, float* pfMinDist, int* piIndex, int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, bool bIsBot, bool bNearestAimingOnly, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS);
+	static int NearestGrenadeWaypoint ( const Vector &vTarget, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS );
 
-	static int NearestGrenadeWaypoint(const Vector& vTarget, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS);
-
-	static void FindNearestGrenadeWptInBucket(int i, int j, int k, const Vector& vOrigin, const Vector& vSrc, float* pfMinDist, int* piIndex, int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, bool bIsBot, bool bNearestAimingOnly, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS);
+	static void FindNearestGrenadeWptInBucket ( int i, int j, int k, const Vector &vOrigin, const Vector &vSrc, float *pfMinDist, int *piIndex, int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, bool bIsBot, bool bNearestAimingOnly, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS );
 
 private:
-
+	
 	//static dataStack<int> m_iLocations[MAX_WPT_BUCKETS][MAX_WPT_BUCKETS][MAX_WPT_BUCKETS];
 	static dataUnconstArray<int> m_iLocations[MAX_WPT_BUCKETS][MAX_WPT_BUCKETS][MAX_WPT_BUCKETS];
 	static float m_fIgnoreSize;

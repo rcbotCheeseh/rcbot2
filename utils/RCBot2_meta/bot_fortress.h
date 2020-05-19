@@ -35,8 +35,7 @@
 
 #include "bot_utility.h"
 
- //#include <stack>
- //using namespace std;
+//#include <stack>
 
 #define TF2_ROCKETSPEED   1100
 #define TF2_GRENADESPEED  1065 // TF2 wiki
@@ -187,7 +186,7 @@ enum TFCond
 #define TF2_PLAYER_INVULN       (1 << 5)    // 32
 #define TF2_PLAYER_TELEGLOW     (1 << 6)    // 64
 #define TF2_PLAYER_KRITS		524288
-#define TF2_PLAYER_HEALING	    2097152
+#define TF2_PLAYER_HEALING	    2097152    
 #define TF2_PLAYER_TAUNTING	    (1 << 7)    // 128
 #define TF2_PLAYER_TELEPORTING	(1<<10)    // 1024 Player is teleporting
 #define TF2_PLAYER_ONFIRE	    4194304 // fix may 2013
@@ -196,32 +195,33 @@ enum TFCond
 
 typedef enum
 {
-	TF_VC_MEDIC = 0,
+    TF_VC_MEDIC = 0,
 	TF_VC_INCOMING = 1,
 	TF_VC_HELP = 2,
-	TF_VC_THANKS = 4,
+    TF_VC_THANKS = 4,
 	TF_VC_SPY = 5,
 	TF_VC_BATTLECRY = 6,
-	TF_VC_GOGOGO = 8,
-	TF_VC_SENTRYAHEAD = 9,
+    TF_VC_GOGOGO = 8,
+    TF_VC_SENTRYAHEAD = 9,
 	TF_VC_CHEERS = 10,
-	TF_VC_MOVEUP = 12,
-	TF_VC_TELEPORTERHERE = 13,
-	TF_VC_JEERS = 14,
-	TF_VC_GOLEFT = 16,
+    TF_VC_MOVEUP = 12,
+    TF_VC_TELEPORTERHERE =13,
+    TF_VC_JEERS = 14,
+    TF_VC_GOLEFT = 16,
 	TF_VC_DISPENSERHERE = 17,
 	TF_VC_POSITIVE = 18,
-	TF_VC_GORIGHT = 20,
-	TF_VC_SENTRYHERE = 21,
-	TF_VC_NEGATIVE = 22,
-	TF_VC_YES = 24,
-	TF_VC_ACTIVATEUBER = 25,
-	TF_VC_NICESHOT = 26,
-	TF_VC_NO = 28,
-	TF_VC_UBERREADY = 29,
-	TF_VC_GOODJOB = 30,
+    TF_VC_GORIGHT = 20,
+    TF_VC_SENTRYHERE = 21,
+    TF_VC_NEGATIVE = 22,
+    TF_VC_YES = 24,
+    TF_VC_ACTIVATEUBER = 25,
+    TF_VC_NICESHOT = 26,
+    TF_VC_NO = 28,
+    TF_VC_UBERREADY = 29,
+    TF_VC_GOODJOB = 30,
 	TF_VC_INVALID = 31
 }eTFVoiceCMD;
+
 
 typedef enum
 {
@@ -284,39 +284,39 @@ typedef enum
 class CBotTF2FunctionEnemyAtIntel : public IBotFunction
 {
 public:
-	CBotTF2FunctionEnemyAtIntel(int iTeam, Vector vPos, int type, edict_t* pPlayer = NULL, int capindex = -1) { m_iTeam = iTeam; m_vPos = vPos; m_iType = type; m_pPlayer = pPlayer; m_iCapIndex = capindex; }
+	CBotTF2FunctionEnemyAtIntel( int iTeam, Vector vPos, int type, edict_t *pPlayer = NULL, int capindex = -1 ){m_iTeam = iTeam;m_vPos = vPos;m_iType = type; m_pPlayer = pPlayer; m_iCapIndex = capindex; }
 
-	void execute(CBot* pBot) override;
+	void execute (CBot *pBot);
 private:
 	int m_iTeam;
 	Vector m_vPos;
 	int m_iType;
-	edict_t* m_pPlayer;
+	edict_t *m_pPlayer;
 	int m_iCapIndex;
 };
 
 class CBroadcastSpySap : public IBotFunction
 {
 public:
-	CBroadcastSpySap(edict_t* pSpy) { m_pSpy = pSpy; }
-	void execute(CBot* pBot) override;
+	CBroadcastSpySap (edict_t *pSpy) { m_pSpy = pSpy; }
+	void execute ( CBot *pBot );
 
 private:
-	edict_t* m_pSpy;
+	edict_t *m_pSpy;
 };
 
 class CBroadcastOvertime : public IBotFunction
 {
 public:
-	CBroadcastOvertime() {};
-	void execute(CBot* pBot) override;
+	CBroadcastOvertime () {};
+	void execute (CBot *pBot);
 };
 
 class CBroadcastFlagReturned : public IBotFunction
 {
 public:
-	CBroadcastFlagReturned(int iTeam) { m_iTeam = iTeam; }
-	void execute(CBot* pBot) override;
+	CBroadcastFlagReturned (int iTeam) { m_iTeam = iTeam; }
+	void execute ( CBot *pBot );
 
 private:
 	int m_iTeam;
@@ -325,8 +325,8 @@ private:
 class CBroadcastFlagDropped : public IBotFunction
 {
 public:
-	CBroadcastFlagDropped(int iTeam, Vector origin) { m_iTeam = iTeam; m_vOrigin = origin; }
-	void execute(CBot* pBot) override;
+	CBroadcastFlagDropped (int iTeam, Vector origin) { m_iTeam = iTeam; m_vOrigin = origin; }
+	void execute ( CBot *pBot );
 
 private:
 	Vector m_vOrigin;
@@ -338,7 +338,7 @@ class CBroadcastFlagCaptured : public IBotFunction
 public:
 	CBroadcastFlagCaptured(int iTeam) { m_iTeam = iTeam; }
 
-	void execute(CBot* pBot) override;
+	void execute ( CBot *pBot );
 private:
 	int m_iTeam;
 };
@@ -346,8 +346,8 @@ private:
 class CBroadcastRoundStart : public IBotFunction
 {
 public:
-	CBroadcastRoundStart(bool bFullReset) { m_bFullReset = bFullReset; }
-	void execute(CBot* pBot) override;
+	CBroadcastRoundStart ( bool bFullReset ) { m_bFullReset = bFullReset; }
+	void execute ( CBot *pBot );
 private:
 	bool m_bFullReset;
 };
@@ -355,148 +355,22 @@ private:
 class CBroadcastCapturedPoint : public IBotFunction
 {
 public:
-	CBroadcastCapturedPoint(int iPoint, int iTeam, const char* szName);
+	CBroadcastCapturedPoint ( int iPoint, int iTeam, const char *szName );
 
-	void execute(CBot* pBot) override;
+	void execute ( CBot *pBot );
 private:
 	int m_iPoint;
 	int m_iTeam;
-	const char* m_szName;
-};
-
-class CBasePlayer;
-
-template< class T, class I = int >
-class CUtlMemoryTF2Items : public CUtlMemory< T, I >
-{
-public:
-	CUtlMemoryTF2Items(int nGrowSize = 0, int nInitSize = 0) { CUtlMemory< T, I >(nGrowSize, nInitSize); }
-	CUtlMemoryTF2Items(T* pMemory, int numElements) { CUtlMemory< T, I >(pMemory, numElements); }
-	CUtlMemoryTF2Items(const T* pMemory, int numElements) { CUtlMemory< T, I >(pMemory, numElements); }
-	//~CUtlMemoryTF2Items() { ~CUtlMemory< T, I >(); }
-
-	void Purge()
-	{
-		if (!CUtlMemory< T, I >::IsExternallyAllocated())
-		{
-			if (CUtlMemory< T, I >::m_pMemory)
-			{
-				UTLMEMORY_TRACK_FREE();
-				//free( (void*)m_pMemory );
-#ifdef TF2ITEMS_DEBUG_ITEMS
-				META_CONPRINTF("CUtlMemory tried to be freed!\n");
-#endif
-				CUtlMemory< T, I >::m_pMemory = 0;
-			}
-			CUtlMemory< T, I >::m_nAllocationCount = 0;
-		}
-	}
-};
-
-// Taken from the TF2Items extension by Asher "asherkin" Baker
-class CAttributeManager;
-
-class CEconItemAttribute
-{
-public:
-	CEconItemAttribute() {};
-
-	CEconItemAttribute(uint16 iAttributeDefinitionIndex, float flValue/* = -1.0*/)
-	{
-		this->m_iAttributeDefinitionIndex = iAttributeDefinitionIndex;
-		this->m_flValue = flValue;
-		this->m_nRefundableCurrency = 0;
-		this->m_pVTable = NULL;
-	}
-
-public:
-	void* m_pVTable;
-
-	uint16 m_iAttributeDefinitionIndex;
-	float m_flValue;
-	int32 m_nRefundableCurrency;
-};
-
-class CEconItem;
-
-class CEconItemHandle
-{
-public:
-	void* m_pVTable;
-
-	CEconItem* m_pItem;
-
-	int64 m_ulItemID;
-	uint64 m_SteamID;
-};
-
-class CAttributeList
-{
-public:
-	void* m_pVTable;
-
-	CUtlVector<CEconItemAttribute, CUtlMemoryTF2Items<CEconItemAttribute> > m_Attributes;
-	void* m_pAttributeManager;
-
-public:
-	CAttributeList& operator=(const CAttributeList& other)
-	{
-		m_pVTable = other.m_pVTable;
-
-		m_Attributes = other.m_Attributes;
-		m_pAttributeManager = other.m_pAttributeManager;
-
-		return *this;
-	}
-};
-
-class ITexture;
-class ITextureCompositor;
-class CEconItemView
-{
-public:
-	void* m_pVTable; //0
-
-	uint16 m_iItemDefinitionIndex; //4
-
-	int32 m_iEntityQuality; //8
-	uint32 m_iEntityLevel; //12
-
-	uint64 m_iItemID; //16
-	uint32 m_iItemIDHigh; //24
-	uint32 m_iItemIDLow; //28
-
-	uint32 m_iAccountID; //32
-
-	uint32 m_iInventoryPosition; //36
-
-	CEconItemHandle m_ItemHandle; //40 (44, 48, 52, 56, 60)
-
-	bool m_bColorInit; //64
-	bool m_bPaintOverrideInit; //65
-	bool m_bHasPaintOverride; //66
-	//67
-
-	float m_flOverrideIndex; //68
-	uint32 m_unRGB; //72
-	uint32 m_unAltRGB; //76
-
-	int32 m_iTeamNumber; //80
-
-	bool m_bInitialized; //84
-
-	CAttributeList m_AttributeList; //88 (92, 96, 100, 104, 108, 112)
-	CAttributeList m_NetworkedDynamicAttributesForDemos; //116 (120, 124, 128, 132, 136, 140)
-
-	bool m_bDoNotIterateStaticAttributes; //144
+	const char *m_szName;
 };
 
 #define EVENT_FLAG_PICKUP 0
 #define EVENT_CAPPOINT    1
 
+
 class CBotFortress : public CBot
 {
-public:
+public:	
 
 	CBotFortress();
 
@@ -504,226 +378,227 @@ public:
 
 	//virtual void wantToZoom ( bool bSet ) { m_bWantToZoom = bSet; }
 
-	void enemyLost(edict_t* pEnemy) override;
+	virtual void enemyLost (edict_t *pEnemy);
 
-	void updateConditions() override;
+	virtual void updateConditions();
 
-	void shot(edict_t* pEnemy) override;
+	virtual void shot ( edict_t *pEnemy );
 
-	virtual int engiBuildObject(int* iState, eEngiBuild iObject, float* fTime, int* iTries);
+	virtual int engiBuildObject ( int *iState, eEngiBuild iObject, float *fTime, int *iTries );
 
-	float getEnemyFactor(edict_t* pEnemy) override { return CBot::getEnemyFactor(pEnemy); }
+	virtual float getEnemyFactor ( edict_t *pEnemy ) { return CBot::getEnemyFactor(pEnemy); }
 
-	void checkDependantEntities() override;
+	virtual void checkDependantEntities();
 
-	int getMetal();
+	int getMetal ();
 
 	//virtual Vector getAimVector ( edict_t *pEntity ) { return CBot::getAimVector(pEntity); }
 
-	void modAim(edict_t* pEntity, Vector& v_origin, Vector* v_desired_offset, Vector& v_size, float fDist, float fDist2D) override
+	virtual void modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset, Vector &v_size, float fDist, float fDist2D )
 	{
-		CBot::modAim(pEntity, v_origin, v_desired_offset, v_size, fDist, fDist2D);
+		CBot::modAim(pEntity,v_origin,v_desired_offset,v_size,fDist,fDist2D);
 	}
 
-	void touchedWpt(CWaypoint* pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1) override { CBot::touchedWpt(pWaypoint); }
+	virtual void touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1 ) { CBot::touchedWpt(pWaypoint); }
 
-	inline edict_t* getHealingEntity() { return m_pHeal; }
+	inline edict_t *getHealingEntity () { return m_pHeal; }
 
-	inline void clearHealingEntity() { m_pHeal = NULL; }
+	inline void clearHealingEntity () { m_pHeal = NULL; }
 
-	unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
+	virtual unsigned int maxEntityIndex ( ) { return gpGlobals->maxEntities; }
 
-	void init(bool bVarInit = false) override;
+	virtual void init (bool bVarInit=false);
 
-	virtual void foundSpy(edict_t* pEdict, TF_Class iDisguise);
+	virtual void foundSpy (edict_t *pEdict, TF_Class iDisguise );
 
-	void getTasks(unsigned int iIgnore = 0) override { CBot::getTasks(iIgnore); }
+	virtual void getTasks ( unsigned int iIgnore = 0 ) { CBot :: getTasks(iIgnore); }
 
-	void died(edict_t* pKiller, const char* pszWeapon) override;
+	virtual void died ( edict_t *pKiller, const char *pszWeapon );
 
-	void killed(edict_t* pVictim, char* weapon) override;
+	virtual void killed ( edict_t *pVictim, char *weapon );
 
-	void modThink() override;
+	virtual void modThink ();
 
-	bool isBuilding(edict_t* pBuilding);
+	bool isBuilding ( edict_t *pBuilding );
 
-	float getHealFactor(edict_t* pPlayer);
+	float getHealFactor ( edict_t *pPlayer );
 
-	bool wantToFollowEnemy() override;
+	virtual bool wantToFollowEnemy ();
 
-	virtual void checkBuildingsValid(bool bForce = false) {};
+	virtual void checkBuildingsValid (bool bForce = false) {};
 
-	virtual void checkHealingValid();
+	virtual void checkHealingValid ();
 
-	// linux fix 2
-	virtual edict_t* findEngineerBuiltObject(eEngiBuild iBuilding, int index) { return NULL; }
+// linux fix 2
+	virtual edict_t *findEngineerBuiltObject ( eEngiBuild iBuilding, int index ) { return NULL; }
 
-	virtual void engineerBuild(eEngiBuild iBuilding, eEngiCmd iEngiCmd) {};
+	virtual void engineerBuild ( eEngiBuild iBuilding, eEngiCmd iEngiCmd ) {};
 
-	virtual void spyDisguise(int iTeam, int iClass) {};
+	virtual void spyDisguise ( int iTeam, int iClass ) {};
 
-	virtual bool lookAfterBuildings(float* fTime) { return false; }
+	virtual bool lookAfterBuildings (float *fTime) { return false; }
 
-	inline void nextLookAfterSentryTime(float fTime) { m_fLookAfterSentryTime = fTime; }
+	inline void nextLookAfterSentryTime ( float fTime ) { m_fLookAfterSentryTime = fTime; }
 
-	inline edict_t* getSentry() { return m_pSentryGun; }
+	inline edict_t *getSentry () { return m_pSentryGun; }
 
-	virtual bool hasEngineerBuilt(eEngiBuild iBuilding) { return false; }
+	virtual bool hasEngineerBuilt ( eEngiBuild iBuilding ) {return false;}
 
-	virtual void engiBuildSuccess(eEngiBuild iObject, int index) {};
+	virtual void engiBuildSuccess ( eEngiBuild iObject, int index ) {};
 
-	virtual bool healPlayer(edict_t* pPlayer, edict_t* pPrevPlayer) { return false; }
-	virtual bool upgradeBuilding(edict_t* pBuilding, bool removesapper = false) { return false; }
+	virtual bool healPlayer ( edict_t *pPlayer, edict_t *pPrevPlayer ) { return false; }
+	virtual bool upgradeBuilding ( edict_t *pBuilding, bool removesapper = false) {return false;}
 
-	virtual bool isCloaked() { return false; }
-	virtual bool isDisguised() { return false; }
+	virtual bool isCloaked () { return false; }
+	virtual bool isDisguised () { return false; }
 
-	CBotWeapon* getCurrentWeapon() override
+
+	virtual CBotWeapon *getCurrentWeapon()
 	{
 		return CBot::getCurrentWeapon();
 	}
 
-	bool handleAttack(CBotWeapon* pWeapon, edict_t* pEnemy) override { return CBot::handleAttack(pWeapon, pEnemy); }
+	virtual bool handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy) { return CBot::handleAttack(pWeapon, pEnemy); }
 
 	void resetAttackingEnemy() { m_pAttackingEnemy = NULL; }
 
-	bool setVisible(edict_t* pEntity, bool bVisible) override;
+	virtual bool setVisible ( edict_t *pEntity, bool bVisible );
 
-	virtual void setClass(TF_Class _class);
+	virtual void setClass ( TF_Class _class );
 
-	inline edict_t* seeFlag(bool reset = false) { if (reset) { m_pFlag = NULL; } return m_pFlag; }
+	inline edict_t *seeFlag ( bool reset = false ) { if ( reset ) { m_pFlag = NULL; } return m_pFlag; }
 
-	bool canAvoid(edict_t* pEntity) override;
+	virtual bool canAvoid ( edict_t *pEntity );
 
-	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
+	virtual bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true );
 
-	bool startGame() override;
+	virtual bool startGame ();
 
-	void spawnInit() override;
+	virtual void spawnInit ();
 
-	bool isTF() override { return true; }
+	bool isTF () { return true; }
 
-	bool isTF2() override { return false; }
+	virtual bool isTF2 () { return false; }
 
-	bool hurt(edict_t* pAttacker, int iHealthNow, bool bDontHide = false) override
+	virtual bool hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide  = false )
 	{
-		return CBot::hurt(pAttacker, iHealthNow, bDontHide);
+		return CBot::hurt(pAttacker,iHealthNow,bDontHide);
 	}
 
-	void chooseClass();
+	void chooseClass ();
 
-	virtual TF_Class getClass() { return TF_CLASS_CIVILIAN; }
+	virtual TF_Class getClass () { return TF_CLASS_CIVILIAN; }
 
-	virtual void updateClass() { };
+	virtual void updateClass () { };
 
-	void currentlyDead() override;
+	virtual void currentlyDead ();
 
-	void onInventoryApplication() override {}
+	virtual void onInventoryApplication (){}
 
-	void pickedUpFlag();
+	void pickedUpFlag ();
 
-	inline bool hasFlag() { return m_bHasFlag; }
+	inline bool hasFlag () { return m_bHasFlag; }
 
-	inline void droppedFlag() { m_bHasFlag = false; }
+	inline void droppedFlag () { m_bHasFlag = false; }
 
-	void medicCalled(edict_t* pPlayer);
+	void medicCalled ( edict_t *pPlayer );
 
-	bool isAlive() override;
+	bool isAlive ();
 
-	void enemyDown(edict_t* pEnemy) override
-	{
+	void enemyDown (edict_t *pEnemy) 
+	{ 
 		CBot::enemyDown(pEnemy);
 
-		if (pEnemy == m_pPrevSpy)
+		if ( pEnemy == m_pPrevSpy )
 		{
 			m_pPrevSpy = NULL;
 			m_fSeeSpyTime = 0.0f;
 		}
 	}
 
-	bool isTeleporterUseful(edict_t* pTele);
+	bool isTeleporterUseful ( edict_t *pTele );
 
-	bool waitForFlag(Vector* vOrigin, float* fWait, bool bFindFlag);
+	bool waitForFlag ( Vector *vOrigin, float *fWait, bool bFindFlag );
 
-	void flagDropped(Vector vOrigin);
-	void teamFlagDropped(Vector vOrigin);
-	void teamFlagPickup();
+	void flagDropped ( Vector vOrigin );
+	void teamFlagDropped ( Vector vOrigin );
+	void teamFlagPickup ();
 
-	virtual bool wantToListenToPlayer(edict_t* pPlayer, int iWeaponID = -1) { return true; }
-	bool wantToListenToPlayerFootsteps(edict_t* pPlayer) override { return true; }
-	bool wantToInvestigateSound() override { return true; }
+	virtual bool wantToListenToPlayer ( edict_t *pPlayer, int iWeaponID = -1 ) { return true; }
+	virtual bool wantToListenToPlayerFootsteps ( edict_t *pPlayer ) { return true; }
+	virtual bool wantToInvestigateSound () { return true; }
 
-	inline void flagReset() { m_fLastKnownFlagTime = 0.0f; }
-	inline void teamFlagReset() { m_fLastKnownTeamFlagTime = 0.0f; }
+	inline void flagReset () { m_fLastKnownFlagTime = 0.0f; }
+	inline void teamFlagReset () { m_fLastKnownTeamFlagTime = 0.0f; }
 
-	bool canGotoWaypoint(Vector vPrevWaypoint, CWaypoint* pWaypoint, CWaypoint* pPrev = NULL) override
+	virtual bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL )
 	{
-		return CBot::canGotoWaypoint(vPrevWaypoint, pWaypoint, pPrev);
+		return CBot::canGotoWaypoint(vPrevWaypoint,pWaypoint,pPrev);
 	}
 
-	void setup() override;
+	virtual void setup ();
 
 	virtual bool needHealth();
 
-	virtual bool needAmmo();
+	virtual bool needAmmo ();
 
-	void waitBackstab();
+	void waitBackstab ();
 
-	void wantToDisguise(bool bSet);
+	void wantToDisguise ( bool bSet );
 
-	bool select_CWeapon(CWeapon* pWeapon) override { return CBot::select_CWeapon(pWeapon); }
-	bool selectBotWeapon(CBotWeapon* pBotWeapon) override { return CBot::selectBotWeapon(pBotWeapon); }
+	virtual bool select_CWeapon ( CWeapon *pWeapon ) { return CBot::select_CWeapon(pWeapon); }
+	virtual bool selectBotWeapon ( CBotWeapon *pBotWeapon ) { return CBot::selectBotWeapon(pBotWeapon); }
 
-	bool getIgnoreBox(Vector* vLoc, float* fSize) override;
+	virtual bool getIgnoreBox ( Vector *vLoc, float *fSize );
 
 	// found a new enemy
-	void enemyFound(edict_t* pEnemy) override { CBot::enemyFound(pEnemy); }
+	virtual void enemyFound (edict_t *pEnemy){CBot::enemyFound(pEnemy); }
 
-	bool wantToNest();
+	bool wantToNest ();
 
-	bool overrideAmmoTypes() override { return false; }
+	bool overrideAmmoTypes () { return false; }
 
 	bool wantToCloak();
 
 	bool wantToUnCloak();
 
-	bool someoneCalledMedic();
+	bool someoneCalledMedic ();
 
-	void waitCloak();
+	void waitCloak ();
 
-	void detectedAsSpy(edict_t* pDetector, bool bDisguiseComprimised);
+	void detectedAsSpy ( edict_t *pDetector, bool bDisguiseComprimised );
 
 	// return an enemy sentry gun / special visible (e.g.) for quick checking
-	edict_t* getVisibleSpecial() override;
+	virtual edict_t *getVisibleSpecial ();
 
-	inline bool isBeingHealed() { return m_bIsBeingHealed; }
+	inline bool isBeingHealed () { return m_bIsBeingHealed; }
 
-	void handleWeapons() override { CBot::handleWeapons(); }
+	virtual void handleWeapons () { CBot::handleWeapons(); }
 
-	void seeFriendlyDie(edict_t* pDied, edict_t* pKiller, CWeapon* pWeapon) override { CBot::seeFriendlyDie(pDied, pKiller, pWeapon); }
-	void seeFriendlyKill(edict_t* pTeamMate, edict_t* pDied, CWeapon* pWeapon) override { CBot::seeFriendlyKill(pTeamMate, pDied, pWeapon); }
+	virtual void seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWeapon ) { CBot::seeFriendlyDie(pDied,pKiller,pWeapon); }
+	virtual void seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *pWeapon ) { CBot::seeFriendlyKill(pTeamMate,pDied,pWeapon); }
 
-	void voiceCommand(int cmd) override { };
+	virtual void voiceCommand ( int cmd ) { };
 
-	void seeFriendlyHurtEnemy(edict_t* pTeammate, edict_t* pEnemy, CWeapon* pWeapon) override;
+	virtual void seeFriendlyHurtEnemy ( edict_t *pTeammate, edict_t *pEnemy, CWeapon *pWeapon );
+	
+	bool incomingRocket ( float fRange );
 
-	bool incomingRocket(float fRange);
-
-	void hearPlayerAttack(edict_t* pAttacker, int iWeaponID) override { CBot::hearPlayerAttack(pAttacker, iWeaponID); }
+	virtual void hearPlayerAttack( edict_t *pAttacker, int iWeaponID ) { CBot::hearPlayerAttack(pAttacker,iWeaponID); }
 protected:
-	virtual void selectTeam();
+	virtual void selectTeam ();
 
-	virtual void selectClass();
+	virtual void selectClass ();
 
-	virtual void callMedic();
+	virtual void callMedic ();
 
-	static bool isClassOnTeam(int iClass, int iTeam);
+	static bool isClassOnTeam ( int iClass, int iTeam );
 
-	int getSpyDisguiseClass(int iTeam);
+	int getSpyDisguiseClass ( int iTeam );
 
-	virtual bool thinkSpyIsEnemy(edict_t* pEdict, TF_Class iDisguise);
+	virtual bool thinkSpyIsEnemy ( edict_t *pEdict, TF_Class iDisguise );
 
-	bool checkStuck(void) override { return CBot::checkStuck(); }
+	virtual bool checkStuck ( void ) { return CBot::checkStuck(); }
 
 	float m_fCallMedic;
 	float m_fTauntTime;
@@ -792,7 +667,7 @@ protected:
 	float m_fUpdateClass;
 	float m_fUseTeleporterTime;
 
-	bool m_bHasFlag;
+	bool m_bHasFlag;	
 	float m_fSnipeAttackTime;
 
 	// time left before the bot decides if it wants to change class
@@ -851,231 +726,206 @@ protected:
 //
 //
 //
-class CTF2Loadout;
-
-class CTF2LoadoutAdded
-{
-public:
-	CTF2LoadoutAdded(CBaseEntity* pEnt, CTF2Loadout* pLoadout)
-	{
-		m_pEnt = pEnt;
-		m_loadout = pLoadout;
-	}
-
-	CBaseEntity* m_pEnt;
-	CTF2Loadout* m_loadout;
-};
 
 class CBotTF2 : public CBotFortress
 {
 public:
 
-	//
+	// 
 	CBotTF2();
 
-	CBotWeapon* getCurrentWeapon() override;
+	virtual CBotWeapon *getCurrentWeapon();
 
-	void onInventoryApplication() override;
-
-	void giveWeapon(int slot, int index);
-	void PostGiveNamedItem(CEconItemView* cscript);
+	void onInventoryApplication();
 
 	void MannVsMachineWaveComplete();
-	void MannVsMachineAlarmTriggered(Vector vLoc);
+	void MannVsMachineAlarmTriggered (Vector vLoc);
 
-	bool sentryRecentlyHadEnemy();
+	bool sentryRecentlyHadEnemy ();
 
-	void highFivePlayer(edict_t* pPlayer, float fYaw);
+	void highFivePlayer ( edict_t *pPlayer, float fYaw );
 
-	bool hurt(edict_t* pAttacker, int iHealthNow, bool bDontHide = false) override;
+	virtual bool hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide  = false );
 
-	void updateAttackDefendPoints();
+	void updateAttackDefendPoints ();
 
-	void updateAttackPoints();
-	void updateDefendPoints();
+	void updateAttackPoints ();
+	void updateDefendPoints ();
 
 	// found a new enemy
-	void enemyFound(edict_t* pEnemy) override;
+	void enemyFound (edict_t *pEnemy);
 
-	void enemyAtIntel(Vector vPos, int type = EVENT_FLAG_PICKUP, int iArea = -1);
+	void enemyAtIntel ( Vector vPos, int type = EVENT_FLAG_PICKUP, int iArea = -1 );
 
-	bool isTF2() override { return true; }
+	bool isTF2 () { return true; }
 
-	void checkDependantEntities() override;
+	void checkDependantEntities ();
 
-	bool wantToListenToPlayerAttack(edict_t* pPlayer, int iWeaponID = -1) override;
-	bool wantToListenToPlayerFootsteps(edict_t* pPlayer) override;
+	virtual bool wantToListenToPlayerAttack ( edict_t *pPlayer, int iWeaponID = -1 );
+	virtual bool wantToListenToPlayerFootsteps ( edict_t *pPlayer );
 
-	bool wantToInvestigateSound() override;
+	bool wantToInvestigateSound ();
 
-	void getDefendArea(std::vector<int>* m_iAreas);
+	void getDefendArea ( std::vector<int> *m_iAreas );
 
-	void getAttackArea(std::vector <int>* m_iAreas);
+	void getAttackArea ( std::vector<int> *m_iAreas );
 
-	int getCurrentAttackArea() { return m_iCurrentAttackArea; }
-	int getCurrentDefendArea() { return m_iCurrentDefendArea; }
+	int getCurrentAttackArea () { return m_iCurrentAttackArea; }
+	int getCurrentDefendArea () { return m_iCurrentDefendArea; }
 
-	void pointsUpdated();
+	void pointsUpdated ( );
 
-	eBotFuncState rocketJump(int* iState, float* fTime);
+	eBotFuncState rocketJump(int *iState,float *fTime);
 
-	bool wantToFollowEnemy() override;
+	virtual bool wantToFollowEnemy ();
 
-	void resetCloakTime() { m_fSpyCloakTime = 0.0f; }
+	void resetCloakTime () { m_fSpyCloakTime = 0.0f; }
 
-	float getEnemyFactor(edict_t* pEnemy) override;
+	float getEnemyFactor ( edict_t *pEnemy );
 
-	void foundSpy(edict_t* pEdict, TF_Class iDisguise) override;
+	void foundSpy (edict_t *pEdict, TF_Class iDisguise);
 
-	void touchedWpt(CWaypoint* pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1) override;
+	void touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1 );
 
-	bool handleAttack(CBotWeapon* pWeapon, edict_t* pEnemy) override;
+	bool handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy );
 
-	void engiBuildSuccess(eEngiBuild iObject, int index) override;
+	void engiBuildSuccess ( eEngiBuild iObject, int index );
 
-	bool lookAfterBuildings(float* fTime) override;
+	bool lookAfterBuildings (float *fTime);
 
-	void spawnInit() override;
+	void spawnInit ();
 
-	bool setVisible(edict_t* pEntity, bool bVisible) override;
+	bool setVisible ( edict_t *pEntity, bool bVisible );
 
 	//Vector getAimVector ( edict_t *pEntity );
-	void modAim(edict_t* pEntity, Vector& v_origin,
-		Vector* v_desired_offset, Vector& v_size,
-		float fDist, float fDist2D) override;
+	virtual void modAim ( edict_t *pEntity, Vector &v_origin, 
+		Vector *v_desired_offset, Vector &v_size,
+		float fDist, float fDist2D);
 
-	void modThink() override;
+	void modThink ();
 
-	bool isCloaked() override;
+	bool isCloaked ();
 
-	bool executeAction(CBotUtility* util);//eBotAction id, CWaypoint *pWaypointResupply, CWaypoint *pWaypointHealth, CWaypoint *pWaypointAmmo );
+	bool executeAction ( CBotUtility *util );//eBotAction id, CWaypoint *pWaypointResupply, CWaypoint *pWaypointHealth, CWaypoint *pWaypointAmmo );
 
-	void setClass(TF_Class _class) override;
+	void setClass ( TF_Class _class );
 
-	bool isDisguised() override;
+	bool isDisguised ();
 
-	void checkBuildingsValid(bool bForce = false) override;
+	void checkBuildingsValid (bool bForce = false);
 
-	edict_t* findEngineerBuiltObject(eEngiBuild iBuilding, int index) override;
+	edict_t *findEngineerBuiltObject ( eEngiBuild iBuilding, int index );
 
-	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
+	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true );
 
-	bool isTF() override { return true; }
+	bool isTF () { return true; }
 
-	void taunt(bool bOverride = false);
+	void taunt ( bool bOverride = false );
 
-	void callMedic() override;
+	void callMedic ();
 
-	void roundReset(bool bFullReset);
+	void roundReset (bool bFullReset);
 
-	void pointCaptured(int iPoint, int iTeam, const char* szPointName);
+	void pointCaptured ( int iPoint, int iTeam, const char *szPointName );
 
-	void engineerBuild(eEngiBuild iBuilding, eEngiCmd iEngiCmd) override;
+	void engineerBuild ( eEngiBuild iBuilding, eEngiCmd iEngiCmd );
 
-	void spyDisguise(int iTeam, int iClass) override;
+	void spyDisguise ( int iTeam, int iClass );
 
-	bool hasEngineerBuilt(eEngiBuild iBuilding) override;
+	bool hasEngineerBuilt ( eEngiBuild iBuilding );
 
-	void getTasks(unsigned int iIgnore = 0) override;
+	void getTasks ( unsigned int iIgnore = 0 );
 
-	void died(edict_t* pKiller, const char* pszWeapon) override;
+	void died ( edict_t *pKiller, const char *pszWeapon );
 
-	void killed(edict_t* pVictim, char* weapon) override;
+	void killed ( edict_t *pVictim, char *weapon );
 
-	void capturedFlag();
+	void capturedFlag ();
 
-	void pointCaptured();
+	void pointCaptured ();
 
-	void waitRemoveSap();
+	void waitRemoveSap ();
+	
+	void roundWon ( int iTeam, bool bFullRound );
 
-	void roundWon(int iTeam, bool bFullRound);
+	void changeClass ();
 
-	void changeClass();
+	virtual bool needAmmo();
 
-	bool needAmmo() override;
+	void buildingDestroyed ( int iType, edict_t *pAttacker, edict_t *pEdict );
 
-	void buildingDestroyed(int iType, edict_t* pAttacker, edict_t* pEdict);
+	TF_Class getClass ();
 
-	TF_Class getClass() override;
+	void updateClass ();
 
-	void updateClass() override;
+	bool healPlayer ( );
+	
+	bool upgradeBuilding ( edict_t *pBuilding, bool removesapper = false );
 
-	bool healPlayer();
+	void setup ();
 
-	bool upgradeBuilding(edict_t* pBuilding, bool removesapper = false) override;
+	void buildingSapped ( eEngiBuild building, edict_t *pSapper, edict_t *pSpy );
 
-	void setup() override;
+	void sapperDestroyed ( edict_t *pSapper );
+	
+	bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL );
 
-	void buildingSapped(eEngiBuild building, edict_t* pSapper, edict_t* pSpy);
+	bool deployStickies ( eDemoTrapType type, Vector vStand, Vector vLocation, Vector vSpread, Vector *vPoint, int *iState, int *iStickyNum, bool *bFail, float *fTime, int wptindex );
 
-	void sapperDestroyed(edict_t* pSapper);
+	void detonateStickies (bool isJumping = false);
 
-	bool canGotoWaypoint(Vector vPrevWaypoint, CWaypoint* pWaypoint, CWaypoint* pPrev = NULL) override;
+	void setStickyTrapType ( Vector vLocation, eDemoTrapType iTrapType ) { m_vStickyLocation = vLocation; m_iTrapType = iTrapType; }
 
-	bool deployStickies(eDemoTrapType type, Vector vStand, Vector vLocation, Vector vSpread, Vector* vPoint,
-		int* iState, int* iStickyNum, bool* bFail, float* fTime, int wptindex);
+	bool canDeployStickies ();
 
-	void detonateStickies(bool isJumping = false);
+	bool thinkSpyIsEnemy ( edict_t *pEdict, TF_Class iDisguise );
 
-	void setStickyTrapType(const Vector& vLocation, const eDemoTrapType iTrapType)
-	{
-		m_vStickyLocation = vLocation;
-		m_iTrapType = iTrapType;
-	}
+	void seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWeapon );
+	void seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *pWeapon );
 
-	bool canDeployStickies();
+	void voiceCommand ( int cmd );
 
-	bool thinkSpyIsEnemy(edict_t* pEdict, TF_Class iDisguise) override;
+	void handleWeapons ( void ) ;
 
-	void seeFriendlyDie(edict_t* pDied, edict_t* pKiller, CWeapon* pWeapon) override;
-	void seeFriendlyKill(edict_t* pTeamMate, edict_t* pDied, CWeapon* pWeapon) override;
+	virtual bool select_CWeapon ( CWeapon *pWeapon );
+	virtual bool selectBotWeapon ( CBotWeapon *pBotWeapon );
 
-	void voiceCommand(int cmd) override;
+	void checkStuckonSpy ( void );
 
-	void handleWeapons(void) override;
+	bool checkStuck ( void );
 
-	bool select_CWeapon(CWeapon* pWeapon) override;
-	bool selectBotWeapon(CBotWeapon* pBotWeapon) override;
+	void init (bool bVarInit=false);
 
-	void checkStuckonSpy(void);
+	bool checkAttackPoint ( void );
 
-	bool checkStuck(void) override;
+	bool canAvoid ( edict_t *pEntity );
 
-	void init(bool bVarInit = false) override;
+	void hearVoiceCommand ( edict_t *pPlayer, byte cmd );
+		
+	void checkBeingHealed ( );
 
-	bool checkAttackPoint(void);
+	void spyCloak ();
 
-	bool canAvoid(edict_t* pEntity) override;
+	void spyUnCloak ();
 
-	void hearVoiceCommand(edict_t* pPlayer, byte cmd) override;
+	void healedPlayer ( edict_t *pPlayer, float fAmount );
 
-	void checkBeingHealed();
+	void teleportedPlayer ( void );
 
-	void spyCloak();
+	inline bool isCarrying () { return m_bIsCarryingObj; }
 
-	void spyUnCloak();
+	void updateCarrying ();
 
-	void healedPlayer(edict_t* pPlayer, float fAmount);
+	inline void resetCarryTime () { m_fCarryTime = engine->Time(); }
 
-	void teleportedPlayer(void);
+	void MvM_Upgrade ();
 
-	void upgradeWeapon(int iSlot);
-
-	inline bool isCarrying() { return m_bIsCarryingObj; }
-
-	void updateCarrying();
-
-	inline void resetCarryTime() { m_fCarryTime = engine->Time(); }
-
-	void MvM_Upgrade();
-
-	//void addLoadoutWeapon ( CTF2Loadout *weap );
 private:
 	// time for next jump
 	float m_fDoubleJumpTime;
 	// time bot has taken to sap something
 	float m_fSpySapTime;
-	//
+	// 
 	int m_iCurrentDefendArea;
 	int m_iCurrentAttackArea;
 	//
@@ -1100,26 +950,26 @@ private:
 
 	float m_fRevMiniGunBelief;
 	float m_fCloakBelief;
-
+	
 	//
 	MyEHandle m_pCloakedSpy;
 
 	float m_fAttackPointTime; // used in cart maps
 
-	float m_prevSentryHealth;
-	float m_prevDispHealth;
-	float m_prevTeleExtHealth;
-	float m_prevTeleEntHealth;
+	 float m_prevSentryHealth;
+	 float m_prevDispHealth;
+	 float m_prevTeleExtHealth;
+	 float m_prevTeleEntHealth;
 
-	float m_fDispenserHealAmount;
-	float m_fDispenserPlaceTime;
+	 float m_fDispenserHealAmount;
+	 float m_fDispenserPlaceTime;
 
-	int m_iSentryArea;
-	int m_iDispenserArea;
-	int m_iTeleEntranceArea;
-	int m_iTeleExitArea;
+	 int m_iSentryArea;
+	 int m_iDispenserArea;
+	 int m_iTeleEntranceArea;
+	 int m_iTeleExitArea;
 
-	eTFVoiceCMD m_nextVoicecmd;
+	 eTFVoiceCMD m_nextVoicecmd;
 
 	bool m_bIsCarryingTeleExit;
 	bool m_bIsCarryingSentry;
@@ -1130,25 +980,12 @@ private:
 	float m_fCarryTime;
 
 	float m_fCheckNextCarrying;
-	float m_fEquipHatTime;
 
-	bool m_bHatEquipped;
-
-	//stack<CTF2LoadoutAdded*> m_toApply;
-
-	void* m_pVTable;
-	void* m_pVTable_Attributes;
+	void *m_pVTable;
 
 	float m_fUseBuffItemTime;
 
-	CTF2Loadout* m_pHat;
-	CTF2Loadout* m_pMisc;
-	CTF2Loadout* m_pMelee;
-	CTF2Loadout* m_pPrimary;
-	CTF2Loadout* m_pSecondary;
-
 	int m_iDesiredResistType;
-	//dataStack<CTF2LoadoutAdded*> m_LoadoutsApplyAttributes;
 };
 
 class CBotFF : public CBotFortress
@@ -1157,11 +994,12 @@ public:
 
 	CBotFF() { CBotFortress(); }
 
-	void modThink() override;
+	void modThink ();
 
-	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
+	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true );
 
-	bool isTF() override { return true; }
+	bool isTF () { return true; }
+
 };
 
 #endif

@@ -43,8 +43,8 @@
 
 #define __to_lower(a) (((a)>='A')&&((a)<='Z'))?('a'+((a)-'A')):(a)
 #define __strlow(str) { char *__strx = str; while ( __strx && *__strx ) { *__strx = __to_lower(*__strx); __strx++; } }
- //#define strlow(str) { unsigned short int len = strlen(str); unsigned short int i;	for ( i = 0; i < len; i ++ ) { str[i] = to_lower(str[i]); } }
-#define __round(a) ((((a)-(int)(a)) >= 0.5) ? ((int)(a)+1) : ((int)(a)))
+//#define strlow(str) { unsigned short int len = strlen(str); unsigned short int i;	for ( i = 0; i < len; i ++ ) { str[i] = to_lower(str[i]); } }
+#define __round(a) (((a-(int)a) >= 0.5) ? ((int)a+1) : ((int)a))
 
 //#define RANDOM_INT(min,max) (min + round(((float)rand()/RAND_MAX)*(float)(max-min)))
 //#define RANDOM_FLOAT(min,max) (min + ((float)rand()/RAND_MAX)*(float)(max-min))
@@ -55,24 +55,24 @@
 
 #define BOT_WPT_TOUCH_DIST 72 // distance for bot to touch waypoint
 
-#define BOT_DEBUG_GAME_EVENT	0
-#define BOT_DEBUG_NAV			1
-#define BOT_DEBUG_SPEED			2
+#define BOT_DEBUG_GAME_EVENT	0 
+#define BOT_DEBUG_NAV			1 
+#define BOT_DEBUG_SPEED			2 
 #define BOT_DEBUG_VIS			3
-#define BOT_DEBUG_TASK			4
-#define BOT_DEBUG_BUTTONS		5
-#define BOT_DEBUG_USERCMD		6
+#define BOT_DEBUG_TASK			4 
+#define BOT_DEBUG_BUTTONS		5  
+#define BOT_DEBUG_USERCMD		6 
 #define BOT_DEBUG_UTIL			7
-#define BOT_DEBUG_PROFILE		8
-#define BOT_DEBUG_EDICTS		9
-#define BOT_DEBUG_THINK			10
-#define BOT_DEBUG_LOOK			11
-#define BOT_DEBUG_HUD			12
-#define BOT_DEBUG_AIM			13
+#define BOT_DEBUG_PROFILE		8 
+#define BOT_DEBUG_EDICTS		9 
+#define BOT_DEBUG_THINK			10 
+#define BOT_DEBUG_LOOK			11 
+#define BOT_DEBUG_HUD			12 
+#define BOT_DEBUG_AIM			13 
 #define BOT_DEBUG_CHAT			14
 
 // from sourcemod
-enum RoundState
+enum RoundState 
 {
 	// initialize the game, create teams
 	RoundState_Init,
@@ -118,7 +118,7 @@ typedef enum
 	LOOK_MAX
 }eLookTask;
 
-extern const char* g_szLookTaskToString[LOOK_MAX];
+extern const char *g_szLookTaskToString[LOOK_MAX];
 
 #define BOT_CONFIG_FOLDER "config"
 #define BOT_MOD_FILE "bot_mods"
@@ -133,7 +133,7 @@ extern const char* g_szLookTaskToString[LOOK_MAX];
 #define BOT_TAG "[RCBot] " // for printing messages
 /*
 // Engine player info, no game related infos here
-// If you change this, change the two byteswap defintions:
+// If you change this, change the two byteswap defintions: 
 // cdll_client_int.cpp and cdll_engine_int.cpp
 typedef struct player_info_s
 {
@@ -187,24 +187,13 @@ typedef enum
 
 #undef ENTINDEX
 #define ENTINDEX(pEdict) engine->IndexOfEdict(pEdict)
-/*
-#define BUILDNAME "TF2/HL2DM/DOD:S"
-#define BUILDVER "BETA"
-#define BUILDNUM "365"*/
-#define BOT_NAME "RCBot"
-#ifdef __linux__
-#define BOT_VER "TF2/HL2DM/DOD:S 1.04 META Linux 492-apg (merge)" //bir3yk
-#else
-#define BOT_VER "TF2/HL2DM/DOD:S 1.04 META Win32 492-apg (merge)"
-#endif
-#define BOT_NAME_VER "RCbot version"
-#define BOT_VER_CVAR "rcbot_ver"
+
 #define BOT_FOLDER "rcbot2"
 
 typedef enum
 {
 	BOT_FUNC_FAIL = 0,
-	BOT_FUNC_CONTINUE,
+    BOT_FUNC_CONTINUE,
 	BOT_FUNC_COMPLETE,
 }eBotFuncState;
 
@@ -245,7 +234,7 @@ typedef enum
 ////////////////////////
 #define BLAST_RADIUS 200
 ///////////////////////
-typedef enum
+typedef enum 
 {
 	STATE_IDLE = 0,
 	STATE_RUNNING,

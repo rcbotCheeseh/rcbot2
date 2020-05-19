@@ -36,37 +36,37 @@
 #include "bot_globals.h"
 #include <stdio.h>
 
- /*unsigned char *CWaypointVisibilityTable :: m_VisTable = NULL;
- bool CWaypointVisibilityTable :: bWorkVisibility = false;
- int CWaypointVisibilityTable :: iCurFrom = 0;
- int CWaypointVisibilityTable :: iCurTo = 0;*/
+/*unsigned char *CWaypointVisibilityTable :: m_VisTable = NULL;
+bool CWaypointVisibilityTable :: bWorkVisibility = false;
+int CWaypointVisibilityTable :: iCurFrom = 0;
+int CWaypointVisibilityTable :: iCurTo = 0;*/
 
-void CWaypointVisibilityTable::workVisibility()
-{
+void CWaypointVisibilityTable :: workVisibility ()
+{		
 	int percent;
 	int iTicks = 0;
-	unsigned short int iSize = static_cast<unsigned short int>(CWaypoints::numWaypoints());
+	register unsigned short int iSize = (unsigned short int) CWaypoints::numWaypoints();
 
-	for (iCurFrom = iCurFrom; iCurFrom < iSize; iCurFrom++)
+	for ( iCurFrom = iCurFrom; iCurFrom < iSize; iCurFrom ++ )
 	{
-		for (iCurTo = iCurTo; iCurTo < iSize; iCurTo++)
+		for ( iCurTo = iCurTo; iCurTo < iSize; iCurTo ++ )
 		{
-			CWaypoint* pWaypoint1 = CWaypoints::getWaypoint(iCurFrom);
-			CWaypoint* pWaypoint2 = CWaypoints::getWaypoint(iCurTo);
+			CWaypoint *pWaypoint1 = CWaypoints::getWaypoint(iCurFrom);
+			CWaypoint *pWaypoint2 = CWaypoints::getWaypoint(iCurTo);
 
-			SetVisibilityFromTo(iCurFrom, iCurTo, CBotGlobals::isVisible(pWaypoint1->getOrigin(), pWaypoint2->getOrigin()));
+			SetVisibilityFromTo(iCurFrom,iCurTo,CBotGlobals::isVisible(pWaypoint1->getOrigin(),pWaypoint2->getOrigin()));
 
 			iTicks++;
 
-			if (iTicks >= WAYPOINT_VIS_TICKS)
+			if ( iTicks >= WAYPOINT_VIS_TICKS )
 			{
-				if (m_fNextShowMessageTime < engine->Time())
+				if ( m_fNextShowMessageTime < engine->Time() )
 				{
-					percent = static_cast<int>(((float)iCurFrom / iSize) * 100);
+					percent = (int)(((float)iCurFrom / iSize) * 100);
 
-					if (m_iPrevPercent != percent)
+					if ( m_iPrevPercent != percent )
 					{
-						Msg(" *** working out visibility %d percent***\n", percent);
+						Msg(" *** working out visibility %d percent***\n",percent);
 						m_fNextShowMessageTime = engine->Time() + 2.5f;
 						m_iPrevPercent = percent;
 					}
@@ -79,19 +79,19 @@ void CWaypointVisibilityTable::workVisibility()
 		iCurTo = 0;
 	}
 
-	if (iCurFrom == iSize)
+	if ( iCurFrom == iSize )
 	{
 		// finished
 		Msg(" *** finished working out visibility ***\n");
 		/////////////////////////////
-		// for "concurrent" reading of
+		// for "concurrent" reading of 
 		// visibility throughout frames
 		bWorkVisibility = false;
 		iCurFrom = 0;
 		iCurTo = 0;
 
 		// save waypoints with visibility flag now
-		if (SaveToFile())
+		if ( SaveToFile() )
 		{
 			CWaypoints::save(true);
 			Msg(" *** saving waypoints with visibility information ***\n");
@@ -102,109 +102,109 @@ void CWaypointVisibilityTable::workVisibility()
 	}
 }
 
-void CWaypointVisibilityTable::workVisibilityForWaypoint(int i, int iNumWaypoints, bool bTwoway)
+void CWaypointVisibilityTable :: workVisibilityForWaypoint ( int i, int iNumWaypoints, bool bTwoway )
 {
-	static CWaypoint* Waypoint1;
-	static CWaypoint* Waypoint2;
+	static CWaypoint *Waypoint1;
+	static CWaypoint *Waypoint2;
 	static bool bVisible;
 
 	Waypoint1 = CWaypoints::getWaypoint(i);
 
-	if (!Waypoint1->isUsed())
+	if ( !Waypoint1->isUsed() )
 		return;
 
-	for (short int j = 0; j < iNumWaypoints; j++)
+	for ( register short int j = 0; j < iNumWaypoints; j ++ )
 	{
-		if (i == j)
+		if ( i == j )
 		{
-			SetVisibilityFromTo(i, j, true);
+			SetVisibilityFromTo(i,j,1);
 			continue;
 		}
 
 		Waypoint2 = CWaypoints::getWaypoint(j);
 
-		if (!Waypoint2->isUsed())
+		if ( !Waypoint2->isUsed() )
 			continue;
 
-		bVisible = CBotGlobals::isVisible(Waypoint1->getOrigin(), Waypoint2->getOrigin());
+		bVisible = CBotGlobals::isVisible(Waypoint1->getOrigin(),Waypoint2->getOrigin());
 
-		SetVisibilityFromTo(i, j, bVisible);
+		SetVisibilityFromTo(i,j,bVisible);
 
-		if (bTwoway)
-			SetVisibilityFromTo(j, i, bVisible);
+		if ( bTwoway )
+			SetVisibilityFromTo(j,i,bVisible);
 	}
 }
 
-void CWaypointVisibilityTable::WorkOutVisibilityTable()
+void CWaypointVisibilityTable :: WorkOutVisibilityTable ()
 {
-	short int i;
+	register short int i;
 
 	int iNumWaypoints = CWaypoints::numWaypoints();
 
 	ClearVisibilityTable();
 
 	// loop through all waypoint possibilities.
-	for (i = 0; i < iNumWaypoints; i++)
+	for ( i = 0; i < iNumWaypoints; i ++ )
 	{
-		workVisibilityForWaypoint(i, iNumWaypoints, false);
+		workVisibilityForWaypoint(i,iNumWaypoints,false);
 	}
 }
 
-bool CWaypointVisibilityTable::SaveToFile(void)
+bool CWaypointVisibilityTable :: SaveToFile ( void )
 {
-	char filename[1024];
+    char filename[1024];
 	wpt_vis_header_t header;
 
-	CBotGlobals::buildFileName(filename, CBotGlobals::getMapName(), BOT_WAYPOINT_FOLDER, "rcv", true);
+	CBotGlobals::buildFileName(filename,CBotGlobals::getMapName(),BOT_WAYPOINT_FOLDER,"rcv",true);
 
-	FILE* bfp = CBotGlobals::openFile(filename, "wb");
+	FILE *bfp = CBotGlobals::openFile(filename,"wb");
 
-	if (bfp == NULL)
-	{
-		CBotGlobals::botMessage(NULL, 0, "Can't open Waypoint Visibility table for writing!");
-		return false;
-	}
+   if ( bfp == NULL )
+   {
+	   CBotGlobals::botMessage(NULL,0,"Can't open Waypoint Visibility table for writing!");
+	   return false;
+   }
 
 	header.numwaypoints = CWaypoints::numWaypoints();
-	strncpy(header.szMapName, CBotGlobals::getMapName(), 63);
+	strncpy(header.szMapName,CBotGlobals::getMapName(),63);
 	header.waypoint_version = CWaypoints::WAYPOINT_VERSION;
 
-	fwrite(&header, sizeof(wpt_vis_header_t), 1, bfp);
-	fwrite(m_VisTable, sizeof(byte), g_iMaxVisibilityByte, bfp);
+	fwrite(&header,sizeof(wpt_vis_header_t),1,bfp);
+	fwrite(m_VisTable,sizeof(byte),g_iMaxVisibilityByte,bfp);
 
-	fclose(bfp);
+   fclose(bfp);
 
-	return true;
+   return true;
 }
 
-bool CWaypointVisibilityTable::ReadFromFile(int numwaypoints)
+bool CWaypointVisibilityTable :: ReadFromFile ( int numwaypoints )
 {
-	char filename[1024];
+    char filename[1024];
 
 	wpt_vis_header_t header;
 
-	CBotGlobals::buildFileName(filename, CBotGlobals::getMapName(), BOT_WAYPOINT_FOLDER, "rcv", true);
+	CBotGlobals::buildFileName(filename,CBotGlobals::getMapName(),BOT_WAYPOINT_FOLDER,"rcv",true);
 
-	FILE* bfp = CBotGlobals::openFile(filename, "rb");
+   FILE *bfp =  CBotGlobals::openFile(filename,"rb");
 
-	if (bfp == NULL)
-	{
-		Msg(" *** Can't open Waypoint Visibility table for reading!\n");
-		return false;
-	}
+   if ( bfp == NULL )
+   {
+	   Msg(" *** Can't open Waypoint Visibility table for reading!\n");
+	   return false;
+   }
 
-	fread(&header, sizeof(wpt_vis_header_t), 1, bfp);
+   fread(&header,sizeof(wpt_vis_header_t),1,bfp);
 
-	if (header.numwaypoints != numwaypoints)
-		return false;
-	if (header.waypoint_version != CWaypoints::WAYPOINT_VERSION)
-		return false;
-	if (strncmp(header.szMapName, CBotGlobals::getMapName(), 63))
-		return false;
+   if ( header.numwaypoints != numwaypoints )
+	   return false;
+   if ( header.waypoint_version != CWaypoints::WAYPOINT_VERSION )
+	   return false;
+   if ( strncmp(header.szMapName,CBotGlobals::getMapName(),63) )
+	   return false;
 
-	fread(m_VisTable, sizeof(byte), g_iMaxVisibilityByte, bfp);
+   fread(m_VisTable,sizeof(byte),g_iMaxVisibilityByte,bfp);
 
-	fclose(bfp);
+   fclose(bfp);
 
-	return true;
+   return true;
 }

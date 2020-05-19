@@ -15,6 +15,10 @@
 #ifndef _INCLUDE_SOURCE_ENGINE_WRAPPERS_
 #define _INCLUDE_SOURCE_ENGINE_WRAPPERS_
 
+//#define swap V_swap
+#include "mathlib.h"
+//#undef swap
+
 #include <eiface.h>
 
 extern IVEngineServer *engine;

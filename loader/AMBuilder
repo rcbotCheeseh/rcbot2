@@ -1,0 +1,33 @@
+# vim: set sts=2 ts=8 sw=2 tw=99 et ft=python:
+import os.path
+
+loader_name = 'RCBot2Meta'
+
+for arch in MMS.archs:
+  if builder.target.platform in ['windows', 'mac']:
+    name = loader_name
+    extra_ldflags = []
+  elif builder.target.platform == 'linux':
+    name = loader_name + '_i486'
+    extra_ldflags = ['-ldl']
+
+  if arch == 'x64':
+    name = loader_name + '.x64'
+
+  binary = MMS.Library(builder, name, arch)
+  binary.compiler.cxxincludes += [
+    os.path.join(MMS.mms_root, 'core'),
+    os.path.join(MMS.mms_root, 'sourcehook')
+  ]
+  binary.compiler.defines += ['META_NO_HL2SDK']
+  if binary.compiler.family == 'gcc' or binary.compiler.family == 'clang':
+    binary.compiler.cxxflags += ['-fno-rtti']
+  elif binary.compiler.family == 'msvc':
+    binary.compiler.cxxflags += ['/GR-']
+  binary.compiler.linkflags += extra_ldflags
+  binary.sources = [
+    'loader.cpp'
+  ]
+
+  nodes = builder.Add(binary)
+  MMS.binaries += [nodes]

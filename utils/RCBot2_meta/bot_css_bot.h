@@ -31,25 +31,25 @@
 #ifndef __CSS_RCBOT_H__
 #define __CSS_RCBOT_H__
 
- // bot for CS Source
+// bot for CS Source
 class CCSSBot : public CBot
 {
 public:
 
-	bool isCSS() override { return true; }
+	bool isCSS () { return true; }
 
-	void init();
-	void setup() override;
+	void init ();
+	void setup();
 
-	bool startGame() override;
+	bool startGame ();
 
-	void died();
+	void died ();
 
-	void spawnInit() override;
+	void spawnInit ();
 
-	bool isAlive() override;
+	bool isAlive ();
 
-	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
+	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true );
 private:
 	// blah blah
 };
