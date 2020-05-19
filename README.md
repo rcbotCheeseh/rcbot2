@@ -3,6 +3,7 @@
 ## Information
 
 This is a fork of [the official RCBot2 plugin][rcbot2] written by Cheeseh.
+Special thanks to pongo1231 for adding more TF2 support and NoSoop for adding AMBuild support and many more!
 
 The [bots-united.com discord][] and [forums][bots-united forums] are the places to ask for
 general RCBot2 support. I'm not present in either of those; file an issue on this repository if
