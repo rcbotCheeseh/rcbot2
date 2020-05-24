@@ -80,7 +80,8 @@ in `build/package`.
 
 [Building SourceMod]: https://wiki.alliedmods.net/Building_SourceMod
 
-Credits:
+## Credits:
+
 Cheeseh - Founder
 
 Bot base code - Botman's HPB Template
@@ -94,7 +95,7 @@ SourceMod and AMBuild support - nosoop
 Synergy support - Anonymous Player/caxanga334
 
 
-Waypointers:-
+## Waypointers:-
 
 NightC0re
 
