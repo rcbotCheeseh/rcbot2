@@ -79,3 +79,27 @@ passing in `--depth 1` or a few to avoid retrieving the files that were removed 
 in `build/package`.
 
 [Building SourceMod]: https://wiki.alliedmods.net/Building_SourceMod
+
+Credits:
+Cheeseh - Founder
+Bot base code - Botman's HPB Template
+Linux Conversion and waypointing - [APG]RoboCop[CL]
+TF2 support and enhancements - Ducky1231/Pongo
+SourceMod and AMBuild support - nosoop
+Synergy support - Anonymous Player/caxanga334
+
+Waypointers:-
+NightC0re
+wakaflaka
+dgesd
+naMelesS
+ati251		
+Sandman[SA]
+Speed12	
+MarioGuy3
+Sjru	
+Fillmore
+htt123
+swede
+YouLoseAndIWin
+madmax2
