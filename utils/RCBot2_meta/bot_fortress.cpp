@@ -31,7 +31,9 @@
  *
  */
 #include "bot_plugin_meta.h"
+
 #include "bot.h"
+#include "bot_cvars.h"
 
 #include "ndebugoverlay.h"
 
@@ -55,21 +57,6 @@
 #include "bot_wpt_dist.h"
 #include "bot_squads.h"
 //#include "bot_hooks.h"
-
-extern ConVar bot_beliefmulti;
-extern ConVar bot_spyknifefov;
-extern ConVar bot_use_vc_commands;
-extern ConVar bot_max_cc_time;
-extern ConVar bot_min_cc_time;
-extern ConVar bot_change_class;
-extern ConVar rcbot_demo_jump;
-extern ConVar rcbot_melee_only;
-extern ConVar rcbot_tf2_protect_cap_time;
-extern ConVar rcbot_tf2_protect_cap_percent;
-extern ConVar rcbot_tf2_spy_kill_on_cap_dist;
-extern ConVar rcbot_speed_boost;
-extern ConVar rcbot_projectile_tweak;
-extern ConVar rcbot_force_class;
 
 extern IVDebugOverlay *debugoverlay;
 
@@ -875,8 +862,6 @@ void CBotTF2 :: buildingDestroyed ( int iType, edict_t *pAttacker, edict_t *pEdi
 
 void CBotFortress ::wantToDisguise(bool bSet)
 {
-	extern ConVar rcbot_tf2_debug_spies_cloakdisguise;
-
 	if ( rcbot_tf2_debug_spies_cloakdisguise.GetBool() )
 	{
 		if ( bSet )
@@ -1641,8 +1626,6 @@ void CBotFortress :: foundSpy (edict_t *pEdict,TF_Class iDisguise)
 // got shot by someone
 bool CBotTF2 :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 {
-	extern ConVar rcbot_spy_runaway_health;
-
 	if ( !pAttacker )
 		return false;
 
@@ -1829,7 +1812,6 @@ void CBotTF2 :: highFivePlayer ( edict_t *pPlayer, float fYaw )
 // bOverride will be true in messaround mode
 void CBotTF2 :: taunt ( bool bOverride )
 {
-	extern ConVar rcbot_taunt;
 	// haven't taunted for a while, no emeny, not ubered, OK! Taunt!
 	if ( bOverride || (!m_bHasFlag && rcbot_taunt.GetBool() && !CTeamFortress2Mod::TF2_IsPlayerOnFire(m_pEdict) && !m_pEnemy && (m_fTauntTime < engine->Time()) && (!CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict))) )
 	{
@@ -2571,11 +2553,9 @@ void CBotFortress ::waitCloak()
 }
 
 bool CBotFortress:: wantToCloak()
-{	
-	extern ConVar rcbot_tf2_debug_spies_cloakdisguise;
-
+{
 	if ( rcbot_tf2_debug_spies_cloakdisguise.GetBool() )
-	{		
+	{
 		if ( ( m_fFrenzyTime < engine->Time() ) && (!m_pEnemy || !hasSomeConditions(CONDITION_SEE_CUR_ENEMY))  )
 		{
 			return ( (!m_bStatsCanUse || (m_StatsCanUse.stats.m_iEnemiesVisible>0)) && (CClassInterface::getTF2SpyCloakMeter(m_pEdict) > 90.0f) && ( m_fCurrentDanger > TF2_SPY_CLOAK_BELIEF ));
@@ -3107,8 +3087,6 @@ void CBotTF2::modThink()
 	case TF_CLASS_SPY:
 		if (!hasFlag())
 		{
-			extern ConVar rcbot_tf2_debug_spies_cloakdisguise;
-
 			if (rcbot_tf2_debug_spies_cloakdisguise.GetBool() && (m_fSpyDisguiseTime < engine->Time()))
 			{
 				// if previously detected or isn't disguised
@@ -3269,7 +3247,6 @@ void CBotTF2::handleWeapons()
 
 		if ( m_bWantToChangeWeapon && (pWeapon != NULL) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex() )
 		{
-			//selectWeaponSlot(pWeapon->getWeaponInfo()->getSlot());
 			select_CWeapon(pWeapon->getWeaponInfo());
 			//selectWeapon(pWeapon->getWeaponIndex());
 		}
@@ -3308,8 +3285,6 @@ bool CBotFortress :: canAvoid ( edict_t *pEntity )
 
 bool CBotTF2::canAvoid(edict_t *pEntity)
 {
-	extern ConVar bot_avoid_radius;
-
 	float distance;
 	Vector vAvoidOrigin;
 	int index;
@@ -3389,7 +3364,6 @@ bool CBotTF2 :: wantToInvestigateSound ()
 
 bool CBotTF2 :: wantToListenToPlayerFootsteps ( edict_t *pPlayer )
 {
-	extern ConVar rcbot_notarget;
 	if ( rcbot_notarget.GetBool() && (CClients::isListenServerClient(CClients::get(pPlayer)) ) )
 		return false;
 
@@ -3671,7 +3645,7 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 {
 	int i = 0;
 	edict_t *pPlayer;
-	dataUnconstArray<int> m_classes;
+	std::vector<int> availableClasses;
 	int _class;
 	float fTotal;
 	float fRand;
@@ -3685,19 +3659,19 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 			_class = CClassInterface::getTF2Class(pPlayer);
 
 			if ( _class )
-				m_classes.Add(_class);
+				availableClasses.push_back(_class);
 		}
 	}
 
 
-	if ( m_classes.IsEmpty() )
+	if ( availableClasses.empty() )
 		return randomInt(1,9);
 	
 	fTotal = 0;
 
-	for ( int i = 0; i < m_classes.Size(); i ++ )
+	for ( int i = 0; i < availableClasses.size(); i ++ )
 	{
-		fTotal += m_fClassDisguiseFitness[m_classes.ReturnValueFromIndex(i)];
+		fTotal += m_fClassDisguiseFitness[ availableClasses[i] ];
 	}
 
 	if ( fTotal > 0 )
@@ -3707,17 +3681,18 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 
 		fTotal = 0;
 
-		for ( int i = 0; i < m_classes.Size(); i ++ )
+		for ( int i = 0; i < availableClasses.size(); i ++ )
 		{
-			fTotal += m_fClassDisguiseFitness[m_classes.ReturnValueFromIndex(i)];
+			fTotal += m_fClassDisguiseFitness[ availableClasses[i] ];
 
 			if ( fRand <= fTotal )
-				return m_classes.ReturnValueFromIndex(i);
+				return availableClasses[i];
 		}
 
 	}
 
-	return m_classes.Random();
+	// choose one of the classes proportional to whatever's on the team
+	return availableClasses[ randomInt(0, availableClasses.size() - 1) ];
 }
 
 bool CBotFortress :: incomingRocket ( float fRange )
@@ -4097,8 +4072,7 @@ bool CBotTF2::healPlayer()
 			{
 				// yes -- press fire to disconnect from player
 				if ( m_fHealClickTime < engine->Time() )
-				{					
-					extern ConVar rcbot_tf2_medic_letgotime;
+				{
 					m_fHealClickTime = engine->Time() + rcbot_tf2_medic_letgotime.GetFloat();
 				}
 
@@ -4245,8 +4219,6 @@ float CBotTF2 :: getEnemyFactor ( edict_t *pEnemy )
 		}
 		else if ( CTeamFortress2Mod::isBoss(pEnemy,&fBossFactor) )
 		{
-			extern ConVar bot_bossattackfactor;
-
 			fPreFactor = fBossFactor * bot_bossattackfactor.GetFloat();
 		}
 		else if ( CTeamFortress2Mod::isPipeBomb(pEnemy,CTeamFortress2Mod::getEnemyTeam(m_iTeam)) )
@@ -4295,14 +4267,6 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	static Vector vOrigin;
 	static unsigned char *failedlist;
 
-	extern ConVar rcbot_move_sentry_kpm;
-	extern ConVar rcbot_move_sentry_time;
-	extern ConVar rcbot_move_disp_time;
-	extern ConVar rcbot_move_disp_healamount;
-	extern ConVar rcbot_move_tele_time;
-	extern ConVar rcbot_move_tele_tpm;
-	extern ConVar rcbot_move_obj;
-
 	static bool bMoveObjs;
 
 	static bool bSentryHasEnemy;
@@ -4337,9 +4301,6 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	static int numplayersonteam_alive;
 
 	static bool bCheckCurrent;
-	
-	extern ConVar bot_messaround;
-	extern ConVar bot_defrate;
 
 	static CBotWeapon *pBWMediGun = NULL;
 	//static float fResupplyUtil = 0.5;
@@ -4429,9 +4390,9 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	}
 	if ( bNeedAmmo || bNeedHealth )
 	{
-		dataUnconstArray<int> *failed;
 		Vector vOrigin = getOrigin();
 
+		WaypointList *failed;
 		m_pNavigator->getFailedGoals(&failed);
 
 		failedlist = CWaypointLocations :: resetFailedWaypoints ( failed );
@@ -4599,9 +4560,9 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 				}
 				else
 				{
-					dataUnconstArray<int> *failed;
 					Vector vOrigin = getOrigin();
 
+					WaypointList *failed;
 					m_pNavigator->getFailedGoals(&failed);
 
 					failedlist = CWaypointLocations::resetFailedWaypoints(failed);
@@ -5185,7 +5146,6 @@ bool CBotTF2 :: selectBotWeapon ( CBotWeapon *pBotWeapon )
 bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *pWaypointResupply, CWaypoint *pWaypointHealth, CWaypoint *pWaypointAmmo )
 {
 	static CWaypoint *pWaypoint;
-	extern ConVar rcbot_move_dist;
 	int id;
 
 	id =  util->getId();
@@ -5362,8 +5322,6 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 						}
 						else // no where near the capture point 
 						{
-							extern ConVar bot_defrate;
-
 							fprob = bot_defrate.GetFloat();
 						}
 					}
@@ -6075,8 +6033,8 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					vPoint = pWaypoint->getOrigin();
 
-					dataUnconstArray<int> m_iVisibles;
-					dataUnconstArray<int> m_iInvisibles;
+					WaypointList m_iVisibles;
+					WaypointList m_iInvisibles;
 
 					int iWptFrom = CWaypointLocations::NearestWaypoint(vPoint,2048.0,-1,true,true,true,NULL,false,0,false);
 
@@ -6084,7 +6042,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					CWaypointLocations::GetAllVisible(iWptFrom,iWptFrom,vPoint,vPoint,2048.0,&m_iVisibles,&m_iInvisibles);
 
-					for ( int i = 0; i < m_iVisibles.Size(); i ++ )
+					for ( int i = 0; i < m_iVisibles.size(); i ++ )
 					{
 						if ( m_iVisibles[i] == CWaypoints::getWaypointIndex(pWaypoint) )
 							continue;
@@ -6102,9 +6060,6 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 							}
 						}
 					}
-					
-					m_iVisibles.Destroy();
-					m_iInvisibles.Destroy();
 
 					if ( !pStand )
 					{
@@ -6541,7 +6496,6 @@ void CBotTF2 :: touchedWpt ( CWaypoint *pWaypoint , int iNextWaypoint, int iPrev
 		}
 		else if ( pWaypoint->hasFlag(CWaypointTypes::W_FL_DOUBLEJUMP) )
 		{
-			extern ConVar bot_scoutdj;
 			m_pButtons->tap(IN_JUMP);
 			m_fDoubleJumpTime = engine->Time() + bot_scoutdj.GetFloat();
 			//m_pSchedules->addFront(new CBotSchedule(new CBotTFDoubleJump()));
@@ -6596,8 +6550,6 @@ void CBotTF2 :: modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_o
 	static CBotWeapon *pWp;
 	static float fTime;
 
-	extern ConVar rcbot_supermode;
-
 	pWp = getCurrentWeapon();
 
 	CBot::modAim(pEntity,v_origin,v_desired_offset,v_size,fDist,fDist2D);
@@ -6610,7 +6562,6 @@ void CBotTF2 :: modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_o
 			{
 				if (pWp->getProjectileSpeed() > 0)
 				{
-					extern ConVar *sv_gravity;
 					CClient *pClient = CClients::get(pEntity);
 					Vector vVelocity;
 
@@ -6653,8 +6604,6 @@ void CBotTF2 :: modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_o
 		{
 			if ( pWp->getID() == TF2_WEAPON_MINIGUN )
 			{
-				extern ConVar bot_heavyaimoffset;
-
 				Vector vForward;
 				Vector vRight;
 				Vector vUp;
@@ -6679,7 +6628,6 @@ void CBotTF2 :: modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_o
 				case TF2_WEAPON_FLAREGUN:
 				case TF2_WEAPON_GRENADELAUNCHER:
 				{
-					extern ConVar *sv_gravity;
 					CClient *pClient = CClients::get(pEntity);
 					Vector vVelocity;
 
@@ -6729,8 +6677,6 @@ void CBotTF2 :: modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_o
 /*
 Vector CBotTF2 :: getAimVector ( edict_t *pEntity )
 {
-	extern ConVar bot_aimsmoothing;
-	
 	static CBotWeapon *pWp;
 	static float fDist;
 	static float fTime;
@@ -6760,7 +6706,6 @@ Vector CBotTF2 :: getAimVector ( edict_t *pEntity )
 		{
 			if ( pWp->getID() == TF2_WEAPON_MINIGUN )
 			{
-				extern ConVar bot_heavyaimoffset;
 
 				Vector vForward;
 				Vector vRight;
@@ -6838,8 +6783,6 @@ void CBotTF2 :: checkDependantEntities ()
 
 eBotFuncState CBotTF2 :: rocketJump(int *iState,float *fTime)
 {
-	extern ConVar bot_rj;
-
 	setLookAtTask(LOOK_GROUND);
 	m_bIncreaseSensitivity = true;
 
@@ -6876,7 +6819,6 @@ eBotFuncState CBotTF2 :: rocketJump(int *iState,float *fTime)
 // return true if the enemy is ok to shoot, return false if there is a problem (e.g. weapon problem)
 bool CBotTF2 :: handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy )
 {
-	extern ConVar rcbot_enemyshootfov;
 	static float fDistance;
 
 	fDistance = distanceFrom(pEnemy);
@@ -6916,7 +6858,6 @@ bool CBotTF2 :: handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy )
 	{
 		Vector vEnemyOrigin;
 		bool bSecAttack = false;
-		extern ConVar rcbot_tf2_pyro_airblast;
 		bool bIsPlayer = false;
 
 		clearFailedWeaponSelect();
@@ -7162,10 +7103,6 @@ void CBotTF2 :: pointsUpdated()
 {
 	if ( m_iClass == TF_CLASS_ENGINEER )
 	{
-		extern ConVar rcbot_move_sentry_time;
-		extern ConVar rcbot_move_disp_time;
-		extern ConVar rcbot_move_tele_time;
-
 //m_pPayloadBomb = NULL;
 		bool bMoveSentry = (m_iSentryArea!=m_iCurrentAttackArea)&&(m_iSentryArea!=m_iCurrentDefendArea)&&((m_iTeam==TF2_TEAM_BLUE)||!CTeamFortress2Mod::isAttackDefendMap());
 		bool bMoveTeleEntrance = (m_iTeam==TF2_TEAM_BLUE)||!CTeamFortress2Mod::isAttackDefendMap();
@@ -7216,6 +7153,7 @@ void CBotTF2::updateDefendPoints()
 }
 
 /// TO DO : list of areas
+// TODO: determine if the intent was to use WaypointList for these
 void CBotTF2::getDefendArea ( std::vector<int> *m_iAreas )
 {
 	m_iCurrentDefendArea = CTeamFortress2Mod::m_ObjectiveResource.getRandomValidPointForTeam(m_iTeam,TF2_POINT_DEFEND);
@@ -7242,8 +7180,6 @@ void CBotTF2::pointCaptured(int iPoint, int iTeam, const char *szPointName)
 
 bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 {
-	extern ConVar rcbot_notarget;
-
 	static short int iEnemyTeam;
 	static bool bIsPipeBomb;
 	static bool bIsRocket;
@@ -7656,7 +7592,7 @@ void CBotTF2 :: enemyAtIntel ( Vector vPos, int type, int iArea )
 	// everyone go back to cap point unless doing something important
 	if ( (type == EVENT_CAPPOINT) || (!m_pNavigator->hasNextPoint() || ((m_pNavigator->getGoalOrigin()-getOrigin()).Length() > ((vPos-getOrigin()).Length()))) )
 	{
-		dataUnconstArray<int> *failed;
+		WaypointList *failed;
 		m_pNavigator->getFailedGoals(&failed);
 		CWaypoint *pWpt = NULL;
 		int iIgnore = -1;

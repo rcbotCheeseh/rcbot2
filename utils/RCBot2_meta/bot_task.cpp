@@ -34,6 +34,7 @@
 
 #include "bot_mtrand.h"
 #include "bot.h"
+#include "bot_cvars.h"
 #include "bot_schedule.h"
 #include "bot_task.h"
 #include "bot_navigator.h"
@@ -50,7 +51,6 @@
 #include "bot_waypoint_visibility.h"
 
 
-extern ConVar *sv_gravity;
 // desx and desy must be normalized
 // desx = distance (should be 2d)
 // desy = height offset
@@ -3660,7 +3660,6 @@ void CAttackEntityTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	if ( (pWeapon != NULL) && (pWeapon != pBot->getCurrentWeapon()) && pWeapon->getWeaponIndex() )
 	{
-		//pBot->selectWeaponSlot(pWeapon->getWeaponInfo()->getSlot());
 		pBot->selectWeapon(pWeapon->getWeaponIndex());
 	}
 
@@ -4231,7 +4230,6 @@ void CBotTF2DemomanPipeJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 			Vector v_startrunup;
 			Vector v_pipe;
 			Vector vel;
-			extern ConVar rcbot_demo_runup_dist;
 
 			if ( CClassInterface::getVelocity(m_pPipeBomb,&vel) )
 			{
@@ -4262,7 +4260,6 @@ void CBotTF2DemomanPipeJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	case 2:
 		{
 			Vector v_comp;
-			extern ConVar rcbot_demo_runup_dist;
 			Vector v_endrunup;
 			Vector v_pipe;
 

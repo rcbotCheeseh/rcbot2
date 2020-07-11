@@ -31,16 +31,14 @@
 #ifndef __RCBOT_NAVIGATOR_H__
 #define __RCBOT_NAVIGATOR_H__
 
-#include "bot_genclass.h"
-
 #include <vector>
 #include <queue>
+#include <stack>
 
 #include "bot.h"
 #include "bot_waypoint.h"
 
 #include "bot_belief.h"
-#include "bot_genclass.h"
 
 class CNavMesh;
 class CWaypointVisibilityTable;
@@ -102,7 +100,7 @@ public:
 
 	virtual void clear () = 0;
 
-	virtual void getFailedGoals (dataUnconstArray <int> **goals) = 0;
+	virtual void getFailedGoals (WaypointList **goals) = 0;
 
 	inline Vector getGoalOrigin () { return m_vGoal; }
 
@@ -379,8 +377,8 @@ public:
 
 	void init ();
 
-	CWaypoint *chooseBestFromBelief ( dataUnconstArray<CWaypoint*> *goals, bool bHighDanger = false, int iSearchFlags = 0, int iTeam = 0);
-	CWaypoint *chooseBestFromBeliefBetweenAreas ( dataUnconstArray<AStarNode*> *goals, bool bHighDanger = false, bool bIgnoreBelief = false );
+	CWaypoint *chooseBestFromBelief ( std::vector<CWaypoint*> &goals, bool bHighDanger = false, int iSearchFlags = 0, int iTeam = 0);
+	CWaypoint *chooseBestFromBeliefBetweenAreas ( std::vector<AStarNode*> &goals, bool bHighDanger = false, bool bIgnoreBelief = false );
 
 	float getNextYaw ();
 
@@ -437,7 +435,7 @@ public:
 	// nearest cover postion to both vectors
 	bool getHideSpotPosition ( Vector vCoverOrigin, Vector *vCover );
 
-	void getFailedGoals ( dataUnconstArray <int> **goals) { *goals = &m_iFailedGoals; }
+	void getFailedGoals (WaypointList **goals) { *goals = &m_iFailedGoals; }
 
 	int numPaths ( );
 
@@ -478,7 +476,7 @@ private:
 
 	failedpath_t m_lastFailedPath;
 
-	dataStack<int> m_currentRoute;
+	std::stack<int> m_currentRoute;
 	std::queue<int> m_oldRoute;
 
 	int m_iLastFailedWpt;
@@ -487,7 +485,7 @@ private:
 	AStarNode *curr;
 	AStarNode *succ;
 
-	dataUnconstArray<int> m_iFailedGoals;
+	WaypointList m_iFailedGoals;
 	float m_fNextClearFailedGoals;
 
 	float m_fBelief [CWaypoints::MAX_WAYPOINTS];

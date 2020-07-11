@@ -35,6 +35,7 @@
 
 #include "bot_const.h"
 //#include "bot_ehandle.h"
+#include "bot_waypoint.h"
 
 #define MAX_STORED_AUTOWAYPOINT 5
 
@@ -316,7 +317,9 @@ private:
 	int m_iCopyWptFlags;
 	int m_iCopyWptArea;
 
-	std::vector<int> m_WaypointCutPaths;
+	/* TODO m_WaypointCutPaths never gets read from -- only ::clear and ::push_back are used */
+	WaypointList m_WaypointCutPaths;
+	
 	eWptCopyType m_WaypointCopyType;
 	// TODO: tooltips queue
 	// vector<CToolTip*> tooltips

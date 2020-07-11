@@ -39,6 +39,7 @@
 #endif
 
 #include "bot.h"
+#include "bot_cvars.h"
 #include "bot_globals.h"
 #include "bot_strings.h"
 #include "bot_waypoint_locations.h"
@@ -222,7 +223,6 @@ void CBotGlobals::readRCBotFolder()
 float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fProjSpeed, float fGrenadePrimeTime, float *fAngle )
 {
 	static float g;
-	extern ConVar *sv_gravity;
 	Vector v_comp = vEnemy-vOrigin;
 	float fDistance = v_comp.Length();
 
@@ -488,11 +488,6 @@ bool CBotGlobals :: traceVisible (edict_t *pEnt)
 	return (m_TraceResult.fraction >= 1.0)||(m_TraceResult.m_pEnt && pEnt && (m_TraceResult.m_pEnt==pEnt->GetUnknown()->GetBaseEntity()));
 }
 
-void CBotGlobals :: freeMemory ()
-{
-	m_pCommands->freeMemory();
-}
-
 bool CBotGlobals::initModFolder() {
 	char szGameFolder[512];
 	engine->GetGameDir(szGameFolder, 512);
@@ -711,8 +706,7 @@ bool CBotGlobals :: setWaypointDisplayType ( int iType )
 }
 // work on this
 bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_dest)
-{   
-	extern ConVar rcbot_wptplace_width;
+{
 	CTraceFilterVis filter = CTraceFilterVis(pPlayer);
 	float fDistance = sqrt((v_dest - v_src).LengthSqr());
 	CClient *pClient = CClients::get(pPlayer);
@@ -894,7 +888,7 @@ bool CBotGlobals :: linesTouching3d (
 	return onOppositeSides3d(amins,amaxs,bmins,bmaxs) && boundingBoxTouch3d(amins,amaxs,bmins,bmaxs);
 }
 
-void CBotGlobals :: botMessage ( edict_t *pEntity, int iErr, char *fmt, ... )
+void CBotGlobals :: botMessage ( edict_t *pEntity, int iErr, const char *fmt, ... )
 {
 	va_list argptr; 
 	static char string[1024];

@@ -454,7 +454,7 @@ public:
 	const char *getCaption(CClient *pClient,WptColor &color );
 };*/
 
-typedef enum 
+enum 
 {
 	BOT_MENU_WPT = 0,
 	//BOT_MENU_BOT = 1,

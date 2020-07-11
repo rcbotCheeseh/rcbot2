@@ -31,8 +31,8 @@
 #include "engine_wrappers.h"
 
 #include "bot.h"
+#include "bot_cvars.h"
 #include "bot_visibles.h"
-#include "bot_genclass.h"
 #include "bot_globals.h"
 #include "bot_profile.h"
 #include "bot_client.h"
@@ -42,8 +42,6 @@
 #include "ndebugoverlay.h"
 
 extern IVDebugOverlay *debugoverlay;
-extern ConVar bot_visrevs;
-extern ConVar bot_visrevs_clients;
 ////////////////////////////////////////////
 
 byte CBotVisibles :: m_bPvs[MAX_MAP_CLUSTERS/8];
@@ -117,22 +115,15 @@ CBotVisibles :: ~CBotVisibles ()
 
 void CBotVisibles :: eachVisible ( CVisibleFunc *pFunc )
 {
-	dataStack<edict_t*> tempStack = m_VisibleList;
-	edict_t *pEnt;
-
-	while ( !tempStack.IsEmpty() )
-	{
-		pEnt = tempStack.ChooseFromStack();
-
-		if ( !pEnt->IsFree() )
-			pFunc->execute(pEnt);
+	for (edict_t *pEnt : m_VisibleSet) {
+		pFunc->execute(pEnt);
 	}
 }
 
 void CBotVisibles :: reset ()
 {
 	memset(m_iIndicesVisible,0,sizeof(unsigned char)*m_iMaxSize);
-	m_VisibleList.Destroy();
+	m_VisibleSet.clear();
 	m_iCurrentIndex = CBotGlobals::maxClients()+1;
 	m_iCurPlayer = 1;
 }
@@ -144,18 +135,23 @@ void CBotVisibles :: debugString ( char *string )
 
 	string[0] = 0;
 
-	dataStack<edict_t*> tempStack = m_VisibleList;
+	/**
+	 * I don't trust this implementation, so I'll just comment it out for now.
+	 * TODO: modify to use `std::set<T> m_VisibleSet` instead of the now-removed
+	 * `dataStack<T> m_VisibleList`
+	 */
+	// dataStack<edict_t*> tempStack = m_VisibleList;
 
-	while ( !tempStack.IsEmpty() )
-	{
-		edict_t *pEnt = tempStack.ChooseFromStack();
+	// while ( !tempStack.IsEmpty() )
+	// {
+		// edict_t *pEnt = tempStack.ChooseFromStack();
 
-		if ( !pEnt )
-			continue;
+		// if ( !pEnt )
+			// continue;
 
-		sprintf(szNum,"%d,",ENTINDEX(pEnt));
-		strcat(string,szNum);
-	}
+		// sprintf(szNum,"%d,",ENTINDEX(pEnt));
+		// strcat(string,szNum);
+	// }
 }
 /*
 @param	pEntity		entity to check
@@ -231,7 +227,6 @@ void CBotVisibles :: updateVisibles ()
 	static bool bVisible;
 	static edict_t *pEntity;
 	static edict_t *pGroundEntity;
-	extern ConVar rcbot_supermode;
 
 	static int iTicks;
 	static int iMaxTicks;  //m_pBot->getProfile()->getVisionTicks();
@@ -405,7 +400,7 @@ void CBotVisibles :: setVisible ( edict_t *pEdict, bool bVisible )
 	{
 		// visible now
 		if ( ((*(m_iIndicesVisible+iByte) & iFlag)!=iFlag) )
-			m_VisibleList.Push(pEdict);
+			m_VisibleSet.insert(pEdict);
 
 		*(m_iIndicesVisible+iByte) |= iFlag;		
 	}
@@ -413,7 +408,7 @@ void CBotVisibles :: setVisible ( edict_t *pEdict, bool bVisible )
 	{
 		// not visible anymore
 		if ( pEdict && ((*(m_iIndicesVisible+iByte) & iFlag)==iFlag) )
-			m_VisibleList.Remove(pEdict);
+			m_VisibleSet.erase(pEdict);
 
 		*(m_iIndicesVisible+iByte) &= ~iFlag;		
 	}

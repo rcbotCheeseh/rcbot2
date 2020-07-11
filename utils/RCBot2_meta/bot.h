@@ -40,12 +40,13 @@
 #ifndef __RCBOT2_H__
 #define __RCBOT2_H__
 
-//#define swap V_swap
+#define swap V_swap
 #include "mathlib.h"
-//#undef swap
+#undef swap
 
 //#include "cbase.h"
 //#include "baseentity.h"
+#include "toolframework/itoolentity.h"
 #include "filesystem.h"
 #include "interface.h"
 #include "engine/iserverplugin.h"
@@ -67,7 +68,10 @@
 #include "bot_utility.h"
 #include "bot_const.h"
 #include "bot_ehandle.h"
+
 #include <queue>
+#include <bitset>
+#include <limits>
 
 #if defined WIN32 && !defined snprintf
 #define snprintf _snprintf
@@ -78,11 +82,8 @@
 #define MIN_WPT_TOUCH_DIST 16.0f
 
 // Interfaces from the engine
-//using namespace VEngineServerV21;
-//using namespace ServerGameClientsV3;
 extern IVEngineServer *engine;  // helper functions (messaging clients, loading content, making entities, running commands, etc)
 extern IFileSystem *filesystem;  // file I/O 
-//extern IGameEventManager *gameeventmanager;  // game events interface
 extern IGameEventManager2 *gameeventmanager;
 extern IPlayerInfoManager *playerinfomanager;  // game dll interface to interact with players
 extern IServerPluginHelpers *helpers;  // special 3rd party plugin helpers from the engine
@@ -98,118 +99,20 @@ extern CGlobalVars *gpGlobals;
 
 #define T_OFFSETMAX  3
 
+// use a fixed bitset for all the conditions in bot_const.h
+using ConditionBitSet = std::bitset<NUM_CONDITIONS>;
+
 class CBotSquad;
 
+// static function
 bool BotFunc_BreakableIsEnemy ( edict_t *pBreakable, edict_t *pEdict );
 
-//-----------------------------------------------------------------------------
-// Purpose: This is a backward compatible IServerGameDLL
-//-----------------------------------------------------------------------------
-abstract_class IServerGameDLL_004
+// TODO: this is from game/server/util.h, remove once we can get it included
+// Misc useful
+inline bool FStrEq(const char *sz1, const char *sz2)
 {
-public:
-	// Initialize the game (one-time call when the DLL is first loaded )
-	// Return false if there is an error during startup.
-	virtual bool			DLLInit(	CreateInterfaceFn engineFactory, 
-										CreateInterfaceFn physicsFactory, 
-										CreateInterfaceFn fileSystemFactory, 
-										CGlobalVars *pGlobals) = 0;
-	
-	// This is called when a new game is started. (restart, map)
-	virtual bool			GameInit( void ) = 0;
-
-	// Called any time a new level is started (after GameInit() also on level transitions within a game)
-	virtual bool			LevelInit( char const *pMapName, 
-									char const *pMapEntities, char const *pOldLevel, 
-									char const *pLandmarkName, bool loadGame, bool background ) = 0;
-
-	// The server is about to activate
-	virtual void			ServerActivate( edict_t *pEdictList, int edictCount, int clientMax ) = 0;
-
-	// The server should run physics/think on all edicts
-	virtual void			GameFrame( bool simulating ) = 0;
-
-	// Called once per simulation frame on the final tick
-	virtual void			PreClientUpdate( bool simulating ) = 0;
-
-	// Called when a level is shutdown (including changing levels)
-	virtual void			LevelShutdown( void ) = 0;
-	// This is called when a game ends (server disconnect, death, restart, load)
-	// NOT on level transitions within a game
-	virtual void			GameShutdown( void ) = 0;
-
-	// Called once during DLL shutdown
-	virtual void			DLLShutdown( void ) = 0;
-
-	// Get the simulation interval (must be compiled with identical values into both client and game .dll for MOD!!!)
-	// Right now this is only requested at server startup time so it can't be changed on the fly, etc.
-	virtual float			GetTickInterval( void ) const = 0;
-
-	// Give the list of datatable classes to the engine.  The engine matches class names from here with
-	//  edict_t::classname to figure out how to encode a class's data for networking
-	virtual ServerClass*	GetAllServerClasses( void ) = 0;
-
-	// Returns string describing current .dll.  e.g., TeamFortress 2, Half-Life 2.  
-	//  Hey, it's more descriptive than just the name of the game directory
-	virtual const char     *GetGameDescription( void ) = 0;      
-	
-	// Let the game .dll allocate it's own network/shared string tables
-	virtual void			CreateNetworkStringTables( void ) = 0;
-	
-	// Save/restore system hooks
-	virtual CSaveRestoreData  *SaveInit( int size ) = 0;
-	virtual void			SaveWriteFields( CSaveRestoreData *, const char *, void *, datamap_t *, typedescription_t *, int ) = 0;
-	virtual void			SaveReadFields( CSaveRestoreData *, const char *, void *, datamap_t *, typedescription_t *, int ) = 0;
-	virtual void			SaveGlobalState( CSaveRestoreData * ) = 0;
-	virtual void			RestoreGlobalState( CSaveRestoreData * ) = 0;
-	virtual void			PreSave( CSaveRestoreData * ) = 0;
-	virtual void			Save( CSaveRestoreData * ) = 0;
-	virtual void			GetSaveComment( char *comment, int maxlength, float flMinutes, float flSeconds, bool bNoTime = false ) = 0;
-	virtual void			WriteSaveHeaders( CSaveRestoreData * ) = 0;
-	virtual void			ReadRestoreHeaders( CSaveRestoreData * ) = 0;
-	virtual void			Restore( CSaveRestoreData *, bool ) = 0;
-	virtual bool			IsRestoring() = 0;
-
-	// Returns the number of entities moved across the transition
-	virtual int				CreateEntityTransitionList( CSaveRestoreData *, int ) = 0;
-	// Build the list of maps adjacent to the current map
-	virtual void			BuildAdjacentMapList( void ) = 0;
-
-	// Retrieve info needed for parsing the specified user message
-	virtual bool			GetUserMessageInfo( int msg_type, char *name, int maxnamelength, int& size ) = 0;
-
-	// Hand over the StandardSendProxies in the game DLL's module.
-	virtual CStandardSendProxies*	GetStandardSendProxies() = 0;
-
-	// Called once during startup, after the game .dll has been loaded and after the client .dll has also been loaded
-	virtual void			PostInit() = 0;
-	// Called once per frame even when no level is loaded...
-	virtual void			Think( bool finalTick ) = 0;
-
-#ifdef _XBOX
-	virtual void			GetTitleName( const char *pMapName, char* pTitleBuff, int titleBuffSize ) = 0;
-#endif
-
-	virtual void			PreSaveGameLoaded( char const *pSaveName, bool bCurrentlyInGame ) = 0;
-
-	// Returns true if the game DLL wants the server not to be made public.
-	// Used by commentary system to hide multiplayer commentary servers from the master.
-	virtual bool			ShouldHideServer( void ) = 0;
-
-	virtual void			InvalidateMdlCache() = 0;
-
-	// * This function is new with version 6 of the interface.
-	//
-	// This is called when a query from IServerPluginHelpers::StartQueryCvarValue is finished.
-	// iCookie is the value returned by IServerPluginHelpers::StartQueryCvarValue.
-	// Added with version 2 of the interface.
-	virtual void			OnQueryCvarValueFinished( QueryCvarCookie_t iCookie, edict_t *pPlayerEntity, EQueryCvarValueStatus eStatus, const char *pCvarName, const char *pCvarValue ) = 0;
-	
-	// Called after the steam API has been activated post-level startup
-	virtual void			GameServerSteamAPIActivated( void ) = 0;
-	
-	virtual void			GameServerSteamAPIShutdown( void ) = 0;
-};
+	return ( sz1 == sz2 || Q_stricmp(sz1, sz2) == 0 );
+}
 
 /////////// Voice commands
 
@@ -490,7 +393,7 @@ public:
 
 	inline bool hasSomeConditions ( int iConditions )
 	{
-		return (m_iConditions & iConditions) > 0;
+		return (m_iConditions & static_cast<ConditionBitSet>(iConditions)).any();
 	}
 
 	virtual bool handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy );
@@ -508,12 +411,13 @@ public:
 
 	inline int getConditions ()
 	{
-		return m_iConditions;
+		static_assert(NUM_CONDITIONS <= std::numeric_limits<int>::digits, "Condition bitset is larger than int");
+		return static_cast<int>(m_iConditions.to_ulong());
 	}
 
 	inline bool hasAllConditions ( int iConditions )
 	{
-		return (m_iConditions & iConditions) == iConditions;
+		return (m_iConditions & static_cast<ConditionBitSet>(iConditions)) == static_cast<ConditionBitSet>(iConditions);
 	}
 
 	inline void updateCondition ( int iCondition )
@@ -590,8 +494,6 @@ public:
 
 		return ret;
 	}
-
-	void selectWeaponSlot ( int iSlot );
 
 	edict_t *getAvoidEntity () { return m_pAvoidEntity; }
 
@@ -1013,7 +915,8 @@ protected:
 	int m_iAccumulatedDamage;
 	int m_iPrevHealth;
 	///////////////////////////////////
-	int m_iConditions;
+	ConditionBitSet m_iConditions;
+
 	// bot tasks etc -- complex actuators
 	CBotSchedules *m_pSchedules;
 	// buttons held -- simple actuators
@@ -1203,91 +1106,5 @@ private:
 	static float m_flAddKickBotTime;
 
 };
-
-class IEntityFactoryDictionary;
-class IClientEntity;
-class CBaseAnimating;
-class ITempEntsSystem;
-class CTakeDamageInfo;
-//-----------------------------------------------------------------------------
-// Purpose: Interface from engine to tools for manipulating entities
-//-----------------------------------------------------------------------------
-class IServerTools : public IBaseInterface
-{
-public:
-	virtual IServerEntity *GetIServerEntity( IClientEntity *pClientEntity ) = 0;
-	virtual bool SnapPlayerToPosition( const Vector &org, const QAngle &ang, IClientEntity *pClientPlayer = NULL ) = 0;
-	virtual bool GetPlayerPosition( Vector &org, QAngle &ang, IClientEntity *pClientPlayer = NULL ) = 0;
-	virtual bool SetPlayerFOV( int fov, IClientEntity *pClientPlayer = NULL ) = 0;
-	virtual int GetPlayerFOV( IClientEntity *pClientPlayer = NULL ) = 0;
-	virtual bool IsInNoClipMode( IClientEntity *pClientPlayer = NULL ) = 0;
-
-	// entity searching
-	virtual CBaseEntity *FirstEntity( void ) = 0;
-	virtual CBaseEntity *NextEntity( CBaseEntity *pEntity ) = 0;
-	virtual CBaseEntity *FindEntityByHammerID( int iHammerID ) = 0;
-
-	// entity query
-	virtual bool GetKeyValue( CBaseEntity *pEntity, const char *szField, char *szValue, int iMaxLen ) = 0;
-	virtual bool SetKeyValue( CBaseEntity *pEntity, const char *szField, const char *szValue ) = 0;
-	virtual bool SetKeyValue( CBaseEntity *pEntity, const char *szField, float flValue ) = 0;
-	virtual bool SetKeyValue( CBaseEntity *pEntity, const char *szField, const Vector &vecValue ) = 0;
-
-	// entity spawning
-	virtual CBaseEntity *CreateEntityByName( const char *szClassName ) = 0;
-	virtual void DispatchSpawn( CBaseEntity *pEntity ) = 0;
-
-	// This reloads a portion or all of a particle definition file.
-	// It's up to the server to decide if it cares about this file
-	// Use a UtlBuffer to crack the data
-	virtual void ReloadParticleDefintions( const char *pFileName, const void *pBufData, int nLen ) = 0;
-
-	virtual void AddOriginToPVS( const Vector &org ) = 0;
-	virtual void MoveEngineViewTo( const Vector &vPos, const QAngle &vAngles ) = 0;
-
-	virtual bool DestroyEntityByHammerId( int iHammerID ) = 0;
-	virtual CBaseEntity *GetBaseEntityByEntIndex( int iEntIndex ) = 0;
-	virtual void RemoveEntity( CBaseEntity *pEntity ) = 0;
-	virtual void RemoveEntityImmediate( CBaseEntity *pEntity ) = 0;
-	virtual IEntityFactoryDictionary *GetEntityFactoryDictionary( void ) = 0;
-
-	virtual void SetMoveType( CBaseEntity *pEntity, int val ) = 0;
-	virtual void SetMoveType( CBaseEntity *pEntity, int val, int moveCollide ) = 0;
-	virtual void ResetSequence( CBaseAnimating *pEntity, int nSequence ) = 0;
-	virtual void ResetSequenceInfo( CBaseAnimating *pEntity ) = 0;
-
-	virtual void ClearMultiDamage( void ) = 0;
-	virtual void ApplyMultiDamage( void ) = 0;
-	virtual void AddMultiDamage( const CTakeDamageInfo &pTakeDamageInfo, CBaseEntity *pEntity ) = 0;
-	virtual void RadiusDamage( const CTakeDamageInfo &info, const Vector &vecSrc, float flRadius, int iClassIgnore, CBaseEntity *pEntityIgnore ) = 0;
-
-	virtual ITempEntsSystem *GetTempEntsSystem( void ) = 0;
-};
-
-typedef IServerTools IServerTools001;
-
-#define VSERVERTOOLS_INTERFACE_VERSION_1	"VSERVERTOOLS001"
-#define VSERVERTOOLS_INTERFACE_VERSION		"VSERVERTOOLS002"
-#define VSERVERTOOLS_INTERFACE_VERSION_INT	2
-
-void DrawLine ( const Vector &origin, const Vector &target, int r, int g, int b, bool noDepthTest, float duration );
-
-// useful helper funcs...
-//int RANDOM_INT(int min, int max);
-// Misc useful
-inline bool FStrEq(const char *sz1, const char *sz2)
-{
-	return ( sz1 == sz2 || Q_stricmp(sz1, sz2) == 0 );
-}
-//edict_t* INDEXENT( int iEdictNum );
-// get entity index
-//int ENTINDEX( edict_t *pEdict );
-float VectorDistance(Vector &vec);
-int Ceiling ( float fVal );
-bool FNullEnt(const edict_t* pent);
-// ??
-//#define SAFE_STRCPY (to,from,siz)\
-//	strncpy(to,from,siz-1);\
-//	to[siz-1] = 0;
 
 #endif // __RCBOT2_H__

@@ -34,8 +34,6 @@
 #ifndef __BOT_UTILITY_H__
 #define __BOT_UTILITY_H__
 
-#include "bot_genclass.h"
-
 #include <vector>
 
 class CBot;

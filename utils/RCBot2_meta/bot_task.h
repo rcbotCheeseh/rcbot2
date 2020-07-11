@@ -39,6 +39,7 @@ struct edict_t;
 #include "bot.h"
 #include "bot_const.h"
 #include "bot_fortress.h"
+#include "bot_waypoint.h"
 
 class CWaypointVisibilityTable;
 
@@ -388,8 +389,8 @@ private:
 
 	CWaypointVisibilityTable *m_pTable;
 	CWaypoint *m_pTarget;
-	std::vector<int> m_WaypointsI;
-	std::vector<int> m_WaypointsJ;
+	WaypointList m_WaypointsI;
+	WaypointList m_WaypointsJ;
 };
 
 

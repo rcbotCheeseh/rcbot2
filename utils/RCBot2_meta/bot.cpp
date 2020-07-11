@@ -42,9 +42,9 @@
 //#define GAME_DLL
 
 //#include "cbase.h"
-//#define swap V_swap
+#define swap V_swap
 #include "mathlib.h"
-//#undef swap
+#undef swap
 
 #include "vector.h"
 #include "vplane.h"
@@ -69,6 +69,7 @@
 //#include "basecombatcharacter.h"
 
 #include "bot.h"
+#include "bot_cvars.h"
 #include "bot_schedule.h"
 #include "bot_buttons.h"
 #include "bot_navigator.h"
@@ -122,8 +123,6 @@ float  CBots :: m_flAddKickBotTime = 0;
 #define TIME_TO_TICKS( dt )		( (int)( 0.5f + (float)(dt) / TICK_INTERVAL ) )
 
 extern IVDebugOverlay *debugoverlay;
-extern ConVar bot_use_vc_commands;
-extern ConVar rcbot_dont_move;
 
 const char *g_szLookTaskToString[LOOK_MAX] = 
 {
@@ -198,9 +197,6 @@ void CBroadcastVoiceCommand :: execute ( CBot *pBot )
 ///////////////////////////////////////
 void CBot :: runPlayerMove()
 {
-	extern ConVar rcbot_move_forward;
-	extern ConVar bot_attack;
-
 	int cmdnumbr = cmd.command_number+1;
 
 	//////////////////////////////////
@@ -644,8 +640,6 @@ bool CBot :: canAvoid ( edict_t *pEntity )
 	float distance;
 	Vector vAvoidOrigin;
 
-	extern ConVar bot_avoid_radius;
-
 	if ( !CBotGlobals::entityIsValid(pEntity) )
 		return false;
 	if ( m_pEdict == pEntity ) // can't avoid self!!!
@@ -735,16 +729,6 @@ void CBot :: selectWeaponName ( const char *szWeapon )
 	m_pController->SetActiveWeapon(szWeapon);
 }
 
-void CBot :: selectWeaponSlot ( int iSlot )
-{
-	char cmd[16];
-
-	sprintf(cmd,"slot%d",iSlot);
-
-	helpers->ClientCommand(m_pEdict,cmd);
-	//m_iSelectWeapon = iSlot;
-}
-
 CBotWeapon *CBot :: getBestWeapon (edict_t *pEnemy,bool bAllowMelee, bool bAllowMeleeFallback, bool bMeleeOnly, bool bExplosivesOnly )
 {
 	return m_pWeapons->getBestWeapon(pEnemy,bAllowMelee,bAllowMeleeFallback,bMeleeOnly,bExplosivesOnly);
@@ -785,9 +769,6 @@ void CBot :: kill ()
 void CBot :: think ()
 {
 	static float fTime;
-	extern ConVar rcbot_debug_iglev;
-	extern ConVar rcbot_debug_dont_shoot;
-	extern ConVar rcbot_debug_notasks;
 	//static bool debug;
 	//static bool battack;
 
@@ -1097,7 +1078,6 @@ void CBot :: handleWeapons ()
 
 		if ( m_bWantToChangeWeapon && (pWeapon != NULL) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex() )
 		{
-			//selectWeaponSlot(pWeapon->getWeaponInfo()->getSlot());
 			selectWeapon(pWeapon->getWeaponIndex());
 		}
 
@@ -1219,8 +1199,6 @@ void CBot :: updateConditions ()
 
 			if ( CBotGlobals::entityIsValid(pLeader) && CBotGlobals::entityIsAlive(pLeader) )
 			{
-				extern ConVar rcbot_squad_idle_time;
-
 				removeCondition(CONDITION_SQUAD_LEADER_DEAD);
 
 				if ( distanceFrom(pLeader) <= 400.0f )
@@ -1718,7 +1696,7 @@ int CBot :: getTeam ()
 	return m_pPlayerInfo->GetTeamIndex();
 }
 
-const char *pszConditionsDebugStrings[CONDITION_MAX_BITS+1] =
+const char *pszConditionsDebugStrings[NUM_CONDITIONS] =
 {"CONDITION_ENEMY_OBSCURED",
 "CONDITION_NO_WEAPON",
 "CONDITION_OUT_OF_AMMO",
@@ -1770,19 +1748,16 @@ void CBot ::debugBot(char *msg)
 
 	char szConditions[512];
 	int iBit = 0;
-	int iMask;
 
 	szConditions[0] = 0; // initialise string
 
-	for ( iMask = 1; iMask <= CONDITION_MAX; iBit++ )
+	for (size_t iCond = 0; iCond < NUM_CONDITIONS; iCond++)
 	{
-		if ( m_iConditions & iMask )
+		if ( m_iConditions[iCond] )
 		{
-			strcat(szConditions,pszConditionsDebugStrings[iBit]);
-			strcat(szConditions,"\n");
+			strcat(szConditions, pszConditionsDebugStrings[iCond]);
+			strcat(szConditions, "\n");
 		}
-	
-		iMask *= 2;
 	}
 
 	char task_string[256];
@@ -1912,8 +1887,6 @@ void CBot :: updateStatistics ()
 	bool bVisible = false;
 	bool bIsEnemy = false;
 
-	extern ConVar rcbot_stats_inrange_dist;
-
 	if ( (m_iStatsIndex == 0) || ( m_iStatsIndex > gpGlobals->maxClients ) )
 	{
 		if ( m_iStatsIndex != 0 )
@@ -1998,8 +1971,6 @@ void CBot :: listenForPlayers ()
 	float fDist;
 	float fVelocity;
 	Vector vVelocity;
-	extern ConVar rcbot_listen_dist;
-	extern ConVar rcbot_footstep_speed;
 	bool bIsNearestAttacking = false;
 
 	if ( m_bListenPositionValid && (m_fListenTime > engine->Time()) ) // already listening to something ?
@@ -2220,8 +2191,6 @@ void CBot :: doMove ()
 		{
 			if ( canAvoid(m_pAvoidEntity) )
 			{
-				extern ConVar bot_avoid_strength;
-
 				Vector m_vAvoidOrigin = CBotGlobals::entityOrigin(m_pAvoidEntity);
 
 				//m_vMoveTo = getOrigin() + ((m_vMoveTo-getOrigin())-((m_vAvoidOrigin-getOrigin())*bot_avoid_strength.GetFloat()));
@@ -2411,8 +2380,6 @@ Vector CBot::getAimVector ( edict_t *pEntity )
 
 	// post aim
 	// update 
-	extern ConVar rcbot_supermode;
-
 	if ( rcbot_supermode.GetBool() )
 	{
 		m_vAimOffset = v_desired_offset;
@@ -2467,8 +2434,6 @@ void CBot::modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset
 	static Vector enemyvel;
 	static float fDistFactor;
 	static float fHeadOffset;
-
-	extern ConVar rcbot_supermode;
 
 	int iPlayerFlags = CClassInterface::getPlayerFlags(pEntity);
 
@@ -2829,8 +2794,6 @@ void CBot :: changeAngles ( float fSpeed, float *fIdeal, float *fCurrent, float 
 	float alpha;
 	float alphaspeed;
 
-	extern ConVar bot_anglespeed;
-
 	if (bot_anglespeed.GetFloat() < 0.01f)
 		bot_anglespeed.SetValue(0.16f);
 
@@ -2901,8 +2864,6 @@ void CBot :: doLook ()
     if ( lookAtIsValid () )
 	{	
 		float fSensitivity;
-		extern ConVar rcbot_supermode;
-		
 		if ( rcbot_supermode.GetBool() || m_bIncreaseSensitivity || onLadder() )
 			fSensitivity = 15.0f;
 		else
@@ -3162,8 +3123,6 @@ bool CBots :: createBot (const char *szClass, const char *szTeam, const char *sz
 	edict_t *pEdict;
 	CBotProfile *pBotProfile;
 	CBotMod *pMod = CBotGlobals::getCurrentMod();
-	extern ConVar rcbot_addbottime;
-
 	char *szOVName = "";
 
 	if ( (m_iMaxBots != -1) && (CBotGlobals::numClients() >= m_iMaxBots) )
@@ -3306,8 +3265,6 @@ CBot *CBots :: findBotByProfile ( CBotProfile *pProfile )
 void CBots :: runPlayerMoveAll ()
 {
 	static CBot *pBot;
-	extern ConVar bot_stop;
-
 	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
 	{
 		pBot = m_Bots[i];
@@ -3324,9 +3281,6 @@ void CBots :: runPlayerMoveAll ()
 void CBots :: botThink ()
 {
 	static CBot *pBot;
-
-	extern ConVar bot_stop;
-	extern ConVar bot_command;
 
 	bool bBotStop = bot_stop.GetInt() > 0;
 
@@ -3501,27 +3455,27 @@ bool CBots :: needToKickBot ()
 
 void CBots :: kickRandomBot (size_t count)
 {
-	std::vector<int> list;
+	std::vector<int> botList;
 	char szCommand[512];
 	//gather list of bots
 	for ( size_t i = 0; i < MAX_PLAYERS; i ++ )
 	{
 		if ( m_Bots[i]->inUse() )
-			list.push_back(i);
+			botList.push_back(i);
 	}
 
-	if ( list.empty() )
+	if ( botList.empty() )
 	{
 		CBotGlobals::botMessage(NULL,0,"kickRandomBot() : No bots to kick");
 		return;
 	}
 
-	std::random_shuffle ( list.begin(), list.end() );
+	std::random_shuffle ( botList.begin(), botList.end() );
 
 	size_t numBotsKicked = 0;
-	while (numBotsKicked < count && list.size()) {
-		size_t index = list.back();
-		list.pop_back();
+	while (numBotsKicked < count && botList.size()) {
+		size_t index = botList.back();
+		botList.pop_back();
 		
 		CBot *tokick = m_Bots[index];
 
@@ -3536,28 +3490,27 @@ void CBots :: kickRandomBot (size_t count)
 
 void CBots :: kickRandomBotOnTeam ( int team )
 {
-	dataUnconstArray<int> list;
+	std::vector<int> botList;
 	int index;
 	CBot *tokick;
 	char szCommand[512];
 	//gather list of bots
 	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
 	{
-		if ( m_Bots[i]->inUse() )
+		if ( m_Bots[i]->inUse() && m_Bots[i]->getTeam() == team )
 		{
-			if ( m_Bots[i]->getTeam() == team )
-				list.Add(i);
+			botList.push_back(i);
 		}
 	}
 
-	if ( list.IsEmpty() )
+	if ( botList.empty() )
 	{
 		CBotGlobals::botMessage(NULL,0,"kickRandomBotOnTeam() : No bots to kick");
 		return;
 	}
 
-	index = list.Random();
-	list.Clear();
+	// TODO change this to container function
+	index = botList[ randomInt(0, botList.size() - 1) ];
 	
 	tokick = m_Bots[index];
 	

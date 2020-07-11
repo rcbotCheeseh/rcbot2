@@ -33,7 +33,8 @@
 
 #include "bot.h"
 #include "bot_globals.h"
-#include "bot_genclass.h"
+
+#include <set>
 
 class CVisibleFunc
 {
@@ -124,7 +125,7 @@ private:
 	int m_iMaxSize;
 	int m_iMaxIndex;
 
-	dataStack<edict_t*> m_VisibleList;
+	std::set<edict_t*> m_VisibleSet;
 };
 
 #endif

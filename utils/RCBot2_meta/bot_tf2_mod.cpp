@@ -33,6 +33,7 @@
 //#include "server_class.h"
 
 #include "bot.h"
+#include "bot_cvars.h"
 
 #include "in_buttons.h"
 
@@ -97,12 +98,9 @@ int CTeamFortress2Mod::m_iFlagPointWptID = -1;
 MyEHandle CTeamFortress2Mod::m_pNearestTankBoss = NULL;
 float CTeamFortress2Mod::m_fNearestTankDistance = 0.0f;
 Vector CTeamFortress2Mod::m_vNearestTankLocation = Vector(0, 0, 0);
-extern ConVar bot_use_disp_dist;
 
 bool CTeamFortress2Mod::isSuddenDeath()
 {
-	extern ConVar *mp_stalemate_enable;
-	
 	// Bot weapon Randomizer -- leonardo
 	if (!mp_stalemate_enable || !mp_stalemate_enable->GetBool() || isMapType(TF_MAP_ARENA))
 		return false;
@@ -737,11 +735,8 @@ void CTeamFortress2Mod:: flagPickedUp (int iTeam, edict_t *pPlayer)
 
 	m_iFlagCarrierTeam = iTeam;
 
-	CBotTF2FunctionEnemyAtIntel *function = new CBotTF2FunctionEnemyAtIntel(iTeam,CBotGlobals::entityOrigin(pPlayer),EVENT_FLAG_PICKUP);
-
-	CBots::botFunction(function);
-
-	delete function;
+	CBotTF2FunctionEnemyAtIntel func(iTeam, CBotGlobals::entityOrigin(pPlayer), EVENT_FLAG_PICKUP);
+	CBots::botFunction(&func);
 }
 
 bool CTeamFortress2Mod :: isArenaPointOpen ()
@@ -1170,7 +1165,6 @@ void CTeamFortress2Mod::updatePointMaster()
 		if ( pMaster )
 		{
 #ifdef _WIN32
-			extern ConVar rcbot_const_point_master_offset;
 			extern IServerGameEnts *servergameents;
 
 			CBaseEntity *pMasterEntity = servergameents->EdictToBaseEntity(pMaster);
@@ -1182,15 +1176,12 @@ void CTeamFortress2Mod::updatePointMaster()
 			m_PointMaster = (CTeamControlPointMaster*)mempoint;
 			m_PointMasterResource = pMaster;
 #else
-			extern ConVar rcbot_const_point_master_offset;
 			CBaseEntity *pent = pMaster->GetUnknown()->GetBaseEntity();
 			unsigned long mempoint = ((unsigned long)pent)+rcbot_const_point_master_offset.GetInt();
 
 			m_PointMaster = (CTeamControlPointMaster*)mempoint;
 			m_PointMasterResource = pMaster;
 #endif
-
-			//extern ConVar rcbot_const_round_offset;
 
 			int idx = m_PointMaster->m_iCurrentRoundIndex;
 			int size = m_PointMaster->m_ControlPointRounds.Size();
@@ -1282,7 +1273,6 @@ void CTeamFortress2Mod :: roundReset ()
 
 	if ( m_ObjectiveResource.isInitialised() )
 	{
-		extern ConVar rcbot_tf2_autoupdate_point_time;
 		int numpoints = m_ObjectiveResource.GetNumControlPoints();
 		int i;
 

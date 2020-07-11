@@ -1,5 +1,6 @@
 #include "engine_wrappers.h"
 #include "bot.h"
+#include "bot_cvars.h"
 #include "bot_getprop.h"
 #include "bot_fortress.h"
 #include "bot_tf2_points.h"
@@ -169,7 +170,7 @@ bool CTFObjectiveResource::isCPValid ( int iCPIndex, int iTeam, ePointAttackDefe
 int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDefend_s type)
 {
 	TF2PointProb_t *arr = NULL;
-	std::vector<int> points;
+	std::vector<int> points; // point indices
 	int iotherteam;
 
 	float fTotal = 0.0f;
@@ -255,7 +256,6 @@ void CTeamRoundTimer::reset()
 bool CTeamControlPointRound :: isPointInRound ( edict_t *point_pent )
 {
 	edict_t *pPoint;
-	//extern ConVar rcbot_const_point_master_offset;
 
 	for ( int i = 0; i < m_ControlPoints.Size(); i ++ )
 	{
@@ -296,7 +296,6 @@ CTeamControlPointRound *CTeamControlPointMaster:: getCurrentRound ( )
 
 	//edict_t *p = servergameents->BaseEntityToEdict(pent);
 	
-	extern ConVar rcbot_const_point_master_offset;
 	/*
 	CTeamControlPointRound *org = (CTeamControlPointRound*)((unsigned long)pent+(unsigned long)rcbot_const_round_offset.GetInt());
 	CTeamControlPointRound *fromunk = (CTeamControlPointRound*)p->GetUnknown();
@@ -433,7 +432,6 @@ int CTFObjectiveResource::NearestArea ( Vector vOrigin )
 
 /*CTeamControlPoint *CTeamControlPoint::getPoint ( edict_t *pent )
 {
-	extern ConVar rcbot_const_point_offset;
 	return (CTeamControlPoint*)((((unsigned long)pent) + rcbot_const_point_offset.GetInt())); //MAP_CLASS(CTeamControlPoint,(((unsigned long)pent) + offset),knownoffset);
 }*/
 
@@ -580,8 +578,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 								arr[i].fProb = 1.0f;
 							}
 							else if ( iNumOwned == (iNumAvailable-2) )
-							{							
-								extern ConVar bot_defrate;
+							{
 								// other team can capture this as the next point
 								arr[i].fProb = bot_defrate.GetFloat();
 							}
@@ -624,8 +621,6 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 			{
 				// this point is next because the current valid points are required
 				arr[i].bNextPoint = true;
-
-				extern ConVar bot_defrate;
 		
 				// other team can capture this as the next point
 				// lower chance of defending the next point before round has started!!! Get everyone up!!
@@ -681,8 +676,6 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 	{
 		float fMaxProb = 1.0f;
 		bool bFirst = true;
-		extern ConVar bot_defrate;
-		extern ConVar rcbot_tf2_payload_dist_retreat;
 
 		other = (team==2)?3:2;
 
@@ -791,8 +784,6 @@ void CTFObjectiveResource :: think ()
 
 		if ( bupdate )
 		{
-			extern ConVar rcbot_tf2_autoupdate_point_time;
-
 			updatePoints();
 
 			m_fNextCheckMonitoredPoint = engine->Time() + 5.0f;

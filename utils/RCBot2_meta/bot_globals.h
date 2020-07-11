@@ -60,8 +60,6 @@ public:
 
 	static QAngle playerAngles ( edict_t *pPlayer );
 
-	static void freeMemory ();
-
 	static inline bool isPlayer ( edict_t *pEdict )
 	{
 		static int index;
@@ -87,7 +85,7 @@ public:
 	// add a directory delimiter to the string like '/' (linux) or '\\' (windows) or
 	static void addDirectoryDelimiter ( char *szString );
 	// print a message to client pEntity with bot formatting
-	static void botMessage ( edict_t *pEntity, int iErr, char *fmt, ... );	
+	static void botMessage ( edict_t *pEntity, int iErr, const char *fmt, ... );	
 	
 	static void fixFloatAngle ( float *fAngle );
 
@@ -206,7 +204,7 @@ public:
 	static Vector getVelocity ( edict_t *pPlayer );
 
 	////////
-	static CBotCommandContainer *m_pCommands;
+	static CBotSubcommands *m_pCommands;
 
 	static void readRCBotFolder();
 	

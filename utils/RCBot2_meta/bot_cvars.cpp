@@ -93,7 +93,7 @@ ConVar rcbot_spy_runaway_health("rcbot_spy_runaway_health","70",0,"health which 
 ConVar rcbot_supermode("rcbot_supermode","0",0,"If 1 will make every bot skill and reaction much higher");
 ConVar rcbot_addbottime("rcbot_addbottime","3",0,"The time in seconds for bots to be added after another");
 ConVar rcbot_gamerules_offset("rcbot_gamerules_offset", "5", 0, "offset for gamerules object");
-ConVar rcbot_bot_quota_interval("rcbot_bot_quota_interval", "-1", 0, "Interval between bot quota checks, 0 or lower to disable");
+ConVar rcbot_bot_quota_interval("rcbot_bot_quota_interval", "10", 0, "Interval between bot quota checks, 0 or lower to disable");
 ConVar rcbot_show_welcome_msg("rcbot_show_welcome_msg", "1", 0, "Show welcome message on player connect");
 ConVar rcbot_force_class("rcbot_force_class", "0", 0, "Force bots to choose specified class, kills alive bots on change (1 - 9, set to 0 for none)");
 

@@ -759,13 +759,14 @@ void CBotSchedule :: execute ( CBot *pBot )
 	static CBotTask *pTask;
 	static eTaskState iState;
 
-	if ( m_Tasks.IsEmpty() )
+	if ( m_Tasks.empty() )
 	{
 		m_bFailed = true;
 		return;
 	}
 
-	pTask = m_Tasks.GetFrontInfo();
+	// why would task ever be null??
+	pTask = m_Tasks.front();
 
 	if ( pTask == NULL )
 	{
@@ -813,16 +814,14 @@ void CBotSchedule :: addTask ( CBotTask *pTask )
 {
 	// initialize
 	pTask->init();
-    // add
-	m_Tasks.Add(pTask);
+	// add
+	m_Tasks.push_back(pTask);
 }
 
 void CBotSchedule :: removeTop ()
 {
-	CBotTask *pTask = m_Tasks.GetFrontInfo();
-
-	m_Tasks.RemoveFront();
-
+	CBotTask *pTask = m_Tasks.front();
+	m_Tasks.pop_front();
 	delete pTask;
 }
 

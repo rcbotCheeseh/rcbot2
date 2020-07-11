@@ -406,7 +406,7 @@ bool CDODFlags::getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int
 
 bool CDODFlags::getRandomBombToDefuse  ( Vector *position, int iTeam, edict_t **pBombTarget, int *id )
 {
-	std::vector<int> iPossible;
+	std::vector<int> iPossible; // int is control point entry
 	short int j;
 	int selection;
 
@@ -446,7 +446,7 @@ bool CDODFlags::getRandomBombToDefuse  ( Vector *position, int iTeam, edict_t **
 //return random bomb with highest danger
 bool CDODFlags:: getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id )
 {
-	std::vector<int> iPossible;
+	std::vector<int> iPossible; // int is control point entry
 	short int j;
 	int selection;
 

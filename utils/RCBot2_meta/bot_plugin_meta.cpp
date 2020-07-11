@@ -567,7 +567,6 @@ bool RCBotPluginMeta::Unload(char *error, size_t maxlen)
 	
 	CBots::freeAllMemory();
 	CStrings::freeAllMemory();
-	CBotGlobals::freeMemory();
 	CBotMods::freeMemory();
 	CAccessClients::freeMemory();
 	CBotEvents::freeMemory();

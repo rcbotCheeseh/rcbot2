@@ -33,10 +33,14 @@
 
 #include <stdio.h>
 
+// this must be before bot_client.h to avoid unknown override / missing type warnings
+#include <vector>
+using WaypointList = std::vector<int>;
+
 #include "bot.h"
-#include "bot_genclass.h"
 #include "bot_client.h"
 #include "bot_wpt_color.h"
+#include "bot_mtrand.h"
 
 //#include "bot_navigator.h"
 
@@ -223,14 +227,14 @@ public:
 
 	CWaypoint ()
 	{
-		m_thePaths.Init();
+		m_thePaths.clear();
 		init();
 //		m_iId = -1;
 	}
 
 	CWaypoint ( Vector vOrigin, int iFlags = 0, int iYaw = 0, int m_fRadius = 0 )
 	{
-		m_thePaths.Clear();
+		m_thePaths.clear();
 		init();
 		m_iFlags = iFlags;
 		m_vOrigin = vOrigin;		
@@ -239,7 +243,7 @@ public:
 		m_fNextCheckGroundTime = 0;
 		m_bHasGround = false;
 		m_fRadius = 0;
-		m_OpensLaterInfo.Clear();
+		m_OpensLaterInfo.clear();
 		m_bIsReachable = true; 
 		m_fCheckReachableTime = 0;
 //		m_iId = iId;
@@ -328,7 +332,7 @@ public:
 
 	inline void freeMapMemory ()
 	{
-		m_thePaths.Clear();//Destroy();
+		m_thePaths.clear();
 	}
 
 	inline int getArea () { return m_iArea; }
@@ -382,16 +386,16 @@ private:
 	// not deleted
 	bool m_bUsed;
 	// paths to other waypoints
-	dataUnconstArray<int> m_thePaths;
+	WaypointList m_thePaths;
 	// for W_FL_WAIT_GROUND waypoints
 	float m_fNextCheckGroundTime;
 	bool m_bHasGround;
 	// Update m_iNumPathsTo (For display)
 	bool m_bIsReachable; 
 	float m_fCheckReachableTime;
-	dataUnconstArray<int> m_PathsTo; // paths to this waypoint from other waypoints
+	WaypointList m_PathsTo; // paths to this waypoint from other waypoints
 
-	dataUnconstArray<wpt_opens_later_t> m_OpensLaterInfo;
+	std::vector<wpt_opens_later_t> m_OpensLaterInfo;
 };
 
 class CWaypoints

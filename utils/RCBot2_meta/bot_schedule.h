@@ -33,8 +33,9 @@
 
 #include "bot.h"
 #include "bot_task.h"
-#include "bot_genclass.h"
 //#include "bot_fortress.h"
+
+#include <deque>
 
 class CBotTask;
 class CAttackEntityTask;
@@ -120,10 +121,7 @@ public:
 
 	CBotTask *currentTask ()
 	{
-		if ( m_Tasks.IsEmpty() )
-			return NULL;
-
-		return m_Tasks.GetFrontInfo();
+		return m_Tasks.empty() ? NULL : m_Tasks.front();
 	}
 
 	bool hasFailed ()
@@ -133,13 +131,16 @@ public:
 
 	bool isComplete ()
 	{
-		return m_Tasks.IsEmpty();
+		return m_Tasks.empty();
 	}
 
 	void freeMemory ()
 	{
-		m_Tasks.Destroy();
-	}	
+		for (CBotTask* task : m_Tasks) {
+			delete task;
+		}
+		m_Tasks.clear();
+	}
 
 	void removeTop ();
 
@@ -170,7 +171,7 @@ public:
 
 
 private:
-    dataQueue <CBotTask*> m_Tasks;
+	std::deque<CBotTask*> m_Tasks;
 	bool m_bFailed;
 	eBotSchedule m_iSchedId;
 	
@@ -188,52 +189,32 @@ class CBotSchedules
 public:
 	bool hasSchedule ( eBotSchedule iSchedule )
 	{
-		dataQueue<CBotSchedule*> tempQueue = m_Schedules;
-
-		while ( !tempQueue.IsEmpty() )
-		{	
-			CBotSchedule *sched = tempQueue.ChooseFrom();
-
-			if ( sched->isID(iSchedule) )
-			{
-				tempQueue.Init();
+		for (CBotSchedule *sched : m_Schedules) {
+			if (sched->isID(iSchedule)) {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
 	bool isCurrentSchedule ( eBotSchedule iSchedule )
 	{
-		if ( m_Schedules.IsEmpty() )
+		if ( m_Schedules.empty() )
 			return false;
-
-		return m_Schedules.GetFrontInfo()->isID(iSchedule);
+		return m_Schedules.front()->isID(iSchedule);
 	}
 
+	// remove the first schedule in the queue matching this schedule identifier
 	void removeSchedule ( eBotSchedule iSchedule )
 	{
-		dataQueue<CBotSchedule*> tempQueue = m_Schedules;
-
-		CBotSchedule *toRemove = NULL;
-
-		while ( !tempQueue.IsEmpty() )
-		{	
-			CBotSchedule *sched = tempQueue.ChooseFrom();
-
-			if ( sched->isID(iSchedule) )
-			{
-				toRemove = sched;
-				tempQueue.Init();
-				break;
+		for (auto it = m_Schedules.begin(); it != m_Schedules.end(); ) {
+			if ((*it)->isID(iSchedule)) {
+				m_Schedules.erase(it);
+				return;
+			} else {
+				++it;
 			}
 		}
-
-		if ( toRemove )
-			m_Schedules.Remove(toRemove);
-
-		return;
 	}
 
 	void execute ( CBot *pBot )
@@ -241,8 +222,7 @@ public:
 		if ( isEmpty() )
 			return;
 
-		CBotSchedule *pSched = m_Schedules.GetFrontInfo();
-		
+		CBotSchedule *pSched = m_Schedules.front();
 		pSched->execute(pBot);
 
 		if ( pSched->isComplete() || pSched->hasFailed() )
@@ -251,10 +231,10 @@ public:
 
 	void removeTop ()
 	{
-		CBotSchedule *pSched = m_Schedules.GetFrontInfo();
-		
-		m_Schedules.RemoveFront();
+		CBotSchedule *pSched = m_Schedules.front();
+		m_Schedules.pop_front();
 
+		// TODO: eradicate freeMemory from the codebase
 		pSched->freeMemory();
 
 		delete pSched;
@@ -262,7 +242,10 @@ public:
 
 	void freeMemory ()
 	{
-		m_Schedules.Destroy();
+		for (CBotSchedule *sched : m_Schedules) {
+			delete sched;
+		}
+		m_Schedules.clear();
 	}
 
 	void add ( CBotSchedule *pSchedule )
@@ -270,25 +253,25 @@ public:
 		// initialize
 		pSchedule->init();
 		// add
-		m_Schedules.Add(pSchedule);
+		m_Schedules.push_back(pSchedule);
 	}
 
 	void addFront ( CBotSchedule *pSchedule )
 	{
 		pSchedule->init();
-		m_Schedules.AddFront(pSchedule);
+		m_Schedules.push_front(pSchedule);
 	}
 
 	inline bool isEmpty ()
 	{
-		return m_Schedules.IsEmpty();
+		return m_Schedules.empty();
 	}
 
 	CBotTask *getCurrentTask ()
 	{
-		if ( !m_Schedules.IsEmpty() )
+		if ( !m_Schedules.empty() )
 		{
-			CBotSchedule *sched = m_Schedules.GetFrontInfo();
+			CBotSchedule *sched = m_Schedules.front();
 
 			if ( sched != NULL )
 			{
@@ -304,11 +287,11 @@ public:
 		if ( isEmpty() )
 			return NULL;
 
-		return m_Schedules.GetFrontInfo();
+		return m_Schedules.front();
 	}
 
 private:
-	dataQueue <CBotSchedule*> m_Schedules;
+	std::deque<CBotSchedule*> m_Schedules;
 };
 ///////////////////////////////////////////
 class CBotTF2DemoPipeTrapSched : public CBotSchedule

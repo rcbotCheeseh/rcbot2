@@ -16,9 +16,9 @@
 #include <unistd.h>
 #endif
 
-//#define swap V_swap
+#define swap V_swap
 #include "mathlib/mathlib.h"
-//#undef swap
+#undef swap
 
 //#include "cbase.h"
 //#include "baseentity.h"
@@ -35,6 +35,7 @@
 #include "eiface.h"
 #include "bot_const.h"
 #include "bot.h"
+#include "bot_cvars.h"
 #include "bot_fortress.h"
 #include "bot_kv.h"
 #include "bot_getprop.h"
@@ -301,7 +302,5 @@ CCreateGameRulesObject::CCreateGameRulesObject(CRCBotKeyValueList *list, void *p
 void **CCreateGameRulesObject::getGameRules()
 {
 	char *addr = reinterpret_cast<char*>(m_func);
-	extern ConVar rcbot_gamerules_offset;
-
 	return *reinterpret_cast<void ***>(addr + rcbot_gamerules_offset.GetInt());
 }

@@ -38,7 +38,9 @@
 #include "bot_squads.h"
 #include "bot_getprop.h"
 
-dataStack<CBotSquad*> CBotSquads::m_theSquads;
+#include <algorithm>
+
+std::deque<CBotSquad*> CBotSquads::m_theSquads;
 
 class CRemoveBotFromSquad : public IBotFunction
 {
@@ -63,19 +65,11 @@ private:
 
 void CBotSquads::FreeMemory ( void )
 {
-	CBotSquad *pSquad;
-	dataStack<CBotSquad*> tempStack = m_theSquads;
-
-	while ( !tempStack.IsEmpty() )
-	{
-		pSquad = tempStack.ChooseFromStack();
-
-		if ( pSquad )
-			delete pSquad;
-		pSquad = NULL;
+	// TODO inline squad or use unique pointers or something so they're freed automatically
+	for (CBotSquad *squad : m_theSquads) {
+		delete squad;
 	}
-
-	m_theSquads.Destroy();
+	m_theSquads.clear();
 }
 
 void CBotSquads::removeSquadMember ( CBotSquad *pSquad, edict_t *pMember )
@@ -88,21 +82,14 @@ void CBotSquads::removeSquadMember ( CBotSquad *pSquad, edict_t *pMember )
 	}
 }
 
-edict_t *CBotSquad::getMember ( int iMember )
+edict_t *CBotSquad::getMember ( size_t iMember )
 {
-	int i = 0;
-	dataStack<MyEHandle> tempStack = m_theSquad;
-	edict_t *pPlayer;
-
-	while ( !tempStack.IsEmpty() )
-	{
-		pPlayer = tempStack.ChooseFromStack();
-
-		if ( i == iMember )
-			return pPlayer;
+	// TODO: this is only used in CBotSquads::SquadJoin() -- inline the logic
+	if (iMember < 0 || iMember >= m_SquadMembers.size()) {
+		return nullptr;
 	}
-
-	return NULL;
+	
+	return m_SquadMembers[iMember];
 }
 
 // AddSquadMember can have many effects
@@ -114,8 +101,6 @@ edict_t *CBotSquad::getMember ( int iMember )
 //              make a new squad
 CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 {
-	dataStack<CBotSquad*> tempStack = m_theSquads;
-	CBotSquad *theSquad;
 	CBot *pBot;
 
 	//char msg[120];
@@ -136,31 +121,20 @@ CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 	//sprintf(msg,"%s %s has joined your squad",BOT_DBG_MSG_TAG,STRING(pMember->v.netname));
 	//ClientPrint(pLeader,HUD_PRINTTALK,msg);
 	
-	while ( !tempStack.IsEmpty() )
-	{
-		theSquad = tempStack.ChooseFromStack();
-		
-		if ( theSquad->IsLeader(pLeader) )
-		{
-			theSquad->AddMember(pMember);
-			tempStack.Init();
-			return theSquad;
-		}
-		else if ( theSquad->IsMember(pLeader) )
-		{
-			theSquad->AddMember(pMember);
-			tempStack.Init();
-			return theSquad;
+	// member joins whatever squad the leader is in
+	for (CBotSquad *squad : m_theSquads) {
+		if (squad->IsLeader(pLeader) || squad->IsMember(pLeader)) {
+			squad->AddMember(pMember);
+			return squad;
 		}
 	}
 	
 	// no squad with leader, make one
-	
-	theSquad = new CBotSquad(pLeader,pMember);
+	CBotSquad *theSquad = new CBotSquad(pLeader, pMember);
 	
 	if ( theSquad != NULL )
 	{
-		m_theSquads.Push(theSquad);
+		m_theSquads.push_back(theSquad);
 		
 		if ( (pBot = CBots::getBotPointer(pLeader)) != NULL )
 			pBot->setSquad(theSquad);
@@ -173,7 +147,6 @@ CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 //
 CBotSquad *CBotSquads::SquadJoin ( edict_t *pLeader, edict_t *pMember )
 {
-	dataStack<CBotSquad*> tempStack = m_theSquads;
 	CBotSquad *theSquad;
 	CBotSquad *joinSquad;
 
@@ -196,9 +169,10 @@ CBotSquad *CBotSquads::SquadJoin ( edict_t *pLeader, edict_t *pMember )
 
 		if ( joinSquad )
 		{
-			for ( int i = 0; i < joinSquad->numMembers(); i ++ )
+			// TODO make this a friend class so we could just join the squads directly?
+			for ( size_t i = 0; i < joinSquad->numMembers(); i ++ )
 			{
-				theSquad->AddMember(joinSquad->getMember(i));				
+				theSquad->AddMember(joinSquad->getMember(i));
 			}
 
 			RemoveSquad(joinSquad);
@@ -218,57 +192,31 @@ CBotSquad *CBotSquads::SquadJoin ( edict_t *pLeader, edict_t *pMember )
 
 CBotSquad *CBotSquads::FindSquadByLeader ( edict_t *pLeader )
 {
-	CBotSquad *pSquad;
-	dataStack<CBotSquad*> tempStack = m_theSquads;
-
-	while ( !tempStack.IsEmpty() )
-	{
-		pSquad = tempStack.ChooseFromStack();
-
-		if ( pSquad->IsLeader(pLeader) )
-		{
-			tempStack.Init();
-			return pSquad;
+	for (CBotSquad *squad : m_theSquads) {
+		if (squad->IsLeader(pLeader)) {
+			return squad;
 		}
 	}
-
-	return NULL;
+	return nullptr;
 }
 
 void CBotSquads::RemoveSquad ( CBotSquad *pSquad )
 {
-	CRemoveBotFromSquad *func = new CRemoveBotFromSquad(pSquad);
-	CBots::botFunction(func);
-	delete func;
+	// TODO see if we can modify this so the squad unregisters itself
+	// TODO call this logic in CBotSquad::~CBotSquad() instead
+	CRemoveBotFromSquad func(pSquad);
+	CBots::botFunction(&func);
 	
-	m_theSquads.Remove(pSquad);
+	m_theSquads.erase(std::remove(m_theSquads.begin(), m_theSquads.end(), pSquad), m_theSquads.end());
 	
-	if ( pSquad != NULL )
+	if (pSquad)
 		delete pSquad;
 }
 
 void CBotSquads::UpdateAngles ( void )
 {
-	CBotSquad *pSquad;
-	dataStack<CBotSquad*> tempStack = m_theSquads;
-
-	pSquad = NULL;
-
-	while ( !tempStack.IsEmpty() )
-	{
-		try
-		{
-			pSquad = tempStack.ChooseFromStack();
-			pSquad->UpdateAngles();
-		}
-
-		catch ( ... )
-		{
-			// Arghhhhh
-
-			m_theSquads.Remove(pSquad);
-			tempStack = m_theSquads;
-		}
+	for (CBotSquad *squad : m_theSquads) {
+		squad->UpdateAngles();
 	}
 }
 
@@ -307,34 +255,38 @@ void CBotSquad::Init ()
 }
 
 // Change a leader of a squad, this can cause lots of effects
-void CBotSquads :: ChangeLeader ( CBotSquad *theSquad )
+void CBotSquads :: ChangeLeader ( CBotSquad *pSquad )
 {
 	// first change leader to next squad member
-	theSquad->ChangeLeader();
+	pSquad->ChangeLeader();
 
 	// if no leader anymore/no members in group
-	if ( theSquad->IsLeader(NULL) )
+	if ( pSquad->IsLeader(NULL) )
 	{
-		CRemoveBotFromSquad *func = new CRemoveBotFromSquad(theSquad);
-
-		CBots::botFunction(func);
-			
-		// must also remove from stack of available squads.
-		m_theSquads.Remove(theSquad);
+		CRemoveBotFromSquad func(pSquad);
+		CBots::botFunction(&func);
+		
+		// must also remove from available squads.
+		m_theSquads.erase(std::remove(m_theSquads.begin(), m_theSquads.end(), pSquad), m_theSquads.end());
 	}
 }
 
+/**
+ * Make the succeeding squad member the new leader if they have any subordinates, otherwise
+ * disband the squad.
+ */
 void CBotSquad::ChangeLeader ( void )
 {
-	if ( m_theSquad.IsEmpty() )
+	if ( m_SquadMembers.empty() )
 	{
 		SetLeader(NULL);
 	}
 	else
 	{
-		m_pLeader = m_theSquad.Pop();
+		m_pLeader = m_SquadMembers.front();
+		m_SquadMembers.pop_front();
 
-		if ( m_theSquad.IsEmpty() )
+		if ( m_SquadMembers.empty() )
 			SetLeader(NULL);
 		else
 		{
@@ -429,44 +381,20 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 	return vLeaderOrigin+vBase;
 }
 
+/**
+ * Returns the edict's position in the squad.
+ */
 int CBotSquad::GetFormationPosition ( edict_t *pEdict )
 {
-	int iPosition = 0;
-
-	dataStack<MyEHandle> tempStack = m_theSquad;
-
-	while ( !tempStack.IsEmpty() )
-	{
-		iPosition++;			
-
-		if ( pEdict == tempStack.ChooseFromStack().get() )
-		{				
-			/// !! musssst init
-			tempStack.Init();
-			return iPosition;
-		}			
-	}
-
-	return 0;
+	auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pEdict);
+	return it != m_SquadMembers.end()? std::distance(m_SquadMembers.begin(), it) : 0;
 }
 
 void CBotSquad::removeMember ( edict_t *pMember )
 {
-	dataStack<MyEHandle> tempStack;
-	MyEHandle *temp;
-
-	tempStack = m_theSquad;
-
-	while ( !tempStack.IsEmpty() )
-	{
-		temp = tempStack.ChoosePointerFromStack();
-
-		if ( temp->get() == pMember )
-		{
-			m_theSquad.RemoveByPointer(temp);
-			tempStack.Init();
-			return;
-		}
+	auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pMember);
+	if (it != m_SquadMembers.end()) {
+		m_SquadMembers.erase(it);
 	}
 }
 
@@ -479,7 +407,7 @@ void CBotSquad::AddMember ( edict_t *pEdict )
 
 		newh = pEdict;
 
-		m_theSquad.Push(newh);
+		m_SquadMembers.push_back(newh);
 
 		/*if ( (pBot=CBots::getBotPointer(pEdict))!=NULL )
 		{
@@ -489,63 +417,26 @@ void CBotSquad::AddMember ( edict_t *pEdict )
 	}
 }
 
-int CBotSquad::numMembers ()
+size_t CBotSquad::numMembers ()
 {
-	dataStack<MyEHandle> tempStack;
-	int num = 0;
-
-	tempStack = m_theSquad;
-
-	while ( !tempStack.IsEmpty() )
-	{
-		tempStack.ChooseFromStack();
-
-		num++;
-	}
-
-	return num;
+	return m_SquadMembers.size();
 }
 
 void CBotSquad :: ReturnAllToFormation ( void )
 {
-	dataStack<MyEHandle> tempStack = this->m_theSquad;
-	edict_t *pMember;
-	CBot *pBot;
-
-	while ( !tempStack.IsEmpty() )
-	{
-		pMember = tempStack.ChooseFromStack().get();
-
-		pBot = CBots::getBotPointer(pMember);
-			
-		if ( pBot )
-		{
+	for (edict_t *member : m_SquadMembers) {
+		CBot *pBot = CBots::getBotPointer(member);
+		if (pBot) {
 			pBot->removeCondition(CONDITION_PUSH);
 			pBot->removeCondition(CONDITION_COVERT);
 			pBot->updateCondition(CONDITION_CHANGED);
 			pBot->setSquadIdleTime(0.0f);
 		}
-    }
+	}
 }
 
 bool CBotSquad::IsMember ( edict_t *pEdict )
 {
-	dataStack<MyEHandle> tempStack;
-	MyEHandle temp;
-
-	tempStack = m_theSquad;
-
-	while ( !tempStack.IsEmpty() )
-	{
-		temp = tempStack.ChooseFromStack();
-
-		if ( temp.get() == pEdict )
-		{
-			tempStack.Init();
-			return true;
-		}
-	}
-
-	return false;
+	return std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pEdict)
+			!= m_SquadMembers.end();
 }
-

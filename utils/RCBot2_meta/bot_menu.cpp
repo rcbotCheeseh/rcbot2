@@ -34,6 +34,7 @@
 
 #include "ndebugoverlay.h"
 
+#include "bot_cvars.h"
 #include "bot_waypoint.h"
 #include "bot_menu.h"
 #include "bot_wpt_color.h"
@@ -348,7 +349,6 @@ void CBotMenu ::render (CClient *pClient)
 	const char *pszCaption;
 	IPlayerInfo *pPlayerInfo = playerinfomanager->GetPlayerInfo(pClient->getPlayer());
 	CBotCmd lastCmd = pPlayerInfo->GetLastUserCommand();
-	extern ConVar rcbot_menu_update_time1;
 	float fUpdateTime = rcbot_menu_update_time1.GetFloat();
 
 	angles = lastCmd.viewangles;

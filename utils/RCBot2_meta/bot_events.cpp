@@ -34,6 +34,7 @@
 
 #include "igameevents.h"
 #include "bot.h"
+#include "bot_cvars.h"
 #include "bot_event.h"
 #include "bot_strings.h"
 #include "bot_globals.h"
@@ -47,7 +48,6 @@
 #include "bot_waypoint_locations.h"
 
 std::vector<CBotEvent*> CBotEvents :: m_theEvents;
-extern ConVar bot_use_vc_commands;
 ///////////////////////////////////////////////////////
 
 class CBotSeeFriendlyKill : public IBotFunction
@@ -200,8 +200,6 @@ public:
 
 	void execute ( CBot *pBot )
 	{
-		extern ConVar rcbot_listen_dist;
-
 		if ( !pBot->hasEnemy() && (pBot->wantToListen()||pBot->isListeningToPlayer(m_pAttacker)) && pBot->wantToListenToPlayerAttack(m_pAttacker,m_iWeaponID) )
 		{
 			float fDistance = pBot->distanceFrom(m_pAttacker);
@@ -1163,10 +1161,8 @@ void CDODFireWeaponEvent :: execute ( IBotEventInterface *pEvent )
 		edict_t *pAttacker = CBotGlobals::playerByUserId(iAttacker);
 		int iWeaponID = pEvent->getInt("weapon",-1);
 
-		CBotHearPlayerAttack *func = new CBotHearPlayerAttack(pAttacker,iWeaponID);
-
-		CBots::botFunction(func);
-		delete func;
+		CBotHearPlayerAttack func(pAttacker,iWeaponID);
+		CBots::botFunction(&func);
 	}
 
 
