@@ -3093,7 +3093,7 @@ void CWaypoint :: removePathTo ( int iWaypointIndex )
 
 	if ( pOther != NULL )
 	{
-		m_thePaths.erase(std::remove(m_thePaths.begin(), m_thePaths.end(), iWaypointIndex), m_thePaths.end());
+		m_PathsTo.erase(std::remove(m_thePaths.begin(), m_thePaths.end(), iWaypointIndex), m_PathsTo.end());
 		pOther->removePathFrom(CWaypoints::getWaypointIndex(this));
 	}
 

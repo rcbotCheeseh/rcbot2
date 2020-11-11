@@ -292,8 +292,7 @@ edict_t *CWeapons :: findWeapon ( edict_t *pPlayer, const char *pszWeaponName )
 	{
 		pWeapon = INDEXENT(m_Weapon_iter->GetEntryIndex());
 
-		// TODO get familiar with validity of handles / edicts
-		if (pWeapon && !pWeapon->IsFree() && strcmp(pWeapon->GetClassName(),pszWeaponName) == 0 )
+		if ( strcmp(pWeapon->GetClassName(),pszWeaponName) == 0 )
 			return pWeapon;
 
 		m_Weapon_iter++;

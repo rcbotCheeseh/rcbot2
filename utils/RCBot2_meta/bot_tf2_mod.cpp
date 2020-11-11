@@ -1164,17 +1164,24 @@ void CTeamFortress2Mod::updatePointMaster()
 
 		if ( pMaster )
 		{
+#ifdef _WIN32
 			extern IServerGameEnts *servergameents;
-			extern IServerTools *servertools;
-			
-			// HACK: we use one of the known CBaseEntity-sized entities to compute the offset to the first subclass member for CTeamControlPointMaster / CTeamControlPointRound
-			size_t baseEntityOffset = servertools->GetEntityFactoryDictionary()->FindFactory("simple_physics_brush")->GetEntitySize();
-			
-			uintptr_t pMasterMembers = reinterpret_cast<uintptr_t>(servergameents->EdictToBaseEntity(pMaster)) + baseEntityOffset;
-			m_PointMaster = (CTeamControlPointMaster*) pMasterMembers;
+
+			CBaseEntity *pMasterEntity = servergameents->EdictToBaseEntity(pMaster);
+
+			//local variable is initialized but not referenced - [APG]RoboCop[CL]
+			unsigned long full_size = sizeof(pMasterEntity);
+			unsigned long mempoint = ((unsigned long)pMasterEntity) + rcbot_const_point_master_offset.GetInt();
+
+			m_PointMaster = (CTeamControlPointMaster*)mempoint;
 			m_PointMasterResource = pMaster;
-			
-			CBotGlobals::botMessage(NULL, 0, "Computed point master offset %d", baseEntityOffset);
+#else
+			CBaseEntity *pent = pMaster->GetUnknown()->GetBaseEntity();
+			unsigned long mempoint = ((unsigned long)pent)+rcbot_const_point_master_offset.GetInt();
+
+			m_PointMaster = (CTeamControlPointMaster*)mempoint;
+			m_PointMasterResource = pMaster;
+#endif
 
 			int idx = m_PointMaster->m_iCurrentRoundIndex;
 			int size = m_PointMaster->m_ControlPointRounds.Size();
@@ -1188,7 +1195,8 @@ void CTeamFortress2Mod::updatePointMaster()
 					try
 					{
 						CBaseEntity *pent = m_PointMaster->m_ControlPointRounds[r];
-						CTeamControlPointRound* pointRound = (CTeamControlPointRound*)(reinterpret_cast<uintptr_t>(pent) + baseEntityOffset);
+
+						CTeamControlPointRound* pointRound = (CTeamControlPointRound*)((unsigned long)pent + (unsigned long)rcbot_const_point_master_offset.GetInt());
 
 						CBotGlobals::botMessage(NULL, 0, "Control Points for Round %d", r);
 
