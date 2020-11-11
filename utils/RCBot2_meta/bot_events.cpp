@@ -647,13 +647,11 @@ void CTF2UpgradeObjectEvent :: execute ( IBotEventInterface *pEvent )
 void CTF2RoundWinEvent :: execute (IBotEventInterface *pEvent )
 {
 	int iWinningTeam = pEvent->getInt("team");
-	CTF2BroadcastRoundWin *function = new CTF2BroadcastRoundWin(iWinningTeam,pEvent->getInt("full_round") == 1);
-
-	CBots::botFunction(function);
-
+	
+	CTF2BroadcastRoundWin fn(iWinningTeam, pEvent->getInt("full_round") == 1);
+	CBots::botFunction(&fn);
+	
 	CTeamFortress2Mod::roundWon(iWinningTeam);
-
-	delete function;
 }
 
 
@@ -859,12 +857,8 @@ void CTF2PointStartCapture :: execute ( IBotEventInterface *pEvent )
 	CTeamFortress2Mod::m_ObjectiveResource.updateCaptureTime(capindex);
 	//CPoints::pointBeingCaptured(capteam,cpname,cappers[0]);
 
-	CBotTF2FunctionEnemyAtIntel *function = new CBotTF2FunctionEnemyAtIntel(capteam,CTeamFortress2Mod::m_ObjectiveResource.GetCPPosition(capindex),EVENT_CAPPOINT,NULL,capindex);
-
-	CBots::botFunction(function);
-
-	delete function;
-	
+	CBotTF2FunctionEnemyAtIntel fn(capteam, CTeamFortress2Mod::m_ObjectiveResource.GetCPPosition(capindex), EVENT_CAPPOINT, NULL, capindex);
+	CBots::botFunction(&fn);
 }
 
 void CTF2MannVsMachineAlarm :: execute ( IBotEventInterface *pEvent )

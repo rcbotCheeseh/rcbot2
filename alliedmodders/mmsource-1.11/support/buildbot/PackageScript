@@ -1,0 +1,43 @@
+# vim: set ts=2 sw=2 tw=99 noet ft=python: 
+import os
+
+builder.SetBuildFolder('package')
+
+addons_folder = builder.AddFolder('addons')
+metamod_folder = builder.AddFolder(os.path.join('addons', 'metamod'))
+bin_folder = builder.AddFolder(os.path.join('addons', 'metamod', 'bin'))
+
+for cxx in MMS.all_targets:
+	if cxx.target.arch == 'x86_64':
+		if cxx.target.platform == 'windows':
+			bin64_folder = builder.AddFolder(os.path.join('addons', 'metamod', 'bin', 'win64'))
+			builder.AddCopy(os.path.join(builder.sourcePath, 'support', 'metamod_win64.vdf'), 
+			                os.path.join('addons', 'metamod_x64.vdf'))
+		elif cxx.target.platform == 'linux':
+			bin64_folder = builder.AddFolder(os.path.join('addons', 'metamod', 'bin', 'linux64'))
+			builder.AddCopy(os.path.join(builder.sourcePath, 'support', 'metamod_linux64.vdf'), 
+			                os.path.join('addons', 'metamod_x64.vdf'))
+		elif cxx.target.platform == 'mac':
+			bin64_folder = builder.AddFolder(os.path.join('addons', 'metamod', 'bin', 'osx64'))
+			builder.AddCopy(os.path.join(builder.sourcePath, 'support', 'metamod_osx64.vdf'), 
+			                os.path.join('addons', 'metamod_x64.vdf'))
+
+builder.AddCopy(os.path.join(builder.sourcePath, 'support', 'metamod.vdf'), addons_folder)
+builder.AddCopy(os.path.join(builder.sourcePath, 'support', 'metaplugins.ini'), metamod_folder)
+builder.AddCopy(os.path.join(builder.sourcePath, 'support', 'README.txt'), metamod_folder)
+
+pdb_list = []
+for task in MMS.binaries:
+	if task.target.arch == 'x86_64':
+		builder.AddCopy(task.binary, bin64_folder)
+	else:
+		builder.AddCopy(task.binary, bin_folder)
+
+	if task.debug:
+		pdb_list.append(task.debug)
+
+# Generate PDB info.
+with open(os.path.join(builder.buildPath, 'pdblog.txt'), 'wt') as fp:
+	for line in pdb_list:
+		fp.write(line.path + '\n')
+

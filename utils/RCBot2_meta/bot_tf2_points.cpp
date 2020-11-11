@@ -256,29 +256,17 @@ void CTeamRoundTimer::reset()
 bool CTeamControlPointRound :: isPointInRound ( edict_t *point_pent )
 {
 	edict_t *pPoint;
-
 	for ( int i = 0; i < m_ControlPoints.Size(); i ++ )
 	{
 		CBaseHandle *hndl;
-
 		hndl = (CBaseHandle *)&(m_ControlPoints[i]); 
 
 		if ( hndl )
 		{ 
 			pPoint = INDEXENT(hndl->GetEntryIndex());
-
 			CBaseEntity *pent = pPoint->GetUnknown()->GetBaseEntity();
-
 			if ( point_pent->GetUnknown()->GetBaseEntity() == pent )
 				return true;
-
-			//CTeamControlPoint *point = (CTeamControlPoint*)((unsigned long)pent + rcbot_const_point_offset.GetInt() );
-
-			//if ( point )
-			//{
-			//	if ( point->m_iIndex == iIndex )
-			//		return true;
-			//}
 		}
 	}
 
@@ -296,13 +284,13 @@ CTeamControlPointRound *CTeamControlPointMaster:: getCurrentRound ( )
 
 	//edict_t *p = servergameents->BaseEntityToEdict(pent);
 	
-	/*
-	CTeamControlPointRound *org = (CTeamControlPointRound*)((unsigned long)pent+(unsigned long)rcbot_const_round_offset.GetInt());
-	CTeamControlPointRound *fromunk = (CTeamControlPointRound*)p->GetUnknown();
-	CTeamControlPointRound *fromserverent = (CTeamControlPointRound*)p->GetIServerEntity();*/
+	extern IServerGameEnts *servergameents;
+	extern IServerTools *servertools;
+	
+	// HACK: we use one of the known CBaseEntity-sized entities to compute the offset to the first subclass member for CTeamControlPointMaster / CTeamControlPointRound
+	size_t baseEntityOffset = servertools->GetEntityFactoryDictionary()->FindFactory("simple_physics_brush")->GetEntitySize();
 
-	// Fix for later TF2 2016 Engine? [APG]RoboCop[CL]
-	return (CTeamControlPointRound*)((unsigned long)pent + (unsigned long)rcbot_const_point_master_offset.GetInt());
+	return reinterpret_cast<CTeamControlPointRound*>((uintptr_t) pent + baseEntityOffset);
 }
 
 //////////////////

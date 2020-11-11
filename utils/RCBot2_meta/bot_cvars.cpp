@@ -9,7 +9,6 @@ static ICvar *s_pCVar;
 
 ConVar rcbot_tf2_debug_spies_cloakdisguise("rcbot_tf2_debug_spies_cloakdisguise","1",0,"Debug command : allow spy bots to cloak and disguise");
 ConVar rcbot_tf2_medic_letgotime("rcbot_tf2_medic_letgotime","0.4",0,"Time for medic to let go of medigun to switch players");
-ConVar rcbot_const_point_master_offset("rcbot_const_mstr_offset","856",0,"TF2 OFFSET for Point Master Class");
 ConVar rcbot_tf2_pyro_airblast("rcbot_tf2_pyro_airblast_ammo","50",0,"Ammo must be above this to airblast -- if 200 airblast will be disabled");
 ConVar rcbot_projectile_tweak("rcbot_projtweak","0.05",0,"Tweaks the bots knowledge of projectiles and gravity");
 ConVar bot_cmd_enable_wpt_sounds("rcbot_enable_wpt_sounds","1",0,"Enable/disable sound effects when editing waypoints");

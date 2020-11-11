@@ -105,16 +105,18 @@ static ConVar rcbot2_ver_cvar("rcbot_ver", build_info::long_version, FCVAR_REPLI
 
 CON_COMMAND(rcbotd, "access the bot commands on a server")
 {
-	eBotCommandResult iResult;
-
 	if (!engine->IsDedicatedServer() || !CBotGlobals::IsMapRunning())
 	{
 		CBotGlobals::botMessage(NULL, 0, "Error, no map running or not dedicated server");
 		return;
 	}
 
-	//iResult = CBotGlobals::m_pCommands->execute(NULL,engine->Cmd_Argv(1),engine->Cmd_Argv(2),engine->Cmd_Argv(3),engine->Cmd_Argv(4),engine->Cmd_Argv(5),engine->Cmd_Argv(6));
-	iResult = CBotGlobals::m_pCommands->execute(NULL, args.Arg(1), args.Arg(2), args.Arg(3), args.Arg(4), args.Arg(5), args.Arg(6));
+	// shift args and call subcommand
+	BotCommandArgs argList;
+	for (size_t i = 1; i <= static_cast<size_t>(args.ArgC()); i++) {
+		argList.push_back(args.Arg(i));
+	}
+	eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(NULL, argList);
 
 	if (iResult == COMMAND_ACCESSED)
 	{
@@ -406,17 +408,9 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 		rcbot_runplayercmd_dods.SetValue(val);
 	if (pKVL->getInt("gamerules_win", &val))
 		rcbot_gamerules_offset.SetValue(val);
-	if (pKVL->getInt("mstr_offset_win", &val)) {
-		rcbot_const_point_master_offset.SetValue(val);
-		//rcbot_const_round_offset.SetValue(val);
-	}
 #else
 	if (pKVL->getInt("runplayermove_dods_linux", &val))
 		rcbot_runplayercmd_dods.SetValue(val);
-	if (pKVL->getInt("mstr_offset_linux", &val)) {
-		rcbot_const_point_master_offset.SetValue(val);
-		//rcbot_const_round_offset.SetValue(val);
-	}
 #endif
 
 	g_pGameRules_Obj = new CGameRulesObject(pKVL, gameServerFactory);
@@ -658,9 +652,13 @@ void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 
 	// is bot command?
 	if ( CBotGlobals::m_pCommands->isCommand(pcmd) )
-	{		
-		//eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient,engine->Cmd_Argv(1),engine->Cmd_Argv(2),engine->Cmd_Argv(3),engine->Cmd_Argv(4),engine->Cmd_Argv(5),engine->Cmd_Argv(6));
-		eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient,args.Arg(1),args.Arg(2),args.Arg(3),args.Arg(4),args.Arg(5),args.Arg(6));
+	{
+		// create shifted command list
+		BotCommandArgs argList;
+		for (size_t i = 1; i <= static_cast<size_t>(args.ArgC()); i++) {
+			argList.push_back(args.Arg(i));
+		}
+		eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient, argList);
 
 		if ( iResult == COMMAND_ACCESSED )
 		{
