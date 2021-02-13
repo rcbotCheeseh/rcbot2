@@ -161,7 +161,7 @@ CBotUtility :: CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil
 
 	if ( m_pBot && m_pBot->isTF2() )
 	{
-		int iClass = CClassInterface::getTF2Class(pBot->getEdict());
+		const int iClass = CClassInterface::getTF2Class(pBot->getEdict());
 
 		if ( CTeamFortress2Mod::isAttackDefendMap() && (m_pBot->getTeam() == TF2_TEAM_BLUE) )
 			m_fUtility += randomFloat(CRCBotTF2UtilFile::m_fUtils[BOT_ATT_UTIL][id][iClass].min,CRCBotTF2UtilFile::m_fUtils[BOT_ATT_UTIL][id][iClass].max);

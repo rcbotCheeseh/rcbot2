@@ -311,7 +311,7 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 	iPosition = GetFormationPosition(pEdict);
 	vLeaderOrigin = CBotGlobals::entityOrigin(pLeader);
 
-	int iMod = iPosition % 2;
+	const int iMod = iPosition % 2;
 
 	AngleVectors(m_vLeaderAngle,&v_forward); // leader body angles as base
 
@@ -386,13 +386,13 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
  */
 int CBotSquad::GetFormationPosition ( edict_t *pEdict )
 {
-	auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pEdict);
+	const auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pEdict);
 	return it != m_SquadMembers.end()? std::distance(m_SquadMembers.begin(), it) : 0;
 }
 
 void CBotSquad::removeMember ( edict_t *pMember )
 {
-	auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pMember);
+	const auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pMember);
 	if (it != m_SquadMembers.end()) {
 		m_SquadMembers.erase(it);
 	}

@@ -786,7 +786,7 @@ int CDODMod ::getScore(edict_t *pPlayer)
 
 edict_t *CDODMod :: getBreakable ( CWaypoint *pWpt )
 {
-	register unsigned short int size = m_BreakableWaypoints.size();
+	const register unsigned short int size = m_BreakableWaypoints.size();
 
 	for ( register unsigned short int i = 0; i < size; i ++ )
 	{
@@ -799,7 +799,7 @@ edict_t *CDODMod :: getBreakable ( CWaypoint *pWpt )
 
 edict_t *CDODMod :: getBombTarget ( CWaypoint *pWpt )
 {
-	register unsigned short int size = m_BombWaypoints.size();
+	const register unsigned short int size = m_BombWaypoints.size();
 
 	for ( register unsigned short int i = 0; i < size; i ++ )
 	{
@@ -889,7 +889,7 @@ void CDODMod :: addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags
 {
 	if ( isBombMap()  )
 	{
-		int id = m_Flags.getBombID(pEdict);
+		const int id = m_Flags.getBombID(pEdict);
 
 		if ( id != -1 )
 		{
@@ -900,7 +900,7 @@ void CDODMod :: addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags
 	
 	if ( isFlagMap() )
 	{
-		int id = m_Flags.getFlagID(pEdict);
+		const int id = m_Flags.getFlagID(pEdict);
 
 		if ( id != -1 )
 		{

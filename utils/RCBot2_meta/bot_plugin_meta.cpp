@@ -652,7 +652,7 @@ void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 	if ( CBotGlobals::m_pCommands->isCommand(pcmd) )
 	{		
 		//eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient,engine->Cmd_Argv(1),engine->Cmd_Argv(2),engine->Cmd_Argv(3),engine->Cmd_Argv(4),engine->Cmd_Argv(5),engine->Cmd_Argv(6));
-		eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient,args.Arg(1),args.Arg(2),args.Arg(3),args.Arg(4),args.Arg(5),args.Arg(6));
+		const eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient,args.Arg(1),args.Arg(2),args.Arg(3),args.Arg(4),args.Arg(5),args.Arg(6));
 
 		if ( iResult == COMMAND_ACCESSED )
 		{
@@ -714,7 +714,7 @@ bool RCBotPluginMeta::Hook_ClientConnect(edict_t *pEntity,
 void RCBotPluginMeta::Hook_ClientPutInServer(edict_t *pEntity, char const *playername)
 {
 	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pEntity);
-	bool is_Rcbot = false;
+	const bool is_Rcbot = false;
 
 	CClient *pClient = CClients::clientConnected(pEntity);
 
@@ -859,7 +859,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 			CBots::kickRandomBot(bot_count - bot_target);
 			notify = true;
 		} else if (bot_target > bot_count) {
-			int bot_diff = bot_target - bot_count;
+			const int bot_diff = bot_target - bot_count;
 
 			for (int i = 0; i < bot_diff; ++i) {
 				CBots::createBot("", "", "");

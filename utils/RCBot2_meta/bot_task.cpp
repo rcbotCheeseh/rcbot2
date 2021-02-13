@@ -57,21 +57,21 @@
 void getGrenadeAngle ( float v, float g, float desx, float desy, float *fa1, float *fa2 )
 {
 	//normalize
-	float fmax = MAX(v,MAX(g,MAX(desx,desy)));
+	const float fmax = MAX(v,MAX(g,MAX(desx,desy)));
 
 	v /= fmax;
 	g /= fmax;
 	desx /= fmax;
 	desy /= fmax;
-	double vsquared = v*v;
-	double vfourth = vsquared * vsquared;
-	double x2 = desx * desx;
-	double gx2 = g * x2;
-	double twoyv2 = 2*desy*vsquared;
-	double fourabplusa = vfourth - g*(gx2+twoyv2);
-	double topplus = vsquared + sqrt(fourabplusa);
-	double topminus = vsquared - sqrt(fourabplusa);
-	double bottom = g*desx;
+	const double vsquared = v*v;
+	const double vfourth = vsquared * vsquared;
+	const double x2 = desx * desx;
+	const double gx2 = g * x2;
+	const double twoyv2 = 2*desy*vsquared;
+	const double fourabplusa = vfourth - g*(gx2+twoyv2);
+	const double topplus = vsquared + sqrt(fourabplusa);
+	const double topminus = vsquared - sqrt(fourabplusa);
+	const double bottom = g*desx;
 
 	*fa1 = (float)atan(topplus / bottom);
 	*fa2 = (float)atan(topminus / bottom);
@@ -89,10 +89,10 @@ float getGrenadeZ ( edict_t *pShooter, edict_t *pTarget, Vector vOrigin, Vector 
 	Vector vForward;
 	QAngle angles;
 
-	Vector v_comp = (vTarget-vOrigin);
+	const Vector v_comp = (vTarget-vOrigin);
 
-	float fDist2D = v_comp.Length2D();
-	float fDist3D = v_comp.Length();
+	const float fDist2D = v_comp.Length2D();
+	const float fDist3D = v_comp.Length();
 
 	getGrenadeAngle(fInitialSpeed,sv_gravity->GetFloat(),fDist2D,vTarget.z-vOrigin.z,&fAngle1,&fAngle2);
 
@@ -217,7 +217,7 @@ void CBotTF2MedicHeal::execute(CBot *pBot,CBotSchedule *pSchedule)
 
 CBotTF2ShootLastEnemyPosition :: CBotTF2ShootLastEnemyPosition  ( Vector vPosition, edict_t *pEnemy, Vector m_vVelocity )
 {
-	float len = m_vVelocity.Length();
+	const float len = m_vVelocity.Length();
 
 	m_vPosition = vPosition;
 
@@ -722,8 +722,8 @@ CBotTF2AttackPoint :: CBotTF2AttackPoint ( int iArea, Vector vOrigin, int iRadiu
 
 void CBotTF2AttackPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 {
-	int iCpIndex = CTeamFortress2Mod::m_ObjectiveResource.m_WaypointAreaToIndexTranslation[m_iArea];
-	int iTeam = pBot->getTeam();
+	const int iCpIndex = CTeamFortress2Mod::m_ObjectiveResource.m_WaypointAreaToIndexTranslation[m_iArea];
+	const int iTeam = pBot->getTeam();
 	CBotTF2 *pTF2Bot = (CBotTF2*)pBot;
 
 	if ( CTeamFortress2Mod::TF2_IsPlayerInvuln(pBot->getEdict()) )
@@ -929,8 +929,8 @@ CBotTF2DefendPoint :: CBotTF2DefendPoint ( int iArea, Vector vOrigin, int iRadiu
 
 void CBotTF2DefendPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 {
-	int iCpIndex = CTeamFortress2Mod::m_ObjectiveResource.m_WaypointAreaToIndexTranslation[m_iArea];
-	int iTeam = pBot->getTeam();
+	const int iCpIndex = CTeamFortress2Mod::m_ObjectiveResource.m_WaypointAreaToIndexTranslation[m_iArea];
+	const int iTeam = pBot->getTeam();
 
 	if ( m_iArea && (CTeamFortress2Mod::m_ObjectiveResource.GetOwningTeam(iCpIndex) != iTeam) )
 	{
@@ -1400,8 +1400,8 @@ void CBotTaskEngiPlaceBuilding :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	else if ( pBot->distanceFrom(m_vOrigin) < 100 )
 	{		
 		if ( CBotGlobals::yawAngleFromEdict(pBot->getEdict(),m_vOrigin) < 25 )
-		{	
-			int state = ((CBotTF2*)pBot)->engiBuildObject(&m_iState,m_iObject,&m_fTime,&m_iTries);
+		{
+			const int state = ((CBotTF2*)pBot)->engiBuildObject(&m_iState,m_iObject,&m_fTime,&m_iTries);
 
 			if ( state == 1 )
 				complete();
@@ -1695,8 +1695,8 @@ void CBotDefendTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 					if ( CTeamFortress2Mod::getFlagLocation(TF2_TEAM_BLUE,&vFlag) )
 					{
 						// FOR DEBUGGING
-						float fDist = (vFlag - m_vOrigin).Length();
-						float fWaitTime = (90.0f - (fDist/45)); // MAX Dist 4050
+						const float fDist = (vFlag - m_vOrigin).Length();
+						const float fWaitTime = (90.0f - (fDist/45)); // MAX Dist 4050
 						//
 						m_fTime = engine->Time() + fWaitTime;
 					}
@@ -1825,7 +1825,7 @@ CBotTFEngiBuildTask :: CBotTFEngiBuildTask ( eEngiBuild iObject, CWaypoint *pWay
 	m_fTime = 0;
 	m_iTries = 0;
 	m_fNextUpdateAngle = 0.0f;
-	QAngle ang = QAngle(0,pWaypoint->getAimYaw(),0);
+	const QAngle ang = QAngle(0,pWaypoint->getAimYaw(),0);
 	Vector vForward;
 	AngleVectors(ang,&vForward);
 	m_vAimingVector = m_vOrigin + (vForward*100.0f);
@@ -1894,9 +1894,9 @@ void CBotTFEngiBuildTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 		if ( pSentry && CBotGlobals::entityIsValid(pSentry) )
 		{
-			Vector vSentry = CBotGlobals::entityOrigin(pSentry);
-			Vector vOrigin = pBot->getOrigin();
-			Vector vLookAt = vOrigin - (vSentry - vOrigin);
+			const Vector vSentry = CBotGlobals::entityOrigin(pSentry);
+			const Vector vOrigin = pBot->getOrigin();
+			const Vector vLookAt = vOrigin - (vSentry - vOrigin);
 
 			m_vAimingVector = vLookAt;
 
@@ -1908,9 +1908,9 @@ void CBotTFEngiBuildTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		}
 		else
 		{
-			Vector vSentry = pBot->getAiming();
-			Vector vOrigin = pBot->getOrigin();
-			Vector vLookAt = vOrigin - (vSentry - vOrigin);
+			const Vector vSentry = pBot->getAiming();
+			const Vector vOrigin = pBot->getOrigin();
+			const Vector vLookAt = vOrigin - (vSentry - vOrigin);
 
 			m_vAimingVector = vLookAt;
 
@@ -1954,7 +1954,7 @@ void CBotTFEngiBuildTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 	else if ( bAimingOk || (m_iTries > 1) )
 	{
-		int state = tfBot->engiBuildObject(&m_iState,m_iObject,&m_fTime,&m_iTries);
+		const int state = tfBot->engiBuildObject(&m_iState,m_iObject,&m_fTime,&m_iTries);
 
 		if ( state == 1 )
 			complete();
@@ -2941,7 +2941,7 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 
 		CBotGlobals::quickTraceline(pBot->getEdict(), m_vOrigin, m_vAim);
 
-		int iAimWpt = CWaypointLocations::NearestWaypoint(CBotGlobals::getTraceResult()->endpos, 400.0f, -1, true, true);
+		const int iAimWpt = CWaypointLocations::NearestWaypoint(CBotGlobals::getTraceResult()->endpos, 400.0f, -1, true, true);
 
 		if (iAimWpt != -1)
 		{
@@ -3075,7 +3075,7 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 
 				pBot->setLookAtTask(LOOK_ENEMY);
 
-				float angle = pBot->DotProductFromOrigin(CBotGlobals::entityOrigin(pBot->getEnemy()));
+				const float angle = pBot->DotProductFromOrigin(CBotGlobals::entityOrigin(pBot->getEnemy()));
 
 				if (angle > 0.96f) // 16 degrees
 				{
@@ -3230,7 +3230,7 @@ void CBotTF2Snipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 		CBotGlobals::quickTraceline(pBot->getEdict(),m_vOrigin,m_vAim);
 
-		int iAimWpt = CWaypointLocations::NearestWaypoint(CBotGlobals::getTraceResult()->endpos,400.0f,-1,true,true);
+		const int iAimWpt = CWaypointLocations::NearestWaypoint(CBotGlobals::getTraceResult()->endpos,400.0f,-1,true,true);
 
 		if ( iAimWpt != -1 )
 		{
@@ -3255,7 +3255,7 @@ void CBotTF2Snipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 			if (m_iHideWaypoint == -1)
 			{
 				// can't find a useful hide waypoint -- choose a random one
-				int pathid = randomInt(0, pWaypoint->numPaths());
+				const int pathid = randomInt(0, pWaypoint->numPaths());
 				m_iHideWaypoint = pWaypoint->getPath(pathid);
 
 				if (m_iHideWaypoint != -1)
@@ -3369,7 +3369,7 @@ void CBotTF2Snipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 				pBot->setLookAtTask(LOOK_ENEMY);
 
-				float angle = pBot->DotProductFromOrigin(CBotGlobals::entityOrigin(pBot->getEnemy()));
+				const float angle = pBot->DotProductFromOrigin(CBotGlobals::entityOrigin(pBot->getEnemy()));
 
 				if ( angle > 0.96f ) // 16 degrees
 				{
@@ -3574,7 +3574,7 @@ void CBotTFUseTeleporter :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	{
 		if ( CTeamFortress2Mod::getTeleporterExit(m_pTele) ) // exit is still alive?
 		{
-			Vector vTele = CBotGlobals::entityOrigin(m_pTele);		
+			const Vector vTele = CBotGlobals::entityOrigin(m_pTele);		
 
 			if ( (pBot->distanceFrom(vTele) > 48) || (CClassInterface::getGroundEntity(pBot->getEdict())!=m_pTele.get()) )
 			{
@@ -3701,7 +3701,7 @@ void CThrowGrenadeTask ::execute (CBot *pBot,CBotSchedule *pSchedule)
 
 		if ( sv_gravity )
 		{
-			float fFraction = pBot->distanceFrom(m_vLoc)/MAX_GREN_THROW_DIST;
+			const float fFraction = pBot->distanceFrom(m_vLoc)/MAX_GREN_THROW_DIST;
 			//m_vLoc.z = m_vLoc.z + getGrenadeZ(pBot->getOrigin(),m_vLoc,m_pWeapon->getProjectileSpeed());
 			m_vLoc.z = m_vLoc.z + (sv_gravity->GetFloat() * randomFloat(1.5f,2.5f) * fFraction);
 		}
@@ -3987,7 +3987,7 @@ void CDODDropAmmoTask :: debugString ( char *string )
 
 void CDODDropAmmoTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 {
-	Vector vOrigin = CBotGlobals::entityOrigin(m_pPlayer.get());
+	const Vector vOrigin = CBotGlobals::entityOrigin(m_pPlayer.get());
 
 	if ( m_pPlayer.get() == NULL )
 	{
@@ -4351,7 +4351,7 @@ void CBotTF2DemomanPipeEnemy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	{
 
 		m_vStand = CWaypoints::getWaypoint(pSchedule->passedInt())->getOrigin();
-		Vector vOtherWaypoint = pSchedule->passedVector();
+		const Vector vOtherWaypoint = pSchedule->passedVector();
 		((CBotTF2*)pBot)->setStickyTrapType(m_vEnemy,TF_TRAP_TYPE_ENEMY);
 
 		// Need to Lob my pipes
@@ -4436,7 +4436,7 @@ void CBotTF2DemomanPipeEnemy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 		if ( pBot->DotProductFromOrigin(m_vAim) > 0.99 )
 		{
-			float fTime = engine->Time();
+			const float fTime = engine->Time();
 
 			if ( m_fHeldAttackTime == 0 )
 				m_fHeldAttackTime = fTime + m_fHoldAttackTime + randomFloat(0.0,0.15);
@@ -4527,7 +4527,7 @@ void CMessAround::execute ( CBot *pBot, CBotSchedule *pSchedule )
 	{
 	case 0:
 		{
-		Vector origin = CBotGlobals::entityOrigin(m_pFriendly);
+			const Vector origin = CBotGlobals::entityOrigin(m_pFriendly);
 
 		pBot->setLookVector(origin);
 		pBot->setLookAtTask(LOOK_VECTOR);
@@ -4556,7 +4556,7 @@ void CMessAround::execute ( CBot *pBot, CBotSchedule *pSchedule )
 	break;// taunt at my friendly player
 	case 1:
 	{
-		Vector origin = CBotGlobals::entityOrigin(m_pFriendly);
+		const Vector origin = CBotGlobals::entityOrigin(m_pFriendly);
 		bool ok = true;
 
 		pBot->setLookVector(origin);
@@ -4639,7 +4639,7 @@ void CMessAround::execute ( CBot *pBot, CBotSchedule *pSchedule )
 CBotTF2Spam :: CBotTF2Spam ( CBot *pBot, Vector vStart, int iYaw, CBotWeapon *pWeapon )
 {
 	Vector forward;
-	QAngle angle = QAngle(0,iYaw,0);
+	const QAngle angle = QAngle(0,iYaw,0);
 
 	AngleVectors(angle,&forward);
 	m_vTarget = vStart + forward*2000.0f;
@@ -4690,7 +4690,7 @@ void CBotTF2Spam :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	{
 		if ( m_pWeapon->getID() == TF2_WEAPON_GRENADELAUNCHER )
 		{
-			Vector vVisibleWaypoint = pSchedule->passedVector();
+			const Vector vVisibleWaypoint = pSchedule->passedVector();
 
 			if ( vVisibleWaypoint.z > (m_vTarget.z + 32.0f) ) // need to lob grenade
 				m_vTarget.z += getGrenadeZ(pBot->getEdict(),NULL,pBot->getOrigin(),m_vTarget,m_pWeapon->getProjectileSpeed());
@@ -5394,7 +5394,7 @@ bool CBotTF2EngineerInterrupt :: isInterrupted ( CBot *pBot, bool *bFailed, bool
 	{
 		if ( !CClassInterface::getTF2BuildingIsMini(m_pSentryGun) )
 		{
-			float m_fCurrentHealth = CClassInterface::getSentryHealth(m_pSentryGun);
+			const float m_fCurrentHealth = CClassInterface::getSentryHealth(m_pSentryGun);
 
 			if ( (((CBotFortress*)pBot)->getMetal()>75) && (m_fCurrentHealth < m_fPrevSentryHealth) )
 			{

@@ -978,7 +978,7 @@ public:
 
 	static edict_t *getMySentryGun ( edict_t *pOwner )
 	{
-		int id = ENTINDEX(pOwner)-1;
+		const int id = ENTINDEX(pOwner)-1;
 
 		if ( id>=0 )
 		{
@@ -1002,7 +1002,7 @@ public:
 
 	static bool isMySentrySapped ( edict_t *pOwner ) 
 	{
-		int id = ENTINDEX(pOwner)-1;
+		const int id = ENTINDEX(pOwner)-1;
 
 		if ( id>=0 )
 		{
@@ -1024,7 +1024,7 @@ public:
 
 	static bool isMyTeleporterSapped ( edict_t *pOwner )
 	{
-		int id = ENTINDEX(pOwner)-1;
+		const int id = ENTINDEX(pOwner)-1;
 
 		if ( id>=0 )
 		{
@@ -1036,7 +1036,7 @@ public:
 
 	static bool isMyDispenserSapped ( edict_t *pOwner )
 	{
-		int id = ENTINDEX(pOwner)-1;
+		const int id = ENTINDEX(pOwner)-1;
 
 		if ( id>=0 )
 		{

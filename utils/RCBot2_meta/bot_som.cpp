@@ -87,7 +87,7 @@ CSomNeuron *CSom :: getBMU ( std::vector <float> *inputs )
 void CSom :: updateAround ( std::vector<float> *inputs, CSomNeuron *bmu )
 {
 	float dist;
-	float nsiz = (m_fNSize*m_fNSize);
+	const float nsiz = (m_fNSize*m_fNSize);
 
 	for ( unsigned int i = 0; i < m_Neurons.size(); i ++ )
 	{
@@ -193,8 +193,8 @@ void CSomNeuron :: displayWeights ()
 
 float CSomNeuron :: neighbourDistance ( CSomNeuron *other )
 {
-	float distx = getX()-other->getX();
-	float disty = getY()-other->getY();
+	const float distx = getX()-other->getX();
+	const float disty = getY()-other->getY();
 	
 	return (distx*distx)+(disty*disty);
 }

@@ -130,7 +130,7 @@ public:
 
 	int GetCPCappingIcon( int index )
 	{
-		int iCapper = GetCappingTeam(index);
+		const int iCapper = GetCappingTeam(index);
 
 		return GetIconForTeam( index, iCapper );
 	}

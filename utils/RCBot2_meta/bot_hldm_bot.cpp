@@ -475,7 +475,7 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 
 	if ( !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && hasSomeConditions(CONDITION_SEE_LAST_ENEMY_POS) && m_pLastEnemy && m_fLastSeeEnemy && ((m_fLastSeeEnemy + 10.0) > engine->Time()) && m_pWeapons->hasWeapon(HL2DM_WEAPON_FRAG) )
 	{
-		float fDistance = distanceFrom(m_vLastSeeEnemyBlastWaypoint);
+		const float fDistance = distanceFrom(m_vLastSeeEnemyBlastWaypoint);
 
 		if ( ( fDistance > BLAST_RADIUS ) && ( fDistance < 1500 ) )
 		{
@@ -710,7 +710,7 @@ bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 	static float fDist;
 	const char *szClassname;
 
-	bool bValid = CBot::setVisible(pEntity,bVisible);
+	const bool bValid = CBot::setVisible(pEntity,bVisible);
 
 	fDist = distanceFrom(pEntity);
 

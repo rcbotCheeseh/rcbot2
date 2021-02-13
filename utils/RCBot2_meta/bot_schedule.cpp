@@ -419,7 +419,7 @@ CBotSpySapBuildingSched :: CBotSpySapBuildingSched ( edict_t *pBuilding, eEngiBu
 //////////////////////////////////////
 CBotTauntSchedule :: CBotTauntSchedule ( edict_t *pPlayer, float fYaw )
 {
-	QAngle angles = QAngle(0,fYaw,0);
+	const QAngle angles = QAngle(0,fYaw,0);
 	Vector forward;
 	Vector vOrigin;
 	Vector vGoto;

@@ -106,7 +106,7 @@ bool g_PrintProps = false;
 
 SendProp *UTIL_FindSendProp(SendTable *pTable, const char *name)
 {
-	int count = pTable->GetNumProps();
+	const int count = pTable->GetNumProps();
 	//SendTable *pTable;
 	SendProp *pProp;
 	for (int i=0; i<count; i++)
@@ -174,7 +174,7 @@ bool UTIL_FindInSendTable(SendTable *pTable,
 						  unsigned int offset)
 {
 	const char *pname;
-	int props = pTable->GetNumProps();
+	const int props = pTable->GetNumProps();
 	SendProp *prop;
 
 	for (int i=0; i<props; i++)
@@ -582,7 +582,7 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 	float fDist;
 	const char *pszClassname;
 	// speed up loop by by using smaller ints in register
-	register short int max = (short int)gpGlobals->maxEntities;
+	const register short int max = (short int)gpGlobals->maxEntities;
 
 	for (register short int i = 0; i < max; i++)
 	{

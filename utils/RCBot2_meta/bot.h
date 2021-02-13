@@ -488,7 +488,7 @@ public:
 
 	inline bool moveFailed ()
 	{
-		bool ret = m_bFailNextMove;
+		const bool ret = m_bFailNextMove;
 
 		m_bFailNextMove = false;
 

@@ -58,7 +58,7 @@ void *GetGameRules()
 size_t CSignatureFunction::decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr)
 {
 	size_t written = 0;
-	size_t length = strlen(hexstr);
+	const size_t length = strlen(hexstr);
 
 	for (size_t i = 0; i < length; i++)
 	{

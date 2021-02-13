@@ -160,7 +160,7 @@ void CGA :: epoch ()
 
 	m_iNumGenerations++;
 
-	float fCurAvgFitness = m_thePopulation.averageFitness();
+	const float fCurAvgFitness = m_thePopulation.averageFitness();
 
 	/*CBotGlobals::botMessage(NULL,0,"------Generation %d------",m_iNumGenerations);
 	CBotGlobals::botMessage(NULL,0,"best fitness = %0.5f",m_thePopulation.bestFitness());
@@ -204,7 +204,7 @@ IIndividual *CGA :: pick ()
 
 IIndividual *CRouletteSelection :: select ( CPopulation *population )
 {
-	ga_nn_value fFitnessSlice = randomFloat(0,population->totalFitness());
+	const ga_nn_value fFitnessSlice = randomFloat(0,population->totalFitness());
 	ga_nn_value fFitnessSoFar = 0.0f;
 
 	for ( unsigned int i = 0; i < population->size(); i ++ )

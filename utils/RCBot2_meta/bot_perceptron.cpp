@@ -241,10 +241,10 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 	register unsigned short int j; //jth output
 	register signed short int l; // layer
 	CLogisticalNeuron *pNode, *pOutputNode;
-	unsigned short int numbatches = tset->getNumBatches();
+	const unsigned short int numbatches = tset->getNumBatches();
 	training_batch_t *batches = tset->getBatches();
-	ga_nn_value min_value = tset->getMinScale();
-	ga_nn_value max_value = tset->getMaxScale();
+	const ga_nn_value min_value = tset->getMinScale();
+	const ga_nn_value max_value = tset->getMaxScale();
 
 	outs = new ga_nn_value [m_numOutputs];
 

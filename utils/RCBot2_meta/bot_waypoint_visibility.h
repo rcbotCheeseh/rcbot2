@@ -59,7 +59,7 @@ public:
 
 	void init ()
 	{
-		int iSize = g_iMaxVisibilityByte;
+		const int iSize = g_iMaxVisibilityByte;
 
 		/////////////////////////////
 		// for "concurrent" reading of 
@@ -86,10 +86,10 @@ public:
 	bool GetVisibilityFromTo ( int iFrom, int iTo )
 	{
 		// work out the position 
-		int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
+		const int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
 
-		int iByte = (int)(iPosition/8);
-		int iBit = iPosition%8;
+		const int iByte = (int)(iPosition/8);
+		const int iBit = iPosition%8;
 
 		if ( iByte < g_iMaxVisibilityByte )
 		{			
@@ -134,10 +134,10 @@ public:
 
 	void SetVisibilityFromTo ( int iFrom, int iTo, bool bVisible )
 	{
-		int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
+		const int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
 
-		int iByte = (int)(iPosition/8);
-		int iBit = iPosition%8;
+		const int iByte = (int)(iPosition/8);
+		const int iBit = iPosition%8;
 
 		if ( iByte < g_iMaxVisibilityByte )
 		{

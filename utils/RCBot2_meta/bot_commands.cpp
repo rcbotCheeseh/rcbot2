@@ -121,7 +121,7 @@ CBotCommandInline KickBotCommand("kickbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATE
 	}
 	else
 	{
-		int team = atoi(pcmd);
+		const int team = atoi(pcmd);
 
 		CBots::kickRandomBotOnTeam(team);
 	}
@@ -133,7 +133,7 @@ CBotCommandInline KickBotCommand("kickbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATE
 bool CBotCommand :: hasAccess ( CClient *pClient )
 {
 	// check access level excluding dedicated server flag
-	int iClientAccessLevel = this->m_iAccessLevel & ~CMD_ACCESS_DEDICATED;
+	const int iClientAccessLevel = this->m_iAccessLevel & ~CMD_ACCESS_DEDICATED;
 	return (iClientAccessLevel & pClient->accessLevel()) == iClientAccessLevel;
 }
 
@@ -163,7 +163,7 @@ eBotCommandResult CBotSubcommands::execute(CClient *pClient, const char *pcmd, c
 		}
 		
 		// shift arguments and call
-		eBotCommandResult result = cmd->execute(pClient, arg1, arg2, arg3, arg4, arg5, nullptr);
+		const eBotCommandResult result = cmd->execute(pClient, arg1, arg2, arg3, arg4, arg5, nullptr);
 		if (result == COMMAND_ERROR) {
 			cmd->printHelp(pClient? pClient->getPlayer() : nullptr);
 		}

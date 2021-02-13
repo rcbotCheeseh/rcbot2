@@ -109,7 +109,7 @@ bool CTeamFortress2Mod::isSuddenDeath()
 
 	if (pGameRules)
 	{
-		int iRoundState = CClassInterface::TF2_getRoundState(pGameRules);
+		const int iRoundState = CClassInterface::TF2_getRoundState(pGameRules);
 		 
 		return iRoundState == RoundState_Stalemate;
 	}
@@ -212,7 +212,7 @@ void CTeamFortress2Mod :: mapInit ()
 	m_vNearestTankLocation = Vector(0, 0, 0);
 
 	unsigned int i = 0;
-	string_t mapname = gpGlobals->mapname;
+	const string_t mapname = gpGlobals->mapname;
 
 	const char *szmapname = mapname.ToCStr();
 
@@ -313,37 +313,37 @@ int CTeamFortress2Mod :: getTeleporterWaypoint ( edict_t *pTele )
 
 bool CTeamFortress2Mod :: TF2_IsPlayerZoomed(edict_t *pPlayer)
 {
-    int pcond = CClassInterface :: getTF2Conditions(pPlayer);
+	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
     return ((pcond & TF2_PLAYER_ZOOMED) == TF2_PLAYER_ZOOMED);
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerSlowed(edict_t *pPlayer)
 {
-    int pcond = CClassInterface :: getTF2Conditions(pPlayer);
+	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
     return ((pcond & TF2_PLAYER_SLOWED) == TF2_PLAYER_SLOWED);
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerDisguised(edict_t *pPlayer)
 {
-    int pcond = CClassInterface :: getTF2Conditions(pPlayer);
+	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
     return ((pcond & TF2_PLAYER_DISGUISED) == TF2_PLAYER_DISGUISED);
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerTaunting ( edict_t *pPlayer )
 {
-    int pcond = CClassInterface :: getTF2Conditions(pPlayer);
+	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
     return ((pcond & TF2_PLAYER_TAUNTING) == TF2_PLAYER_TAUNTING);
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerCloaked(edict_t *pPlayer)
 {
-    int pcond = CClassInterface :: getTF2Conditions(pPlayer);
+	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
     return ((pcond & TF2_PLAYER_CLOAKED) == TF2_PLAYER_CLOAKED);
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerKrits(edict_t *pPlayer)
 {
-	int pcond = CClassInterface :: getTF2Conditions(pPlayer);
+	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
 	return ((pcond & TF2_PLAYER_KRITS) == TF2_PLAYER_KRITS);
 
 	return false;
@@ -353,7 +353,7 @@ bool CTeamFortress2Mod :: TF2_IsPlayerInvuln(edict_t *pPlayer)
 {
 	if ( CBotGlobals::isPlayer(pPlayer) )
 	{
-		int pcond = CClassInterface :: getTF2Conditions(pPlayer);
+		const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
 		return ((pcond & TF2_PLAYER_INVULN) == TF2_PLAYER_INVULN);
 	}
 
@@ -362,7 +362,7 @@ bool CTeamFortress2Mod :: TF2_IsPlayerInvuln(edict_t *pPlayer)
 
 bool CTeamFortress2Mod :: TF2_IsPlayerOnFire(edict_t *pPlayer)
 {
-    int pcond = CClassInterface :: getTF2Conditions(pPlayer);
+	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
     return ((pcond & TF2_PLAYER_ONFIRE) == TF2_PLAYER_ONFIRE);
 }
 
@@ -456,7 +456,7 @@ int CTeamFortress2Mod :: getTeam ( edict_t *pEntity )
 
 int CTeamFortress2Mod :: getSentryLevel ( edict_t *pSentry )
 {
-	string_t model = pSentry->GetIServerEntity()->GetModelName();
+	const string_t model = pSentry->GetIServerEntity()->GetModelName();
 	const char *szmodel = model.ToCStr();
 
 	return (szmodel[24] - '1')+1;
@@ -465,7 +465,7 @@ int CTeamFortress2Mod :: getSentryLevel ( edict_t *pSentry )
 
 int CTeamFortress2Mod :: getDispenserLevel ( edict_t *pDispenser )
 {
-	string_t model = pDispenser->GetIServerEntity()->GetModelName();
+	const string_t model = pDispenser->GetIServerEntity()->GetModelName();
 	const char *szmodel = model.ToCStr();
 
 	if ( strcmp(szmodel,"models/buildables/dispenser_light.mdl") == 0 )
@@ -589,8 +589,8 @@ bool CTeamFortress2Mod :: isHurtfulPipeGrenade ( edict_t *pEntity, edict_t *pPla
 		if ( bCheckOwner && (CClassInterface::getPipeBombOwner(pEntity) == pPlayer) )
 			return true;
 
-		int iPlayerTeam = getTeam(pPlayer);
-		int iGrenTeam = getTeam(pEntity);
+		const int iPlayerTeam = getTeam(pPlayer);
+		const int iGrenTeam = getTeam(pEntity);
 
 		return iPlayerTeam != iGrenTeam;
 	}
@@ -786,7 +786,7 @@ bool CTeamFortress2Mod :: isPayloadBomb ( edict_t *pEntity, int iTeam )
 
 void CTeamFortress2Mod::checkMVMTankBoss(edict_t *pEntity)
 {
-	float fTankDistance = CBotGlobals::entityOrigin(pEntity).DistTo(m_vMVMCapturePoint);
+	const float fTankDistance = CBotGlobals::entityOrigin(pEntity).DistTo(m_vMVMCapturePoint);
 
 	if (m_pNearestTankBoss.get() != NULL)
 	{
@@ -810,7 +810,7 @@ CWaypoint *CTeamFortress2Mod :: getBestWaypointMVM ( CBot *pBot, int iFlags )
 {
 	Vector vFlagLocation;
 
-	bool bFlagLocationValid = CTeamFortress2Mod::getFlagLocation(TF2_TEAM_BLUE,&vFlagLocation);		
+	const bool bFlagLocationValid = CTeamFortress2Mod::getFlagLocation(TF2_TEAM_BLUE,&vFlagLocation);		
 
 
 	float fTankDistance = 0.0f;
@@ -884,7 +884,7 @@ void CTeamFortress2Mod :: teleporterBuilt ( edict_t *pOwner, eEngiBuild type, ed
 	if ( (type != ENGI_TELE ) ) //(type != ENGI_ENTRANCE) && (type != ENGI_EXIT) )
 		return;
 
-	short int iIndex = ENTINDEX(pOwner)-1;
+	const short int iIndex = ENTINDEX(pOwner)-1;
 
 	if ( (iIndex < 0) || (iIndex > gpGlobals->maxClients) )
 		return;
@@ -1099,7 +1099,7 @@ void CTeamFortress2Mod::sapperPlaced(edict_t *pOwner,eEngiBuild type,edict_t *pS
 
 void CTeamFortress2Mod:: addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags, int *iArea, float *fMaxDistance )
 {
-	string_t model = pEdict->GetIServerEntity()->GetModelName();
+	const string_t model = pEdict->GetIServerEntity()->GetModelName();
 
 	if ( strncmp(pEdict->GetClassName(),"item_health",11) == 0 )
 		*iFlags |= CWaypointTypes::W_FL_HEALTH;
@@ -1168,16 +1168,16 @@ void CTeamFortress2Mod::updatePointMaster()
 			extern IServerTools *servertools;
 			
 			// HACK: we use one of the known CBaseEntity-sized entities to compute the offset to the first subclass member for CTeamControlPointMaster / CTeamControlPointRound
-			size_t baseEntityOffset = servertools->GetEntityFactoryDictionary()->FindFactory("simple_physics_brush")->GetEntitySize();
-			
-			uintptr_t pMasterMembers = reinterpret_cast<uintptr_t>(servergameents->EdictToBaseEntity(pMaster)) + baseEntityOffset;
+			const size_t baseEntityOffset = servertools->GetEntityFactoryDictionary()->FindFactory("simple_physics_brush")->GetEntitySize();
+
+			const uintptr_t pMasterMembers = reinterpret_cast<uintptr_t>(servergameents->EdictToBaseEntity(pMaster)) + baseEntityOffset;
 			m_PointMaster = (CTeamControlPointMaster*) pMasterMembers;
 			m_PointMasterResource = pMaster;
 			
 			CBotGlobals::botMessage(NULL, 0, "Computed point master offset %d", baseEntityOffset);
 
-			int idx = m_PointMaster->m_iCurrentRoundIndex;
-			int size = m_PointMaster->m_ControlPointRounds.Size();
+			const int idx = m_PointMaster->m_iCurrentRoundIndex;
+			const int size = m_PointMaster->m_ControlPointRounds.Size();
 
 			if (idx >= 0 && size >= 0 && idx < 100 && size < 100) 
 			{
@@ -1265,7 +1265,7 @@ void CTeamFortress2Mod :: roundReset ()
 
 	if ( m_ObjectiveResource.isInitialised() )
 	{
-		int numpoints = m_ObjectiveResource.GetNumControlPoints();
+		const int numpoints = m_ObjectiveResource.GetNumControlPoints();
 		int i;
 
 		for ( i = 0; i < numpoints; i ++ )
@@ -1403,11 +1403,11 @@ void CTeamFortress2Mod::updateBluePayloadBomb ( edict_t *pent )
 
 bool CTeamFortress2Mod::isDefending ( edict_t *pPlayer )//, int iCapIndex = -1 )
 {
-	int iIndex = (1<<(ENTINDEX(pPlayer)-1));
+	const int iIndex = (1<<(ENTINDEX(pPlayer)-1));
 
 	if ( m_ObjectiveResource.GetNumControlPoints() > 0 )
 	{
-		int iTeam = CClassInterface::getTeam(pPlayer);
+		const int iTeam = CClassInterface::getTeam(pPlayer);
 
 	//if ( iCapIndex == -1 )
 	//{
@@ -1429,11 +1429,11 @@ bool CTeamFortress2Mod::isDefending ( edict_t *pPlayer )//, int iCapIndex = -1 )
 
 bool CTeamFortress2Mod::isCapping ( edict_t *pPlayer )//, int iCapIndex = -1 )
 {
-	int index = (1<<(ENTINDEX(pPlayer)-1));
+	const int index = (1<<(ENTINDEX(pPlayer)-1));
 
 	if ( m_ObjectiveResource.GetNumControlPoints() > 0 )
 	{
-		int iTeam = CClassInterface::getTeam(pPlayer);
+		const int iTeam = CClassInterface::getTeam(pPlayer);
 
 		int i = 0;
 

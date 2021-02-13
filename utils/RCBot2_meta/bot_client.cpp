@@ -220,7 +220,7 @@ public:
 	{
 		if ( (pBot->getEdict() != m_pPlayer) && (pBot->getTeam() == m_iTeam) && pBot->isVisible(m_pPlayer) )
 		{
-			float fDist = pBot->distanceFrom(m_pPlayer);
+			const float fDist = pBot->distanceFrom(m_pPlayer);
 
 			if ( !m_pNearestBot || (fDist < m_fNearestDist) )
 			{
@@ -416,7 +416,7 @@ void CClient :: think ()
 					if ( msg[i] == 0 )
 						break;
 					i++;
-				}while ( 1 ) ;
+				}while ( true ) ;
 				//int ent_index, int line_offset, float duration, int r, int g, int b, int a, const char *format, ...
 			//	debugoverlay->AddEntityTextOverlay();
 #endif
@@ -824,8 +824,8 @@ void CClient :: think ()
 #ifndef __linux__
 					if ( m_bDebugAutoWaypoint && !engine->IsDedicatedServer() )
 					{
-						debugoverlay->AddLineOverlay(vCheckOrigin+Vector(0,0,16),vCheckOrigin-Vector(0,0,16),255,255,255,0,2);
-						debugoverlay->AddLineOverlay(vPlayerOrigin,vCheckOrigin,255,255,255,0,2);
+						debugoverlay->AddLineOverlay(vCheckOrigin+Vector(0,0,16),vCheckOrigin-Vector(0,0,16),255,255,255,false,2);
+						debugoverlay->AddLineOverlay(vPlayerOrigin,vCheckOrigin,255,255,255,false,2);
 					}
 #endif					
 					if ( tr->fraction < 1.0 )

@@ -704,7 +704,7 @@ void CWeapons::loadWeapons(const char *szWeaponListName, WeaponsData_t *pDefault
 				{
 					kv = kv->GetFirstSubKey();
 
-					if (0)
+					if (false)
 						kv = kv->GetFirstTrueSubKey();
 
 					while (kv != NULL)
