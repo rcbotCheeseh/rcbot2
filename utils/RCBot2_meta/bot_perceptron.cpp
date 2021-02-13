@@ -28,7 +28,7 @@
  *    version.
  *
  */
-#include <math.h>
+#include <cmath>
 #include <mem.h>
 //#include "vstdlib/random.h" // for random functions
 #include "bot_mtrand.h"

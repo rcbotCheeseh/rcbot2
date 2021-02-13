@@ -39,7 +39,7 @@
 #include "bot_commands.h" // for main rcbot command
 
 #ifdef _WIN32
-#include <ctype.h>
+#include <cctype>
 #endif
 
 #define MAX_MAP_STRING_LEN 64

@@ -12,7 +12,7 @@
  * This sample plugin is public domain.
  */
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "bot_plugin_meta.h"
 
@@ -29,7 +29,7 @@
 #include "Color.h"
 #include "ndebugoverlay.h"
 #include "server_class.h"
-#include "time.h"
+#include <ctime>
 #include "irecipientfilter.h"
 
 #include "KeyValues.h"

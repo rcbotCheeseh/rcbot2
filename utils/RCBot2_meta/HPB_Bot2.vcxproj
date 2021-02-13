@@ -87,7 +87,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\alliedmodders\hl2sdk-orangebox\public\mathlib;..\..\alliedmodders\hl2sdk-orangebox\public;..\..\alliedmodders\hl2sdk-orangebox\public\engine;..\..\alliedmodders\hl2sdk-orangebox\public\tier0;..\..\alliedmodders\hl2sdk-orangebox\public\tier1;..\..\alliedmodders\hl2sdk-orangebox\game\shared;..\..\alliedmodders\hl2sdk-orangebox\game\server;..\..\alliedmodders\hl2sdk-orangebox\public\game\server;..\..\alliedmodders\mmsource-1.10\core\;..\..\alliedmodders\mmsource-1.10\core\sourcehook\;..\..\alliedmodders\mmsource-1.10\public\;..\..\sm_ext\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\alliedmodders\hl2sdk-tf2\public\mathlib;..\..\alliedmodders\hl2sdk-tf2\public;..\..\alliedmodders\hl2sdk-tf2\public\engine;..\..\alliedmodders\hl2sdk-tf2\public\tier0;..\..\alliedmodders\hl2sdk-tf2\public\tier1;..\..\alliedmodders\hl2sdk-tf2\game\shared;..\..\alliedmodders\hl2sdk-tf2\game\server;..\..\alliedmodders\hl2sdk-tf2\public\game\server;..\..\alliedmodders\mmsource-1.11\core\;..\..\alliedmodders\mmsource-1.11\core\sourcehook\;..\..\alliedmodders\mmsource-1.11\public\;..\..\sm_ext\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SOURCE_ENGINE=4;WIN32;_DEBUG;_WINDOWS;HOMEFOLDER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -134,7 +134,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server;..\mmsource\core\;..\mmsource\core\sourcehook\;..\mmsource\public\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\alliedmodders\hl2sdk-tf2\public\mathlib;..\..\alliedmodders\hl2sdk-tf2\public;..\..\alliedmodders\hl2sdk-tf2\public\engine;..\..\alliedmodders\hl2sdk-tf2\public\tier0;..\..\alliedmodders\hl2sdk-tf2\public\tier1;..\..\alliedmodders\hl2sdk-tf2\game\shared;..\..\alliedmodders\hl2sdk-tf2\game\server;..\..\alliedmodders\hl2sdk-tf2\public\game\server;..\..\alliedmodders\mmsource-1.11\core\;..\..\alliedmodders\mmsource-1.11\core\sourcehook\;..\..\alliedmodders\mmsource-1.11\public\;..\..\sm_ext\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SOURCE_ENGINE=4;WIN32;NDEBUG;_WINDOWS;HOMEFOLDER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -177,7 +177,7 @@
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server;..\mmsource\core\;..\mmsource\core\sourcehook\;..\mmsource\public\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\alliedmodders\hl2sdk-tf2\public\mathlib;..\..\alliedmodders\hl2sdk-tf2\public;..\..\alliedmodders\hl2sdk-tf2\public\engine;..\..\alliedmodders\hl2sdk-tf2\public\tier0;..\..\alliedmodders\hl2sdk-tf2\public\tier1;..\..\alliedmodders\hl2sdk-tf2\game\shared;..\..\alliedmodders\hl2sdk-tf2\game\server;..\..\alliedmodders\hl2sdk-tf2\public\game\server;..\..\alliedmodders\mmsource-1.11\core\;..\..\alliedmodders\mmsource-1.11\core\sourcehook\;..\..\alliedmodders\mmsource-1.11\public\;..\..\sm_ext\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SOURCE_ENGINE=4;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -215,7 +215,6 @@
     <ClCompile Include="bot_buttons.cpp" />
     <ClCompile Include="bot_client.cpp" />
     <ClCompile Include="bot_commands.cpp" />
-    <ClCompile Include="bot_config.cpp" />
     <ClCompile Include="bot_configfile.cpp" />
     <ClCompile Include="bot_coop.cpp" />
     <ClCompile Include="bot_css_bot.cpp" />
@@ -244,7 +243,6 @@
     <ClCompile Include="bot_task.cpp" />
     <ClCompile Include="bot_tf2_mod.cpp" />
     <ClCompile Include="bot_tf2_points.cpp" />
-    <ClCompile Include="bot_usercmd.cpp" />
     <ClCompile Include="bot_utility.cpp" />
     <ClCompile Include="bot_visibles.cpp" />
     <ClCompile Include="bot_waypoint.cpp" />
@@ -288,6 +286,7 @@
     <ClInclude Include="bot_mtrand.h" />
     <ClInclude Include="bot_navigator.h" />
     <ClInclude Include="bot_perceptron.h" />
+    <ClInclude Include="bot_plugin_meta.h" />
     <ClInclude Include="bot_profile.h" />
     <ClInclude Include="bot_profiling.h" />
     <ClInclude Include="bot_rb.h" />
@@ -308,42 +307,41 @@
     <ClInclude Include="bot_wpt_color.h" />
     <ClInclude Include="bot_wpt_dist.h" />
     <ClInclude Include="bot_zombie.h" />
-    <ClInclude Include="..\..\public\Color.h" />
-    <ClInclude Include="..\..\public\const.h" />
-    <ClInclude Include="..\..\public\tier0\dbg.h" />
-    <ClInclude Include="..\..\public\dt_send.h" />
-    <ClInclude Include="..\..\Public\eiface.h" />
-    <ClInclude Include="..\..\Public\FileSystem.h" />
-    <ClInclude Include="..\..\public\tier0\icommandline.h" />
-    <ClInclude Include="..\..\public\icvar.h" />
-    <ClInclude Include="..\..\public\igameevents.h" />
-    <ClInclude Include="..\..\public\tier1\interface.h" />
-    <ClInclude Include="..\..\public\game\server\iplayerinfo.h" />
-    <ClInclude Include="..\..\public\engine\iserverplugin.h" />
-    <ClInclude Include="..\..\public\tier1\KeyValues.h" />
-    <ClInclude Include="..\..\public\mathlib\mathlib.h" />
-    <ClInclude Include="..\..\public\tier0\mem.h" />
-    <ClInclude Include="..\..\public\tier0\memalloc.h" />
-    <ClInclude Include="..\..\public\tier0\memdbgon.h" />
-    <ClInclude Include="..\..\public\server_class.h" />
-    <ClInclude Include="..\..\public\tier1\strtools.h" />
-    <ClInclude Include="..\..\public\tier1\utlbuffer.h" />
-    <ClInclude Include="..\..\public\tier1\utlmemory.h" />
-    <ClInclude Include="..\..\public\tier1\utlvector.h" />
-    <ClInclude Include="..\..\public\mathlib\vector.h" />
-    <ClInclude Include="..\..\public\vstdlib\vstdlib.h" />
-    <ClInclude Include="bot_plugin_meta.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\Color.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\const.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\dbg.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\dt_send.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\eiface.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\FileSystem.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\icommandline.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\icvar.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\igameevents.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\interface.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\game\server\iplayerinfo.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\engine\iserverplugin.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\KeyValues.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\mathlib\mathlib.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\mem.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\memalloc.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\memdbgon.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\server_class.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\strtools.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\utlbuffer.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\utlmemory.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\utlvector.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\mathlib\vector.h" />
+    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\vstdlib\vstdlib.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="tf2weaponsgive.txt" />
     <Text Include="update.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\lib\public\mathlib.lib" />
-    <Library Include="..\..\lib\public\tier0.lib" />
-    <Library Include="..\..\lib\public\tier1.lib" />
-    <Library Include="..\..\lib\public\tier2.lib" />
-    <Library Include="..\..\lib\public\vstdlib.lib" />
+    <Library Include="..\..\alliedmodders\hl2sdk-tf2\lib\public\mathlib.lib" />
+    <Library Include="..\..\alliedmodders\hl2sdk-tf2\lib\public\tier0.lib" />
+    <Library Include="..\..\alliedmodders\hl2sdk-tf2\lib\public\tier1.lib" />
+    <Library Include="..\..\alliedmodders\hl2sdk-tf2\lib\public\tier2.lib" />
+    <Library Include="..\..\alliedmodders\hl2sdk-tf2\lib\public\vstdlib.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

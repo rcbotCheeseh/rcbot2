@@ -34,7 +34,7 @@
 #include "bot_waypoint.h"
 #include "bot_waypoint_visibility.h"
 #include "bot_globals.h"
-#include <stdio.h>
+#include <cstdio>
 
 /*unsigned char *CWaypointVisibilityTable :: m_VisTable = NULL;
 bool CWaypointVisibilityTable :: bWorkVisibility = false;

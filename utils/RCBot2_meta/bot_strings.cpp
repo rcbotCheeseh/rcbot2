@@ -28,8 +28,8 @@
  *    version.
  *
  */
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "bot.h"
 #include "bot_strings.h"

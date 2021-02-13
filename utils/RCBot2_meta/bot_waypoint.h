@@ -31,7 +31,7 @@
 #ifndef __RCBOT_WAYPOINT_H__
 #define __RCBOT_WAYPOINT_H__
 
-#include <stdio.h>
+#include <cstdio>
 
 // this must be before bot_client.h to avoid unknown override / missing type warnings
 #include <vector>

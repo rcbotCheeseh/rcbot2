@@ -1,5 +1,7 @@
 # Build outputs
 build/
+utils/RCBot2_meta/Debug
+utils/RCBot2_meta/.vs
 
 # SourceMod compiled plugins
 *.smx
@@ -10,3 +12,6 @@ build/
 *.suo
 *.user
 apg-load
+*.obj
+*.sbr
+utils/RCBot2_meta/HPB_Bot2.vcxproj.filters
