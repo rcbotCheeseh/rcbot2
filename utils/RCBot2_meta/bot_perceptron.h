@@ -283,6 +283,7 @@ public:
 
 	CBotNeuralNet ()
 	{
+		m_pHidden = NULL;
 		m_pOutputs = NULL;
 		//m_transferFunction = NULL;
 

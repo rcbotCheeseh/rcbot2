@@ -39,6 +39,11 @@ ga_nn_value CPerceptron::m_fDefaultBias = 1.0f;
 
 CNeuron :: CNeuron ()
 {
+	m_iInputs = 0;
+	m_LearnRate = 0;
+	m_output = 0;
+	m_Bias = 0;
+	
 	m_weights = NULL;
 	m_inputs = NULL;
 }
@@ -155,7 +160,7 @@ ga_nn_value CLogisticalNeuron :: execute (  )//, bool usebias )
 	x = m_inputs;
 
 	// bias weight
-	m_netinput = m_Bias;
+	m_netinput = m_Bias;//m_netinput assigned twice? [APG]RoboCop[CL]
 	
 	for ( i = 0; i < m_iInputs; i ++ )	
 	{
