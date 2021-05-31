@@ -42,9 +42,7 @@
 //#define GAME_DLL
 
 //#include "cbase.h"
-#define swap V_swap
 #include "mathlib.h"
-#undef swap
 
 #include "vector.h"
 #include "vplane.h"

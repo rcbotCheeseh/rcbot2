@@ -16,10 +16,6 @@
 #include <unistd.h>
 #endif
 
-#define swap V_swap
-#include "mathlib/mathlib.h"
-#undef swap
-
 //#include "cbase.h"
 //#include "baseentity.h"
 #include "filesystem.h"

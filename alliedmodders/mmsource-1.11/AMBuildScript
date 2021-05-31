@@ -183,7 +183,7 @@ class MMSConfig(object):
         '-pipe',
         '-fno-strict-aliasing',
         '-Wall',
-        '-Werror',
+        #'-Werror',
         '-Wno-uninitialized',
         '-Wno-unused',
         '-Wno-switch',

@@ -146,7 +146,7 @@ void CBotProfiles :: setupProfiles ()
 			READ_PROFILE_INT("pathticks",m_iPathTicks);
 			READ_PROFILE_INT("visionticks_clients",m_iVisionTicksClients);
 			READ_PROFILE_INT("sensitivity",m_iSensitivity);
-			READ_PROFILE_FLOAT("aim_skill",m_fAimSkill);
+			READ_PROFILE_FLOAT("aimskill",m_fAimSkill);
 			READ_PROFILE_FLOAT("braveness",m_fBraveness);
 			READ_PROFILE_INT("class",m_iClass);
 
