@@ -1402,7 +1402,7 @@ void CWaypointNavigator :: updatePosition ()
 				if ( pWaypoint )
 				{
 					if ( iWaypointFlagsPrev & CWaypointTypes::W_FL_TELEPORT_CHEAT )
-						CBotGlobals::teleportPlayer(m_pBot->getEdict(),pWaypoint->getOrigin()-(CWaypoint::WAYPOINT_HEIGHT/2));
+						CBotGlobals::teleportPlayer(m_pBot->getEdict(),pWaypoint->getOrigin()-Vector(0,0,(CWaypoint::WAYPOINT_HEIGHT/2)));
 				}
 				if ( m_iCurrentWaypoint != -1 )
 				{ // random point, but more chance of choosing the most dangerous point

@@ -146,7 +146,18 @@ for sdk_name in MMS.sdks:
 
     if builder.target.platform in ['linux', 'mac']:
       ## RCBot2: link other dependencies
-      cxx.postlink += [
+      if sdk.name == 'sdk2013':
+        cxx.postlink += [
+        cxx.Dep(os.path.join(lib_folder, 'mathlib.a')),
+        cxx.Dep(os.path.join(lib_folder, 'tier2.a')),
+        cxx.Dep(os.path.join(lib_folder, 'tier3.a')),
+        'libvstdlib_srv.so',
+        '-lm',
+        '-ldl',
+        '-lpthread'
+      ]
+      else:
+        cxx.postlink += [
         cxx.Dep(os.path.join(lib_folder, 'mathlib_i486.a')),
         cxx.Dep(os.path.join(lib_folder, 'tier2_i486.a')),
         cxx.Dep(os.path.join(lib_folder, 'tier3_i486.a')),

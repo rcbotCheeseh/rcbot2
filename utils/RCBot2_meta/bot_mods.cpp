@@ -266,7 +266,7 @@ void CBotMods :: createFile ()
 		fprintf(fp,"# ZOMBIE\n");
 		fprintf(fp,"# DOD\n");
 		fprintf(fp,"#\n");
-		fprintf(fp, "# weaponlists are changeable in config / weapons.ini\n");
+		fprintf(fp,"# weaponlists are changeable in config / weapons.ini\n");
 		fprintf(fp,"#\n");
 		fprintf(fp,"#mod = CSS\n");
 		fprintf(fp,"#steamdir = counter-strike source\n");
@@ -293,11 +293,11 @@ void CBotMods :: createFile ()
 		fprintf(fp,"#gamedir = hl1dm\n");
 		fprintf(fp,"#bot = HL1DM\n");
 		fprintf(fp,"#\n");
-		fprintf(fp,"mod = DOD\n");
-		fprintf(fp,"steamdir = orangebox\n");
-		fprintf(fp,"gamedir = dod\n");
-		fprintf(fp,"bot = DOD\n");
-		fprintf(fp, "weaponlist = DOD\n");
+		fprintf(fp,"#mod = DOD\n");
+		fprintf(fp,"#steamdir = orangebox\n");
+		fprintf(fp,"#gamedir = dod\n");
+		fprintf(fp,"#bot = DOD\n");
+		fprintf(fp,"#weaponlist = DOD\n");
 		fprintf(fp,"#\n");
 
 		fclose(fp);
@@ -309,6 +309,7 @@ void CBotMods :: createFile ()
 void CBotMods :: readMods()
 {
 	// TODO improve game detection
+	// caxanga334: Better game detection required if we want to support multiple mods on the same engine (IE: SDK 2013)
 	#if SOURCE_ENGINE == SE_TF2
 		m_Mods.push_back(new CTeamFortress2Mod());
 	#elif SOURCE_ENGINE == SE_DODS
@@ -317,6 +318,8 @@ void CBotMods :: readMods()
 		m_Mods.push_back(new CCounterStrikeSourceMod());
 	#elif SOURCE_ENGINE == SE_HL2DM
 		m_Mods.push_back(new CHalfLifeDeathmatchMod());
+	#elif SOURCE_ENGINE == SE_SDK2013
+		m_Mods.push_back(new CSynergyMod());
 	#else
 
 		m_Mods.push_back(new CFortressForeverMod());
