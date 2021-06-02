@@ -146,7 +146,7 @@ for sdk_name in MMS.sdks:
 
     if builder.target.platform in ['linux', 'mac']:
       ## RCBot2: link other dependencies
-      if sdk.name == 'sdk2013':
+      if sdk.name in ['sdk2013', 'bms']:
         cxx.postlink += [
         cxx.Dep(os.path.join(lib_folder, 'mathlib.a')),
         cxx.Dep(os.path.join(lib_folder, 'tier2.a')),
