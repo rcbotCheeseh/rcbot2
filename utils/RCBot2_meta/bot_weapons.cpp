@@ -291,7 +291,8 @@ edict_t *CWeapons :: findWeapon ( edict_t *pPlayer, const char *pszWeaponName )
 	for ( j = 0; j < MAX_WEAPONS; j ++ )
 	{
 		pWeapon = INDEXENT(m_Weapon_iter->GetEntryIndex());
-
+		
+		// Fix by nosoop for GiveBotsWeapons.smx plugin
 		// TODO get familiar with validity of handles / edicts
 		if (pWeapon && !pWeapon->IsFree() && strcmp(pWeapon->GetClassName(),pszWeaponName) == 0 )
 			return pWeapon;
