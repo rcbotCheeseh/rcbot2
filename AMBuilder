@@ -35,6 +35,8 @@ sourceFiles = [
   "utils/RCBot2_meta/bot_som.cpp",
   "utils/RCBot2_meta/bot_squads.cpp",
   "utils/RCBot2_meta/bot_strings.cpp",
+  "utils/RCBot2_meta/bot_synergy.cpp",
+  "utils/RCBot2_meta/bot_synergy_mod.cpp",
   "utils/RCBot2_meta/bot_task.cpp",
   "utils/RCBot2_meta/bot_tf2_mod.cpp",
   "utils/RCBot2_meta/bot_utility.cpp",
@@ -78,7 +80,7 @@ mods_requiring_runcmd_overrides = [
   # hack: DOD:S uses `Bot_Think`, which forces all `bot`-spawned entities to use Valve's
   # default bot AI.  we'll hook into their RunPlayerMove for now, but for consistency across
   # games it'd be better to supercede `Bot_Think` (or `Bot_RunAll` higher up the call stack)
-  'dods',
+  'dods','sdk2013',
 ]
 
 ###############
@@ -148,24 +150,24 @@ for sdk_name in MMS.sdks:
       ## RCBot2: link other dependencies
       if sdk.name in ['sdk2013', 'bms']:
         cxx.postlink += [
-        cxx.Dep(os.path.join(lib_folder, 'mathlib.a')),
-        cxx.Dep(os.path.join(lib_folder, 'tier2.a')),
-        cxx.Dep(os.path.join(lib_folder, 'tier3.a')),
-        'libvstdlib_srv.so',
-        '-lm',
-        '-ldl',
-        '-lpthread'
-      ]
+          cxx.Dep(os.path.join(lib_folder, 'mathlib.a')),
+          cxx.Dep(os.path.join(lib_folder, 'tier2.a')),
+          cxx.Dep(os.path.join(lib_folder, 'tier3.a')),
+          'libvstdlib_srv.so',
+          '-lm',
+          '-ldl',
+          '-lpthread'
+        ]
       else:
         cxx.postlink += [
-        cxx.Dep(os.path.join(lib_folder, 'mathlib_i486.a')),
-        cxx.Dep(os.path.join(lib_folder, 'tier2_i486.a')),
-        cxx.Dep(os.path.join(lib_folder, 'tier3_i486.a')),
-        'libvstdlib_srv.so',
-        '-lm',
-        '-ldl',
-        '-lpthread'
-      ]
+          cxx.Dep(os.path.join(lib_folder, 'mathlib_i486.a')),
+          cxx.Dep(os.path.join(lib_folder, 'tier2_i486.a')),
+          cxx.Dep(os.path.join(lib_folder, 'tier3_i486.a')),
+          'libvstdlib_srv.so',
+          '-lm',
+          '-ldl',
+          '-lpthread'
+        ]
 
     nodes = builder.Add(binary)
     MMS.binaries += [nodes]

@@ -7577,6 +7577,7 @@ void CBotTF2 :: enemyAtIntel ( Vector vPos, int type, int iArea )
 			#else
 			const Vector vCapAttacking = CTeamFortress2Mod::m_ObjectiveResource.getControlPointWaypoint(capindex);
 			#endif
+
 			if ( distanceFrom(vPos) > distanceFrom(vCapAttacking) )
 				return;
 		}

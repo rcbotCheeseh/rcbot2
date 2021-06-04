@@ -54,6 +54,7 @@
 #include "bot_waypoint_visibility.h"
 #include "bot_kv.h"
 #include "bot_sigscan.h"
+#include "bot_mods.h"
 
 #include <build_info.h>
 
@@ -406,9 +407,13 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 		rcbot_runplayercmd_dods.SetValue(val);
 	if (pKVL->getInt("gamerules_win", &val))
 		rcbot_gamerules_offset.SetValue(val);
+	if (pKVL->getInt("runplayermove_synergy_win", &val))
+		rcbot_runplayercmd_syn.SetValue(val);
 #else
 	if (pKVL->getInt("runplayermove_dods_linux", &val))
 		rcbot_runplayercmd_dods.SetValue(val);
+	if (pKVL->getInt("runplayermove_synergy_linux", &val))
+		rcbot_runplayercmd_syn.SetValue(val);
 #endif
 
 	g_pGameRules_Obj = new CGameRulesObject(pKVL, gameServerFactory);
@@ -426,7 +431,15 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 #ifdef OVERRIDE_RUNCMD
 	// TODO figure out a more robust gamedata fix instead of vtable
+	#if SOURCE_ENGINE == SE_DODS
 	SH_MANUALHOOK_RECONFIGURE(MHook_PlayerRunCmd, rcbot_runplayercmd_dods.GetInt(), 0, 0);
+	#elif SOURCE_ENGINE == SE_SDK2013
+	if(pMod->getModId() == MOD_SYNERGY)
+	{
+		SH_MANUALHOOK_RECONFIGURE(MHook_PlayerRunCmd, rcbot_runplayercmd_syn.GetInt(), 0, 0);
+	}
+	#endif
+
 #endif
 
 	ENGINE_CALL(LogPrint)("All hooks started!\n");

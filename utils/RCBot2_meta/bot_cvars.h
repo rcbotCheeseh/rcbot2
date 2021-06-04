@@ -91,6 +91,9 @@ extern ConVar rcbot_bot_quota_interval;
 extern ConVar rcbot_const_point_master_offset;
 //extern ConVar rcbot_util_learning;
 
+//Synergy Cvars
+extern ConVar rcbot_runplayercmd_syn;
+
 /** Additional convars by pongo1231 **/
 extern ConVar rcbot_show_welcome_msg;
 extern ConVar rcbot_force_class;

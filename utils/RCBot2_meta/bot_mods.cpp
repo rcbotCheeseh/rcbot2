@@ -210,6 +210,8 @@ void CBotMods :: parseFile ()
 				bottype = BOTTYPE_ZOMBIE;
 			else if ( !strcmpi("DOD",val) )
 				bottype = BOTTYPE_DOD;
+			else if ( !strcmpi("SYNERGY",val) )
+				bottype = BOTTYPE_SYN;
 		}
 		else if ( curmod && !strcmpi(key,"gamedir") )
 		{

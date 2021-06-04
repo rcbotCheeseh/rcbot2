@@ -133,45 +133,46 @@ class CWaypointTypes
 {
 public:
 
-	static const int W_FL_NONE = 0;
-	static const int W_FL_JUMP = 1;
-	static const int W_FL_CROUCH = 2;
-	static const int W_FL_UNREACHABLE = 4;
-	static const int W_FL_LADDER = 8;
-	static const int W_FL_FLAG = 16;
-	static const int W_FL_CAPPOINT = 32;
-	static const int W_FL_NOBLU = 64;
-	static const int W_FL_NOAXIS = 64;
-	static const int W_FL_NORED = 128;
-	static const int W_FL_NOALLIES = 128;
-	static const int W_FL_HEALTH = 256;
-	static const int W_FL_OPENS_LATER = 512;
-	static const int W_FL_ROCKET_JUMP = 1024;
-	static const int W_FL_BOMB_TO_OPEN = 1024; // DOD:S
-	static const int W_FL_SNIPER = 2048;
-	static const int W_FL_AMMO = 4096;
-	static const int W_FL_RESUPPLY = 8192;
-	static const int W_FL_BOMBS_HERE = 8192;
-	static const int W_FL_SENTRY = 16384;
-	static const int W_FL_MACHINEGUN = 16384;
-	static const int W_FL_DOUBLEJUMP = 32768;
-	static const int W_FL_PRONE = 32768;
-	static const int W_FL_TELE_ENTRANCE = 65536;	
-	static const int W_FL_TELE_EXIT = 131072;
-	static const int W_FL_DEFEND = 262144;
-	static const int W_FL_AREAONLY = 524288;
-	static const int W_FL_ROUTE = 1048576;
-	static const int W_FL_WAIT_GROUND = 2097152;
-	static const int W_FL_NO_FLAG = 4194304;
-	static const int W_FL_COVER_RELOAD = 4194304; // DOD:S only
-	static const int W_FL_LIFT = 8388608;
-	static const int W_FL_FLAGONLY = 16777216;
-	static const int W_FL_FALL = 33554432;
-	static const int W_FL_BREAKABLE = 67108864;
-	static const int W_FL_SPRINT = 134217728; 
-	static const int W_FL_TELEPORT_CHEAT = 268435456; // teleports bots to the next waypoint (cheat)
-	static const int W_FL_OWNER_ONLY = 536870912; // Only owners of this area can use the waypoint
-	//static const int W_FL_ATTACKPOINT = 1073741824; // Tactical waypoint -- each squad will go to different attack points and signal others to go
+// if you're adding a new waypoint type, don't forget to update CWaypointTypes :: setup()
+	static const int W_FL_NONE           = 0;
+	static const int W_FL_JUMP           = (1 << 0);
+	static const int W_FL_CROUCH         = (1 << 1);
+	static const int W_FL_UNREACHABLE    = (1 << 2);
+	static const int W_FL_LADDER         = (1 << 3);
+	static const int W_FL_FLAG           = (1 << 4);
+	static const int W_FL_CAPPOINT       = (1 << 5);
+	static const int W_FL_NOBLU          = (1 << 6);
+	static const int W_FL_NOAXIS         = (1 << 6);
+	static const int W_FL_NORED          = (1 << 7);
+	static const int W_FL_NOALLIES       = (1 << 7);
+	static const int W_FL_HEALTH         = (1 << 8);
+	static const int W_FL_OPENS_LATER    = (1 << 9);
+	static const int W_FL_ROCKET_JUMP    = (1 << 10);
+	static const int W_FL_BOMB_TO_OPEN   = (1 << 10); // DOD:S
+	static const int W_FL_SNIPER         = (1 << 11);
+	static const int W_FL_AMMO           = (1 << 12);
+	static const int W_FL_RESUPPLY       = (1 << 13);
+	static const int W_FL_BOMBS_HERE     = (1 << 13);
+	static const int W_FL_SENTRY         = (1 << 14);
+	static const int W_FL_MACHINEGUN     = (1 << 14);
+	static const int W_FL_DOUBLEJUMP     = (1 << 15);
+	static const int W_FL_PRONE          = (1 << 15);
+	static const int W_FL_TELE_ENTRANCE  = (1 << 16);
+	static const int W_FL_TELE_EXIT      = (1 << 17);
+	static const int W_FL_DEFEND         = (1 << 18);
+	static const int W_FL_AREAONLY       = (1 << 19);
+	static const int W_FL_ROUTE          = (1 << 20);
+	static const int W_FL_WAIT_GROUND    = (1 << 21);
+	static const int W_FL_NO_FLAG        = (1 << 22);
+	static const int W_FL_COVER_RELOAD   = (1 << 22); // DOD:S only
+	static const int W_FL_LIFT           = (1 << 23);
+	static const int W_FL_FLAGONLY       = (1 << 24);
+	static const int W_FL_FALL           = (1 << 25);
+	static const int W_FL_BREAKABLE      = (1 << 26);
+	static const int W_FL_SPRINT         = (1 << 27);
+	static const int W_FL_TELEPORT_CHEAT = (1 << 28); // teleports bots to the next waypoint (cheat)
+	static const int W_FL_OWNER_ONLY     = (1 << 29); // Only owners of this area can use the waypoint
+	//static const int W_FL_ATTACKPOINT = (1 << 30); // Tactical waypoint -- each squad will go to different attack points and signal others to go
 
 	static void setup ();
 

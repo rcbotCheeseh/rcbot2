@@ -76,6 +76,7 @@ typedef enum
 	BOTTYPE_ZOMBIE,
 	BOTTYPE_DOD,
 	BOTTYPE_NS2,
+	BOTTYPE_SYN,
 	BOTTYPE_MAX
 }eBotType;
 
@@ -690,12 +691,16 @@ class CSynergyMod : public CBotMod
 public:
 	CSynergyMod()
 	{
-		setup("synergy",MOD_SYNERGY,BOTTYPE_COOP,"SYNERGY");
+		setup("synergy",MOD_SYNERGY,BOTTYPE_SYN,"SYNERGY");
 	}
 
-	//void initMod ();
+	void initMod ();
+	void mapInit ();
 
-	//void mapInit ();
+	const char *getPlayerClass () override
+	{
+		return "CSynergyPlayer";
+	}
 
 	//void entitySpawn ( edict_t *pEntity );
 };

@@ -15,3 +15,7 @@ apg-load
 *.obj
 *.sbr
 utils/RCBot2_meta/HPB_Bot2.vcxproj.filters
+
+# Visual Studio code
+.vscode/
+*.code-workspace

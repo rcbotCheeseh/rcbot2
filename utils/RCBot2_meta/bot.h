@@ -581,6 +581,7 @@ public:
 	virtual bool isCSS () { return false; }
 	virtual bool isHLDM () { return false; }
 	virtual bool isTF () { return false; }
+	virtual bool isSYN () { return false; }
 
 	virtual void spawnInit ();
 

@@ -3071,7 +3071,7 @@ void CDODBot :: getTasks (unsigned int iIgnore)
 		bCanMessAround = false;
 
 		if ( inSquad() )
-		{			
+		{
 			//caxanga334: SDK 2013 doesn't like to create a Vector from an int
 			//TODO: Proper fix
 			#if SOURCE_ENGINE == SE_SDK2013 || SOURCE_ENGINE == SE_BMS

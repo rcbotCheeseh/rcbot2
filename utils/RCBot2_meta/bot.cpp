@@ -78,6 +78,7 @@
 #include "bot_hldm_bot.h"
 #include "bot_hl1dmsrc_bot.h"
 #include "bot_fortress.h"
+#include "bot_synergy.h"
 #include "bot_visibles.h"
 //#include "bot_memory.h"
 //#include "bot_ga.h"
@@ -3218,6 +3219,9 @@ void CBots :: init ()
 			break;
 		case BOTTYPE_ZOMBIE:
 			m_Bots[i] = new CBotZombie();
+			break;
+		case BOTTYPE_SYN:
+			m_Bots[i] = new CBotSynergy();
 			break;
 		default:
 			m_Bots[i] = new CBot();

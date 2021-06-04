@@ -1401,6 +1401,8 @@ void CWaypointNavigator :: updatePosition ()
 
 				if ( pWaypoint )
 				{
+					//caxanga334: Original code subtracted an int from Vector, SDK 2013 doesn't like that
+					//The waypoint height is probably the Z axis, so I created a Vector with 0 for xy and waypoint height for z
 					if ( iWaypointFlagsPrev & CWaypointTypes::W_FL_TELEPORT_CHEAT )
 						CBotGlobals::teleportPlayer(m_pBot->getEdict(),pWaypoint->getOrigin()-Vector(0,0,(CWaypoint::WAYPOINT_HEIGHT/2)));
 				}
