@@ -92,7 +92,7 @@ const char *CWaypointFlagMenuItem :: getCaption ( CClient *pClient, WptColor &co
 
 	color = type->getColour();
 
-	sprintf(m_szCaption,"[%s] %s",(pWpt!=NULL)?(pWpt->hasFlag(type->getBits())?"x":" "):"No Waypoint",type->getName());
+	sprintf(m_szCaption,"[%s] %s",(pWpt!= nullptr)?(pWpt->hasFlag(type->getBits())?"x":" "):"No Waypoint",type->getName());
 
 	return m_szCaption;
 }
@@ -334,7 +334,7 @@ const char *CWaypointPasteMenuItem :: getCaption ( CClient *pClient, WptColor &c
 
 void CWaypointPasteMenuItem :: activate ( CClient *pClient )
 {
-	CWaypoints::addWaypoint(pClient,NULL,NULL,NULL,NULL,true);
+	CWaypoints::addWaypoint(pClient, nullptr, nullptr, nullptr, nullptr,true);
 }
 
 void CBotMenu ::render (CClient *pClient)
@@ -532,10 +532,8 @@ void CBotMenu :: freeMemory ()
 
 void CBotMenuList :: freeMemory ()
 {
-	for ( unsigned int i = 0; i < BOT_MENU_MAX; i ++ )
+	for (auto temp : m_MenuList)
 	{
-		CBotMenu *temp = m_MenuList[i];
-
 		temp->freeMemory();
 
 		delete temp;

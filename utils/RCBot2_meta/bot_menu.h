@@ -151,7 +151,7 @@ class CBotExitMenuItem : public CBotMenuItem
 
 	void activate ( CClient *pClient )
 	{
-		pClient->setCurrentMenu(NULL);
+		pClient->setCurrentMenu(nullptr);
 	}
 };
 
@@ -376,7 +376,7 @@ public:
 		addMenuItem(new CWaypointEditMenu(this));
 		addMenuItem(new CPathWaypointMenu(this));
 		addMenuItem(new CWaypointFlagShowMenu(this));
-		addMenuItem(new CBotGotoMenuItem("Exit",NULL));
+		addMenuItem(new CBotGotoMenuItem("Exit", nullptr));
 	}
 
 	//CWaypointFlagMenu ( int iShow );

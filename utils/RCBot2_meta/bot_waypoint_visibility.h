@@ -47,7 +47,7 @@ class CWaypointVisibilityTable
 public:
 	CWaypointVisibilityTable()
 	{
-		m_VisTable = NULL;
+		m_VisTable = nullptr;
 		bWorkVisibility = false;
 		iCurFrom = 0;
 		iCurTo = 0;
@@ -88,7 +88,7 @@ public:
 		// work out the position 
 		const int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
 
-		const int iByte = (int)(iPosition/8);
+		const int iByte = iPosition/8;
 		const int iBit = iPosition%8;
 
 		if ( iByte < g_iMaxVisibilityByte )
@@ -117,10 +117,10 @@ public:
 
 	void FreeVisibilityTable ( void )
 	{
-		if ( m_VisTable != NULL )
+		if ( m_VisTable != nullptr )
 		{
 			delete m_VisTable;
-			m_VisTable = NULL;
+			m_VisTable = nullptr;
 		}
 
 		/////////////////////////////
@@ -136,7 +136,7 @@ public:
 	{
 		const int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
 
-		const int iByte = (int)(iPosition/8);
+		const int iByte = iPosition/8;
 		const int iBit = iPosition%8;
 
 		if ( iByte < g_iMaxVisibilityByte )

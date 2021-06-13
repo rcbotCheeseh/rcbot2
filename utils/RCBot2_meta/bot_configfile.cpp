@@ -53,11 +53,11 @@ void CBotConfigFile :: load ()
 
 	if ( !fp )
 	{
-		CBotGlobals::botMessage(NULL,0,"config file not found");
+		CBotGlobals::botMessage(nullptr,0,"config file not found");
 		return;
 	}
 
-	while ( fgets(line,255,fp) != NULL )
+	while ( fgets(line,255,fp) != nullptr )
 	{
 		if ( line[0] == '#' )
 			continue;
@@ -72,7 +72,7 @@ void CBotConfigFile :: load ()
 			line[--len] = '\0';
 		}
 
-		CBotGlobals::botMessage(NULL, 0, line);
+		CBotGlobals::botMessage(nullptr, 0, line);
 		m_Commands.push_back(CStrings::getString(line));
 	}
 
@@ -89,7 +89,7 @@ void CBotConfigFile :: doNextCommand ()
 		snprintf(cmd, sizeof(cmd), "%s\n", m_Commands[m_iCmd]);
 		engine->ServerCommand(cmd);
 
-		CBotGlobals::botMessage(NULL,0,"Bot Command '%s' executed",m_Commands[m_iCmd]);
+		CBotGlobals::botMessage(nullptr,0,"Bot Command '%s' executed",m_Commands[m_iCmd]);
 		m_iCmd ++;
 		m_fNextCommandTime = engine->Time() + 0.1f;
 	}
@@ -104,7 +104,7 @@ void CBotConfigFile :: executeCommands ()
 		snprintf(cmd, sizeof(cmd), "%s\n", m_Commands[m_iCmd]);
 		engine->ServerCommand(cmd);
 
-		CBotGlobals::botMessage(NULL,0,"Bot Command '%s' executed",m_Commands[m_iCmd]);
+		CBotGlobals::botMessage(nullptr,0,"Bot Command '%s' executed",m_Commands[m_iCmd]);
 		m_iCmd ++;
 	}
 
@@ -165,9 +165,9 @@ void CRCBotTF2UtilFile :: loadConfig()
 
 		if ( fp )
 		{
-			eBotAction iUtil = (eBotAction)0;
+			auto iUtil = (eBotAction)0;
 
-			while ( fgets(line,255,fp) != NULL )
+			while ( fgets(line,255,fp) != nullptr )
 			{
 				float iClassList[TF_CLASS_MAX][2];
 				char utiltype[64];

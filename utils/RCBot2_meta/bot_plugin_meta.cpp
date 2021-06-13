@@ -78,25 +78,25 @@ SH_DECL_HOOK1_void(IServerGameClients, ClientCommand, SH_NOATTRIB, 0, edict_t *)
 
 SH_DECL_MANUALHOOK2_void(MHook_PlayerRunCmd, 0, 0, 0, CUserCmd*, IMoveHelper*); 
 
-IServerGameDLL *server = NULL;
-IGameEventManager2 *gameevents = NULL;
-IServerPluginCallbacks *vsp_callbacks = NULL;
-ICvar *icvar = NULL;
-IVEngineServer *engine = NULL;  // helper functions (messaging clients, loading content, making entities, running commands, etc)
-IFileSystem *filesystem = NULL;  // file I/O 
-IGameEventManager2 *gameeventmanager = NULL;
-IGameEventManager *gameeventmanager1 = NULL;  // game events interface
-IPlayerInfoManager *playerinfomanager = NULL;  // game dll interface to interact with players
-IServerPluginHelpers *helpers = NULL;  // special 3rd party plugin helpers from the engine
-IServerGameClients* gameclients = NULL;
-IEngineTrace *enginetrace = NULL;
-IEffects *g_pEffects = NULL;
-IBotManager *g_pBotManager = NULL;
-CGlobalVars *gpGlobals = NULL;
-IVDebugOverlay *debugoverlay = NULL;
-IServerGameEnts *servergameents = NULL; // for accessing the server game entities
-IServerGameDLL *servergamedll = NULL;
-IServerTools *servertools = NULL;
+IServerGameDLL *server = nullptr;
+IGameEventManager2 *gameevents = nullptr;
+IServerPluginCallbacks *vsp_callbacks = nullptr;
+ICvar *icvar = nullptr;
+IVEngineServer *engine = nullptr;  // helper functions (messaging clients, loading content, making entities, running commands, etc)
+IFileSystem *filesystem = nullptr;  // file I/O 
+IGameEventManager2 *gameeventmanager = nullptr;
+IGameEventManager *gameeventmanager1 = nullptr;  // game events interface
+IPlayerInfoManager *playerinfomanager = nullptr;  // game dll interface to interact with players
+IServerPluginHelpers *helpers = nullptr;  // special 3rd party plugin helpers from the engine
+IServerGameClients* gameclients = nullptr;
+IEngineTrace *enginetrace = nullptr;
+IEffects *g_pEffects = nullptr;
+IBotManager *g_pBotManager = nullptr;
+CGlobalVars *gpGlobals = nullptr;
+IVDebugOverlay *debugoverlay = nullptr;
+IServerGameEnts *servergameents = nullptr; // for accessing the server game entities
+IServerGameDLL *servergamedll = nullptr;
+IServerTools *servertools = nullptr;
 
 RCBotPluginMeta g_RCBotPluginMeta;
 
@@ -110,12 +110,12 @@ CON_COMMAND(rcbotd, "access the bot commands on a server")
 
 	if (!engine->IsDedicatedServer() || !CBotGlobals::IsMapRunning())
 	{
-		CBotGlobals::botMessage(NULL, 0, "Error, no map running or not dedicated server");
+		CBotGlobals::botMessage(nullptr, 0, "Error, no map running or not dedicated server");
 		return;
 	}
 
 	//iResult = CBotGlobals::m_pCommands->execute(NULL,engine->Cmd_Argv(1),engine->Cmd_Argv(2),engine->Cmd_Argv(3),engine->Cmd_Argv(4),engine->Cmd_Argv(5),engine->Cmd_Argv(6));
-	iResult = CBotGlobals::m_pCommands->execute(NULL, args.Arg(1), args.Arg(2), args.Arg(3), args.Arg(4), args.Arg(5), args.Arg(6));
+	iResult = CBotGlobals::m_pCommands->execute(nullptr, args.Arg(1), args.Arg(2), args.Arg(3), args.Arg(4), args.Arg(5), args.Arg(6));
 
 	if (iResult == COMMAND_ACCESSED)
 	{
@@ -123,15 +123,15 @@ CON_COMMAND(rcbotd, "access the bot commands on a server")
 	}
 	else if (iResult == COMMAND_REQUIRE_ACCESS)
 	{
-		CBotGlobals::botMessage(NULL, 0, "You do not have access to this command");
+		CBotGlobals::botMessage(nullptr, 0, "You do not have access to this command");
 	}
 	else if (iResult == COMMAND_NOT_FOUND)
 	{
-		CBotGlobals::botMessage(NULL, 0, "bot command not found");
+		CBotGlobals::botMessage(nullptr, 0, "bot command not found");
 	}
 	else if (iResult == COMMAND_ERROR)
 	{
-		CBotGlobals::botMessage(NULL, 0, "bot command returned an error");
+		CBotGlobals::botMessage(nullptr, 0, "bot command returned an error");
 	}
 }
 
@@ -215,7 +215,7 @@ void RCBotPluginMeta::HudTextMessage(edict_t *pEntity, const char *szMessage)
 	// if (!bOK)
 	// return;
 
-	CBotRecipientFilter *filter = new CBotRecipientFilter(pEntity);
+	auto*filter = new CBotRecipientFilter(pEntity);
 
 	bf_write *buf = nullptr;
 
@@ -263,7 +263,7 @@ void RCBotPluginMeta::BroadcastTextMessage(const char *szMessage)
 	if (msgid == 0)
 		return;
 
-	CClientBroadcastRecipientFilter *filter = new CClientBroadcastRecipientFilter();
+	auto*filter = new CClientBroadcastRecipientFilter();
 
 	bf_write *buf = nullptr;
 
@@ -283,7 +283,7 @@ void RCBotPluginMeta::Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper)
 {
 	static CBot *pBot;
 
-	CBaseEntity *pPlayer = META_IFACEPTR(CBaseEntity);
+	auto*pPlayer = META_IFACEPTR(CBaseEntity);
 
 	edict_t *pEdict = servergameents->BaseEntityToEdict(pPlayer);
 
@@ -358,7 +358,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 	/* Load the VSP listener.  This is usually needed for IServerPluginHelpers. */
 	ismm->AddListener(this, this);
-	if ((vsp_callbacks = ismm->GetVSPInfo(NULL)) == NULL)
+	if ((vsp_callbacks = ismm->GetVSPInfo(nullptr)) == nullptr)
 	{
 		ismm->EnableVSPListener();
 	}
@@ -393,12 +393,12 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 	FILE *fp = fopen(filename, "r");
 
-	CRCBotKeyValueList *pKVL = new CRCBotKeyValueList();
+	auto*pKVL = new CRCBotKeyValueList();
 
 	if (fp)
 		pKVL->parseFile(fp);
 
-	void *gameServerFactory = reinterpret_cast<void*>(ismm->GetServerFactory(false));
+	void* gameServerFactory = reinterpret_cast<void*>(ismm->GetServerFactory(false));
 
 	int val;
 
@@ -448,15 +448,15 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	//ConVar_Register( 0 );
 	//InitCVars( interfaceFactory ); // register any cvars we have defined
 
-	srand( (unsigned)time(NULL) );  // initialize the random seed
-	irand.seed( (unsigned)time(NULL) );
+	srand( (unsigned)time(nullptr) );  // initialize the random seed
+	irand.seed( (unsigned)time(nullptr) );
 
 	// Find the RCBOT2 Path from metamod VDF
 	extern IFileSystem *filesystem;
-	KeyValues *mainkv = new KeyValues("metamodplugin");
+	auto*mainkv = new KeyValues("metamodplugin");
 	
 	const char *rcbot2path;
-	CBotGlobals::botMessage(NULL, 0, "Reading rcbot2 path from VDF...");
+	CBotGlobals::botMessage(nullptr, 0, "Reading rcbot2 path from VDF...");
 	
 	mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD");
 	
@@ -495,8 +495,9 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	int bot_count = 0;
 	int human_count = 0;
 
-	for (int i = 0; i < MAX_PLAYERS; ++i) {
-		m_iTargetBots[i] = 0;
+	for (int& m_iTargetBot : m_iTargetBots)
+	{
+		m_iTargetBot = 0;
 	}
 
 	CBotGlobals::buildFileName(filename, "bot_quota", BOT_CONFIG_FOLDER, "ini");
@@ -504,32 +505,33 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 	memset(bq_line, 0, sizeof(bq_line));
 
-	if (fp != NULL) {
-		while (fgets(bq_line, sizeof(bq_line), fp) != NULL) {
+	if (fp != nullptr) {
+		while (fgets(bq_line, sizeof(bq_line), fp) != nullptr) {
 			if (bq_line[0] == '#')
 				continue;
 
-			for (int i = 0; i < sizeof(bq_line); ++i) {
-				if (bq_line[i] == '\0')
+			for (char& i : bq_line)
+			{
+				if (i == '\0')
 					break;
 
-				if (!isdigit(bq_line[i]))
-					bq_line[i] = ' ';
+				if (!isdigit(i))
+					i = ' ';
 			}
 
 			if (sscanf(bq_line, "%d %d", &human_count, &bot_count) == 2) {
 				if (human_count < 0 || human_count > 32) {
-					CBotGlobals::botMessage(NULL, 0, "Bot Quota - Invalid Human Count %d", human_count);
+					CBotGlobals::botMessage(nullptr, 0, "Bot Quota - Invalid Human Count %d", human_count);
 					continue;
 				}
 
 				if (bot_count < 0 || bot_count > 32) {
-					CBotGlobals::botMessage(NULL, 0, "Bot Quota - Invalid Bot Count %d", bot_count);
+					CBotGlobals::botMessage(nullptr, 0, "Bot Quota - Invalid Bot Count %d", bot_count);
 					continue;
 				}
 
 				m_iTargetBots[human_count] = bot_count;
-				CBotGlobals::botMessage(NULL, 0, "Bot Quota - Humans: %d, Bots: %d", human_count, bot_count);
+				CBotGlobals::botMessage(nullptr, 0, "Bot Quota - Humans: %d, Bots: %d", human_count, bot_count);
 			}
 		}
 	}
@@ -543,7 +545,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 bool RCBotPluginMeta::FireGameEvent(IGameEvent * pevent, bool bDontBroadcast)
 {
-	CBotEvents::executeEvent((void*)pevent,TYPE_IGAMEEVENT);
+	CBotEvents::executeEvent(pevent,TYPE_IGAMEEVENT);
 
 	RETURN_META_VALUE(MRES_IGNORED, true);
 }
@@ -646,7 +648,7 @@ void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity, const CCommand &args)
 void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 #endif
 {
-	static CBotMod *pMod = NULL;
+	static CBotMod *pMod = nullptr;
 
 #if SOURCE_ENGINE <= SE_DARKMESSIAH
 	CCommand args;
@@ -843,7 +845,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 			CClient* client = CClients::get(i);
 			CBot* bot = CBots::get(i);
 
-			if (bot != NULL && bot->getEdict() != NULL && bot->inUse()) {
+			if (bot != nullptr && bot->getEdict() != nullptr && bot->inUse()) {
 				IPlayerInfo *p = playerinfomanager->GetPlayerInfo(bot->getEdict());
 
 				if (p->IsConnected() && p->IsFakeClient() && !p->IsHLTV()) {
@@ -851,7 +853,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 				}
 			}
 
-			if (client != NULL && client->getPlayer() != NULL && client->isUsed()) {
+			if (client != nullptr && client->getPlayer() != nullptr && client->isUsed()) {
 				IPlayerInfo *p = playerinfomanager->GetPlayerInfo(client->getPlayer());
 
 				if (p->IsConnected() && !p->IsFakeClient() && !p->IsHLTV()) {
@@ -886,9 +888,9 @@ void RCBotPluginMeta::BotQuotaCheck() {
 			char chatmsg[128];
 			snprintf(chatmsg, sizeof(chatmsg), "[Bot Quota] Humans: %d, Bots: %d", human_count, bot_target);
 
-			CBotGlobals::botMessage(NULL, 0, "=======================================");
-			CBotGlobals::botMessage(NULL, 0, chatmsg);
-			CBotGlobals::botMessage(NULL, 0, "=======================================");
+			CBotGlobals::botMessage(nullptr, 0, "=======================================");
+			CBotGlobals::botMessage(nullptr, 0, chatmsg);
+			CBotGlobals::botMessage(nullptr, 0, "=======================================");
 
 			// RCBotPluginMeta::BroadcastTextMessage(chatmsg);
 		}
@@ -938,7 +940,7 @@ bool RCBotPluginMeta::Hook_LevelInit(const char *pMapName,
 
 	CBotSquads::FreeMemory();
 
-	CClients::setListenServerClient(NULL);
+	CClients::setListenServerClient(nullptr);
 
 	// Setup game rules
 	extern void **g_pGameRules;

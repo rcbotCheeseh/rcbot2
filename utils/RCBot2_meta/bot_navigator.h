@@ -209,7 +209,7 @@ public:
 	AStarListNode ( AStarNode *data )
 	{
 		m_Data = data;
-		m_Next = NULL;
+		m_Next = nullptr;
 	}
 	AStarNode *m_Data;
 	AStarListNode *m_Next;
@@ -220,25 +220,25 @@ class AStarOpenList
 public:
 	AStarOpenList()
 	{
-		m_Head = NULL;
+		m_Head = nullptr;
 	}
 
 	bool empty ()
 	{
-		return (m_Head==NULL);
+		return (m_Head== nullptr);
 	}
 
 	AStarNode *top ()
 	{
-		if ( m_Head == NULL )
-			return NULL;
+		if ( m_Head == nullptr )
+			return nullptr;
 		
 		return m_Head->m_Data;
 	}
 
 	void pop ()
 	{
-		if ( m_Head != NULL )
+		if ( m_Head != nullptr )
 		{
 			AStarListNode *t = m_Head;
 
@@ -251,11 +251,11 @@ public:
 
 	void add ( AStarNode *data )
 	{
-		AStarListNode *newNode = new AStarListNode(data);
+		auto*newNode = new AStarListNode(data);
 		AStarListNode *t;
 		AStarListNode *p;
 
-		if ( m_Head == NULL )
+		if ( m_Head == nullptr )
 			m_Head = newNode;
 		else
 		{
@@ -269,7 +269,7 @@ public:
 				p = m_Head;
 				t = m_Head->m_Next;
 
-				while ( t != NULL )
+				while ( t != nullptr )
 				{
 					if ( data->precedes(t->m_Data) )
 					{
@@ -282,7 +282,7 @@ public:
 					t = t->m_Next;
 				}
 
-				if ( t == NULL )
+				if ( t == nullptr )
 					p->m_Next = newNode;
 
 			}
@@ -293,15 +293,15 @@ public:
 	{
 		AStarListNode *t;
 
-		while ( m_Head != NULL )
+		while ( m_Head != nullptr )
 		{
 			t = m_Head;
 			m_Head = m_Head->m_Next;
 			delete t;
-			t = NULL;
+			t = nullptr;
 		}
 
-		m_Head = NULL;
+		m_Head = nullptr;
 	}
 	
 private:

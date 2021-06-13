@@ -38,15 +38,15 @@
 #include "bot_sigscan.h"
 #include "bot_mods.h"
 
-CGameRulesObject *g_pGameRules_Obj = NULL;
-CCreateGameRulesObject *g_pGameRules_Create_Obj = NULL;
+CGameRulesObject *g_pGameRules_Obj = nullptr;
+CCreateGameRulesObject *g_pGameRules_Create_Obj = nullptr;
 
-void **g_pGameRules = NULL;
+void **g_pGameRules = nullptr;
 
 void *GetGameRules()
 {
 	if (!g_pGameRules)
-		return NULL;
+		return nullptr;
 
 	return *g_pGameRules;
 }
@@ -88,7 +88,7 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 {
 	uintptr_t baseAddr;
 
-	if (libPtr == NULL)
+	if (libPtr == nullptr)
 	{
 		return false;
 	}
@@ -222,7 +222,7 @@ void *CSignatureFunction::findPattern(const void *libPtr, const char *pattern, s
 
 	if (!getLibraryInfo(libPtr, lib))
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	ptr = reinterpret_cast<char *>(lib.baseAddress);
@@ -246,7 +246,7 @@ void *CSignatureFunction::findPattern(const void *libPtr, const char *pattern, s
 		ptr++;
 	}
 
-	return NULL;
+	return nullptr;
 }
 // Sourcemod - Metamod - Allied Modders.net
 void *CSignatureFunction::findSignature(void *addrInBase, const char *signature)
@@ -263,13 +263,13 @@ void *CSignatureFunction::findSignature(void *addrInBase, const char *signature)
 		return findPattern(addrInBase, (char*)real_sig, real_bytes);
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 
 void CSignatureFunction::findFunc(CRCBotKeyValueList *kv, const char*pKey, void *pAddrBase, const char *defaultsig)
 {
-	char *sig = NULL;
+	char *sig = nullptr;
 
 	if (kv->getString(pKey, &sig) && sig)
 		m_func = findSignature(pAddrBase, sig);
@@ -280,7 +280,7 @@ void CSignatureFunction::findFunc(CRCBotKeyValueList *kv, const char*pKey, void 
 CGameRulesObject::CGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase)
 {
 #ifdef _WIN32
-	m_func = NULL;
+	m_func = nullptr;
 #else
 	findFunc(list, "g_pGameRules", pAddrBase, "@g_pGameRules");
 #endif

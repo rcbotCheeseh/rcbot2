@@ -53,7 +53,7 @@ bool CAccessClient :: forBot ()
 
 bool CAccessClient :: isForSteamId ( const char *szSteamId )
 {
-	CBotGlobals::botMessage(NULL, 0, "AccessClient: '%s','%s'", m_szSteamId, szSteamId);
+	CBotGlobals::botMessage(nullptr, 0, "AccessClient: '%s','%s'", m_szSteamId, szSteamId);
 	return FStrEq(m_szSteamId,szSteamId);
 }
 
@@ -68,7 +68,7 @@ void CAccessClient :: giveAccessToClient ( CClient *pClient )
 	if ( !forBot() )
 		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s authenticated for bot commands",pClient->getName());
 	// notify server
-	CBotGlobals::botMessage(NULL,0,"%s authenticated for bot commands",pClient->getName());
+	CBotGlobals::botMessage(nullptr,0,"%s authenticated for bot commands",pClient->getName());
 
 	pClient->setAccessLevel(m_iAccessLevel);
 }
@@ -83,7 +83,7 @@ void CAccessClients :: showUsers ( edict_t *pEntity )
 	CBotGlobals::botMessage(pEntity,0,"showing users...");
 
 	if ( m_Clients.empty() )
-		CBotGlobals::botMessage(NULL,0,"showUsers() : No users to show");
+		CBotGlobals::botMessage(nullptr,0,"showUsers() : No users to show");
 
 	for ( unsigned int i = 0; i < m_Clients.size(); i ++ )
 	{
@@ -107,7 +107,7 @@ void CAccessClients :: createFile ()
 
 	FILE *fp = CBotGlobals::openFile(filename,"w");
 
-	CBotGlobals::botMessage(NULL,0,"Making an accessclients.ini file for you... Edit it in %s",filename);
+	CBotGlobals::botMessage(nullptr,0,"Making an accessclients.ini file for you... Edit it in %s",filename);
 
 	if ( fp )
 	{
@@ -125,7 +125,7 @@ void CAccessClients :: createFile ()
 		fclose(fp);
 	}
 	else
-		CBotGlobals::botMessage(NULL,0,"Error! Couldn't create config file %s",filename);
+		CBotGlobals::botMessage(nullptr,0,"Error! Couldn't create config file %s",filename);
 }
 
 void CAccessClients :: freeMemory ()
@@ -133,7 +133,7 @@ void CAccessClients :: freeMemory ()
 	for ( unsigned int i = 0; i < m_Clients.size(); i ++ )
 	{
 		delete m_Clients[i];
-		m_Clients[i] = NULL;
+		m_Clients[i] = nullptr;
 	}
 
 	m_Clients.clear();
@@ -160,7 +160,7 @@ void CAccessClients :: load ()
 
 		int iLine = 0;
 
-		while ( fgets(buffer,255,fp) != NULL )
+		while ( fgets(buffer,255,fp) != nullptr )
 		{
 			iLine++;
 
@@ -197,7 +197,7 @@ void CAccessClients :: load ()
 
 			if ( i == len )
 			{
-				CBotGlobals::botMessage(NULL,0,"line %d invalid in access client config, missing access level",iLine);
+				CBotGlobals::botMessage(nullptr,0,"line %d invalid in access client config, missing access level",iLine);
 				continue; // invalid
 			}
 
@@ -206,12 +206,12 @@ void CAccessClients :: load ()
 			// invalid
 			if ( (szSteamId[0] == 0) || (szSteamId[0] == ' ' ) )
 			{
-				CBotGlobals::botMessage(NULL,0,"line %d invalid in access client config, steam id invalid",iLine);
+				CBotGlobals::botMessage(nullptr,0,"line %d invalid in access client config, steam id invalid",iLine);
 				continue;
 			}
 			if ( iAccess == 0 )
 			{
-				CBotGlobals::botMessage(NULL,0,"line %d invalid in access client config, access level can't be 0",iLine);
+				CBotGlobals::botMessage(nullptr,0,"line %d invalid in access client config, access level can't be 0",iLine);
 				continue;
 			}
 

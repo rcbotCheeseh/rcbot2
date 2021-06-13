@@ -45,7 +45,7 @@ void CWaypointVisibilityTable :: workVisibility ()
 {		
 	int percent;
 	int iTicks = 0;
-	const register unsigned short int iSize = (unsigned short int) CWaypoints::numWaypoints();
+	const register auto iSize = (unsigned short int) CWaypoints::numWaypoints();
 
 	for ( iCurFrom = iCurFrom; iCurFrom < iSize; iCurFrom ++ )
 	{
@@ -159,9 +159,9 @@ bool CWaypointVisibilityTable :: SaveToFile ( void )
 
 	FILE *bfp = CBotGlobals::openFile(filename,"wb");
 
-   if ( bfp == NULL )
+   if ( bfp == nullptr )
    {
-	   CBotGlobals::botMessage(NULL,0,"Can't open Waypoint Visibility table for writing!");
+	   CBotGlobals::botMessage(nullptr,0,"Can't open Waypoint Visibility table for writing!");
 	   return false;
    }
 
@@ -187,7 +187,7 @@ bool CWaypointVisibilityTable :: ReadFromFile ( int numwaypoints )
 
    FILE *bfp =  CBotGlobals::openFile(filename,"rb");
 
-   if ( bfp == NULL )
+   if ( bfp == nullptr )
    {
 	   Msg(" *** Can't open Waypoint Visibility table for reading!\n");
 	   return false;

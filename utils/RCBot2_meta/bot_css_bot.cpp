@@ -42,7 +42,7 @@ bool CCSSBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
  
 	IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEdict);
 
-	if ( p == NULL )
+	if ( p == nullptr )
 		return false;
 	if ( m_pEdict == pEdict )
 		return false;

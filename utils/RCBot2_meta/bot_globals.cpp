@@ -60,16 +60,16 @@ extern IServerGameEnts *servergameents;
 
 ///////////
 trace_t CBotGlobals :: m_TraceResult;
-char * CBotGlobals :: m_szModFolder = NULL;
+char * CBotGlobals :: m_szModFolder = nullptr;
 eModId CBotGlobals :: m_iCurrentMod = MOD_UNSUPPORTED;
-CBotMod *CBotGlobals :: m_pCurrentMod = NULL;
+CBotMod *CBotGlobals :: m_pCurrentMod = nullptr;
 bool CBotGlobals :: m_bMapRunning = false;
 int CBotGlobals :: m_iMaxClients = 0;
 int CBotGlobals :: m_iEventVersion = 1;
 int CBotGlobals :: m_iWaypointDisplayType = 0;
 char CBotGlobals :: m_szMapName[MAX_MAP_STRING_LEN];
 bool CBotGlobals :: m_bTeamplay = false;
-char *CBotGlobals :: m_szRCBotFolder = NULL;
+char *CBotGlobals :: m_szRCBotFolder = nullptr;
 
 ///////////
 
@@ -78,7 +78,7 @@ extern IVDebugOverlay *debugoverlay;
 class CTraceFilterVis : public CTraceFilter
 {
 public:
-	CTraceFilterVis(edict_t *pPlayer, edict_t *pHit = NULL )
+	CTraceFilterVis(edict_t *pPlayer, edict_t *pHit = nullptr )
 	{
 		m_pPlayer = pPlayer;
 		m_pHit = pHit;
@@ -193,23 +193,23 @@ bool CBotGlobals::dirExists(const char *path)
 
 void CBotGlobals::readRCBotFolder()
 {
-	KeyValues *mainkv = new KeyValues("Metamod Plugin");
+	auto*mainkv = new KeyValues("Metamod Plugin");
 
 	if (mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD")) {
 		char folder[256] = "\0";
 		const char *szRCBotFolder = mainkv->GetString("rcbot2path");
 
 		if (szRCBotFolder && *szRCBotFolder) {
-			CBotGlobals::botMessage(NULL, 0, "RCBot Folder -> trying %s", szRCBotFolder);
+			CBotGlobals::botMessage(nullptr, 0, "RCBot Folder -> trying %s", szRCBotFolder);
 
 			if (!dirExists(szRCBotFolder)) {
 				snprintf(folder, sizeof(folder), "%s/%s", CBotGlobals::modFolder(), szRCBotFolder);
 
 				szRCBotFolder = CStrings::getString(folder);
-				CBotGlobals::botMessage(NULL, 0, "RCBot Folder -> trying %s", szRCBotFolder);
+				CBotGlobals::botMessage(nullptr, 0, "RCBot Folder -> trying %s", szRCBotFolder);
 
 				if (!dirExists(szRCBotFolder)) {
-					CBotGlobals::botMessage(NULL, 0, "RCBot Folder -> not found ...");
+					CBotGlobals::botMessage(nullptr, 0, "RCBot Folder -> not found ...");
 				}
 			}
 
@@ -230,7 +230,7 @@ float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fPro
 
 	g = sv_gravity->GetFloat();
 
-	if ( fAngle == NULL )
+	if ( fAngle == nullptr )
 	{
 
 		return false;
@@ -266,7 +266,7 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 // find a player by a truncated name "name".
 // e.g. name = "Jo" might find a player called "John"
 {
-	edict_t *pent = NULL;
+	edict_t *pent = nullptr;
 	IPlayerInfo *pInfo;
 	int i;
 
@@ -285,7 +285,7 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 
 			pInfo = playerinfomanager->GetPlayerInfo( pent );
 			
-			if ( pInfo == NULL )
+			if ( pInfo == nullptr )
 				continue;
 
 			strcpy(pent_lwr,pInfo->GetName());
@@ -300,7 +300,7 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 class CTraceFilterHitAllExceptPlayers : public CTraceFilter
@@ -359,11 +359,11 @@ private:
 
 bool CBotGlobals :: checkOpensLater ( Vector vSrc, Vector vDest )
 {
-	CTraceFilterSimple traceFilter( NULL, NULL, MASK_PLAYERSOLID );
+	CTraceFilterSimple traceFilter(nullptr, nullptr, MASK_PLAYERSOLID );
 
 	traceLine (vSrc,vDest,MASK_PLAYERSOLID,&traceFilter);
 
-	return (traceVisible(NULL));
+	return (traceVisible(nullptr));
 }
 
 
@@ -371,7 +371,7 @@ bool CBotGlobals :: isVisibleHitAllExceptPlayer ( edict_t *pPlayer, Vector vSrc,
 {
 	const IHandleEntity *ignore = pPlayer->GetIServerEntity();
 
-	CTraceFilterSimple traceFilter( ignore, ((pDest==NULL)?NULL:pDest->GetIServerEntity()), MASK_ALL );
+	CTraceFilterSimple traceFilter( ignore, ((pDest== nullptr)? nullptr:pDest->GetIServerEntity()), MASK_ALL );
 
 	traceLine (vSrc,vDest,MASK_SHOT|MASK_VISIBLE,&traceFilter);
 
@@ -384,7 +384,7 @@ bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest)
 
 	traceLine (vSrc,vDest,MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
 
-	return (traceVisible(NULL));
+	return (traceVisible(nullptr));
 }
 
 bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest )
@@ -415,7 +415,7 @@ bool CBotGlobals :: isVisible (Vector vSrc, Vector vDest)
 
 	traceLine (vSrc,vDest,MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
 
-	return traceVisible(NULL);
+	return traceVisible(nullptr);
 }
 
 void CBotGlobals :: traceLine (Vector vSrc, Vector vDest, unsigned int mask, ITraceFilter *pFilter)
@@ -531,7 +531,7 @@ bool CBotGlobals :: gameStart ()
 	
 	m_pCurrentMod = CBotMods::getMod(m_szModFolder);
 
-	if ( m_pCurrentMod != NULL )
+	if ( m_pCurrentMod != nullptr )
 	{
 		m_iCurrentMod = m_pCurrentMod->getModId();
 
@@ -642,7 +642,7 @@ edict_t *CBotGlobals :: playerByUserId(int iUserId)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 int CBotGlobals :: getTeam ( edict_t *pEntity )
@@ -657,7 +657,7 @@ bool CBotGlobals :: isNetworkable ( edict_t *pEntity )
 
 	pServerEnt = pEntity->GetIServerEntity();
 
-	return (pServerEnt && (pServerEnt->GetNetworkable() != NULL));
+	return (pServerEnt && (pServerEnt->GetNetworkable() != nullptr));
 }
 
 /*
@@ -800,7 +800,7 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 						// check jump height again
 						CBotGlobals::traceLine(v_checkpoint,v_checkpoint-Vector(0,0,45.0f),MASK_NPCSOLID_BRUSHONLY,&filter);
 
-						if ( CBotGlobals::traceVisible(NULL) )
+						if ( CBotGlobals::traceVisible(nullptr) )
 						{
 #ifndef __linux__
 							debugoverlay->AddTextOverlay(tr->endpos,0,3,"step/jump fail");
@@ -1003,17 +1003,17 @@ FILE *CBotGlobals :: openFile ( char *szFile, char *szMode )
 {
 	FILE *fp = fopen(szFile,szMode);
 
-	if ( fp == NULL )
+	if ( fp == nullptr )
 	{
-		botMessage ( NULL, 0, "file not found/opening error '%s' mode %s", szFile, szMode );
+		botMessage (nullptr, 0, "file not found/opening error '%s' mode %s", szFile, szMode );
 
 		makeFolders(szFile);
 
 		// try again
 		fp = fopen(szFile,szMode);
 
-		if ( fp == NULL )
-			botMessage ( NULL, 0, "failed to make folders for %s",szFile);
+		if ( fp == nullptr )
+			botMessage (nullptr, 0, "failed to make folders for %s",szFile);
 	}
 
 	return fp;
@@ -1021,7 +1021,7 @@ FILE *CBotGlobals :: openFile ( char *szFile, char *szMode )
 
 void CBotGlobals :: buildFileName ( char *szOutput, const char *szFile, const char *szFolder, const char *szExtension, bool bModDependent )
 {
-	if (m_szRCBotFolder == NULL)
+	if (m_szRCBotFolder == nullptr)
 	{
 #ifdef HOMEFOLDER
 		char home[512];

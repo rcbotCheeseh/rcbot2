@@ -99,12 +99,12 @@ ConVar rcbot_force_class("rcbot_force_class", "0", 0, "Force bots to choose spec
 // Synergy CVars
 ConVar rcbot_runplayercmd_syn("rcbot_runplayer_cmd_syn","424",0,"offset of the Synergy PlayerRunCommand function");
 
-ConVar *sv_gravity = NULL;
-ConVar *mp_teamplay = NULL;
-ConVar *sv_tags = NULL;
-ConVar *mp_friendlyfire = NULL;
-ConVar *mp_stalemate_enable = NULL;
-ConVar *mp_stalemate_meleeonly = NULL;
+ConVar *sv_gravity = nullptr;
+ConVar *mp_teamplay = nullptr;
+ConVar *sv_tags = nullptr;
+ConVar *mp_friendlyfire = nullptr;
+ConVar *mp_stalemate_enable = nullptr;
+ConVar *mp_stalemate_meleeonly = nullptr;
 
 void RCBOT2_Cvar_setup (ICvar *cvar)
 {
@@ -115,14 +115,14 @@ void RCBOT2_Cvar_setup (ICvar *cvar)
 	sv_tags = cvar->FindVar("sv_tags");
 	mp_teamplay = cvar->FindVar("mp_teamplay");
 
-	if ( sv_tags != NULL )
+	if ( sv_tags != nullptr )
 	{
 		char sv_tags_str[512];
 	
 		strcpy(sv_tags_str,sv_tags->GetString());
 
 		// fix
-		if ( strstr(sv_tags_str,"rcbot2") == NULL )
+		if ( strstr(sv_tags_str,"rcbot2") == nullptr )
 		{
 
 			if ( sv_tags_str[0] == 0 )

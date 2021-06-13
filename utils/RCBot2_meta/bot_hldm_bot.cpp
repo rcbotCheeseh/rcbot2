@@ -124,15 +124,15 @@ void CHLDMBot :: spawnInit ()
 
 	m_CurrentUtil = BOT_UTIL_MAX;
 	// reset objects
-	m_pNearbyWeapon = NULL;
-	m_FailedPhysObj = NULL;
+	m_pNearbyWeapon = nullptr;
+	m_FailedPhysObj = nullptr;
 	m_flSprintTime = 0;
-	m_NearestPhysObj = NULL;
-	m_pBattery = NULL;
-	m_pHealthKit = NULL;
-	m_pAmmoKit = NULL;
-	m_pCurrentWeapon = NULL;
-	m_pCharger = NULL;
+	m_NearestPhysObj = nullptr;
+	m_pBattery = nullptr;
+	m_pHealthKit = nullptr;
+	m_pAmmoKit = nullptr;
+	m_pCurrentWeapon = nullptr;
+	m_pCharger = nullptr;
 	m_fFixWeaponTime = 0.0f;
 	m_fUseButtonTime = 0.0f;
 	m_fUseCrateTime = 0.0f;
@@ -195,7 +195,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 		{
 			const char *szModel;
 			char type;
-			CBotWeapon *pWeapon = NULL;
+			CBotWeapon *pWeapon = nullptr;
 
 			/*
 			possible models
@@ -229,7 +229,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 
 			if ( pWeapon && (pWeapon->getAmmo(this) < 1) )
 			{
-				CBotSchedule *pSched = new CBotSchedule();
+				auto*pSched = new CBotSchedule();
 				
 				pSched->addTask(new CFindPathTask(m_pAmmoCrate));
 				pSched->addTask(new CBotHL2DMUseButton(m_pAmmoCrate));
@@ -256,7 +256,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 		return true;
 	case BOT_UTIL_HL2DM_USE_HEALTH_CHARGER:
 		{
-			CBotSchedule *pSched = new CBotSchedule();
+			auto*pSched = new CBotSchedule();
 			
 			pSched->addTask(new CFindPathTask(m_pHealthCharger));
 			pSched->addTask(new CBotHL2DMUseCharger(m_pHealthCharger,CHARGER_HEALTH));
@@ -268,7 +268,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 		}
 	case BOT_UTIL_HL2DM_USE_CHARGER:
 		{
-			CBotSchedule *pSched = new CBotSchedule();
+			auto*pSched = new CBotSchedule();
 			
 			pSched->addTask(new CFindPathTask(m_pCharger));
 			pSched->addTask(new CBotHL2DMUseCharger(m_pCharger,CHARGER_ARMOR));
@@ -280,7 +280,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 		}
 	case BOT_UTIL_HL2DM_GRAVIGUN_PICKUP:
 		{
-			CBotSchedule *pSched = new CBotSchedule(new CBotGravGunPickup(m_pCurrentWeapon,m_NearestPhysObj));
+			auto*pSched = new CBotSchedule(new CBotGravGunPickup(m_pCurrentWeapon,m_NearestPhysObj));
 			pSched->setID(SCHED_GRAVGUN_PICKUP);
 			m_pSchedules->add(pSched);
 			return true;
@@ -289,9 +289,9 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 		{
 			Vector vVelocity = Vector(0,0,0);
 			CClient *pClient = CClients::get(m_pLastEnemy);
-			CBotSchedule *pSchedule = new CBotSchedule();
-			
-			CFindPathTask *pFindPath = new CFindPathTask(m_vLastSeeEnemy);	
+			auto*pSchedule = new CBotSchedule();
+
+			auto*pFindPath = new CFindPathTask(m_vLastSeeEnemy);	
 
 			pFindPath->setCompleteInterrupt(CONDITION_SEE_CUR_ENEMY);
 			
@@ -316,11 +316,11 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 	case BOT_UTIL_THROW_GRENADE:
 		{
 		// find hide waypoint
-			CWaypoint *pWaypoint = CWaypoints::getWaypoint(CWaypointLocations::GetCoverWaypoint(getOrigin(),m_vLastSeeEnemy,NULL));
+			CWaypoint *pWaypoint = CWaypoints::getWaypoint(CWaypointLocations::GetCoverWaypoint(getOrigin(),m_vLastSeeEnemy, nullptr));
 
 			if ( pWaypoint )
 			{
-				CBotSchedule *pSched = new CBotSchedule();
+				auto*pSched = new CBotSchedule();
 				pSched->addTask(new CThrowGrenadeTask(m_pWeapons->getWeapon(CWeapons::getWeapon(HL2DM_WEAPON_FRAG)),getAmmo(CWeapons::getWeapon(HL2DM_WEAPON_FRAG)->getAmmoIndex1()),m_vLastSeeEnemyBlastWaypoint)); // first - throw
 				pSched->addTask(new CFindPathTask(pWaypoint->getOrigin())); // 2nd -- hide
 				m_pSchedules->add(pSched);
@@ -335,7 +335,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 
 			if ( pWaypoint )
 			{
-				CBotSchedule *snipe = new CBotSchedule();
+				auto*snipe = new CBotSchedule();
 				CBotTask *findpath = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
 				CBotTask *snipetask;
 
@@ -449,7 +449,7 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 		}
 	}
 
-	if ( (crossbow = m_pWeapons->getWeapon(CWeapons::getWeapon(HL2DM_WEAPON_CROSSBOW))) != NULL )
+	if ( (crossbow = m_pWeapons->getWeapon(CWeapons::getWeapon(HL2DM_WEAPON_CROSSBOW))) != nullptr )
 	{
 		if ( crossbow->hasWeapon() && !crossbow->outOfAmmo(this) )
 			ADD_UTILITY(BOT_UTIL_SNIPE,true,0.91f);
@@ -499,7 +499,7 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 
 	utils.execute();
 
-	while ( (next = utils.nextBest()) != NULL )
+	while ( (next = utils.nextBest()) != nullptr )
 	{
 		if ( !m_pSchedules->isEmpty() && bCheckCurrent )
 		{
@@ -537,10 +537,10 @@ void CHLDMBot :: modThink ()
 	//m_pEdict->GetCollideable()->GetCollisionOrigin();
 
 	if ( !CBotGlobals::entityIsValid(m_NearestPhysObj) )
-		m_NearestPhysObj = NULL;
+		m_NearestPhysObj = nullptr;
 
 	if ( !CBotGlobals::entityIsValid(m_FailedPhysObj) )
-		m_FailedPhysObj = NULL;
+		m_FailedPhysObj = nullptr;
 
 	m_pCurrentWeapon = CClassInterface::getCurrentWeapon(m_pEdict);
 
@@ -548,7 +548,7 @@ void CHLDMBot :: modThink ()
 	if ( m_pCurrentWeapon )
 		CClassInterface::getWeaponClip(m_pCurrentWeapon,&m_iClip1,&m_iClip2);
 
-	if ( CClassInterface::onLadder(m_pEdict) != NULL )
+	if ( CClassInterface::onLadder(m_pEdict) != nullptr )
 	{
 		setMoveLookPriority(MOVELOOK_OVERRIDE);
 		setLookAtTask(LOOK_WAYPOINT);
@@ -624,7 +624,7 @@ bool CHLDMBot::checkStuck()
 				if ( !m_pSchedules->hasSchedule(SCHED_GRAVGUN_PICKUP) )
 				{
 					m_pSchedules->freeMemory();
-					CBotSchedule *pSched = new CBotSchedule(new CBotGravGunPickup(m_pCurrentWeapon,m_NearestPhysObj));
+					auto*pSched = new CBotSchedule(new CBotGravGunPickup(m_pCurrentWeapon,m_NearestPhysObj));
 					pSched->setID(SCHED_GRAVGUN_PICKUP);
 					m_pSchedules->add(pSched);
 				}
@@ -687,7 +687,7 @@ void CHLDMBot :: handleWeapons ()
 
 		pWeapon = getBestWeapon(m_pEnemy,true,true,(m_pEnemy==m_NearestBreakable)&&!rcbot_melee_only.GetBool());
 
-		if ( m_bWantToChangeWeapon && (pWeapon != NULL) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex() )
+		if ( m_bWantToChangeWeapon && (pWeapon != nullptr) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex() )
 		{
 			selectWeapon(pWeapon->getWeaponIndex());
 		}
@@ -698,8 +698,8 @@ void CHLDMBot :: handleWeapons ()
 
 		if ( !handleAttack ( pWeapon, m_pEnemy ) )
 		{
-			m_pEnemy = NULL;
-			m_pOldEnemy = NULL;
+			m_pEnemy = nullptr;
+			m_pOldEnemy = nullptr;
 			wantToShoot(false);
 		}
 	}
@@ -816,25 +816,25 @@ bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 	else
 	{
 		if ( m_pAmmoKit == pEntity )
-			m_pAmmoKit = NULL;
+			m_pAmmoKit = nullptr;
 		else if ( m_pAmmoCrate == pEntity )
-			m_pAmmoCrate = NULL;
+			m_pAmmoCrate = nullptr;
 		else if ( m_pHealthKit == pEntity )
-			m_pHealthKit = NULL;
+			m_pHealthKit = nullptr;
 		else if ( m_pBattery == pEntity )
-			m_pBattery = NULL;
+			m_pBattery = nullptr;
 		else if ( m_NearestPhysObj == pEntity )
-			m_NearestPhysObj = NULL;
+			m_NearestPhysObj = nullptr;
 		else if ( m_pCharger == pEntity )
-			m_pCharger = NULL;
+			m_pCharger = nullptr;
 		else if ( m_pHealthCharger == pEntity )
-			m_pHealthCharger = NULL;
+			m_pHealthCharger = nullptr;
 		else if ( m_NearestBreakable == pEntity )
-			m_NearestBreakable = NULL;
+			m_NearestBreakable = nullptr;
 		else if ( m_pNearbyWeapon == pEntity )
-			m_pNearbyWeapon = NULL;
+			m_pNearbyWeapon = nullptr;
 		else if ( m_pNearestButton == pEntity )
-			m_pNearestButton = NULL;
+			m_pNearestButton = nullptr;
 		//else if ( m_pNearestBreakable == pEntity )
 		//	m_pNearestBreakable = NULL;
 	}

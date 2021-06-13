@@ -166,9 +166,9 @@ class CClassInterfaceValue
 public:
 	CClassInterfaceValue ()
 	{
-		m_data = NULL; 
-		m_class = NULL;
-		m_value = NULL;
+		m_data = nullptr; 
+		m_class = nullptr;
+		m_value = nullptr;
 		m_offset = 0;
 	}
 
@@ -210,7 +210,7 @@ public:
 		getData(edict);  
 				
 		if ( !m_data ) 
-			return NULL; 
+			return nullptr; 
 
 		return ((bool*)m_data); 
 	}
@@ -220,7 +220,7 @@ public:
 		getData(edict);  
 				
 		if ( !m_data ) 
-			return NULL; 
+			return nullptr; 
 
 		return m_data; 
 	}
@@ -240,7 +240,7 @@ public:
 		getData(edict); 
 		
 		if ( !m_data ) 
-			return NULL; 
+			return nullptr; 
 		
 		return ((float*)m_data); 
 	}
@@ -261,7 +261,7 @@ public:
 			return (Vector*)m_data;
 		}
 
-		return NULL;
+		return nullptr;
 	}
 
 	inline bool getVector ( edict_t *edict, Vector *v )
@@ -355,7 +355,7 @@ public:
 	static const char *FindEntityNetClass(int start, const char *classname);
 	static edict_t *FindEntityByNetClass(int start, const char *classname);
 	static edict_t *FindEntityByNetClassNearest(Vector vstart, const char *classname);
-	static edict_t *FindEntityByClassnameNearest(Vector vstart, const char *classname, float fMinDist = 8192.0f, edict_t *pOwner = NULL );
+	static edict_t *FindEntityByClassnameNearest(Vector vstart, const char *classname, float fMinDist = 8192.0f, edict_t *pOwner = nullptr );
 
 	// TF2
 	static int getTF2Score ( edict_t *edict );
@@ -402,7 +402,7 @@ public:
 	inline static void setTF2Class(edict_t *edict, int _class)
 	{
 		int* p = g_GetProps[GETPROP_TF2DESIREDCLASS].getIntPointer(edict);
-		if (p != NULL) *p = _class;
+		if (p != nullptr) *p = _class;
 	}
 	//end Jrob
 	inline static bool TF2_IsMedievalMode(void*gamerules) { return g_GetProps[GETPROP_TF2_MEDIEVALMODE].getBool(gamerules, false, false);}
@@ -596,21 +596,21 @@ public:
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_SCORE].getIntPointer(resource);
 
-		return (score_array!=NULL) ? score_array[ENTINDEX(pPlayer)] : 0;
+		return (score_array!= nullptr) ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
 	inline static int getPlayerObjectiveScoreDOD ( edict_t *resource, edict_t *pPlayer )
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_OBJSCORE].getIntPointer(resource);
 
-		return (score_array!=NULL) ? score_array[ENTINDEX(pPlayer)] : 0;
+		return (score_array!= nullptr) ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
 	inline static int getPlayerDeathsDOD ( edict_t *resource, edict_t *pPlayer )
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_DEATHS].getIntPointer(resource);
 
-		return (score_array!=NULL) ? score_array[ENTINDEX(pPlayer)] : 0;
+		return (score_array!= nullptr) ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
 	inline static float getSmokeSpawnTime ( edict_t *pSmoke )

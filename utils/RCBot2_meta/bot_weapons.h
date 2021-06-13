@@ -558,12 +558,12 @@ class CBotWeapon
 public:
 	CBotWeapon ()
 	{
-		m_pWeaponInfo = NULL;
+		m_pWeaponInfo = nullptr;
 		m_bHasWeapon = false;		
 		m_iWeaponIndex = 0;
-		m_pEnt = NULL;
-		m_iClip1 = NULL;
-		m_iClip2 = NULL;
+		m_pEnt = nullptr;
+		m_iClip1 = nullptr;
+		m_iClip2 = nullptr;
 	}
 
 	inline void setWeapon ( CWeapon *pWeapon )
@@ -763,25 +763,25 @@ public:
 
 	CBotWeapon *getWeapon(CWeapon *pWeapon);
 
-	CBotWeapon *getActiveWeapon(const char *szWeaponName, edict_t *pWeaponUpdate = NULL, bool bOverrideAmmoTypes = true);
+	CBotWeapon *getActiveWeapon(const char *szWeaponName, edict_t *pWeaponUpdate = nullptr, bool bOverrideAmmoTypes = true);
 
 	CBotWeapon *getCurrentWeaponInSlot ( int iSlot );
 
 	CBotWeapon *getGrenade ()
 	{
-		for ( int i = 0; i < MAX_WEAPONS; i ++ )
+		for (auto& m_theWeapon : m_theWeapons)
 		{
-			if ( m_theWeapons[i].hasWeapon() )
+			if (m_theWeapon.hasWeapon() )
 			{
-				if ( m_theWeapons[i].getWeaponInfo() )
+				if (m_theWeapon.getWeaponInfo() )
 				{
-					if ( m_theWeapons[i].getWeaponInfo()->isGrenade() )
-						return &(m_theWeapons[i]);
+					if (m_theWeapon.getWeaponInfo()->isGrenade() )
+						return &m_theWeapon;
 				}
 			}
 		}
 
-		return NULL;
+		return nullptr;
 	}
 
 	void clearWeapons ();

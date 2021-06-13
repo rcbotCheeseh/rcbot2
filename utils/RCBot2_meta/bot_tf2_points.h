@@ -173,7 +173,7 @@ public:
 	// Data functions, called to set up the state at the beginning of a round
 	inline int	 GetNumControlPoints( void ) 
 	{ 
-		if ( m_iNumControlPoints==NULL )
+		if ( m_iNumControlPoints== nullptr )
 			return 0;
 		return *m_iNumControlPoints;
 	}
@@ -279,14 +279,14 @@ public:
 	{
 		resetValidWaypointAreas();
 
-		for ( int i = 0; i < 2; i ++ )
+		for (auto& m_ValidPoint : m_ValidPoints)
 		{
 			for ( int j = 0; j < 2; j ++ )
 			{
 				for ( int k = 0; k < MAX_CONTROL_POINTS; k ++ )
 				{
 					// OR
-					m_ValidAreas[k] = (m_ValidAreas[k] || m_ValidPoints[i][j][k].bValid);
+					m_ValidAreas[k] = (m_ValidAreas[k] || m_ValidPoint[j][k].bValid);
 				}
 			}
 		}
@@ -304,7 +304,7 @@ public:
 
 	float getSetupTime ()
 	{
-		if ((m_Resource.get() != NULL) && m_nSetupTimeLength)
+		if ((m_Resource.get() != nullptr) && m_nSetupTimeLength)
 			return (float)*m_nSetupTimeLength;
 		return 0.0f;
 	}
@@ -419,9 +419,9 @@ public:
 			iszOverlay = NULL_STRING;
 			iPlayersRequired = 0;
 			iTimedPoints = 0;
-			for ( int i = 0; i < MAX_PREVIOUS_POINTS; i++ )
+			for (auto& i : iszPreviousPoint)
 			{
-				iszPreviousPoint[i] = NULL_STRING;
+				i = NULL_STRING;
 			}
 			iTeamPoseParam = 0;
 		}

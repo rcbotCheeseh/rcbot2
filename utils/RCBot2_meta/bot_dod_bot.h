@@ -180,7 +180,7 @@ public:
 
 	bool selectBotWeapon ( CBotWeapon *pBotWeapon );
 
-	bool canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL);
+	bool canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = nullptr);
 
 	void defending ();
 

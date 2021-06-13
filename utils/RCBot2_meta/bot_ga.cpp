@@ -185,7 +185,7 @@ void CGA :: freeGlobalMemory ()
 {
 	freeLocalMemory();
 	delete m_theSelectFunction;
-	m_theSelectFunction = NULL;
+	m_theSelectFunction = nullptr;
 }
 
 bool CGA :: canPick ()

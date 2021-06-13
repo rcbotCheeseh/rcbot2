@@ -26,7 +26,7 @@ void CWaypointDistances :: load ()
 
 		FILE *bfp = CBotGlobals::openFile(filename,"rb");
 
-		if ( bfp == NULL )
+		if ( bfp == nullptr )
 		{
 			return; // give up
 		}
@@ -59,7 +59,7 @@ void CWaypointDistances :: save ()
 
 			FILE *bfp = CBotGlobals::openFile(filename,"wb");
 
-			if ( bfp == NULL )
+			if ( bfp == nullptr )
 			{
 				m_fSaveTime = engine->Time() + 100.0f;
 				return; // give up

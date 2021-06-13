@@ -129,7 +129,7 @@ class dataStack
 			dataNode<T> *tempNode = m_Head;			
 			dataNode<T> *deleteNode;
 
-			if ( m_Head == NULL )
+			if ( m_Head == nullptr )
 				return false;
 
 			if ( &m_Head->m_NodeData == pObj )
@@ -169,7 +169,7 @@ class dataStack
 			dataNode<T> *tempNode = m_Head;			
 			dataNode<T> *deleteNode;
 
-			if ( m_Head == NULL )
+			if ( m_Head == nullptr )
 				return false;
 
 			if ( m_Head->m_NodeData == pObj )
@@ -224,7 +224,7 @@ class dataStack
 
 		inline bool IsEmpty ( void )
 		{
-			return ( m_Head == NULL );
+			return ( m_Head == nullptr );
 		}
 
 		void Push ( const T pObj )
@@ -292,7 +292,7 @@ class dataStack
 
 				m_Head = NULL;
 				// return default
-				return NULL;
+				return nullptr;
 			}
 
 			return l_pTemp;
@@ -307,7 +307,7 @@ class dataStack
 				return &m_Head->m_NodeData;
 			}
 
-			return NULL;
+			return nullptr;
 		}
 
 	private:
@@ -781,7 +781,7 @@ class dataQueue
 
 		void Destroy ( void )
 		{
-			dataNode<T> *tempNode = NULL;
+			dataNode<T> *tempNode = nullptr;
 
 			while ( m_Head )
 			{
@@ -801,7 +801,7 @@ class dataQueue
 
 		inline bool IsEmpty ( void )
 		{
-			return (( m_Head == NULL )||(m_Tail == NULL));
+			return (( m_Head == nullptr )||(m_Tail == nullptr));
 		}
 
 		void AddFront ( const T &pObj )
@@ -810,7 +810,7 @@ class dataQueue
 
 			newNode->m_NodeData = pObj;
 
-			if ( m_Head == NULL )
+			if ( m_Head == nullptr )
 			{
 				m_Tail = newNode;
 				m_Head = newNode;
@@ -895,7 +895,7 @@ class dataQueue
 				m_Head = NULL;
 				m_Tail = NULL;
 				// return default
-				return NULL;
+				return nullptr;
 			}
 
 			return l_pTemp;
@@ -905,7 +905,7 @@ class dataQueue
 		{
 			dataNode<T> *tempNode = m_Head;
 
-			if ( m_Head == NULL )
+			if ( m_Head == nullptr )
 			{
 				// just set tail to null incase
 				m_Tail = NULL;
@@ -962,9 +962,9 @@ class dataQueue
 		bool Remove ( const T pObj )
 		{
 			dataNode<T> *tempNode = m_Head;			
-			dataNode<T> *deleteNode = NULL;
+			dataNode<T> *deleteNode = nullptr;
 
-			if ( m_Head == NULL )
+			if ( m_Head == nullptr )
 				return false;
 
 			if ( m_Head->m_NodeData == pObj )
@@ -1018,9 +1018,9 @@ class dataQueue
 		bool RemoveByPointer ( const T *pObj )
 		{
 			dataNode<T> *tempNode = m_Head;			
-			dataNode<T> *deleteNode = NULL;
+			dataNode<T> *deleteNode = nullptr;
 
-			if ( m_Head == NULL )
+			if ( m_Head == nullptr )
 				return false;
 
 			if ( &m_Head->m_NodeData == pObj )

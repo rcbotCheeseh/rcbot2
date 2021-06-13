@@ -100,13 +100,13 @@
 #include <vector>
 #include <algorithm>
 
-#define DEG_TO_RAD(x) (x)*0.0174533
-#define RAD_TO_DEG(x) (x)*57.29578
+#define DEG_TO_RAD(x) ((x)*0.0174533)
+#define RAD_TO_DEG(x) ((x)*57.29578)
 
 //extern void HookPlayerRunCommand ( edict_t *edict );
 
 // instantiate bots -- make different for different mods
-CBot **CBots::m_Bots = NULL;
+CBot **CBots::m_Bots = nullptr;
 
 const float CBot :: m_fAttackLowestHoldTime = 0.1f;
 const float CBot :: m_fAttackHighestHoldTime = 0.6f;
@@ -327,15 +327,15 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 
 	m_pProfile = pProfile;
 
-	CBotGlobals::botMessage(NULL, 0, "===================================");
-	CBotGlobals::botMessage(NULL, 0, "Creating Bot: %s", m_pProfile->m_szName);
-	CBotGlobals::botMessage(NULL, 0, "AimSkill: %f", m_pProfile->m_fAimSkill);
-	CBotGlobals::botMessage(NULL, 0, "Braveness: %f", m_pProfile->m_fBraveness);
-	CBotGlobals::botMessage(NULL, 0, "PathTicks: %d", m_pProfile->m_iPathTicks);
-	CBotGlobals::botMessage(NULL, 0, "Sensitivity: %d", m_pProfile->m_iSensitivity);
-	CBotGlobals::botMessage(NULL, 0, "VisionTicks: %d", m_pProfile->m_iVisionTicks);
-	CBotGlobals::botMessage(NULL, 0, "VisionTicksClients: %d", m_pProfile->m_iVisionTicksClients);
-	CBotGlobals::botMessage(NULL, 0, "===================================");
+	CBotGlobals::botMessage(nullptr, 0, "===================================");
+	CBotGlobals::botMessage(nullptr, 0, "Creating Bot: %s", m_pProfile->m_szName);
+	CBotGlobals::botMessage(nullptr, 0, "AimSkill: %f", m_pProfile->m_fAimSkill);
+	CBotGlobals::botMessage(nullptr, 0, "Braveness: %f", m_pProfile->m_fBraveness);
+	CBotGlobals::botMessage(nullptr, 0, "PathTicks: %d", m_pProfile->m_iPathTicks);
+	CBotGlobals::botMessage(nullptr, 0, "Sensitivity: %d", m_pProfile->m_iSensitivity);
+	CBotGlobals::botMessage(nullptr, 0, "VisionTicks: %d", m_pProfile->m_iVisionTicks);
+	CBotGlobals::botMessage(nullptr, 0, "VisionTicksClients: %d", m_pProfile->m_iVisionTicksClients);
+	CBotGlobals::botMessage(nullptr, 0, "===================================");
 
 	engine->SetFakeClientConVarValue(pEdict,"cl_team","default");
 	engine->SetFakeClientConVarValue(pEdict,"cl_defaultweapon","pistol");
@@ -679,14 +679,14 @@ bool CBot :: setVisible ( edict_t *pEntity, bool bVisible )
 	{
 		if ( canAvoid(pEntity) )
 		{
-			if ( (m_pAvoidEntity.get()==NULL) || (distanceFrom(pEntity) < distanceFrom(m_pAvoidEntity)) )
+			if ( (m_pAvoidEntity.get()== nullptr) || (distanceFrom(pEntity) < distanceFrom(m_pAvoidEntity)) )
 					m_pAvoidEntity = pEntity;
 		}
 	}
 	else
 	{
 		if ( m_pAvoidEntity == pEntity )
-			m_pAvoidEntity = NULL;
+			m_pAvoidEntity = nullptr;
 		if ( m_pEnemy == pEntity )
 		{
 			m_pLastEnemy = m_pEnemy;
@@ -784,10 +784,10 @@ void CBot :: think ()
 	m_iMoveSpeedPriority = 0;
 	
 	// re-added
-	if ( !CBotGlobals::entityIsValid(m_pEdict) || m_pPlayerInfo == NULL )
+	if ( !CBotGlobals::entityIsValid(m_pEdict) || m_pPlayerInfo == nullptr )
 	{
 		m_pPlayerInfo = playerinfomanager->GetPlayerInfo(m_pEdict);
-		CBotGlobals::botMessage(NULL,0,"%s : m_pPlayerInfo = NULL; Waiting for player info...",m_szBotName);
+		CBotGlobals::botMessage(nullptr,0,"%s : m_pPlayerInfo = NULL; Waiting for player info...",m_szBotName);
 		return;
 	}
 
@@ -920,7 +920,7 @@ void CBot :: think ()
 		else if ( hasEnemy() )
 		{
 			// got an enemy -- reset 
-			m_PlayerListeningTo = MyEHandle(NULL);
+			m_PlayerListeningTo = MyEHandle(nullptr);
 			m_fLookSetTime = 0.0f;
 			m_fListenTime = 0.0f;
 			m_bListenPositionValid = false;
@@ -957,7 +957,7 @@ void CBot :: think ()
 #endif
 	// update m_pEnemy with findEnemy()
 	m_pOldEnemy = m_pEnemy;
-	m_pEnemy = NULL;
+	m_pEnemy = nullptr;
 
 	if ( m_pOldEnemy )
 		findEnemy(m_pOldEnemy); // any better enemies than this one?
@@ -1075,7 +1075,7 @@ void CBot :: handleWeapons ()
 
 		pWeapon = getBestWeapon(m_pEnemy);
 
-		if ( m_bWantToChangeWeapon && (pWeapon != NULL) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex() )
+		if ( m_bWantToChangeWeapon && (pWeapon != nullptr) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex() )
 		{
 			selectWeapon(pWeapon->getWeaponIndex());
 		}
@@ -1084,8 +1084,8 @@ void CBot :: handleWeapons ()
 
 		if ( !handleAttack ( pWeapon, m_pEnemy ) )
 		{
-			m_pEnemy = NULL;
-			m_pOldEnemy = NULL;
+			m_pEnemy = nullptr;
+			m_pOldEnemy = nullptr;
 			wantToShoot(false);
 		}
 	}
@@ -1105,26 +1105,26 @@ void CBot :: init (bool bVarInit)
 {
 	//m_bNeedToInit = false; // doing this now
 	m_fLastHurtTime = 0.0f;
-	m_iAmmo = NULL;
-	m_pButtons = NULL;
-	m_pNavigator = NULL;
-	m_pSchedules = NULL;
-	m_pVisibles = NULL;
-	m_pEdict = NULL;
+	m_iAmmo = nullptr;
+	m_pButtons = nullptr;
+	m_pNavigator = nullptr;
+	m_pSchedules = nullptr;
+	m_pVisibles = nullptr;
+	m_pEdict = nullptr;
 //	m_pBaseEdict = NULL;
-	m_pFindEnemyFunc = NULL;
+	m_pFindEnemyFunc = nullptr;
 	m_bUsed = false;
-	m_pController = NULL;
-	m_pPlayerInfo = NULL;
+	m_pController = nullptr;
+	m_pPlayerInfo = nullptr;
 
-	m_pWeapons = NULL;
+	m_pWeapons = nullptr;
 	m_fTimeCreated = 0;	
-	m_pProfile = NULL;
+	m_pProfile = nullptr;
 	m_szBotName[0] = 0;
 	m_fIdealMoveSpeed = 320;
 	m_fFov = BOT_DEFAULT_FOV;
 	m_bOpenFire = true;
-	m_pSquad = NULL;
+	m_pSquad = nullptr;
 
 	cmd.command_number = 0;
 
@@ -1144,12 +1144,12 @@ bool CBot :: isSquadLeader ( void )
 
 void CBot :: updateConditions ()
 {
-	if ( m_pEnemy.get() != NULL )
+	if ( m_pEnemy.get() != nullptr )
 	{
 		if ( !CBotGlobals::entityIsAlive(m_pEnemy) )
 		{
 			updateCondition(CONDITION_ENEMY_DEAD);
-			m_pEnemy = NULL;
+			m_pEnemy = nullptr;
 		}
 		else
 		{
@@ -1271,7 +1271,7 @@ bool CBot :: canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWayp
 
 	if ( pWaypoint->hasFlag(CWaypointTypes::W_FL_OPENS_LATER) )
 	{
-		if ( pPrev != NULL )
+		if ( pPrev != nullptr )
 		{
 			return pPrev->isPathOpened(pWaypoint->getOrigin());
 		}
@@ -1323,7 +1323,7 @@ int CBot :: getHealth ()
 
 float CBot :: getHealthPercent ()
 {
-	return (((float)m_pPlayerInfo->GetHealth())/m_pPlayerInfo->GetMaxHealth());
+	return (static_cast<float>(m_pPlayerInfo->GetHealth())/m_pPlayerInfo->GetMaxHealth());
 }
 
 bool CBot ::isOnLift()
@@ -1333,7 +1333,7 @@ bool CBot ::isOnLift()
 
 edict_t *CBot :: getVisibleSpecial ()
 {
-	return NULL;
+	return nullptr;
 }
 
 bool CBot::wantToInvestigateSound () 
@@ -1353,8 +1353,8 @@ void CBot :: spawnInit ()
 	m_fSpawnTime = engine->Time();
 	m_bIncreaseSensitivity = false;
 	m_fLastSeeEnemyPlayer = 0.0f;
-	m_PlayerListeningTo = NULL;
-	m_pPrimaryWeapon = NULL;
+	m_PlayerListeningTo = nullptr;
+	m_pPrimaryWeapon = nullptr;
 	m_uSquadDetail.dat = 0;
 	m_bStatsCanUse = false;
 	m_StatsCanUse.data = 0;
@@ -1365,7 +1365,7 @@ void CBot :: spawnInit ()
 	m_fWantToListenTime = 0;
 
 	resetTouchDistance(48.0f);
-	m_pLastCoverFrom = MyEHandle(NULL);
+	m_pLastCoverFrom = MyEHandle(nullptr);
 
 	m_vAimOffset = Vector(1.0f,1.0f,1.0f);
 
@@ -1378,15 +1378,15 @@ void CBot :: spawnInit ()
 	m_fLastUpdateLastSeeEnemy = 0;
 	m_fPercentMoved = 1.0f;
 
-	for (short int i = 0; i < BOT_UTIL_MAX; i ++ )
-		m_fUtilTimes[i] = 0;
+	for (float& m_fUtilTime : m_fUtilTimes)
+		m_fUtilTime = 0;
 
-	if ( m_pSchedules != NULL )
+	if ( m_pSchedules != nullptr )
 		m_pSchedules->freeMemory(); // clear tasks, im dead now!!
-	if ( m_pVisibles != NULL )
+	if ( m_pVisibles != nullptr )
 		m_pVisibles->reset();	
 
-	if ( m_pEdict && (m_iAmmo == NULL) )
+	if ( m_pEdict && (m_iAmmo == nullptr) )
 		m_iAmmo = CClassInterface::getAmmoList(m_pEdict);
 
 	m_fCurrentDanger = 0.0f;
@@ -1402,12 +1402,12 @@ void CBot :: spawnInit ()
 	m_fAvoidTime = 0;
 	m_vLookAroundOffset = Vector(0,0,0);
 	m_fWaypointStuckTime = 0.0f;
-	m_pPickup = NULL;
-	m_pAvoidEntity = NULL;
+	m_pPickup = nullptr;
+	m_pAvoidEntity = nullptr;
 	m_bThinkStuck = false;
-	m_pLookEdict = NULL;
+	m_pLookEdict = nullptr;
 	m_fLookAroundTime = 0.0f;
-	m_pAvoidEntity = NULL;
+	m_pAvoidEntity = nullptr;
 	m_bLookedForEnemyLast = false;
 	////////////////////////
 	m_iPrevHealth = 0;    // 
@@ -1427,11 +1427,11 @@ void CBot :: spawnInit ()
 	m_fLookSetTime = 0.0f;
 	m_vHurtOrigin = Vector(0,0,0);
 
-	m_pOldEnemy = NULL;
-	m_pEnemy = NULL;	
+	m_pOldEnemy = nullptr;
+	m_pEnemy = nullptr;	
 
 	m_vLastSeeEnemy = Vector(0,0,0);
-	m_pLastEnemy = NULL; // enemy we were fighting before we lost it
+	m_pLastEnemy = nullptr; // enemy we were fighting before we lost it
 	//m_pAvoidEntity = NULL; // avoid this guy
 	m_fLastWaypointVisible = 0;
 	m_vGoal = Vector(0,0,0);
@@ -1464,7 +1464,7 @@ void CBot :: spawnInit ()
 	//
 	m_vViewAngles = QAngle(0,0,0);
 
-	if ( m_pVisibles != NULL )
+	if ( m_pVisibles != nullptr )
 		m_pVisibles->reset();
 }
 
@@ -1472,10 +1472,10 @@ void CBot::setLastEnemy(edict_t *pEnemy)
 {
 	CWaypoint *pWpt;
 
-	if ( pEnemy == NULL )
+	if ( pEnemy == nullptr )
 	{
 		m_fLastSeeEnemy = 0.0f;
-		m_pLastEnemy = NULL;
+		m_pLastEnemy = nullptr;
 		return;
 	}
 
@@ -1560,7 +1560,7 @@ void CBot :: died ( edict_t *pKiller, const char *pszWeapon )
 {	
 	spawnInit();
 
-	if ( m_pSquad != NULL )
+	if ( m_pSquad != nullptr )
 	{
 		// died
 		CBotSquads::removeSquadMember(m_pSquad,m_pEdict);
@@ -1575,7 +1575,7 @@ void CBot :: died ( edict_t *pKiller, const char *pszWeapon )
 void CBot :: killed ( edict_t *pVictim, char *weapon )
 {	
 	if ( pVictim == m_pLastEnemy )
-		m_pLastEnemy = NULL;
+		m_pLastEnemy = nullptr;
 }
 
 // called when bot shoots a wall or similar object -i.e. not the enemy
@@ -1611,7 +1611,7 @@ bool CBot :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 	if ( m_fUpdateDamageTime < fTime )
 	{
 		m_fUpdateDamageTime = fTime + 0.5;
-		m_fCurrentDanger += (((float)m_iAccumulatedDamage)/m_pPlayerInfo->GetMaxHealth())*MAX_BELIEF;
+		m_fCurrentDanger += (static_cast<float>(m_iAccumulatedDamage)/m_pPlayerInfo->GetMaxHealth())*MAX_BELIEF;
 		m_iAccumulatedDamage = 0;
 	}
 
@@ -1640,7 +1640,7 @@ bool CBot :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 void CBot :: checkEntity ( edict_t **pEdict )
 {
 	if ( pEdict && *pEdict && !CBotGlobals::entityIsValid(*pEdict) )
-		*pEdict = NULL;
+		*pEdict = nullptr;
 }
 
 void CBot :: checkDependantEntities ()
@@ -1732,7 +1732,7 @@ void CBot :: clearSquad ()
 	//if ( m_pSquad != NULL )
 	//	CBotSquads::removeSquadMember(m_pSquad,m_pEdict);
 
-	m_pSquad = NULL;
+	m_pSquad = nullptr;
 }
 
 bool CBot :: isFacing ( Vector vOrigin )
@@ -1742,7 +1742,7 @@ bool CBot :: isFacing ( Vector vOrigin )
 
 void CBot ::debugBot(char *msg)
 {
-	const bool hastask = m_pSchedules->getCurrentTask()!=NULL;
+	const bool hastask = m_pSchedules->getCurrentTask()!= nullptr;
 	int iEnemyID = 0;
 
 	char szConditions[512];
@@ -1750,11 +1750,12 @@ void CBot ::debugBot(char *msg)
 
 	szConditions[0] = 0; // initialise string
 
-	for (size_t iCond = 0; iCond < NUM_CONDITIONS; iCond++)
+	for (auto& pszConditionsDebugString : pszConditionsDebugStrings)
 	{
+		int iCond = 0;
 		if ( m_iConditions[iCond] )
 		{
-			strcat(szConditions, pszConditionsDebugStrings[iCond]);
+			strcat(szConditions, pszConditionsDebugString);
 			strcat(szConditions, "\n");
 		}
 	}
@@ -1765,7 +1766,7 @@ void CBot ::debugBot(char *msg)
 
 	edict_t *pEnemy = m_pEnemy.get();
 
-	IPlayerInfo *p = NULL;
+	IPlayerInfo *p = nullptr;
 
 	iEnemyID = ENTINDEX(pEnemy);
 
@@ -1794,8 +1795,8 @@ void CBot ::debugBot(char *msg)
 		m_pNavigator->hasNextPoint() ? m_pNavigator->getCurrentWaypointID() : -1, 
 		m_pNavigator->hasNextPoint() ? m_pNavigator->getCurrentGoalID() : -1,
 		(m_fCurrentDanger/MAX_BELIEF)*100,
-		(pEnemy!=NULL)?pEnemy->GetClassName():"none",
-		(p!=NULL)?p->GetName():"none",
+		(pEnemy!= nullptr)?pEnemy->GetClassName():"none",
+		(p!= nullptr)?p->GetName():"none",
 		szConditions
 		);
 
@@ -1805,7 +1806,7 @@ int CBot :: nearbyFriendlies (float fDistance)
 {
 	int num = 0;
 	register short int i = 0;
-	const register short int maxclients = (short int)CBotGlobals::maxClients();
+	const register auto maxclients = static_cast<short>(CBotGlobals::maxClients());
 	edict_t *pEdict;
 
 	for ( i = 0; i <= maxclients; i ++ )
@@ -1835,48 +1836,48 @@ void CBot :: freeMapMemory ()
 	// we can save things here
 	// 
 	/////////////////////////////////
-	if ( m_pButtons != NULL )
+	if ( m_pButtons != nullptr )
 	{
 		m_pButtons->freeMemory();
 		delete m_pButtons;
-		m_pButtons = NULL;
+		m_pButtons = nullptr;
 	}
 	/////////////////////////////////
-	if ( m_pSchedules != NULL )
+	if ( m_pSchedules != nullptr )
 	{
 		m_pSchedules->freeMemory();
 		delete m_pSchedules;
-		m_pSchedules = NULL;
+		m_pSchedules = nullptr;
 	}
 	/////////////////////////////////
-	if ( m_pNavigator != NULL )
+	if ( m_pNavigator != nullptr )
 	{
 		m_pNavigator->beliefSave(true);
 		m_pNavigator->freeMapMemory();
 		delete m_pNavigator;
-		m_pNavigator = NULL;
+		m_pNavigator = nullptr;
 	}
 	/////////////////////////////////
-	if ( m_pVisibles != NULL )
+	if ( m_pVisibles != nullptr )
 	{
 		m_pVisibles->reset();
 		delete m_pVisibles;
-		m_pVisibles = NULL;
+		m_pVisibles = nullptr;
 	}
 	/////////////////////////////////
-	if ( m_pFindEnemyFunc != NULL )
+	if ( m_pFindEnemyFunc != nullptr )
 	{
 		delete m_pFindEnemyFunc;
-		m_pFindEnemyFunc = NULL;
+		m_pFindEnemyFunc = nullptr;
 	}
 	/////////////////////////////////
-	if ( m_pWeapons != NULL )
+	if ( m_pWeapons != nullptr )
 	{
 		delete m_pWeapons;
-		m_pWeapons = NULL;
+		m_pWeapons = nullptr;
 	}
 
-	m_iAmmo = NULL;
+	m_iAmmo = nullptr;
 	/////////////////////////////////
 	init();
 }
@@ -1959,7 +1960,7 @@ void CBot :: listenForPlayers ()
 {
 	//m_fNextListenTime = engine->Time() + randomFloat(0.5f,2.0f);
 
-	edict_t *pListenNearest = NULL;
+	edict_t *pListenNearest = nullptr;
 	CClient *pClient;
 	edict_t *pPlayer;
 	CBotCmd cmd;
@@ -2041,7 +2042,7 @@ void CBot :: listenForPlayers ()
 		}
 	}
 
-	if ( pListenNearest != NULL )
+	if ( pListenNearest != nullptr )
 	{
 		listenToPlayer(pListenNearest,false,bIsNearestAttacking);
 	}
@@ -2233,7 +2234,7 @@ void CBot :: doMove ()
 			
 			}
 			else
-				m_pAvoidEntity = NULL;
+				m_pAvoidEntity = nullptr;
 		}
 
 		fAngle = CBotGlobals::yawAngleFromEdict(m_pEdict,m_vMoveTo);
@@ -2371,7 +2372,7 @@ Vector CBot::getAimVector ( edict_t *pEntity )
 	v_size = pEntity->GetCollideable()->OBBMaxs() - pEntity->GetCollideable()->OBBMins();
 	v_size = v_size * 0.5f;
 
-	fSensitivity = (float)m_pProfile->m_iSensitivity/20;
+	fSensitivity = static_cast<float>(m_pProfile->m_iSensitivity)/20;
 
 	v_origin = CBotGlobals::entityOrigin(pEntity);
 
@@ -2576,7 +2577,7 @@ void CBot :: getLookAtVector ()
 			try
 			{
 
-				if (m_pLookEdict.get() != NULL)
+				if (m_pLookEdict.get() != nullptr)
 					setLookAt(getAimVector(m_pLookEdict));
 				//setLookAt(CBotGlobals::entityOrigin(m_pLookEdict)+Vector(0,0,32));
 
@@ -2586,7 +2587,7 @@ void CBot :: getLookAtVector ()
 			}
 			catch (...)
 			{
-				m_pLookEdict = NULL;
+				m_pLookEdict = nullptr;
 				setLookAtTask(LOOK_NONE);
 			}
 		}
@@ -2604,7 +2605,7 @@ void CBot :: getLookAtVector ()
 			try
 			{
 
-				if (m_pEnemy.get() != NULL)
+				if (m_pEnemy.get() != nullptr)
 				{
 					setLookAt(getAimVector(m_pEnemy));
 				}
@@ -2616,7 +2617,7 @@ void CBot :: getLookAtVector ()
 			}
 			catch (...)
 			{
-				m_pEnemy = NULL;
+				m_pEnemy = nullptr;
 				setLookAtTask(LOOK_NONE);
 			}
 		}		
@@ -2669,7 +2670,7 @@ void CBot :: getLookAtVector ()
 					CClients::clientDebugMsg(BOT_DEBUG_AIM,"no valid route point",this);
 				}
 			}
-			else if ( (m_pLastEnemy.get()!=NULL) && ((m_fLastSeeEnemy + 5.0f) > engine->Time()) )
+			else if ( (m_pLastEnemy.get()!= nullptr) && ((m_fLastSeeEnemy + 5.0f) > engine->Time()) )
 				setLookAt(m_vLastSeeEnemy);
 			else if ( (m_fCurrentDanger >= 20.0f) && m_pNavigator->getDangerPoint(&vLook) )
 				setLookAt(vLook);
@@ -2866,7 +2867,7 @@ void CBot :: doLook ()
 		if ( rcbot_supermode.GetBool() || m_bIncreaseSensitivity || onLadder() )
 			fSensitivity = 15.0f;
 		else
-			fSensitivity = (float)m_pProfile->m_iSensitivity;
+			fSensitivity = static_cast<float>(m_pProfile->m_iSensitivity);
 
 		QAngle requiredAngles;
 
@@ -2885,8 +2886,8 @@ void CBot :: doLook ()
 			CClients::clientDebugMsg(BOT_DEBUG_AIM, "view angle invalid", this);
 		}
 
-		changeAngles(fSensitivity,&requiredAngles.x,&m_vViewAngles.x,NULL);
-		changeAngles(fSensitivity,&requiredAngles.y,&m_vViewAngles.y,NULL);
+		changeAngles(fSensitivity,&requiredAngles.x,&m_vViewAngles.x, nullptr);
+		changeAngles(fSensitivity,&requiredAngles.y,&m_vViewAngles.y, nullptr);
 		CBotGlobals::fixFloatAngle(&m_vViewAngles.x);
 		CBotGlobals::fixFloatAngle(&m_vViewAngles.y);
 
@@ -3008,9 +3009,9 @@ void CBot :: getTasks (unsigned int iIgnore)
 		{
 			Vector vVelocity = Vector(0,0,0);
 			CClient *pClient = CClients::get(m_pLastEnemy);
-			CBotSchedule *pSchedule = new CBotSchedule();
-			
-			CFindPathTask *pFindPath = new CFindPathTask(m_vLastSeeEnemy);	
+			auto*pSchedule = new CBotSchedule();
+
+			auto*pFindPath = new CFindPathTask(m_vLastSeeEnemy);	
 			
 			if ( pClient )
 				vVelocity = pClient->getVelocity();
@@ -3051,13 +3052,13 @@ bool CBots :: controlBot ( edict_t *pEdict )
 		return false;
 	}
 
-	if ( pBotProfile == NULL )
+	if ( pBotProfile == nullptr )
 	{
-		CBotGlobals::botMessage(NULL,0,"No bot profiles are free, creating a default bot...");
+		CBotGlobals::botMessage(nullptr,0,"No bot profiles are free, creating a default bot...");
 
 		pBotProfile = CBotProfiles::getDefaultProfile();
 
-		if ( pBotProfile == NULL )
+		if ( pBotProfile == nullptr )
 			return false;
 	}
 
@@ -3066,8 +3067,8 @@ bool CBots :: controlBot ( edict_t *pEdict )
 	return true;
 }
 
-#define SET_PROFILE_DATA_INT(varname,membername) if ( varname && *varname ) { pBotProfile->membername = atoi(varname); }
-#define SET_PROFILE_STRING(varname,localname,membername) if ( varname && *varname ) { localname = (char*)varname; } else { localname = pBotProfile->membername; }
+#define SET_PROFILE_DATA_INT(varname,membername) if ( (varname) && *(varname) ) { pBotProfile->membername = atoi(varname); }
+#define SET_PROFILE_STRING(varname,localname,membername) if ( (varname) && *(varname) ) { (localname) = (char*)(varname); } else { (localname) = pBotProfile->membername; }
 
 bool CBots :: controlBot ( const char *szOldName, const char *szName, const char *szTeam, const char *szClass )
 {
@@ -3076,21 +3077,21 @@ bool CBots :: controlBot ( const char *szOldName, const char *szName, const char
 
 	char *szOVName = "";
 
-	if ( (pEdict = CBotGlobals::findPlayerByTruncName(szOldName)) == NULL )
+	if ( (pEdict = CBotGlobals::findPlayerByTruncName(szOldName)) == nullptr )
 	{
-		CBotGlobals::botMessage(NULL,0,"Can't find player");
+		CBotGlobals::botMessage(nullptr,0,"Can't find player");
 		return false;
 	}
 
 	if ( m_Bots[slotOfEdict(pEdict)]->getEdict() == pEdict )
 	{
-		CBotGlobals::botMessage(NULL,0,"already controlling player");
+		CBotGlobals::botMessage(nullptr,0,"already controlling player");
 		return false;
 	}
 
 	if ( (m_iMaxBots != -1) && (CBotGlobals::numClients() >= m_iMaxBots) )
 	{
-		CBotGlobals::botMessage(NULL,0,"Can't create bot, max_bots reached");
+		CBotGlobals::botMessage(nullptr,0,"Can't create bot, max_bots reached");
 		return false;
 	}
 
@@ -3098,13 +3099,13 @@ bool CBots :: controlBot ( const char *szOldName, const char *szName, const char
 
 	pBotProfile = CBotProfiles::getRandomFreeProfile();
 
-	if ( pBotProfile == NULL )
+	if ( pBotProfile == nullptr )
 	{
-		CBotGlobals::botMessage(NULL,0,"No bot profiles are free, creating a default bot...");
+		CBotGlobals::botMessage(nullptr,0,"No bot profiles are free, creating a default bot...");
 
 		pBotProfile = CBotProfiles::getDefaultProfile();
 
-		if ( pBotProfile == NULL )
+		if ( pBotProfile == nullptr )
 			return false;
 	}
 	SET_PROFILE_DATA_INT(szClass,m_iClass);
@@ -3125,19 +3126,19 @@ bool CBots :: createBot (const char *szClass, const char *szTeam, const char *sz
 	char *szOVName = "";
 
 	if ( (m_iMaxBots != -1) && (CBotGlobals::numClients() >= m_iMaxBots) )
-		CBotGlobals::botMessage(NULL,0,"Can't create bot, max_bots reached");
+		CBotGlobals::botMessage(nullptr,0,"Can't create bot, max_bots reached");
 
 	m_flAddKickBotTime = engine->Time() + rcbot_addbottime.GetFloat();
 
 	pBotProfile = CBotProfiles::getRandomFreeProfile();
 
-	if ( pBotProfile == NULL )
+	if ( pBotProfile == nullptr )
 	{
-		CBotGlobals::botMessage(NULL,0,"No bot profiles are free, creating a default bot...");
+		CBotGlobals::botMessage(nullptr,0,"No bot profiles are free, creating a default bot...");
 
 		pBotProfile = CBotProfiles::getDefaultProfile();
 
-		if ( pBotProfile == NULL )
+		if ( pBotProfile == nullptr )
 			return false;
 	}
 
@@ -3147,7 +3148,7 @@ bool CBots :: createBot (const char *szClass, const char *szTeam, const char *sz
 
 	pEdict = g_pBotManager->CreateBot( szOVName );
 
-	if ( pEdict == NULL )
+	if ( pEdict == nullptr )
 		return false;
 
 	return ( m_Bots[slotOfEdict(pEdict)]->createBotFromEdict(pEdict,pBotProfile) );
@@ -3161,7 +3162,7 @@ int CBots::createDefaultBot(const char* name) {
 	}
 
 	// hack: there's no way to remove names / profiles here
-	CBotProfile* pBotProfile = new CBotProfile(*CBotProfiles::getDefaultProfile());
+	auto* pBotProfile = new CBotProfile(*CBotProfiles::getDefaultProfile());
 	pBotProfile->m_szName = CStrings::getString(name);
 
 	const int slot = slotOfEdict(pEdict);
@@ -3248,7 +3249,7 @@ int CBots :: numBots ()
 
 CBot *CBots :: findBotByProfile ( CBotProfile *pProfile )
 {	
-	CBot *pBot = NULL;
+	CBot *pBot = nullptr;
 
 	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
 	{
@@ -3261,7 +3262,7 @@ CBot *CBots :: findBotByProfile ( CBotProfile *pProfile )
 		}
 	}
 	
-	return NULL;
+	return nullptr;
 }
 
 void CBots :: runPlayerMoveAll ()
@@ -3352,7 +3353,7 @@ void CBots :: botThink ()
 
 	if ( (m_flAddKickBotTime < engine->Time()) && needToAddBot() )
 	{
-		createBot(NULL,NULL,NULL);
+		createBot(nullptr, nullptr, nullptr);
 	}
 	else if ( needToKickBot () )
 	{
@@ -3365,19 +3366,19 @@ CBot *CBots :: getBotPointer ( edict_t *pEdict )
 	int slot;
 
 	if ( !pEdict )
-		return NULL;
+		return nullptr;
 
 	slot = slotOfEdict(pEdict);
 
 	if ( (slot < 0) || (slot >= MAX_PLAYERS) )
-		return NULL;
+		return nullptr;
 
 	CBot *pBot = m_Bots[slot];
 
 	if ( pBot->inUse() )
 		return pBot;
 
-	return NULL;
+	return nullptr;
 }
 
 CBot* CBots::getBot(int slot) {
@@ -3389,7 +3390,7 @@ CBot* CBots::getBot(int slot) {
 
 void CBots :: freeMapMemory ()
 {
-	if ( m_Bots == NULL )
+	if ( m_Bots == nullptr )
 		return;
 
 	//bots should have been freed when they disconnected
@@ -3403,21 +3404,21 @@ void CBots :: freeMapMemory ()
 
 void CBots :: freeAllMemory ()
 {
-	if ( m_Bots == NULL )
+	if ( m_Bots == nullptr )
 		return;
 
 	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
 	{
-		if ( m_Bots[i] != NULL )
+		if ( m_Bots[i] != nullptr )
 		{
 			m_Bots[i]->freeAllMemory();
 			delete m_Bots[i];
-			m_Bots[i] = NULL;
+			m_Bots[i] = nullptr;
 		}
 	}
 
 	delete[] m_Bots;
-	m_Bots = NULL;
+	m_Bots = nullptr;
 }
 
 void CBots :: roundStart ()
@@ -3468,7 +3469,7 @@ void CBots :: kickRandomBot (size_t count)
 
 	if ( botList.empty() )
 	{
-		CBotGlobals::botMessage(NULL,0,"kickRandomBot() : No bots to kick");
+		CBotGlobals::botMessage(nullptr,0,"kickRandomBot() : No bots to kick");
 		return;
 	}
 
@@ -3507,7 +3508,7 @@ void CBots :: kickRandomBotOnTeam ( int team )
 
 	if ( botList.empty() )
 	{
-		CBotGlobals::botMessage(NULL,0,"kickRandomBotOnTeam() : No bots to kick");
+		CBotGlobals::botMessage(nullptr,0,"kickRandomBotOnTeam() : No bots to kick");
 		return;
 	}
 
@@ -3532,10 +3533,10 @@ CBotLastSee :: CBotLastSee ( edict_t *pEdict )
 
 void CBotLastSee :: update ()
 {
-	if ( (m_pLastSee.get() == NULL) || !CBotGlobals::entityIsAlive(m_pLastSee) )
+	if ( (m_pLastSee.get() == nullptr) || !CBotGlobals::entityIsAlive(m_pLastSee) )
 	{
 		m_fLastSeeTime = 0.0f;
-		m_pLastSee = NULL;
+		m_pLastSee = nullptr;
 	}
 	else
 	{
@@ -3547,7 +3548,7 @@ void CBotLastSee :: update ()
 
 bool CBotLastSee :: hasSeen ( float fTime )
 {
-	return (m_pLastSee.get() != NULL) && ((m_fLastSeeTime + fTime) > engine->Time());
+	return (m_pLastSee.get() != nullptr) && ((m_fLastSeeTime + fTime) > engine->Time());
 }
 
 Vector CBotLastSee :: getLocation ()

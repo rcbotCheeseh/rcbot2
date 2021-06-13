@@ -202,7 +202,7 @@ public:
 
 	inline void reset ()
 	{
-		m_pLastSee = NULL; // edict
+		m_pLastSee = nullptr; // edict
 		m_fLastSeeTime = 0.0f; // time
 	}
 
@@ -413,7 +413,7 @@ public:
 
 	inline bool hasAllConditions ( int iConditions )
 	{
-		return (m_iConditions & static_cast<ConditionBitSet>(iConditions)) == static_cast<ConditionBitSet>(iConditions);
+		return (m_iConditions & static_cast<ConditionBitSet>(iConditions)) == iConditions;
 	}
 
 	inline void updateCondition ( int iCondition )
@@ -447,14 +447,14 @@ public:
 	 */
 	inline bool inUse ()
 	{
-		return (m_bUsed && (m_pEdict!=NULL));
+		return (m_bUsed && (m_pEdict!= nullptr));
 	}
 
 	edict_t *getEdict ();
 
 	void setEdict ( edict_t *pEdict);
 
-	bool FVisible ( Vector &vOrigin, edict_t *pDest = NULL );
+	bool FVisible ( Vector &vOrigin, edict_t *pDest = nullptr );
 
 	Vector getEyePosition ();
 
@@ -523,7 +523,7 @@ public:
 		}
 	}
 
-	void findEnemy ( edict_t *pOldEnemy = NULL );
+	void findEnemy ( edict_t *pOldEnemy = nullptr );
 	virtual void enemyFound ( edict_t *pEnemy );
 
 	virtual void checkDependantEntities ();
@@ -574,7 +574,7 @@ public:
 			updateCondition(CONDITION_ENEMY_DEAD); 
 		if ( pEnemy == m_pLastEnemy )
 		{
-			m_pLastEnemy = NULL;
+			m_pLastEnemy = nullptr;
 		}
 	}
 	//////////////////////
@@ -652,7 +652,7 @@ public:
 
 	inline CBotProfile *getProfile () { return m_pProfile; }
 
-	virtual bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL );
+	virtual bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = nullptr );
 
 	void tapButton ( int iButton );
 
@@ -766,7 +766,7 @@ public:
 
 	inline bool inSquad ( void )
 	{
-		return m_pSquad != NULL;
+		return m_pSquad != nullptr;
 	}
 
 	bool isSquadLeader ( void );
@@ -787,7 +787,7 @@ public:
 	virtual void sayInPosition() { }
 	virtual void sayMoveOut() { }
 
-	bot_statistics_t *getStats() { if ( m_bStatsCanUse ) return &m_StatsCanUse; return NULL; }
+	bot_statistics_t *getStats() { if ( m_bStatsCanUse ) return &m_StatsCanUse; return nullptr; }
 
 	virtual void hearPlayerAttack( edict_t *pAttacker, int iWeaponID );
 

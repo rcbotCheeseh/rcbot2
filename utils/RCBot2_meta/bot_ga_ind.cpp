@@ -64,7 +64,7 @@ void CBotGAValues :: crossOver ( IIndividual *other )
 	const unsigned int iPoint = randomInt(0,m_theValues.size());
 	float fTemp;
 
-	CBotGAValues *vother = (CBotGAValues*)other;
+	auto*vother = static_cast<CBotGAValues*>(other);
 
 	unsigned int i;
 
@@ -75,7 +75,7 @@ void CBotGAValues :: crossOver ( IIndividual *other )
 		vother->set(i,fTemp);
 	}
 
-	for (  i = iPoint; i < m_theValues.size(); i ++ )
+	for ( i = iPoint; i < m_theValues.size(); i ++ )
 	{
 		fTemp = vother->get(i);
 		vother->set(i,get(i));

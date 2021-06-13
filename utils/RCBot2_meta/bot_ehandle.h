@@ -37,7 +37,7 @@ class MyEHandle
 public:
 	MyEHandle ()
 	{
-		m_pEnt = NULL;
+		m_pEnt = nullptr;
 		m_iSerialNumber = 0;
 	}
 
@@ -53,8 +53,8 @@ public:
 			m_iSerialNumber = 0;
 	}
 
-	inline bool notValid () { return get() == NULL; }
-	inline bool isValid () { return get() != NULL; }
+	inline bool notValid () { return get() == nullptr; }
+	inline bool isValid () { return get() != nullptr; }
 
 	inline edict_t *get ()
 	{
@@ -64,9 +64,9 @@ public:
 				return m_pEnt;
 		}
 		else if ( m_pEnt )
-			m_pEnt = NULL;
+			m_pEnt = nullptr;
 
-		return NULL;
+		return nullptr;
 	}
 
 	inline edict_t *get_old ()
@@ -82,9 +82,9 @@ public:
 				return m_pEnt;
 		}
 		else if ( m_pEnt )
-			m_pEnt = NULL;
+			m_pEnt = nullptr;
 
-		return NULL;
+		return nullptr;
 	}
 
 	inline bool operator == ( int a )

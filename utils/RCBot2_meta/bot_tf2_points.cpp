@@ -169,7 +169,7 @@ bool CTFObjectiveResource::isCPValid ( int iCPIndex, int iTeam, ePointAttackDefe
 // base on base point -- if already have attack point and base point -- less focus on base point
 int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDefend_s type)
 {
-	TF2PointProb_t *arr = NULL;
+	TF2PointProb_t *arr = nullptr;
 	std::vector<int> points; // point indices
 	int iotherteam;
 
@@ -178,7 +178,7 @@ int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDef
 	if (( team < 2 ) || ( team > 3 ))
 		return 0;
 
-	if ( m_iNumControlPoints == NULL )
+	if ( m_iNumControlPoints == nullptr )
 		return 0;
 
 	iotherteam = (team==2)?3:2;
@@ -248,7 +248,7 @@ void CTeamRoundTimer::reset()
 
 	m_Resource = CClassInterface::FindEntityByNetClass(gpGlobals->maxClients + 1, "CTeamRoundTimer");
 
-	if (m_Resource.get() != NULL)
+	if (m_Resource.get() != nullptr)
 	{
 		CClassInterface::setupCTeamRoundTimer(this);
 	}
@@ -259,7 +259,7 @@ bool CTeamControlPointRound :: isPointInRound ( edict_t *point_pent )
 	for ( int i = 0; i < m_ControlPoints.Size(); i ++ )
 	{
 		CBaseHandle *hndl;
-		hndl = (CBaseHandle *)&(m_ControlPoints[i]); 
+		hndl = &m_ControlPoints[i]; 
 
 		if ( hndl )
 		{ 
@@ -276,7 +276,7 @@ bool CTeamControlPointRound :: isPointInRound ( edict_t *point_pent )
 CTeamControlPointRound *CTeamControlPointMaster:: getCurrentRound ( )
 {
 	if ( m_iCurrentRoundIndex == -1 )
-		return NULL;
+		return nullptr;
 
 	CBaseEntity *pent = m_ControlPointRounds[m_iCurrentRoundIndex];
 
@@ -328,7 +328,7 @@ void CTFObjectiveResource::setup ()
 
 			for ( int j = 0; j < *m_iNumControlPoints; j ++ )
 			{
-				if ( m_pControlPoints[j].get() != NULL )
+				if ( m_pControlPoints[j].get() != nullptr )
 					continue;
 
 				if ( vOrigin == m_vCPPositions[j] )
@@ -349,7 +349,7 @@ void CTFObjectiveResource::setup ()
 
 		if ( m_iControlPointWpt[j] == -1 )
 		{
-			iWpt = CWaypointLocations::NearestWaypoint(vOrigin,1024.0f,-1,false,false,false,NULL,false,0,false,false,Vector(0,0,0),CWaypointTypes::W_FL_CAPPOINT);
+			iWpt = CWaypointLocations::NearestWaypoint(vOrigin,1024.0f,-1,false,false,false, nullptr,false,0,false,false,Vector(0,0,0),CWaypointTypes::W_FL_CAPPOINT);
 			pWaypoint = CWaypoints::getWaypoint(iWpt);
 			m_iControlPointWpt[j] = iWpt;
 
@@ -440,7 +440,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 	//CTeamControlPointMaster *pMaster = CTeamFortress2Mod::getPointMaster();
 	CTeamControlPointRound *pRound = CTeamFortress2Mod::getCurrentRound();
 	
-	if ( m_ObjectiveResource.get() == NULL ) // not set up yet
+	if ( m_ObjectiveResource.get() == nullptr ) // not set up yet
 		return false;
 	if ( team == 0 ) // invalid team
 		return false;
@@ -633,9 +633,9 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 
 				if ( arr[j].bPrev )
 				{
-					for ( int k = 0; k < MAX_PREVIOUS_POINTS; k ++ )
+					for (int k : arr[j].iPrev)
 					{
-						if ( arr[j].iPrev[k] == i )
+						if (k == i )
 						{
 							bfound = true;
 							break;
@@ -673,7 +673,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 			{
 				edict_t *pPayloadBomb = CTeamFortress2Mod::getPayloadBomb(other);
 
-				if ( pPayloadBomb != NULL )
+				if ( pPayloadBomb != nullptr )
 				{
 					if ( bFirst )
 					{
@@ -791,7 +791,7 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 	CTeamControlPointRound *pRound = CTeamFortress2Mod::getCurrentRound();
 	TF2PointProb_t *arr;
 
-	if ( m_ObjectiveResource.get() == NULL ) // not set up yet
+	if ( m_ObjectiveResource.get() == nullptr ) // not set up yet
 		return false;
 	if ( team == 0 )
 		return false;
@@ -958,9 +958,9 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 
 				if ( arr[j].bPrev )
 				{
-					for ( int k = 0; k < MAX_PREVIOUS_POINTS; k ++ )
+					for (int k : arr[j].iPrev)
 					{
-						if ( arr[j].iPrev[k] == i )
+						if (k == i )
 						{
 							bfound = true;
 							break;

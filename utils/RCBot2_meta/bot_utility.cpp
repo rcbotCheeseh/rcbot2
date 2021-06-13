@@ -181,7 +181,7 @@ void CBotUtilities :: execute ()
 	util_node_t *pnew;
 	util_node_t *prev;
 
-	m_pBest.head = NULL;
+	m_pBest.head = nullptr;
 
 	for ( i = 0; i < m_Utilities.size(); i ++ )
 	{
@@ -197,11 +197,11 @@ void CBotUtilities :: execute ()
 			// put in correct order by making a linked list
 			pnew = (util_node_t*)malloc(sizeof(util_node_t));
 
-			if ( pnew != NULL )
+			if ( pnew != nullptr )
 			{
 				pnew->util = pUtil;
-				pnew->next = NULL;
-				prev = NULL;
+				pnew->next = nullptr;
+				prev = nullptr;
 
 				if ( temp )
 				{
@@ -228,7 +228,7 @@ void CBotUtilities :: execute ()
 						temp = temp->next;
 					}
 
-					if ( pnew->next == NULL )
+					if ( pnew->next == nullptr )
 						prev->next = pnew;
 				}
 				else
@@ -246,7 +246,7 @@ void CBotUtilities :: freeMemory ()
 	m_Utilities.clear();
 
 	// FREE LIST
-	while ( (temp = m_pBest.head) != NULL )
+	while ( (temp = m_pBest.head) != nullptr )
 	{
 		temp = m_pBest.head;
 		m_pBest.head = m_pBest.head->next;
@@ -259,8 +259,8 @@ CBotUtility *CBotUtilities :: nextBest ()
 	CBotUtility *pBest;
 	util_node_t *temp;
 
-	if ( m_pBest.head == NULL )
-		return NULL;
+	if ( m_pBest.head == nullptr )
+		return nullptr;
 
 	pBest = m_pBest.head->util;
 

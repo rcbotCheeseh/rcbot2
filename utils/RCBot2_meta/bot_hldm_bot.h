@@ -73,7 +73,7 @@ public:
 		m_FailedPhysObj = pent; 
 
 		if ( m_NearestPhysObj == pent ) 
-			m_NearestPhysObj = NULL;
+			m_NearestPhysObj = nullptr;
 	}
 
 	bool checkStuck ();

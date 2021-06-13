@@ -106,10 +106,10 @@ CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 	//char msg[120];
 
 	if ( !pLeader )
-		return NULL;
+		return nullptr;
 
 	if ( CClassInterface::getTeam(pLeader) != CClassInterface::getTeam(pMember) )
-		return NULL;
+		return nullptr;
 
 	//CClient *pClient = gBotGlobals.m_Clients.GetClientByEdict(pLeader);
 
@@ -130,13 +130,13 @@ CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 	}
 	
 	// no squad with leader, make one
-	CBotSquad *theSquad = new CBotSquad(pLeader, pMember);
+	auto*theSquad = new CBotSquad(pLeader, pMember);
 	
-	if ( theSquad != NULL )
+	if ( theSquad != nullptr )
 	{
 		m_theSquads.push_back(theSquad);
 		
-		if ( (pBot = CBots::getBotPointer(pLeader)) != NULL )
+		if ( (pBot = CBots::getBotPointer(pLeader)) != nullptr )
 			pBot->setSquad(theSquad);
 	}
 	
@@ -153,15 +153,15 @@ CBotSquad *CBotSquads::SquadJoin ( edict_t *pLeader, edict_t *pMember )
 	//char msg[120];
 
 	if ( !pLeader )
-		return NULL;
+		return nullptr;
 
 	if ( CClassInterface::getTeam(pLeader) != CClassInterface::getTeam(pMember) )
-		return NULL;
+		return nullptr;
 
 	// no squad with leader, make pMember join SquadLeader
 	theSquad = FindSquadByLeader(pMember);
 
-	if ( theSquad != NULL )
+	if ( theSquad != nullptr )
 	{
 		theSquad->AddMember(pMember);
 
@@ -178,13 +178,13 @@ CBotSquad *CBotSquads::SquadJoin ( edict_t *pLeader, edict_t *pMember )
 			RemoveSquad(joinSquad);
 		}
 		else
-			return NULL;
+			return nullptr;
 	}
 	
 	// no squad with leader, make pMember join SquadLeader
 	theSquad = FindSquadByLeader(pLeader);
 
-	if ( theSquad != NULL )
+	if ( theSquad != nullptr )
 		theSquad->AddMember(pMember);
 
 	return theSquad;
@@ -247,7 +247,7 @@ void CBotSquad::Init ()
 
 	bCanFire = true;
 
-	if ( (pLeader = GetLeader()) != NULL )
+	if ( (pLeader = GetLeader()) != nullptr )
 	{
 		IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pLeader);
 		m_vLeaderAngle = p->GetLastUserCommand().viewangles;
@@ -261,7 +261,7 @@ void CBotSquads :: ChangeLeader ( CBotSquad *pSquad )
 	pSquad->ChangeLeader();
 
 	// if no leader anymore/no members in group
-	if ( pSquad->IsLeader(NULL) )
+	if ( pSquad->IsLeader(nullptr) )
 	{
 		CRemoveBotFromSquad func(pSquad);
 		CBots::botFunction(&func);
@@ -279,7 +279,7 @@ void CBotSquad::ChangeLeader ( void )
 {
 	if ( m_SquadMembers.empty() )
 	{
-		SetLeader(NULL);
+		SetLeader(nullptr);
 	}
 	else
 	{
@@ -287,7 +287,7 @@ void CBotSquad::ChangeLeader ( void )
 		m_SquadMembers.pop_front();
 
 		if ( m_SquadMembers.empty() )
-			SetLeader(NULL);
+			SetLeader(nullptr);
 		else
 		{
 			Init(); // new squad init

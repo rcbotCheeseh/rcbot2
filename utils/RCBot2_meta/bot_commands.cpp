@@ -66,7 +66,7 @@ eBotCommandResult CBotCommandInline::execute(CClient *pClient, const char *pcmd,
 
 CBotCommandInline ControlCommand("control", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED, [](CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5)
 {
-	edict_t *pEntity = NULL;
+	edict_t *pEntity = nullptr;
 
 	if ( pClient )
 		pEntity = pClient->getPlayer();
@@ -89,7 +89,7 @@ CBotCommandInline AddBotCommand("addbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED,
 {	
 //	bool bOkay = false;
 
-	edict_t *pEntity = NULL;
+	edict_t *pEntity = nullptr;
 
 	if ( pClient )
 		pEntity = pClient->getPlayer();
@@ -206,15 +206,15 @@ void CBotSubcommands::printHelp( edict_t *pPrintTo ) {
 
 CBotCommandInline PrintCommands("printcommands", CMD_ACCESS_DEDICATED, [](CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5)
 {
-	if ( pClient != NULL )
+	if ( pClient != nullptr )
 	{
 		CBotGlobals::botMessage(pClient->getPlayer(),0,"All bot commands:");
 		CBotGlobals::m_pCommands->printCommand(pClient->getPlayer());
 	}
 	else
 	{
-		CBotGlobals::botMessage(NULL,0,"All bot commands:");
-		CBotGlobals::m_pCommands->printCommand(NULL);
+		CBotGlobals::botMessage(nullptr,0,"All bot commands:");
+		CBotGlobals::m_pCommands->printCommand(nullptr);
 	}
 
 	return COMMAND_ACCESSED;

@@ -65,7 +65,7 @@ void CBotMods :: parseFile ()
 
 	FILE *fp = CBotGlobals::openFile(buffer,"r");
 
-	CBotMod *curmod = NULL;
+	CBotMod *curmod = nullptr;
 
 	if ( !fp )
 	{
@@ -79,7 +79,7 @@ void CBotMods :: parseFile ()
 		return;
 	}
 
-	while ( fgets(buffer,1023,fp) != NULL )
+	while ( fgets(buffer,1023,fp) != nullptr )
 	{
 		if ( buffer[0] == '#' )
 			continue;
@@ -125,7 +125,7 @@ void CBotMods :: parseFile ()
 				m_Mods.push_back(curmod);
 			}
 			
-			curmod = NULL;
+			curmod = nullptr;
 			weaponlist[0] = 0;
 
 			bottype = BOTTYPE_GENERIC;
@@ -240,7 +240,7 @@ void CBotMods :: createFile ()
 
 	FILE *fp = CBotGlobals::openFile(filename,"w");
 
-	CBotGlobals::botMessage(NULL,0,"Making a %s.%s file for you... Edit it in '%s'",BOT_MOD_FILE,BOT_CONFIG_EXTENSION,filename);
+	CBotGlobals::botMessage(nullptr,0,"Making a %s.%s file for you... Edit it in '%s'",BOT_MOD_FILE,BOT_CONFIG_EXTENSION,filename);
 
 	if ( fp )
 	{
@@ -305,7 +305,7 @@ void CBotMods :: createFile ()
 		fclose(fp);
 	}
 	else
-		CBotGlobals::botMessage(NULL,0,"Error! Couldn't create config file %s",filename);
+		CBotGlobals::botMessage(nullptr,0,"Error! Couldn't create config file %s",filename);
 }
 
 void CBotMods :: readMods()
@@ -377,7 +377,7 @@ void CBotMods :: freeMemory ()
 	{
 		m_Mods[i]->freeMemory();
 		delete m_Mods[i];
-		m_Mods[i] = NULL;
+		m_Mods[i] = nullptr;
 	}
 
 	m_Mods.clear();
@@ -389,22 +389,22 @@ CBotMod *CBotMods :: getMod ( char *szModFolder )
 	{
 		if ( m_Mods[i]->isModFolder(szModFolder) )
 		{
-			CBotGlobals::botMessage(NULL,1,"HL2 MOD ID %d (Game Folder = %s) FOUND",m_Mods[i]->getModId(), szModFolder);
+			CBotGlobals::botMessage(nullptr,1,"HL2 MOD ID %d (Game Folder = %s) FOUND",m_Mods[i]->getModId(), szModFolder);
 
 			return m_Mods[i];
 		}
 	}
 
-	CBotGlobals::botMessage(NULL,1,"HL2 MODIFICATION \"%s\" NOT FOUND, EXITING... see bot_mods.ini in bot config folder", szModFolder);
+	CBotGlobals::botMessage(nullptr,1,"HL2 MODIFICATION \"%s\" NOT FOUND, EXITING... see bot_mods.ini in bot config folder", szModFolder);
 
-	return NULL;
+	return nullptr;
 }
 
 void CBotMod :: initMod ()
 {
 	m_bPlayerHasSpawned = false;
 
-	CWeapons::loadWeapons(m_szWeaponListName, NULL);
+	CWeapons::loadWeapons(m_szWeaponListName, nullptr);
 }
 
 void CBotMod :: mapInit ()
@@ -437,7 +437,7 @@ bool CHalfLifeDeathmatchMod :: playerSpawned ( edict_t *pPlayer )
 void CHalfLifeDeathmatchMod :: initMod ()
 {
 
-	CWeapons::loadWeapons((m_szWeaponListName==NULL)?"HL2DM":m_szWeaponListName, HL2DMWeaps);
+	CWeapons::loadWeapons((m_szWeaponListName== nullptr)?"HL2DM":m_szWeaponListName, HL2DMWeaps);
 	
 //	for ( i = 0; i < HL2DM_WEAPON_MAX; i ++ )
 	//	CWeapons::addWeapon(new CWeapon(HL2DMWeaps[i]));//.iSlot,HL2DMWeaps[i].szWeaponName,HL2DMWeaps[i].iId,HL2DMWeaps[i].m_iFlags,HL2DMWeaps[i].m_iAmmoIndex,HL2DMWeaps[i].minPrimDist,HL2DMWeaps[i].maxPrimDist,HL2DMWeaps[i].m_iPreference,HL2DMWeaps[i].m_fProjSpeed));

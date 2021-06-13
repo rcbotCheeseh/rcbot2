@@ -18,7 +18,7 @@ void CRCBotKeyValueList :: parseFile ( FILE *fp )
 	iLine = 0;
 
 	// parse profile ini
-	while ( fgets(buffer,255,fp) != NULL )
+	while ( fgets(buffer,255,fp) != nullptr )
 	{
 		iLine++;
 
@@ -69,7 +69,7 @@ void CRCBotKeyValueList :: parseFile ( FILE *fp )
 		szKey[iKi] = 0;
 		szValue[iVi] = 0;
 
-		CBotGlobals::botMessage(NULL,0,"m_KVs.push_back(%s,%s)",szKey, szValue);
+		CBotGlobals::botMessage(nullptr,0,"m_KVs.push_back(%s,%s)",szKey, szValue);
 
 		m_KVs.push_back(new CRCBotKeyValue(szKey,szValue));
 
@@ -82,7 +82,7 @@ CRCBotKeyValueList :: ~CRCBotKeyValueList()
 	for ( unsigned int i = 0; i < m_KVs.size(); i ++ )
 	{
 		delete m_KVs[i];
-		m_KVs[i] = NULL;
+		m_KVs[i] = nullptr;
 	}
 
 	m_KVs.clear();
@@ -96,7 +96,7 @@ CRCBotKeyValue *CRCBotKeyValueList :: getKV ( const char *key )
 			return m_KVs[i];
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool CRCBotKeyValueList :: getFloat ( const char *key, float *val )
