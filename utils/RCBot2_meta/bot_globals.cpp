@@ -51,6 +51,8 @@
 #ifndef __linux__
 #include <direct.h> // for mkdir
 #include <sys/stat.h>
+
+#include <cmath>
 #else
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -250,11 +252,11 @@ float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fPro
 		const float t = fDistance/vhorz;
 
 		// within one second of going off
-		if ( fabs(t-fGrenadePrimeTime) < 1.0f )
+		if (std::fabs(t-fGrenadePrimeTime) < 1.0f )
 		{
 			const float ffinaly =  vOrigin.z + (vvert*t) - ((g*0.5)*(t*t));
 
-			return ( fabs(ffinaly - vEnemy.z) < BLAST_RADIUS ); // ok why not
+			return ( std::fabs(ffinaly - vEnemy.z) < BLAST_RADIUS ); // ok why not
 		}
 	}
 

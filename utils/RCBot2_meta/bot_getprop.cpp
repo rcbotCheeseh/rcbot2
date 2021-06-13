@@ -556,7 +556,7 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 
 	if (bIsEdict)
 	{
-		auto*pEdict = reinterpret_cast<edict_t*>(edict);
+		auto*pEdict = static_cast<edict_t*>(edict);
 
 		pUnknown = pEdict->GetUnknown();
 

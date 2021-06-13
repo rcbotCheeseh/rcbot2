@@ -167,10 +167,10 @@ public:
 	//////////////////////////////////////////////////////	
 	inline void setHeuristic ( float fHeuristic ) { m_fHeuristic = fHeuristic; setFlag(FL_HEURISTIC_SET); }
 	inline bool heuristicSet () { return hasFlag(FL_HEURISTIC_SET); }
-	inline const float getHeuristic () { return m_fHeuristic; } const
-	
+	inline float getHeuristic() { return m_fHeuristic; }
+
 	////////////////////////////////////////////////////////
-	inline void setFlag ( int iFlag ) { m_iFlags |= iFlag; }
+	inline void setFlag(int iFlag) { m_iFlags |= iFlag; }
 	inline bool hasFlag ( int iFlag ) { return ((m_iFlags & iFlag) == iFlag); }
 	inline void removeFlag ( int iFlag ) { m_iFlags &= ~iFlag; }
 	/////////////////////////////////////////////////////////
@@ -185,8 +185,8 @@ public:
 			setFlag(FL_ASTAR_PARENT);
 	}
 	////////////////////////////////////////////////////////
-	inline const float getCost () { return m_fCost; } const
-	inline void setCost ( float fCost ) { m_fCost = fCost; }
+	inline float getCost() { return m_fCost; }
+	inline void setCost(float fCost) { m_fCost = fCost; }
 	////////////////////////////////////////////////////////
 	// for comparison
 	bool precedes ( AStarNode *other ) const

@@ -1752,7 +1752,7 @@ void CBot ::debugBot(char *msg)
 
 	for (auto& pszConditionsDebugString : pszConditionsDebugStrings)
 	{
-		int iCond = 0;
+		const int iCond = 0;
 		if ( m_iConditions[iCond] )
 		{
 			strcat(szConditions, pszConditionsDebugString);

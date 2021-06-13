@@ -438,7 +438,7 @@ public:
 		return m_szWeaponName;
 	}
 
-	inline const int getID () const
+	inline int getID() const
 	{
 		return m_iWeaponId;
 	}
