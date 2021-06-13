@@ -51,11 +51,38 @@
 #include "bot_perceptron.h"
 #include "bot_waypoint_visibility.h"
 
+void CBotSynergy::init(bool bVarInit)
+{
+	CBot::init(bVarInit); // call base first
+	m_fFov = 110.0f; // Coop mod, give bot larger FOV (default is 75)
+}
+
 void CBotSynergy::spawnInit()
 {
     CBot::spawnInit();
 
+	if ( m_pWeapons ) // reset weapons
+		m_pWeapons->clearWeapons();
+
     m_CurrentUtil = BOT_UTIL_MAX;
+	m_pNearbyAmmo = NULL;
+	m_pNearbyBattery = NULL;
+	m_pNearbyCrate = NULL;
+	m_pNearbyHealthKit = NULL;
+	m_pNearbyWeapon = NULL;
+}
+
+void CBotSynergy::died(edict_t *pKiller, const char *pszWeapon)
+{
+	CBot::died(pKiller, pszWeapon);
+
+	if(pKiller)
+	{
+		if(CBotGlobals::entityIsValid(pKiller))
+		{
+			m_pNavigator->belief(CBotGlobals::entityOrigin(pKiller), getEyePosition(), bot_beliefmulti.GetFloat(), distanceFrom(pKiller), BELIEF_DANGER);
+		}
+	}
 }
 
 void CBotSynergy::modThink()
@@ -73,12 +100,97 @@ bool CBotSynergy::isEnemy(edict_t *pEdict, bool bCheckWeapons)
 
     const char* szclassname = pEdict->GetClassName();
 
+	// BUGBUG!! Maps can override NPC relationship with the ai_relationship entity, making this classname filter useless
     if(strncmp(szclassname, "npc_", 4) == 0) // Attack NPCs
-    {// TODO: Filter NPCs
-        return true;
+    {
+		if (((strcmp(szclassname, "npc_combinegunship") == 0) || (strcmp(szclassname, "npc_helicopter") == 0) || (strcmp(szclassname, "npc_strider") == 0))
+			&& m_pWeapons->hasWeapon(SYN_WEAPON_RPG))
+		{
+			return true; // ignore gunships, helicopters and striders if I don't have an RPG.
+		}
+
+		if (strcmp(szclassname, "npc_metropolice") == 0 || strcmp(szclassname, "npc_combine_s") == 0 || strcmp(szclassname, "npc_manhack") == 0 ||
+			strcmp(szclassname, "npc_zombie") == 0 || strcmp(szclassname, "npc_fastzombie") == 0 || strcmp(szclassname, "npc_poisonzombie") == 0 || strcmp(szclassname, "npc_zombine") == 0 ||
+			strcmp(szclassname, "npc_antlionguard") == 0 || strcmp(szclassname, "npc_antlion") == 0 || strcmp(szclassname, "npc_headcrab") == 0 || strcmp(szclassname, "npc_headcrab_fast") == 0 ||
+			strcmp(szclassname, "npc_headcrab_black") == 0 || strcmp(szclassname, "npc_hunter") == 0 || strcmp(szclassname, "npc_fastzombie_torso") == 0 || strcmp(szclassname, "npc_zombie_torso") == 0 ||
+			strcmp(szclassname, "npc_barnacle") == 0)
+		{
+			return true;
+		}
     }
 
     return false;
+}
+
+bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
+{
+	bool bValid = CBot::setVisible(pEntity, bVisible);
+
+	static float fDist = distanceFrom(pEntity);
+	const char* szclassname = pEntity->GetClassName();
+	CBotWeapon* pWeapon = NULL;
+
+	// Is valid and NOT invisible
+	if (bValid && bVisible && !(CClassInterface::getEffects(pEntity) & EF_NODRAW))
+	{
+		if(strcmp(szclassname, "item_ammo_crate") == 0 && (!m_pNearbyCrate.get() || fDist < distanceFrom(m_pNearbyCrate.get())))
+		{
+			m_pNearbyCrate = pEntity;
+		}
+		else if(strncmp(szclassname, "item_ammo", 9) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
+		{
+			m_pNearbyAmmo = pEntity;
+			if(strncmp(szclassname, "item_ammo_crate", 15))
+			{
+				m_pNearbyAmmo = NULL; // Invalidate if this entity is an ammo crate
+			}
+		}
+		else if(strncmp(szclassname, "item_healthkit", 14) == 0 && (!m_pNearbyHealthKit.get() || fDist < distanceFrom(m_pNearbyHealthKit.get())))
+		{
+			m_pNearbyHealthKit = pEntity;
+			if(getHealthPercent() <= 0.90f)
+				updateCondition(CONDITION_CHANGED);
+		}
+		else if(strncmp(szclassname, "item_battery", 12) == 0 && (!m_pNearbyBattery.get() || fDist < distanceFrom(m_pNearbyBattery.get())))
+		{
+			m_pNearbyHealthKit = pEntity;
+			if(getArmorPercent() < 1.0f)
+				updateCondition(CONDITION_CHANGED);
+
+		}
+		else if(strncmp(szclassname, "weapon_", 7) == 0 && (!m_pNearbyWeapon.get() || fDist < distanceFrom(m_pNearbyWeapon.get())))
+		{
+			pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(szclassname));
+			if(pWeapon && pWeapon->hasWeapon())
+			{
+				m_pNearbyWeapon = NULL; // bot already has this weapon
+			}
+			else
+			{
+				edict_t* pOwner = CClassInterface::getOwner(pEntity);
+				if(pOwner == NULL) // Don't pick if owned by someone
+				{
+					m_pNearbyWeapon = pEntity;
+					updateCondition(CONDITION_CHANGED);
+				}
+			}
+		}		
+	}
+	else
+	{
+		if(pEntity == m_pNearbyAmmo.get_old())
+			m_pNearbyAmmo = NULL;
+		else if(pEntity == m_pNearbyCrate.get_old())
+			m_pNearbyCrate = NULL;
+		else if(pEntity == m_pNearbyHealthKit.get_old())
+			m_pNearbyHealthKit = NULL;
+		else if(pEntity == m_pNearbyBattery.get_old())
+			m_pNearbyBattery = NULL;
+		else if(pEntity == m_pNearbyWeapon.get_old())
+			m_pNearbyWeapon = NULL;
+	}
+
+	return bValid;
 }
 
 void CBotSynergy::getTasks (unsigned int iIgnore)
@@ -94,6 +206,9 @@ void CBotSynergy::getTasks (unsigned int iIgnore)
     bCheckCurrent = true; // important for checking current schedule
 
 	// Utilities
+	ADD_UTILITY(BOT_UTIL_PICKUP_WEAPON, m_pNearbyWeapon.get() != NULL, 0.75f) // New weapons are interesting, high priority
+	ADD_UTILITY(BOT_UTIL_GETHEALTHKIT, m_pNearbyHealthKit.get() != NULL, 1.0f - getHealthPercent()); // Pick up health kits
+	ADD_UTILITY(BOT_UTIL_HL2DM_FIND_ARMOR, m_pNearbyBattery.get() != NULL, 1.0f - getArmorPercent()); // Pick up armor batteries
 	ADD_UTILITY(BOT_UTIL_ROAM, true, 0.01f); // Roam around
 
 	utils.execute();
@@ -132,6 +247,14 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 {
     switch (iAction)
     {
+	case BOT_UTIL_PICKUP_WEAPON:
+		m_pSchedules->addFront(new CBotPickupSched(m_pNearbyWeapon.get()));
+		return true;
+	break;
+	case BOT_UTIL_GETHEALTHKIT:
+		m_pSchedules->addFront(new CBotPickupSched(m_pNearbyHealthKit.get()));
+		return true;
+	break;
     case BOT_UTIL_ROAM:
     {
 		// roam

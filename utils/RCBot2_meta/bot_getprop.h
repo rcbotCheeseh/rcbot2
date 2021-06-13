@@ -150,6 +150,8 @@ typedef enum
 	GETPROP_TF2_CHARGE_RESIST_TYPE,
 	GETPROP_TF2_ROUNDSTATE,
 	GETPROP_TF2DESIREDCLASS, //Jrob
+	GETPROP_SYN_PLAYER_VEHICLE,
+	GETPROP_SYN_VEHICLE_DRIVER,
 	GET_PROPDATA_MAX
 }getpropdata_id;
 
@@ -672,6 +674,20 @@ public:
 	{
 		return g_GetProps[GETPROP_SENTRYGUN_PLACING].getBool(pSentry,false);
 	}
+
+	// Synergy
+
+	// Gets the player's current vehicle
+	inline static edict_t* getSynPlayerVehicle(edict_t* pPlayer)
+	{
+		return g_GetProps[GETPROP_SYN_PLAYER_VEHICLE].getEntity(pPlayer);
+	}
+
+	// Gets the driver of the given vehicle
+	inline static edict_t* getSynVehicleDriver(edict_t* pVehicle)
+	{
+		return g_GetProps[GETPROP_SYN_VEHICLE_DRIVER].getEntity(pVehicle);
+	}	
 
 private:
 	static CClassInterfaceValue g_GetProps[GET_PROPDATA_MAX];

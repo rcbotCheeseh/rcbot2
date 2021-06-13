@@ -3191,16 +3191,16 @@ void CWaypointTypes :: setup ()
 	addType(new CWaypointType(W_FL_NOALLIES,"noallies","DOD allies team can't use this waypoint",WptColor(255,0,0),(1<<MOD_DOD)));
 
 	addType(new CWaypointType(W_FL_FLAG,"flag","bot will find a flag here",WptColor(255,255,0),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_HEALTH,"health","bot can sometimes get health here",WptColor(255,255,255),(1<<MOD_TF2)|(1<<MOD_HLDM2)));
+	addType(new CWaypointType(W_FL_HEALTH,"health","bot can sometimes get health here",WptColor(255,255,255),(1<<MOD_TF2)|(1<<MOD_HLDM2)|(1<<MOD_SYNERGY)));
 	addType(new CWaypointType(W_FL_ROCKET_JUMP,"rocketjump","TF2 a bot can rocket jump here",WptColor(10,100,0),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_AMMO,"ammo","bot can sometimes get ammo here",WptColor(50,100,10),(1<<MOD_TF2)|(1<<MOD_HLDM2)));
+	addType(new CWaypointType(W_FL_AMMO,"ammo","bot can sometimes get ammo here",WptColor(50,100,10),(1<<MOD_TF2)|(1<<MOD_HLDM2)|(1<<MOD_SYNERGY)));
 	addType(new CWaypointType(W_FL_RESUPPLY,"resupply","TF2 bot can always get ammo and health here",WptColor(255,100,255),(1<<MOD_TF2)));
 	addType(new CWaypointType(W_FL_SENTRY,"sentry","TF2 engineer bot can build here",WptColor(255,0,0),(1<<MOD_TF2)));
 	addType(new CWaypointType(W_FL_DOUBLEJUMP,"doublejump","TF2 scout can double jump here",WptColor(10,10,100),(1<<MOD_TF2)));
 	addType(new CWaypointType(W_FL_TELE_ENTRANCE,"teleentrance","TF2 engineer bot can build tele entrance here",WptColor(50,50,150),(1<<MOD_TF2)));
 	addType(new CWaypointType(W_FL_TELE_EXIT,"teleexit","TF2 engineer bot can build tele exit here",WptColor(100,100,255),(1<<MOD_TF2)));
 	addType(new CWaypointType(W_FL_AREAONLY,"areaonly","bot will only use this waypoint at certain areas of map",WptColor(150,200,150),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_ROUTE,"route","bot will attempt to go through one of these",WptColor(100,100,100),(1<<MOD_TF2)|(1<<MOD_DOD)));
+	addType(new CWaypointType(W_FL_ROUTE,"route","bot will attempt to go through one of these",WptColor(100,100,100),(1<<MOD_TF2)|(1<<MOD_DOD)|(1<<MOD_SYNERGY)));
 	addType(new CWaypointType(W_FL_NO_FLAG,"noflag","TF2 bot will lose flag if he goes thorugh here",WptColor(200,100,50),(1<<MOD_TF2)));
 	addType(new CWaypointType(W_FL_COVER_RELOAD,"cover_reload","DOD:S bots can take cover here while shooting an enemy and reload. They can also stand up and shoot the enemy after reloading",WptColor(200,100,50),(1<<MOD_DOD)));
 	addType(new CWaypointType(W_FL_FLAGONLY,"flagonly","TF2 bot needs the flag to go through here",WptColor(180,50,80),(1<<MOD_TF2)));
@@ -3217,7 +3217,7 @@ void CWaypointTypes :: setup ()
 	addType(new CWaypointType(W_FL_UNREACHABLE,"unreachable","bot can't go here (used for visibility purposes only)",WptColor(200,200,200)));
 	addType(new CWaypointType(W_FL_LADDER,"ladder","bot will climb a ladder here",WptColor(255,255,0)));
 	addType(new CWaypointType(W_FL_FALL,"fall","Bots might kill themselves if they fall down here with low health",WptColor(128,128,128)));
-	addType(new CWaypointType(W_FL_CAPPOINT,"capture","TF2/DOD bot will find a capture point here",WptColor(255,255,0)));
+	addType(new CWaypointType(W_FL_CAPPOINT,"capture","TF2/DOD bot will find a capture point here",WptColor(255,255,0),(1<<MOD_TF2)|(1<<MOD_DOD)));
 	addType(new CWaypointType(W_FL_BOMBS_HERE,"bombs","DOD bots can pickup bombs here",WptColor(255,100,255),(1<<MOD_DOD)));
 	addType(new CWaypointType(W_FL_BOMB_TO_OPEN,"bombtoopen","DOD:S bot needs to blow up this point to move on",WptColor(50,200,30),(1<<MOD_DOD)));
 	addType(new CWaypointType(W_FL_BREAKABLE,"breakable","Bots need to break something with a rocket to get through here",WptColor(100,255,50),(1<<MOD_DOD)));
@@ -3228,6 +3228,9 @@ void CWaypointTypes :: setup ()
 	addType(new CWaypointType(W_FL_SPRINT,"sprint","bots will sprint here",WptColor(255,255,190),((1<<MOD_DOD)|(1<<MOD_HLDM2))));
 	addType(new CWaypointType(W_FL_TELEPORT_CHEAT,"teleport","bots will teleport to the next waypoint (cheat)",WptColor(255,255,255)));
 	addType(new CWaypointType(W_FL_OWNER_ONLY,"owneronly","only bot teams who own the area of the waypoint can use it",WptColor(0,150,150)));
+
+	// Synergy waypoint types
+	addType(new CWaypointType(W_FL_GOAL,"goal","Synergy: Bots will go here.",WptColor(100,255,50),(1<<MOD_SYNERGY)));
 
 	//addType(new CWaypointType(W_FL_ATTACKPOINT,"squad_attackpoint","Tactical waypoint -- each squad will go to different attack points and signal others to go",WptColor(90,90,90)));
 }

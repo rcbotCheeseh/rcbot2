@@ -33,13 +33,24 @@
 
 class CBotSynergy : public CBot
 {
+public:
     bool isSYN () override { return true; }
+    void init (bool bVarInit=false) override;
     void spawnInit () override;
+    void died ( edict_t *pKiller, const char *pszWeapon ) override;
     void modThink () override;
     void getTasks (unsigned int iIgnore=0) override;
     virtual bool executeAction(eBotAction iAction);
+    virtual float getArmorPercent() { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
     unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
     bool isEnemy ( edict_t *pEdict, bool bCheckWeapons = true ) override;
+    bool setVisible ( edict_t *pEntity, bool bVisible ) override;
+protected:
+    MyEHandle m_pNearbyWeapon; // weapons
+    MyEHandle m_pNearbyHealthKit; // Healthkit
+    MyEHandle m_pNearbyBattery; // Armor battery
+    MyEHandle m_pNearbyAmmo; // ammo pickups
+    MyEHandle m_pNearbyCrate; // ammo crate
 };
 
 #endif

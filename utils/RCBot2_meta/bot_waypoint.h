@@ -141,6 +141,7 @@ public:
 	static const int W_FL_LADDER         = (1 << 3);
 	static const int W_FL_FLAG           = (1 << 4);
 	static const int W_FL_CAPPOINT       = (1 << 5);
+	static const int W_FL_GOAL           = (1 << 5); // Synergy: Map Goal
 	static const int W_FL_NOBLU          = (1 << 6);
 	static const int W_FL_NOAXIS         = (1 << 6);
 	static const int W_FL_NORED          = (1 << 7);
