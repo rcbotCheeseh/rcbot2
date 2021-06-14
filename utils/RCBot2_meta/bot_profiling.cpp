@@ -116,7 +116,7 @@ void CProfileTimer :: Stop()
 
 // print the values, first work out average (use max/min/previous values), 
 // and work out percentage of power
-void CProfileTimer :: print (double *high)
+void CProfileTimer :: print (const double *high)
 {
 	if ((m_iInvoked>0) && m_szFunction )
 	{

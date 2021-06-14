@@ -1828,7 +1828,7 @@ bool CWaypoints :: save ( bool bVisiblityMade, edict_t *pPlayer, const char *psz
 
 			memset(authorinfo.szModifiedBy,0,32);
 		}
-		else if ( strcmp(szAuthorName,authorinfo.szAuthor) )
+		else if ( strcmp(szAuthorName,authorinfo.szAuthor) != 0)
 		{
 			// modified
 			strncpy(authorinfo.szModifiedBy,szAuthorName,31);

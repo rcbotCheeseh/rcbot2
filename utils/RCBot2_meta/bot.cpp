@@ -343,7 +343,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	engine->SetFakeClientConVarValue(pEdict,"tf_medigun_autoheal","0");	
 
 	// joining name not the same as the profile name, change name
-	if (strcmp(m_szBotName,pProfile->m_szName) )
+	if (strcmp(m_szBotName,pProfile->m_szName) != 0)
 	{
 		engine->SetFakeClientConVarValue(pEdict,"name",pProfile->m_szName);
 		strcpy(m_szBotName,pProfile->m_szName);

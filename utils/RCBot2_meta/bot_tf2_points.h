@@ -281,12 +281,12 @@ public:
 
 		for (auto& m_ValidPoint : m_ValidPoints)
 		{
-			for ( int j = 0; j < 2; j ++ )
+			for (auto& j : m_ValidPoint)
 			{
 				for ( int k = 0; k < MAX_CONTROL_POINTS; k ++ )
 				{
 					// OR
-					m_ValidAreas[k] = (m_ValidAreas[k] || m_ValidPoint[j][k].bValid);
+					m_ValidAreas[k] = (m_ValidAreas[k] || j[k].bValid);
 				}
 			}
 		}

@@ -199,7 +199,7 @@ bool CWaypointVisibilityTable :: ReadFromFile ( int numwaypoints )
 	   return false;
    if ( header.waypoint_version != CWaypoints::WAYPOINT_VERSION )
 	   return false;
-   if ( strncmp(header.szMapName,CBotGlobals::getMapName(),63) )
+   if ( strncmp(header.szMapName,CBotGlobals::getMapName(),63) != 0)
 	   return false;
 
    fread(m_VisTable,sizeof(byte),g_iMaxVisibilityByte,bfp);

@@ -242,7 +242,7 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 	const ga_nn_value min_value = tset->getMinScale();
 	const ga_nn_value max_value = tset->getMaxScale();
 
-	ga_nn_value* outs = new ga_nn_value [m_numOutputs];
+	auto* outs = new ga_nn_value [m_numOutputs];
 
 	for ( unsigned short int e = 0; e < epochs; e ++ )
 	{

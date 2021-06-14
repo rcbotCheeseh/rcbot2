@@ -208,9 +208,8 @@ void CBotSquads::RemoveSquad ( CBotSquad *pSquad )
 	CBots::botFunction(&func);
 	
 	m_theSquads.erase(std::remove(m_theSquads.begin(), m_theSquads.end(), pSquad), m_theSquads.end());
-	
-	if (pSquad)
-		delete pSquad;
+
+	delete pSquad;
 }
 
 void CBotSquads::UpdateAngles ( void )

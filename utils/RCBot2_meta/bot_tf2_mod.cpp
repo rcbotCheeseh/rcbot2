@@ -423,7 +423,8 @@ case TF_CLASS_PYRO: return 100.0f;
 case TF_CLASS_SPY: return 109.0f; 
 case TF_CLASS_ENGINEER: return 100.0f; 
 case TF_CLASS_SNIPER: return 100.0f; 
-case TF_CLASS_HWGUY: return 77.0f; 
+case TF_CLASS_HWGUY: return 77.0f;
+default: ;
 } 
 return 0.0; 
 } 

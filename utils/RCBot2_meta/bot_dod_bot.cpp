@@ -118,8 +118,7 @@ void CDODBot :: setup ()
 
 void CDODBot :: freeMapMemory ()
 {
-	if ( m_pWantToProne )
-		delete m_pWantToProne;
+	delete m_pWantToProne;
 
 	m_pWantToProne = nullptr;
 
@@ -2820,7 +2819,7 @@ bool CDODBot:: checkStuck ()
 
 		if ( pGroundEnt ) // stuck on furniture? 
 		{
-			if ( strncmp(pGroundEnt->GetClassName(),"prop_physics",12) )
+			if ( strncmp(pGroundEnt->GetClassName(),"prop_physics",12) != 0)
 			{
 				// Duck
 				if ( randomFloat(0.0f,1.0f) < 0.9f )

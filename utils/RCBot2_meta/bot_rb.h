@@ -1,5 +1,8 @@
 #ifndef __RCBOT_RB_H__
 #define __RCBOT_RB_H__
+#include <vector>
+
+class CBotOperator;
 
 class CBotRule
 {
@@ -8,7 +11,7 @@ public:
 	{
 	}
 private:
-	vector<CBotOperator> m_Rules;
+	std::vector<CBotOperator> m_Rules;
 };
 
 class CBotOperator
@@ -17,6 +20,8 @@ public:
 	CBotOperator ( CBotFactOpertor op ) : m_op(op)
 	{		
 	}
+
+	CBotOperator();
 
 	virtual bool operate ( bool bVal, CBotOperator *pNext )
 	{
@@ -45,7 +50,7 @@ private:
 class CBotFact : public CBotOperator
 {
 public:
-	CBotFact ( unsigned int iFactId ) : m_fid(iFactId)
+	CBotFact ( unsigned int iFactId ) : CBotOperator(), m_fid(iFactId)
 	{
 	}
 
