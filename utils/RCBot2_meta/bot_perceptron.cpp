@@ -197,8 +197,7 @@ CBotNeuralNet :: CBotNeuralNet ( unsigned short int numinputs, unsigned short in
 							  unsigned short int neuronsperhiddenlayer, unsigned short int numoutputs, 
 								ga_nn_value learnrate)
 {
-	register unsigned short int i;
-	register unsigned short int j;
+	unsigned short int i;
 
 	m_pOutputs = new CLogisticalNeuron[numoutputs];
 	m_pHidden = new CLogisticalNeuron*[numhiddenlayers];
@@ -206,7 +205,7 @@ CBotNeuralNet :: CBotNeuralNet ( unsigned short int numinputs, unsigned short in
 	m_layerinput = new ga_nn_value[_MAX(numinputs,neuronsperhiddenlayer)];
 	m_layeroutput = new ga_nn_value[_MAX(numoutputs,_MAX(numinputs,neuronsperhiddenlayer))];
 
-	for ( j = 0; j < numhiddenlayers; j ++ )
+	for ( unsigned short int j = 0; j < numhiddenlayers; j ++ )
 	{
 		m_pHidden[j] = new CLogisticalNeuron[neuronsperhiddenlayer];
 
@@ -229,31 +228,23 @@ CBotNeuralNet :: CBotNeuralNet ( unsigned short int numinputs, unsigned short in
 	m_numHidden = neuronsperhiddenlayer;
 	m_numHiddenLayers = numhiddenlayers;
 
-
 }
 
 #define RCPP_VERB_EPOCHS 1000
 
 void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epochs )
 {
-	ga_nn_value *outs;
-	ga_nn_value exp_out; // expected
-	ga_nn_value act_out; // actual
-	ga_nn_value out_error;
-	unsigned short int e; // epoch
-	register unsigned short int bi; // batch iterator
-	register unsigned short int i; // ith node
-	register unsigned short int j; //jth output
-	register signed short int l; // layer
-	CLogisticalNeuron *pNode, *pOutputNode;
+	unsigned short int i; // ith node
+	unsigned short int j; //jth output
+	CLogisticalNeuron*pOutputNode;
 	const unsigned short int numbatches = tset->getNumBatches();
 	training_batch_t *batches = tset->getBatches();
 	const ga_nn_value min_value = tset->getMinScale();
 	const ga_nn_value max_value = tset->getMaxScale();
 
-	outs = new ga_nn_value [m_numOutputs];
+	ga_nn_value* outs = new ga_nn_value [m_numOutputs];
 
-	for ( e = 0; e < epochs; e ++ )
+	for ( unsigned short int e = 0; e < epochs; e ++ )
 	{
 		/*if ( !(e%RCPP_VERB_EPOCHS) )
 		{
@@ -263,20 +254,20 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 			printf("in1\tin2\texp\tact\terr\n");
 		}*/
 
-		for ( bi = 0; bi < numbatches; bi ++ )
+		for ( unsigned short int bi = 0; bi < numbatches; bi ++ )
 		{
 			memset(outs,0,sizeof(ga_nn_value)*m_numOutputs);
 
 			execute(batches[bi].in,outs,min_value,max_value);
 
-			pNode = m_pOutputs;
+			CLogisticalNeuron* pNode = m_pOutputs;
 
 			// work out error for output layer
 			for ( j = 0; j < m_numOutputs; j ++ )
 			{
-				act_out = pNode->getOutput();
-				exp_out = batches[bi].out[j];
-				out_error = act_out * (1.0f-act_out) * (exp_out - act_out);
+				ga_nn_value act_out = pNode->getOutput();
+				ga_nn_value exp_out = batches[bi].out[j];
+				ga_nn_value out_error = act_out * (1.0f - act_out) * (exp_out - act_out);
 				pNode->setError(out_error);
 				pNode++;
 			}
@@ -306,7 +297,7 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 				pNode++;
 			}
 
-			for ( l = (m_numHiddenLayers-2); l >= 0; l -- )
+			for ( signed short int l = (m_numHiddenLayers - 2); l >= 0; l -- )
 			{
 				pOutputNode = m_pHidden[l];
 				//Send Error back to Input Layer
@@ -402,4 +393,3 @@ void CBotNeuralNet :: execute ( ga_nn_value *inputs, ga_nn_value *outputs, ga_nn
 		outputs[i] = gdescale(pNode->getOutput(),fMin,fMax);
 	}
 }
-

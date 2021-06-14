@@ -250,9 +250,12 @@ void CWaypointLocations :: AutoPathInBucket ( edict_t *pPlayer, int i, int j, in
 		if ( pOtherWpt == pWpt )
 			continue;
 		
+		if( pOtherWpt->hasFlag(CWaypointTypes::W_FL_UNREACHABLE) ) // Stop auto adding paths to waypoints with unreachable flag -@caxanga334
+			continue;
+		
 		vOtherWptOrigin = pOtherWpt->getOrigin();
 
-	//	if ( fabs(vOtherWptOrigin.z-vWptOrigin.z) > 128 )
+		//	if ( fabs(vOtherWptOrigin.z-vWptOrigin.z) > 128 )
 		//	continue;
 
 		if ( (vWptOrigin-vOtherWptOrigin).Length() <= bot_waypointpathdist.GetFloat() )
