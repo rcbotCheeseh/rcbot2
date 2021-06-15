@@ -106,8 +106,8 @@ bool CWaypointNavigator :: beliefLoad ( )
 {
    int iSize;
    int iDesiredSize;
-   register unsigned short int i;
-   register unsigned short int num;
+   unsigned short int i;
+   unsigned short int num;
    unsigned short int filebelief [ CWaypoints::MAX_WAYPOINTS ];
 
     char filename[1024];
@@ -166,8 +166,8 @@ bool CWaypointNavigator :: beliefSave ( bool bOverride )
 {
    int iSize;
    int iDesiredSize;
-   register unsigned short int i;
-   register unsigned short int num;
+   unsigned short int i;
+   unsigned short int num;
    unsigned short int filebelief [ CWaypoints::MAX_WAYPOINTS ];
    char filename[1024];
    char mapname[512];
@@ -1727,7 +1727,7 @@ float CWaypoint :: distanceFrom ( Vector vOrigin )
 ///////////////////////////////////////////////////
 void CWaypoints :: updateWaypointPairs ( std::vector<edict_wpt_pair_t> *pPairs, int iWptFlag, const char *szClassname )
 {
-	const register short int iSize = numWaypoints();
+	const short int iSize = numWaypoints();
 	CWaypoint *pWpt;
 	edict_wpt_pair_t pair;
 	CTraceFilterWorldAndPropsOnly filter;
@@ -1738,7 +1738,7 @@ void CWaypoints :: updateWaypointPairs ( std::vector<edict_wpt_pair_t> *pPairs, 
 
 	Vector vOrigin;
 
-	for ( register short int i = 0; i < iSize; i ++ )
+	for (short int i = 0; i < iSize; i ++ )
 	{
 		if ( pWpt->isUsed() && pWpt->hasFlag(iWptFlag) )
 		{
@@ -2482,7 +2482,7 @@ int CWaypoints :: numWaypoints ()
 
 int CWaypoints :: nearestWaypointGoal ( int iFlags, Vector &origin, float fDist, int iTeam )
 {
-	register short int i;
+	short int i;
 	static int size;
 
 	float distance;
@@ -2520,7 +2520,7 @@ int CWaypoints :: nearestWaypointGoal ( int iFlags, Vector &origin, float fDist,
 
 CWaypoint *CWaypoints :: randomRouteWaypoint ( CBot *pBot, Vector vOrigin, Vector vGoal, int iTeam, int iArea )
 {
-	register short int i;
+	short int i;
 	static short int size;
 	static CWaypointNavigator *pNav;
 	
@@ -2638,7 +2638,7 @@ CWaypoint *CWaypoints :: nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, i
 
 	CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 
-	const register auto numwaypoints = (short int)numWaypoints();
+	const auto numwaypoints = (short int)numWaypoints();
 
 	float finearestdist = 9999.0f;
 	float fjnearestdist = 9999.0f;
@@ -2647,7 +2647,7 @@ CWaypoint *CWaypoints :: nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, i
 
 	CWaypoint *pTempi,*pTempj; 
 	
-	for ( register short int i = 0; i < numwaypoints; i ++ )
+	for (short int i = 0; i < numwaypoints; i ++ )
 	{
 		if ( iTarget == i )
 			continue;
@@ -2659,7 +2659,7 @@ CWaypoint *CWaypoints :: nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, i
 
 		if ( pTable->GetVisibilityFromTo(iTarget,i) )
 		{
-			for ( register short int j = 0; j < numwaypoints; j ++ )
+			for (short int j = 0; j < numwaypoints; j ++ )
 			{				
 				if ( j == i )
 					continue;
@@ -2733,7 +2733,7 @@ void CWaypoints :: checkAreas ( edict_t *pActivator )
 
 CWaypoint *CWaypoints :: randomWaypointGoalNearestArea ( int iFlags, int iTeam, int iArea, bool bForceArea, CBot *pBot, bool bHighDanger, Vector *origin, int iIgnore, bool bIgnoreBelief, int iWpt1 )
 {
-	register short int i;
+	short int i;
 	static short int size; 
 	CWaypoint *pWpt;
 	AStarNode *node;
@@ -2817,7 +2817,7 @@ CWaypoint *CWaypoints :: randomWaypointGoalNearestArea ( int iFlags, int iTeam, 
 
 CWaypoint *CWaypoints :: randomWaypointGoalBetweenArea ( int iFlags, int iTeam, int iArea, bool bForceArea, CBot *pBot, bool bHighDanger, Vector *org1, Vector *org2, bool bIgnoreBelief, int iWpt1, int iWpt2 )
 {
-	register short int i;
+	short int i;
 	static short int size; 
 	CWaypoint *pWpt;
 	AStarNode *node;
@@ -2899,7 +2899,7 @@ CWaypoint *CWaypoints :: randomWaypointGoalBetweenArea ( int iFlags, int iTeam, 
 
 CWaypoint *CWaypoints :: randomWaypointGoal ( int iFlags, int iTeam, int iArea, bool bForceArea, CBot *pBot, bool bHighDanger, int iSearchFlags, int iIgnore )
 {
-	register short int i;
+	short int i;
 	static short int size; 
 	CWaypoint *pWpt;
 

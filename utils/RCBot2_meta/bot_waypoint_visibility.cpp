@@ -42,10 +42,9 @@ int CWaypointVisibilityTable :: iCurFrom = 0;
 int CWaypointVisibilityTable :: iCurTo = 0;*/
 
 void CWaypointVisibilityTable :: workVisibility ()
-{		
-	int percent;
+{
 	int iTicks = 0;
-	const register auto iSize = (unsigned short int) CWaypoints::numWaypoints();
+	const auto iSize = (unsigned short int) CWaypoints::numWaypoints();
 
 	for ( iCurFrom = iCurFrom; iCurFrom < iSize; iCurFrom ++ )
 	{
@@ -62,7 +61,7 @@ void CWaypointVisibilityTable :: workVisibility ()
 			{
 				if ( m_fNextShowMessageTime < engine->Time() )
 				{
-					percent = (int)(((float)iCurFrom / iSize) * 100);
+					int percent = (int)(((float)iCurFrom / iSize) * 100);
 
 					if ( m_iPrevPercent != percent )
 					{
@@ -113,7 +112,7 @@ void CWaypointVisibilityTable :: workVisibilityForWaypoint ( int i, int iNumWayp
 	if ( !Waypoint1->isUsed() )
 		return;
 
-	for ( register short int j = 0; j < iNumWaypoints; j ++ )
+	for (short int j = 0; j < iNumWaypoints; j ++ )
 	{
 		if ( i == j )
 		{
@@ -137,14 +136,12 @@ void CWaypointVisibilityTable :: workVisibilityForWaypoint ( int i, int iNumWayp
 
 void CWaypointVisibilityTable :: WorkOutVisibilityTable ()
 {
-	register short int i;
-
 	const int iNumWaypoints = CWaypoints::numWaypoints();
 
 	ClearVisibilityTable();
 
 	// loop through all waypoint possibilities.
-	for ( i = 0; i < iNumWaypoints; i ++ )
+	for ( register short int i = 0; i < iNumWaypoints; i ++ )
 	{
 		workVisibilityForWaypoint(i,iNumWaypoints,false);
 	}

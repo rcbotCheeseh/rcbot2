@@ -343,7 +343,8 @@ public:
 			
 			edict = INDEXENT(pHandleEntity->GetRefEHandle().GetEntryIndex());
 
-			debugoverlay->AddTextOverlayRGB(CBotGlobals::entityOrigin(edict),0,2.0f,255,100,100,200,"Traceline hit %s",edict->GetClassName());
+			debugoverlay->AddTextOverlayRGB(CBotGlobals::entityOrigin(edict), 0, 2.0f, 255, 100, 100, 200,
+			                                "Traceline hit %s", edict->GetClassName());
 		}
 #endif
 		return true;

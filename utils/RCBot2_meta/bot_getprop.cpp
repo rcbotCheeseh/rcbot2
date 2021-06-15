@@ -586,9 +586,9 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 	float fDist;
 	const char *pszClassname;
 	// speed up loop by by using smaller ints in register
-	const register auto max = (short int)gpGlobals->maxEntities;
+	const auto max = (short int)gpGlobals->maxEntities;
 
-	for (register short int i = 0; i < max; i++)
+	for (short int i = 0; i < max; i++)
 	{
 		current = engine->PEntityOfEntIndex(i);
 

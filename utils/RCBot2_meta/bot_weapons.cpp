@@ -326,7 +326,7 @@ CBotWeapons::CBotWeapons(CBot *pBot)
 
 edict_t *CWeapons :: findWeapon ( edict_t *pPlayer, const char *pszWeaponName )
 {
-	register unsigned short int j;
+	unsigned short int j;
 	CBaseHandle *m_Weapons = CClassInterface::getWeaponList(pPlayer);
 	edict_t *pWeapon;
 	CBaseHandle *m_Weapon_iter = m_Weapons;
@@ -375,7 +375,7 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 		this->clearWeapons();
 
 		int iWeaponState;
-		register unsigned short int i;
+		unsigned short int i;
 		bool bFound;
 
 		const char *pszClassname;
@@ -596,7 +596,7 @@ void CBotWeapon::setWeaponEntity(edict_t *pent, bool bOverrideAmmoTypes)
 
 CBotWeapon *CBotWeapons::addWeapon(CWeapon *pWeaponInfo, int iId, edict_t *pent, bool bOverrideAll)
 {
-	register int i = 0;
+	int i = 0;
 	Vector origin;
 	const char *classname;
 	edict_t *pEnt = nullptr;
@@ -864,7 +864,7 @@ CBotWeapon *CBotWeapons::getActiveWeapon(const char *szWeaponName, edict_t *pWea
 
 		if (pWeapon)
 		{
-			register unsigned short int i;
+			unsigned short int i;
 
 			for (i = 0; i < MAX_WEAPONS; i++)
 			{

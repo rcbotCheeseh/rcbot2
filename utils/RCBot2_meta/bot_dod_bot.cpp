@@ -1990,7 +1990,7 @@ void CDODBot :: listenForPlayers ()
 
 	m_bListenPositionValid = false;
 
-	for ( register short int i = 1; i <= gpGlobals->maxClients; i ++ )
+	for (short int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
 		pPlayer = INDEXENT(i);
 
