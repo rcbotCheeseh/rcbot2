@@ -786,9 +786,9 @@ int CDODMod ::getScore(edict_t *pPlayer)
 
 edict_t *CDODMod :: getBreakable ( CWaypoint *pWpt )
 {
-	const register unsigned short int size = m_BreakableWaypoints.size();
+	const unsigned short int size = m_BreakableWaypoints.size();
 
-	for ( register unsigned short int i = 0; i < size; i ++ )
+	for (unsigned short int i = 0; i < size; i ++ )
 	{
 		if ( m_BreakableWaypoints[i].pWaypoint == pWpt )
 			return m_BreakableWaypoints[i].pEdict;
@@ -799,9 +799,9 @@ edict_t *CDODMod :: getBreakable ( CWaypoint *pWpt )
 
 edict_t *CDODMod :: getBombTarget ( CWaypoint *pWpt )
 {
-	const register unsigned short int size = m_BombWaypoints.size();
+	const unsigned short int size = m_BombWaypoints.size();
 
-	for ( register unsigned short int i = 0; i < size; i ++ )
+	for (unsigned short int i = 0; i < size; i ++ )
 	{
 		if ( m_BombWaypoints[i].pWaypoint == pWpt )
 			return m_BombWaypoints[i].pEdict;
