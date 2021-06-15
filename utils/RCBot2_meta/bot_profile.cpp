@@ -85,26 +85,9 @@ void CBotProfiles :: deleteProfiles ()
 	m_pDefaultProfile = nullptr;
 }
 
-// requires CBotProfile 'read' declared
-#ifndef __linux__
-#define READ_PROFILE_STRING(kvname,varname) if ( !pKVL->getString(##kvname##,&read.varname) ) { read.varname = m_pDefaultProfile->varname; }
-#define READ_PROFILE_INT(kvname,varname) if ( !pKVL->getInt(##kvname##,&read.varname) ) { read.varname = m_pDefaultProfile->varname; }
-// reads integers between 0 and 100 and converts to between 0.0 and 1.0
-#define READ_PROFILE_FLOAT(kvname,varname) { float fval; if ( !pKVL->getFloat(##kvname##,&fval) ) { read.varname = m_pDefaultProfile->varname; } else { read.varname = fval * 0.01f; } }
-#else
-#define READ_PROFILE_STRING(kvname,varname) if ( !pKVL->getString(kvname,&read.varname) ) { read.varname = m_pDefaultProfile->varname; }
-#define READ_PROFILE_INT(kvname,varname) if ( !pKVL->getInt(kvname,&read.varname) ) { read.varname = m_pDefaultProfile->varname; }
-// reads integers between 0 and 100 and converts to between 0.0 and 1.0
-#define READ_PROFILE_FLOAT(kvname,varname) { float fval; if ( !pKVL->getFloat(kvname,&fval) ) { read.varname = m_pDefaultProfile->varname; } else { read.varname = fval * 0.01f; } }
-#endif
 // find profiles and setup list
 void CBotProfiles :: setupProfiles ()
 {
-	unsigned int iId;
-	bool bDone;
-	char szId[4];
-	char filename[512];
-
 	// Setup Default profile
 	m_pDefaultProfile = new CBotProfile(
 		DEFAULT_BOT_NAME, // name
@@ -120,11 +103,13 @@ void CBotProfiles :: setupProfiles ()
 		);	
 
 	// read profiles
-	iId = 1;
-	bDone = false;
+	unsigned int iId = 1;
+	bool bDone = false;
 
 	while ( (iId < 999) && (!bDone) )
 	{
+		char filename[512];
+		char szId[4];
 		sprintf(szId,"%d",iId);
 		CBotGlobals::buildFileName(filename,szId,BOT_PROFILE_FOLDER,BOT_CONFIG_EXTENSION);
 
@@ -132,27 +117,43 @@ void CBotProfiles :: setupProfiles ()
 
 		if ( fp )
 		{
-			CBotProfile read;
-			auto*pKVL = new CRCBotKeyValueList();
+			// copy defaults
+			CBotProfile read = *m_pDefaultProfile;
+			CRCBotKeyValueList kvl;
 
 			CBotGlobals::botMessage(nullptr,0,"Reading bot profile \"%s\"",filename);
 
-			pKVL->parseFile(fp);
+			kvl.parseFile(fp);
 
-			READ_PROFILE_INT("team",m_iTeam);
-			READ_PROFILE_STRING("model",m_szModel);
-			READ_PROFILE_STRING("name",m_szName);
-			READ_PROFILE_INT("visionticks",m_iVisionTicks);
-			READ_PROFILE_INT("pathticks",m_iPathTicks);
-			READ_PROFILE_INT("visionticks_clients",m_iVisionTicksClients);
-			READ_PROFILE_INT("sensitivity",m_iSensitivity);
-			READ_PROFILE_FLOAT("aimskill",m_fAimSkill);
-			READ_PROFILE_FLOAT("braveness",m_fBraveness);
-			READ_PROFILE_INT("class",m_iClass);
+			kvl.getInt("team", &read.m_iTeam);
+			kvl.getString("model", &read.m_szModel);
+			kvl.getString("name", &read.m_szName);
+			kvl.getInt("visionticks", &read.m_iVisionTicks);
+			kvl.getInt("pathticks", &read.m_iPathTicks);
+			kvl.getInt("visionticks_clients", &read.m_iVisionTicksClients);
+			kvl.getInt("sensitivity", &read.m_iSensitivity);
+
+			// config maps [ 0.0, 100.0 ] to [ 0.0, 1.0 ]
+			float flWholeValuePercent;
+			if (kvl.getFloat("aim_skill", &flWholeValuePercent)) {
+				read.m_fAimSkill = flWholeValuePercent / 100.0f;
+			} else if (kvl.getFloat("aimskill", &flWholeValuePercent)) {
+				// *someone* wrote a broken bot profile generator.
+				// most of the profiles did not actually have working aim skill values
+				// we'll go ahead and allow it, but I have to express my displeasure about the matter in some way
+				CBotGlobals::botMessage(nullptr, 0,
+				                        "Warning: Incorrect option 'aimskill' on bot profile \"%s\". "
+				                        "Did you mean 'aim_skill'?", filename);
+				read.m_fAimSkill = flWholeValuePercent / 100.0f;
+			}
+			
+			if (kvl.getFloat("braveness", &flWholeValuePercent)) {
+				read.m_fBraveness = flWholeValuePercent / 100.0f;
+			}
+
+			kvl.getInt("class", &read.m_iClass);
 
 			m_Profiles.push_back(new CBotProfile(read));
-
-			delete pKVL;
 
 			fclose(fp);
 		}
@@ -178,10 +179,9 @@ CBotProfile *CBotProfiles :: getDefaultProfile ()
 // return a profile unused by a bot
 CBotProfile *CBotProfiles :: getRandomFreeProfile ()
 {
-	unsigned int i;
 	std::vector<CBotProfile*> freeProfiles;
 	
-	for ( i = 0; i < m_Profiles.size(); i ++ )
+	for ( unsigned int i = 0; i < m_Profiles.size(); i ++ )
 	{
 		if ( !CBots::findBotByProfile(m_Profiles[i]) )
 			freeProfiles.push_back(m_Profiles[i]);
