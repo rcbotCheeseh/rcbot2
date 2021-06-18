@@ -106,8 +106,6 @@ static ConVar rcbot2_ver_cvar("rcbot_ver", build_info::long_version, FCVAR_REPLI
 
 CON_COMMAND(rcbotd, "access the bot commands on a server")
 {
-	eBotCommandResult iResult;
-
 	if (!engine->IsDedicatedServer() || !CBotGlobals::IsMapRunning())
 	{
 		CBotGlobals::botMessage(nullptr, 0, "Error, no map running or not dedicated server");
@@ -115,7 +113,9 @@ CON_COMMAND(rcbotd, "access the bot commands on a server")
 	}
 
 	//iResult = CBotGlobals::m_pCommands->execute(NULL,engine->Cmd_Argv(1),engine->Cmd_Argv(2),engine->Cmd_Argv(3),engine->Cmd_Argv(4),engine->Cmd_Argv(5),engine->Cmd_Argv(6));
-	iResult = CBotGlobals::m_pCommands->execute(nullptr, args.Arg(1), args.Arg(2), args.Arg(3), args.Arg(4), args.Arg(5), args.Arg(6));
+	eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(nullptr, args.Arg(1), args.Arg(2), args.Arg(3),
+	                                                              args.Arg(4),
+	                                                              args.Arg(5), args.Arg(6));
 
 	if (iResult == COMMAND_ACCESSED)
 	{
@@ -227,7 +227,7 @@ void RCBotPluginMeta::HudTextMessage(edict_t *pEntity, const char *szMessage)
 
 	if (say > 0) {
 		char chatline[128];
-		snprintf(chatline, sizeof(chatline), "\x01\x04[RCBot2]\x01 %s\n", szMessage);
+		snprintf(chatline, sizeof chatline, "\x01\x04[RCBot2]\x01 %s\n", szMessage);
 
 		buf = engine->UserMessageBegin(filter, say);
 		buf->WriteString(chatline);
@@ -247,13 +247,12 @@ void RCBotPluginMeta::BroadcastTextMessage(const char *szMessage)
 	char msgbuf[64];
 	bool bOK;
 
-	int hint = -1;
 	int say = -1;
 
 	while ((bOK = servergamedll->GetUserMessageInfo(msgid, msgbuf, 63, imsgsize)) == true)
 	{
 		if (strcmp(msgbuf, "HintText") == 0)
-			hint = msgid;
+			int hint = msgid;
 		else if (strcmp(msgbuf, "SayText") == 0)
 			say = msgid;
 
@@ -265,13 +264,11 @@ void RCBotPluginMeta::BroadcastTextMessage(const char *szMessage)
 
 	auto*filter = new CClientBroadcastRecipientFilter();
 
-	bf_write *buf = nullptr;
-
 	if (say > 0) {
 		char chatline[128];
-		snprintf(chatline, sizeof(chatline), "\x01\x04[RCBot2]\x01 %s\n", szMessage);
+		snprintf(chatline, sizeof chatline, "\x01\x04[RCBot2]\x01 %s\n", szMessage);
 
-		buf = engine->UserMessageBegin(filter, say);
+		bf_write* buf = engine->UserMessageBegin(filter, say);
 		buf->WriteString(chatline);
 		engine->MessageEnd();
 	}
@@ -399,7 +396,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 		pKVL->parseFile(fp);
 
 	//void* gameServerFactory = ismm->GetServerFactory(false);
-	void* gameServerFactory = reinterpret_cast<void*>(ismm->GetServerFactory(false));
+	const auto gameServerFactory = reinterpret_cast<void*>(ismm->GetServerFactory(false));
 
 	int val;
 
@@ -455,8 +452,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	// Find the RCBOT2 Path from metamod VDF
 	extern IFileSystem *filesystem;
 	auto*mainkv = new KeyValues("metamodplugin");
-	
-	const char *rcbot2path;
+
 	CBotGlobals::botMessage(nullptr, 0, "Reading rcbot2 path from VDF...");
 	
 	mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD");
@@ -464,7 +460,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	mainkv = mainkv->FindKey("Metamod Plugin");
 
 	if (mainkv)
-		rcbot2path = mainkv->GetString("rcbot2path", "\0");
+		const char* rcbot2path = mainkv->GetString("rcbot2path", "\0");
 
 	mainkv->deleteThis();
 	//eventListener2 = new CRCBotEventListener();
@@ -504,10 +500,10 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	CBotGlobals::buildFileName(filename, "bot_quota", BOT_CONFIG_FOLDER, "ini");
 	fp = fopen(filename, "r");
 
-	memset(bq_line, 0, sizeof(bq_line));
+	memset(bq_line, 0, sizeof bq_line);
 
 	if (fp != nullptr) {
-		while (fgets(bq_line, sizeof(bq_line), fp) != nullptr) {
+		while (fgets(bq_line, sizeof bq_line, fp) != nullptr) {
 			if (bq_line[0] == '#')
 				continue;
 
@@ -831,9 +827,6 @@ void RCBotPluginMeta::BotQuotaCheck() {
 	if (m_fBotQuotaTimer < engine->Time() - rcbot_bot_quota_interval.GetInt()) {
 		m_fBotQuotaTimer = engine->Time();
 
-		// Target Bot Count
-		int bot_target = 0;
-
 		// Change Notification
 		bool notify = false;
 
@@ -868,7 +861,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 		}
 
 		// Get Bot Quota
-		bot_target = m_iTargetBots[human_count];
+		int bot_target = m_iTargetBots[human_count];
 
 		// Change Bot Quota
 		if (bot_count > bot_target) {
@@ -887,7 +880,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 
 		if (notify) {
 			char chatmsg[128];
-			snprintf(chatmsg, sizeof(chatmsg), "[Bot Quota] Humans: %d, Bots: %d", human_count, bot_target);
+			snprintf(chatmsg, sizeof chatmsg, "[Bot Quota] Humans: %d, Bots: %d", human_count, bot_target);
 
 			CBotGlobals::botMessage(nullptr, 0, "=======================================");
 			CBotGlobals::botMessage(nullptr, 0, chatmsg);

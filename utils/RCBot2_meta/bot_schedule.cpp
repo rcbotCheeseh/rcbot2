@@ -245,11 +245,10 @@ void CBotTFEngiUpgrade :: init ()
 //////////////////////////////////////////////////
 CBotBackstabSched :: CBotBackstabSched ( edict_t *pEnemy )
 {
-	Vector vrear;
 	Vector vangles;
 
 	AngleVectors(CBotGlobals::entityEyeAngles(pEnemy),&vangles);
-	vrear = CBotGlobals::entityOrigin(pEnemy) - (vangles * 45) + Vector(0,0,32);
+	Vector vrear = CBotGlobals::entityOrigin(pEnemy) - vangles * 45 + Vector(0, 0, 32);
 
 	addTask(new CFindPathTask(vrear));
 	addTask(new CBotBackstab(pEnemy));
@@ -420,8 +419,6 @@ CBotTauntSchedule :: CBotTauntSchedule ( edict_t *pPlayer, float fYaw )
 {
 	const QAngle angles = QAngle(0,fYaw,0);
 	Vector forward;
-	Vector vOrigin;
-	Vector vGoto;
 	const float fTauntDist = 40.0f;
 
 	m_pPlayer = pPlayer;
@@ -430,9 +427,9 @@ CBotTauntSchedule :: CBotTauntSchedule ( edict_t *pPlayer, float fYaw )
 	AngleVectors(angles,&forward);
 
 	forward = forward/forward.Length();
-	vOrigin = CBotGlobals::entityOrigin(pPlayer);
+	Vector vOrigin = CBotGlobals::entityOrigin(pPlayer);
 
-	vGoto = vOrigin + (forward*fTauntDist);
+	Vector vGoto = vOrigin + forward * fTauntDist;
 
 	CBotGlobals::fixFloatAngle(&m_fYaw);
 
@@ -520,9 +517,7 @@ CBotDefendSched ::CBotDefendSched ( Vector vOrigin, float fMaxTime )
 
 CBotDefendSched::CBotDefendSched ( int iWaypointID, float fMaxTime )
 {
-	CWaypoint *pWaypoint;
-
-	pWaypoint = CWaypoints::getWaypoint(iWaypointID);
+	CWaypoint* pWaypoint = CWaypoints::getWaypoint(iWaypointID);
 
 	addTask(new CFindPathTask(iWaypointID));
 	addTask(new CBotDefendTask(pWaypoint->getOrigin(),fMaxTime,8,false,Vector(0,0,0),LOOK_SNIPE,pWaypoint->getFlags()));
@@ -692,7 +687,7 @@ CBotFollowLastEnemy ::	CBotFollowLastEnemy ( CBot *pBot, edict_t *pEnemy, Vector
 
 	if ( CClassInterface :: getVelocity(pEnemy,&vVelocity) )
 	{
-		if ( pClient && (vVelocity == Vector(0,0,0)) )
+		if ( pClient && vVelocity == Vector(0,0,0) )
 			vVelocity = pClient->getVelocity();
 	}
 	else if ( pClient )

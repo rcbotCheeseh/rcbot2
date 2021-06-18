@@ -154,7 +154,7 @@ public:
 	void passEdict(edict_t *p);
 	//////////////////////////
 
-	bool hasPassInfo () { return (m_bitsPass!=0); }
+	bool hasPassInfo () { return m_bitsPass!=0; }
 
 	inline int passedInt () { return iPass; }
 	inline float passedFloat() { return fPass; }
@@ -162,10 +162,10 @@ public:
 	inline edict_t *passedEdict() { return pPass; }
 	inline bool isID ( eBotSchedule iId ) { return m_iSchedId == iId; }
 
-	inline bool hasPassInt () { return ((m_bitsPass&BITS_SCHED_PASS_INT)>0); }
-	inline bool hasPassFloat () { return ((m_bitsPass&BITS_SCHED_PASS_FLOAT)>0); }
-	inline bool hasPassVector () { return ((m_bitsPass&BITS_SCHED_PASS_VECTOR)>0); }
-	inline bool hasPassEdict () { return ((m_bitsPass&BITS_SCHED_PASS_EDICT)>0); }
+	inline bool hasPassInt () { return (m_bitsPass&BITS_SCHED_PASS_INT)>0; }
+	inline bool hasPassFloat () { return (m_bitsPass&BITS_SCHED_PASS_FLOAT)>0; }
+	inline bool hasPassVector () { return (m_bitsPass&BITS_SCHED_PASS_VECTOR)>0; }
+	inline bool hasPassEdict () { return (m_bitsPass&BITS_SCHED_PASS_EDICT)>0; }
 
 	inline void setID ( eBotSchedule iId ) { m_iSchedId = iId; }
 

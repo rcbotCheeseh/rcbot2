@@ -85,7 +85,7 @@ ga_nn_value CPerceptron :: execute ()
 	
 	for ( i = 0; i < m_iInputs; i ++ )
 	{
-		m_output += (*w) * (*x);
+		m_output += *w * *x;
 		w++;
 		x++;
 	}
@@ -120,7 +120,7 @@ void CPerceptron :: train ( ga_nn_value expectedOutput )
 	
 	for ( i = 0; i < m_iInputs; i ++ )
 	{
-		*w = *w + m_LearnRate*(expectedOutput-m_output)* (*x);
+		*w = *w + m_LearnRate*(expectedOutput-m_output)* *x;
 		w++;
 		x++;
 	}
@@ -138,7 +138,7 @@ void CLogisticalNeuron :: train ()// ITransfer *transferFunction, bool usebias )
 
 	for ( i = 0; i < m_iInputs; i ++ )
 	{
-		delta = (m_LearnRate * (*x) * m_error);
+		delta = m_LearnRate * *x * m_error;
 		delta += m_momentum * 0.9f;
 		*w = *w + delta;
 		m_momentum = delta;
@@ -164,7 +164,7 @@ ga_nn_value CLogisticalNeuron :: execute (  )//, bool usebias )
 	
 	for ( i = 0; i < m_iInputs; i ++ )	
 	{
-		m_netinput += (*w) * (*x);
+		m_netinput += *w * *x;
 		w++;
 		x++;
 	}
@@ -297,7 +297,7 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 				pNode++;
 			}
 
-			for ( signed short int l = (m_numHiddenLayers - 2); l >= 0; l -- )
+			for ( signed short int l = m_numHiddenLayers - 2; l >= 0; l -- )
 			{
 				pOutputNode = m_pHidden[l];
 				//Send Error back to Input Layer
@@ -314,7 +314,7 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 						pNode++;
 					}
 
-					pOutputNode->setError((pOutputNode->getOutput() * (1.0f-pOutputNode->getOutput())) * err);
+					pOutputNode->setError(pOutputNode->getOutput() * (1.0f-pOutputNode->getOutput()) * err);
 					pOutputNode ++;
 				}
 			}

@@ -17,18 +17,18 @@ inline unsigned short int _MAX ( unsigned short int a, unsigned short int b )
 
 inline ga_nn_value zeroscale ( ga_nn_value x, ga_nn_value fMin, ga_nn_value fMax )
 {
-	return ((x-fMin)/(fMax-fMin));
+	return (x-fMin)/(fMax-fMin);
 }
 
 // scales into -1 and +1 (medium at zero)
 inline ga_nn_value gscale ( ga_nn_value x, ga_nn_value fMin, ga_nn_value fMax ) 
 { 
-	return (zeroscale(x,fMin,fMax)*2)-1.0f;
+	return zeroscale(x,fMin,fMax)*2-1.0f;
 }
 // descales between 0 and 1 to min and max range
 inline ga_nn_value gdescale ( ga_nn_value x, ga_nn_value fMin, ga_nn_value fMax )
 {
-	return (fMin+(x*(fMax-fMin)));
+	return fMin+x*(fMax-fMin);
 }
 
 /*
@@ -222,7 +222,7 @@ public:
 	inline void in ( ga_nn_value input )
 	{
 		//assert(m_batchNum>=0);
-		if ( (m_batchNum >= 0) && (m_batchNum < m_numBatches) && (m_inputNum < m_numInputs) ) 
+		if ( m_batchNum >= 0 && m_batchNum < m_numBatches && m_inputNum < m_numInputs ) 
 			batches[m_batchNum].in[m_inputNum++] = scale(input);
 	}
 
@@ -230,7 +230,7 @@ public:
 	inline void out ( ga_nn_value output )
 	{
 		//assert(m_batchNum>=0);
-		if ( (m_batchNum >= 0) && (m_batchNum < m_numBatches) && (m_outputNum < m_numOutputs) ) 
+		if ( m_batchNum >= 0 && m_batchNum < m_numBatches && m_outputNum < m_numOutputs ) 
 			batches[m_batchNum].out[m_outputNum++] = zeroscale(output,m_fMin,m_fMax);
 	}
 

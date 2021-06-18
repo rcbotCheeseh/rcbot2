@@ -4,18 +4,11 @@
 
 void CRCBotKeyValueList :: parseFile ( FILE *fp )
 {
-	char buffer[2*(RCBOT_MAX_KV_LEN)];
+	char buffer[2* RCBOT_MAX_KV_LEN];
 	char szKey[RCBOT_MAX_KV_LEN];
 	char szValue[RCBOT_MAX_KV_LEN];
 
-	int iKi;
-	int iVi;
-	int iLen;
-	int iCi; // current character index		
-	bool bHaveKey;
-	int iLine;
-
-	iLine = 0;
+	int iLine = 0;
 
 	// parse profile ini
 	while ( fgets(buffer,255,fp) != nullptr )
@@ -25,7 +18,7 @@ void CRCBotKeyValueList :: parseFile ( FILE *fp )
 		if ( buffer[0] == '#' ) // skip comment
 			continue;
 
-		iLen = strlen(buffer);
+		int iLen = strlen(buffer);
 
 		if ( iLen == 0 )
 			continue;
@@ -36,12 +29,12 @@ void CRCBotKeyValueList :: parseFile ( FILE *fp )
 		if ( buffer[iLen-1] == '\r' )
 			buffer[--iLen] = 0;
 
-		bHaveKey = false;
+		bool bHaveKey = false;
 
-		iKi = 0;
-		iVi = 0;
+		int iKi = 0;
+		int iVi = 0;
 
-		for ( iCi = 0; iCi < iLen; iCi ++ )
+		for ( int iCi = 0; iCi < iLen; iCi ++ )
 		{
 			// ignore spacing
 			if ( buffer[iCi] == ' ' )
@@ -101,9 +94,7 @@ CRCBotKeyValue *CRCBotKeyValueList :: getKV ( const char *key )
 
 bool CRCBotKeyValueList :: getFloat ( const char *key, float *val )
 {
-	CRCBotKeyValue *pKV;
-
-	pKV = getKV(key);
+	CRCBotKeyValue* pKV = getKV(key);
 
 	if ( !pKV )
 		return false;
@@ -116,9 +107,7 @@ bool CRCBotKeyValueList :: getFloat ( const char *key, float *val )
 	
 bool CRCBotKeyValueList :: getInt ( const char *key, int *val )
 {
-	CRCBotKeyValue *pKV;
-
-	pKV = getKV(key);
+	CRCBotKeyValue* pKV = getKV(key);
 
 	if ( !pKV )
 		return false;
@@ -131,9 +120,7 @@ bool CRCBotKeyValueList :: getInt ( const char *key, int *val )
 
 bool CRCBotKeyValueList :: getString ( const char *key, char **val )
 {
-	CRCBotKeyValue *pKV;
-
-	pKV = getKV(key);
+	CRCBotKeyValue* pKV = getKV(key);
 
 	if ( !pKV )
 		return false;

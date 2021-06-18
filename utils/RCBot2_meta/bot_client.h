@@ -175,7 +175,7 @@ public:
 	void setTeleportVector ();
 	Vector *getTeleportVector () { if ( m_bTeleportVectorValid ) return &m_vTeleportVector; return nullptr; }
 
-	inline bool isUsingMenu () { return (m_pMenu != nullptr); }
+	inline bool isUsingMenu () { return m_pMenu != nullptr; }
 	inline void setCurrentMenu ( CBotMenu *pMenu ) 
 	{ 
 		m_pMenu = pMenu; 
@@ -244,10 +244,10 @@ public:
 
 	void clientActive ();
 
-	void setDebug ( int iLevel, bool bSet ) { if ( bSet ) { m_iDebugLevels |= (1<<iLevel); } else { m_iDebugLevels &= ~(1<<iLevel); } }
-	bool isDebugOn ( int iLevel ) { return (m_iDebugLevels & (1<<iLevel))>0; }
+	void setDebug ( int iLevel, bool bSet ) { if ( bSet ) { m_iDebugLevels |= 1<<iLevel; } else { m_iDebugLevels &= ~(1<<iLevel); } }
+	bool isDebugOn ( int iLevel ) { return (m_iDebugLevels & 1<<iLevel)>0; }
 	void clearDebug ( ) { m_iDebugLevels = 0; }
-	bool isDebugging () { return (m_iDebugLevels != 0); }
+	bool isDebugging () { return m_iDebugLevels != 0; }
 
 	inline void setDebugBot ( edict_t *pBot ) { m_pDebugBot = pBot; }	
 	inline bool isDebuggingBot ( edict_t *pBot ) { return m_pDebugBot == pBot; }

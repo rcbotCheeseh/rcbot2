@@ -84,9 +84,9 @@ void CBotConfigFile :: doNextCommand ()
 {
 	char cmd[64] = {0};
 
-	if ( (m_fNextCommandTime < engine->Time()) && (m_iCmd < m_Commands.size()) )
+	if ( m_fNextCommandTime < engine->Time() && m_iCmd < m_Commands.size() )
 	{
-		snprintf(cmd, sizeof(cmd), "%s\n", m_Commands[m_iCmd]);
+		snprintf(cmd, sizeof cmd, "%s\n", m_Commands[m_iCmd]);
 		engine->ServerCommand(cmd);
 
 		CBotGlobals::botMessage(nullptr,0,"Bot Command '%s' executed",m_Commands[m_iCmd]);
@@ -99,9 +99,9 @@ void CBotConfigFile :: executeCommands ()
 {
 	char cmd[64] = {0};
 
-	while ( (m_iCmd < m_Commands.size()) )
+	while ( m_iCmd < m_Commands.size() )
 	{
-		snprintf(cmd, sizeof(cmd), "%s\n", m_Commands[m_iCmd]);
+		snprintf(cmd, sizeof cmd, "%s\n", m_Commands[m_iCmd]);
 		engine->ServerCommand(cmd);
 
 		CBotGlobals::botMessage(nullptr,0,"Bot Command '%s' executed",m_Commands[m_iCmd]);
@@ -113,13 +113,11 @@ void CBotConfigFile :: executeCommands ()
 
 void CRCBotTF2UtilFile :: init()
 {
-	short unsigned int i,j,k;
-
-	for ( i = 0; i < UTIL_TYPE_MAX; i ++ )
+	for ( short unsigned int i = 0; i < UTIL_TYPE_MAX; i ++ )
 	{
-		for ( j = 0; j < BOT_UTIL_MAX; j ++ )
+		for ( short unsigned int j = 0; j < BOT_UTIL_MAX; j ++ )
 		{
-			for ( k = 0; k < 9; k ++ )
+			for ( short unsigned int k = 0; k < 9; k ++ )
 			{
 				m_fUtils[i][j][k].min = 0;
 				m_fUtils[i][j][k].max = 0;
@@ -130,9 +128,7 @@ void CRCBotTF2UtilFile :: init()
 
 void CRCBotTF2UtilFile :: addUtilPerturbation (eBotAction iAction, eTF2UtilType iUtil, float fUtility[9][2])
 {
-	short unsigned int i;
-
-	for ( i = 0; i < 9; i ++ )
+	for ( short unsigned int i = 0; i < 9; i ++ )
 	{
 		m_fUtils[iUtil][iAction][i].min = fUtility[i][0];
 		m_fUtils[iUtil][iAction][i].max = fUtility[i][1];
@@ -141,15 +137,13 @@ void CRCBotTF2UtilFile :: addUtilPerturbation (eBotAction iAction, eTF2UtilType 
 
 void CRCBotTF2UtilFile :: loadConfig()
 {
-	 eTF2UtilType iFile;
-	 char szFullFilename[512];
+	char szFullFilename[512];
 	 char szFilename[64];
 	 char line[256];
-	 FILE *fp;
 
-	 init();
+	init();
 
-	 for ( iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = (eTF2UtilType)((int)iFile+1) )
+	 for ( eTF2UtilType iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = (eTF2UtilType)((int)iFile+1) )
 	 {
 		 if ( iFile == BOT_ATT_UTIL )
 		 {
@@ -161,7 +155,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 		}
 
 		CBotGlobals::buildFileName(szFullFilename,szFilename,BOT_CONFIG_FOLDER);
-		fp = CBotGlobals::openFile(szFullFilename,"r");
+		FILE* fp = CBotGlobals::openFile(szFullFilename, "r");
 
 		if ( fp )
 		{
@@ -184,15 +178,15 @@ void CRCBotTF2UtilFile :: loadConfig()
 					// 
 					
 					if ( sscanf(line,"%[^,],%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\r\n",utiltype,
-						&(iClassList[0][0]),&(iClassList[0][1]),
-						&(iClassList[1][0]),&(iClassList[1][1]),
-						&(iClassList[2][0]),&(iClassList[2][1]),
-						&(iClassList[3][0]),&(iClassList[3][1]),
-						&(iClassList[4][0]),&(iClassList[4][1]),
-						&(iClassList[5][0]),&(iClassList[5][1]),
-						&(iClassList[6][0]),&(iClassList[6][1]),
-						&(iClassList[7][0]),&(iClassList[7][1]),
-						&(iClassList[8][0]),&(iClassList[8][1])) )
+						&iClassList[0][0],&iClassList[0][1],
+						&iClassList[1][0],&iClassList[1][1],
+						&iClassList[2][0],&iClassList[2][1],
+						&iClassList[3][0],&iClassList[3][1],
+						&iClassList[4][0],&iClassList[4][1],
+						&iClassList[5][0],&iClassList[5][1],
+						&iClassList[6][0],&iClassList[6][1],
+						&iClassList[7][0],&iClassList[7][1],
+						&iClassList[8][0],&iClassList[8][1]) )
 					{
 
 						addUtilPerturbation(iUtil,iFile,iClassList);

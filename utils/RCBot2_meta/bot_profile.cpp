@@ -106,7 +106,7 @@ void CBotProfiles :: setupProfiles ()
 	unsigned int iId = 1;
 	bool bDone = false;
 
-	while ( (iId < 999) && (!bDone) )
+	while ( iId < 999 && !bDone )
 	{
 		char filename[512];
 		char szId[4];

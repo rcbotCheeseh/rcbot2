@@ -51,9 +51,7 @@ std::vector<edict_wpt_pair_t> CHalfLifeDeathmatchMod::m_LiftWaypoints;
 void CBotMods :: parseFile ()
 {
 	char buffer[1024];
-	unsigned int len;
 	char key[64];
-	unsigned int i,j;
 	char val[256];
 
 	eModId modtype;
@@ -84,7 +82,7 @@ void CBotMods :: parseFile ()
 		if ( buffer[0] == '#' )
 			continue;
 
-		len = strlen(buffer);
+		unsigned int len = strlen(buffer);
 
 		if ( len == 0 )
 			continue;
@@ -92,10 +90,10 @@ void CBotMods :: parseFile ()
 		if ( buffer[len-1] == '\n' )
 			buffer[--len] = 0;
 
-		i = 0;
-		j = 0;
+		unsigned int i = 0;
+		unsigned int j = 0;
 
-		while ( (i < len) && (buffer[i] != '=') )
+		while ( i < len && buffer[i] != '=' )
 		{
 			if ( buffer[i] != ' ' )
 				key[j++] = buffer[i];
@@ -108,9 +106,9 @@ void CBotMods :: parseFile ()
 
 		j = 0;
 
-		while ( (i < len) && (buffer[i] != '\n') && (buffer[i] != '\r') )
+		while ( i < len && buffer[i] != '\n' && buffer[i] != '\r' )
 		{
-			if ( j || (buffer[i] != ' ') )
+			if ( j || buffer[i] != ' ' )
 				val[j++] = buffer[i];
 			i++;
 		}
@@ -437,7 +435,7 @@ bool CHalfLifeDeathmatchMod :: playerSpawned ( edict_t *pPlayer )
 void CHalfLifeDeathmatchMod :: initMod ()
 {
 
-	CWeapons::loadWeapons((m_szWeaponListName== nullptr)?"HL2DM":m_szWeaponListName, HL2DMWeaps);
+	CWeapons::loadWeapons(m_szWeaponListName== nullptr?"HL2DM":m_szWeaponListName, HL2DMWeaps);
 	
 //	for ( i = 0; i < HL2DM_WEAPON_MAX; i ++ )
 	//	CWeapons::addWeapon(new CWeapon(HL2DMWeaps[i]));//.iSlot,HL2DMWeaps[i].szWeaponName,HL2DMWeaps[i].iId,HL2DMWeaps[i].m_iFlags,HL2DMWeaps[i].m_iAmmoIndex,HL2DMWeaps[i].minPrimDist,HL2DMWeaps[i].maxPrimDist,HL2DMWeaps[i].m_iPreference,HL2DMWeaps[i].m_fProjSpeed));

@@ -66,13 +66,12 @@ CSomNeuron *CSom :: getBMU ( std::vector <float> *inputs )
 {       
 	CSomNeuron *winner = nullptr;
 	float bestdistance = 0;
-	float dist;
 
 	for (auto& m_Neuron : m_Neurons)
 	{       
-		dist = m_Neuron->distance(inputs);
+		float dist = m_Neuron->distance(inputs);
 
-		if ( !winner || (dist < bestdistance) )
+		if ( !winner || dist < bestdistance )
 		{
 			winner = m_Neuron;
 			bestdistance = dist;
@@ -87,13 +86,13 @@ CSomNeuron *CSom :: getBMU ( std::vector <float> *inputs )
 void CSom :: updateAround ( std::vector<float> *inputs, CSomNeuron *bmu )
 {
 	float dist;
-	const float nsiz = (m_fNSize*m_fNSize);
+	const float nsiz = m_fNSize*m_fNSize;
 
 	for (auto current : m_Neurons)
 	{
 		if ( (dist = bmu->neighbourDistance(current)) <= nsiz )
 		{
-			bmu->update(inputs,exp(-(dist) / (2*nsiz)));    
+			bmu->update(inputs,exp(-dist / (2*nsiz)));    
 		}           
 	}
 }
@@ -113,7 +112,7 @@ CSomNeuron *CSom :: inputOne ( std::vector <float> *inputs )
 
 CSomNeuron *CSom :: input ( std::vector < std::vector <float> > *inputs )
 {
-	return inputOne(&((*inputs)[randomInt(0,(int)inputs->size()-1)]));
+	return inputOne(&(*inputs)[randomInt(0,(int)inputs->size()-1)]);
 }
 
 void CSom :: display ()
@@ -130,13 +129,11 @@ void CSom :: display ()
 
 void CSomNeuron :: update ( std::vector<float> *inputs, float inf )
 {
-	float change;
-
 	for ( unsigned int i = 0; i < inputs->size(); i ++ )
 	{
-		change = ((*inputs)[i] - fWeights[i]);
+		float change = (*inputs)[i] - fWeights[i];
 
-		fWeights[i] += (change*CSom::m_fLearnRate*inf);
+		fWeights[i] += change*CSom::m_fLearnRate*inf;
 	}
 }
 
@@ -166,13 +163,12 @@ CSomNeuron :: CSomNeuron ( unsigned short iId, int iInp, int iX, int iY )
 float CSomNeuron :: distance ( std::vector <float> *inputs )
 {
 	float dist = 0;
-	float comp;
-	
+
 	for ( unsigned int i = 0; i < inputs->size(); i ++ )
 	{
-		comp = fWeights[i] - (*inputs)[i];
+		float comp = fWeights[i] - (*inputs)[i];
 		
-		dist += (comp*comp);
+		dist += comp*comp;
 	}
 	
 	return dist;
@@ -196,5 +192,5 @@ float CSomNeuron :: neighbourDistance ( CSomNeuron *other )
 	const float distx = getX()-other->getX();
 	const float disty = getY()-other->getY();
 	
-	return (distx*distx)+(disty*disty);
+	return distx*distx+disty*disty;
 }

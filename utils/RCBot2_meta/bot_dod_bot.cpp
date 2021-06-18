@@ -96,7 +96,7 @@ void CDODBot :: bombEvent ( int iEvent, int iCP, int iTeam )
 CDODBot :: CDODBot()
 {
 	CBot();
-	init(true);
+	CDODBot::init(true);
 }
 
 void CDODBot :: init (bool bVarInit)
@@ -174,10 +174,10 @@ bool CDODBot::canGotoWaypoint(Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypo
 	return false;
 }
 
-#define UPDATE_VISIBLE_OBJECT(visobj,pent) if ( !visobj.get() || (distanceFrom(pent)<distanceFrom(visobj)) ) { visobj = pent; }
-#define UPDATE_VISIBLE_OBJECT_CONDITION(visobj,pent,condition)  if ( !visobj.get() || (distanceFrom(pent)<distanceFrom(visobj)) ) { if ( condition ) { visobj = pent; }  }
-#define NULLIFY_VISIBLE(visobj,pent,distance)  if ( visobj == pent ) { if ( !bValid || (distanceFrom(visobj)>distance) ) { visobj = NULL; } }
-#define NULLIFY_VISIBLE_CONDITION(visobj,pent,distance,condition) if ( visobj == pent ) { if ( !bValid || (distanceFrom(visobj)>distance) || (condition) ) { visobj = NULL; } }
+#define UPDATE_VISIBLE_OBJECT(visobj,pent) if ( !(visobj).get() || (distanceFrom(pent)<distanceFrom(visobj)) ) { (visobj) = pent; }
+#define UPDATE_VISIBLE_OBJECT_CONDITION(visobj,pent,condition)  if ( !(visobj).get() || (distanceFrom(pent)<distanceFrom(visobj)) ) { if ( condition ) { (visobj) = pent; }  }
+#define NULLIFY_VISIBLE(visobj,pent,distance)  if ( (visobj) == (pent) ) { if ( !bValid || (distanceFrom(visobj)>(distance)) ) { (visobj) = NULL; } }
+#define NULLIFY_VISIBLE_CONDITION(visobj,pent,distance,condition) if ( (visobj) == (pent) ) { if ( !bValid || (distanceFrom(visobj)>(distance)) || (condition) ) { (visobj) = NULL; } }
 
 bool CDODBot :: setVisible ( edict_t *pEntity, bool bVisible )
 {
@@ -631,7 +631,6 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 void CDODBot :: seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *pWeapon )
 {
 	static CWaypoint *pWpt;
-	static CBotWeapon *pCurrentWeapon;
 
 	if ( (pDied != m_pEdict) && pTeamMate && !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && (CClassInterface::getTeam(pDied)!=m_iTeam) )
 	{
@@ -639,6 +638,7 @@ void CDODBot :: seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *p
 
 		if ( pWeapon )
 		{
+			static CBotWeapon *pCurrentWeapon;
 			const auto pclass = (DOD_Class)CClassInterface::getPlayerClassDOD(pTeamMate);
 			//DOD_Class pclassdead = (DOD_Class)CClassInterface::getPlayerClassDOD(pDied);
 
@@ -856,9 +856,7 @@ void CDODBot :: handleWeapons ()
 		hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && wantToShoot() && 
 		isVisible(m_pEnemy) && isEnemy(m_pEnemy,true) )
 	{
-		CBotWeapon *pWeapon;
-
-		pWeapon = getCurrentWeapon();
+		CBotWeapon* pWeapon = getCurrentWeapon();
 
 		if ( pWeapon && pWeapon->getWeaponEntity() && !rcbot_melee_only.GetBool() && pWeapon->isDeployable() && !pWeapon->outOfAmmo(this) && CClassInterface::isMachineGunDeployed(pWeapon->getWeaponEntity()))
 		{
@@ -954,28 +952,24 @@ void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 		// Check if current waypoint has a path which is invisible to my next waypoint
 		if ( (iPrevWaypoint != -1) && (iNextWaypoint != -1) && (randomFloat(0,MAX_BELIEF) < m_pNavigator->getBelief(CWaypoints::getWaypointIndex(pWaypoint))) )
 		{
-			
-			int i;
-			int iPath;
 			CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 			WaypointList m_InvisPaths;
-			CWaypoint *pPath;
 			const int iThisWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
 			//CWaypoint *pNextWaypoint = CWaypoints::getWaypoint(iNextWaypoint);
 
 
 			extern IVDebugOverlay *debugoverlay;
 
-			for ( i = 0; i < pWaypoint->numPaths(); i++ )
+			for ( int i = 0; i < pWaypoint->numPaths(); i++ )
 			{
-				iPath = pWaypoint->getPath(i);
+				int iPath = pWaypoint->getPath(i);
 
 				if ( iPath == iNextWaypoint )
 					continue;
 				if ( iPath == iPrevWaypoint )
 					continue;
 
-				pPath = CWaypoints::getWaypoint(iPath);
+				CWaypoint* pPath = CWaypoints::getWaypoint(iPath);
 
 				if ( pPath == pWaypoint )
 					continue;
@@ -1056,13 +1050,10 @@ void CDODBot :: chooseClass ( bool bIsChangingClass )
 {
 	float fClassFitness[6]; // 6 classes
 	float fTotalFitness = 0;
-	float fRandom;
 
 	short int i = 0;
 
 	const int iTeam = getTeam();
-	int iClass;
-	edict_t *pPlayer;
 
 	for ( i = 0; i < 6; i ++ ) 
 		fClassFitness[i] = 1.0f;
@@ -1072,11 +1063,11 @@ void CDODBot :: chooseClass ( bool bIsChangingClass )
 
 	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
-		pPlayer = INDEXENT(i);
+		edict_t* pPlayer = INDEXENT(i);
 		
 		if ( CBotGlobals::entityIsValid(pPlayer) && (CClassInterface::getTeam(pPlayer) == iTeam))
 		{
-			iClass = CClassInterface::getPlayerClassDOD(pPlayer);
+			int iClass = CClassInterface::getPlayerClassDOD(pPlayer);
 
 			if ( (iClass >= 0) && (iClass < 6) )
 				fClassFitness [iClass] *= 0.6f; 
@@ -1086,7 +1077,7 @@ void CDODBot :: chooseClass ( bool bIsChangingClass )
 	for (float fClassFitnes : fClassFitness)
 		fTotalFitness += fClassFitnes;
 
-	fRandom = randomFloat(0,fTotalFitness);
+	float fRandom = randomFloat(0, fTotalFitness);
 
 	fTotalFitness = 0;
 
@@ -1924,13 +1915,9 @@ bool CDODBot :: withinTeammate ( )
 {
 	// check if the bot is right next to a team mate (sometimes bots can't deploy if theyr are next to one already)
 
-	short int i;
-	edict_t *pPlayer;
-	IPlayerInfo *playerinfo;
-
-	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( short int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
-		pPlayer = INDEXENT(i);
+		edict_t* pPlayer = INDEXENT(i);
 
 		// skip me
 		if ( pPlayer == m_pEdict )
@@ -1938,7 +1925,7 @@ bool CDODBot :: withinTeammate ( )
 
 		if ( pPlayer && !pPlayer->IsFree() )
 		{
-			playerinfo = playerinfomanager->GetPlayerInfo(pPlayer);
+			IPlayerInfo* playerinfo = playerinfomanager->GetPlayerInfo(pPlayer);
 
 			if ( playerinfo )
 			{
@@ -1978,21 +1965,14 @@ void CDODBot :: listenForPlayers ()
 	// check for footsteps
 		//m_fNextListenTime = engine->Time() + randomFloat(0.5f,2.0f);
 	edict_t *pListenNearest = nullptr;
-	CClient *pClient;
-	edict_t *pPlayer;
-	IPlayerInfo *p;
-	float fFactor = 0;
 	float fMaxFactor = 0;
-	//float fMinDist = 1024.0f;
-	float fDist;
-	float fVelocity;
 	Vector vVelocity;
 
 	m_bListenPositionValid = false;
 
 	for (short int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
-		pPlayer = INDEXENT(i);
+		edict_t* pPlayer = INDEXENT(i);
 
 		if ( pPlayer == m_pEdict )
 			continue; // don't listen to self
@@ -2001,12 +1981,12 @@ void CDODBot :: listenForPlayers ()
 			continue;
 
 		// get client network info
-		pClient = CClients::get(pPlayer);
+		CClient* pClient = CClients::get(pPlayer);
 
 		if ( !pClient->isUsed() )
 			continue;
 
-		p = playerinfomanager->GetPlayerInfo(pPlayer);
+		IPlayerInfo* p = playerinfomanager->GetPlayerInfo(pPlayer);
 
 		// 05/07/09 fix crash bug
 		if ( !p || !p->IsConnected() || p->IsDead() || p->IsObserver() || !p->IsPlayer() )
@@ -2015,18 +1995,18 @@ void CDODBot :: listenForPlayers ()
 		if ( isVisible(pPlayer) )
 			continue; // only listen to footsteps / don't care about people I can already see
 
-		fDist = distanceFrom(pPlayer);
+		float fDist = distanceFrom(pPlayer);
 
 		if ( fDist > rcbot_listen_dist.GetFloat() )
 			continue;
 
-		fFactor = (rcbot_listen_dist.GetFloat() - fDist);
+		float fFactor = (rcbot_listen_dist.GetFloat() - fDist);
 
 		cmd = p->GetLastUserCommand();
 		
 		CClassInterface::getVelocity(pPlayer,&vVelocity);
 		
-		fVelocity = vVelocity.Length();
+		float fVelocity = vVelocity.Length();
 
 		if (  fVelocity > rcbot_footstep_speed.GetFloat() )
 			fFactor += vVelocity.Length();
@@ -2842,9 +2822,7 @@ bool CDODBot :: handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy )
 
 	if ( pWeapon )
 	{
-		Vector vEnemyOrigin;
-
-		vEnemyOrigin = CBotGlobals::entityOrigin(pEnemy);
+		Vector vEnemyOrigin = CBotGlobals::entityOrigin(pEnemy);
 
 		fDist = distanceFrom(vEnemyOrigin);
 
@@ -3417,9 +3395,8 @@ void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin,
 	static int index;
 	bool bIsEnemyProne;
 	float fEnemyStamina;
-	bool bAddHeadHeight;
 
-	bAddHeadHeight = false;
+	bool bAddHeadHeight = false;
 
 	CBot::modAim(pEntity,v_origin,v_desired_offset,v_size,fDist,fDist2D);
 

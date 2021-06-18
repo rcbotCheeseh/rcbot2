@@ -97,10 +97,6 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 
 
 	MEMORY_BASIC_INFORMATION info;
-	IMAGE_DOS_HEADER *dos;
-	IMAGE_NT_HEADERS *pe;
-	IMAGE_FILE_HEADER *file;
-	IMAGE_OPTIONAL_HEADER *opt;
 
 	if (!VirtualQuery(libPtr, &info, sizeof(MEMORY_BASIC_INFORMATION)))
 	{
@@ -110,10 +106,10 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 	baseAddr = reinterpret_cast<uintptr_t>(info.AllocationBase);
 
 	// All this is for our insane sanity checks :o 
-	dos = reinterpret_cast<IMAGE_DOS_HEADER *>(baseAddr);
-	pe = reinterpret_cast<IMAGE_NT_HEADERS *>(baseAddr + dos->e_lfanew);
-	file = &pe->FileHeader;
-	opt = &pe->OptionalHeader;
+	IMAGE_DOS_HEADER* dos = reinterpret_cast<IMAGE_DOS_HEADER*>(baseAddr);
+	IMAGE_NT_HEADERS* pe = reinterpret_cast<IMAGE_NT_HEADERS*>(baseAddr + dos->e_lfanew);
+	IMAGE_FILE_HEADER* file = &pe->FileHeader;
+	IMAGE_OPTIONAL_HEADER* opt = &pe->OptionalHeader;
 
 	// Check PE magic and signature 
 	if (dos->e_magic != IMAGE_DOS_SIGNATURE || pe->Signature != IMAGE_NT_SIGNATURE || opt->Magic != IMAGE_NT_OPTIONAL_HDR32_MAGIC)
@@ -215,8 +211,6 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 void *CSignatureFunction::findPattern(const void *libPtr, const char *pattern, size_t len)
 {
 	DynLibInfo lib;
-	bool found;
-	char *ptr, *end;
 
 	memset(&lib, 0, sizeof(DynLibInfo));
 
@@ -225,12 +219,12 @@ void *CSignatureFunction::findPattern(const void *libPtr, const char *pattern, s
 		return nullptr;
 	}
 
-	ptr = static_cast<char *>(lib.baseAddress);
-	end = ptr + lib.memorySize - len;
+	char* ptr = static_cast<char*>(lib.baseAddress);
+	char* end = ptr + lib.memorySize - len;
 
 	while (ptr < end)
 	{
-		found = true;
+		bool found = true;
 		for (size_t i = 0; i < len; i++)
 		{
 			if (pattern[i] != '\x2A' && pattern[i] != ptr[i])
@@ -254,9 +248,7 @@ void *CSignatureFunction::findSignature(void *addrInBase, const char *signature)
 	// First, preprocess the signature 
 	unsigned char real_sig[511];
 
-	size_t real_bytes;
-
-	real_bytes = decodeHexString(real_sig, sizeof(real_sig), signature);
+	size_t real_bytes = decodeHexString(real_sig, sizeof real_sig, signature);
 
 	if (real_bytes >= 1)
 	{

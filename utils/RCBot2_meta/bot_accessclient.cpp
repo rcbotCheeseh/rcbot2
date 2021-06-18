@@ -77,9 +77,6 @@ void CAccessClient :: giveAccessToClient ( CClient *pClient )
 
 void CAccessClients :: showUsers ( edict_t *pEntity )
 {
-	CAccessClient *pPlayer;
-	CClient *pClient;
-
 	CBotGlobals::botMessage(pEntity,0,"showing users...");
 
 	if ( m_Clients.empty() )
@@ -87,9 +84,9 @@ void CAccessClients :: showUsers ( edict_t *pEntity )
 
 	for ( unsigned int i = 0; i < m_Clients.size(); i ++ )
 	{
-		pPlayer = m_Clients[i];
+		CAccessClient* pPlayer = m_Clients[i];
 		
-		pClient = CClients::findClientBySteamID(pPlayer->getSteamID());
+		CClient* pClient = CClients::findClientBySteamID(pPlayer->getSteamID());
 		
 		if ( pClient )
 			CBotGlobals::botMessage(pEntity,0,"[ID: %s]/[AL: %d] (currently playing as : %s)\n",pPlayer->getSteamID(),pPlayer->getAccessLevel(),pClient->getName());
@@ -152,11 +149,6 @@ void CAccessClients :: load ()
 		char buffer[256];
 
 		char szSteamId[32];
-		int iAccess;
-
-		int i;
-		int len;
-		int n;
 
 		int iLine = 0;
 
@@ -175,24 +167,24 @@ void CAccessClients :: load ()
 			if ( buffer[0] == '#' )
 				continue;
 
-			len = strlen(buffer);
+			int len = strlen(buffer);
 
-			i = 0;
+			int i = 0;
 
-			while (( i < len ) && ((buffer[i] == '\"') || (buffer[i] == ' ')))
+			while (i < len && (buffer[i] == '\"' || buffer[i] == ' '))
 				i++;
 
-			n = 0;
+			int n = 0;
 
 			// parse Steam ID
-			while ( (n<31) && (i < len) && (buffer[i] != '\"') )			
+			while ( n<31 && i < len && buffer[i] != '\"' )			
 				szSteamId[n++] = buffer[i++];
 
 			szSteamId[n] = 0;
 
 			i++;
 
-			while (( i < len ) && (buffer[i] == ' '))
+			while (i < len && buffer[i] == ' ')
 				i++;
 
 			if ( i == len )
@@ -201,10 +193,10 @@ void CAccessClients :: load ()
 				continue; // invalid
 			}
 
-			iAccess = atoi(&buffer[i]);
+			int iAccess = atoi(&buffer[i]);
 
 			// invalid
-			if ( (szSteamId[0] == 0) || (szSteamId[0] == ' ' ) )
+			if ( szSteamId[0] == 0 || szSteamId[0] == ' ' )
 			{
 				CBotGlobals::botMessage(nullptr,0,"line %d invalid in access client config, steam id invalid",iLine);
 				continue;

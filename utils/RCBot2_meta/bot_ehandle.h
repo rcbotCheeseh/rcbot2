@@ -60,7 +60,7 @@ public:
 	{
 		if ( m_iSerialNumber && m_pEnt )
 		{
-			if ( !m_pEnt->IsFree() && (m_iSerialNumber == m_pEnt->m_NetworkSerialNumber) )
+			if ( !m_pEnt->IsFree() && m_iSerialNumber == m_pEnt->m_NetworkSerialNumber )
 				return m_pEnt;
 		}
 		else if ( m_pEnt )
@@ -78,7 +78,7 @@ public:
 	{ // same as get function (inlined for speed)
 		if ( m_iSerialNumber && m_pEnt )
 		{
-			if ( !m_pEnt->IsFree() && (m_iSerialNumber == m_pEnt->m_NetworkSerialNumber) )
+			if ( !m_pEnt->IsFree() && m_iSerialNumber == m_pEnt->m_NetworkSerialNumber )
 				return m_pEnt;
 		}
 		else if ( m_pEnt )
@@ -89,17 +89,17 @@ public:
 
 	inline bool operator == ( int a )
 	{
-		return ((int)get() == a);
+		return (int)get() == a;
 	}
 
 	inline bool operator == ( edict_t *pent )
 	{
-		return (get() == pent);
+		return get() == pent;
 	}
 
 	inline bool operator == ( MyEHandle &other )
 	{
-		return (get() == other.get());
+		return get() == other.get();
 	}
 
 	inline edict_t * operator = ( edict_t *pent )

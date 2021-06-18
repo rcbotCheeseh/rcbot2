@@ -301,9 +301,9 @@ void CPlayerDeathEvent :: execute ( IBotEventInterface *pEvent )
 	CBotSquad *pPrevSquadLeadersSquad = nullptr;
 	const int iAttacker = pEvent->getInt("attacker",0);
 
-		edict_t *pAttacker = (iAttacker>0)?CBotGlobals::playerByUserId(iAttacker): nullptr;
+		edict_t *pAttacker = iAttacker>0?CBotGlobals::playerByUserId(iAttacker): nullptr;
 	
-		if ( pAttacker && ((CBotGlobals::entityOrigin(pAttacker)-CBotGlobals::entityOrigin(m_pActivator)).Length()>512.0f) )
+		if ( pAttacker && (CBotGlobals::entityOrigin(pAttacker)-CBotGlobals::entityOrigin(m_pActivator)).Length()>512.0f )
 		{
 			// killer
 			CClient *pClient = CClients::get(pAttacker);
@@ -444,7 +444,7 @@ void CTF2ObjectSapped :: execute ( IBotEventInterface *pEvent )
 	int building = pEvent->getInt("object",-1);
 	const int sapperid = pEvent->getInt("sapperid",-1);
 
-	if ( m_pActivator && (owner>=0) && (building>=0) && (sapperid>=0) )
+	if ( m_pActivator && owner>=0 && building>=0 && sapperid>=0 )
 	{
 		edict_t *pSpy = m_pActivator;
 		edict_t *pOwner = CBotGlobals::playerByUserId(owner);
@@ -516,7 +516,7 @@ void CPlayerHealed ::execute(IBotEventInterface *pEvent)
 	const int healer = pEvent->getInt("healer",-1);
 	const int amount = pEvent->getFloat("amount",0);
 
-	if ( (healer != -1) && ( patient != -1 ) && (healer != patient) )
+	if ( healer != -1 && patient != -1 && healer != patient )
 	{
 		m_pActivator = CBotGlobals::playerByUserId(patient);
 
@@ -565,7 +565,7 @@ void CTF2ObjectDestroyed :: execute ( IBotEventInterface *pEvent )
 	{
 		edict_t *pAttacker = CBotGlobals::playerByUserId(iAttacker);
 
-		if ( pAttacker && m_pActivator && (type>=0) && (index>=0) && (was_building>=0) )
+		if ( pAttacker && m_pActivator && type>=0 && index>=0 && was_building>=0 )
 		{
 			//if ( !was_building )
 			//{ // could be a sapper
@@ -627,7 +627,7 @@ void CTF2UpgradeObjectEvent :: execute ( IBotEventInterface *pEvent )
 	if ( bot_use_vc_commands.GetBool() && randomInt(0,1) )
 	{
 		const auto object = (eEngiBuild)pEvent->getInt("object",0);
-		const bool isbuilder = (pEvent->getInt("isbuilder")>0);
+		const bool isbuilder = pEvent->getInt("isbuilder")>0;
 		const short index = pEvent->getInt("index");
 	
 		if ( !isbuilder )
@@ -805,7 +805,7 @@ void CTF2PointStartTouch :: execute ( IBotEventInterface *pEvent )
 
 	edict_t *pPlayer = INDEXENT(iplayerIndex);
 
-	if ( (capindex >= 0) && (CTeamFortress2Mod::m_ObjectiveResource.GetNumControlPoints() > 0) && 
+	if ( capindex >= 0 && CTeamFortress2Mod::m_ObjectiveResource.GetNumControlPoints() > 0 && 
 		CTeamFortress2Mod::m_ObjectiveResource.GetOwningTeam(capindex) == CClassInterface::getTeam(pPlayer) )
 	{
 		CTeamFortress2Mod::addCapDefender(pPlayer,capindex);
@@ -820,7 +820,7 @@ void CTF2PointEndTouch :: execute ( IBotEventInterface *pEvent )
 
 	edict_t *pPlayer = INDEXENT(iplayerIndex);
 
-	if ( (capindex >= 0) && (CTeamFortress2Mod::m_ObjectiveResource.GetNumControlPoints() > 0) && 
+	if ( capindex >= 0 && CTeamFortress2Mod::m_ObjectiveResource.GetNumControlPoints() > 0 && 
 		CTeamFortress2Mod::m_ObjectiveResource.GetOwningTeam(capindex) == CClassInterface::getTeam(pPlayer) )
 	{
 		CTeamFortress2Mod::removeCapDefender(pPlayer,capindex);
@@ -925,9 +925,7 @@ void CFlagEvent :: execute ( IBotEventInterface *pEvent )
 
 			if ( CTeamFortress2Mod::isFlagAtDefaultState() )
 			{
-				CClient *pClient;
-
-				pClient = CClients::get(pPlayer);
+				CClient* pClient = CClients::get(pPlayer);
 
 				if ( pClient && pClient->autoWaypointOn() )
 					pClient->autoEventWaypoint(CWaypointTypes::W_FL_FLAG,200.0f,false);
@@ -941,11 +939,9 @@ void CFlagEvent :: execute ( IBotEventInterface *pEvent )
 		break;
 	case FLAG_CAPTURED: // captured
 		{
-			IPlayerInfo *p = nullptr;
-			
 			if( pPlayer )
 			{
-				p = playerinfomanager->GetPlayerInfo(pPlayer);
+				IPlayerInfo* p = playerinfomanager->GetPlayerInfo(pPlayer);
 
 				if ( p )
 				{
@@ -965,9 +961,7 @@ void CFlagEvent :: execute ( IBotEventInterface *pEvent )
 				const int iTeam = CTeamFortress2Mod::getTeam(pPlayer);
 				CTeamFortress2Mod::flagDropped(iTeam,Vector(0,0,0));
 
-				CClient *pClient;
-
-				pClient = CClients::get(pPlayer);
+				CClient* pClient = CClients::get(pPlayer);
 
 				if ( pClient && pClient->autoWaypointOn() )
 					pClient->autoEventWaypoint(CWaypointTypes::W_FL_CAPPOINT,200.0f,false);
@@ -1025,7 +1019,6 @@ void CDODPointCaptured :: execute ( IBotEventInterface *pEvent )
 {
 	const int cp = pEvent->getInt("cp");
 	const char *szCappers = pEvent->getString("cappers", nullptr);
-	edict_t *pPlayer;
 
 	// get a capper
 	const int userid = szCappers[0];
@@ -1033,9 +1026,9 @@ void CDODPointCaptured :: execute ( IBotEventInterface *pEvent )
 	int team = 0;
 
 	// find the team - should be a player index
-	if ( (userid >= 0) && (userid <= gpGlobals->maxClients) )
+	if ( userid >= 0 && userid <= gpGlobals->maxClients )
 	{
-		pPlayer = INDEXENT(userid);
+		edict_t* pPlayer = INDEXENT(userid);
 		team = CClassInterface::getTeam(pPlayer);
 
 		CClient *pClient = CClients::get(pPlayer);
@@ -1171,7 +1164,7 @@ void CBotEvent :: setType ( char *szType )
 
 bool CBotEvent :: forCurrentMod ()
 {
-	return ((m_iModId == MOD_ANY) || (CBotGlobals::isMod(m_iModId)));
+	return m_iModId == MOD_ANY || CBotGlobals::isMod(m_iModId);
 }
 // should we execute this ??
 inline bool CBotEvent :: isType ( const char *szType )
@@ -1272,9 +1265,7 @@ void CBotEvents :: freeMemory ()
 
 void CBotEvents :: executeEvent( void *pEvent, eBotEventType iType )
 {
-	CBotEvent *pFound;
-	int iEventId = -1; 
-	bool bFound;
+	int iEventId = -1;
 
 	IBotEventInterface *pInterface = nullptr;
 
@@ -1291,13 +1282,13 @@ void CBotEvents :: executeEvent( void *pEvent, eBotEventType iType )
 
 	for (unsigned short int i = 0; i < m_theEvents.size(); i ++ )
 	{
-		pFound = m_theEvents[i];
+		CBotEvent* pFound = m_theEvents[i];
 
 		// if it has an pEvent id stored just check that
 		//if ( ( iType != TYPE_IGAMEEVENT ) && pFound->hasEventId() )
 		//	bFound = pFound->isEventId(iEventId);
 		//else
-		bFound = pFound->forCurrentMod() && pFound->isType(pInterface->getName());
+		bool bFound = pFound->forCurrentMod() && pFound->isType(pInterface->getName());
 
 		if ( bFound )	
 		{
@@ -1305,7 +1296,7 @@ void CBotEvents :: executeEvent( void *pEvent, eBotEventType iType )
 			// set pEvent id for quick checking
 			pFound->setEventId(iEventId);
 
-			pFound->setActivator((userid>=0)?CBotGlobals::playerByUserId(userid): nullptr);
+			pFound->setActivator(userid>=0?CBotGlobals::playerByUserId(userid): nullptr);
 
 			pFound->execute(pInterface);
 

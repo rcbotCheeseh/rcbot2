@@ -193,8 +193,6 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 	case BOT_UTIL_HL2DM_USE_CRATE:
 		// check if it is worth it first
 		{
-			const char *szModel;
-			char type;
 			CBotWeapon *pWeapon = nullptr;
 
 			/*
@@ -207,8 +205,8 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 			models/items/ammocrate_smg1.mdl
 			*/
 
-			szModel = m_pAmmoCrate.get()->GetIServerEntity()->GetModelName().ToCStr();
-			type = szModel[23];
+			const char* szModel = m_pAmmoCrate.get()->GetIServerEntity()->GetModelName().ToCStr();
+			char type = szModel[23];
 
 			if ( type == 'a' ) // ar2
 			{
@@ -337,10 +335,10 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 			{
 				auto*snipe = new CBotSchedule();
 				CBotTask *findpath = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
-				CBotTask *snipetask;
 
 				// use DOD task
-				snipetask = new CBotHL2DMSnipe(m_pWeapons->getWeapon(CWeapons::getWeapon(HL2DM_WEAPON_CROSSBOW)),pWaypoint->getOrigin(),pWaypoint->getAimYaw(),false,0);
+				CBotTask* snipetask = new CBotHL2DMSnipe(m_pWeapons->getWeapon(CWeapons::getWeapon(HL2DM_WEAPON_CROSSBOW)),
+				                                         pWaypoint->getOrigin(), pWaypoint->getAimYaw(), false, 0);
 
 				findpath->setCompleteInterrupt(CONDITION_PUSH);
 				snipetask->setCompleteInterrupt(CONDITION_PUSH);
@@ -683,9 +681,8 @@ void CHLDMBot :: handleWeapons ()
 		hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && wantToShoot() && 
 		isVisible(m_pEnemy) && isEnemy(m_pEnemy) )
 	{
-		CBotWeapon *pWeapon;
-
-		pWeapon = getBestWeapon(m_pEnemy,true,true,(m_pEnemy==m_NearestBreakable)&&!rcbot_melee_only.GetBool());
+		CBotWeapon* pWeapon = getBestWeapon(m_pEnemy, true, true,
+		                                    (m_pEnemy == m_NearestBreakable) && !rcbot_melee_only.GetBool());
 
 		if ( m_bWantToChangeWeapon && (pWeapon != nullptr) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex() )
 		{
@@ -708,7 +705,6 @@ void CHLDMBot :: handleWeapons ()
 bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 {
 	static float fDist;
-	const char *szClassname;
 
 	const bool bValid = CBot::setVisible(pEntity,bVisible);
 
@@ -717,7 +713,7 @@ bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 	// if no draw effect it is invisible
 	if ( bValid && bVisible && !(CClassInterface::getEffects(pEntity)&EF_NODRAW) ) 
 	{
-		szClassname = pEntity->GetClassName();
+		const char* szClassname = pEntity->GetClassName();
 
 		if ( ( strncmp(szClassname,"item_ammo",9)==0 ) && 
 			( !m_pAmmoKit.get() || (fDist<distanceFrom(m_pAmmoKit.get())) ))

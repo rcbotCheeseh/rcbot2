@@ -12,7 +12,7 @@ bool CBotZombie :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 	if ( pEdict == m_pEdict )
 		return false;
 
-	if ( !ENTINDEX(pEdict) || (ENTINDEX(pEdict) > CBotGlobals::maxClients()) )
+	if ( !ENTINDEX(pEdict) || ENTINDEX(pEdict) > CBotGlobals::maxClients() )
 		return false;
 
 	if ( CBotGlobals::getTeamplayOn() )

@@ -126,8 +126,7 @@ class dataStack
 
 		bool RemoveByPointer ( const T *pObj )
 		{
-			dataNode<T> *tempNode = m_Head;			
-			dataNode<T> *deleteNode;
+			dataNode<T> *tempNode = m_Head;
 
 			if ( m_Head == nullptr )
 				return false;
@@ -145,7 +144,7 @@ class dataStack
 			{
 				if ( &tempNode->m_Next->m_NodeData == pObj )
 				{
-					deleteNode = tempNode->m_Next;
+					dataNode<T>* deleteNode = tempNode->m_Next;
 
 					tempNode->m_Next = tempNode->m_Next->m_Next;
 
@@ -166,8 +165,7 @@ class dataStack
 
 		bool Remove ( const T pObj )
 		{
-			dataNode<T> *tempNode = m_Head;			
-			dataNode<T> *deleteNode;
+			dataNode<T> *tempNode = m_Head;
 
 			if ( m_Head == nullptr )
 				return false;
@@ -185,7 +183,7 @@ class dataStack
 			{
 				if ( tempNode->m_Next->m_NodeData == pObj )
 				{
-					deleteNode = tempNode->m_Next;
+					dataNode<T>* deleteNode = tempNode->m_Next;
 
 					tempNode->m_Next = tempNode->m_Next->m_Next;
 
@@ -205,11 +203,9 @@ class dataStack
 
 		void Destroy ( void )
 		{
-			dataNode<T> *tempNode;
-
 			while ( m_Head )
 			{
-				tempNode = m_Head;
+				dataNode<T>* tempNode = m_Head;
 
 				m_Head = m_Head->m_Next;
 
@@ -224,7 +220,7 @@ class dataStack
 
 		inline bool IsEmpty ( void )
 		{
-			return ( m_Head == nullptr );
+			return m_Head == nullptr;
 		}
 
 		void Push ( const T pObj )
@@ -736,7 +732,7 @@ class dataUnconstArray
 
 		T *ReturnPointerFromIndex ( int iIndex )
 		{
-			return &(array[iIndex]);
+			return &array[iIndex];
 		}
 
 		bool IsMember ( T Obj )
@@ -801,7 +797,7 @@ class dataQueue
 
 		inline bool IsEmpty ( void )
 		{
-			return (( m_Head == nullptr )||(m_Tail == nullptr));
+			return m_Head == nullptr||m_Tail == nullptr;
 		}
 
 		void AddFront ( const T &pObj )
@@ -903,8 +899,6 @@ class dataQueue
 
 		void RemoveFront ( void )
 		{
-			dataNode<T> *tempNode = m_Head;
-
 			if ( m_Head == nullptr )
 			{
 				// just set tail to null incase
@@ -915,7 +909,7 @@ class dataQueue
 			
 			try
 			{				
-				tempNode = m_Head;
+				dataNode<T>* tempNode = m_Head;
 				
 				if ( m_Tail == m_Head )
 				{
@@ -961,8 +955,7 @@ class dataQueue
 
 		bool Remove ( const T pObj )
 		{
-			dataNode<T> *tempNode = m_Head;			
-			dataNode<T> *deleteNode = nullptr;
+			dataNode<T> *tempNode = m_Head;
 
 			if ( m_Head == nullptr )
 				return false;
@@ -991,7 +984,7 @@ class dataQueue
 			{
 				if ( tempNode->m_Next->m_NodeData == pObj )
 				{
-					deleteNode = tempNode->m_Next;
+					dataNode<T>* deleteNode = tempNode->m_Next;
 
 					if ( deleteNode == m_Tail )
 					{
@@ -1017,8 +1010,7 @@ class dataQueue
 
 		bool RemoveByPointer ( const T *pObj )
 		{
-			dataNode<T> *tempNode = m_Head;			
-			dataNode<T> *deleteNode = nullptr;
+			dataNode<T> *tempNode = m_Head;
 
 			if ( m_Head == nullptr )
 				return false;
@@ -1045,7 +1037,7 @@ class dataQueue
 			{
 				if ( &tempNode->m_Next->m_NodeData == pObj )
 				{
-					deleteNode = tempNode->m_Next;
+					dataNode<T>* deleteNode = tempNode->m_Next;
 
 					if ( deleteNode == m_Tail )
 					{

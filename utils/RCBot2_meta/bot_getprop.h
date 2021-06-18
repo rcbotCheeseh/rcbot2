@@ -196,7 +196,7 @@ public:
 		
 		try
 		{
-			return *((bool*)m_data); 
+			return *(bool*)m_data; 
 		}
 
 		catch(...)
@@ -212,7 +212,7 @@ public:
 		if ( !m_data ) 
 			return nullptr; 
 
-		return ((bool*)m_data); 
+		return (bool*)m_data; 
 	}
 
 	inline void *getVoidPointer ( edict_t *edict ) 
@@ -232,7 +232,7 @@ public:
 		if ( !m_data ) 
 			return defaultvalue; 
 		
-		return *((float*)m_data); 
+		return *(float*)m_data; 
 	}
 
 	inline float *getFloatPointer ( edict_t *edict ) 
@@ -242,7 +242,7 @@ public:
 		if ( !m_data ) 
 			return nullptr; 
 		
-		return ((float*)m_data); 
+		return (float*)m_data; 
 	}
 
 	inline char *getString (edict_t *edict ) 
@@ -290,7 +290,7 @@ public:
 
 		try
 		{
-			return *((int*)m_data);
+			return *(int*)m_data;
 		}
 
 		catch ( ... )
@@ -320,7 +320,7 @@ public:
 		if ( !m_data ) 
 			return defaultvalue; 
 
-		return (float)(*(int *)m_data);
+		return (float)*(int *)m_data;
 	}
 
 	static void resetError () { m_berror = false; }
@@ -447,9 +447,9 @@ public:
 	inline static edict_t *getMedigunTarget ( edict_t *edict ) { return g_GetProps[GETPROP_TF2MEDIGUN_TARGETTING].getEntity(edict); }
 	inline static edict_t *getSentryEnemy ( edict_t *edict ) { return g_GetProps[GETPROP_SENTRY_ENEMY].getEntity(edict); }
 	inline static edict_t *getOwner ( edict_t *edict ) { return g_GetProps[GETPROP_ALL_ENTOWNER].getEntity(edict); }
-	inline static bool isMedigunTargetting ( edict_t *pgun, edict_t *ptarget) { return (g_GetProps[GETPROP_TF2MEDIGUN_TARGETTING].getEntity(pgun) == ptarget); }
+	inline static bool isMedigunTargetting ( edict_t *pgun, edict_t *ptarget) { return g_GetProps[GETPROP_TF2MEDIGUN_TARGETTING].getEntity(pgun) == ptarget; }
 	//static void setTickBase ( edict_t *edict, int tickbase ) { return ;
-	inline static int isTeleporterMode (edict_t *edict, eTeleMode mode ) { return (g_GetProps[GETPROP_TF2TELEPORTERMODE].getInt(edict,-1) == (int)mode); }
+	inline static int isTeleporterMode (edict_t *edict, eTeleMode mode ) { return g_GetProps[GETPROP_TF2TELEPORTERMODE].getInt(edict,-1) == (int)mode; }
 	inline static edict_t *getCurrentWeapon (edict_t *player) { return g_GetProps[GETPROP_CURRENTWEAPON].getEntity(player); }
 	inline static int getUberChargeLevel (edict_t *pWeapon) { return (int)(g_GetProps[GETPROP_TF2UBERCHARGE_LEVEL].getFloat(pWeapon,0)*100.0); }
 	//static void test ();
@@ -564,27 +564,27 @@ public:
 
 	inline static bool isMoveType ( edict_t *pent, int movetype )
 	{
-		return ((g_GetProps[GETPROP_MOVETYPE].getInt(pent,0) & 15) == movetype);
+		return (g_GetProps[GETPROP_MOVETYPE].getInt(pent,0) & 15) == movetype;
 	}
 
 	inline static byte getTakeDamage ( edict_t *pent )
 	{
-		return (byte)(g_GetProps[GETPROP_TAKEDAMAGE].getInt(pent,0));
+		return (byte)g_GetProps[GETPROP_TAKEDAMAGE].getInt(pent,0);
 	}
 
 	inline static byte *getTakeDamagePointer ( edict_t *pent )
 	{
-		return (g_GetProps[GETPROP_TAKEDAMAGE].getBytePointer(pent));
+		return g_GetProps[GETPROP_TAKEDAMAGE].getBytePointer(pent);
 	}
 
 	inline static int getMoveType ( edict_t *pent )
 	{
-		return (g_GetProps[GETPROP_MOVETYPE].getInt(pent,0) & 15);
+		return g_GetProps[GETPROP_MOVETYPE].getInt(pent,0) & 15;
 	}
 
 	inline static byte *getMoveTypePointer ( edict_t *pent )
 	{
-		return (g_GetProps[GETPROP_MOVETYPE].getBytePointer(pent));
+		return g_GetProps[GETPROP_MOVETYPE].getBytePointer(pent);
 	}
 
 	inline static edict_t *getGrenadeThrower ( edict_t *gren )
@@ -596,21 +596,21 @@ public:
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_SCORE].getIntPointer(resource);
 
-		return (score_array!= nullptr) ? score_array[ENTINDEX(pPlayer)] : 0;
+		return score_array!= nullptr ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
 	inline static int getPlayerObjectiveScoreDOD ( edict_t *resource, edict_t *pPlayer )
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_OBJSCORE].getIntPointer(resource);
 
-		return (score_array!= nullptr) ? score_array[ENTINDEX(pPlayer)] : 0;
+		return score_array!= nullptr ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
 	inline static int getPlayerDeathsDOD ( edict_t *resource, edict_t *pPlayer )
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_DEATHS].getIntPointer(resource);
 
-		return (score_array!= nullptr) ? score_array[ENTINDEX(pPlayer)] : 0;
+		return score_array!= nullptr ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
 	inline static float getSmokeSpawnTime ( edict_t *pSmoke )

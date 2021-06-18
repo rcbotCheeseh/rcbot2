@@ -82,15 +82,14 @@ ga_nn_value CPopulation :: totalFitness ()
 
 ga_nn_value CPopulation :: bestFitness ()
 {
-	float fFitness = 0.0f;
 	BOOL gotBestFitness = FALSE;
 	float fBestFitness = 0.0f;
 
 	for ( unsigned int i = 0; i < size(); i ++ )
 	{
-		fFitness = m_theIndividuals[i]->getFitness();
+		float fFitness = m_theIndividuals[i]->getFitness();
 
-		if ( !gotBestFitness || (fFitness > fBestFitness) )
+		if ( !gotBestFitness || fFitness > fBestFitness )
 		{
 			fBestFitness = fFitness;
 			gotBestFitness = TRUE;
@@ -190,7 +189,7 @@ void CGA :: freeGlobalMemory ()
 
 bool CGA :: canPick ()
 {
-	return (m_theNewPopulation.size() > 0);
+	return m_theNewPopulation.size() > 0;
 }
 
 IIndividual *CGA :: pick ()

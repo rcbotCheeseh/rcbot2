@@ -98,7 +98,7 @@ eDODVoiceCommand_t g_DODVoiceCommands[DOD_VC_INVALID] =
 // Returns true if team can go to waypoint
 bool CDODMod :: checkWaypointForTeam(CWaypoint *pWpt, int iTeam)
 {
-	return (!pWpt->hasFlag(CWaypointTypes::W_FL_NOALLIES)||(iTeam!=TEAM_ALLIES))&&(!pWpt->hasFlag(CWaypointTypes::W_FL_NOAXIS)||(iTeam!=TEAM_AXIS));
+	return (!pWpt->hasFlag(CWaypointTypes::W_FL_NOALLIES)||iTeam!=TEAM_ALLIES)&&(!pWpt->hasFlag(CWaypointTypes::W_FL_NOAXIS)||iTeam!=TEAM_AXIS);
 }
 
 bool CDODMod :: shouldAttack ( int iTeam )
@@ -111,8 +111,8 @@ bool CDODMod :: shouldAttack ( int iTeam )
 
 	iNumFlags = m_Flags.getNumFlags();
 
-	iFlags_0 = (int) (((float)m_Flags.getNumFlagsOwned(iTeam == TEAM_ALLIES ? TEAM_AXIS : TEAM_ALLIES) / iNumFlags)*MAX_DOD_FLAGS);
-	iFlags_1 = (int) (((float)m_Flags.getNumFlagsOwned(iTeam) / iNumFlags)*MAX_DOD_FLAGS);
+	iFlags_0 = (int) ((float)m_Flags.getNumFlagsOwned(iTeam == TEAM_ALLIES ? TEAM_AXIS : TEAM_ALLIES) / iNumFlags*MAX_DOD_FLAGS);
+	iFlags_1 = (int) ((float)m_Flags.getNumFlagsOwned(iTeam) / iNumFlags*MAX_DOD_FLAGS);
 
 	return randomFloat(0.0,1.0) < fAttackProbLookUp[iFlags_0][iFlags_1];//gNetAttackOrDefend->getOutput();
 }
@@ -157,9 +157,9 @@ void CDODMod :: initMod ()
 		{
 			tset->init();
 			tset->addSet();
-			tset->in(((float)i) / MAX_DOD_FLAGS);
-			tset->in(((float)j) / MAX_DOD_FLAGS);
-			nn->execute(tset->getBatches()->in,&(fAttackProbLookUp[i][j]),0.0f,1.0f);
+			tset->in((float)i / MAX_DOD_FLAGS);
+			tset->in((float)j / MAX_DOD_FLAGS);
+			nn->execute(tset->getBatches()->in,&fAttackProbLookUp[i][j],0.0f,1.0f);
 		}
 	}
 
@@ -170,7 +170,7 @@ void CDODMod :: initMod ()
 	CBotGlobals::botMessage(nullptr,0,"... done!");
 ///-------------------------------------------------
 
-	CWeapons::loadWeapons((m_szWeaponListName == nullptr) ? "DOD" : m_szWeaponListName, DODWeaps);
+	CWeapons::loadWeapons(m_szWeaponListName == nullptr ? "DOD" : m_szWeaponListName, DODWeaps);
 	//CWeapons::loadWeapons("DOD", DODWeaps);
 	/*
 	for ( i = 0; i < DOD_WEAPON_MAX; i ++ )
@@ -207,17 +207,14 @@ int CDODMod::getHighestScore ()
 		return 0;
 
 	int highest = 0;
-	int score;
-	short int i = 0;
-	edict_t *edict;
 
-	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( short int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
-		edict = INDEXENT(i);
+		edict_t* edict = INDEXENT(i);
 
 		if ( edict && CBotGlobals::entityIsValid(edict) )
 		{
-			score = (short int)getScore(edict);
+			int score = (short int)getScore(edict);
 		
 			if ( score > highest )
 			{
@@ -239,14 +236,9 @@ bool CDODFlags::isTeamMateDefusing ( edict_t *pIgnore, int iTeam, int id )
 
 bool CDODFlags::isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin )
 {
-	int i;
-	edict_t *pPlayer;
-	IPlayerInfo *pPlayerinfo;
-	CBotCmd cmd;
-
-	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
-		pPlayer = INDEXENT(i);
+		edict_t* pPlayer = INDEXENT(i);
 
 		if ( pIgnore == pPlayer )
 			continue;
@@ -254,10 +246,10 @@ bool CDODFlags::isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin
 		if ( !CBotGlobals::entityIsValid(pPlayer) )
 			continue;
 
-		pPlayerinfo = playerinfomanager->GetPlayerInfo(pPlayer);
-		cmd = pPlayerinfo->GetLastUserCommand();
+		IPlayerInfo* pPlayerinfo = playerinfomanager->GetPlayerInfo(pPlayer);
+		CBotCmd cmd = pPlayerinfo->GetLastUserCommand();
 
-		if ( CClassInterface::isPlayerDefusingBomb_DOD(pPlayer) || (cmd.buttons & IN_USE) )
+		if ( CClassInterface::isPlayerDefusingBomb_DOD(pPlayer) || cmd.buttons & IN_USE )
 		{
 			if ( CClassInterface::getTeam(pPlayer) != iTeam )
 				continue;
@@ -275,12 +267,9 @@ bool CDODFlags::isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin
 
 bool CDODFlags::isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin )
 {
-	int i;
-	edict_t *pPlayer;
-
-	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
-		pPlayer = INDEXENT(i);
+		edict_t* pPlayer = INDEXENT(i);
 
 		if ( pIgnore == pPlayer )
 			continue;
@@ -336,60 +325,56 @@ int CDODFlags::findNearestObjective ( Vector vOrigin )
 // return the flag with the least danger (randomly)
 bool CDODFlags::getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id )
 {
-	IBotNavigator *pNav;
-	float fTotal;
-	float fRand;
-
 	if ( id )
 		*id = -1;
 
-	pNav = pBot->getNavigator();
+	IBotNavigator* pNav = pBot->getNavigator();
 
-	fTotal = 0.0f;
+	float fTotal = 0.0f;
 
 	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
-			if ( ( m_pFlags[i] == nullptr ) || ( m_iOwner[i] == iTeam ) )
+			if ( m_pFlags[i] == nullptr || m_iOwner[i] == iTeam )
 				continue;
 
-			if ( (iTeam == TEAM_ALLIES) && (m_iAlliesReqCappers[i] == 0) )
+			if ( iTeam == TEAM_ALLIES && m_iAlliesReqCappers[i] == 0 )
 				continue;
 
-			if ( (iTeam == TEAM_AXIS) && (m_iAxisReqCappers[i] == 0) )
+			if ( iTeam == TEAM_AXIS && m_iAxisReqCappers[i] == 0 )
 				continue;
 
 			if ( iTeam == TEAM_ALLIES )
-				fTotal += (((MAX_BELIEF + 1.0f) - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF) * (m_iNumAllies[i]+1);
+				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * (m_iNumAllies[i]+1);
 			else
-				fTotal += (((MAX_BELIEF + 1.0f) - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF) * (m_iNumAxis[i]+1);
+				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * (m_iNumAxis[i]+1);
 		}
 	}
 
 	if ( fTotal == 0.0f )
 		return false;
 
-	fRand = randomFloat(0,fTotal);
+	float fRand = randomFloat(0, fTotal);
 	fTotal = 0.0f;
 
 	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
-			if ( ( m_pFlags[i] == nullptr ) || ( m_iOwner[i] == iTeam ) )
+			if ( m_pFlags[i] == nullptr || m_iOwner[i] == iTeam )
 				continue;
 
-			if ( (iTeam == TEAM_ALLIES) && (m_iAlliesReqCappers[i] == 0) )
+			if ( iTeam == TEAM_ALLIES && m_iAlliesReqCappers[i] == 0 )
 				continue;
 
-			if ( (iTeam == TEAM_AXIS) && (m_iAxisReqCappers[i] == 0) )
+			if ( iTeam == TEAM_AXIS && m_iAxisReqCappers[i] == 0 )
 				continue;
 
 			if ( iTeam == TEAM_ALLIES )
-				fTotal += (((MAX_BELIEF + 1.0f) - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF) * (m_iNumAllies[i]+1);
+				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * (m_iNumAllies[i]+1);
 			else
-				fTotal += (((MAX_BELIEF + 1.0f) - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF) * (m_iNumAxis[i]+1);
+				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * (m_iNumAxis[i]+1);
 		}
 
 		if ( fRand <= fTotal )
@@ -407,8 +392,6 @@ bool CDODFlags::getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int
 bool CDODFlags::getRandomBombToDefuse  ( Vector *position, int iTeam, edict_t **pBombTarget, int *id )
 {
 	std::vector<int> iPossible; // int is control point entry
-	short int j;
-	int selection;
 
 	if ( id )
 		*id = -1;
@@ -416,13 +399,13 @@ bool CDODFlags::getRandomBombToDefuse  ( Vector *position, int iTeam, edict_t **
 	// more possibility to return bomb targets with no bomb already
 	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 	{
-		if ( (m_iOwner[i] == iTeam) && isBombPlanted(i) && !isBombBeingDefused(i) && (m_pBombs[i][0] != nullptr) )
-			for ( j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.push_back(i); }
+		if ( m_iOwner[i] == iTeam && isBombPlanted(i) && !isBombBeingDefused(i) && m_pBombs[i][0] != nullptr )
+			for ( short int j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.push_back(i); }
 	}
 
 	if ( iPossible.size() > 0 )
 	{
-		selection = iPossible[randomInt(0,iPossible.size()-1)];
+		int selection = iPossible[randomInt(0, iPossible.size() - 1)];
 
 		if ( m_pBombs[selection][1] != nullptr )
 		{
@@ -440,15 +423,13 @@ bool CDODFlags::getRandomBombToDefuse  ( Vector *position, int iTeam, edict_t **
 			*id = selection;
 	}
 
-	return (iPossible.size()>0);
+	return iPossible.size()>0;
 }
 
 //return random bomb with highest danger
 bool CDODFlags:: getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id )
 {
 	std::vector<int> iPossible; // int is control point entry
-	short int j;
-	int selection;
 
 	if ( id )
 		*id = -1;
@@ -456,13 +437,13 @@ bool CDODFlags:: getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam
 	// more possibility to return bomb targets with no bomb already
 	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 	{
-		if ( (m_iOwner[i] != iTeam) && isBombPlanted(i) && (m_pBombs[i][0] != nullptr) )
-			for ( j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.push_back(i); }
+		if ( m_iOwner[i] != iTeam && isBombPlanted(i) && m_pBombs[i][0] != nullptr )
+			for ( short int j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.push_back(i); }
 	}
 
 	if ( iPossible.size() > 0 )
 	{
-		selection = iPossible[randomInt(0,iPossible.size()-1)];
+		int selection = iPossible[randomInt(0, iPossible.size() - 1)];
 
 		if ( m_pBombs[selection][1] != nullptr )
 		{
@@ -480,45 +461,37 @@ bool CDODFlags:: getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam
 			*id = selection;
 	}
 
-	return (iPossible.size()>0);
+	return iPossible.size()>0;
 }
 
 // return rnaomd flag with lowest danger
 bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id )
 {
-	float fTotal;
-	float fRand;
-
-	IBotNavigator *pNav;
-
-//	short int j;
-	int selection;
-
 	if ( id )
 		*id = -1;
 
-	selection = -1;
+	int selection = -1;
 
-	pNav = pBot->getNavigator();
+	IBotNavigator* pNav = pBot->getNavigator();
 
-	fTotal = 0.0f;
+	float fTotal = 0.0f;
 
 	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		// if no waypoint -- can't go there
 		if ( m_iWaypoint[i] != -1 )
 		{
-			if ( ( m_pBombs[i][0] == nullptr ) || ( m_iOwner[i] == iTeam ) || isBombPlanted(i) || (m_iBombsRemaining[i] == 0) )
+			if ( m_pBombs[i][0] == nullptr || m_iOwner[i] == iTeam || isBombPlanted(i) || m_iBombsRemaining[i] == 0 )
 				continue;
 
-			fTotal += (((MAX_BELIEF + 1.0f) - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF) * getNumBombsRemaining(i);
+			fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * getNumBombsRemaining(i);
 		}
 	}
 
 	if ( fTotal == 0.0f )
 		return false;
 
-	fRand = randomFloat(0.0f,fTotal);
+	float fRand = randomFloat(0.0f, fTotal);
 
 	fTotal = 0.0f;
 
@@ -526,10 +499,10 @@ bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam,
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
-			if ( ( m_pBombs[i][0] == nullptr ) || ( m_iOwner[i] == iTeam ) || isBombPlanted(i) )
+			if ( m_pBombs[i][0] == nullptr || m_iOwner[i] == iTeam || isBombPlanted(i) )
 				continue;
 
-				fTotal += (((MAX_BELIEF + 1.0f) - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF) * getNumBombsRemaining(i);
+				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * getNumBombsRemaining(i);
 		}
 		else
 			fTotal += 0.1f;
@@ -563,48 +536,44 @@ bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam,
 
 bool CDODFlags::getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id )
 {
-	IBotNavigator *pNav;
-	float fTotal;
-	float fRand;
-
 	if ( id )
 		*id = -1;
 
-	pNav = pBot->getNavigator();
+	IBotNavigator* pNav = pBot->getNavigator();
 
-	fTotal = 0.0f;
+	float fTotal = 0.0f;
 
 	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
-			if ( ( m_pFlags[i] == nullptr ) || ( m_iOwner[i] != iTeam ) )
+			if ( m_pFlags[i] == nullptr || m_iOwner[i] != iTeam )
 				continue;
 
 			if ( iTeam == TEAM_AXIS )
-				fTotal += ((pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2)) * (m_iNumAllies[i]+1);
+				fTotal += (pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2) * (m_iNumAllies[i]+1);
 			else
-				fTotal += ((pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2)) * (m_iNumAxis[i]+1);
+				fTotal += (pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2) * (m_iNumAxis[i]+1);
 		}
 	}
 
 	if ( fTotal == 0.0f )
 		return false;
 
-	fRand = randomFloat(0,fTotal);
+	float fRand = randomFloat(0, fTotal);
 	fTotal = 0.0f;
 
 	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
-			if ( ( m_pFlags[i] == nullptr ) || ( m_iOwner[i] != iTeam ) )
+			if ( m_pFlags[i] == nullptr || m_iOwner[i] != iTeam )
 				continue;
 
 			if ( iTeam == TEAM_AXIS )
-				fTotal += ((pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2)) * (m_iNumAllies[i]+1);
+				fTotal += (pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2) * (m_iNumAllies[i]+1);
 			else
-				fTotal += ((pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2)) * (m_iNumAxis[i]+1);
+				fTotal += (pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2) * (m_iNumAxis[i]+1);
 		}
 
 		if ( fRand <= fTotal )
@@ -648,25 +617,23 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 
 	}
 
-	short int i,j;
-
-//	string_t model;		
+	//	string_t model;		
 //	const char *modelname;
 //	bool bVisible;
 				
 
 	// find the edicts of the flags using the origin and classname
 
-	for ( j = 0; j < m_iNumControlPoints; j ++ )
+	for ( short int j = 0; j < m_iNumControlPoints; j ++ )
 	{
 		edict_t *pent;
 
 		Vector vOrigin;
 
-		i = gpGlobals->maxClients;
+		short int i = gpGlobals->maxClients;
 
 		// find visible flags -- with a model
-		while ( (++i < gpGlobals->maxEntities) &&  (m_pFlags[j] == nullptr ) )
+		while ( ++i < gpGlobals->maxEntities &&  m_pFlags[j] == nullptr )
 		{
 			pent = INDEXENT(i);
 
@@ -709,7 +676,7 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 		// find bombs near flag
 		i = gpGlobals->maxClients;
 
-		while ( (++i < gpGlobals->maxEntities) && ((m_pBombs[j][0]== nullptr)||(m_pBombs[j][1]== nullptr)) )
+		while ( ++i < gpGlobals->maxEntities && (m_pBombs[j][0]== nullptr||m_pBombs[j][1]== nullptr) )
 		{
 			pent = INDEXENT(i);
 
@@ -826,9 +793,6 @@ void CDODMod ::roundStart()
 	//{
 		if ( CClassInterface::FindEntityByNetClass(gpGlobals->maxClients+1,"CDODBombDispenserMapIcon") != nullptr )
 		{
-			CWaypoint *pWaypointAllies;
-			CWaypoint *pWaypointAxis;
-
 			// add bitmask
 			m_iMapType |= DOD_MAPTYPE_BOMB;
 /*
@@ -840,12 +804,12 @@ void CDODMod ::roundStart()
 				CRCBotPlugin::HudTextMessage(CClients::get(0)->getPlayer(),"RCBot detected flag map with bombs ","RCBot2","RCbot2 detected a flag capture map with bombs");
 
 */
-			pWaypointAllies = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_BOMBS_HERE,TEAM_ALLIES);
-			pWaypointAxis = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_BOMBS_HERE,TEAM_AXIS);
+			CWaypoint* pWaypointAllies = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_BOMBS_HERE,TEAM_ALLIES);
+			CWaypoint* pWaypointAxis = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_BOMBS_HERE,TEAM_AXIS);
 
 			if ( pWaypointAllies && pWaypointAxis )
 			{
-				m_bCommunalBombPoint = (pWaypointAllies->getArea()>0) || (pWaypointAxis->getArea()>0);
+				m_bCommunalBombPoint = pWaypointAllies->getArea()>0 || pWaypointAxis->getArea()>0;
 
 				m_iBombAreaAllies = pWaypointAllies->getArea();
 				m_iBombAreaAxis = pWaypointAxis->getArea();
@@ -919,13 +883,11 @@ void CDODMod :: modFrame()
 
 int CDODMod ::numClassOnTeam( int iTeam, int iClass )
 {
-	int i = 0;
 	int num = 0;
-	edict_t *pEdict;
 
-	for ( i = 1; i <= CBotGlobals::numClients(); i ++ )
+	for ( int i = 1; i <= CBotGlobals::numClients(); i ++ )
 	{
-		pEdict = INDEXENT(i);
+		edict_t* pEdict = INDEXENT(i);
 
 		if ( CBotGlobals::entityIsValid(pEdict) )
 		{
@@ -946,11 +908,10 @@ void CDODMod ::clientCommand( edict_t *pEntity, int argc, const char *pcmd, cons
 	{
 		if ( strncmp(pcmd,"voice_",6) == 0 )
 		{
-			short int i;
 			// somebody said a voice command
 			u_VOICECMD vcmd;
 
-			for ( i = 0; i < DOD_VC_INVALID; i ++ )
+			for ( short int i = 0; i < DOD_VC_INVALID; i ++ )
 			{
 				if ( strcmp(&pcmd[6],g_DODVoiceCommands[i].pcmd) == 0 )
 				{

@@ -112,7 +112,7 @@ public:
 
 	eModId getModId ();
 
-	virtual bool isAreaOwnedByTeam (int iArea, int iTeam) { return (iArea == 0); }
+	virtual bool isAreaOwnedByTeam (int iArea, int iTeam) { return iArea == 0; }
 
 	eBotType getBotType () { return m_iBotType; }
 
@@ -287,7 +287,7 @@ public:
 
 	inline float isBombExplodeImminent ( int id )
 	{
-		return (engine->Time() - m_fBombPlantedTime[id]) > DOD_BOMB_EXPLODE_IMMINENT_TIME;
+		return engine->Time() - m_fBombPlantedTime[id] > DOD_BOMB_EXPLODE_IMMINENT_TIME;
 	}
 
 	inline void setBombPlanted ( int id, bool val )
@@ -341,7 +341,7 @@ public:
 		if ( iFlag == -1 )
 			return 0;
 
-		return (iTeam == TEAM_ALLIES) ? (m_iAlliesReqCappers[iFlag]) : (m_iAxisReqCappers[iFlag]);
+		return iTeam == TEAM_ALLIES ? m_iAlliesReqCappers[iFlag] : m_iAxisReqCappers[iFlag];
 	}
 
 	inline bool isBombPlanted ( int iId )
@@ -359,17 +359,17 @@ public:
 
 	inline bool canDefendBomb ( int iTeam, int iId )
 	{
-		return ((m_pBombs[iId][0]!= nullptr)&&(m_iOwner[iId]!=iTeam) && isBombPlanted(iId));
+		return m_pBombs[iId][0]!= nullptr&&m_iOwner[iId]!=iTeam && isBombPlanted(iId);
 	}
 
 	inline bool canDefuseBomb ( int iTeam, int iId )
 	{
-		return ((m_pBombs[iId][0]!= nullptr)&&(m_iOwner[iId]==iTeam) && isBombPlanted(iId));
+		return m_pBombs[iId][0]!= nullptr&&m_iOwner[iId]==iTeam && isBombPlanted(iId);
 	}
 
 	inline bool canPlantBomb ( int iTeam, int iId )
 	{
-		return ((m_pBombs[iId][0]!= nullptr)&&(m_iOwner[iId]!=iTeam) && !isBombPlanted(iId));
+		return m_pBombs[iId][0]!= nullptr&&m_iOwner[iId]!=iTeam && !isBombPlanted(iId);
 	}
 
 	bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, int id );
@@ -426,7 +426,7 @@ public:
 		if ( iFlag == -1 )
 			return 0;
 
-		return (iTeam == TEAM_ALLIES) ? (m_iNumAllies[iFlag]) : (m_iNumAxis[iFlag]);
+		return iTeam == TEAM_ALLIES ? m_iNumAllies[iFlag] : m_iNumAxis[iFlag];
 	}
 
 	inline int numEnemiesAtCap ( int iFlag, int iTeam )
@@ -434,12 +434,12 @@ public:
 		if ( iFlag == -1 )
 			return 0;
 
-		return (iTeam == TEAM_ALLIES) ? (m_iNumAxis[iFlag]) : (m_iNumAllies[iFlag]);
+		return iTeam == TEAM_ALLIES ? m_iNumAxis[iFlag] : m_iNumAllies[iFlag];
 	}
 
 	inline edict_t *getFlagByID ( int id )
 	{
-		if ( (id >= 0) && (id < m_iNumControlPoints) )
+		if ( id >= 0 && id < m_iNumControlPoints )
 			return m_pFlags[id];
 
 		return nullptr;
@@ -463,7 +463,7 @@ public:
 
 		for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 		{
-			if ( (m_pBombs[i][0] == pent) || (m_pBombs[i][1] == pent) )
+			if ( m_pBombs[i][0] == pent || m_pBombs[i][1] == pent )
 				return i;
 		}
 
@@ -944,14 +944,14 @@ public:
 
 	static inline bool isLosingTeam ( int iTeam )
 	{
-		return !m_bHasRoundStarted && m_bRoundOver && m_iWinningTeam && (m_iWinningTeam != iTeam); 
+		return !m_bHasRoundStarted && m_bRoundOver && m_iWinningTeam && m_iWinningTeam != iTeam; 
 	}
 
 	static void roundReset ();
 
 	static inline bool isFlagCarrier (edict_t *pPlayer)
 	{
-		return (m_pFlagCarrierBlue==pPlayer)||(m_pFlagCarrierRed==pPlayer);
+		return m_pFlagCarrierBlue==pPlayer||m_pFlagCarrierRed==pPlayer;
 	}
 
 	static inline edict_t *getFlagCarrier (int iTeam)
@@ -967,9 +967,9 @@ public:
 	static bool isFlagCarried (int iTeam)
 	{
 		if ( iTeam == TF2_TEAM_BLUE )
-			return (m_pFlagCarrierBlue != nullptr);
+			return m_pFlagCarrierBlue != nullptr;
 		else if ( iTeam == TF2_TEAM_RED )
-			return (m_pFlagCarrierRed != nullptr);
+			return m_pFlagCarrierRed != nullptr;
 
 		return false;
 	}
@@ -1011,7 +1011,7 @@ public:
 
 		if ( id>=0 )
 		{
-			return (m_SentryGuns[id].sentry.get()!= nullptr)&&(m_SentryGuns[id].sapper.get()!= nullptr);
+			return m_SentryGuns[id].sentry.get()!= nullptr&&m_SentryGuns[id].sapper.get()!= nullptr;
 		}
 
 		return false;
@@ -1033,7 +1033,7 @@ public:
 
 		if ( id>=0 )
 		{
-			return ((m_Teleporters[id].exit.get()!= nullptr)||(m_Teleporters[id].entrance.get()!= nullptr))&&(m_Teleporters[id].sapper.get()!= nullptr);
+			return (m_Teleporters[id].exit.get()!= nullptr||m_Teleporters[id].entrance.get()!= nullptr)&&m_Teleporters[id].sapper.get()!= nullptr;
 		}
 
 		return false;
@@ -1045,7 +1045,7 @@ public:
 
 		if ( id>=0 )
 		{
-			return (m_Dispensers[id].disp.get()!= nullptr)&&(m_Dispensers[id].sapper.get()!= nullptr);
+			return m_Dispensers[id].disp.get()!= nullptr&&m_Dispensers[id].sapper.get()!= nullptr;
 		}
 
 		return false;
@@ -1053,9 +1053,7 @@ public:
 
 	static bool isSentrySapped ( edict_t *pSentry )
 	{
-		unsigned int i;
-
-		for ( i = 0; i < MAX_PLAYERS; i ++ )
+		for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
 		{
 			if ( m_SentryGuns[i].sentry.get() == pSentry )
 				return m_SentryGuns[i].sapper.get()!= nullptr;
@@ -1066,11 +1064,9 @@ public:
 
 	static bool isTeleporterSapped ( edict_t *pTele )
 	{
-		unsigned int i;
-
-		for ( i = 0; i < MAX_PLAYERS; i ++ )
+		for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
 		{
-			if ( (m_Teleporters[i].entrance.get() == pTele) || (m_Teleporters[i].exit.get() == pTele) )
+			if ( m_Teleporters[i].entrance.get() == pTele || m_Teleporters[i].exit.get() == pTele )
 				return m_Teleporters[i].sapper.get()!= nullptr;
 		}
 
@@ -1079,9 +1075,7 @@ public:
 
 	static bool isDispenserSapped ( edict_t *pDisp )
 	{
-		unsigned int i;
-
-		for ( i = 0; i < MAX_PLAYERS; i ++ )
+		for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
 		{
 			if ( m_Dispensers[i].disp.get() == pDisp )
 				return m_Dispensers[i].sapper.get()!= nullptr;
@@ -1094,12 +1088,12 @@ public:
 
 	static void addCapDefender ( edict_t *pPlayer, int iCapIndex )
 	{
-		m_iCapDefenders[iCapIndex] |= (1<<(ENTINDEX(pPlayer)-1));
+		m_iCapDefenders[iCapIndex] |= 1<< ENTINDEX(pPlayer)-1;
 	}
 
 	static void removeCapDefender ( edict_t *pPlayer, int iCapIndex )
 	{
-		m_iCapDefenders[iCapIndex] &= ~(1<<(ENTINDEX(pPlayer)-1));
+		m_iCapDefenders[iCapIndex] &= ~(1<< ENTINDEX(pPlayer)-1);
 	}
 
 	static void resetDefenders ()
@@ -1113,8 +1107,8 @@ public:
 	
 	static void addCapper ( int cp, int capper )
 	{
-		if ( capper && (cp < MAX_CAP_POINTS) )
-			m_Cappers[cp] |= (1<<(capper-1));
+		if ( capper && cp < MAX_CAP_POINTS )
+			m_Cappers[cp] |= 1<<capper-1;
 	}
 
 	static void removeCappers ( int cp )
@@ -1181,7 +1175,7 @@ public:
 			return true;
 		}
 
-		return ( getFlagLocation(TF2_TEAM_BLUE,vec) );
+		return getFlagLocation(TF2_TEAM_BLUE,vec);
 	}
 
 	static bool isMedievalMode();

@@ -163,7 +163,7 @@ CBotUtility :: CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil
 	{
 		const int iClass = CClassInterface::getTF2Class(pBot->getEdict());
 
-		if ( CTeamFortress2Mod::isAttackDefendMap() && (m_pBot->getTeam() == TF2_TEAM_BLUE) )
+		if ( CTeamFortress2Mod::isAttackDefendMap() && m_pBot->getTeam() == TF2_TEAM_BLUE )
 			m_fUtility += randomFloat(CRCBotTF2UtilFile::m_fUtils[BOT_ATT_UTIL][id][iClass].min,CRCBotTF2UtilFile::m_fUtils[BOT_ATT_UTIL][id][iClass].max);
 		else
 			m_fUtility += randomFloat(CRCBotTF2UtilFile::m_fUtils[BOT_NORM_UTIL][id][iClass].min,CRCBotTF2UtilFile::m_fUtils[BOT_NORM_UTIL][id][iClass].max);
@@ -173,35 +173,27 @@ CBotUtility :: CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil
 // Execute a list of possible actions and put them into order of available actions against utility
 void CBotUtilities :: execute ()
 {
-	unsigned int i = 0;
-	CBotUtility *pUtil;
-	float fUtil;
-
-	util_node_t *temp;
-	util_node_t *pnew;
-	util_node_t *prev;
-
 	m_pBest.head = nullptr;
 
-	for ( i = 0; i < m_Utilities.size(); i ++ )
+	for ( unsigned int i = 0; i < m_Utilities.size(); i ++ )
 	{
-		pUtil = &(m_Utilities[i]);
-		fUtil = pUtil->getUtility();
+		CBotUtility* pUtil = &m_Utilities[i];
+		float fUtil = pUtil->getUtility();
 
 		// if bot can do this action
 		if ( pUtil->canDo() )
 		{			
 			// add to list
-			temp = m_pBest.head;
+			util_node_t* temp = m_pBest.head;
 
 			// put in correct order by making a linked list
-			pnew = (util_node_t*)malloc(sizeof(util_node_t));
+			util_node_t* pnew = (util_node_t*)malloc(sizeof(util_node_t));
 
 			if ( pnew != nullptr )
 			{
 				pnew->util = pUtil;
 				pnew->next = nullptr;
-				prev = nullptr;
+				util_node_t* prev = nullptr;
 
 				if ( temp )
 				{
@@ -256,15 +248,12 @@ void CBotUtilities :: freeMemory ()
 
 CBotUtility *CBotUtilities :: nextBest ()
 {
-	CBotUtility *pBest;
-	util_node_t *temp;
-
 	if ( m_pBest.head == nullptr )
 		return nullptr;
 
-	pBest = m_pBest.head->util;
+	CBotUtility* pBest = m_pBest.head->util;
 
-	temp = m_pBest.head;
+	util_node_t* temp = m_pBest.head;
 
 	m_pBest.head = m_pBest.head->next;
 

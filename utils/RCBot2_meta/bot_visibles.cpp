@@ -70,7 +70,7 @@ void CFindEnemyFunc :: execute ( edict_t *pEntity )
 	{
 		const float fFactor = getFactor(pEntity);
 
-		if ( !m_pBest || (fFactor < m_fBestFactor) )
+		if ( !m_pBest || fFactor < m_fBestFactor )
 		{
 			m_pBest = pEntity;
 			m_fBestFactor = fFactor;
@@ -101,7 +101,7 @@ CBotVisibles :: CBotVisibles ( CBot *pBot )
 {
 	m_pBot = pBot;
 	m_iMaxIndex = m_pBot->maxEntityIndex();
-	m_iMaxSize = (m_iMaxIndex/8)+1;
+	m_iMaxSize = m_iMaxIndex/8+1;
 	m_iIndicesVisible = new unsigned char [m_iMaxSize];
 	reset();
 }
@@ -186,7 +186,7 @@ void CBotVisibles :: checkVisible ( edict_t *pEntity, int *iTicks, bool *bVisibl
 			*iTicks = *iTicks + 1;
 
 			clusterIndex = engine->GetClusterForOrigin( m_pBot->getOrigin() );
-			engine->GetPVSForCluster( clusterIndex, sizeof(m_bPvs), m_bPvs );
+			engine->GetPVSForCluster( clusterIndex, sizeof m_bPvs, m_bPvs );
 			
 			vEntityOrigin = CBotGlobals::entityOrigin(pEntity);
 
@@ -194,7 +194,7 @@ void CBotVisibles :: checkVisible ( edict_t *pEntity, int *iTicks, bool *bVisibl
 			if ( iIndex <= gpGlobals->maxClients )
 				vEntityOrigin + Vector(0,0,32);
 
-			playerInPVS = engine->CheckOriginInPVS(vEntityOrigin,m_bPvs,sizeof(m_bPvs));//engine->CheckBoxInPVS( vectorSurroundMins, vectorSurroundMaxs, m_bPvs, sizeof( m_bPvs ) );
+			playerInPVS = engine->CheckOriginInPVS(vEntityOrigin,m_bPvs,sizeof m_bPvs);//engine->CheckBoxInPVS( vectorSurroundMins, vectorSurroundMaxs, m_bPvs, sizeof( m_bPvs ) );
 
 			if ( playerInPVS )
 			{
@@ -204,12 +204,12 @@ void CBotVisibles :: checkVisible ( edict_t *pEntity, int *iTicks, bool *bVisibl
 #ifndef __linux__
 				if ( *bVisible )
 				{
-					if ( CClients::clientsDebugging(BOT_DEBUG_VIS) && CClients::get(0)->isDebuggingBot(m_pBot->getEdict()) && (ENTINDEX(pEntity)<=CBotGlobals::maxClients()))
+					if ( CClients::clientsDebugging(BOT_DEBUG_VIS) && CClients::get(0)->isDebuggingBot(m_pBot->getEdict()) && ENTINDEX(pEntity)<=CBotGlobals::maxClients())
 						debugoverlay->AddTextOverlay(CBotGlobals::entityOrigin(pEntity),0,0.1,"VISIBLE");
 				}
 				else
 				{
-					if ( CClients::clientsDebugging(BOT_DEBUG_VIS) && CClients::get(0)->isDebuggingBot(m_pBot->getEdict()) && (ENTINDEX(pEntity)<=CBotGlobals::maxClients()))
+					if ( CClients::clientsDebugging(BOT_DEBUG_VIS) && CClients::get(0)->isDebuggingBot(m_pBot->getEdict()) && ENTINDEX(pEntity)<=CBotGlobals::maxClients())
 						debugoverlay->AddTextOverlayRGB(CBotGlobals::entityOrigin(pEntity),0,0.1,255,0,0,200,"INVISIBLE");
 				}
 #endif
@@ -238,7 +238,7 @@ void CBotVisibles :: updateVisibles ()
 	//update ground entity
 	pGroundEntity = CClassInterface::getGroundEntity(m_pBot->getEdict());
 
-	if ( pGroundEntity && (ENTINDEX(pGroundEntity) > 0) )
+	if ( pGroundEntity && ENTINDEX(pGroundEntity) > 0 )
 	{
 		setVisible(pGroundEntity,true);
 		m_pBot->setVisible(pGroundEntity,true);
@@ -254,7 +254,7 @@ void CBotVisibles :: updateVisibles ()
 	iStartIndex = m_iCurrentIndex;
 
 	if ( rcbot_supermode.GetBool() )
-		iMaxClientTicks = (gpGlobals->maxClients/2)+1;
+		iMaxClientTicks = gpGlobals->maxClients/2+1;
 	else
 		iMaxClientTicks =m_pBot->getProfile()->m_iVisionTicksClients; // bot_visrevs_clients.GetInt();
 
@@ -290,7 +290,7 @@ void CBotVisibles :: updateVisibles ()
 
 		if ( pEntity != pGroundEntity )
 		{
-			if ( CBotGlobals::entityIsValid(pEntity) && (pEntity != m_pBot->getEdict()) )
+			if ( CBotGlobals::entityIsValid(pEntity) && pEntity != m_pBot->getEdict() )
 			{
 				checkVisible(pEntity,&iTicks,&bVisible,m_iCurPlayer);
 				setVisible(pEntity,bVisible);
@@ -336,7 +336,7 @@ void CBotVisibles :: updateVisibles ()
 
 		pEntity = INDEXENT(m_iCurrentIndex);
 
-		if ( (pEntity != pGroundEntity) && (m_iCurrentIndex != iSpecialIndex)  )
+		if ( pEntity != pGroundEntity && m_iCurrentIndex != iSpecialIndex  )
 		{
 			if ( CBotGlobals::entityIsValid(pEntity) )
 			{		
@@ -381,7 +381,7 @@ bool CBotVisibles :: isVisible ( edict_t *pEdict )
 	if ( iByte > m_iMaxSize )
 		return false;
 
-	return ( (*(m_iIndicesVisible+iByte))&(1<<iBit))==(1<<iBit);
+	return ( *(m_iIndicesVisible+iByte)&1<<iBit)==1<<iBit;
 }
 
 void CBotVisibles :: setVisible ( edict_t *pEdict, bool bVisible ) 
@@ -399,7 +399,7 @@ void CBotVisibles :: setVisible ( edict_t *pEdict, bool bVisible )
 	if ( bVisible )
 	{
 		// visible now
-		if ( ((*(m_iIndicesVisible+iByte) & iFlag)!=iFlag) )
+		if ( (*(m_iIndicesVisible+iByte) & iFlag)!=iFlag )
 			m_VisibleSet.insert(pEdict);
 
 		*(m_iIndicesVisible+iByte) |= iFlag;		
@@ -407,7 +407,7 @@ void CBotVisibles :: setVisible ( edict_t *pEdict, bool bVisible )
 	else
 	{
 		// not visible anymore
-		if ( pEdict && ((*(m_iIndicesVisible+iByte) & iFlag)==iFlag) )
+		if ( pEdict && (*(m_iIndicesVisible+iByte) & iFlag)==iFlag )
 			m_VisibleSet.erase(pEdict);
 
 		*(m_iIndicesVisible+iByte) &= ~iFlag;		

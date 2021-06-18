@@ -44,14 +44,12 @@ CStrings :: CStrings ()
 
 void CStrings :: freeAllMemory()
 {
-	char *pszFree;
-
 	// clear strings 
 	for ( int i = 0; i < MAX_STRINGS_HASH; i ++ )
 	{
 		for ( unsigned int j = 0; j < m_Strings[i].size(); j ++ )
 		{
-			pszFree = m_Strings[i][j];
+			char* pszFree = m_Strings[i][j];
 
 			if ( pszFree )
 				delete pszFree;

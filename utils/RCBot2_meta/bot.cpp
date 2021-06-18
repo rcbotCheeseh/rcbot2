@@ -2749,7 +2749,7 @@ void CBot :: letGoOfButton ( int button )
 	m_pButtons->letGo(button);
 }
 
-void CBot :: changeAngles ( float fSpeed, float *fIdeal, float *fCurrent, float *fUpdate )
+void CBot :: changeAngles ( float fSpeed, const float *fIdeal, float *fCurrent, float *fUpdate )
 {
 	float current = *fCurrent;
 	const float ideal = *fIdeal;

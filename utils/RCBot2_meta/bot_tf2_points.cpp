@@ -97,7 +97,7 @@ bool CTFObjectiveResource :: isWaypointAreaValid ( int wptarea, int waypointflag
 		return true;
 
 	// Translate Waypoint Area to Index
-	if ( (wptarea < 0) || (wptarea > MAX_CONTROL_POINTS) )
+	if ( wptarea < 0 || wptarea > MAX_CONTROL_POINTS )
 		return false;
 
 const int cpindex = m_WaypointAreaToIndexTranslation[wptarea];
@@ -108,8 +108,8 @@ const int cpindex = m_WaypointAreaToIndexTranslation[wptarea];
 	if ( waypointflags & CWaypointTypes::W_FL_AREAONLY )
 	{
 		// AND
-		return (m_ValidPoints[0][0][cpindex].bValid && m_ValidPoints[1][1][cpindex].bValid) || 
-			   (m_ValidPoints[0][1][cpindex].bValid && m_ValidPoints[1][0][cpindex].bValid);
+		return m_ValidPoints[0][0][cpindex].bValid && m_ValidPoints[1][1][cpindex].bValid || 
+			   m_ValidPoints[0][1][cpindex].bValid && m_ValidPoints[1][0][cpindex].bValid;
 	}
 
 	// OR
@@ -134,7 +134,7 @@ bool CTFObjectiveResource::isCPValidWptArea ( int iWptArea, int iTeam, ePointAtt
 	if ( iWptArea == 0 )
 		return true;
 
-	if ( (iWptArea < 1) || (iWptArea > MAX_CONTROL_POINTS) )
+	if ( iWptArea < 1 || iWptArea > MAX_CONTROL_POINTS )
 		return false;
 
 	return isCPValid(m_WaypointAreaToIndexTranslation[iWptArea],iTeam,type);
@@ -145,21 +145,21 @@ bool CTFObjectiveResource::testProbWptArea ( int iWptArea, int iTeam )
 {
 	const int iCpIndex = m_WaypointAreaToIndexTranslation[iWptArea];
 
-	if ( (iTeam != TF2_TEAM_BLUE) && (iTeam != TF2_TEAM_RED) )
+	if ( iTeam != TF2_TEAM_BLUE && iTeam != TF2_TEAM_RED )
 		return true;
 
 	if ( iWptArea == 0 )
 		return true;
 
-	if ( (iWptArea < 1) || (iWptArea > MAX_CONTROL_POINTS) )
+	if ( iWptArea < 1 || iWptArea > MAX_CONTROL_POINTS )
 		return true;
 
-	return isCPValid(iCpIndex,iTeam,TF2_POINT_ATTACK) ? (randomFloat(0.0f,1.0f) > m_ValidPoints[iTeam-2][TF2_POINT_ATTACK][iCpIndex].fProb) : ( isCPValid(iCpIndex,iTeam,TF2_POINT_DEFEND) ? (randomFloat(0.0f,1.0f) > m_ValidPoints[iTeam-2][TF2_POINT_DEFEND][iCpIndex].fProb) : true );
+	return isCPValid(iCpIndex,iTeam,TF2_POINT_ATTACK) ? randomFloat(0.0f,1.0f) > m_ValidPoints[iTeam-2][TF2_POINT_ATTACK][iCpIndex].fProb : isCPValid(iCpIndex,iTeam,TF2_POINT_DEFEND) ? randomFloat(0.0f,1.0f) > m_ValidPoints[iTeam-2][TF2_POINT_DEFEND][iCpIndex].fProb : true;
 }
 
 bool CTFObjectiveResource::isCPValid ( int iCPIndex, int iTeam, ePointAttackDefend_s type )
 {
-	if ( (iCPIndex < 0) || (iCPIndex >= MAX_CONTROL_POINTS) )
+	if ( iCPIndex < 0 || iCPIndex >= MAX_CONTROL_POINTS )
 		return false;
 
 	return m_ValidPoints[iTeam-2][type][iCPIndex].bValid;
@@ -169,21 +169,19 @@ bool CTFObjectiveResource::isCPValid ( int iCPIndex, int iTeam, ePointAttackDefe
 // base on base point -- if already have attack point and base point -- less focus on base point
 int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDefend_s type)
 {
-	TF2PointProb_t *arr = nullptr;
 	std::vector<int> points; // point indices
-	int iotherteam;
 
 	float fTotal = 0.0f;
 
-	if (( team < 2 ) || ( team > 3 ))
+	if (team < 2 || team > 3)
 		return 0;
 
 	if ( m_iNumControlPoints == nullptr )
 		return 0;
 
-	iotherteam = (team==2)?3:2;
+	int iotherteam = team == 2 ? 3 : 2;
 
-	arr = m_ValidPoints[team-2][type];
+	TF2PointProb_t* arr = m_ValidPoints[team - 2][type];
 
 	for ( int i = 0; i < *m_iNumControlPoints; i ++ )
 	{
@@ -195,7 +193,7 @@ int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDef
 			{
 				if (GetCappingTeam(i) == team)
 					arr[i].fProbMultiplier = 3.0f;
-				else if ((getLastCaptureTime(i) + 10.0f) > gpGlobals->curtime )
+				else if (getLastCaptureTime(i) + 10.0f > gpGlobals->curtime )
 					arr[i].fProbMultiplier = 2.0f;
 			}
 			else
@@ -205,9 +203,9 @@ int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDef
 					const int numplayers = GetNumPlayersInArea(i,iotherteam);
 
 					// IF this is not base point and a lot of players are here, reduce probability of defending
-					if ( (i != GetBaseControlPointForTeam(team)) && (numplayers > 1)  )
+					if ( i != GetBaseControlPointForTeam(team) && numplayers > 1  )
 					{
-						arr[i].fProbMultiplier = 1.0f - ((float)numplayers/(gpGlobals->maxClients/4));
+						arr[i].fProbMultiplier = 1.0f - (float)numplayers/(gpGlobals->maxClients/4);
 
 						if ( arr[i].fProbMultiplier <= 0.0f )
 							arr[i].fProbMultiplier = 0.1f;
@@ -215,7 +213,7 @@ int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDef
 					else // Otherwise there aren't any playres on or is base and has been attacked recently
 						arr[i].fProbMultiplier = 4.0f;
 				}
-				else if ((getLastCaptureTime(i) + 10.0f) > gpGlobals->curtime )
+				else if (getLastCaptureTime(i) + 10.0f > gpGlobals->curtime )
 					arr[i].fProbMultiplier = 2.0f;
 			}
 
@@ -255,15 +253,13 @@ void CTeamRoundTimer::reset()
 }
 bool CTeamControlPointRound :: isPointInRound ( edict_t *point_pent )
 {
-	edict_t *pPoint;
 	for ( int i = 0; i < m_ControlPoints.Size(); i ++ )
 	{
-		CBaseHandle *hndl;
-		hndl = &m_ControlPoints[i]; 
+		CBaseHandle* hndl = &m_ControlPoints[i]; 
 
 		if ( hndl )
 		{ 
-			pPoint = INDEXENT(hndl->GetEntryIndex());
+			edict_t* pPoint = INDEXENT(hndl->GetEntryIndex());
 			CBaseEntity *pent = pPoint->GetUnknown()->GetBaseEntity();
 			if ( point_pent->GetUnknown()->GetBaseEntity() == pent )
 				return true;
@@ -305,8 +301,6 @@ void CTFObjectiveResource::setup ()
 	memset(m_fLastCaptureTime,0,sizeof(float)*MAX_CONTROL_POINTS);
 	// Find control point entities
 
-	edict_t *pent;
-
 	Vector vOrigin;
 
 	int i = gpGlobals->maxClients;
@@ -317,7 +311,7 @@ void CTFObjectiveResource::setup ()
 	// find visible flags -- with a model
 	while ( ++i < gpGlobals->maxEntities )
 	{
-		pent = INDEXENT(i);
+		edict_t* pent = INDEXENT(i);
 
 		if ( !pent || pent->IsFree() )
 			continue;
@@ -340,17 +334,15 @@ void CTFObjectiveResource::setup ()
 		}
 	}
 
-	CWaypoint *pWaypoint;
-	int iWpt;
-
 	for ( int j = 0; j < *m_iNumControlPoints; j ++ )
 	{
 		vOrigin = m_vCPPositions[j];
 
 		if ( m_iControlPointWpt[j] == -1 )
 		{
-			iWpt = CWaypointLocations::NearestWaypoint(vOrigin,1024.0f,-1,false,false,false, nullptr,false,0,false,false,Vector(0,0,0),CWaypointTypes::W_FL_CAPPOINT);
-			pWaypoint = CWaypoints::getWaypoint(iWpt);
+			int iWpt = CWaypointLocations::NearestWaypoint(vOrigin, 1024.0f, -1, false, false, false, nullptr, false, 0, false,
+			                                               false, Vector(0, 0, 0), CWaypointTypes::W_FL_CAPPOINT);
+			CWaypoint* pWaypoint = CWaypoints::getWaypoint(iWpt);
 			m_iControlPointWpt[j] = iWpt;
 
 			// For compatibility -- old waypoints are already set with an area, so take the area from the waypoint here
@@ -360,7 +352,7 @@ void CTFObjectiveResource::setup ()
 				const int iArea = pWaypoint->getArea();
 				m_IndexToWaypointAreaTranslation[j] = iArea;
 
-				if ( ( iArea >= 1 ) && ( iArea < MAX_CONTROL_POINTS ) )
+				if ( iArea >= 1 && iArea < MAX_CONTROL_POINTS )
 					m_WaypointAreaToIndexTranslation[iArea] = j;
 			}
 			else
@@ -379,7 +371,7 @@ int CTFObjectiveResource :: getControlPointArea ( edict_t *pPoint )
 	for ( int j = 0; j < *m_iNumControlPoints; j ++ )
 	{
 		if ( m_pControlPoints[j] == pPoint )
-			return (j+1); // return waypoint area (+1)
+			return j+1; // return waypoint area (+1)
 	}
 
 	return 0;
@@ -393,7 +385,7 @@ void CTFObjectiveResource::	debugprint ( void )
 	CBotGlobals::botMessage(pEdict,0,"m_bCPLocked[byte]\t[%d]",*m_bCPLocked);
 	CBotGlobals::botMessage(pEdict,0,"m_bCPLocked[8]\t[%s,%s,%s,%s,%s,%s,%s,%s]",m_bCPLocked[0]?"Y":"N",m_bCPLocked[1]?"Y":"N",m_bCPLocked[2]?"Y":"N",m_bCPLocked[3]?"Y":"N",m_bCPLocked[4]?"Y":"N",m_bCPLocked[5]?"Y":"N",m_bCPLocked[6]?"Y":"N",m_bCPLocked[7]?"Y":"N");
 	CBotGlobals::botMessage(pEdict,0,"m_bCPIsVisible[8]\t[%s,%s,%s,%s,%s,%s,%s,%s]",m_bCPIsVisible[0]?"Y":"N",m_bCPIsVisible[1]?"Y":"N",m_bCPIsVisible[2]?"Y":"N",m_bCPIsVisible[3]?"Y":"N",m_bCPIsVisible[4]?"Y":"N",m_bCPIsVisible[5]?"Y":"N",m_bCPIsVisible[6]?"Y":"N",m_bCPIsVisible[7]?"Y":"N");
-	CBotGlobals::botMessage(pEdict,0,"m_iOwner[8]\t[%s,%s,%s,%s,%s,%s,%s,%s]",(m_iOwner[0]==2)?"red":((m_iOwner[0]==3)?"blue":"unassigned"),(m_iOwner[1]==2)?"red":((m_iOwner[1]==3)?"blue":"unassigned"),(m_iOwner[2]==2)?"red":((m_iOwner[2]==3)?"blue":"unassigned"),(m_iOwner[3]==2)?"red":((m_iOwner[3]==3)?"blue":"unassigned"),(m_iOwner[4]==2)?"red":((m_iOwner[4]==3)?"blue":"unassigned"),(m_iOwner[5]==2)?"red":((m_iOwner[5]==3)?"blue":"unassigned"),(m_iOwner[6]==2)?"red":((m_iOwner[6]==3)?"blue":"unassigned"),(m_iOwner[7]==2)?"red":((m_iOwner[7]==3)?"blue":"unassigned"));
+	CBotGlobals::botMessage(pEdict,0,"m_iOwner[8]\t[%s,%s,%s,%s,%s,%s,%s,%s]",m_iOwner[0]==2?"red":m_iOwner[0]==3?"blue":"unassigned",m_iOwner[1]==2?"red":m_iOwner[1]==3?"blue":"unassigned",m_iOwner[2]==2?"red":m_iOwner[2]==3?"blue":"unassigned",m_iOwner[3]==2?"red":m_iOwner[3]==3?"blue":"unassigned",m_iOwner[4]==2?"red":m_iOwner[4]==3?"blue":"unassigned",m_iOwner[5]==2?"red":m_iOwner[5]==3?"blue":"unassigned",m_iOwner[6]==2?"red":m_iOwner[6]==3?"blue":"unassigned",m_iOwner[7]==2?"red":m_iOwner[7]==3?"blue":"unassigned");
 }
 
 int CTFObjectiveResource::NearestArea ( Vector vOrigin )
@@ -434,7 +426,6 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 	int other;
 	int prev;
 	const bool isPayLoadMap = CTeamFortress2Mod::isMapType(TF_MAP_CART)||CTeamFortress2Mod::isMapType(TF_MAP_CARTRACE);
-	TF2PointProb_t *arr;
 
 	//CTeamControlPoint *pPoint;
 	//CTeamControlPointMaster *pMaster = CTeamFortress2Mod::getPointMaster();
@@ -445,7 +436,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 	if ( team == 0 ) // invalid team
 		return false;
 
-	arr = m_ValidPoints[team-2][TF2_POINT_DEFEND];
+	TF2PointProb_t* arr = m_ValidPoints[team - 2][TF2_POINT_DEFEND];
 
 	// reset array
 	memset(arr,0,sizeof(TF2PointProb_t)*MAX_CONTROL_POINTS);
@@ -474,7 +465,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 		if ( GetOwningTeam(i) == team )
 		{
 			// The other team can capture
-			other = (team==2)?3:2;
+			other = team==2?3:2;
 
 			if ( TeamCanCapPoint(i,other) )
 			{
@@ -488,11 +479,9 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 					}
 					else
 					{
-						// This point needs previous points to be captured first
-						int j;
 						bool bEnemyCanCap = true;
 
-						for ( j = 0; j < MAX_PREVIOUS_POINTS; j ++ )
+						for ( int j = 0; j < MAX_PREVIOUS_POINTS; j ++ )
 						{
 							// need to go through each previous point to update the array
 							// DONT BREAK!!!
@@ -560,12 +549,12 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 								iNumAvailable++;
 							}
 
-							if ( iNumOwned == (iNumAvailable-1) )
+							if ( iNumOwned == iNumAvailable-1 )
 							{								
 								// other team can capture
 								arr[i].fProb = 1.0f;
 							}
-							else if ( iNumOwned == (iNumAvailable-2) )
+							else if ( iNumOwned == iNumAvailable-2 )
 							{
 								// other team can capture this as the next point
 								arr[i].fProb = bot_defrate.GetFloat();
@@ -591,10 +580,9 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 		if ( arr[i].bPrev )
 		{
 			int iNumPrevPointsAvail = 0;
-			int j;
 
 			// Check this points prevous points
-			for ( j = 0; j < MAX_PREVIOUS_POINTS; j ++ )
+			for ( int j = 0; j < MAX_PREVIOUS_POINTS; j ++ )
 			{
 				if ( arr[i].iPrev[j] != -1 )
 				{
@@ -612,7 +600,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 		
 				// other team can capture this as the next point
 				// lower chance of defending the next point before round has started!!! Get everyone up!!
-				arr[i].fProb = CTeamFortress2Mod::hasRoundStarted() ? bot_defrate.GetFloat() : (bot_defrate.GetFloat()*0.5f);
+				arr[i].fProb = CTeamFortress2Mod::hasRoundStarted() ? bot_defrate.GetFloat() : bot_defrate.GetFloat()*0.5f;
 			}
 		}
 	}
@@ -665,7 +653,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 		float fMaxProb = 1.0f;
 		bool bFirst = true;
 
-		other = (team==2)?3:2;
+		other = team==2?3:2;
 
 		for ( int i = 0; i < *m_iNumControlPoints; i ++ )
 		{
@@ -701,7 +689,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 							{
 								if ( arr[j].bValid == false )
 								{
-									if ( !pRound || (m_pControlPoints[j]&&pRound->isPointInRound(m_pControlPoints[j])) )
+									if ( !pRound || m_pControlPoints[j]&&pRound->isPointInRound(m_pControlPoints[j]) )
 										arr[j].bValid = true; // this is the next point - move back lads
 								}
 							}
@@ -728,11 +716,10 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 	// update signature
 	for ( int i = 0; i < *m_iNumControlPoints; i ++ )
 	{
-		byte j;
-		byte *barr = (byte*)&(arr[i]);
+		byte *barr = (byte*)&arr[i];
 
-		for ( j = 0; j < sizeof(TF2PointProb_t); j ++ )
-			signature = signature + ((barr[j]*(i+1))+j);
+		for ( byte j = 0; j < sizeof(TF2PointProb_t); j ++ )
+			signature = signature + (barr[j]*(i+1)+j);
 	}
 
 	if ( signature != m_PointSignature[team-2][TF2_POINT_DEFEND] )
@@ -746,9 +733,9 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 
 void CTFObjectiveResource :: think ()
 {
-	if ( m_bInitialised && ( m_fNextCheckMonitoredPoint < engine->Time() ) )
+	if ( m_bInitialised && m_fNextCheckMonitoredPoint < engine->Time() )
 	{
-		bool bupdate = (m_fUpdatePointTime < engine->Time());
+		bool bupdate = m_fUpdatePointTime < engine->Time();
 
 		int team = 0;
 
@@ -758,9 +745,9 @@ void CTFObjectiveResource :: think ()
 			{
 				for ( int j = 0; j < MAX_PREVIOUS_POINTS; j ++ )
 				{
-					const int prev = GetPreviousPointForPoint(m_iMonitorPoint[team],(team+2),j);
+					const int prev = GetPreviousPointForPoint(m_iMonitorPoint[team],team+2,j);
 
-					if ( (prev != -1) && (GetOwningTeam(prev)!=(team+2)) )
+					if ( prev != -1 && GetOwningTeam(prev)!=team+2 )
 					{
 						bupdate = true;
 						break;
@@ -768,7 +755,7 @@ void CTFObjectiveResource :: think ()
 				}
 			}
 			team++;
-		}while ((team < 2) && (bupdate==false));
+		}while (team < 2 && bupdate==false);
 
 		if ( bupdate )
 		{
@@ -789,20 +776,19 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 	int prev;
 	int signature = 0;
 	CTeamControlPointRound *pRound = CTeamFortress2Mod::getCurrentRound();
-	TF2PointProb_t *arr;
 
 	if ( m_ObjectiveResource.get() == nullptr ) // not set up yet
 		return false;
 	if ( team == 0 )
 		return false;
 
-	arr = m_ValidPoints[team-2][TF2_POINT_ATTACK];
+	TF2PointProb_t* arr = m_ValidPoints[team - 2][TF2_POINT_ATTACK];
 
 	// reset array
 	memset(arr,0,sizeof(TF2PointProb_t)*MAX_CONTROL_POINTS);
 	memset(arr->iPrev,0xFF,sizeof(int)*MAX_PREVIOUS_POINTS);
 
-	if ( (team == TF2_TEAM_RED) && (CTeamFortress2Mod::isAttackDefendMap()) )
+	if ( team == TF2_TEAM_RED && CTeamFortress2Mod::isAttackDefendMap() )
 	{
 		// no attacking for red on this map
 		return false;
@@ -849,11 +835,9 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 					}
 					else
 					{
-						int j;
-
 						bool bCanCap = true;
 
-						for ( j = 0; j < MAX_PREVIOUS_POINTS; j ++ )
+						for ( int j = 0; j < MAX_PREVIOUS_POINTS; j ++ )
 						{
 							// need to go through each previous point to update the array
 							// DONT BREAK!!!
@@ -885,7 +869,7 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 					if ( !CTeamFortress2Mod::isAttackDefendMap() )
 					{
 						// if its not an attack defend map check previous points are owned
-						const int other = (team==2)?3:2;
+						const int other = team==2?3:2;
 
 						// find the base point
 						const int basepoint = GetBaseControlPointForTeam(other);
@@ -916,7 +900,7 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 						
 							continue;
 						}
-						else if ( basepoint == ((*m_iNumControlPoints)-1) )
+						else if ( basepoint == *m_iNumControlPoints-1 )
 						{
 							bool allowned = true;
 							// make sure team owns all points below this point
@@ -999,11 +983,10 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 
 	for ( int i = 0; i < *m_iNumControlPoints; i ++ )
 	{
-		byte j;
-		byte *barr = (byte*)&(arr[i]);
+		byte *barr = (byte*)&arr[i];
 
-		for ( j = 0; j < sizeof(TF2PointProb_t); j ++ )
-			signature = signature + ((barr[j]*(i+1))+j);
+		for ( byte j = 0; j < sizeof(TF2PointProb_t); j ++ )
+			signature = signature + (barr[j]*(i+1)+j);
 	}
 
 	if ( signature != m_PointSignature[team-2][TF2_POINT_ATTACK] )

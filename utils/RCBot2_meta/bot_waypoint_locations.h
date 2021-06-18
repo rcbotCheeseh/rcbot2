@@ -74,7 +74,7 @@ public:
 	// want bucket spacing of 512 units
 	static const int MAX_WPT_BUCKETS = 64;
 
-	static const int BUCKET_SPACING = (HALF_MAX_MAP_SIZE*2)/MAX_WPT_BUCKETS;
+	static const int BUCKET_SPACING = HALF_MAX_MAP_SIZE*2/MAX_WPT_BUCKETS;
 
 	static unsigned char g_iFailedWaypoints [ CWaypoints::MAX_WAYPOINTS ];
 	
@@ -94,13 +94,11 @@ public:
 
 	static void Clear ()
 	{
-		int i,j,k;
-
-		for ( i = 0; i < MAX_WPT_BUCKETS; i ++ )
+		for ( int i = 0; i < MAX_WPT_BUCKETS; i ++ )
 		{
-			for ( j = 0; j < MAX_WPT_BUCKETS; j ++ )
+			for ( int j = 0; j < MAX_WPT_BUCKETS; j ++ )
 			{
-				for ( k = 0; k < MAX_WPT_BUCKETS; k ++ )
+				for ( int k = 0; k < MAX_WPT_BUCKETS; k ++ )
 				{
 					m_iLocations[i][j][k].clear();
 				}

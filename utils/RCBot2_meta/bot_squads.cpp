@@ -147,9 +147,6 @@ CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 //
 CBotSquad *CBotSquads::SquadJoin ( edict_t *pLeader, edict_t *pMember )
 {
-	CBotSquad *theSquad;
-	CBotSquad *joinSquad;
-
 	//char msg[120];
 
 	if ( !pLeader )
@@ -159,13 +156,13 @@ CBotSquad *CBotSquads::SquadJoin ( edict_t *pLeader, edict_t *pMember )
 		return nullptr;
 
 	// no squad with leader, make pMember join SquadLeader
-	theSquad = FindSquadByLeader(pMember);
+	CBotSquad* theSquad = FindSquadByLeader(pMember);
 
 	if ( theSquad != nullptr )
 	{
 		theSquad->AddMember(pMember);
 
-		joinSquad = FindSquadByLeader(pLeader);
+		CBotSquad* joinSquad = FindSquadByLeader(pLeader);
 
 		if ( joinSquad )
 		{
@@ -296,28 +293,24 @@ void CBotSquad::ChangeLeader ( void )
 
 Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 {
-	Vector vLeaderOrigin;
 	Vector vBase; 
 	Vector v_forward;
 	Vector v_right;
-	QAngle angle_right;
-	// vBase = first : offset from leader origin without taking into consideration spread and position
-	int iPosition;
 	trace_t *tr = CBotGlobals::getTraceResult();
 
 	edict_t *pLeader = GetLeader();
 	
-	iPosition = GetFormationPosition(pEdict);
-	vLeaderOrigin = CBotGlobals::entityOrigin(pLeader);
+	int iPosition = GetFormationPosition(pEdict);
+	Vector vLeaderOrigin = CBotGlobals::entityOrigin(pLeader);
 
 	const int iMod = iPosition % 2;
 
 	AngleVectors(m_vLeaderAngle,&v_forward); // leader body angles as base
 
-	angle_right = m_vLeaderAngle;
+	QAngle angle_right = m_vLeaderAngle;
 	angle_right.y += 90.0f;
 
-	CBotGlobals::fixFloatAngle(&(angle_right.y));
+	CBotGlobals::fixFloatAngle(&angle_right.y);
 
 	AngleVectors(angle_right,&v_right); // leader body angles as base
 
@@ -327,9 +320,9 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 	case SQUAD_FORM_VEE:
 		{
 			if ( iMod )			
-				vBase = (v_forward-v_right);			
+				vBase = v_forward-v_right;			
 			else
-				vBase = (v_forward+v_right);
+				vBase = v_forward+v_right;
 		}
 		break;
 	case SQUAD_FORM_WEDGE:
@@ -368,13 +361,13 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 		break;
 	}
 	
-	vBase = (vBase * m_fDesiredSpread) * iPosition;
+	vBase = vBase * m_fDesiredSpread * iPosition;
 
 	CBotGlobals::quickTraceline(pLeader,vLeaderOrigin,vLeaderOrigin+vBase);
 
 	if ( tr->fraction < 1.0 )
 	{
-		return vLeaderOrigin + (vBase*tr->fraction*0.5f);
+		return vLeaderOrigin + vBase*tr->fraction*0.5f;
 	}
 
 	return vLeaderOrigin+vBase;
@@ -401,10 +394,9 @@ void CBotSquad::AddMember ( edict_t *pEdict )
 {
 	if ( !IsMember(pEdict) )
 	{
-		MyEHandle newh;
 		//CBot *pBot;
 
-		newh = pEdict;
+		MyEHandle newh = pEdict;
 
 		m_SquadMembers.push_back(newh);
 

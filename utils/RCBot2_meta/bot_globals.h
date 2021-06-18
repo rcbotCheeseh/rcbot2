@@ -66,7 +66,7 @@ public:
 
 		index = ENTINDEX(pEdict);
 
-		return (index>0)&&(index<=gpGlobals->maxClients);
+		return index>0&&index<=gpGlobals->maxClients;
 	}
 
 	static bool walkableFromTo (edict_t *pPlayer,Vector v_src, Vector v_dest);
@@ -103,7 +103,7 @@ public:
 
 	static inline bool entityIsValid ( edict_t *pEntity )
 	{
-		return pEntity && !pEntity->IsFree() && (pEntity->GetNetworkable() != nullptr) && (pEntity->GetIServerEntity() != nullptr) && (pEntity->m_NetworkSerialNumber != 0);	
+		return pEntity && !pEntity->IsFree() && pEntity->GetNetworkable() != nullptr && pEntity->GetIServerEntity() != nullptr && pEntity->m_NetworkSerialNumber != 0;	
 	}
 
 	static void serverSay ( char *fmt, ... );
@@ -148,7 +148,8 @@ public:
 		const Vector &amins, const Vector &amaxs,
 		const Vector &bmins, const Vector &bmaxs );
 
-	static float grenadeWillLand (  Vector vOrigin, Vector vEnemy, float fProjSpeed = 400.0f, float fGrenadePrimeTime = 5.0f, float *fAngle = nullptr );
+	static float grenadeWillLand (  Vector vOrigin, Vector vEnemy, float fProjSpeed = 400.0f, float fGrenadePrimeTime = 5.0f,
+	                                const float *fAngle = nullptr );
 	////////////////////////////////////////////////////////////////////////
 
 	/*static Vector forwardVec ();
@@ -179,7 +180,7 @@ public:
 
 	static inline void setEventVersion ( int iVersion ){m_iEventVersion = iVersion;}
 
-	static inline bool isEventVersion ( int iVersion ){return (m_iEventVersion == iVersion);}
+	static inline bool isEventVersion ( int iVersion ){return m_iEventVersion == iVersion;}
 
 	static inline bool getTeamplayOn (){return m_bTeamplay;}
 

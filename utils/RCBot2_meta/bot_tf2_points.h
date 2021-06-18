@@ -30,7 +30,7 @@ class CTFGameRulesProxy
 };
 
 
-#define TEAM_ARRAY( index, team )		(index + (team * MAX_CONTROL_POINTS))
+#define TEAM_ARRAY( index, team )		((index) + ((team) * MAX_CONTROL_POINTS))
 
 typedef enum ePointAttackDefend_s
 {
