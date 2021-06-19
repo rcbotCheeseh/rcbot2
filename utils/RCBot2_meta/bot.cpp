@@ -41,15 +41,16 @@
 
 //#define GAME_DLL
 
-//#include "cbase.h"
 #include "mathlib.h"
 
 #include "vector.h"
 #include "vplane.h"
 #include "eiface.h"
+
 #ifdef __linux__
 #include "shareddefs.h" //bir3yk
 #endif
+
 #include "usercmd.h"
 #include "bitbuf.h"
 #include "in_buttons.h"
@@ -58,6 +59,7 @@
 #include "vstdlib/vstdlib.h"
 #include "vstdlib/random.h" // for random functions
 #include "iservernetworkable.h" // may come in handy
+
 #ifdef __linux__
 #include "shake.h"    //bir3yk
 #endif
@@ -71,6 +73,7 @@
 #include "bot_schedule.h"
 #include "bot_buttons.h"
 #include "bot_navigator.h"
+
 #include "bot_css_bot.h"
 #include "bot_coop.h"
 #include "bot_zombie.h"
@@ -79,12 +82,14 @@
 #include "bot_hl1dmsrc_bot.h"
 #include "bot_fortress.h"
 #include "bot_synergy.h"
+
 #include "bot_visibles.h"
 //#include "bot_memory.h"
 //#include "bot_ga.h"
 //#include "bot_ga_ind.h"
 //#include "bot_perceptron.h"
 #include "bot_ga_nn_const.h"
+
 #include "bot_weapons.h"
 #include "bot_profile.h"
 #include "bot_waypoint_locations.h"
@@ -1396,7 +1401,6 @@ void CBot :: spawnInit ()
 	m_bThinkStuck = false;
 	m_pLookEdict = nullptr;
 	m_fLookAroundTime = 0.0f;
-	m_pAvoidEntity = nullptr;
 	m_bLookedForEnemyLast = false;
 	////////////////////////
 	m_iPrevHealth = 0;    // 
@@ -1749,7 +1753,6 @@ void CBot ::debugBot(char *msg)
 
 	char task_string[256];
 
-
 	edict_t *pEnemy = m_pEnemy.get();
 
 	IPlayerInfo *p = nullptr;
@@ -1882,7 +1885,7 @@ void CBot :: updateStatistics ()
 
 		if ( !m_uSquadDetail.b1.said_area_clear && (m_StatsCanUse.stats.m_iEnemiesInRange == 0) && (m_StatsCanUse.stats.m_iEnemiesVisible == 0) && (m_StatsCanUse.stats.m_iTeamMatesInRange > 0))
 		{
-			if ( !inSquad() || isSquadLeader() && (m_fLastSeeEnemy && ((m_fLastSeeEnemy + 10.0f)<engine->Time())) )
+			if (isSquadLeader() && (m_fLastSeeEnemy && m_fLastSeeEnemy + 10.0f < engine->Time()) || !inSquad())
 				areaClear();
 
 			m_uSquadDetail.b1.said_area_clear = true;

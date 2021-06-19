@@ -131,7 +131,7 @@ void CBotVisibles :: reset ()
 void CBotVisibles :: debugString ( char *string )
 {
 	//char szEntities[1024];
-	char szNum[10];
+	//char szNum[10];
 
 	string[0] = 0;
 

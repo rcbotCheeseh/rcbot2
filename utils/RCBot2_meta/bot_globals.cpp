@@ -481,7 +481,8 @@ float CBotGlobals :: DotProductFromOrigin ( Vector vPlayer, Vector vFacing, QAng
 
 bool CBotGlobals :: traceVisible (edict_t *pEnt)
 {
-	return m_TraceResult.fraction >= 1.0||m_TraceResult.m_pEnt && pEnt && m_TraceResult.m_pEnt==pEnt->GetUnknown()->GetBaseEntity();
+	return m_TraceResult.m_pEnt && pEnt && m_TraceResult.m_pEnt == pEnt->GetUnknown()->GetBaseEntity() || m_TraceResult.
+		fraction >= 1.0;
 }
 
 bool CBotGlobals::initModFolder() {

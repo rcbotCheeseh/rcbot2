@@ -47,7 +47,7 @@ public:
 
 	inline bool held ( float fTime )
 	{
-		return m_bTapped || fTime >= m_fTimeStart && fTime <= m_fTimeEnd;// && (!m_fLetGoTime||(fTime > m_fLetGoTime));
+		return fTime >= m_fTimeStart && fTime <= m_fTimeEnd || m_bTapped; // && (!m_fLetGoTime||(fTime > m_fLetGoTime));
 	}
 
 	inline bool canPress (float fTime)

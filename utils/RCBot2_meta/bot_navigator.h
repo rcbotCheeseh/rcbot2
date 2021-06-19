@@ -360,8 +360,8 @@ class CWaypointNavigator : public IBotNavigator
 {
 public:
 	CWaypointNavigator ( CBot *pBot ) 
-	{ 
-		init();
+	{
+		CWaypointNavigator::init();
 		m_pBot = pBot; 
 		m_fNextClearFailedGoals = 0;
 		m_bDangerPoint = false;

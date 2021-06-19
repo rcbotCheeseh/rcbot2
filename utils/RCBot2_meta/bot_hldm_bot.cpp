@@ -314,12 +314,15 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 	case BOT_UTIL_THROW_GRENADE:
 		{
 		// find hide waypoint
-			CWaypoint *pWaypoint = CWaypoints::getWaypoint(CWaypointLocations::GetCoverWaypoint(getOrigin(),m_vLastSeeEnemy, nullptr));
+			CWaypoint* pWaypoint = CWaypoints::getWaypoint(
+				CWaypointLocations::GetCoverWaypoint(getOrigin(), m_vLastSeeEnemy, nullptr));
 
 			if ( pWaypoint )
 			{
 				auto*pSched = new CBotSchedule();
-				pSched->addTask(new CThrowGrenadeTask(m_pWeapons->getWeapon(CWeapons::getWeapon(HL2DM_WEAPON_FRAG)),getAmmo(CWeapons::getWeapon(HL2DM_WEAPON_FRAG)->getAmmoIndex1()),m_vLastSeeEnemyBlastWaypoint)); // first - throw
+				pSched->addTask(new CThrowGrenadeTask(m_pWeapons->getWeapon(CWeapons::getWeapon(HL2DM_WEAPON_FRAG)),
+				                                      getAmmo(CWeapons::getWeapon(HL2DM_WEAPON_FRAG)->getAmmoIndex1()),
+				                                      m_vLastSeeEnemyBlastWaypoint)); // first - throw
 				pSched->addTask(new CFindPathTask(pWaypoint->getOrigin())); // 2nd -- hide
 				m_pSchedules->add(pSched);
 				return true;

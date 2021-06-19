@@ -1610,7 +1610,7 @@ void CBotInvestigateTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		if ( pWaypoint->numPaths() > 0 )
 		{
 			for ( int i = 0; i < pWaypoint->numPaths(); i ++ )
-				m_InvPoints.push_back(CWaypoints::getWaypoint(pWaypoint->getPath(i))->getOrigin());	
+				m_InvPoints.emplace_back(CWaypoints::getWaypoint(pWaypoint->getPath(i))->getOrigin());	
 
 			m_iCurPath = randomInt(0,pWaypoint->numPaths()-1);
 		}
@@ -1630,7 +1630,7 @@ void CBotInvestigateTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		else if ( m_iState == 1 ) // goto origin
 			vPoint = m_vOrigin;
 
-		if ( pBot->distanceFrom(vPoint) < 80 || m_iState==0&&pBot->distanceFrom(m_vOrigin)>m_fRadius )
+		if (m_iState == 0 && pBot->distanceFrom(m_vOrigin) > m_fRadius || pBot->distanceFrom(vPoint) < 80)
 		{
 			m_iState = !m_iState ? 1 : 0;
 
@@ -2373,7 +2373,7 @@ void CMoveToTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 	float fDistance = pBot->distanceFrom(m_vVector);
 
 	// sort out looping move to origins by using previous distance check
-	if ( fDistance < 64 || fPrevDist&&fPrevDist < fDistance )
+	if (fPrevDist && fPrevDist < fDistance || fDistance < 64)
 	{
 		complete();
 		return;
@@ -3731,7 +3731,7 @@ CBotInvestigateHidePoint :: CBotInvestigateHidePoint ( int iWaypointIndexToInves
 		if ( pWaypointOther == pOriginalWpt )
 			continue;
 
-		m_CheckPoints.push_back(pWaypointOther->getOrigin());
+		m_CheckPoints.emplace_back(pWaypointOther->getOrigin());
 	}
 
 	m_iCurrentCheckPoint = 0;

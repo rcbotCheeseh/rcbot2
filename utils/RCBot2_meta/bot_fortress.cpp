@@ -773,7 +773,8 @@ void CBotFortress :: medicCalled(edict_t *pPlayer )
 		return; // nothing to do
 	if ( distanceFrom(pPlayer) > 1024 ) // a bit far away
 		return; // ignore
-	if ( (CBotGlobals::getTeam(pPlayer) == getTeam()) || (CClassInterface::getTF2Class(pPlayer) == TF_CLASS_SPY) && thinkSpyIsEnemy(pPlayer,CTeamFortress2Mod::getSpyDisguise(pPlayer)) )
+	if (CClassInterface::getTF2Class(pPlayer) == TF_CLASS_SPY && thinkSpyIsEnemy(
+		pPlayer, CTeamFortress2Mod::getSpyDisguise(pPlayer)) || CBotGlobals::getTeam(pPlayer) == getTeam())
 	{
 		bool bGoto = true;
 
@@ -3133,7 +3134,7 @@ void CBotTF2::modThink()
 			{
 				spyCloak();
 			}
-			else if (bIsCloaked || isDisguised() && !hasEnemy())
+			else if (isDisguised() && !hasEnemy() || bIsCloaked)
 			{
 				updateCondition(CONDITION_COVERT);
 			}
@@ -7034,7 +7035,6 @@ void CBotTF2::roundReset(bool bFullReset)
 	m_pNearestEnemyDisp = nullptr;
 	m_pNearestPipeGren = nullptr;
 	m_pFlag = nullptr;
-	m_pPrevSpy = nullptr;
 	m_iSentryKills = 0;
 	m_fSentryPlaceTime = 0.0;
 	m_fDispenserPlaceTime = 0.0f;
@@ -7672,10 +7672,6 @@ CBotTF2::CBotTF2(): m_iTrapCPIndex(0), m_fRemoveSapTime(0), m_fRevMiniGunTime(0)
 
 	m_iTrapType = TF_TRAP_TYPE_NONE;
 	m_pLastEnemySentry = MyEHandle(nullptr);
-	m_prevSentryHealth = 0;
-	m_prevDispHealth = 0;
-	m_prevTeleExtHealth = 0;
-	m_prevTeleEntHealth = 0;
 	m_fHealClickTime = 0;
 	m_fCheckHealTime = 0;
 

@@ -41,7 +41,7 @@ CBotCommandInline DebugGameEventCommand("gameevent", CMD_ACCESS_DEBUG, [](CClien
 
 CBotCommandInline DebugBotCommand("bot", CMD_ACCESS_DEBUG, [](CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5)
 {
-	if ( (!pcmd || !*pcmd) )
+	if ( !pcmd || !*pcmd )
 	{
 		extern IServerGameEnts *servergameents;
 		// do a traceline in front of player
