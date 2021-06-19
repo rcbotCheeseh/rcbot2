@@ -1385,7 +1385,7 @@ void CTeamFortress2Mod::updateBluePayloadBomb ( edict_t *pent )
 
 bool CTeamFortress2Mod::isDefending ( edict_t *pPlayer )//, int iCapIndex = -1 )
 {
-	const int iIndex = 1<< ENTINDEX(pPlayer)-1;
+	const int iIndex = (1 << (ENTINDEX(pPlayer) - 1));
 
 	if ( m_ObjectiveResource.GetNumControlPoints() > 0 )
 	{
@@ -1411,7 +1411,7 @@ bool CTeamFortress2Mod::isDefending ( edict_t *pPlayer )//, int iCapIndex = -1 )
 
 bool CTeamFortress2Mod::isCapping ( edict_t *pPlayer )//, int iCapIndex = -1 )
 {
-	const int index = 1<< ENTINDEX(pPlayer)-1;
+	const int index = (1 << (ENTINDEX(pPlayer) - 1));
 
 	if ( m_ObjectiveResource.GetNumControlPoints() > 0 )
 	{

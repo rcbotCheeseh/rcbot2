@@ -2529,7 +2529,7 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 			}
 
 			if ( pBot->isVisible(pPlayer) )
-				seenlist |= 1<<i-1;
+				seenlist |= (1 << (i - 1));
 		}
 		
 		m_fTime = engine->Time() + randomFloat(2.0f,5.0f);
@@ -2576,10 +2576,10 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 				if ( CTeamFortress2Mod::isFlagCarrier(pPlayer) )
 					continue; // spies can't hold flag unless not disguised
 
-				if ( !(seenlist & 1<<i-1) )
+				if (!(seenlist & (1 << (i - 1))))
 				{
 					m_pUnseenBefore = pPlayer;
-					seenlist |= 1<<i-1; //add to list
+					seenlist |= (1 << (i - 1)); //add to list
 					break;
 				}
 			}

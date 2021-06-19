@@ -1084,14 +1084,14 @@ public:
 
 	static edict_t *findResourceEntity ();
 
-	static void addCapDefender ( edict_t *pPlayer, int iCapIndex )
+	static void addCapDefender(edict_t* pPlayer, int iCapIndex)
 	{
-		m_iCapDefenders[iCapIndex] |= 1<< ENTINDEX(pPlayer)-1;
+		m_iCapDefenders[iCapIndex] |= (1 << (ENTINDEX(pPlayer) - 1));
 	}
 
-	static void removeCapDefender ( edict_t *pPlayer, int iCapIndex )
+	static void removeCapDefender(edict_t* pPlayer, int iCapIndex)
 	{
-		m_iCapDefenders[iCapIndex] &= ~(1<< ENTINDEX(pPlayer)-1);
+		m_iCapDefenders[iCapIndex] &= ~(1 << (ENTINDEX(pPlayer) - 1));
 	}
 
 	static void resetDefenders ()
@@ -1105,8 +1105,8 @@ public:
 	
 	static void addCapper ( int cp, int capper )
 	{
-		if ( capper && cp < MAX_CAP_POINTS )
-			m_Cappers[cp] |= 1<<capper-1;
+		if (capper && (cp < MAX_CAP_POINTS))
+			m_Cappers[cp] |= (1 << (capper - 1));
 	}
 
 	static void removeCappers ( int cp )

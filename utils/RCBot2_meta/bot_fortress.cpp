@@ -3677,7 +3677,7 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 	
 	float fTotal = 0;
 
-	for ( int i = 0; i < availableClasses.size(); i ++ )
+	for (int i = 0; i < availableClasses.size(); i++)
 	{
 		fTotal += m_fClassDisguiseFitness[ availableClasses[i] ];
 	}
@@ -7530,7 +7530,6 @@ void CBotTF2 :: enemyAtIntel ( Vector vPos, int type, int iArea )
 		m_fLookSetTime = m_fListenTime;
 		setLookAtTask(LOOK_NOISE);
 	}
-
 
 	// bot is already capturing a point
 	if ( m_pSchedules && m_pSchedules->isCurrentSchedule(SCHED_ATTACKPOINT) )
