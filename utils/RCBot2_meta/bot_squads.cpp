@@ -63,7 +63,7 @@ private:
 
 //-------------
 
-void CBotSquads::FreeMemory ( void )
+void CBotSquads::FreeMemory ()
 {
 	// TODO inline squad or use unique pointers or something so they're freed automatically
 	for (CBotSquad *squad : m_theSquads) {
@@ -101,8 +101,6 @@ edict_t *CBotSquad::getMember ( size_t iMember )
 //              make a new squad
 CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 {
-	CBot *pBot;
-
 	//char msg[120];
 
 	if ( !pLeader )
@@ -134,6 +132,7 @@ CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 	
 	if ( theSquad != nullptr )
 	{
+		CBot *pBot;
 		m_theSquads.push_back(theSquad);
 		
 		if ( (pBot = CBots::getBotPointer(pLeader)) != nullptr )
@@ -209,7 +208,7 @@ void CBotSquads::RemoveSquad ( CBotSquad *pSquad )
 	delete pSquad;
 }
 
-void CBotSquads::UpdateAngles ( void )
+void CBotSquads::UpdateAngles ()
 {
 	for (CBotSquad *squad : m_theSquads) {
 		squad->UpdateAngles();
@@ -218,7 +217,7 @@ void CBotSquads::UpdateAngles ( void )
 
 //-------------
 
-void CBotSquad::UpdateAngles ( void )
+void CBotSquad::UpdateAngles ()
 {
 	edict_t *pLeader = GetLeader();
 
@@ -271,7 +270,7 @@ void CBotSquads :: ChangeLeader ( CBotSquad *pSquad )
  * Make the succeeding squad member the new leader if they have any subordinates, otherwise
  * disband the squad.
  */
-void CBotSquad::ChangeLeader ( void )
+void CBotSquad::ChangeLeader ()
 {
 	if ( m_SquadMembers.empty() )
 	{
@@ -413,7 +412,7 @@ size_t CBotSquad::numMembers ()
 	return m_SquadMembers.size();
 }
 
-void CBotSquad :: ReturnAllToFormation ( void )
+void CBotSquad :: ReturnAllToFormation ()
 {
 	for (edict_t *member : m_SquadMembers) {
 		CBot *pBot = CBots::getBotPointer(member);

@@ -702,7 +702,7 @@ public:
 
 	virtual bool wantToInvestigateSound ();
 	inline void wantToInvestigateSound ( bool bSet ) { m_bWantToInvestigateSound = bSet; }
-	inline bool wantToShoot ( void ) { return m_bOpenFire; }
+	inline bool wantToShoot () const { return m_bOpenFire; }
 	inline void wantToShoot ( bool bSet ) { m_bOpenFire = bSet; }
 	inline void wantToListen ( bool bSet ) { m_bWantToListen = bSet; }
 	bool wantToListen ();
@@ -712,7 +712,7 @@ public:
 	
 	bool isFacing ( Vector vOrigin );
 
-	bool isOnLift (void);
+	bool isOnLift ();
 
 	virtual bool isDOD () { return false; }
 
@@ -759,17 +759,17 @@ public:
 	inline void resetAreaClear () { m_uSquadDetail.b1.said_area_clear = false; }
 
 
-	inline bool inSquad ( CBotSquad *pSquad )
+	inline bool inSquad ( CBotSquad *pSquad ) const
 	{
 		return m_pSquad == pSquad;
 	}
 
-	inline bool inSquad ( void )
+	inline bool inSquad () const
 	{
 		return m_pSquad != nullptr;
 	}
 
-	bool isSquadLeader ( void );
+	bool isSquadLeader ();
 
 	inline void setSquadIdleTime ( float fTime )
 	{
@@ -810,7 +810,7 @@ public:
 
 	bool recentlyHurt ( float fTime );
 
-	eBotAction getCurrentUtil ( void ) { return m_CurrentUtil;}
+	eBotAction getCurrentUtil () const { return m_CurrentUtil;}
 
 	bool recentlySpawned ( float fTime );
 

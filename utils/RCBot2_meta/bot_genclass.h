@@ -83,7 +83,7 @@ class dataStack
 {
 	public:
 
-		void Init ( void )
+		void Init ()
 		{
 			m_Head = NULL;
 		}
@@ -201,7 +201,7 @@ class dataStack
 			return false;
 		}
 
-		void Destroy ( void )
+		void Destroy ()
 		{
 			while ( m_Head )
 			{
@@ -218,7 +218,7 @@ class dataStack
 			m_Head = NULL;
 		}
 
-		inline bool IsEmpty ( void )
+		inline bool IsEmpty ()
 		{
 			return m_Head == nullptr;
 		}
@@ -234,7 +234,7 @@ class dataStack
 
 		}
 
-		T Pop ( void )
+		T Pop ()
 		{
 			dataNode<T> *tempNode = m_Head;
 
@@ -246,7 +246,7 @@ class dataStack
 			return returnData;
 		}
 
-		T ChooseFromStack ( void )
+		T ChooseFromStack ()
 		{					
 			T *l_pTemp;
 
@@ -270,7 +270,7 @@ class dataStack
 			return *l_pTemp;
 		}
 
-		T *ChoosePointerFromStack ( void )
+		T *ChoosePointerFromStack ()
 		{
 			T *l_pTemp;
 
@@ -296,7 +296,7 @@ class dataStack
 
 		// Returns a pointer to the DETAILS (m_NodeData)
 		// in the HEAD.
-		T *GetHeadInfoPointer ( void )
+		T *GetHeadInfoPointer ()
 		{
 			if ( m_Head )
 			{
@@ -629,7 +629,7 @@ class dataUnconstArray
 			this->Clear();
 		}
 
-		inline int Size (void)
+		inline int Size ()
 		{
 			return array.size();
 		}
@@ -690,22 +690,22 @@ class dataUnconstArray
 #endif
 		}
 
-		inline void Destroy (void)
+		inline void Destroy ()
 		{
 			array.clear();
 		}
 
-		inline void Init ( void )
+		inline void Init ()
 		{
 			array.clear();
 		}
 
-		inline bool IsEmpty ( void )
+		inline bool IsEmpty ()
 		{
 			return array.empty();
 		}
 
-		inline void Clear ( void )
+		inline void Clear ()
 		{
 			this->Destroy();
 			this->Init();
@@ -713,7 +713,7 @@ class dataUnconstArray
 
 		//static int RandomInteger ( int min, int max );
 
-		T Random ( void )
+		T Random ()
 		{
 			//return array[RANDOM_INT(0,array.size()-1)];
 			//return array[RandomInteger(0,array.size()-1)];
@@ -769,13 +769,13 @@ class dataQueue
 			this->Destroy();
 		}
 
-		inline void Init ( void )
+		inline void Init ()
 		{
 			m_Head = NULL;
 			m_Tail = NULL;
 		}
 
-		void Destroy ( void )
+		void Destroy ()
 		{
 			dataNode<T> *tempNode = nullptr;
 
@@ -795,7 +795,7 @@ class dataQueue
 			m_Tail = NULL;
 		}
 
-		inline bool IsEmpty ( void )
+		inline bool IsEmpty ()
 		{
 			return m_Head == nullptr||m_Tail == nullptr;
 		}
@@ -837,17 +837,17 @@ class dataQueue
 			}
 		}
 
-		inline T GetFrontInfo ( void )
+		inline T GetFrontInfo ()
 		{
 			return m_Head->m_NodeData;
 		}
 
-		inline T *GetFrontPointer ( void )
+		inline T *GetFrontPointer ()
 		{
 			return &m_Head->m_NodeData;
 		}
 
-		T ChooseFrom ( void )
+		T ChooseFrom ()
 		{
 			T *l_pTemp;
 
@@ -872,7 +872,7 @@ class dataQueue
 			return *l_pTemp;
 		}
 
-		T *ChoosePointerFrom ( void )
+		T *ChoosePointerFrom ()
 		{
 			T *l_pTemp;
 
@@ -897,7 +897,7 @@ class dataQueue
 			return l_pTemp;
 		}
 
-		void RemoveFront ( void )
+		void RemoveFront ()
 		{
 			if ( m_Head == nullptr )
 			{

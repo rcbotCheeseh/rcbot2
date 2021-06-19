@@ -1126,7 +1126,7 @@ edict_t *CBot :: getEdict ()
 	return m_pEdict;
 }
 
-bool CBot :: isSquadLeader ( void )
+bool CBot :: isSquadLeader ()
 {
 	return (m_pSquad->GetLeader() == m_pEdict);
 }
@@ -3408,7 +3408,6 @@ bool CBots :: needToKickBot ()
 void CBots :: kickRandomBot (size_t count)
 {
 	std::vector<int> botList;
-	char szCommand[512];
 	//gather list of bots
 	for ( size_t i = 0; i < MAX_PLAYERS; i ++ )
 	{
@@ -3426,6 +3425,7 @@ void CBots :: kickRandomBot (size_t count)
 
 	size_t numBotsKicked = 0;
 	while (numBotsKicked < count && botList.size()) {
+		char szCommand[512];
 		const size_t index = botList.back();
 		botList.pop_back();
 		

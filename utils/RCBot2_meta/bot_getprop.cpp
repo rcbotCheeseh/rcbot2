@@ -536,9 +536,6 @@ bool CClassInterface :: getTF2ObjectiveResource ( CTFObjectiveResource *pResourc
 
 void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 {
-	static IServerUnknown *pUnknown;
-	static CBaseEntity *pEntity;
-
 	if (!m_offset || edict== nullptr)
 	{
 		m_data = nullptr;
@@ -548,6 +545,8 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 
 	if (bIsEdict)
 	{
+		static CBaseEntity *pEntity;
+		static IServerUnknown *pUnknown;
 		auto*pEdict = static_cast<edict_t*>(edict);
 
 		pUnknown = pEdict->GetUnknown();

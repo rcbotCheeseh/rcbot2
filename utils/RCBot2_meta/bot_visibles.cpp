@@ -161,12 +161,6 @@ void CBotVisibles :: debugString ( char *string )
 */
 void CBotVisibles :: checkVisible ( edict_t *pEntity, int *iTicks, bool *bVisible, int &iIndex, bool bCheckHead )
 {
-	// make these static, calling a function with data many times	
-	//static Vector vectorSurroundMins, vectorSurroundMaxs;
-	static Vector vEntityOrigin;
-	static int clusterIndex;
-	static bool playerInPVS;
-
 	// reset
 	*bVisible = false;
 
@@ -179,6 +173,9 @@ void CBotVisibles :: checkVisible ( edict_t *pEntity, int *iTicks, bool *bVisibl
 		// if in view cone
 		if ( m_pBot->FInViewCone(pEntity) )
 		{
+			static bool playerInPVS;
+			static int clusterIndex;
+			static Vector vEntityOrigin;
 			// from Valve developer community wiki
 			// http://developer.valvesoftware.com/wiki/Transforming_the_Multiplayer_SDK_into_Coop
 

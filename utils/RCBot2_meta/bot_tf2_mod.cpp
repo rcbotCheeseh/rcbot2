@@ -297,10 +297,10 @@ void CTeamFortress2Mod :: mapInit ()
 
 int CTeamFortress2Mod :: getTeleporterWaypoint ( edict_t *pTele )
 {
-	for ( int i = 0; i < MAX_PLAYERS; i ++ )
+	for (auto& m_Teleporter : m_Teleporters)
 	{
-		if ( m_Teleporters[i].exit.get() == pTele )
-			return m_Teleporters[i].m_iWaypoint; 
+		if (m_Teleporter.exit.get() == pTele )
+			return m_Teleporter.m_iWaypoint; 
 	}
 
 	return -1;
@@ -342,8 +342,6 @@ bool CTeamFortress2Mod :: TF2_IsPlayerKrits(edict_t *pPlayer)
 {
 	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
 	return (pcond & TF2_PLAYER_KRITS) == TF2_PLAYER_KRITS;
-
-	return false;
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerInvuln(edict_t *pPlayer)
@@ -637,11 +635,11 @@ edict_t *CTeamFortress2Mod :: getTeleporterExit ( edict_t *pTele )
 {
 	edict_t *pExit;
 
-	for ( int i = 0; i < MAX_PLAYERS; i ++ )
+	for (auto& m_Teleporter : m_Teleporters)
 	{
-		if ( m_Teleporters[i].entrance.get() == pTele )
+		if (m_Teleporter.entrance.get() == pTele )
 		{
-			if ( (pExit = m_Teleporters[i].exit.get()) != nullptr )
+			if ( (pExit = m_Teleporter.exit.get()) != nullptr )
 			{
 				return pExit;
 			}
@@ -904,7 +902,7 @@ int CTeamFortress2Mod ::getHighestScore ()
 
 		if ( edict && CBotGlobals::entityIsValid(edict) )
 		{
-			short int score = (short int)CClassInterface::getTF2Score(edict);
+			auto score = static_cast<short>(CClassInterface::getTF2Score(edict));
 		
 			if ( score > highest )
 			{
@@ -998,11 +996,10 @@ edict_t *CTeamFortress2Mod::getBuilding (eEngiBuild object, edict_t *pOwner)
 // get the owner of 
 edict_t *CTeamFortress2Mod ::getBuildingOwner (eEngiBuild object, short index)
 {
-	static short int i;
-	static tf_tele_t *tele;
-
 	switch ( object )
 	{
+		static tf_tele_t *tele;
+		static short int i;
 	case ENGI_DISP:
 		for ( i = 0; i < MAX_PLAYERS; i ++ )
 		{
@@ -1031,6 +1028,7 @@ edict_t *CTeamFortress2Mod ::getBuildingOwner (eEngiBuild object, short index)
 			tele++;
 		}
 		break;
+	default: ;
 	}
 
 	return nullptr;
@@ -1316,14 +1314,14 @@ void CTeamFortress2Mod :: roundReset ()
 void CTeamFortress2Mod::sentryBuilt(edict_t *pOwner, eEngiBuild type, edict_t *pBuilding )
 {
 	static short int index;
-	static tf_sentry_t *temp;
-	
+
 	index = ENTINDEX(pOwner)-1;
 
 	if ( index>=0 && index<MAX_PLAYERS )
 	{
 		if ( type == ENGI_SENTRY )
 		{
+			static tf_sentry_t *temp;
 			temp = &m_SentryGuns[index];
 			temp->sentry = MyEHandle(pBuilding);
 			temp->sapper = MyEHandle();
@@ -1353,14 +1351,14 @@ bool CTeamFortress2Mod::isSentryGun (edict_t *pEdict )
 void CTeamFortress2Mod::dispenserBuilt(edict_t *pOwner, eEngiBuild type, edict_t *pBuilding )
 {
 	static short int index;
-	static tf_disp_t *temp;
-	
+
 	index = ENTINDEX(pOwner)-1;
 
 	if ( index>=0 && index<MAX_PLAYERS )
 	{
 		if ( type == ENGI_DISP )
 		{
+			static tf_disp_t *temp;
 			temp = &m_Dispensers[index];
 			temp->disp = MyEHandle(pBuilding);
 			temp->sapper = MyEHandle();

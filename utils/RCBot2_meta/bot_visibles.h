@@ -106,7 +106,7 @@ public:
 
 	void checkVisible ( edict_t *pEntity, int *iTicks, bool *bVisible, int &iIndex, bool bCheckHead = false );
 
-	void debugString ( char *string );
+	static void debugString ( char *string );
 
 	static const int DEFAULT_MAX_TICKS = 10; // max number of PVS checks fired every visible check
 

@@ -106,8 +106,8 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 	baseAddr = reinterpret_cast<uintptr_t>(info.AllocationBase);
 
 	// All this is for our insane sanity checks :o 
-	IMAGE_DOS_HEADER* dos = reinterpret_cast<IMAGE_DOS_HEADER*>(baseAddr);
-	IMAGE_NT_HEADERS* pe = reinterpret_cast<IMAGE_NT_HEADERS*>(baseAddr + dos->e_lfanew);
+	auto dos = reinterpret_cast<IMAGE_DOS_HEADER*>(baseAddr);
+	auto pe = reinterpret_cast<IMAGE_NT_HEADERS*>(baseAddr + dos->e_lfanew);
 	IMAGE_FILE_HEADER* file = &pe->FileHeader;
 	IMAGE_OPTIONAL_HEADER* opt = &pe->OptionalHeader;
 

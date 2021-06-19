@@ -40,7 +40,7 @@ public:
 
 	CBotGAValues( std::vector<float> values );
 
-	void init (void);
+	void init ();
 
 	// crossover with other individual
 	void crossOver ( IIndividual *other );

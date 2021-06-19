@@ -113,14 +113,14 @@ void CBotConfigFile :: executeCommands ()
 
 void CRCBotTF2UtilFile :: init()
 {
-	for ( short unsigned int i = 0; i < UTIL_TYPE_MAX; i ++ )
+	for (auto& m_fUtil : m_fUtils)
 	{
-		for ( short unsigned int j = 0; j < BOT_UTIL_MAX; j ++ )
+		for (auto& j : m_fUtil)
 		{
-			for ( short unsigned int k = 0; k < 9; k ++ )
+			for (auto& k : j)
 			{
-				m_fUtils[i][j][k].min = 0;
-				m_fUtils[i][j][k].max = 0;
+				k.min = 0;
+				k.max = 0;
 			}
 		}
 	}
@@ -137,14 +137,12 @@ void CRCBotTF2UtilFile :: addUtilPerturbation (eBotAction iAction, eTF2UtilType 
 
 void CRCBotTF2UtilFile :: loadConfig()
 {
-	char szFullFilename[512];
-	 char szFilename[64];
-	 char line[256];
-
 	init();
 
 	 for ( eTF2UtilType iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = (eTF2UtilType)((int)iFile+1) )
 	 {
+		 char szFilename[64];
+		 char szFullFilename[512];
 		 if ( iFile == BOT_ATT_UTIL )
 		 {
 			sprintf(szFilename,"attack_util.csv");
@@ -159,16 +157,16 @@ void CRCBotTF2UtilFile :: loadConfig()
 
 		if ( fp )
 		{
+			char line[256];
 			auto iUtil = (eBotAction)0;
 
 			while ( fgets(line,255,fp) != nullptr )
 			{
-				float iClassList[TF_CLASS_MAX][2];
-				char utiltype[64];
-
 				if ( line[0] == 'B' && line[1] == 'O' && 
 					 line[2] == 'T' && line[3] == '_') // OK
 				{
+					char utiltype[64];
+					float iClassList[TF_CLASS_MAX][2];
 
 					// Format:    U, 1, 2, 3, 4, 5, 6, 7, 8, 9
 					//                

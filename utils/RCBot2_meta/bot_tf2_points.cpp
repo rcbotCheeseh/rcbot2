@@ -376,7 +376,7 @@ int CTFObjectiveResource :: getControlPointArea ( edict_t *pPoint )
 
 	return 0;
 }
-void CTFObjectiveResource::	debugprint ( void )
+void CTFObjectiveResource::	debugprint ()
 {
 	edict_t *pEdict = CClients::getListenServerClient();
 
@@ -582,12 +582,12 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 			int iNumPrevPointsAvail = 0;
 
 			// Check this points prevous points
-			for ( int j = 0; j < MAX_PREVIOUS_POINTS; j ++ )
+			for (int j : arr[i].iPrev)
 			{
-				if ( arr[i].iPrev[j] != -1 )
+				if (j != -1 )
 				{
 					// the previous point is not valid
-					if ( arr[arr[i].iPrev[j]].bValid )
+					if ( arr[j].bValid )
 						iNumPrevPointsAvail++;
 				}
 			}

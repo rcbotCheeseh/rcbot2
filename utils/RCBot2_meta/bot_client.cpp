@@ -537,9 +537,7 @@ void CClient :: think ()
 			//g_pBotManager->GetBotController(m_pPlayer)->IsEFlagSet();
 
 			if ( /*(pev->waterlevel < 3) &&*/ m_fCanPlaceJump < engine->Time() )
-			{	
-				Vector v_floor;
-
+			{
 				if ( m_fCanPlaceJump != -1 && m_iLastButtons & IN_JUMP && !(iPlayerFlags & FL_ONGROUND) )
 				{
 					int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 80.0, -1, true, false, false, nullptr);
@@ -572,6 +570,7 @@ void CClient :: think ()
 
 							if ( iNewWpt != -1 )
 							{
+								Vector v_floor;
 								CWaypoint *pWpt = CWaypoints::getWaypoint(iNewWpt);
 								CWaypoint *pJumpWpt = CWaypoints::getWaypoint(m_iLastJumpWaypointIndex);
 

@@ -353,7 +353,6 @@ void CWaypointLocations :: FindNearestCoverWaypointInBucket ( int i, int j, int 
 {
 	//dataStack <int> tempStack = m_iLocations[i][j][k];
 
-	float fDist;
 	WaypointList &arr = m_iLocations[i][j][k];
 	const size_t size = arr.size();
 	//CBotMod *curmod = CBotGlobals::getCurrentMod();
@@ -382,7 +381,7 @@ void CWaypointLocations :: FindNearestCoverWaypointInBucket ( int i, int j, int 
 			continue;
 
 
-		fDist = curr_wpt->distanceFrom(vOrigin);
+		float fDist = curr_wpt->distanceFrom(vOrigin);
 
 		if ( vGoalOrigin != nullptr )
 		{
@@ -707,7 +706,6 @@ int CWaypointLocations :: NearestWaypoint ( const Vector &vOrigin, float fNeares
 // Draw waypoints around a player
 void CWaypointLocations :: DrawWaypoints ( CClient *pClient, float fDist )
 {
-	static byte m_bPvs[MAX_MAP_CLUSTERS/8];
 	static int clusterIndex;
 	static short int size;
 	static int iWpt;
@@ -762,6 +760,7 @@ void CWaypointLocations :: DrawWaypoints ( CClient *pClient, float fDist )
 					{
 						//if ( CBotGlobals::FInViewCone(pEntity) )
 						{
+							static byte m_bPvs[MAX_MAP_CLUSTERS/8];
 							// from Valve developer community wiki
 							// http://developer.valvesoftware.com/wiki/Transforming_the_Multiplayer_SDK_into_Coop
 

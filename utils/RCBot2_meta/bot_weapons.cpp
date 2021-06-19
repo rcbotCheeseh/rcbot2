@@ -273,7 +273,7 @@ int CBotWeapon :: getAmmo (CBot *pBot, int type )
 }
 
 
-bool CBotWeapons::hasExplosives( void )
+bool CBotWeapons::hasExplosives()
 {
 	for (auto& m_theWeapon : m_theWeapons)
 	{
@@ -734,9 +734,6 @@ void CWeapons::loadWeapons(const char *szWeaponListName, WeaponsData_t *pDefault
 				{
 					kv = kv->GetFirstSubKey();
 
-					if (false)
-						kv = kv->GetFirstTrueSubKey();
-
 					while (kv != nullptr)
 					{
 						WeaponsData_t newWeapon;
@@ -846,16 +843,16 @@ CBotWeapon *CBotWeapons::getActiveWeapon(const char *szWeaponName, edict_t *pWea
 
 		if (pWeapon)
 		{
-			for (unsigned short int i = 0; i < MAX_WEAPONS; i++)
+			for (auto& m_theWeapon : m_theWeapons)
 			{
-				CWeapon *p = m_theWeapons[i].getWeaponInfo();
+				CWeapon *p = m_theWeapon.getWeaponInfo();
 
 				if (!p)
 					continue;
 
 				if (strcmp(p->getWeaponName(), szWeaponName) == 0)
 				{
-					toReturn = &m_theWeapons[i];
+					toReturn = &m_theWeapon;
 					break;
 				}
 			}

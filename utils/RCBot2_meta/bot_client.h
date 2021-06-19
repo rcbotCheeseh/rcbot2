@@ -74,7 +74,7 @@ public:
 		m_bVectorSet = TRUE;
 	}
 
-	inline Vector GetVector ( void ) const
+	inline Vector GetVector () const
 	{
 		return Vector((float)m_x,(float)m_y,(float)m_z);
 	}

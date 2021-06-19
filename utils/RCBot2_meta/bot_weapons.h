@@ -529,7 +529,7 @@ public:
 
 	static inline void addWeapon ( CWeapon *pWeapon ) { m_theWeapons.push_back(pWeapon); }
 
-	static CWeapon *getWeapon ( const int iId );
+	static CWeapon *getWeapon ( int iId );
 
 	static CWeapon *getWeapon ( const char *szWeapon );
 
@@ -788,7 +788,7 @@ public:
 
 	bool hasWeapon ( int id );
 
-	bool hasExplosives ( void );
+	bool hasExplosives ();
 
 	// returns true if there is a change to the weapons
 	bool update ( bool bOverrideAllFromEngine = true ); // update from sendprop

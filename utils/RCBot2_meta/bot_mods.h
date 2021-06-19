@@ -375,10 +375,10 @@ public:
 	bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, int id );
 	bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, int id );
 
-	bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin );
-	bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin );
+	static bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin );
+	static bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin );
 
-	inline int getNumBombsRequired ( int iId )
+	inline int getNumBombsRequired ( int iId ) const
 	{
 		if ( iId == -1 )
 			return false;
@@ -391,7 +391,7 @@ public:
 		return getNumBombsRequired(getBombID(pBomb));
 	}
 
-	inline int getNumBombsRemaining ( int iId )
+	inline int getNumBombsRemaining ( int iId ) const
 	{
 		if ( iId == -1 )
 			return false;
@@ -404,7 +404,7 @@ public:
 		return getNumBombsRemaining(getBombID(pBomb));
 	}
 
-	inline bool isBombBeingDefused ( int iId )
+	inline bool isBombBeingDefused ( int iId ) const
 	{
 		if ( iId == -1 )
 			return false;
@@ -421,7 +421,7 @@ public:
 
 	inline int numFriendliesAtCap ( edict_t *pFlag, int iTeam ) { return numFriendliesAtCap(getFlagID(pFlag),iTeam); }
 
-	inline int numFriendliesAtCap ( int iFlag, int iTeam )
+	inline int numFriendliesAtCap ( int iFlag, int iTeam ) const
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -429,7 +429,7 @@ public:
 		return iTeam == TEAM_ALLIES ? m_iNumAllies[iFlag] : m_iNumAxis[iFlag];
 	}
 
-	inline int numEnemiesAtCap ( int iFlag, int iTeam )
+	inline int numEnemiesAtCap ( int iFlag, int iTeam ) const
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -480,7 +480,7 @@ public:
 		return getBombID(pent) != -1;
 	}
 
-	inline int getNumBombsOnMap ( int iTeam )
+	inline int getNumBombsOnMap ( int iTeam ) const
 	{
 		if ( iTeam == TEAM_ALLIES )
 			return m_iNumAlliesBombsOnMap;
@@ -673,8 +673,6 @@ public:
 	{
 		setup("FortressForever", MOD_FF, BOTTYPE_FF, "FF");
 	}
-private:
-
 };
 
 class CHLDMSourceMod : public CBotMod
@@ -800,7 +798,7 @@ public:
 
 	bool isWaypointAreaValid ( int iWptArea, int iWptFlags );
 
-	static bool isSuddenDeath(void);
+	static bool isSuddenDeath();
 
 	static bool isHealthKit ( edict_t *pEntity );
 
@@ -1053,10 +1051,10 @@ public:
 
 	static bool isSentrySapped ( edict_t *pSentry )
 	{
-		for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
+		for (auto& m_SentryGun : m_SentryGuns)
 		{
-			if ( m_SentryGuns[i].sentry.get() == pSentry )
-				return m_SentryGuns[i].sapper.get()!= nullptr;
+			if (m_SentryGun.sentry.get() == pSentry )
+				return m_SentryGun.sapper.get()!= nullptr;
 		}
 
 		return false;
@@ -1064,10 +1062,10 @@ public:
 
 	static bool isTeleporterSapped ( edict_t *pTele )
 	{
-		for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
+		for (auto& m_Teleporter : m_Teleporters)
 		{
-			if ( m_Teleporters[i].entrance.get() == pTele || m_Teleporters[i].exit.get() == pTele )
-				return m_Teleporters[i].sapper.get()!= nullptr;
+			if (m_Teleporter.entrance.get() == pTele || m_Teleporter.exit.get() == pTele )
+				return m_Teleporter.sapper.get()!= nullptr;
 		}
 
 		return false;
@@ -1075,10 +1073,10 @@ public:
 
 	static bool isDispenserSapped ( edict_t *pDisp )
 	{
-		for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
+		for (auto& m_Dispenser : m_Dispensers)
 		{
-			if ( m_Dispensers[i].disp.get() == pDisp )
-				return m_Dispensers[i].sapper.get()!= nullptr;
+			if (m_Dispenser.disp.get() == pDisp )
+				return m_Dispenser.sapper.get()!= nullptr;
 		}
 
 		return false;

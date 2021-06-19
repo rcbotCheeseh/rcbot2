@@ -193,10 +193,10 @@ void CBotUtilities :: execute ()
 			{
 				pnew->util = pUtil;
 				pnew->next = nullptr;
-				util_node_t* prev = nullptr;
 
 				if ( temp )
 				{
+					util_node_t * prev = nullptr;
 					while ( temp )
 					{
 						// put into correct position

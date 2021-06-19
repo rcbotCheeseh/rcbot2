@@ -424,7 +424,6 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 	static CBotUtility *next;
 	static CBotWeapon *gravgun;
 	static CBotWeapon *crossbow;
-	static CWeapon *pWeapon;
 	static bool bCheckCurrent;
 
 	if ( !hasSomeConditions(CONDITION_CHANGED) && !m_pSchedules->isEmpty() )
@@ -443,7 +442,11 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 
 		if ( CBotGlobals::entityIsValid(pent) )
 		{
-			ADD_UTILITY(BOT_UTIL_HL2DM_GRAVIGUN_PICKUP,(!m_pEnemy||(m_pCurrentWeapon&&(strcmp("weapon_physcannon",m_pCurrentWeapon->GetClassName())))) && gravgun && gravgun->hasWeapon() && (m_NearestPhysObj.get()!=NULL) && (gravgun->getWeaponIndex() > 0) && (CClassInterface::gravityGunObject(INDEXENT(gravgun->getWeaponIndex()))==NULL),0.9f);
+			ADD_UTILITY(BOT_UTIL_HL2DM_GRAVIGUN_PICKUP,
+			            (!m_pEnemy||(m_pCurrentWeapon && strcmp("weapon_physcannon",m_pCurrentWeapon->GetClassName())))
+			            && gravgun && gravgun->hasWeapon() && (m_NearestPhysObj.get()!=NULL) && gravgun->getWeaponIndex
+				            () > 0 && (CClassInterface::gravityGunObject(INDEXENT(gravgun->getWeaponIndex()))==NULL),
+			            0.9f);
 		}
 	}
 
@@ -486,6 +489,7 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 
 	if ( m_pNearbyWeapon.get() )
 	{
+		static CWeapon *pWeapon;
 		pWeapon = CWeapons::getWeapon(m_pNearbyWeapon.get()->GetClassName());
 
 		if ( pWeapon && !m_pWeapons->hasWeapon(pWeapon->getID()) )
@@ -636,15 +640,14 @@ bool CHLDMBot::checkStuck()
 bool CHLDMBot :: willCollide ( edict_t *pEntity, bool *bCanJump, float *fTime )
 {
 	static Vector vel;
-	static Vector v_size;
-	static float fDistance;
-	static Vector vOrigin;
-	static float fSpeed;
-	static Vector v_dest;
 	static Vector v_min,v_max;
 
 	if ( CClassInterface::getVelocity(m_pEdict,&vel) )
 	{
+		static float fSpeed;
+		static Vector vOrigin;
+		static float fDistance;
+		static Vector v_size;
 		v_min = pEntity->GetCollideable()->OBBMins();
 		v_max = pEntity->GetCollideable()->OBBMaxs();
 		v_size = v_max - v_min;
@@ -656,6 +659,7 @@ bool CHLDMBot :: willCollide ( edict_t *pEntity, bool *bCanJump, float *fTime )
 		// speed = dist/time  --- time = dist/speed
 		if ( fSpeed > 0 )
 		{
+			static Vector v_dest;
 			*fTime = fDistance / fSpeed;
 
 			vel = vel / fSpeed; // normalize

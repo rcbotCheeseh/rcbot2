@@ -206,7 +206,7 @@ private:
 class CWaypointTest
 {
 public:
-	void go ( edict_t *pPlayer );
+	static void go ( edict_t *pPlayer );
 };
 
 typedef struct
@@ -376,7 +376,7 @@ public:
 
 	Vector applyRadius ();
 
-	bool isAiming ( void );
+	bool isAiming ();
 
 private:
 	Vector m_vOrigin;

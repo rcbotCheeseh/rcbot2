@@ -16,9 +16,9 @@ class CSignatureFunction
 public:
 	CSignatureFunction() { m_func = nullptr; }
 private:
-	size_t decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr);
+	static size_t decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr);
 
-	bool getLibraryInfo(const void *libPtr, DynLibInfo &lib);
+	static bool getLibraryInfo(const void *libPtr, DynLibInfo &lib);
 
 	void *findPattern(const void *libPtr, const char *pattern, size_t len);
 
@@ -34,9 +34,9 @@ class CGameRulesObject : public CSignatureFunction
 public:
 	CGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase);
 
-	bool found() { return m_func != nullptr; }
+	bool found() const { return m_func != nullptr; }
 
-	void **getGameRules() { return reinterpret_cast<void **>(m_func); }
+	void **getGameRules() const { return static_cast<void **>(m_func); }
 };
 
 class CCreateGameRulesObject : public CSignatureFunction
@@ -44,7 +44,7 @@ class CCreateGameRulesObject : public CSignatureFunction
 public:
 	CCreateGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase);
 
-	bool found() { return m_func != nullptr; }
+	bool found() const { return m_func != nullptr; }
 
 	void **getGameRules();
 };

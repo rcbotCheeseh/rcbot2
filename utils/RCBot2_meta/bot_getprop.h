@@ -196,7 +196,7 @@ public:
 		
 		try
 		{
-			return *(bool*)m_data; 
+			return *static_cast<bool*>(m_data); 
 		}
 
 		catch(...)
@@ -212,7 +212,7 @@ public:
 		if ( !m_data ) 
 			return nullptr; 
 
-		return (bool*)m_data; 
+		return static_cast<bool*>(m_data); 
 	}
 
 	inline void *getVoidPointer ( edict_t *edict ) 
@@ -232,7 +232,7 @@ public:
 		if ( !m_data ) 
 			return defaultvalue; 
 		
-		return *(float*)m_data; 
+		return *static_cast<float*>(m_data); 
 	}
 
 	inline float *getFloatPointer ( edict_t *edict ) 
@@ -242,14 +242,14 @@ public:
 		if ( !m_data ) 
 			return nullptr; 
 		
-		return (float*)m_data; 
+		return static_cast<float*>(m_data); 
 	}
 
 	inline char *getString (edict_t *edict ) 
 	{ 
 		getData(edict); 
 
-		return (char*)m_data; 
+		return static_cast<char*>(m_data); 
 	}
 
 	inline Vector *getVectorPointer ( edict_t *edict )
@@ -266,13 +266,12 @@ public:
 
 	inline bool getVector ( edict_t *edict, Vector *v )
 	{
-		static float *x;
-
 		getData(edict);
 
 		if ( m_data )
 		{
-			x = (float*)m_data;
+			static float *x;
+			x = static_cast<float*>(m_data);
 			*v = Vector(*x,*(x+1),*(x+2));
 
 			return true;

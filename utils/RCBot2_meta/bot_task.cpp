@@ -128,7 +128,7 @@ void CBotTF2MedicHeal::execute(CBot *pBot,CBotSchedule *pSchedule)
 		return;
 	}
 
-	CBotTF2* pBotTF2 = (CBotTF2*)pBot;
+	auto pBotTF2 = static_cast<CBotTF2*>(pBot);
 
 	edict_t* pHeal = pBotTF2->getHealingEntity();
 
@@ -1123,7 +1123,7 @@ void CBotGravGunPickup :: execute(CBot *pBot,CBotSchedule *pSchedule)
 
 	if ( m_fTime < engine->Time() )
 	{
-		CHLDMBot *HL2DMBot = (CHLDMBot*)pBot;
+		auto HL2DMBot = static_cast<CHLDMBot*>(pBot);
 
 		if (HL2DMBot->getFailedObject() && HL2DMBot->distanceFrom(HL2DMBot->getFailedObject())<=pBot->distanceFrom(m_Prop)+48 )
 			pBot->primaryAttack();
@@ -1833,7 +1833,7 @@ void CBotTFEngiBuildTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	pBot->wantToChangeWeapon(false); // if enemy just strike them with wrench
 	pBot->wantToListen(false); // sometimes bots dont place sentries because they are looking the wrong way due to a noise
 
-	CBotFortress* tfBot = (CBotFortress*)pBot;
+	auto tfBot = static_cast<CBotFortress*>(pBot);
 
 	if ( tfBot->getClass() != TF_CLASS_ENGINEER )
 	{
@@ -2432,7 +2432,7 @@ void CBotTFRocketJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 	else
 	{
-		CBotTF2 *tf2Bot = (CBotTF2*)pBot;
+		auto tf2Bot = static_cast<CBotTF2*>(pBot);
 
 		if ( !m_fTime )
 		{
@@ -2487,7 +2487,6 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 {
 	auto*pBotTF2 = (CBotTF2*)pBot;
 	CBotWeapon *pChooseWeapon;
-	CBotWeapons *pWeaponList;
 	static int iAttackProb;
 
 	if ( CTeamFortress2Mod::TF2_IsPlayerInvuln(pBot->getEdict()) )
@@ -2630,6 +2629,7 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 
 	switch ( pBotTF2->getClass() )
 	{
+		CBotWeapons *pWeaponList;
 	case TF_CLASS_PYRO:
 
 		pWeaponList = pBot->getWeapons();
@@ -2827,7 +2827,7 @@ CBotTF2SnipeCrossBow::CBotTF2SnipeCrossBow(Vector vOrigin, int iWpt)
 
 void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 {
-	CBotTF2* pBotTF2 = (CBotTF2*)pBot;
+	auto pBotTF2 = static_cast<CBotTF2*>(pBot);
 	// Sniper should move if the point has changed, so he's not wasting time
 	if (!CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(m_iArea))
 		fail(); // move up
@@ -3958,7 +3958,7 @@ void CDODDropAmmoTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	if ( pBot->distanceFrom(m_pPlayer) < 200.0f && pBot->isFacing(vOrigin) )
 	{
-		CDODBot *pDODBot = (CDODBot*)pBot;
+		auto pDODBot = static_cast<CDODBot*>(pBot);
 		pDODBot->dropAmmo();
 		complete();
 		return;
@@ -4704,9 +4704,6 @@ void CBotTF2AttackSentryGunTask::execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	if ( m_fTime == 0.0f )
 	{
-		float fMinDist = 9999;
-		float fDist;
-
 		CWaypointVisibilityTable *table = CWaypoints::getVisiblity();
 
 		m_fTime = engine->Time() + randomFloat(8.0f,14.0f);
@@ -4722,6 +4719,8 @@ void CBotTF2AttackSentryGunTask::execute (CBot *pBot,CBotSchedule *pSchedule)
 
 		if ( pWpt != nullptr )
 		{
+			float fDist;
+			float fMinDist = 9999;
 			for ( int i = 0; i < pWpt->numPaths(); i ++ )
 			{
 				if ( table->GetVisibilityFromTo(pWpt->getPath(i),m_iSentryWaypoint) == false )

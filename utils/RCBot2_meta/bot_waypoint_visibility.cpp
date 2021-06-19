@@ -147,7 +147,7 @@ void CWaypointVisibilityTable :: WorkOutVisibilityTable ()
 	}
 }
 
-bool CWaypointVisibilityTable :: SaveToFile ( void )
+bool CWaypointVisibilityTable :: SaveToFile ()
 {
     char filename[1024];
 	wpt_vis_header_t header;

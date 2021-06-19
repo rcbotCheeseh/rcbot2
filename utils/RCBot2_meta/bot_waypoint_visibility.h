@@ -77,7 +77,7 @@ public:
 		memset(m_VisTable,0,iSize);
 	}
 
-	bool SaveToFile ( void );
+	bool SaveToFile ();
 
 	bool ReadFromFile ( int numwaypoints );
 
@@ -101,7 +101,7 @@ public:
 		return false;
 	}
 
-	void ClearVisibilityTable ( void )
+	void ClearVisibilityTable ()
 	{
 		if ( m_VisTable )
 			memset(m_VisTable,0,g_iMaxVisibilityByte);
@@ -115,7 +115,7 @@ public:
 		////////////////////////////
 	}
 
-	void FreeVisibilityTable ( void )
+	void FreeVisibilityTable ()
 	{
 		if ( m_VisTable != nullptr )
 		{
