@@ -1661,6 +1661,7 @@ void CWaypoint :: draw ( edict_t *pEdict, bool bDrawPaths, unsigned short int iD
 			1, WAYPOINT_WIDTH/2, WAYPOINT_WIDTH/2, 255, 
 			1, r, g, b, a, 10);//*/
 		break;
+	default: ;
 	}
 
 	/*

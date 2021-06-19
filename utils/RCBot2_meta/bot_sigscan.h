@@ -20,7 +20,7 @@ private:
 
 	static bool getLibraryInfo(const void *libPtr, DynLibInfo &lib);
 
-	void *findPattern(const void *libPtr, const char *pattern, size_t len);
+	static void *findPattern(const void *libPtr, const char *pattern, size_t len);
 
 	void *findSignature ( void *addrInBase, const char *signature );
 protected:

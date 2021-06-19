@@ -8,8 +8,7 @@ class CBotRule
 {
 public:
 	CBotRule ()
-	{
-	}
+	= default;
 private:
 	std::vector<CBotOperator> m_Rules;
 };
@@ -17,7 +16,7 @@ private:
 class CBotOperator
 {
 public:
-	CBotOperator ( CBotFactOpertor op ) : m_op(op)
+	CBotOperator (const CBotFactOpertor& op ) : m_op(op)
 	{		
 	}
 

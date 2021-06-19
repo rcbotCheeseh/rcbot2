@@ -143,10 +143,10 @@ public:
 		m_iPlayerSlot = ENTINDEX(pPlayer);
 	}
 
-	bool IsReliable(void) const { return false; }
-	bool IsInitMessage(void) const { return false; }
+	bool IsReliable() const { return false; }
+	bool IsInitMessage() const { return false; }
 
-	int	GetRecipientCount(void) const { return 1; }
+	int	GetRecipientCount() const { return 1; }
 	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot; }
 
 private:
@@ -174,10 +174,10 @@ public:
 		}
 	}
 
-	bool IsReliable(void) const { return false; }
-	bool IsInitMessage(void) const { return false; }
+	bool IsReliable() const { return false; }
+	bool IsInitMessage() const { return false; }
 
-	int	GetRecipientCount(void) const { return m_iMaxCount; }
+	int	GetRecipientCount() const { return m_iMaxCount; }
 	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot[slot] + 1; }
 
 private:
@@ -716,7 +716,7 @@ bool RCBotPluginMeta::Hook_ClientConnect(edict_t *pEntity,
 									char *reject,
 									int maxrejectlen)
 {
-	META_LOG(g_PLAPI, "Hook_ClientConnect(%d, \"%s\", \"%s\")", IndexOfEdict(pEntity), pszName, pszAddress);
+	META_LOG(g_PLAPI, R"(Hook_ClientConnect(%d, "%s", "%s"))", IndexOfEdict(pEntity), pszName, pszAddress);
 
 	CClients::init(pEntity);
 
@@ -730,7 +730,7 @@ void RCBotPluginMeta::Hook_ClientPutInServer(edict_t *pEntity, char const *playe
 
 	CClient *pClient = CClients::clientConnected(pEntity);
 
-	if ( !is_Rcbot && pClient )
+	if ( pClient )
 	{
 		if ( !engine->IsDedicatedServer() )
 		{

@@ -418,14 +418,13 @@ void CDODBot :: died ( edict_t *pKiller, const char *pszWeapon )
 // TO COMPLETE
 void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWeapon )
 {
-	static CWaypoint *pWpt;
-
 	static CBotUtilities utils;
 
 	utils.freeMemory();
 
 	if ( (pKiller != m_pEdict) && pKiller && !m_pEnemy && !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && isEnemy(pKiller,false) )
 	{
+		static CWaypoint *pWpt;
 		//bool bInvestigate = true;
 		//bool bFollow = true;
 		const Vector vecEnemy = CBotGlobals::entityOrigin(pKiller);
@@ -542,10 +541,9 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 			// move up MG
 			if ( !rcbot_melee_only.GetBool() && pMachineGun && (m_iClass == DOD_CLASS_MACHINEGUNNER) && !pMachineGun->outOfAmmo(this) && pMachineGun->isDeployable() )
 			{
-				CWaypoint *pWaypoint;
-
 				if ( !m_pSchedules->hasSchedule(SCHED_DEPLOY_MACHINE_GUN) )
 				{
+					CWaypoint *pWaypoint;
 					Vector vSearchForMachineGunPointOrigin = m_vListenPosition-getOrigin();
 
 					vSearchForMachineGunPointOrigin = vSearchForMachineGunPointOrigin/vSearchForMachineGunPointOrigin.Length();
@@ -911,7 +909,7 @@ void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 			if ( pBombTarget && (state != 0) && (CClassInterface::getDODBombTeam(pBombTarget) == m_iTeam) )
 			{
 					// check if someone isn't bombing already
-					if ( (state == 2) || CDODMod::m_Flags.isTeamMatePlanting(m_pEdict,m_iTeam,pWaypoint->getOrigin()) )
+					if ( (state == 2) || CDODFlags::isTeamMatePlanting(m_pEdict,m_iTeam,pWaypoint->getOrigin()) )
 					{
 						auto*bombsched = new CBotSchedule();
 						//todob
@@ -956,7 +954,6 @@ void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 			WaypointList m_InvisPaths;
 			const int iThisWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
 			//CWaypoint *pNextWaypoint = CWaypoints::getWaypoint(iNextWaypoint);
-
 
 			extern IVDebugOverlay *debugoverlay;
 
@@ -1163,7 +1160,7 @@ void CDODBot :: modThink ()
 		{
 			if ( CClassInterface::isMachineGunDeployed(m_pCurrentWeapon) )
 				m_fDeployMachineGunTime = engine->Time();
-			else if ( hasEnemy() & (m_StatsCanUse.stats.m_iEnemiesInRange>0) )
+			else if ( hasEnemy() && (m_StatsCanUse.stats.m_iEnemiesInRange>0) )
 			{
 				// Not deployed machine gun and within enemies -- run for cover
 				// run for cover
@@ -1388,7 +1385,7 @@ void CDODBot :: modThink ()
 
 			if ( distanceFrom(vNearestBomb) < (BLAST_RADIUS*2) )
 			{
-				if ( !CDODMod::m_Flags.isTeamMatePlanting(m_pEdict,m_iTeam,vNearestBomb) )
+				if ( !CDODFlags::isTeamMatePlanting(m_pEdict,m_iTeam,vNearestBomb) )
 				{
 					CWaypoint *pWaypoint = CDODMod::getBombWaypoint(m_pNearestBomb);
 

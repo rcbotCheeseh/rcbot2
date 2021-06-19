@@ -282,7 +282,7 @@ CCreateGameRulesObject::CCreateGameRulesObject(CRCBotKeyValueList *list, void *p
 {
 #ifdef _WIN32
 	findFunc(list, "create_gamerules_object_win", pAddrBase,
-	         "\\x55\\x8B\\xEC\\x8B\\x0D\\x2A\\x2A\\x2A\\x2A\\x85\\xC9\\x74\\x07");
+	         R"(\x55\x8B\xEC\x8B\x0D\x2A\x2A\x2A\x2A\x85\xC9\x74\x07)");
 #else
 	m_func = NULL;
 #endif

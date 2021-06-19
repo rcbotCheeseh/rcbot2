@@ -235,9 +235,38 @@ void CBroadcastRoundStart :: execute ( CBot *pBot )
 	static_cast<CBotTF2*>(pBot)->roundReset(m_bFullReset);
 }
 
-CBotFortress :: CBotFortress()
-{ 
-	CBot(); 
+CBotFortress :: CBotFortress(): m_fTaunting(0), m_fDefendTime(0), m_fHealFactor(0), m_fFrenzyTime(0),
+                                m_fSpyCloakTime(0),
+                                m_fSpyUncloakTime(0),
+                                m_fLastSeeSpyTime(0),
+                                m_fSpyDisguiseTime(0),
+                                m_fLastSaySpy(0),
+                                m_fPickupTime(0),
+                                m_fLookAfterSentryTime(0),
+                                m_bSentryGunVectorValid(false),
+                                m_bDispenserVectorValid(false),
+                                m_bTeleportExitVectorValid(false),
+                                m_fLastKnownTeamFlagTime(0), m_fBackstabTime(0),
+                                m_iClass(), m_fUpdateClass(0),
+                                m_fUseTeleporterTime(0),
+                                m_fChangeClassTime(0),
+                                m_bCheckClass(false),
+                                m_fMedicUpdatePosTime(0),
+                                m_fCheckHealTime(0),
+                                m_fClassDisguiseFitness{},
+                                m_fClassDisguiseTime{},
+                                m_fDisguiseTime(0),
+                                m_iDisguiseClass(0),
+                                m_fTeleporterEntPlacedTime(0),
+                                m_fTeleporterExtPlacedTime(0),
+                                m_iTeleportedPlayers(0),
+                                m_fSpyList{}, m_iTeam(0),
+                                m_fWaitTurnSentry(0),
+                                m_fCallMedicTime{},
+                                m_fHealingMoveTime(0),
+                                m_fLastSentryEnemyTime(0)
+{
+	CBot();
 
 	m_iLastFailSentryWpt = -1;
 	m_iLastFailTeleExitWpt = -1;
@@ -250,16 +279,16 @@ CBotFortress :: CBotFortress()
 	m_fSnipeAttackTime = 0;
 	m_pAmmo = nullptr;
 	m_pHealthkit = nullptr;
-	m_pFlag = nullptr; 
-	m_pHeal = nullptr; 
-	m_fCallMedic = 0; 
-	m_fTauntTime = 0; 
-	m_fLastKnownFlagTime = 0.0f; 
-	m_bHasFlag = false; 
-	m_pSentryGun = nullptr; 
-	m_pDispenser = nullptr; 
-	m_pTeleExit = nullptr; 
-	m_pTeleEntrance = nullptr; 
+	m_pFlag = nullptr;
+	m_pHeal = nullptr;
+	m_fCallMedic = 0;
+	m_fTauntTime = 0;
+	m_fLastKnownFlagTime = 0.0f;
+	m_bHasFlag = false;
+	m_pSentryGun = nullptr;
+	m_pDispenser = nullptr;
+	m_pTeleExit = nullptr;
+	m_pTeleEntrance = nullptr;
 	m_pNearestDisp = nullptr;
 	m_pNearestEnemySentry = nullptr;
 	m_pNearestEnemyTeleporter = nullptr;
@@ -410,7 +439,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 	if ( CClassInterface::getTF2NumHealers(pPlayer) > 1 )
 		return 0.0f;
 
-	const float fHealthPercent = p->GetHealth() / p->GetMaxHealth();
+	const float fHealthPercent = static_cast<float>(p->GetHealth()) / p->GetMaxHealth();
 
 	switch ( iclass )
 	{
@@ -850,6 +879,7 @@ void CBotTF2 :: buildingDestroyed ( int iType, edict_t *pAttacker, edict_t *pEdi
 			m_bTeleportExitVectorValid = false;
 			m_iTeleExitArea = 0;
 			break;
+		default: ;
 	}
 
 	m_pSchedules->freeMemory();
@@ -7273,7 +7303,7 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 	}
 	else if ( CTeamFortress2Mod::isBoss(pEdict) )
 	{
-		bIsBoss = bValid = true;
+		bIsBoss = bValid == true;
 	}
 	// "FrenzyTime" is the time it takes for the bot to check out where he got hurt
 	else if ( (m_iClass != TF_CLASS_SPY) || (m_fFrenzyTime > engine->Time()) )	
@@ -7290,11 +7320,11 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 			bValid = true;
 		}
 		else if ( CTeamFortress2Mod::isPipeBomb ( pEdict, iEnemyTeam ) )
-			bIsPipeBomb = bValid = true;
+			bIsPipeBomb = bValid == true;
 		else if ( CTeamFortress2Mod::isRocket ( pEdict, iEnemyTeam ) )
-			bIsRocket = bValid = true;
+			bIsRocket = bValid == true;
 		else if ( CTeamFortress2Mod::isHurtfulPipeGrenade(pEdict, m_pEdict,false) )
-			bIsGrenade = bValid = true;
+			bIsGrenade = bValid == true;
 	}
 
 	if ( bValid )
@@ -7609,52 +7639,63 @@ void CBotTF2 :: sapperDestroyed ( edict_t *pSapper )
 	m_pSchedules->freeMemory();
 }
 
-CBotTF2::CBotTF2() 
-{ 
-		CBotFortress(); 
-		m_iDesiredResistType = 0;
-		m_pVTable = nullptr;
-		m_fDispenserPlaceTime = 0.0f;
-		m_fDispenserHealAmount = 0.0f;
-	 m_fTeleporterEntPlacedTime = 0;
-	 m_fTeleporterExtPlacedTime = 0;
-	 m_iTeleportedPlayers = 0;
-		m_fDoubleJumpTime = 0;
-		m_fSpySapTime = 0;
-		m_iCurrentDefendArea = 0;
-		m_iCurrentAttackArea = 0;
-	    //m_bBlockPushing = false;
-	    //m_fBlockPushTime = 0;
-		m_pDefendPayloadBomb = nullptr;
-		m_pPushPayloadBomb = nullptr;
-		m_pRedPayloadBomb = nullptr;
-		m_pBluePayloadBomb = nullptr;
-		
-		m_iTrapType = TF_TRAP_TYPE_NONE;
-		m_pLastEnemySentry = MyEHandle(nullptr);
-		m_prevSentryHealth = 0;
-		m_prevDispHealth = 0;
-		m_prevTeleExtHealth = 0;
-		m_prevTeleEntHealth = 0;
-		m_fHealClickTime = 0;
-		m_fCheckHealTime = 0;
-		
-		m_fAttackPointTime  = 0; // used in cart maps
+CBotTF2::CBotTF2(): m_iTrapCPIndex(0), m_fRemoveSapTime(0), m_fRevMiniGunTime(0), m_fNextRevMiniGunTime(0),
+                    m_fRevMiniGunBelief(0),
+                    m_fCloakBelief(0),
+                    m_nextVoicecmd(),
+                    m_bIsCarryingTeleExit(false),
+                    m_bIsCarryingSentry(false),
+                    m_bIsCarryingDisp(false),
+                    m_bIsCarryingTeleEnt(false),
+                    m_bIsCarryingObj(false), m_fCarryTime(0),
+                    m_fCheckNextCarrying(0),
+                    m_fUseBuffItemTime(0)
+{
+	CBotFortress();
+	m_iDesiredResistType = 0;
+	m_pVTable = nullptr;
+	m_fDispenserPlaceTime = 0.0f;
+	m_fDispenserHealAmount = 0.0f;
+	m_fTeleporterEntPlacedTime = 0;
+	m_fTeleporterExtPlacedTime = 0;
+	m_iTeleportedPlayers = 0;
+	m_fDoubleJumpTime = 0;
+	m_fSpySapTime = 0;
+	m_iCurrentDefendArea = 0;
+	m_iCurrentAttackArea = 0;
 
-		m_prevSentryHealth = 0;
-		m_prevDispHealth = 0;
-		m_prevTeleExtHealth = 0;
-		m_prevTeleEntHealth = 0;
+	//m_bBlockPushing = false;
+	//m_fBlockPushTime = 0;
+	m_pDefendPayloadBomb = nullptr;
+	m_pPushPayloadBomb = nullptr;
+	m_pRedPayloadBomb = nullptr;
+	m_pBluePayloadBomb = nullptr;
 
-		m_iSentryArea = 0;
-		m_iDispenserArea = 0;
-		m_iTeleEntranceArea = 0;
-		m_iTeleExitArea = 0;
+	m_iTrapType = TF_TRAP_TYPE_NONE;
+	m_pLastEnemySentry = MyEHandle(nullptr);
+	m_prevSentryHealth = 0;
+	m_prevDispHealth = 0;
+	m_prevTeleExtHealth = 0;
+	m_prevTeleEntHealth = 0;
+	m_fHealClickTime = 0;
+	m_fCheckHealTime = 0;
 
-		for (float& m_fClassDisguiseFitnes : m_fClassDisguiseFitness)
-			m_fClassDisguiseFitnes = 1.0f;
+	m_fAttackPointTime = 0; // used in cart maps
 
-		memset(m_fClassDisguiseTime,0,sizeof(float)*10);
+	m_prevSentryHealth = 0;
+	m_prevDispHealth = 0;
+	m_prevTeleExtHealth = 0;
+	m_prevTeleEntHealth = 0;
+
+	m_iSentryArea = 0;
+	m_iDispenserArea = 0;
+	m_iTeleEntranceArea = 0;
+	m_iTeleExitArea = 0;
+
+	for (float& m_fClassDisguiseFitnes : m_fClassDisguiseFitness)
+		m_fClassDisguiseFitnes = 1.0f;
+
+	memset(m_fClassDisguiseTime, 0, sizeof(float) * 10);
 }
 
 void CBotTF2 ::init(bool bVarInit)

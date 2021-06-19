@@ -445,7 +445,7 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 			ADD_UTILITY(BOT_UTIL_HL2DM_GRAVIGUN_PICKUP,
 			            (!m_pEnemy||(m_pCurrentWeapon && strcmp("weapon_physcannon",m_pCurrentWeapon->GetClassName())))
 			            && gravgun && gravgun->hasWeapon() && (m_NearestPhysObj.get()!=NULL) && gravgun->getWeaponIndex
-				            () > 0 && (CClassInterface::gravityGunObject(INDEXENT(gravgun->getWeaponIndex()))==NULL),
+				        () > 0 && (CClassInterface::gravityGunObject(INDEXENT(gravgun->getWeaponIndex()))==NULL),
 			            0.9f);
 		}
 	}

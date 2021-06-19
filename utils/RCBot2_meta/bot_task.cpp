@@ -475,7 +475,8 @@ void CBotDODBomb :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 			complete();
 		}
-		else if ( CDODMod::m_Flags.isTeamMatePlanting(pBot->getEdict(),pBot->getTeam(),CBotGlobals::entityOrigin(m_pBombTarget)) )
+		else if (CDODFlags::isTeamMatePlanting(pBot->getEdict(), pBot->getTeam(),
+		                                       CBotGlobals::entityOrigin(m_pBombTarget)))
 			complete(); // team mate doing my job
 
 	}
@@ -485,7 +486,8 @@ void CBotDODBomb :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 		if ( CClassInterface::getDODBombState(m_pBombTarget) == DOD_BOMB_STATE_AVAILABLE )
 			complete();
-		else if ( CDODMod::m_Flags.isTeamMateDefusing(pBot->getEdict(),pBot->getTeam(),CBotGlobals::entityOrigin(m_pBombTarget)) )
+		else if (CDODFlags::isTeamMateDefusing(pBot->getEdict(), pBot->getTeam(),
+		                                       CBotGlobals::entityOrigin(m_pBombTarget)))
 			complete(); // team mate doing my job
 	}
 

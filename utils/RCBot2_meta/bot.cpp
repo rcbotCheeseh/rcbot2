@@ -1082,7 +1082,7 @@ void CBot :: handleWeapons ()
 
 CBot :: CBot()
 {
-	init(true);
+	CBot::init(true);
 }
 /*
 * init()
