@@ -2638,10 +2638,7 @@ void CWaypoints :: autoFix ( bool bAutoFixNonArea )
 	{
 		if ( m_theWaypoints[i].isUsed() && m_theWaypoints[i].getFlags() > 0 )
 		{
-			if (bAutoFixNonArea && m_theWaypoints[i].getArea() == 0 && m_theWaypoints[i].hasSomeFlags(
-					CWaypointTypes::W_FL_SENTRY | CWaypointTypes::W_FL_DEFEND | CWaypointTypes::W_FL_SNIPER |
-					CWaypointTypes::W_FL_CAPPOINT | CWaypointTypes::W_FL_TELE_EXIT) || m_theWaypoints[i].getArea() >
-				iNumCps)
+			if ( m_theWaypoints[i].getArea() > iNumCps || bAutoFixNonArea && m_theWaypoints[i].getArea()==0 && m_theWaypoints[i].hasSomeFlags(CWaypointTypes::W_FL_SENTRY|CWaypointTypes::W_FL_DEFEND|CWaypointTypes::W_FL_SNIPER|CWaypointTypes::W_FL_CAPPOINT|CWaypointTypes::W_FL_TELE_EXIT) )
 			{
 				m_theWaypoints[i].setArea(CTeamFortress2Mod::m_ObjectiveResource.NearestArea(m_theWaypoints[i].getOrigin()));
 				CBotGlobals::botMessage(nullptr,0,"Changed Waypoint id %d area to (area = %d)",i,m_theWaypoints[i].getArea());

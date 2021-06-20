@@ -689,7 +689,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 							{
 								if ( arr[j].bValid == false )
 								{
-									if (m_pControlPoints[j] && pRound->isPointInRound(m_pControlPoints[j]) || !pRound)
+									if ( !pRound || m_pControlPoints[j]&&pRound->isPointInRound(m_pControlPoints[j]) )
 										arr[j].bValid = true; // this is the next point - move back lads
 								}
 							}

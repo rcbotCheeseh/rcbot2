@@ -1885,7 +1885,7 @@ void CBot :: updateStatistics ()
 
 		if ( !m_uSquadDetail.b1.said_area_clear && (m_StatsCanUse.stats.m_iEnemiesInRange == 0) && (m_StatsCanUse.stats.m_iEnemiesVisible == 0) && (m_StatsCanUse.stats.m_iTeamMatesInRange > 0))
 		{
-			if (isSquadLeader() && (m_fLastSeeEnemy && m_fLastSeeEnemy + 10.0f < engine->Time()) || !inSquad())
+			if ( !inSquad() || isSquadLeader() && (m_fLastSeeEnemy && ((m_fLastSeeEnemy + 10.0f)<engine->Time())) )
 				areaClear();
 
 			m_uSquadDetail.b1.said_area_clear = true;

@@ -1630,7 +1630,7 @@ void CBotInvestigateTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		else if ( m_iState == 1 ) // goto origin
 			vPoint = m_vOrigin;
 
-		if (m_iState == 0 && pBot->distanceFrom(m_vOrigin) > m_fRadius || pBot->distanceFrom(vPoint) < 80)
+		if ( pBot->distanceFrom(vPoint) < 80 || m_iState==0&&pBot->distanceFrom(m_vOrigin)>m_fRadius )
 		{
 			m_iState = !m_iState ? 1 : 0;
 
@@ -2373,7 +2373,7 @@ void CMoveToTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 	float fDistance = pBot->distanceFrom(m_vVector);
 
 	// sort out looping move to origins by using previous distance check
-	if (fPrevDist && fPrevDist < fDistance || fDistance < 64)
+	if ( fDistance < 64 || fPrevDist&&fPrevDist < fDistance )
 	{
 		complete();
 		return;

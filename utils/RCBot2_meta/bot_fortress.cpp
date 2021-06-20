@@ -773,8 +773,7 @@ void CBotFortress :: medicCalled(edict_t *pPlayer )
 		return; // nothing to do
 	if ( distanceFrom(pPlayer) > 1024 ) // a bit far away
 		return; // ignore
-	if (CClassInterface::getTF2Class(pPlayer) == TF_CLASS_SPY && thinkSpyIsEnemy(
-		pPlayer, CTeamFortress2Mod::getSpyDisguise(pPlayer)) || CBotGlobals::getTeam(pPlayer) == getTeam())
+	if ( (CBotGlobals::getTeam(pPlayer) == getTeam()) || (CClassInterface::getTF2Class(pPlayer) == TF_CLASS_SPY) && thinkSpyIsEnemy(pPlayer,CTeamFortress2Mod::getSpyDisguise(pPlayer)) )
 	{
 		bool bGoto = true;
 
@@ -3134,7 +3133,7 @@ void CBotTF2::modThink()
 			{
 				spyCloak();
 			}
-			else if (isDisguised() && !hasEnemy() || bIsCloaked)
+			else if (bIsCloaked || isDisguised() && !hasEnemy())
 			{
 				updateCondition(CONDITION_COVERT);
 			}
