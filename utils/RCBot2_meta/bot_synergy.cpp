@@ -242,11 +242,11 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 			if(!CSynergyMod::IsCombineMinePlayerPlaced(pEntity)) // Ignore player placed (friendly) mines
 			{
 				m_pNearbyMine = pEntity;
-				int iWaypoint = CWaypoints::nearestWaypointGoal(-1, CBotGlobals::entityOrigin(pEntity),512.0f);
+				/*int iWaypoint = CWaypoints::nearestWaypointGoal(-1, CBotGlobals::entityOrigin(pEntity),512.0f);
 				if(iWaypoint != -1)
 				{
 					m_pNavigator->beliefOne(iWaypoint, BELIEF_DANGER, distanceFrom(pEntity));
-				}
+				}*/ //Broken? [APG]RoboCop[CL]
 			}
 		}
 	}

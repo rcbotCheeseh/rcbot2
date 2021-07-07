@@ -391,7 +391,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	if (fp)
 		pKVL->parseFile(fp);
 
-	void *gameServerFactory = ismm->GetServerFactory(false);
+	void *gameServerFactory = reinterpret_cast<void*>(ismm->GetServerFactory(false));
 
 	int val;
 
