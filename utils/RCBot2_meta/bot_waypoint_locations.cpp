@@ -101,11 +101,11 @@ void CWaypointLocations :: getMinMaxs ( int iLoc, int jLoc, int kLoc,
 void CWaypointLocations :: AutoPath ( edict_t *pPlayer, int iWpt )
 {
 	CWaypoint *pWpt = CWaypoints::getWaypoint(iWpt);
-	Vector vOrigin = pWpt->getOrigin();
+	const Vector vOrigin = pWpt->getOrigin();
 
-	int iLoc = READ_LOC(vOrigin.x);
-	int jLoc = READ_LOC(vOrigin.y);
-	int kLoc = READ_LOC(vOrigin.z);
+	const int iLoc = READ_LOC(vOrigin.x);
+	const int jLoc = READ_LOC(vOrigin.y);
+	const int kLoc = READ_LOC(vOrigin.z);
 
 	int i,j,k;
 
@@ -130,9 +130,9 @@ void CWaypointLocations :: AutoPath ( edict_t *pPlayer, int iWpt )
 // @param iFrom waypoint number from a and b within distance
 void CWaypointLocations :: GetAllInArea ( Vector &vOrigin, WaypointList *pWaypointList, int iVisibleTo )
 {
-	int iLoc = READ_LOC(vOrigin.x);
-	int jLoc = READ_LOC(vOrigin.y);
-	int kLoc = READ_LOC(vOrigin.z);
+	const int iLoc = READ_LOC(vOrigin.x);
+	const int jLoc = READ_LOC(vOrigin.y);
+	const int kLoc = READ_LOC(vOrigin.z);
 
 	int iWpt;
 
@@ -172,9 +172,9 @@ void CWaypointLocations :: GetAllVisible ( int iFrom, int iOther, Vector &vOrigi
 										  WaypointList *iInvisible )
 {
 	CWaypoint *pWpt;
-	int iLoc = READ_LOC(vOrigin.x);
-	int jLoc = READ_LOC(vOrigin.y);
-	int kLoc = READ_LOC(vOrigin.z);
+	const int iLoc = READ_LOC(vOrigin.x);
+	const int jLoc = READ_LOC(vOrigin.y);
+	const int kLoc = READ_LOC(vOrigin.z);
 
 	int i,j,k;
 	int iWpt;
@@ -226,7 +226,7 @@ void CWaypointLocations :: AutoPathInBucket ( edict_t *pPlayer, int i, int j, in
 	CWaypoint *pOtherWpt;
 
 	CWaypoint *pWpt = CWaypoints::getWaypoint(iWptFrom);
-	Vector vWptOrigin = pWpt->getOrigin();
+	const Vector vWptOrigin = pWpt->getOrigin();
 	Vector vOtherWptOrigin;
 
 	trace_t tr;
@@ -234,7 +234,7 @@ void CWaypointLocations :: AutoPathInBucket ( edict_t *pPlayer, int i, int j, in
 	//CTraceFilterWorldOnly filter;
 
 	auto &arr = m_iLocations[i][j][k];
-	size_t size = arr.size();
+	const size_t size = arr.size();
 	
 	for (size_t l = 0; l < size; l++)
 	{
@@ -248,6 +248,9 @@ void CWaypointLocations :: AutoPathInBucket ( edict_t *pPlayer, int i, int j, in
 			continue;
 
 		if ( pOtherWpt == pWpt )
+			continue;
+
+		if( pOtherWpt->hasFlag(CWaypointTypes::W_FL_UNREACHABLE) ) // Stop auto adding paths to waypoints with unreachable flag
 			continue;
 		
 		vOtherWptOrigin = pOtherWpt->getOrigin();
@@ -277,9 +280,9 @@ void CWaypointLocations :: AddWptLocation ( int iIndex, const float *fOrigin )
 {
 // Add a waypoint with index and at origin (for quick insertion in the list)
 //
-	int i = READ_LOC(fOrigin[0]);
-	int j = READ_LOC(fOrigin[1]);
-	int k = READ_LOC(fOrigin[2]);
+const int i = READ_LOC(fOrigin[0]);
+const int j = READ_LOC(fOrigin[1]);
+const int k = READ_LOC(fOrigin[2]);
 
 	m_iLocations[i][j][k].push_back(iIndex);
 }
@@ -288,9 +291,9 @@ void CWaypointLocations :: DeleteWptLocation ( int iIndex, const float *fOrigin 
 // Delete the waypoint index at the origin (for finding it quickly in the list)
 //
 {
-	int i = READ_LOC(fOrigin[0]);
-	int j = READ_LOC(fOrigin[1]);
-	int k = READ_LOC(fOrigin[2]);
+	const int i = READ_LOC(fOrigin[0]);
+	const int j = READ_LOC(fOrigin[1]);
+	const int k = READ_LOC(fOrigin[2]);
 
 	auto &vec = m_iLocations[i][j][k];
 	vec.erase(std::remove(vec.begin(), vec.end(), iIndex), vec.end());
@@ -313,9 +316,9 @@ int CWaypointLocations :: GetCoverWaypoint ( Vector vPlayerOrigin, Vector vCover
 	
 	int iNearestIndex = -1;
 
-	int iLoc = READ_LOC(vPlayerOrigin.x);
-	int jLoc = READ_LOC(vPlayerOrigin.y);
-	int kLoc = READ_LOC(vPlayerOrigin.z);
+	const int iLoc = READ_LOC(vPlayerOrigin.x);
+	const int jLoc = READ_LOC(vPlayerOrigin.y);
+	const int kLoc = READ_LOC(vPlayerOrigin.z);
 
 	int i,j,k;
 
@@ -370,7 +373,7 @@ void CWaypointLocations :: FindNearestCoverWaypointInBucket ( int i, int j, int 
 	int iSelectedIndex;
 	float fDist;
 	WaypointList &arr = m_iLocations[i][j][k];
-	size_t size = arr.size();
+	const size_t size = arr.size();
 	//CBotMod *curmod = CBotGlobals::getCurrentMod();
 
 	for (size_t l = 0; l < size; l++)
@@ -480,7 +483,7 @@ void CWaypointLocations :: FindNearestBlastInBucket ( int i, int j, int k, const
 	bool bAdd;
 	
 	WaypointList &arr = m_iLocations[i][j][k];
-	size_t size = arr.size();
+	const size_t size = arr.size();
 	CBotMod *curmod = CBotGlobals::getCurrentMod();
 
 	for (size_t l = 0; l < size; l ++ )
@@ -561,7 +564,7 @@ void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vect
 	CBotMod *curmod = CBotGlobals::getCurrentMod();
 	
 	WaypointList &arr = m_iLocations[i][j][k];
-	size_t size = arr.size();
+	const size_t size = arr.size();
 	
 	for (size_t l = 0; l < size; l++)
 	//while ( !tempStack.IsEmpty() )
@@ -665,10 +668,10 @@ int CWaypointLocations :: NearestWaypoint ( const Vector &vOrigin, float fNeares
 										   edict_t *pPlayer, bool bIgnorevOther, float fIgnoreSize )
 {
 	int iNearestIndex = -1;
-	
-	int iLoc = READ_LOC(vOrigin.x);
-	int jLoc = READ_LOC(vOrigin.y);
-	int kLoc = READ_LOC(vOrigin.z);
+
+	const int iLoc = READ_LOC(vOrigin.x);
+	const int jLoc = READ_LOC(vOrigin.y);
+	const int kLoc = READ_LOC(vOrigin.z);
 
 	int i,j,k;
 
@@ -743,9 +746,9 @@ void CWaypointLocations :: DrawWaypoints ( CClient *pClient, float fDist )
 	static Vector vOrigin;
 	static edict_t *pEntity;
 
-	int iLoc = READ_LOC(vOrigin.x);
-	int jLoc = READ_LOC(vOrigin.y);
-	int kLoc = READ_LOC(vOrigin.z);
+	const int iLoc = READ_LOC(vOrigin.x);
+	const int jLoc = READ_LOC(vOrigin.y);
+	const int kLoc = READ_LOC(vOrigin.z);
 
 	pEntity = pClient->getPlayer();
 	vOrigin = pClient->getOrigin();
@@ -805,7 +808,7 @@ void CWaypointLocations :: DrawWaypoints ( CClient *pClient, float fDist )
 
 void CWaypointLocations ::AddWptLocation (CWaypoint *pWaypoint, int iIndex)
 {
-	Vector vOrigin = pWaypoint->getOrigin();
+	const Vector vOrigin = pWaypoint->getOrigin();
 	float flOrigin[3] = { vOrigin.x, vOrigin.y, vOrigin.z };
 
 	AddWptLocation(iIndex,flOrigin);

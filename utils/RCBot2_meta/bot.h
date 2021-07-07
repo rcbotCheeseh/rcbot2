@@ -413,7 +413,7 @@ public:
 
 	inline bool hasAllConditions ( int iConditions )
 	{
-		return (m_iConditions & static_cast<ConditionBitSet>(iConditions)) == static_cast<ConditionBitSet>(iConditions);
+		return (m_iConditions & static_cast<ConditionBitSet>(iConditions)) == iConditions;
 	}
 
 	inline void updateCondition ( int iCondition )
@@ -484,7 +484,7 @@ public:
 
 	inline bool moveFailed ()
 	{
-		bool ret = m_bFailNextMove;
+		const bool ret = m_bFailNextMove;
 
 		m_bFailNextMove = false;
 
@@ -581,6 +581,7 @@ public:
 	virtual bool isCSS () { return false; }
 	virtual bool isHLDM () { return false; }
 	virtual bool isTF () { return false; }
+	virtual bool isSYN () { return false; }
 
 	virtual void spawnInit ();
 
@@ -610,7 +611,7 @@ public:
 	bool isHoldingPrimaryAttack();
 
 	void primaryAttack ( bool bHold=false, float fTime =0.0f );
-	void secondaryAttack(bool bHold=false);
+	void secondaryAttack( bool bHold=false, float fTime = 0.0f );
 	void jump ();
 	void duck ( bool hold = false );
 	void use ();
@@ -701,7 +702,7 @@ public:
 
 	virtual bool wantToInvestigateSound ();
 	inline void wantToInvestigateSound ( bool bSet ) { m_bWantToInvestigateSound = bSet; }
-	inline bool wantToShoot ( void ) { return m_bOpenFire; }
+	inline bool wantToShoot () { return m_bOpenFire; }
 	inline void wantToShoot ( bool bSet ) { m_bOpenFire = bSet; }
 	inline void wantToListen ( bool bSet ) { m_bWantToListen = bSet; }
 	bool wantToListen ();
@@ -711,7 +712,7 @@ public:
 	
 	bool isFacing ( Vector vOrigin );
 
-	bool isOnLift (void);
+	bool isOnLift ();
 
 	virtual bool isDOD () { return false; }
 
@@ -763,12 +764,12 @@ public:
 		return m_pSquad == pSquad;
 	}
 
-	inline bool inSquad ( void )
+	inline bool inSquad ()
 	{
 		return m_pSquad != NULL;
 	}
 
-	bool isSquadLeader ( void );
+	bool isSquadLeader ();
 
 	inline void setSquadIdleTime ( float fTime )
 	{
@@ -809,7 +810,7 @@ public:
 
 	bool recentlyHurt ( float fTime );
 
-	eBotAction getCurrentUtil ( void ) { return m_CurrentUtil;}
+	eBotAction getCurrentUtil () { return m_CurrentUtil;}
 
 	bool recentlySpawned ( float fTime );
 

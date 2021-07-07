@@ -36,7 +36,7 @@ public:
 
 	virtual bool value()
 	{
-		return -1;
+		return true;
 	}
 private:
 	CBotFactOperator m_op;

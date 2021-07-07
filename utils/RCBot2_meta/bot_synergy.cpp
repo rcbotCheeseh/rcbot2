@@ -49,7 +49,11 @@
 #include "bot_waypoint_locations.h"
 #include "bot_navigator.h"
 #include "bot_perceptron.h"
+#include "bot_plugin_meta.h"
 #include "bot_waypoint_visibility.h"
+#include "random.h"
+
+extern IVDebugOverlay *debugoverlay;
 
 void CBotSynergy::init(bool bVarInit)
 {
@@ -70,6 +74,7 @@ void CBotSynergy::spawnInit()
 	m_pNearbyCrate = NULL;
 	m_pNearbyHealthKit = NULL;
 	m_pNearbyWeapon = NULL;
+	m_fGoToGoalTime = engine->Time();
 }
 
 void CBotSynergy::died(edict_t *pKiller, const char *pszWeapon)
@@ -88,6 +93,53 @@ void CBotSynergy::died(edict_t *pKiller, const char *pszWeapon)
 void CBotSynergy::modThink()
 {
     m_fIdealMoveSpeed = CClassInterface::getMaxSpeed(m_pEdict);
+
+	if(m_pNearbyGrenade && distanceFrom(m_pNearbyGrenade.get()) <= 200.0f) // Nearby grenade, RUN for cover!
+	{
+		updateCondition(CONDITION_RUN);
+		if(!m_pSchedules->isCurrentSchedule(SCHED_GOOD_HIDE_SPOT))
+		{
+			m_pSchedules->removeSchedule(SCHED_GOOD_HIDE_SPOT);
+			m_pSchedules->addFront(new CGotoHideSpotSched(this, m_pNearbyGrenade, false)); // bIsGrenade is false because when true the bot will do a DoD specific task
+		}
+	}
+
+	if(m_pNearbyMine && distanceFrom(m_pNearbyMine.get()) <= 512.0f && !CSynergyMod::IsCombineMineDisarmed(m_pNearbyMine.get()))
+	{
+		if(CSynergyMod::IsCombineMinePlayerPlaced(m_pNearbyMine.get()))
+		{
+			m_pNearbyMine = NULL; // The mine is friendly now.
+		}
+		else
+		{
+			if(m_pWeapons->hasWeapon(SYN_WEAPON_PHYSCANNON) && !CSynergyMod::IsCombineMineHeldByPhysgun(m_pNearbyMine.get()))
+			{
+				if(!m_pSchedules->isCurrentSchedule(SCHED_SYN_DISARM_MINE))
+				{
+					m_pSchedules->removeSchedule(SCHED_SYN_DISARM_MINE);
+					m_pSchedules->addFront(new CSynDisarmMineSched(m_pNearbyMine.get()));
+				}
+			}
+			else
+			{
+				m_pNavigator->belief(CBotGlobals::entityOrigin(m_pNearbyMine.get()), getEyePosition(), MAX_BELIEF, distanceFrom(m_pNearbyMine.get()), BELIEF_DANGER);
+			}
+		}
+	}
+}
+
+void CBotSynergy::updateConditions()
+{
+	CBot::updateConditions();
+
+	if (m_pEnemy.get() != NULL)
+	{
+		if(CDataInterface::GetEntityHealth(m_pEnemy.get()->GetNetworkable()->GetBaseEntity()) <= 0)
+		{
+			updateCondition(CONDITION_ENEMY_DEAD);
+			m_pEnemy = NULL;
+		}
+	}
 }
 
 bool CBotSynergy::isEnemy(edict_t *pEdict, bool bCheckWeapons)
@@ -168,13 +220,35 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 			else
 			{
 				edict_t* pOwner = CClassInterface::getOwner(pEntity);
-				if(pOwner == NULL) // Don't pick if owned by someone
+				if(pOwner == NULL) // Don't pick weapons owned by someone
 				{
 					m_pNearbyWeapon = pEntity;
 					updateCondition(CONDITION_CHANGED);
 				}
 			}
-		}		
+		}
+		else if(strncmp(szclassname, "npc_grenade_frag", 16) == 0 && (!m_pNearbyGrenade.get() || fDist < distanceFrom(m_pNearbyGrenade.get())))
+		{
+			edict_t *pOwner = CClassInterface::getOwner(pEntity);
+			IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEntity);
+			if(pOwner == NULL || p == NULL) // Only care about grenades that doesn't have an owner or isn't owned by a player
+			{
+				m_pNearbyGrenade = pEntity;
+				m_pNavigator->belief(CBotGlobals::entityOrigin(pEntity), getEyePosition(), bot_beliefmulti.GetFloat(), distanceFrom(pEntity), BELIEF_DANGER);
+			}
+		}
+		else if(strncmp(szclassname, "combine_mine", 12) == 0 && (!m_pNearbyMine.get() || fDist < distanceFrom(m_pNearbyMine.get())))
+		{
+			if(!CSynergyMod::IsCombineMinePlayerPlaced(pEntity)) // Ignore player placed (friendly) mines
+			{
+				m_pNearbyMine = pEntity;
+				int iWaypoint = CWaypoints::nearestWaypointGoal(-1, CBotGlobals::entityOrigin(pEntity),512.0f);
+				if(iWaypoint != -1)
+				{
+					m_pNavigator->beliefOne(iWaypoint, BELIEF_DANGER, distanceFrom(pEntity));
+				}
+			}
+		}
 	}
 	else
 	{
@@ -188,6 +262,10 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 			m_pNearbyBattery = NULL;
 		else if(pEntity == m_pNearbyWeapon.get_old())
 			m_pNearbyWeapon = NULL;
+		else if(pEntity == m_pNearbyMine.get_old())
+			m_pNearbyMine = NULL;
+		else if(pEntity == m_pNearbyGrenade.get_old())
+			m_pNearbyGrenade = NULL;
 	}
 
 	return bValid;
@@ -209,7 +287,8 @@ void CBotSynergy::getTasks (unsigned int iIgnore)
 	ADD_UTILITY(BOT_UTIL_PICKUP_WEAPON, m_pNearbyWeapon.get() != NULL, 0.75f) // New weapons are interesting, high priority
 	ADD_UTILITY(BOT_UTIL_GETHEALTHKIT, m_pNearbyHealthKit.get() != NULL, 1.0f - getHealthPercent()); // Pick up health kits
 	ADD_UTILITY(BOT_UTIL_HL2DM_FIND_ARMOR, m_pNearbyBattery.get() != NULL, 1.0f - getArmorPercent()); // Pick up armor batteries
-	ADD_UTILITY(BOT_UTIL_ROAM, true, 0.01f); // Roam around
+	ADD_UTILITY(BOT_UTIL_ATTACK_POINT, m_fGoToGoalTime <= engine->Time(), 0.01f); // Go to waypoints with 'goal' flag
+	ADD_UTILITY(BOT_UTIL_ROAM, true, 0.0001f); // Roam around
 
 	utils.execute();
 
@@ -255,6 +334,55 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		m_pSchedules->addFront(new CBotPickupSched(m_pNearbyHealthKit.get()));
 		return true;
 	break;
+    case BOT_UTIL_ATTACK_POINT:
+    {
+		// roam
+		CWaypoint* pWaypoint = NULL;
+		CWaypoint* pRoute = NULL;
+		CBotSchedule* pSched = new CBotSchedule();
+		m_fGoToGoalTime = engine->Time() + 90.0f + RandomFloat(30.0f, 150.0f);
+
+		pSched->setID(SCHED_ATTACKPOINT);
+
+		// Make the bot more likely to use alternate paths based on their braveness and current health
+		if(getHealthPercent() + m_pProfile->m_fBraveness <= 1.0f)
+			updateCondition(CONDITION_COVERT);
+		else
+			removeCondition(CONDITION_COVERT);
+
+        pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_GOAL);
+
+		if (pWaypoint)
+		{
+			pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), 0, 0);
+			if ((m_fUseRouteTime <= engine->Time()))
+			{
+				if (pRoute)
+				{
+					int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
+					int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint); // Goal Waypoint
+					pSched->addTask(new CFindPathTask(iRoute, LOOK_WAYPOINT));
+					pSched->addTask(new CMoveToTask(pRoute->getOrigin()));
+					pSched->addTask(new CFindPathTask(iWaypoint, LOOK_WAYPOINT));
+					pSched->addTask(new CMoveToTask(pWaypoint->getOrigin()));
+					m_pSchedules->add(pSched);
+					m_fUseRouteTime = engine->Time() + 30.0f;
+				}
+			}
+
+			if (pRoute == NULL)
+			{
+				int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
+				pSched->addTask(new CFindPathTask(iWaypoint, LOOK_WAYPOINT));
+				pSched->addTask(new CMoveToTask(pWaypoint->getOrigin()));
+				m_pSchedules->add(pSched);
+			}
+
+			return true;
+		}
+
+		break;
+    }
     case BOT_UTIL_ROAM:
     {
 		// roam
@@ -264,18 +392,27 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 
 		pSched->setID(SCHED_GOTO_ORIGIN);
 
+		// Make the bot more likely to use alternate paths based on their braveness and current health
+		if(getHealthPercent() + m_pProfile->m_fBraveness <= 1.0f)
+			updateCondition(CONDITION_COVERT);
+		else
+			removeCondition(CONDITION_COVERT);
+
         pWaypoint = CWaypoints::randomWaypointGoal(-1);
 
 		if (pWaypoint)
 		{
 			pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), 0, 0);
-			if ((m_fUseRouteTime < engine->Time()))
+			if ((m_fUseRouteTime <= engine->Time()))
 			{
 				if (pRoute)
 				{
-					int iRoute = CWaypoints::getWaypointIndex(pRoute);
+					int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
+					int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint); // Goal Waypoint
 					pSched->addTask(new CFindPathTask(iRoute, LOOK_WAYPOINT));
 					pSched->addTask(new CMoveToTask(pRoute->getOrigin()));
+					pSched->addTask(new CFindPathTask(iWaypoint, LOOK_WAYPOINT));
+					pSched->addTask(new CMoveToTask(pWaypoint->getOrigin()));
 					m_pSchedules->add(pSched);
 					m_fUseRouteTime = engine->Time() + 30.0f;
 				}
@@ -297,4 +434,70 @@ bool CBotSynergy::executeAction(eBotAction iAction)
     }
 
     return false;
+}
+
+void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWaypoint)
+{
+	if(iNextWaypoint != -1 && pWaypoint->hasFlag(CWaypointTypes::W_FL_USE)) // Use waypoint: Check for door
+	{
+		CWaypoint *pNext = CWaypoints::getWaypoint(iNextWaypoint);
+		if(pNext && pNext->hasFlag(CWaypointTypes::W_FL_USE))
+		{
+			/**
+			 * Perform a trace to check if there is something blocking the path between the current waypoint and the next waypoint.
+			 * Originally I wanted to use tr->GetEntityIndex() and check if the hit entity is a door
+			 * but that function causes link errors when compiling, so I had to fall back to manually searching for door entities.
+			 * BUGBUG!! Because RCBot2 currently lacks the ability to read datamaps, it's impossible to prevent the bot from trying to open a locked door.
+			**/
+			CTraceFilterHitAll filter;
+			trace_t *tr = CBotGlobals::getTraceResult();
+			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), pNext->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), MASK_PLAYERSOLID, &filter);
+			if(tr->fraction < 1.0f)
+			{
+				edict_t *pDoor;
+				pDoor = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "prop_door_rotating", rcbot_syn_use_search_range.GetFloat());
+				if(pDoor != NULL && !CSynergyMod::IsEntityLocked(pDoor))
+				{
+					m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
+				}
+				else
+				{
+					pDoor = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_door", rcbot_syn_use_search_range.GetFloat());
+					if(pDoor != NULL && !CSynergyMod::IsEntityLocked(pDoor))
+					{
+						m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
+					}
+					else
+					{
+						pDoor = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_door_rotating", rcbot_syn_use_search_range.GetFloat());
+						if(pDoor != NULL && !CSynergyMod::IsEntityLocked(pDoor))
+						{
+							m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
+						}
+					}
+				}
+			}
+		}
+	}
+	else // Check for button
+	{
+		edict_t *pEntity;
+		pEntity = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_button", rcbot_syn_use_search_range.GetFloat());
+		if(pEntity != NULL && !CSynergyMod::IsEntityLocked(pEntity))
+		{
+			CBotSchedule *sched = new CBotSchedule();
+			sched->setID(SCHED_GOTO_ORIGIN);
+			sched->addTask(new CMoveToTask(pEntity));
+			sched->addTask(new CBotHL2DMUseButton(pEntity));
+			sched->addTask(new CBotWaitTask(RandomFloat(3.0f, 6.0f)));
+			m_pSchedules->addFront(sched);
+		}
+	}
+
+	CBot::touchedWpt(pWaypoint, iNextWaypoint, iPrevWaypoint);
+}
+
+bool CBotSynergy::walkingTowardsWaypoint(CWaypoint *pWaypoint, bool *bOffsetApplied, Vector &vOffset)
+{
+	return CBot::walkingTowardsWaypoint(pWaypoint, bOffsetApplied, vOffset);
 }

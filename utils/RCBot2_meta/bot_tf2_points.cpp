@@ -100,7 +100,7 @@ bool CTFObjectiveResource :: isWaypointAreaValid ( int wptarea, int waypointflag
 	if ( (wptarea < 0) || (wptarea > MAX_CONTROL_POINTS) )
 		return false;
 
-	int cpindex = m_WaypointAreaToIndexTranslation[wptarea];
+const int cpindex = m_WaypointAreaToIndexTranslation[wptarea];
 
 	if ( cpindex == -1 )
 		return false;
@@ -143,7 +143,7 @@ bool CTFObjectiveResource::isCPValidWptArea ( int iWptArea, int iTeam, ePointAtt
 // Returns TRUE if waypoint area is worth attacking or defending at this moment
 bool CTFObjectiveResource::testProbWptArea ( int iWptArea, int iTeam )
 {
-	int iCpIndex = m_WaypointAreaToIndexTranslation[iWptArea];
+	const int iCpIndex = m_WaypointAreaToIndexTranslation[iWptArea];
 
 	if ( (iTeam != TF2_TEAM_BLUE) && (iTeam != TF2_TEAM_RED) )
 		return true;
@@ -202,7 +202,7 @@ int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDef
 			{
 				if (GetCappingTeam(i) == iotherteam)
 				{
-					int numplayers = GetNumPlayersInArea(i,iotherteam);
+					const int numplayers = GetNumPlayersInArea(i,iotherteam);
 
 					// IF this is not base point and a lot of players are here, reduce probability of defending
 					if ( (i != GetBaseControlPointForTeam(team)) && (numplayers > 1)  )
@@ -223,13 +223,13 @@ int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDef
 		}
 	}
 
-	float fRand = randomFloat(0.0f,fTotal);
+	const float fRand = randomFloat(0.0f,fTotal);
 
 	fTotal = 0.0f;
 
 	for ( unsigned int i = 0; i < points.size(); i ++ )
 	{
-		int index = points[i];
+		const int index = points[i];
 
 		fTotal += arr[index].fProb*arr[index].fProbMultiplier;
 
@@ -259,7 +259,7 @@ bool CTeamControlPointRound :: isPointInRound ( edict_t *point_pent )
 	for ( int i = 0; i < m_ControlPoints.Size(); i ++ )
 	{
 		CBaseHandle *hndl;
-		hndl = (CBaseHandle *)&(m_ControlPoints[i]); 
+		hndl = &m_ControlPoints[i]; 
 
 		if ( hndl )
 		{ 
@@ -288,7 +288,7 @@ CTeamControlPointRound *CTeamControlPointMaster:: getCurrentRound ( )
 	extern IServerTools *servertools;
 	
 	// HACK: we use one of the known CBaseEntity-sized entities to compute the offset to the first subclass member for CTeamControlPointMaster / CTeamControlPointRound
-	size_t baseEntityOffset = servertools->GetEntityFactoryDictionary()->FindFactory("simple_physics_brush")->GetEntitySize();
+	const size_t baseEntityOffset = servertools->GetEntityFactoryDictionary()->FindFactory("simple_physics_brush")->GetEntitySize();
 
 	return reinterpret_cast<CTeamControlPointRound*>((uintptr_t) pent + baseEntityOffset);
 }
@@ -357,7 +357,7 @@ void CTFObjectiveResource::setup ()
 			// in the future waypoints will automatically be set to the waypoint area anyway
 			if ( pWaypoint )
 			{
-				int iArea = pWaypoint->getArea();
+				const int iArea = pWaypoint->getArea();
 				m_IndexToWaypointAreaTranslation[j] = iArea;
 
 				if ( ( iArea >= 1 ) && ( iArea < MAX_CONTROL_POINTS ) )
@@ -384,7 +384,7 @@ int CTFObjectiveResource :: getControlPointArea ( edict_t *pPoint )
 
 	return 0;
 }
-void CTFObjectiveResource::	debugprint ( void )
+void CTFObjectiveResource::	debugprint ()
 {
 	edict_t *pEdict = CClients::getListenServerClient();
 
@@ -433,7 +433,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 	int signature = 0;
 	int other;
 	int prev;
-	bool isPayLoadMap = CTeamFortress2Mod::isMapType(TF_MAP_CART)||CTeamFortress2Mod::isMapType(TF_MAP_CARTRACE);
+	const bool isPayLoadMap = CTeamFortress2Mod::isMapType(TF_MAP_CART)||CTeamFortress2Mod::isMapType(TF_MAP_CARTRACE);
 	TF2PointProb_t *arr;
 
 	//CTeamControlPoint *pPoint;
@@ -533,7 +533,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 						arr[i].bValid = true;
 					else
 					{
-						int basepoint = GetBaseControlPointForTeam(team);
+						const int basepoint = GetBaseControlPointForTeam(team);
 						arr[i].bValid = true;						
 
 						if ( i == basepoint )
@@ -678,7 +678,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 					if ( bFirst )
 					{
 						// TO DO update probability depending on distance to payload bomb
-						float fDist = (CBotGlobals::entityOrigin(pPayloadBomb) - m_vCPPositions[i]).Length();
+						const float fDist = (CBotGlobals::entityOrigin(pPayloadBomb) - m_vCPPositions[i]).Length();
 
 						bFirst = false;
 
@@ -695,7 +695,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 						{
 							arr[i].fProb = bot_defrate.GetFloat();
 
-							int j = i + 1;
+							const int j = i + 1;
 
 							if ( j < *m_iNumControlPoints )
 							{
@@ -758,7 +758,7 @@ void CTFObjectiveResource :: think ()
 			{
 				for ( int j = 0; j < MAX_PREVIOUS_POINTS; j ++ )
 				{
-					int prev = GetPreviousPointForPoint(m_iMonitorPoint[team],(team+2),j);
+					const int prev = GetPreviousPointForPoint(m_iMonitorPoint[team],(team+2),j);
 
 					if ( (prev != -1) && (GetOwningTeam(prev)!=(team+2)) )
 					{
@@ -885,10 +885,10 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 					if ( !CTeamFortress2Mod::isAttackDefendMap() )
 					{
 						// if its not an attack defend map check previous points are owned
-						int other = (team==2)?3:2;
+						const int other = (team==2)?3:2;
 
 						// find the base point
-						int basepoint = GetBaseControlPointForTeam(other);
+						const int basepoint = GetBaseControlPointForTeam(other);
 
 						/*if ( i == basepoint )
 						{

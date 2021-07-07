@@ -210,6 +210,8 @@ void CBotMods :: parseFile ()
 				bottype = BOTTYPE_ZOMBIE;
 			else if ( !strcmpi("DOD",val) )
 				bottype = BOTTYPE_DOD;
+			else if ( !strcmpi("SYNERGY",val) )
+				bottype = BOTTYPE_SYN;
 		}
 		else if ( curmod && !strcmpi(key,"gamedir") )
 		{
@@ -309,6 +311,7 @@ void CBotMods :: createFile ()
 void CBotMods :: readMods()
 {
 	// TODO improve game detection
+	// caxanga334: Better game detection required if we want to support multiple mods on the same engine (IE: SDK 2013)
 	#if SOURCE_ENGINE == SE_TF2
 		m_Mods.push_back(new CTeamFortress2Mod());
 	#elif SOURCE_ENGINE == SE_DODS
@@ -317,6 +320,8 @@ void CBotMods :: readMods()
 		m_Mods.push_back(new CCounterStrikeSourceMod());
 	#elif SOURCE_ENGINE == SE_HL2DM
 		m_Mods.push_back(new CHalfLifeDeathmatchMod());
+	#elif SOURCE_ENGINE == SE_SDK2013
+		m_Mods.push_back(new CSynergyMod());
 	#else
 
 		m_Mods.push_back(new CFortressForeverMod());

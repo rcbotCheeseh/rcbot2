@@ -24,7 +24,7 @@ private:
 
 	void *findSignature ( void *addrInBase, const char *signature );
 protected:
-	void findFunc ( CRCBotKeyValueList &kv, const char *pKey, void *pAddrBase, const char *defaultsig );
+	void findFunc ( CRCBotKeyValueList *kv, const char *pKey, void *pAddrBase, const char *defaultsig );
 
 	void *m_func;
 };
@@ -32,7 +32,7 @@ protected:
 class CGameRulesObject : public CSignatureFunction
 {
 public:
-	CGameRulesObject(CRCBotKeyValueList &list, void *pAddrBase);
+	CGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase);
 
 	bool found() { return m_func != NULL; }
 
@@ -42,7 +42,7 @@ public:
 class CCreateGameRulesObject : public CSignatureFunction
 {
 public:
-	CCreateGameRulesObject(CRCBotKeyValueList &list, void *pAddrBase);
+	CCreateGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase);
 
 	bool found() { return m_func != NULL; }
 

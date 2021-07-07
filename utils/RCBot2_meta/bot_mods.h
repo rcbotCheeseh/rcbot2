@@ -76,6 +76,7 @@ typedef enum
 	BOTTYPE_ZOMBIE,
 	BOTTYPE_DOD,
 	BOTTYPE_NS2,
+	BOTTYPE_SYN,
 	BOTTYPE_MAX
 }eBotType;
 
@@ -690,14 +691,24 @@ class CSynergyMod : public CBotMod
 public:
 	CSynergyMod()
 	{
-		setup("synergy",MOD_SYNERGY,BOTTYPE_COOP,"SYNERGY");
+		setup("synergy",MOD_SYNERGY,BOTTYPE_SYN,"SYNERGY");
 	}
 
-	//void initMod ();
+	void initMod ();
+	void mapInit ();
 
-	//void mapInit ();
+	const char *getPlayerClass () override
+	{
+		return "CSynergyPlayer";
+	}
 
 	//void entitySpawn ( edict_t *pEntity );
+
+	static bool IsEntityLocked(edict_t *pEntity);
+	static bool IsCombineMinePlayerPlaced(edict_t *pMine);
+	static bool IsCombineMineDisarmed(edict_t *pMine);
+	static bool IsCombineMineArmed(edict_t *pMine);
+	static bool IsCombineMineHeldByPhysgun(edict_t *pMine);
 };
 
 #define NEWENUM typedef enum {
@@ -795,7 +806,7 @@ public:
 
 	bool isWaypointAreaValid ( int iWptArea, int iWptFlags );
 
-	static bool isSuddenDeath(void);
+	static bool isSuddenDeath();
 
 	static bool isHealthKit ( edict_t *pEntity );
 
@@ -978,7 +989,7 @@ public:
 
 	static edict_t *getMySentryGun ( edict_t *pOwner )
 	{
-		int id = ENTINDEX(pOwner)-1;
+		const int id = ENTINDEX(pOwner)-1;
 
 		if ( id>=0 )
 		{
@@ -1002,7 +1013,7 @@ public:
 
 	static bool isMySentrySapped ( edict_t *pOwner ) 
 	{
-		int id = ENTINDEX(pOwner)-1;
+		const int id = ENTINDEX(pOwner)-1;
 
 		if ( id>=0 )
 		{
@@ -1024,7 +1035,7 @@ public:
 
 	static bool isMyTeleporterSapped ( edict_t *pOwner )
 	{
-		int id = ENTINDEX(pOwner)-1;
+		const int id = ENTINDEX(pOwner)-1;
 
 		if ( id>=0 )
 		{
@@ -1036,7 +1047,7 @@ public:
 
 	static bool isMyDispenserSapped ( edict_t *pOwner )
 	{
-		int id = ENTINDEX(pOwner)-1;
+		const int id = ENTINDEX(pOwner)-1;
 
 		if ( id>=0 )
 		{

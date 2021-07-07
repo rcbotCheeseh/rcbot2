@@ -24,7 +24,7 @@ bool CBotZombie :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 	return true;	
 }
 
-void CBotZombie :: modThink ( void )
+void CBotZombie :: modThink ()
 {
 	//
 }

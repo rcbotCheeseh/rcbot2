@@ -70,7 +70,7 @@ public:
 
 	bool testProbWptArea ( int iWptArea, int iTeam );
 
-	void debugprint ( void );
+	void debugprint ();
 	void updatePoints();
 	bool TeamCanCapPoint( int index, int team )
 	{
@@ -130,7 +130,7 @@ public:
 
 	int GetCPCappingIcon( int index )
 	{
-		int iCapper = GetCappingTeam(index);
+		const int iCapper = GetCappingTeam(index);
 
 		return GetIconForTeam( index, iCapper );
 	}
@@ -171,7 +171,7 @@ public:
 	}
 
 	// Data functions, called to set up the state at the beginning of a round
-	inline int	 GetNumControlPoints( void ) 
+	inline int	 GetNumControlPoints() 
 	{ 
 		if ( m_iNumControlPoints==NULL )
 			return 0;
@@ -206,7 +206,7 @@ public:
 
 
 	// Mini-rounds data
-	bool PlayingMiniRounds( void ){ return *m_bPlayingMiniRounds; }
+	bool PlayingMiniRounds(){ return *m_bPlayingMiniRounds; }
 	bool IsInMiniRound( int index ) { return m_bInMiniRound[index]; }
 	void updateCaptureTime(int index);
 	void setup ();
@@ -275,7 +275,7 @@ public:
 	{ 
 		memset(m_ValidAreas,0,sizeof(bool)*MAX_CONTROL_POINTS); 
 	}
-	void updateValidWaypointAreas ( void )
+	void updateValidWaypointAreas ()
 	{
 		resetValidWaypointAreas();
 

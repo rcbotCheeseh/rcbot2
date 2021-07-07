@@ -150,6 +150,8 @@ typedef enum
 	GETPROP_TF2_CHARGE_RESIST_TYPE,
 	GETPROP_TF2_ROUNDSTATE,
 	GETPROP_TF2DESIREDCLASS, //Jrob
+	GETPROP_SYN_PLAYER_VEHICLE,
+	GETPROP_SYN_VEHICLE_DRIVER,
 	GET_PROPDATA_MAX
 }getpropdata_id;
 
@@ -158,6 +160,9 @@ ServerClass *UTIL_FindServerClass(const char *name);
 void UTIL_FindServerClassPrint(const char*name_cmd);
 void UTIL_FindServerClassnamePrint(const char *name_cmd);
 void UTIL_FindPropPrint(const char *prop_name);
+unsigned int UTIL_FindInDataMap(datamap_t* pMap, const char* name);
+datamap_t* CBaseEntity_GetDataDescMap(CBaseEntity* pEntity);
+datamap_t* VGetDataDescMap(CBaseEntity* pThisPtr, int offset);
 
 class CClassInterfaceValue
 {
@@ -404,7 +409,7 @@ public:
 	}
 	//end Jrob
 	inline static bool TF2_IsMedievalMode(void*gamerules) { return g_GetProps[GETPROP_TF2_MEDIEVALMODE].getBool(gamerules, false, false);}
-	inline static int TF2_getRoundState(void *gamerules) { return g_GetProps[GETPROP_TF2_ROUNDSTATE].getInt(gamerules, 0, 0); }
+	inline static int TF2_getRoundState(void *gamerules) { return g_GetProps[GETPROP_TF2_ROUNDSTATE].getInt(gamerules, 0, false); }
 	inline static float getTF2SpyCloakMeter ( edict_t *edict ) { return g_GetProps[GETPROP_TF2SPYMETER].getFloat(edict,0); }
 	inline static int getWaterLevel ( edict_t *edict ) { return g_GetProps[GETPROP_WATERLEVEL].getInt(edict,0); }
 	inline static void updateSimulationTime ( edict_t *edict )
@@ -673,9 +678,135 @@ public:
 		return g_GetProps[GETPROP_SENTRYGUN_PLACING].getBool(pSentry,false);
 	}
 
+	// Synergy
+
+	// Gets the player's current vehicle
+	inline static edict_t* getSynPlayerVehicle(edict_t* pPlayer)
+	{
+		return g_GetProps[GETPROP_SYN_PLAYER_VEHICLE].getEntity(pPlayer);
+	}
+
+	// Gets the driver of the given vehicle
+	inline static edict_t* getSynVehicleDriver(edict_t* pVehicle)
+	{
+		return g_GetProps[GETPROP_SYN_VEHICLE_DRIVER].getEntity(pVehicle);
+	}	
+
 private:
 	static CClassInterfaceValue g_GetProps[GET_PROPDATA_MAX];
 
+};
+
+// For reference: https://github.com/alliedmodders/sourcemod/blob/master/core/smn_entities.cpp
+class CDataInterface
+{
+public:
+	/**
+	* Gets the entity's given prop via datamaps
+	* 
+	* @param pEntity	The entity to read
+	* @param prop		The property to read
+	* @return			The property value
+	**/
+	inline static int GetEntPropInt(CBaseEntity *pEntity, const char *prop)
+	{
+		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
+		int offset = UTIL_FindInDataMap(pDataMap, prop);
+		int propvalue = *(int *)((uint8_t *)pEntity + offset); // to-do: bit count?
+		return propvalue;
+	}
+
+	/**
+	* Gets the entity's given prop via datamaps
+	* 
+	* @param pEntity	The entity to read
+	* @param prop		The property to read
+	* @return			The property value
+	**/
+	inline static float GetEntPropFloat(CBaseEntity *pEntity, const char *prop)
+	{
+		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
+		int offset = UTIL_FindInDataMap(pDataMap, prop);
+		float propvalue = *(float *)((uint8_t *)pEntity + offset);
+		return propvalue;
+	}
+
+	/**
+	* Gets the entity's given prop via datamaps
+	* 
+	* @param pEntity	The entity to read
+	* @param prop		The property to read
+	* @return			The property value or NULL if the edict is invalid
+	**/
+	inline static edict_t *GetEntPropEdict(CBaseEntity *pEntity, const char *prop)
+	{
+		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
+		int offset = UTIL_FindInDataMap(pDataMap, prop);
+		edict_t *pEdict = *(edict_t **) ((uint8_t *) pEntity + offset);
+		if(!pEdict || pEdict->IsFree())
+		{
+			return NULL;
+		}
+			
+		return pEdict;
+	}
+
+	/**
+	* Gets the entity's given prop via datamaps
+	* 
+	* @param pEntity	The entity to read
+	* @param prop		The property to read
+	* @return			The property value
+	**/
+	inline static Vector *GetEntPropVector(CBaseEntity *pEntity, const char *prop)
+	{
+		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
+		int offset = UTIL_FindInDataMap(pDataMap, prop);
+		Vector *propvalue = (Vector *)((uint8_t *)pEntity + offset);
+		return propvalue;
+	}
+
+	/**
+	* Gets the entity's health via datamaps
+	* 
+	* @param pEntity	The entity to get the health from
+	* @return			The entity current health (m_iHealth) value
+	**/
+	inline static int GetEntityHealth(CBaseEntity* pEntity)
+	{
+		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
+		int offset = UTIL_FindInDataMap(pDataMap, "m_iHealth");
+		int iHealth = *(int*)((char*)pEntity + offset);
+		return iHealth;
+	}
+	/**
+	* Gets the entity's maxhealth via datamaps
+	* 
+	* @param pEntity	The entity to get the health from
+	* @return			The entity current max health (m_iMaxHealth) value
+	**/
+	inline static int GetEntityMaxHealth(CBaseEntity* pEntity)
+	{
+		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
+		int offset = UTIL_FindInDataMap(pDataMap, "m_iMaxHealth");
+		int iMaxHealth = *(int*)((char*)pEntity + offset);
+		return iMaxHealth;
+	}
+	/**
+	* Gets the entity's health as percentage
+	* 
+	* @param pEntity	The entity to get the health from
+	* @return			The entity health as percentage, range 1 to 0, where 1 is full health
+	**/
+	inline static float GetEntityHealthPercent(CBaseEntity* pEntity)
+	{
+		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
+		int offset = UTIL_FindInDataMap(pDataMap, "m_iHealth");
+		int offset2 = UTIL_FindInDataMap(pDataMap, "m_iMaxHealth");
+		int iHealth = *(int*)((char*)pEntity + offset);
+		int iMaxHealth = *(int*)((char*)pEntity + offset);
+		return (static_cast<float>(iHealth / iMaxHealth));
+	}
 };
 
 #endif

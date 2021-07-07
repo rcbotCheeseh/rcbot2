@@ -195,32 +195,55 @@ enum
 	DOD_WEAPON_MAX
 };
 
+enum
+{
+	SYN_WEAPON_PISTOL = 0,
+	SYN_WEAPON_CROWBAR,
+	SYN_WEAPON_LEADPIPE,
+	SYN_WEAPON_357,
+	SYN_WEAPON_DESERTEAGLE,
+	SYN_WEAPON_SMG1,
+	SYN_WEAPON_MP5K,
+	SYN_WEAPON_AR2,
+	SYN_WEAPON_FRAG,
+	SYN_WEAPON_STUNSTICK,
+	SYN_WEAPON_CROSSBOW,
+	SYN_WEAPON_RPG,
+	SYN_WEAPON_SLAM,	
+	SYN_WEAPON_SHOTGUN,
+	SYN_WEAPON_PHYSCANNON,
+	SYN_WEAPON_MG1,
+	SYN_WEAPON_BUGBAIT,
+	SYN_WEAPON_MAX
+};
+
 
 #define WEAP_FL_NONE			0
-#define WEAP_FL_PRIM_ATTACK		1
-#define WEAP_FL_SEC_ATTACK		2
-#define WEAP_FL_EXPLOSIVE		4 // weapon is an explosive weapon eg. rpg
-#define WEAP_FL_MELEE			8 //
-#define WEAP_FL_UNDERWATER		16 // weapon can be used under water
-#define WEAP_FL_HOLDATTACK		32 // weapon must hold attack (e.g. minigun)
-#define WEAP_FL_SPECIAL			64 //
-#define WEAP_FL_KILLPIPEBOMBS	128 // weapon can destroy pipe bombs (tf2)
-#define WEAP_FL_DEFLECTROCKETS	256 // weapon can deflect rocekts (tf2)
-#define WEAP_FL_GRAVGUN			512 // weapon is a grav gun
-#define WEAP_FL_EXPLOSIVE_SEC	1024 // weapon has an explosive secondary attack
-#define WEAP_FL_ZOOMABLE		2048 // weapon can be zoomed
-#define WEAP_FL_DEPLOYABLE		4096 // weapon can be deployed
-#define WEAP_FL_MELEE_SEC_ATT	8192 // weapon has a melee secondary attack
-#define WEAP_FL_FIRE_SELECT		16384 // weapon can choose fire mode
-#define WEAP_FL_CANTFIRE_NORM	32768 // weapon can't be fired normally, needs to be zoomed/deployed
-#define WEAP_FL_GRENADE			65536
-#define WEAP_FL_HIGH_RECOIL		131072 // can't be fired at long distance, but ok when deployed
-#define WEAP_FL_SCOPE			262144 // has a scope . i.e. sniper rifle
-#define WEAP_FL_PROJECTILE		524288 // affected by gravity
+#define WEAP_FL_PRIM_ATTACK		(1 << 0)
+#define WEAP_FL_SEC_ATTACK		(1 << 1)
+#define WEAP_FL_EXPLOSIVE		(1 << 2) // weapon is an explosive weapon eg. rpg
+#define WEAP_FL_MELEE			(1 << 3) //
+#define WEAP_FL_UNDERWATER		(1 << 4) // weapon can be used under water
+#define WEAP_FL_HOLDATTACK		(1 << 5) // weapon must hold attack (e.g. minigun)
+#define WEAP_FL_SPECIAL			(1 << 6) //
+#define WEAP_FL_KILLPIPEBOMBS	(1 << 7) // weapon can destroy pipe bombs (tf2)
+#define WEAP_FL_DEFLECTROCKETS	(1 << 8) // weapon can deflect rocekts (tf2)
+#define WEAP_FL_GRAVGUN			(1 << 9) // weapon is a grav gun
+#define WEAP_FL_EXPLOSIVE_SEC	(1 << 10) // weapon has an explosive secondary attack
+#define WEAP_FL_ZOOMABLE		(1 << 11) // weapon can be zoomed
+#define WEAP_FL_DEPLOYABLE		(1 << 12) // weapon can be deployed
+#define WEAP_FL_MELEE_SEC_ATT	(1 << 13) // weapon has a melee secondary attack
+#define WEAP_FL_FIRE_SELECT		(1 << 14) // weapon can choose fire mode
+#define WEAP_FL_CANTFIRE_NORM	(1 << 15) // weapon can't be fired normally, needs to be zoomed/deployed
+#define WEAP_FL_GRENADE			(1 << 16)
+#define WEAP_FL_HIGH_RECOIL		(1 << 17) // can't be fired at long distance, but ok when deployed
+#define WEAP_FL_SCOPE			(1 << 18) // has a scope . i.e. sniper rifle
+#define WEAP_FL_PROJECTILE		(1 << 19) // affected by gravity
 
 extern WeaponsData_t TF2Weaps[];
 extern WeaponsData_t HL2DMWeaps[];
 extern WeaponsData_t DODWeaps[];
+extern WeaponsData_t SYNERGYWeaps[];
 
 class CWeapon
 {
@@ -765,7 +788,7 @@ public:
 
 	bool hasWeapon ( int id );
 
-	bool hasExplosives ( void );
+	bool hasExplosives ();
 
 	// returns true if there is a change to the weapons
 	bool update ( bool bOverrideAllFromEngine = true ); // update from sendprop

@@ -63,7 +63,7 @@ private:
 
 //-------------
 
-void CBotSquads::FreeMemory ( void )
+void CBotSquads::FreeMemory ()
 {
 	// TODO inline squad or use unique pointers or something so they're freed automatically
 	for (CBotSquad *squad : m_theSquads) {
@@ -213,7 +213,7 @@ void CBotSquads::RemoveSquad ( CBotSquad *pSquad )
 		delete pSquad;
 }
 
-void CBotSquads::UpdateAngles ( void )
+void CBotSquads::UpdateAngles ()
 {
 	for (CBotSquad *squad : m_theSquads) {
 		squad->UpdateAngles();
@@ -222,7 +222,7 @@ void CBotSquads::UpdateAngles ( void )
 
 //-------------
 
-void CBotSquad::UpdateAngles ( void )
+void CBotSquad::UpdateAngles ()
 {
 	edict_t *pLeader = GetLeader();
 
@@ -275,7 +275,7 @@ void CBotSquads :: ChangeLeader ( CBotSquad *pSquad )
  * Make the succeeding squad member the new leader if they have any subordinates, otherwise
  * disband the squad.
  */
-void CBotSquad::ChangeLeader ( void )
+void CBotSquad::ChangeLeader ()
 {
 	if ( m_SquadMembers.empty() )
 	{
@@ -311,7 +311,7 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 	iPosition = GetFormationPosition(pEdict);
 	vLeaderOrigin = CBotGlobals::entityOrigin(pLeader);
 
-	int iMod = iPosition % 2;
+	const int iMod = iPosition % 2;
 
 	AngleVectors(m_vLeaderAngle,&v_forward); // leader body angles as base
 
@@ -386,13 +386,13 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
  */
 int CBotSquad::GetFormationPosition ( edict_t *pEdict )
 {
-	auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pEdict);
+	const auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pEdict);
 	return it != m_SquadMembers.end()? std::distance(m_SquadMembers.begin(), it) : 0;
 }
 
 void CBotSquad::removeMember ( edict_t *pMember )
 {
-	auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pMember);
+	const auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pMember);
 	if (it != m_SquadMembers.end()) {
 		m_SquadMembers.erase(it);
 	}
@@ -422,7 +422,7 @@ size_t CBotSquad::numMembers ()
 	return m_SquadMembers.size();
 }
 
-void CBotSquad :: ReturnAllToFormation ( void )
+void CBotSquad :: ReturnAllToFormation ()
 {
 	for (edict_t *member : m_SquadMembers) {
 		CBot *pBot = CBots::getBotPointer(member);

@@ -59,7 +59,7 @@ public:
 
 	void init ()
 	{
-		int iSize = g_iMaxVisibilityByte;
+		const int iSize = g_iMaxVisibilityByte;
 
 		/////////////////////////////
 		// for "concurrent" reading of 
@@ -77,7 +77,7 @@ public:
 		memset(m_VisTable,0,iSize);
 	}
 
-	bool SaveToFile ( void );
+	bool SaveToFile ();
 
 	bool ReadFromFile ( int numwaypoints );
 
@@ -86,10 +86,10 @@ public:
 	bool GetVisibilityFromTo ( int iFrom, int iTo )
 	{
 		// work out the position 
-		int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
+		const int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
 
-		int iByte = (int)(iPosition/8);
-		int iBit = iPosition%8;
+		const int iByte = iPosition/8;
+		const int iBit = iPosition%8;
 
 		if ( iByte < g_iMaxVisibilityByte )
 		{			
@@ -101,7 +101,7 @@ public:
 		return false;
 	}
 
-	void ClearVisibilityTable ( void )
+	void ClearVisibilityTable ()
 	{
 		if ( m_VisTable )
 			memset(m_VisTable,0,g_iMaxVisibilityByte);
@@ -115,7 +115,7 @@ public:
 		////////////////////////////
 	}
 
-	void FreeVisibilityTable ( void )
+	void FreeVisibilityTable ()
 	{
 		if ( m_VisTable != NULL )
 		{
@@ -134,10 +134,10 @@ public:
 
 	void SetVisibilityFromTo ( int iFrom, int iTo, bool bVisible )
 	{
-		int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
+		const int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
 
-		int iByte = (int)(iPosition/8);
-		int iBit = iPosition%8;
+		const int iByte = iPosition/8;
+		const int iBit = iPosition%8;
 
 		if ( iByte < g_iMaxVisibilityByte )
 		{

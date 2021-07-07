@@ -68,7 +68,7 @@ void CFindEnemyFunc :: execute ( edict_t *pEntity )
 {
 	if ( m_pBot->isEnemy(pEntity) )
 	{
-		float fFactor = getFactor(pEntity);
+		const float fFactor = getFactor(pEntity);
 
 		if ( !m_pBest || (fFactor < m_fBestFactor) )
 		{

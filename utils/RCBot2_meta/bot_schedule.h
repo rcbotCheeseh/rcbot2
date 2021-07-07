@@ -94,6 +94,9 @@ typedef enum
 	SCHED_RETURN_TO_INTEL,
 	SCHED_INVESTIGATE_HIDE,
 	SCHED_TAUNT,
+	SCHED_SYN_OPEN_DOOR,
+	SCHED_SYN_DISARM_MINE,
+	SCHED_SYN_PLANT_MINE,
 	SCHED_MAX
 	//SCHED_HIDE_FROM_ENEMY
 }eBotSchedule;
@@ -648,5 +651,28 @@ public:
 	}
 };
 
+class CSynOpenDoorSched : public CBotSchedule
+{
+public:
+	// pDoor - The door the bot will try to open
+	CSynOpenDoorSched( edict_t *pDoor );
+
+	void init()
+	{
+		setID(SCHED_SYN_OPEN_DOOR);
+	}
+};
+
+class CSynDisarmMineSched : public CBotSchedule
+{
+public:
+	// pDoor - The door the bot will try to open
+	CSynDisarmMineSched( edict_t *pMine );
+
+	void init()
+	{
+		setID(SCHED_SYN_DISARM_MINE);
+	}
+};
 
 #endif

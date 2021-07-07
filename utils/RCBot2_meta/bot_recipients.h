@@ -31,6 +31,10 @@
 #ifndef __BOT_RECIPIENTS_H__
 #define __BOT_RECIPIENTS_H__
 
+#include <cstddef>
+#include <edict.h>
+
+#include "bot_const.h"
 #include "irecipientfilter.h"
 
 class CEdictRecipient : public IRecipientFilter
@@ -49,11 +53,11 @@ public:
 		m_bReliable = false;
 	}
 
-	bool	IsReliable( void ) const { return m_bReliable; }
+	bool	IsReliable() const { return m_bReliable; }
 
-	bool	IsInitMessage( void ) const { return false; }
+	bool	IsInitMessage() const { return false; }
 
-	int		GetRecipientCount( void ) const { return 1; }
+	int		GetRecipientCount() const { return 1; }
 	int		GetRecipientIndex( int slot ) const { return ENTINDEX(m_pEdict); } // only 1 stored
 private:
 	edict_t *m_pEdict;

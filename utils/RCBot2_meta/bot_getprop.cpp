@@ -5,6 +5,8 @@
 #include "bot.h"
 #include "bot_globals.h"
 #include "bot_getprop.h"
+#include "bot_cvars.h"
+#include "datamap.h"
 
 CClassInterfaceValue CClassInterface :: g_GetProps[GET_PROPDATA_MAX];
 bool CClassInterfaceValue :: m_berror = false;
@@ -106,7 +108,7 @@ bool g_PrintProps = false;
 
 SendProp *UTIL_FindSendProp(SendTable *pTable, const char *name)
 {
-	int count = pTable->GetNumProps();
+	const int count = pTable->GetNumProps();
 	//SendTable *pTable;
 	SendProp *pProp;
 	for (int i=0; i<count; i++)
@@ -174,7 +176,7 @@ bool UTIL_FindInSendTable(SendTable *pTable,
 						  unsigned int offset)
 {
 	const char *pname;
-	int props = pTable->GetNumProps();
+	const int props = pTable->GetNumProps();
 	SendProp *prop;
 
 	for (int i=0; i<props; i++)
@@ -321,6 +323,83 @@ void CClassInterfaceValue :: findOffset ( )
 	}
 #endif
 }
+
+/**
+ * Finds a named offset in a datamap.
+ *
+ * @param pMap		Datamap to search.
+ * @param name		Name of the property to find.
+ * @return		Offset of a data map property, or 0 if not found.
+ */
+unsigned int UTIL_FindInDataMap(datamap_t* pMap, const char* name)
+{
+	while (pMap)
+	{
+		for (int i = 0; i < pMap->dataNumFields; i++)
+		{
+			if (pMap->dataDesc[i].fieldName == NULL)
+			{
+				continue;
+			}
+			if (strcmp(name, pMap->dataDesc[i].fieldName) == 0)
+			{
+				return pMap->dataDesc[i].fieldOffset[TD_OFFSET_NORMAL];
+			}
+			if (pMap->dataDesc[i].td)
+			{
+				unsigned int offset;
+				if ((offset = UTIL_FindInDataMap(pMap->dataDesc[i].td, name)) != 0)
+				{
+					return offset;
+				}
+			}
+		}
+		pMap = pMap->baseMap;
+	}
+
+	return 0;
+}
+
+class VEmptyClass {};
+datamap_t* VGetDataDescMap(CBaseEntity* pThisPtr, int offset)
+{
+	void** this_ptr = *reinterpret_cast<void***>(&pThisPtr);
+	void** vtable = *reinterpret_cast<void***>(pThisPtr);
+	void* vfunc = vtable[offset];
+
+	union
+	{
+		datamap_t* (VEmptyClass::* mfpnew)();
+#ifndef PLATFORM_POSIX
+		void* addr;
+	} u;
+	u.addr = vfunc;
+#else
+		struct
+		{
+			void* addr;
+			intptr_t adjustor;
+		} s;
+} u;
+	u.s.addr = vfunc;
+	u.s.adjustor = 0;
+#endif
+
+	return (reinterpret_cast<VEmptyClass*>(this_ptr)->*u.mfpnew)();
+}
+
+datamap_t* CBaseEntity_GetDataDescMap(CBaseEntity* pEntity)
+{
+	int offset = rcbot_datamap_offset.GetInt();
+
+	if (offset == -1)
+	{
+		return NULL;
+	}
+
+	return VGetDataDescMap(pEntity, offset);
+}
+
 /* Find and save all offsets at load to save CPU */
 void CClassInterface:: init ()
 {
@@ -484,6 +563,10 @@ void CClassInterface:: init ()
 		DEFINE_GETPROP(GETPROP_TF2_ROUNDSTATE, "CTFGameRulesProxy", "m_iRoundState", 0);
 		DEFINE_GETPROP(GETPROP_TF2DESIREDCLASS, "CTFPlayer", "m_iDesiredPlayerClass", 0);
 
+		// Synergy
+		DEFINE_GETPROP(GETPROP_SYN_PLAYER_VEHICLE, "CSynergyPlayer", "m_hVehicle", 0);
+		DEFINE_GETPROP(GETPROP_SYN_VEHICLE_DRIVER, "CPropVehicleDriveable", "m_hPlayer", 0);
+
 		for ( unsigned int i = 0; i < GET_PROPDATA_MAX; i ++ )
 		{
 			//if ( g_GetProps[i]
@@ -554,7 +637,7 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 	{
 		edict_t *pEdict = reinterpret_cast<edict_t*>(edict);
 
-		pUnknown = (IServerUnknown *)pEdict->GetUnknown();
+		pUnknown = pEdict->GetUnknown();
 
 		if (!pUnknown)
 		{
@@ -582,9 +665,9 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 	float fDist;
 	const char *pszClassname;
 	// speed up loop by by using smaller ints in register
-	register short int max = (short int)gpGlobals->maxEntities;
+	const short int max = (short int)gpGlobals->maxEntities;
 
-	for (register short int i = 0; i < max; i++)
+	for (short int i = 0; i < max; i++)
 	{
 		current = engine->PEntityOfEntIndex(i);
 

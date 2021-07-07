@@ -232,7 +232,7 @@ public:
 			batches[m_batchNum].out[m_outputNum++] = zeroscale(output,m_fMin,m_fMax);
 	}
 
-	inline void addSet ( void )
+	inline void addSet ()
 	{
 		if ( m_batchNum >= m_numBatches )
 			return; // error -- too many
@@ -283,6 +283,7 @@ public:
 
 	CBotNeuralNet ()
 	{
+		m_pHidden = NULL;
 		m_pOutputs = NULL;
 		//m_transferFunction = NULL;
 

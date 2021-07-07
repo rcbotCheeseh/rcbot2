@@ -39,7 +39,7 @@ CBotGAValues :: CBotGAValues()
 	init();
 }
 
-void CBotGAValues :: init (void)
+void CBotGAValues :: init ()
 {
 	clear();	
 	setFitness(0);
@@ -61,7 +61,7 @@ void CBotGAValues :: clear ()
 // crossover with other individual
 void CBotGAValues :: crossOver ( IIndividual *other )
 {
-	unsigned int iPoint = randomInt(0,m_theValues.size());
+	const unsigned int iPoint = randomInt(0,m_theValues.size());
 	float fTemp;
 
 	CBotGAValues *vother = (CBotGAValues*)other;
@@ -90,7 +90,7 @@ void CBotGAValues :: mutate ()
 	{
 		if ( randomFloat(0,1) < CGA::g_fMutateRate )
 		{
-			float fCurrentVal = get(i);
+			const float fCurrentVal = get(i);
 
 			set(i,fCurrentVal + ((fCurrentVal * (-1+randomFloat(0,2))) * CGA::g_fMaxPerturbation));
 		}

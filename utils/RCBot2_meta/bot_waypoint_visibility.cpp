@@ -34,7 +34,7 @@
 #include "bot_waypoint.h"
 #include "bot_waypoint_visibility.h"
 #include "bot_globals.h"
-#include <stdio.h>
+#include <cstdio>
 
 /*unsigned char *CWaypointVisibilityTable :: m_VisTable = NULL;
 bool CWaypointVisibilityTable :: bWorkVisibility = false;
@@ -45,7 +45,7 @@ void CWaypointVisibilityTable :: workVisibility ()
 {		
 	int percent;
 	int iTicks = 0;
-	register unsigned short int iSize = (unsigned short int) CWaypoints::numWaypoints();
+	const unsigned short int iSize = (unsigned short int) CWaypoints::numWaypoints();
 
 	for ( iCurFrom = iCurFrom; iCurFrom < iSize; iCurFrom ++ )
 	{
@@ -113,11 +113,11 @@ void CWaypointVisibilityTable :: workVisibilityForWaypoint ( int i, int iNumWayp
 	if ( !Waypoint1->isUsed() )
 		return;
 
-	for ( register short int j = 0; j < iNumWaypoints; j ++ )
+	for (short int j = 0; j < iNumWaypoints; j ++ )
 	{
 		if ( i == j )
 		{
-			SetVisibilityFromTo(i,j,1);
+			SetVisibilityFromTo(i,j,true);
 			continue;
 		}
 
@@ -137,9 +137,9 @@ void CWaypointVisibilityTable :: workVisibilityForWaypoint ( int i, int iNumWayp
 
 void CWaypointVisibilityTable :: WorkOutVisibilityTable ()
 {
-	register short int i;
+	short int i;
 
-	int iNumWaypoints = CWaypoints::numWaypoints();
+	const int iNumWaypoints = CWaypoints::numWaypoints();
 
 	ClearVisibilityTable();
 
@@ -150,7 +150,7 @@ void CWaypointVisibilityTable :: WorkOutVisibilityTable ()
 	}
 }
 
-bool CWaypointVisibilityTable :: SaveToFile ( void )
+bool CWaypointVisibilityTable :: SaveToFile ()
 {
     char filename[1024];
 	wpt_vis_header_t header;

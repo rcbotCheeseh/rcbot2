@@ -28,8 +28,8 @@
  *    version.
  *
  */
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "bot.h"
 #include "bot_strings.h"
@@ -69,7 +69,7 @@ char *CStrings :: getString ( const char *szString )
 	if ( szString == NULL )
 		return NULL;
 
-	unsigned short int iHash = szString[0]%MAX_STRINGS_HASH;
+	const unsigned short int iHash = szString[0]%MAX_STRINGS_HASH;
 	
 	for ( register unsigned short int i = 0; i < m_Strings[iHash].size(); i ++ )
 	{
@@ -84,7 +84,7 @@ char *CStrings :: getString ( const char *szString )
 			return szCompString;
 	}
 
-	unsigned int len = strlen(szString);
+	const unsigned int len = strlen(szString);
 
 	char *szNew = new char[len+1];
 

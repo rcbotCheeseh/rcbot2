@@ -31,7 +31,7 @@
 #ifndef __RCBOT_WAYPOINT_H__
 #define __RCBOT_WAYPOINT_H__
 
-#include <stdio.h>
+#include <cstdio>
 
 // this must be before bot_client.h to avoid unknown override / missing type warnings
 #include <vector>
@@ -133,7 +133,7 @@ class CWaypointTypes
 {
 public:
 
-	// if you're adding a new waypoint type, don't forget to update CWaypointTypes :: setup()
+// if you're adding a new waypoint type, don't forget to update CWaypointTypes :: setup()
 	static const int W_FL_NONE           = 0;
 	static const int W_FL_JUMP           = (1 << 0);
 	static const int W_FL_CROUCH         = (1 << 1);
@@ -141,6 +141,7 @@ public:
 	static const int W_FL_LADDER         = (1 << 3);
 	static const int W_FL_FLAG           = (1 << 4);
 	static const int W_FL_CAPPOINT       = (1 << 5);
+	static const int W_FL_GOAL           = (1 << 5); // Synergy: Map Goal
 	static const int W_FL_NOBLU          = (1 << 6);
 	static const int W_FL_NOAXIS         = (1 << 6);
 	static const int W_FL_NORED          = (1 << 7);
@@ -149,6 +150,7 @@ public:
 	static const int W_FL_OPENS_LATER    = (1 << 9);
 	static const int W_FL_ROCKET_JUMP    = (1 << 10);
 	static const int W_FL_BOMB_TO_OPEN   = (1 << 10); // DOD:S
+	static const int W_FL_USE            = (1 << 10); // Synergy: Use Button/Door
 	static const int W_FL_SNIPER         = (1 << 11);
 	static const int W_FL_AMMO           = (1 << 12);
 	static const int W_FL_RESUPPLY       = (1 << 13);
@@ -375,7 +377,7 @@ public:
 
 	Vector applyRadius ();
 
-	bool isAiming ( void );
+	bool isAiming ();
 
 private:
 	Vector m_vOrigin;

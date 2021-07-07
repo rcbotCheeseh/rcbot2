@@ -598,7 +598,7 @@ protected:
 
 	virtual bool thinkSpyIsEnemy ( edict_t *pEdict, TF_Class iDisguise );
 
-	virtual bool checkStuck ( void ) { return CBot::checkStuck(); }
+	virtual bool checkStuck () { return CBot::checkStuck(); }
 
 	float m_fCallMedic;
 	float m_fTauntTime;
@@ -885,18 +885,18 @@ public:
 
 	void voiceCommand ( int cmd );
 
-	void handleWeapons ( void ) ;
+	void handleWeapons () ;
 
 	virtual bool select_CWeapon ( CWeapon *pWeapon );
 	virtual bool selectBotWeapon ( CBotWeapon *pBotWeapon );
 
-	void checkStuckonSpy ( void );
+	void checkStuckonSpy ();
 
-	bool checkStuck ( void );
+	bool checkStuck ();
 
 	void init (bool bVarInit=false);
 
-	bool checkAttackPoint ( void );
+	bool checkAttackPoint ();
 
 	bool canAvoid ( edict_t *pEntity );
 
@@ -910,7 +910,7 @@ public:
 
 	void healedPlayer ( edict_t *pPlayer, float fAmount );
 
-	void teleportedPlayer ( void );
+	void teleportedPlayer ();
 
 	inline bool isCarrying () { return m_bIsCarryingObj; }
 

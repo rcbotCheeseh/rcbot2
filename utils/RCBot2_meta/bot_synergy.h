@@ -45,12 +45,18 @@ public:
     unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
     bool isEnemy ( edict_t *pEdict, bool bCheckWeapons = true ) override;
     bool setVisible ( edict_t *pEntity, bool bVisible ) override;
+    void touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1 ) override;
+    bool walkingTowardsWaypoint ( CWaypoint *pWaypoint, bool *bOffsetApplied, Vector &vOffset ) override;
+    void updateConditions () override; // Overridden due to Synergy's quirks
 protected:
     MyEHandle m_pNearbyWeapon; // weapons
     MyEHandle m_pNearbyHealthKit; // Healthkit
     MyEHandle m_pNearbyBattery; // Armor battery
     MyEHandle m_pNearbyAmmo; // ammo pickups
     MyEHandle m_pNearbyCrate; // ammo crate
+    MyEHandle m_pNearbyGrenade; // grenades
+    MyEHandle m_pNearbyMine; // combine mine
+    float m_fGoToGoalTime; // Time control used to check if the bot should roam or not
 };
 
 #endif

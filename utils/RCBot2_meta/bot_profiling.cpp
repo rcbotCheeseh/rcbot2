@@ -48,7 +48,7 @@ float CProfileTimers::m_fNextUpdate = 0;
 
 // if windows USE THE QUERYPERFORMANCECOUNTER
 #ifdef _WIN32
-inline unsigned __int64 RDTSC(void)
+inline unsigned __int64 RDTSC()
     {
             _asm    _emit 0x0F
             _asm    _emit 0x31

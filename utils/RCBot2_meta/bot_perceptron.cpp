@@ -28,7 +28,7 @@
  *    version.
  *
  */
-#include <math.h>
+#include <cmath>
 #include <mem.h>
 //#include "vstdlib/random.h" // for random functions
 #include "bot_mtrand.h"
@@ -39,6 +39,11 @@ ga_nn_value CPerceptron::m_fDefaultBias = 1.0f;
 
 CNeuron :: CNeuron ()
 {
+	m_iInputs = 0;
+	m_LearnRate = 0;
+	m_output = 0;
+	m_Bias = 0;
+	
 	m_weights = NULL;
 	m_inputs = NULL;
 }
@@ -155,7 +160,7 @@ ga_nn_value CLogisticalNeuron :: execute (  )//, bool usebias )
 	x = m_inputs;
 
 	// bias weight
-	m_netinput = m_Bias;
+	m_netinput = m_Bias;//m_netinput assigned twice? [APG]RoboCop[CL]
 	
 	for ( i = 0; i < m_iInputs; i ++ )	
 	{
@@ -192,8 +197,8 @@ CBotNeuralNet :: CBotNeuralNet ( unsigned short int numinputs, unsigned short in
 							  unsigned short int neuronsperhiddenlayer, unsigned short int numoutputs, 
 								ga_nn_value learnrate)
 {
-	register unsigned short int i;
-	register unsigned short int j;
+	unsigned short int i;
+	unsigned short int j;
 
 	m_pOutputs = new CLogisticalNeuron[numoutputs];
 	m_pHidden = new CLogisticalNeuron*[numhiddenlayers];
@@ -236,15 +241,15 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 	ga_nn_value act_out; // actual
 	ga_nn_value out_error;
 	unsigned short int e; // epoch
-	register unsigned short int bi; // batch iterator
-	register unsigned short int i; // ith node
-	register unsigned short int j; //jth output
-	register signed short int l; // layer
+	unsigned short int bi; // batch iterator
+	unsigned short int i; // ith node
+	unsigned short int j; //jth output
+	signed short int l; // layer
 	CLogisticalNeuron *pNode, *pOutputNode;
-	unsigned short int numbatches = tset->getNumBatches();
+	const unsigned short int numbatches = tset->getNumBatches();
 	training_batch_t *batches = tset->getBatches();
-	ga_nn_value min_value = tset->getMinScale();
-	ga_nn_value max_value = tset->getMaxScale();
+	const ga_nn_value min_value = tset->getMinScale();
+	const ga_nn_value max_value = tset->getMaxScale();
 
 	outs = new ga_nn_value [m_numOutputs];
 

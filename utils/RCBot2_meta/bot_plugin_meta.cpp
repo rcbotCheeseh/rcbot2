@@ -12,7 +12,7 @@
  * This sample plugin is public domain.
  */
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "bot_plugin_meta.h"
 
@@ -25,6 +25,8 @@
 
 #include "ndebugoverlay.h"
 #include "irecipientfilter.h"
+
+#include "KeyValues.h"
 
 #include "bot_cvars.h"
 
@@ -44,8 +46,10 @@
 #include "bot_waypoint_visibility.h"
 #include "bot_kv.h"
 #include "bot_sigscan.h"
+#include "bot_mods.h"
 
 #include <build_info.h>
+#include <ctime>
 
 SH_DECL_HOOK6(IServerGameDLL, LevelInit, SH_NOATTRIB, 0, bool, char const *, char const *, char const *, char const *, bool, bool);
 SH_DECL_HOOK3_void(IServerGameDLL, ServerActivate, SH_NOATTRIB, 0, edict_t *, int, int);
@@ -95,18 +99,16 @@ static ConVar rcbot2_ver_cvar("rcbot_ver", build_info::long_version, FCVAR_REPLI
 
 CON_COMMAND(rcbotd, "access the bot commands on a server")
 {
+	eBotCommandResult iResult;
+
 	if (!engine->IsDedicatedServer() || !CBotGlobals::IsMapRunning())
 	{
 		CBotGlobals::botMessage(NULL, 0, "Error, no map running or not dedicated server");
 		return;
 	}
 
-	// shift args and call subcommand
-	BotCommandArgs argList;
-	for (size_t i = 1; i <= static_cast<size_t>(args.ArgC()); i++) {
-		argList.push_back(args.Arg(i));
-	}
-	eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(NULL, argList);
+	//iResult = CBotGlobals::m_pCommands->execute(NULL,engine->Cmd_Argv(1),engine->Cmd_Argv(2),engine->Cmd_Argv(3),engine->Cmd_Argv(4),engine->Cmd_Argv(5),engine->Cmd_Argv(6));
+	iResult = CBotGlobals::m_pCommands->execute(NULL, args.Arg(1), args.Arg(2), args.Arg(3), args.Arg(4), args.Arg(5), args.Arg(6));
 
 	if (iResult == COMMAND_ACCESSED)
 	{
@@ -134,10 +136,10 @@ public:
 		m_iPlayerSlot = ENTINDEX(pPlayer);
 	}
 
-	bool IsReliable(void) const { return false; }
-	bool IsInitMessage(void) const { return false; }
+	bool IsReliable() const { return false; }
+	bool IsInitMessage() const { return false; }
 
-	int	GetRecipientCount(void) const { return 1; }
+	int	GetRecipientCount() const { return 1; }
 	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot; }
 
 private:
@@ -165,10 +167,10 @@ public:
 		}
 	}
 
-	bool IsReliable(void) const { return false; }
-	bool IsInitMessage(void) const { return false; }
+	bool IsReliable() const { return false; }
+	bool IsInitMessage() const { return false; }
 
-	int	GetRecipientCount(void) const { return m_iMaxCount; }
+	int	GetRecipientCount() const { return m_iMaxCount; }
 	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot[slot] + 1; }
 
 private:
@@ -384,27 +386,37 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 	FILE *fp = fopen(filename, "r");
 
-	CRCBotKeyValueList kvl;
+	CRCBotKeyValueList *pKVL = new CRCBotKeyValueList();
 
 	if (fp)
-		kvl.parseFile(fp);
+		pKVL->parseFile(fp);
 
-	void *gameServerFactory = reinterpret_cast<void*>(ismm->GetServerFactory(false));
+	void *gameServerFactory = ismm->GetServerFactory(false);
 
 	int val;
 
 #ifdef _WIN32
-	if (kvl.getInt("runplayermove_dods_win", &val))
+	if (pKVL->getInt("runplayermove_dods_win", &val))
 		rcbot_runplayercmd_dods.SetValue(val);
-	if (kvl.getInt("gamerules_win", &val))
+	if (pKVL->getInt("gamerules_win", &val))
 		rcbot_gamerules_offset.SetValue(val);
+	if (pKVL->getInt("runplayermove_synergy_win", &val))
+		rcbot_runplayercmd_syn.SetValue(val);
+	if (pKVL->getInt("getdatadescmap_win", &val))
+		rcbot_datamap_offset.SetValue(val);
 #else
-	if (kvl.getInt("runplayermove_dods_linux", &val))
+	if (pKVL->getInt("runplayermove_dods_linux", &val))
 		rcbot_runplayercmd_dods.SetValue(val);
+	if (pKVL->getInt("runplayermove_synergy_linux", &val))
+		rcbot_runplayercmd_syn.SetValue(val);
+	if (pKVL->getInt("getdatadescmap_linux", &val))
+		rcbot_datamap_offset.SetValue(val);
 #endif
 
-	g_pGameRules_Obj = new CGameRulesObject(kvl, gameServerFactory);
-	g_pGameRules_Create_Obj = new CCreateGameRulesObject(kvl, gameServerFactory);
+	g_pGameRules_Obj = new CGameRulesObject(pKVL, gameServerFactory);
+	g_pGameRules_Create_Obj = new CCreateGameRulesObject(pKVL, gameServerFactory);
+
+	delete pKVL;
 
 	if (fp)
 		fclose(fp);
@@ -416,7 +428,15 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 #ifdef OVERRIDE_RUNCMD
 	// TODO figure out a more robust gamedata fix instead of vtable
+	#if SOURCE_ENGINE == SE_DODS
 	SH_MANUALHOOK_RECONFIGURE(MHook_PlayerRunCmd, rcbot_runplayercmd_dods.GetInt(), 0, 0);
+	#elif SOURCE_ENGINE == SE_SDK2013
+	if(pMod->getModId() == MOD_SYNERGY)
+	{
+		SH_MANUALHOOK_RECONFIGURE(MHook_PlayerRunCmd, rcbot_runplayercmd_syn.GetInt(), 0, 0);
+	}
+	#endif
+
 #endif
 
 	ENGINE_CALL(LogPrint)("All hooks started!\n");
@@ -520,7 +540,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 bool RCBotPluginMeta::FireGameEvent(IGameEvent * pevent, bool bDontBroadcast)
 {
-	CBotEvents::executeEvent((void*)pevent,TYPE_IGAMEEVENT);
+	CBotEvents::executeEvent(pevent,TYPE_IGAMEEVENT);
 
 	RETURN_META_VALUE(MRES_IGNORED, true);
 }
@@ -530,8 +550,6 @@ bool RCBotPluginMeta::Unload(char *error, size_t maxlen)
 #if defined SM_EXT
 	SM_UnloadExtension();
 #endif
-
-	CBots::kickRandomBot(MAX_PLAYERS);
 	
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameDLL, LevelInit, server, this, &RCBotPluginMeta::Hook_LevelInit, true);
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameDLL, ServerActivate, server, this, &RCBotPluginMeta::Hook_ServerActivate, true);
@@ -642,13 +660,9 @@ void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 
 	// is bot command?
 	if ( CBotGlobals::m_pCommands->isCommand(pcmd) )
-	{
-		// create shifted command list
-		BotCommandArgs argList;
-		for (size_t i = 1; i <= static_cast<size_t>(args.ArgC()); i++) {
-			argList.push_back(args.Arg(i));
-		}
-		eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient, argList);
+	{		
+		//eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient,engine->Cmd_Argv(1),engine->Cmd_Argv(2),engine->Cmd_Argv(3),engine->Cmd_Argv(4),engine->Cmd_Argv(5),engine->Cmd_Argv(6));
+		const eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient,args.Arg(1),args.Arg(2),args.Arg(3),args.Arg(4),args.Arg(5),args.Arg(6));
 
 		if ( iResult == COMMAND_ACCESSED )
 		{
@@ -710,7 +724,7 @@ bool RCBotPluginMeta::Hook_ClientConnect(edict_t *pEntity,
 void RCBotPluginMeta::Hook_ClientPutInServer(edict_t *pEntity, char const *playername)
 {
 	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pEntity);
-	bool is_Rcbot = false;
+	const bool is_Rcbot = false;
 
 	CClient *pClient = CClients::clientConnected(pEntity);
 
@@ -855,7 +869,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 			CBots::kickRandomBot(bot_count - bot_target);
 			notify = true;
 		} else if (bot_target > bot_count) {
-			int bot_diff = bot_target - bot_count;
+			const int bot_diff = bot_target - bot_count;
 
 			for (int i = 0; i < bot_diff; ++i) {
 				CBots::createBot("", "", "");
@@ -905,8 +919,8 @@ bool RCBotPluginMeta::Hook_LevelInit(const char *pMapName,
 	CBotGlobals::setMapRunning(true);
 	CBotConfigFile::reset();
 	
-	if ( mp_teamplay.IsValid() )
-		CBotGlobals::setTeamplay(mp_teamplay.GetBool());
+	if ( mp_teamplay )
+		CBotGlobals::setTeamplay(mp_teamplay->GetBool());
 	else
 		CBotGlobals::setTeamplay(false);
 

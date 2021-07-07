@@ -80,6 +80,27 @@ const char *g_szHL2DMWeapons[] =
 	"weapon_physcannon"
 };
 
+const char *g_szSYNWeapons[] =
+{
+	"weapon_pistol", // 0
+	"weapon_crowbar",
+	"weapon_pipe",
+	"weapon_357",
+	"weapon_deagle",
+	"weapon_smg1", // 5
+	"weapon_mp5k",
+	"weapon_ar2",
+	"weapon_frag",
+	"weapon_stunstick",
+	"weapon_crossbow", // 10
+	"weapon_rpg",
+	"weapon_slam",
+	"weapon_shotgun",
+	"weapon_physcannon",
+	"weapon_mg1", // 15
+	"weapon_bugbait"
+};
+
   /*  0, 0, 1, 2, 6, 3,
     4, 5, 8, 8, 9, 8,
     7, 5, 10, 11, 12, 12,
@@ -199,7 +220,32 @@ WeaponsData_t TF2Weaps[] =
 	{TF2_SLOT_MELEE,TF2_WEAPON_BAT_GIFTWRAP,		"tf_weapon_bat_giftwrap",	WEAP_FL_PRIM_ATTACK|WEAP_FL_MELEE|WEAP_FL_UNDERWATER,0,150,0,1,0},
 	{TF2_SLOT_SCNDR,TF2_WEAPON_RAYGUN,		"tf_weapon_raygun",	WEAP_FL_PRIM_ATTACK,100,2000,2,2,0},
 	{0, 0, "\0", 0, 0, 0, 0, 0, 0}//signal last weapon
-};	
+};
+
+WeaponsData_t SYNERGYWeaps[] =
+{
+/*
+	slot, id , weapon name, flags, min dist, max dist, ammo index, preference
+*/
+	{2,SYN_WEAPON_PISTOL,			g_szSYNWeapons[0],	WEAP_FL_PRIM_ATTACK|WEAP_FL_UNDERWATER,0,1000,-1,1,0},
+	{1,SYN_WEAPON_CROWBAR,			g_szSYNWeapons[1],	WEAP_FL_PRIM_ATTACK|WEAP_FL_MELEE|WEAP_FL_UNDERWATER,0,128,-1,1,0},
+	{1,SYN_WEAPON_LEADPIPE,			g_szSYNWeapons[2],	WEAP_FL_PRIM_ATTACK|WEAP_FL_MELEE|WEAP_FL_UNDERWATER,0,128,-1,1,0},
+	{2,SYN_WEAPON_357,				g_szSYNWeapons[3],	WEAP_FL_PRIM_ATTACK,0,768,-1,2,0},
+	{2,SYN_WEAPON_DESERTEAGLE,		g_szSYNWeapons[4],	WEAP_FL_PRIM_ATTACK,0,768,-1,2,0},
+	{3,SYN_WEAPON_SMG1,				g_szSYNWeapons[5],	WEAP_FL_PRIM_ATTACK|WEAP_FL_SEC_ATTACK,0,1400,-1,2,0},
+	{3,SYN_WEAPON_MP5K,				g_szSYNWeapons[6],	WEAP_FL_PRIM_ATTACK,0,1400,-1,2,0},
+	{3,SYN_WEAPON_AR2,				g_szSYNWeapons[7],	WEAP_FL_PRIM_ATTACK|WEAP_FL_SEC_ATTACK,0,1400,-1,3,0},
+	{5,SYN_WEAPON_FRAG,				g_szSYNWeapons[8],	WEAP_FL_GRENADE|WEAP_FL_EXPLOSIVE,0,180,-1,1,0},
+	{1,SYN_WEAPON_STUNSTICK,		g_szSYNWeapons[9],	WEAP_FL_PRIM_ATTACK|WEAP_FL_MELEE|WEAP_FL_UNDERWATER,0,128,-1,1,0},
+	{4,SYN_WEAPON_CROSSBOW,			g_szSYNWeapons[10],	WEAP_FL_PRIM_ATTACK|WEAP_FL_SCOPE|WEAP_FL_UNDERWATER,0,2000,-1,2,0},
+	{5,SYN_WEAPON_RPG,				g_szSYNWeapons[11],	WEAP_FL_PROJECTILE|WEAP_FL_EXPLOSIVE|WEAP_FL_PRIM_ATTACK|WEAP_FL_UNDERWATER,400,2000,-1,3,1000.0f},
+	{5,SYN_WEAPON_SLAM,				g_szSYNWeapons[12],	WEAP_FL_EXPLOSIVE,0,180,-1,1,0},
+	{4,SYN_WEAPON_SHOTGUN,			g_szSYNWeapons[13],	WEAP_FL_PRIM_ATTACK,0,768,-1,2,0},
+	{6,SYN_WEAPON_PHYSCANNON,		g_szSYNWeapons[14],	WEAP_FL_GRAVGUN|WEAP_FL_PRIM_ATTACK,0,768,-1,4,0},
+	{4,SYN_WEAPON_MG1,				g_szSYNWeapons[15],	WEAP_FL_PRIM_ATTACK,0,1000,-1,3,0},
+	{6,SYN_WEAPON_BUGBAIT,			g_szSYNWeapons[16],	WEAP_FL_PRIM_ATTACK|WEAP_FL_PROJECTILE,0,300,-1,3,1000.0f},
+	{ 0, 0, "\0", 0, 0, 0, 0, 0, 0 }//signal last weapon
+};
 
 bool CBotWeapon :: needToReload (CBot *pBot) 
 { 
@@ -227,7 +273,7 @@ int CBotWeapon :: getAmmo (CBot *pBot, int type )
 }
 
 
-bool CBotWeapons::hasExplosives( void )
+bool CBotWeapons::hasExplosives()
 {
 	CBotWeapon *pWeapon;
 
@@ -280,7 +326,7 @@ CBotWeapons::CBotWeapons(CBot *pBot)
 
 edict_t *CWeapons :: findWeapon ( edict_t *pPlayer, const char *pszWeaponName )
 {
-	register unsigned short int j;
+	unsigned short int j;
 	CBaseHandle *m_Weapons = CClassInterface::getWeaponList(pPlayer);
 	edict_t *pWeapon;
 	CBaseHandle *m_Weapon_iter = m_Weapons;
@@ -328,7 +374,7 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 		this->clearWeapons();
 
 		int iWeaponState;
-		register unsigned short int i;
+		unsigned short int i;
 		bool bFound;
 
 		const char *pszClassname;
@@ -548,7 +594,7 @@ void CBotWeapon::setWeaponEntity(edict_t *pent, bool bOverrideAmmoTypes)
 
 CBotWeapon *CBotWeapons::addWeapon(CWeapon *pWeaponInfo, int iId, edict_t *pent, bool bOverrideAll)
 {
-	register int i = 0;
+	int i = 0;
 	Vector origin;
 	const char *classname;
 	edict_t *pEnt = NULL;
@@ -704,7 +750,7 @@ void CWeapons::loadWeapons(const char *szWeaponListName, WeaponsData_t *pDefault
 				{
 					kv = kv->GetFirstSubKey();
 
-					if (0)
+					if (false)
 						kv = kv->GetFirstTrueSubKey();
 
 					while (kv != NULL)
@@ -816,7 +862,7 @@ CBotWeapon *CBotWeapons::getActiveWeapon(const char *szWeaponName, edict_t *pWea
 
 		if (pWeapon)
 		{
-			register unsigned short int i;
+			unsigned short int i;
 
 			for (i = 0; i < MAX_WEAPONS; i++)
 			{

@@ -126,9 +126,10 @@ class dataStack
 
 		bool RemoveByPointer ( const T *pObj )
 		{
-			dataNode<T> *tempNode = m_Head;
+			dataNode<T> *tempNode = m_Head;			
+			dataNode<T> *deleteNode;
 
-			if ( m_Head == nullptr )
+			if ( m_Head == NULL )
 				return false;
 
 			if ( &m_Head->m_NodeData == pObj )
@@ -144,7 +145,7 @@ class dataStack
 			{
 				if ( &tempNode->m_Next->m_NodeData == pObj )
 				{
-					dataNode<T>* deleteNode = tempNode->m_Next;
+					deleteNode = tempNode->m_Next;
 
 					tempNode->m_Next = tempNode->m_Next->m_Next;
 
@@ -165,9 +166,10 @@ class dataStack
 
 		bool Remove ( const T pObj )
 		{
-			dataNode<T> *tempNode = m_Head;
+			dataNode<T> *tempNode = m_Head;			
+			dataNode<T> *deleteNode;
 
-			if ( m_Head == nullptr )
+			if ( m_Head == NULL )
 				return false;
 
 			if ( m_Head->m_NodeData == pObj )
@@ -183,7 +185,7 @@ class dataStack
 			{
 				if ( tempNode->m_Next->m_NodeData == pObj )
 				{
-					dataNode<T>* deleteNode = tempNode->m_Next;
+					deleteNode = tempNode->m_Next;
 
 					tempNode->m_Next = tempNode->m_Next->m_Next;
 
@@ -203,9 +205,11 @@ class dataStack
 
 		void Destroy ()
 		{
+			dataNode<T> *tempNode;
+
 			while ( m_Head )
 			{
-				dataNode<T>* tempNode = m_Head;
+				tempNode = m_Head;
 
 				m_Head = m_Head->m_Next;
 
@@ -220,7 +224,7 @@ class dataStack
 
 		inline bool IsEmpty ()
 		{
-			return m_Head == nullptr;
+			return ( m_Head == NULL );
 		}
 
 		void Push ( const T pObj )
@@ -288,7 +292,7 @@ class dataStack
 
 				m_Head = NULL;
 				// return default
-				return nullptr;
+				return NULL;
 			}
 
 			return l_pTemp;
@@ -303,7 +307,7 @@ class dataStack
 				return &m_Head->m_NodeData;
 			}
 
-			return nullptr;
+			return NULL;
 		}
 
 	private:
@@ -732,7 +736,7 @@ class dataUnconstArray
 
 		T *ReturnPointerFromIndex ( int iIndex )
 		{
-			return &array[iIndex];
+			return &(array[iIndex]);
 		}
 
 		bool IsMember ( T Obj )
@@ -777,7 +781,7 @@ class dataQueue
 
 		void Destroy ()
 		{
-			dataNode<T> *tempNode = nullptr;
+			dataNode<T> *tempNode = NULL;
 
 			while ( m_Head )
 			{
@@ -797,7 +801,7 @@ class dataQueue
 
 		inline bool IsEmpty ()
 		{
-			return m_Head == nullptr||m_Tail == nullptr;
+			return (( m_Head == NULL )||(m_Tail == NULL));
 		}
 
 		void AddFront ( const T &pObj )
@@ -806,7 +810,7 @@ class dataQueue
 
 			newNode->m_NodeData = pObj;
 
-			if ( m_Head == nullptr )
+			if ( m_Head == NULL )
 			{
 				m_Tail = newNode;
 				m_Head = newNode;
@@ -891,7 +895,7 @@ class dataQueue
 				m_Head = NULL;
 				m_Tail = NULL;
 				// return default
-				return nullptr;
+				return NULL;
 			}
 
 			return l_pTemp;
@@ -899,7 +903,9 @@ class dataQueue
 
 		void RemoveFront ()
 		{
-			if ( m_Head == nullptr )
+			dataNode<T> *tempNode = m_Head;
+
+			if ( m_Head == NULL )
 			{
 				// just set tail to null incase
 				m_Tail = NULL;
@@ -909,7 +915,7 @@ class dataQueue
 			
 			try
 			{				
-				dataNode<T>* tempNode = m_Head;
+				tempNode = m_Head;
 				
 				if ( m_Tail == m_Head )
 				{
@@ -955,9 +961,10 @@ class dataQueue
 
 		bool Remove ( const T pObj )
 		{
-			dataNode<T> *tempNode = m_Head;
+			dataNode<T> *tempNode = m_Head;			
+			dataNode<T> *deleteNode = NULL;
 
-			if ( m_Head == nullptr )
+			if ( m_Head == NULL )
 				return false;
 
 			if ( m_Head->m_NodeData == pObj )
@@ -984,7 +991,7 @@ class dataQueue
 			{
 				if ( tempNode->m_Next->m_NodeData == pObj )
 				{
-					dataNode<T>* deleteNode = tempNode->m_Next;
+					deleteNode = tempNode->m_Next;
 
 					if ( deleteNode == m_Tail )
 					{
@@ -1010,9 +1017,10 @@ class dataQueue
 
 		bool RemoveByPointer ( const T *pObj )
 		{
-			dataNode<T> *tempNode = m_Head;
+			dataNode<T> *tempNode = m_Head;			
+			dataNode<T> *deleteNode = NULL;
 
-			if ( m_Head == nullptr )
+			if ( m_Head == NULL )
 				return false;
 
 			if ( &m_Head->m_NodeData == pObj )
@@ -1037,7 +1045,7 @@ class dataQueue
 			{
 				if ( &tempNode->m_Next->m_NodeData == pObj )
 				{
-					dataNode<T>* deleteNode = tempNode->m_Next;
+					deleteNode = tempNode->m_Next;
 
 					if ( deleteNode == m_Tail )
 					{

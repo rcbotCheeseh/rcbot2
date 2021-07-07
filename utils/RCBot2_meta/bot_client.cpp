@@ -220,7 +220,7 @@ public:
 	{
 		if ( (pBot->getEdict() != m_pPlayer) && (pBot->getTeam() == m_iTeam) && pBot->isVisible(m_pPlayer) )
 		{
-			float fDist = pBot->distanceFrom(m_pPlayer);
+			const float fDist = pBot->distanceFrom(m_pPlayer);
 
 			if ( !m_pNearestBot || (fDist < m_fNearestDist) )
 			{
@@ -416,7 +416,7 @@ void CClient :: think ()
 					if ( msg[i] == 0 )
 						break;
 					i++;
-				}while ( 1 ) ;
+				}while ( true ) ;
 				//int ent_index, int line_offset, float duration, int r, int g, int b, int a, const char *format, ...
 			//	debugoverlay->AddEntityTextOverlay();
 #endif
@@ -431,8 +431,13 @@ void CClient :: think ()
 	{
 		if ( !m_NextTooltip.empty() )
 		{
-			m_NextTooltip.front().send(m_pPlayer);
+			CToolTip *pTooltip = m_NextTooltip.front();
+			
+			pTooltip->send(m_pPlayer);
+
 			m_NextTooltip.pop();
+
+			delete pTooltip;
 
 			m_fNextBotServerMessage = engine->Time() + 11.0f;
 		}
@@ -532,9 +537,7 @@ void CClient :: think ()
 			//g_pBotManager->GetBotController(m_pPlayer)->IsEFlagSet();
 
 			if ( /*(pev->waterlevel < 3) &&*/ (m_fCanPlaceJump < engine->Time()) )
-			{	
-				Vector v_floor;
-
+			{
 				if ( (m_fCanPlaceJump != -1) && (m_iLastButtons & IN_JUMP) && !(iPlayerFlags & FL_ONGROUND) )
 				{
 					int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 80.0, -1, true, false, false, NULL);
@@ -567,6 +570,8 @@ void CClient :: think ()
 
 							if ( iNewWpt != -1 )
 							{
+								Vector v_floor;
+								
 								CWaypoint *pWpt = CWaypoints::getWaypoint(iNewWpt);
 								CWaypoint *pJumpWpt = CWaypoints::getWaypoint(m_iLastJumpWaypointIndex);
 
@@ -819,8 +824,8 @@ void CClient :: think ()
 #ifndef __linux__
 					if ( m_bDebugAutoWaypoint && !engine->IsDedicatedServer() )
 					{
-						debugoverlay->AddLineOverlay(vCheckOrigin+Vector(0,0,16),vCheckOrigin-Vector(0,0,16),255,255,255,0,2);
-						debugoverlay->AddLineOverlay(vPlayerOrigin,vCheckOrigin,255,255,255,0,2);
+						debugoverlay->AddLineOverlay(vCheckOrigin+Vector(0,0,16),vCheckOrigin-Vector(0,0,16),255,255,255,false,2);
+						debugoverlay->AddLineOverlay(vPlayerOrigin,vCheckOrigin,255,255,255,false,2);
 					}
 #endif					
 					if ( tr->fraction < 1.0 )
@@ -929,11 +934,11 @@ void CClient :: think ()
 	}
 }
 
-void CClient::giveMessage(const char *msg,float fTime)
+void CClient::giveMessage(char *msg,float fTime)
 {
 	if ( rcbot_tooltips.GetBool() )
 	{
-		m_NextTooltip.emplace(CToolTip(msg, NULL));
+		m_NextTooltip.push(new CToolTip(msg,NULL));
 		m_fNextBotServerMessage = engine->Time() + fTime;
 	}
 }
@@ -1223,7 +1228,7 @@ void CClient :: setWaypointCut (CWaypoint *pWaypoint)
 {
 	if ( pWaypoint )
 	{
-		register int i = 0;
+		int i = 0;
 
 		setWaypointCopy(pWaypoint);
 
