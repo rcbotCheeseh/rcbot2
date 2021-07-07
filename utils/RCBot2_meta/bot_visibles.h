@@ -47,7 +47,7 @@ class CTF2FindFlagFunc : public CVisibleFunc
 public:
 	CTF2FindFlagFunc ( CBot *pBot ) 
 	{ 
-		m_pFlag = nullptr;
+		m_pFlag = NULL;
 	}
 
 	edict_t *getFlag ( Vector &vOrigin )
@@ -71,7 +71,7 @@ public:
 	{ 
 		m_pBot = pBot; 
 		m_fBestFactor = 0;
-		m_pBest = nullptr;
+		m_pBest = NULL;
 	}
 
 	edict_t *getBestEnemy ()
@@ -106,7 +106,7 @@ public:
 
 	void checkVisible ( edict_t *pEntity, int *iTicks, bool *bVisible, int &iIndex, bool bCheckHead = false );
 
-	static void debugString ( char *string );
+	void debugString ( char *string );
 
 	static const int DEFAULT_MAX_TICKS = 10; // max number of PVS checks fired every visible check
 

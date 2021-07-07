@@ -121,7 +121,7 @@ public:
 
 	CBotTask *currentTask ()
 	{
-		return m_Tasks.empty() ? nullptr : m_Tasks.front();
+		return m_Tasks.empty() ? NULL : m_Tasks.front();
 	}
 
 	bool hasFailed ()
@@ -154,7 +154,7 @@ public:
 	void passEdict(edict_t *p);
 	//////////////////////////
 
-	bool hasPassInfo () { return m_bitsPass!=0; }
+	bool hasPassInfo () { return (m_bitsPass!=0); }
 
 	inline int passedInt () { return iPass; }
 	inline float passedFloat() { return fPass; }
@@ -162,10 +162,10 @@ public:
 	inline edict_t *passedEdict() { return pPass; }
 	inline bool isID ( eBotSchedule iId ) { return m_iSchedId == iId; }
 
-	inline bool hasPassInt () { return (m_bitsPass&BITS_SCHED_PASS_INT)>0; }
-	inline bool hasPassFloat () { return (m_bitsPass&BITS_SCHED_PASS_FLOAT)>0; }
-	inline bool hasPassVector () { return (m_bitsPass&BITS_SCHED_PASS_VECTOR)>0; }
-	inline bool hasPassEdict () { return (m_bitsPass&BITS_SCHED_PASS_EDICT)>0; }
+	inline bool hasPassInt () { return ((m_bitsPass&BITS_SCHED_PASS_INT)>0); }
+	inline bool hasPassFloat () { return ((m_bitsPass&BITS_SCHED_PASS_FLOAT)>0); }
+	inline bool hasPassVector () { return ((m_bitsPass&BITS_SCHED_PASS_VECTOR)>0); }
+	inline bool hasPassEdict () { return ((m_bitsPass&BITS_SCHED_PASS_EDICT)>0); }
 
 	inline void setID ( eBotSchedule iId ) { m_iSchedId = iId; }
 
@@ -273,19 +273,19 @@ public:
 		{
 			CBotSchedule *sched = m_Schedules.front();
 
-			if ( sched != nullptr )
+			if ( sched != NULL )
 			{
 				return sched->currentTask();
 			}
 		}
 
-		return nullptr;
+		return NULL;
 	}
 
 	CBotSchedule *getCurrentSchedule ()
 	{
 		if ( isEmpty() )
-			return nullptr;
+			return NULL;
 
 		return m_Schedules.front();
 	}
@@ -363,7 +363,7 @@ public:
 class CBotAttackPointSched : public CBotSchedule
 {
 public:
-	CBotAttackPointSched ( Vector vPoint, int iRadius, int iArea, bool bHasRoute = false, Vector vRoute = Vector(0,0,0), bool bNest = false, edict_t *pLastEnemySentry = nullptr );
+	CBotAttackPointSched ( Vector vPoint, int iRadius, int iArea, bool bHasRoute = false, Vector vRoute = Vector(0,0,0), bool bNest = false, edict_t *pLastEnemySentry = NULL );
 
 	void init ();
 }; 
@@ -610,7 +610,7 @@ public:
 	// hide from an enemy (pEdict)
 	CGotoHideSpotSched ( CBot *pBot, edict_t *pEdict, bool bIsGrenade = false );
 	// hide from a Vector
-	CGotoHideSpotSched ( CBot *pBot, Vector vOrigin, IBotTaskInterrupt *interrupt = nullptr );
+	CGotoHideSpotSched ( CBot *pBot, Vector vOrigin, IBotTaskInterrupt *interrupt = NULL );
 
 	void init ();
 };

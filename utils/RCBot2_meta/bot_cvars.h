@@ -88,21 +88,18 @@ extern ConVar rcbot_supermode;
 extern ConVar rcbot_addbottime;
 extern ConVar rcbot_gamerules_offset;
 extern ConVar rcbot_bot_quota_interval;
-//extern ConVar rcbot_const_point_master_offset;
+extern ConVar rcbot_const_point_master_offset;
 //extern ConVar rcbot_util_learning;
-
-//Synergy Cvars
-extern ConVar rcbot_runplayercmd_syn;
 
 /** Additional convars by pongo1231 **/
 extern ConVar rcbot_show_welcome_msg;
 extern ConVar rcbot_force_class;
 
-extern ConVar *sv_gravity;
-extern ConVar *mp_teamplay;
-extern ConVar *sv_tags;
-extern ConVar *mp_friendlyfire;
-extern ConVar *mp_stalemate_enable;
+extern ConVarRef sv_gravity;
+extern ConVarRef mp_teamplay;
+extern ConVarRef sv_tags;
+extern ConVarRef mp_friendlyfire;
+extern ConVarRef mp_stalemate_enable;
 
 void RCBOT2_Cvar_setup (ICvar *cvar);
 

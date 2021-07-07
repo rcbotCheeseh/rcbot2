@@ -31,7 +31,7 @@
 #ifndef __RCBOT_SOM_H__
 #define __RCBOT_SOM_H__
 
-#include <cmath>
+#include <math.h>
 
 #include <vector>
 

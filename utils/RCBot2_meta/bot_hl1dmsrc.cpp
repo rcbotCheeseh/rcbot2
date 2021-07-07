@@ -84,7 +84,7 @@ bool CHL1DMSrcBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 
 	if ( ENTINDEX(pEdict) > CBotGlobals::maxClients() ) // monster
 	{
-		const char *cname = pEdict->GetNetworkable()->GetClassName();
+		const char *cname = ((IServerNetworkable*)pEdict->GetNetworkable())->GetClassName();
 
 		if ( strncmp("monster_",cname,8) == 0 )
 		{

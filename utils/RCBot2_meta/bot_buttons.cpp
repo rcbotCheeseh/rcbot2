@@ -104,7 +104,7 @@ int CBotButtons :: getBitMask ()
 
         int iBitMask = 0;
 
-        const float fTime = engine->Time();
+        float fTime = engine->Time();
 
         for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
         {

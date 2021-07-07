@@ -82,14 +82,15 @@ ga_nn_value CPopulation :: totalFitness ()
 
 ga_nn_value CPopulation :: bestFitness ()
 {
+	float fFitness = 0.0f;
 	BOOL gotBestFitness = FALSE;
 	float fBestFitness = 0.0f;
 
 	for ( unsigned int i = 0; i < size(); i ++ )
 	{
-		float fFitness = m_theIndividuals[i]->getFitness();
+		fFitness = m_theIndividuals[i]->getFitness();
 
-		if ( !gotBestFitness || fFitness > fBestFitness )
+		if ( !gotBestFitness || (fFitness > fBestFitness) )
 		{
 			fBestFitness = fFitness;
 			gotBestFitness = TRUE;
@@ -159,7 +160,7 @@ void CGA :: epoch ()
 
 	m_iNumGenerations++;
 
-	const float fCurAvgFitness = m_thePopulation.averageFitness();
+	float fCurAvgFitness = m_thePopulation.averageFitness();
 
 	/*CBotGlobals::botMessage(NULL,0,"------Generation %d------",m_iNumGenerations);
 	CBotGlobals::botMessage(NULL,0,"best fitness = %0.5f",m_thePopulation.bestFitness());
@@ -184,12 +185,12 @@ void CGA :: freeGlobalMemory ()
 {
 	freeLocalMemory();
 	delete m_theSelectFunction;
-	m_theSelectFunction = nullptr;
+	m_theSelectFunction = NULL;
 }
 
 bool CGA :: canPick ()
 {
-	return m_theNewPopulation.size() > 0;
+	return (m_theNewPopulation.size() > 0);
 }
 
 IIndividual *CGA :: pick ()
@@ -203,7 +204,7 @@ IIndividual *CGA :: pick ()
 
 IIndividual *CRouletteSelection :: select ( CPopulation *population )
 {
-	const ga_nn_value fFitnessSlice = randomFloat(0,population->totalFitness());
+	ga_nn_value fFitnessSlice = randomFloat(0,population->totalFitness());
 	ga_nn_value fFitnessSoFar = 0.0f;
 
 	for ( unsigned int i = 0; i < population->size(); i ++ )

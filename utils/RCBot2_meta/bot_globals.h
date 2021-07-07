@@ -39,7 +39,7 @@
 #include "bot_commands.h" // for main rcbot command
 
 #ifdef _WIN32
-#include <cctype>
+#include <ctype.h>
 #endif
 
 #define MAX_MAP_STRING_LEN 64
@@ -66,7 +66,7 @@ public:
 
 		index = ENTINDEX(pEdict);
 
-		return index>0&&index<=gpGlobals->maxClients;
+		return (index>0)&&(index<=gpGlobals->maxClients);
 	}
 
 	static bool walkableFromTo (edict_t *pPlayer,Vector v_src, Vector v_dest);
@@ -81,7 +81,7 @@ public:
 	// just open file but also make folders if possible
 	static FILE *openFile ( char *szFile, char *szMode );
 	// get the proper location
-	static void buildFileName ( char *szOutput, const char *szFile, const char *szFolder = nullptr, const char *szExtension = nullptr, bool bModDependent = false );
+	static void buildFileName ( char *szOutput, const char *szFile, const char *szFolder = NULL, const char *szExtension = NULL, bool bModDependent = false );
 	// add a directory delimiter to the string like '/' (linux) or '\\' (windows) or
 	static void addDirectoryDelimiter ( char *szString );
 	// print a message to client pEntity with bot formatting
@@ -103,7 +103,7 @@ public:
 
 	static inline bool entityIsValid ( edict_t *pEntity )
 	{
-		return pEntity && !pEntity->IsFree() && pEntity->GetNetworkable() != nullptr && pEntity->GetIServerEntity() != nullptr && pEntity->m_NetworkSerialNumber != 0;	
+		return pEntity && !pEntity->IsFree() && (pEntity->GetNetworkable() != NULL) && (pEntity->GetIServerEntity() != NULL) && (pEntity->m_NetworkSerialNumber != 0);	
 	}
 
 	static void serverSay ( char *fmt, ... );
@@ -148,8 +148,7 @@ public:
 		const Vector &amins, const Vector &amaxs,
 		const Vector &bmins, const Vector &bmaxs );
 
-	static float grenadeWillLand (  Vector vOrigin, Vector vEnemy, float fProjSpeed = 400.0f, float fGrenadePrimeTime = 5.0f,
-	                                const float *fAngle = nullptr );
+	static float grenadeWillLand (  Vector vOrigin, Vector vEnemy, float fProjSpeed = 400.0f, float fGrenadePrimeTime = 5.0f, float *fAngle = NULL );
 	////////////////////////////////////////////////////////////////////////
 
 	/*static Vector forwardVec ();
@@ -157,7 +156,7 @@ public:
 	static Vector upVec ();*/
 	////////
 	static trace_t *getTraceResult () { return &m_TraceResult; }
-	static bool isVisibleHitAllExceptPlayer ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest = nullptr );
+	static bool isVisibleHitAllExceptPlayer ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest = NULL );
 	static bool isVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest);
 	static bool isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest);
 	static bool isShotVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest );
@@ -172,7 +171,7 @@ public:
 	}
 	static int getTeam ( edict_t *pEntity );
 	static bool entityIsAlive ( edict_t *pEntity );
-	static int countTeamMatesNearOrigin ( Vector vOrigin, float fRange, int iTeam, edict_t *pIgnore = nullptr );
+	static int countTeamMatesNearOrigin ( Vector vOrigin, float fRange, int iTeam, edict_t *pIgnore = NULL );
 	static int numClients ();
 	static void levelInit();
 
@@ -180,7 +179,7 @@ public:
 
 	static inline void setEventVersion ( int iVersion ){m_iEventVersion = iVersion;}
 
-	static inline bool isEventVersion ( int iVersion ){return m_iEventVersion == iVersion;}
+	static inline bool isEventVersion ( int iVersion ){return (m_iEventVersion == iVersion);}
 
 	static inline bool getTeamplayOn (){return m_bTeamplay;}
 

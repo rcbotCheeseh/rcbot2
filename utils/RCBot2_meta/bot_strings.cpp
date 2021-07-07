@@ -28,8 +28,8 @@
  *    version.
  *
  */
-#include <cstdlib>
-#include <cstring>
+#include <stdlib.h>
+#include <string.h>
 
 #include "bot.h"
 #include "bot_strings.h"
@@ -44,17 +44,19 @@ CStrings :: CStrings ()
 
 void CStrings :: freeAllMemory()
 {
+	char *pszFree;
+
 	// clear strings 
 	for ( int i = 0; i < MAX_STRINGS_HASH; i ++ )
 	{
 		for ( unsigned int j = 0; j < m_Strings[i].size(); j ++ )
 		{
-			char* pszFree = m_Strings[i][j];
+			pszFree = m_Strings[i][j];
 
 			if ( pszFree )
 				delete pszFree;
 
-			m_Strings[i][j] = nullptr;
+			m_Strings[i][j] = NULL;
 		}
 
 		m_Strings[i].clear();
@@ -64,12 +66,12 @@ void CStrings :: freeAllMemory()
 // Either : 1 . Return the existing string or 2 . make a new string and return it.
 char *CStrings :: getString ( const char *szString )
 {
-	if ( szString == nullptr )
-		return nullptr;
+	if ( szString == NULL )
+		return NULL;
 
-	const unsigned short int iHash = szString[0]%MAX_STRINGS_HASH;
+	unsigned short int iHash = szString[0]%MAX_STRINGS_HASH;
 	
-	for (unsigned short int i = 0; i < m_Strings[iHash].size(); i ++ )
+	for ( register unsigned short int i = 0; i < m_Strings[iHash].size(); i ++ )
 	{
 		char *szCompString = m_Strings[iHash][i];
 
@@ -82,7 +84,7 @@ char *CStrings :: getString ( const char *szString )
 			return szCompString;
 	}
 
-	const unsigned int len = strlen(szString);
+	unsigned int len = strlen(szString);
 
 	char *szNew = new char[len+1];
 

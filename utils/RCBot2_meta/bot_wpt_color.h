@@ -42,9 +42,9 @@ public:
 		if ( fb < 0 )
 			fb = 0;
 
-		r = (unsigned char)(int)((float)other.r*0.5)+(unsigned char)(int)fr;
-		g = (unsigned char)(int)((float)other.g*0.5)+(unsigned char)(int)fg;
-		b = (unsigned char)(int)((float)other.b*0.5)+(unsigned char)(int)fb;
+		r = (unsigned char)((int)((float)other.r*0.5))+(unsigned char)((int)fr);
+		g = (unsigned char)((int)((float)other.g*0.5))+(unsigned char)((int)fg);
+		b = (unsigned char)((int)((float)other.b*0.5))+(unsigned char)((int)fb);
 		
 		//r = (r+other.r)/2;
 		//g = (g+other.g)/2;

@@ -4,21 +4,28 @@
 
 void CRCBotKeyValueList :: parseFile ( FILE *fp )
 {
-	char buffer[2* RCBOT_MAX_KV_LEN];
+	char buffer[2*(RCBOT_MAX_KV_LEN)];
 	char szKey[RCBOT_MAX_KV_LEN];
 	char szValue[RCBOT_MAX_KV_LEN];
 
-	int iLine = 0;
+	int iKi;
+	int iVi;
+	int iLen;
+	int iCi; // current character index		
+	bool bHaveKey;
+	int iLine;
+
+	iLine = 0;
 
 	// parse profile ini
-	while ( fgets(buffer,255,fp) != nullptr )
+	while ( fgets(buffer,255,fp) != NULL )
 	{
 		iLine++;
 
 		if ( buffer[0] == '#' ) // skip comment
 			continue;
 
-		int iLen = strlen(buffer);
+		iLen = strlen(buffer);
 
 		if ( iLen == 0 )
 			continue;
@@ -29,12 +36,12 @@ void CRCBotKeyValueList :: parseFile ( FILE *fp )
 		if ( buffer[iLen-1] == '\r' )
 			buffer[--iLen] = 0;
 
-		bool bHaveKey = false;
+		bHaveKey = false;
 
-		int iKi = 0;
-		int iVi = 0;
+		iKi = 0;
+		iVi = 0;
 
-		for ( int iCi = 0; iCi < iLen; iCi ++ )
+		for ( iCi = 0; iCi < iLen; iCi ++ )
 		{
 			// ignore spacing
 			if ( buffer[iCi] == ' ' )
@@ -62,7 +69,7 @@ void CRCBotKeyValueList :: parseFile ( FILE *fp )
 		szKey[iKi] = 0;
 		szValue[iVi] = 0;
 
-		CBotGlobals::botMessage(nullptr,0,"m_KVs.push_back(%s,%s)",szKey, szValue);
+		CBotGlobals::botMessage(NULL,0,"m_KVs.push_back(%s,%s)",szKey, szValue);
 
 		m_KVs.push_back(new CRCBotKeyValue(szKey,szValue));
 
@@ -75,7 +82,7 @@ CRCBotKeyValueList :: ~CRCBotKeyValueList()
 	for ( unsigned int i = 0; i < m_KVs.size(); i ++ )
 	{
 		delete m_KVs[i];
-		m_KVs[i] = nullptr;
+		m_KVs[i] = NULL;
 	}
 
 	m_KVs.clear();
@@ -89,12 +96,14 @@ CRCBotKeyValue *CRCBotKeyValueList :: getKV ( const char *key )
 			return m_KVs[i];
 	}
 
-	return nullptr;
+	return NULL;
 }
 
 bool CRCBotKeyValueList :: getFloat ( const char *key, float *val )
 {
-	CRCBotKeyValue* pKV = getKV(key);
+	CRCBotKeyValue *pKV;
+
+	pKV = getKV(key);
 
 	if ( !pKV )
 		return false;
@@ -107,7 +116,9 @@ bool CRCBotKeyValueList :: getFloat ( const char *key, float *val )
 	
 bool CRCBotKeyValueList :: getInt ( const char *key, int *val )
 {
-	CRCBotKeyValue* pKV = getKV(key);
+	CRCBotKeyValue *pKV;
+
+	pKV = getKV(key);
 
 	if ( !pKV )
 		return false;
@@ -120,7 +131,9 @@ bool CRCBotKeyValueList :: getInt ( const char *key, int *val )
 
 bool CRCBotKeyValueList :: getString ( const char *key, char **val )
 {
-	CRCBotKeyValue* pKV = getKV(key);
+	CRCBotKeyValue *pKV;
+
+	pKV = getKV(key);
 
 	if ( !pKV )
 		return false;

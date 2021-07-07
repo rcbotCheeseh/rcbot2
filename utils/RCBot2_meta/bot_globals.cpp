@@ -31,8 +31,7 @@
 
 #ifndef __linux__
 // for file stuff
-#include <Windows.h>
-#include <WinUser.h>
+#include <windows.h>
 #define WIN32_LEAN_AND_MEAN
 
 #include <conio.h>
@@ -52,8 +51,6 @@
 #ifndef __linux__
 #include <direct.h> // for mkdir
 #include <sys/stat.h>
-
-#include <cmath>
 #else
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -63,16 +60,16 @@ extern IServerGameEnts *servergameents;
 
 ///////////
 trace_t CBotGlobals :: m_TraceResult;
-char * CBotGlobals :: m_szModFolder = nullptr;
+char * CBotGlobals :: m_szModFolder = NULL;
 eModId CBotGlobals :: m_iCurrentMod = MOD_UNSUPPORTED;
-CBotMod *CBotGlobals :: m_pCurrentMod = nullptr;
+CBotMod *CBotGlobals :: m_pCurrentMod = NULL;
 bool CBotGlobals :: m_bMapRunning = false;
 int CBotGlobals :: m_iMaxClients = 0;
 int CBotGlobals :: m_iEventVersion = 1;
 int CBotGlobals :: m_iWaypointDisplayType = 0;
 char CBotGlobals :: m_szMapName[MAX_MAP_STRING_LEN];
 bool CBotGlobals :: m_bTeamplay = false;
-char *CBotGlobals :: m_szRCBotFolder = nullptr;
+char *CBotGlobals :: m_szRCBotFolder = NULL;
 
 ///////////
 
@@ -81,7 +78,7 @@ extern IVDebugOverlay *debugoverlay;
 class CTraceFilterVis : public CTraceFilter
 {
 public:
-	CTraceFilterVis(edict_t *pPlayer, edict_t *pHit = nullptr )
+	CTraceFilterVis(edict_t *pPlayer, edict_t *pHit = NULL )
 	{
 		m_pPlayer = pPlayer;
 		m_pHit = pHit;
@@ -89,10 +86,10 @@ public:
 
 	virtual bool ShouldHitEntity( IHandleEntity *pServerEntity, int contentsMask )
 	{ 
-		if ( m_pPlayer && pServerEntity == (IHandleEntity*)m_pPlayer->GetIServerEntity() )
+		if ( m_pPlayer && (pServerEntity == (IHandleEntity*)m_pPlayer->GetIServerEntity()) )
 			return false;
 
-		if ( m_pHit && pServerEntity == (IHandleEntity*)m_pHit->GetIServerEntity() )
+		if ( m_pHit && (pServerEntity == (IHandleEntity*)m_pHit->GetIServerEntity()) )
 			return false;
 
 		return true; 
@@ -120,7 +117,7 @@ void CBotGlobals :: init ()
 
 bool CBotGlobals ::isAlivePlayer ( edict_t *pEntity )
 {
-	return pEntity && ENTINDEX(pEntity) && ENTINDEX(pEntity) <= gpGlobals->maxClients && entityIsAlive(pEntity);
+	return pEntity && ENTINDEX(pEntity) && (ENTINDEX(pEntity) <= gpGlobals->maxClients) && (entityIsAlive(pEntity));
 }
 
 //new map
@@ -142,11 +139,13 @@ bool CBotGlobals :: isCurrentMod ( eModId modid )
 
 int CBotGlobals ::numPlayersOnTeam(int iTeam, bool bAliveOnly)
 {
+	int i = 0;
 	int num = 0;
+	edict_t *pEdict;
 
-	for ( int i = 1; i <= CBotGlobals::numClients(); i ++ )
+	for ( i = 1; i <= CBotGlobals::numClients(); i ++ )
 	{
-		edict_t* pEdict = INDEXENT(i);
+		pEdict = INDEXENT(i);
 
 		if ( CBotGlobals::entityIsValid(pEdict) )
 		{
@@ -194,23 +193,23 @@ bool CBotGlobals::dirExists(const char *path)
 
 void CBotGlobals::readRCBotFolder()
 {
-	auto*mainkv = new KeyValues("Metamod Plugin");
+	KeyValues *mainkv = new KeyValues("Metamod Plugin");
 
 	if (mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD")) {
 		char folder[256] = "\0";
 		const char *szRCBotFolder = mainkv->GetString("rcbot2path");
 
 		if (szRCBotFolder && *szRCBotFolder) {
-			CBotGlobals::botMessage(nullptr, 0, "RCBot Folder -> trying %s", szRCBotFolder);
+			CBotGlobals::botMessage(NULL, 0, "RCBot Folder -> trying %s", szRCBotFolder);
 
 			if (!dirExists(szRCBotFolder)) {
-				snprintf(folder, sizeof folder, "%s/%s", CBotGlobals::modFolder(), szRCBotFolder);
+				snprintf(folder, sizeof(folder), "%s/%s", CBotGlobals::modFolder(), szRCBotFolder);
 
 				szRCBotFolder = CStrings::getString(folder);
-				CBotGlobals::botMessage(nullptr, 0, "RCBot Folder -> trying %s", szRCBotFolder);
+				CBotGlobals::botMessage(NULL, 0, "RCBot Folder -> trying %s", szRCBotFolder);
 
 				if (!dirExists(szRCBotFolder)) {
-					CBotGlobals::botMessage(nullptr, 0, "RCBot Folder -> not found ...");
+					CBotGlobals::botMessage(NULL, 0, "RCBot Folder -> not found ...");
 				}
 			}
 
@@ -221,18 +220,17 @@ void CBotGlobals::readRCBotFolder()
 	mainkv->deleteThis();
 }
 
-float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fProjSpeed, float fGrenadePrimeTime,
-                                       const float *fAngle )
+float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fProjSpeed, float fGrenadePrimeTime, float *fAngle )
 {
 	static float g;
 	Vector v_comp = vEnemy-vOrigin;
-	const float fDistance = v_comp.Length();
+	float fDistance = v_comp.Length();
 
 	v_comp = v_comp/fDistance;
 
-	g = sv_gravity->GetFloat();
+	g = sv_gravity.IsValid()? sv_gravity.GetFloat() : 800.f;
 
-	if ( fAngle == nullptr )
+	if ( fAngle == NULL )
 	{
 
 		return false;
@@ -249,14 +247,14 @@ float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fPro
 		vhorz *= fProjSpeed;
 		vvert *= fProjSpeed;
 
-		const float t = fDistance/vhorz;
+		float t = fDistance/vhorz;
 
 		// within one second of going off
-		if (std::fabs(t-fGrenadePrimeTime) < 1.0f )
+		if ( fabs(t-fGrenadePrimeTime) < 1.0f )
 		{
-			const float ffinaly =  vOrigin.z + vvert*t - g*0.5*(t*t);
+			float ffinaly =  vOrigin.z + (vvert*t) - ((g*0.5)*(t*t));
 
-			return std::fabs(ffinaly - vEnemy.z) < BLAST_RADIUS; // ok why not
+			return ( fabs(ffinaly - vEnemy.z) < BLAST_RADIUS ); // ok why not
 		}
 	}
 
@@ -268,22 +266,26 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 // find a player by a truncated name "name".
 // e.g. name = "Jo" might find a player called "John"
 {
-	for( int i = 1; i <= maxClients(); i ++ )
+	edict_t *pent = NULL;
+	IPlayerInfo *pInfo;
+	int i;
+
+	for( i = 1; i <= maxClients(); i ++ )
 	{
-		edict_t* pent = INDEXENT(i);
+		pent = INDEXENT(i);
 
 		if( pent && CBotGlobals::isNetworkable(pent) )
 		{
-			const int length = strlen(name);						 
+			int length = strlen(name);						 
 
 			char arg_lwr[128];
 			char pent_lwr[128];
 
 			strcpy(arg_lwr,name);
 
-			IPlayerInfo* pInfo = playerinfomanager->GetPlayerInfo(pent);
+			pInfo = playerinfomanager->GetPlayerInfo( pent );
 			
-			if ( pInfo == nullptr )
+			if ( pInfo == NULL )
 				continue;
 
 			strcpy(pent_lwr,pInfo->GetName());
@@ -298,7 +300,7 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 		}
 	}
 
-	return nullptr;
+	return NULL;
 }
 
 class CTraceFilterHitAllExceptPlayers : public CTraceFilter
@@ -339,8 +341,7 @@ public:
 			
 			edict = INDEXENT(pHandleEntity->GetRefEHandle().GetEntryIndex());
 
-			debugoverlay->AddTextOverlayRGB(CBotGlobals::entityOrigin(edict), 0, 2.0f, 255, 100, 100, 200,
-			                                "Traceline hit %s", edict->GetClassName());
+			debugoverlay->AddTextOverlayRGB(CBotGlobals::entityOrigin(edict),0,2.0f,255,100,100,200,"Traceline hit %s",edict->GetClassName());
 		}
 #endif
 		return true;
@@ -358,11 +359,11 @@ private:
 
 bool CBotGlobals :: checkOpensLater ( Vector vSrc, Vector vDest )
 {
-	CTraceFilterSimple traceFilter(nullptr, nullptr, MASK_PLAYERSOLID );
+	CTraceFilterSimple traceFilter( NULL, NULL, MASK_PLAYERSOLID );
 
 	traceLine (vSrc,vDest,MASK_PLAYERSOLID,&traceFilter);
 
-	return traceVisible(nullptr);
+	return (traceVisible(NULL));
 }
 
 
@@ -370,11 +371,11 @@ bool CBotGlobals :: isVisibleHitAllExceptPlayer ( edict_t *pPlayer, Vector vSrc,
 {
 	const IHandleEntity *ignore = pPlayer->GetIServerEntity();
 
-	CTraceFilterSimple traceFilter( ignore, (pDest== nullptr? nullptr:pDest->GetIServerEntity()), MASK_ALL );
+	CTraceFilterSimple traceFilter( ignore, ((pDest==NULL)?NULL:pDest->GetIServerEntity()), MASK_ALL );
 
 	traceLine (vSrc,vDest,MASK_SHOT|MASK_VISIBLE,&traceFilter);
 
-	return traceVisible(pDest);
+	return (traceVisible(pDest));
 }
 
 bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest)
@@ -383,7 +384,7 @@ bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest)
 
 	traceLine (vSrc,vDest,MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
 
-	return traceVisible(nullptr);
+	return (traceVisible(NULL));
 }
 
 bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest )
@@ -394,7 +395,7 @@ bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest )
 
 	traceLine (vSrc,entityOrigin(pDest),MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
 
-	return traceVisible(pDest);
+	return (traceVisible(pDest));
 }
 
 bool CBotGlobals :: isShotVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest )
@@ -405,7 +406,7 @@ bool CBotGlobals :: isShotVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest,
 
 	traceLine (vSrc,vDest,MASK_SHOT,&filter);
 
-	return traceVisible(pDest);
+	return (traceVisible(pDest));
 }
 
 bool CBotGlobals :: isVisible (Vector vSrc, Vector vDest)
@@ -414,7 +415,7 @@ bool CBotGlobals :: isVisible (Vector vSrc, Vector vDest)
 
 	traceLine (vSrc,vDest,MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
 
-	return traceVisible(nullptr);
+	return traceVisible(NULL);
 }
 
 void CBotGlobals :: traceLine (Vector vSrc, Vector vDest, unsigned int mask, ITraceFilter *pFilter)
@@ -440,15 +441,17 @@ float CBotGlobals :: DotProductFromOrigin ( edict_t *pEnemy, Vector pOrigin )
 {
 	static Vector vecLOS;
 	static float flDot;
-
+	IPlayerInfo *p;
+	
 	Vector vForward;
+	QAngle eyes;
 
-	IPlayerInfo* p = playerinfomanager->GetPlayerInfo(pEnemy);
+	p = playerinfomanager->GetPlayerInfo(pEnemy);
 
 	if (!p )
 		return 0;
 
-	QAngle eyes = p->GetAbsAngles();
+	eyes = p->GetAbsAngles();
 
 	// in fov? Check angle to edict
 	AngleVectors(eyes,&vForward);
@@ -482,18 +485,17 @@ float CBotGlobals :: DotProductFromOrigin ( Vector vPlayer, Vector vFacing, QAng
 
 bool CBotGlobals :: traceVisible (edict_t *pEnt)
 {
-	return m_TraceResult.m_pEnt && pEnt && m_TraceResult.m_pEnt == pEnt->GetUnknown()->GetBaseEntity() || m_TraceResult.
-		fraction >= 1.0;
+	return (m_TraceResult.fraction >= 1.0)||(m_TraceResult.m_pEnt && pEnt && (m_TraceResult.m_pEnt==pEnt->GetUnknown()->GetBaseEntity()));
 }
 
 bool CBotGlobals::initModFolder() {
 	char szGameFolder[512];
 	engine->GetGameDir(szGameFolder, 512);
 
-	const int iLength = strlen(CStrings::getString(szGameFolder));
+	int iLength = strlen(CStrings::getString(szGameFolder));
 	int pos = iLength - 1;
 
-	while (pos > 0 && szGameFolder[pos] != '\\' && szGameFolder[pos] != '/') {
+	while ((pos > 0) && (szGameFolder[pos] != '\\') && (szGameFolder[pos] != '/')) {
 		pos--;
 	}
 	pos++;
@@ -513,11 +515,11 @@ bool CBotGlobals :: gameStart ()
 */
 	//filesystem->GetCurrentDirectory(szSteamFolder,512);
 
-	const size_t iLength = strlen(CStrings::getString(szGameFolder));
+	size_t iLength = strlen(CStrings::getString(szGameFolder));
 
 	size_t pos = iLength-1;
 
-	while ( pos > 0 && szGameFolder[pos] != '\\' && szGameFolder[pos] != '/' )
+	while ( (pos > 0) && (szGameFolder[pos] != '\\') && (szGameFolder[pos] != '/') )
 	{
 		pos--;
 	}
@@ -529,7 +531,7 @@ bool CBotGlobals :: gameStart ()
 	
 	m_pCurrentMod = CBotMods::getMod(m_szModFolder);
 
-	if ( m_pCurrentMod != nullptr )
+	if ( m_pCurrentMod != NULL )
 	{
 		m_iCurrentMod = m_pCurrentMod->getModId();
 
@@ -555,6 +557,7 @@ void CBotGlobals :: levelInit ()
 int CBotGlobals :: countTeamMatesNearOrigin ( Vector vOrigin, float fRange, int iTeam, edict_t *pIgnore )
 {
 	int iCount = 0;
+	IPlayerInfo *p;
 
 	for ( int i = 1; i <= CBotGlobals::maxClients(); i ++ )
 	{
@@ -566,7 +569,7 @@ int CBotGlobals :: countTeamMatesNearOrigin ( Vector vOrigin, float fRange, int 
 		if ( pEdict == pIgnore )
 			continue;
 
-		IPlayerInfo* p = playerinfomanager->GetPlayerInfo(pEdict);
+		p = playerinfomanager->GetPlayerInfo(pEdict);
 
 		if ( !p || !p->IsConnected() || p->IsDead() || p->IsObserver() || !p->IsPlayer() )
 			continue;
@@ -611,17 +614,17 @@ bool CBotGlobals :: entityIsAlive ( edict_t *pEntity )
 
 	index = ENTINDEX(pEntity);
 
-	if ( index && index <= gpGlobals->maxClients )
+	if ( index && (index <= gpGlobals->maxClients) )
 	{
 		IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEntity);
 
 		if ( !p )
 			return false;
 
-		return !p->IsDead() && p->GetHealth()>0;
+		return (!p->IsDead() && (p->GetHealth()>0));
 	}
 
-	return pEntity->GetIServerEntity() && pEntity->GetClassName() && *pEntity->GetClassName();
+	return ( pEntity->GetIServerEntity() && pEntity->GetClassName() && *pEntity->GetClassName() );
 	//CBaseEntity *pBaseEntity = CBaseEntity::Instance(pEntity);
 	//return pBaseEntity->IsAlive();
 }
@@ -639,7 +642,7 @@ edict_t *CBotGlobals :: playerByUserId(int iUserId)
 		}
 	}
 
-	return nullptr;
+	return NULL;
 }
 
 int CBotGlobals :: getTeam ( edict_t *pEntity )
@@ -654,7 +657,7 @@ bool CBotGlobals :: isNetworkable ( edict_t *pEntity )
 
 	pServerEnt = pEntity->GetIServerEntity();
 
-	return pServerEnt && pServerEnt->GetNetworkable() != nullptr;
+	return (pServerEnt && (pServerEnt->GetNetworkable() != NULL));
 }
 
 /*
@@ -693,7 +696,7 @@ void CBotGlobals :: serverSay ( char *fmt, ... )
 // TO DO :: put into CClient
 bool CBotGlobals :: setWaypointDisplayType ( int iType )
 {
-	if ( iType >= 0 && iType <= 1 )
+	if ( (iType >= 0) && (iType <= 1) )
 	{
 		m_iWaypointDisplayType = iType;
 		return true;
@@ -705,9 +708,10 @@ bool CBotGlobals :: setWaypointDisplayType ( int iType )
 bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_dest)
 {
 	CTraceFilterVis filter = CTraceFilterVis(pPlayer);
-	const float fDistance = sqrt((v_dest - v_src).LengthSqr());
+	float fDistance = sqrt((v_dest - v_src).LengthSqr());
 	CClient *pClient = CClients::get(pPlayer);
 	Vector vcross = v_dest - v_src;
+	Vector vleftsrc,vleftdest, vrightsrc,vrightdest;
 	float fWidth = rcbot_wptplace_width.GetFloat();
 
 	if ( v_dest == v_src )
@@ -724,11 +728,11 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 	vcross = vcross.Cross(Vector(0,0,1));
 	vcross = vcross * (fWidth*0.5f);
 
-	Vector vleftsrc = v_src - vcross;
-	Vector vrightsrc = v_src + vcross;
+	vleftsrc = v_src - vcross;
+	vrightsrc = v_src + vcross;
 
-	Vector vleftdest = v_dest - vcross;
-	Vector vrightdest = v_dest + vcross;
+	vleftdest = v_dest - vcross;
+	vrightdest = v_dest + vcross;
 
 	if ( fDistance > CWaypointLocations::REACHABLE_RANGE )
 		return false;
@@ -737,8 +741,8 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 	//	return false;
 
 	// can swim there?
-	if (enginetrace->GetPointContents( v_src ) == CONTENTS_WATER &&
-		enginetrace->GetPointContents( v_dest ) == CONTENTS_WATER)
+	if ((enginetrace->GetPointContents( v_src ) == CONTENTS_WATER) &&
+		(enginetrace->GetPointContents( v_dest ) == CONTENTS_WATER))
 	{
 		return true;
 	}
@@ -748,13 +752,13 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 #ifndef __linux__
 	debugoverlay->AddLineOverlay(v_src,v_src-Vector(0,0,256.0),255,0,255,false,3);
 #endif
-	const Vector v_ground_src = CBotGlobals::getTraceResult()->endpos + Vector(0,0,1);
+	Vector v_ground_src = CBotGlobals::getTraceResult()->endpos + Vector(0,0,1);
 
 	CBotGlobals::traceLine(v_dest,v_dest-Vector(0,0,256.0),MASK_NPCSOLID_BRUSHONLY,&filter);
 #ifndef __linux__
 	debugoverlay->AddLineOverlay(v_dest,v_dest-Vector(0,0,256.0),255,255,0,false,3);
 #endif
-	const Vector v_ground_dest = CBotGlobals::getTraceResult()->endpos + Vector(0,0,1);
+	Vector v_ground_dest = CBotGlobals::getTraceResult()->endpos + Vector(0,0,1);
 
 	if ( !CBotGlobals::isVisible(pPlayer,v_ground_src,v_ground_dest) )
 	{
@@ -772,13 +776,13 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 
 			CBotGlobals::traceLine(tr->endpos,tr->endpos-Vector(0,0,45),MASK_NPCSOLID_BRUSHONLY,&filter);
 
-			const Vector v_jsrc = tr->endpos;
+			Vector v_jsrc = tr->endpos;
 
 #ifndef __linux__
 			debugoverlay->AddLineOverlay(v_jsrc,v_jsrc-Vector(0,0,45),255,255,255,false,3);	
 #endif
 			// can't jump there
-			if ( v_jsrc.z - tr->endpos.z + (v_dest.z-v_jsrc.z) > 45.0f )
+			if ( ((v_jsrc.z - tr->endpos.z) + (v_dest.z-v_jsrc.z)) > 45.0f )
 			{
 				//if ( (tr->endpos.z > (v_src.z+45)) && (fDistance > 64.0f) )
 				//{
@@ -791,12 +795,12 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 
 					for ( float fDistCheck = 45.0f; fDistCheck < fDistance; fDistCheck += 45.0f )
 					{
-						Vector v_checkpoint = v_src + v_norm * fDistCheck;
+						Vector v_checkpoint = v_src + (v_norm * fDistCheck);
 
 						// check jump height again
 						CBotGlobals::traceLine(v_checkpoint,v_checkpoint-Vector(0,0,45.0f),MASK_NPCSOLID_BRUSHONLY,&filter);
 
-						if ( CBotGlobals::traceVisible(nullptr) )
+						if ( CBotGlobals::traceVisible(NULL) )
 						{
 #ifndef __linux__
 							debugoverlay->AddTextOverlay(tr->endpos,0,3,"step/jump fail");
@@ -824,34 +828,34 @@ bool CBotGlobals :: boundingBoxTouch2d (
 										const Vector2D &a1, const Vector2D &a2,
 										const Vector2D &bmins, const Vector2D &bmaxs )
 {
-	const Vector2D amins = Vector2D(min(a1.x,a2.x),min(a1.y,a2.y));
-	const Vector2D amaxs = Vector2D(max(a1.x,a2.x),max(a1.y,a2.y));
+	Vector2D amins = Vector2D(min(a1.x,a2.x),min(a1.y,a2.y));
+	Vector2D amaxs = Vector2D(max(a1.x,a2.x),max(a1.y,a2.y));
 
-	return bmins.x >= amins.x && bmins.y >= amins.y && (bmins.x <= amaxs.x && bmins.y <= amaxs.y) ||
-		bmaxs.x >= amins.x && bmaxs.y >= amins.y && (bmaxs.x <= amaxs.x && bmaxs.y <= amaxs.y);
+	return (((bmins.x >= amins.x) && (bmins.y >= amins.y)) && ((bmins.x <= amaxs.x) && (bmins.y <= amaxs.y)) ||
+		((bmaxs.x >= amins.x) && (bmaxs.y >= amins.y)) && ((bmaxs.x <= amaxs.x) && (bmaxs.y <= amaxs.y)));
 }
 
 bool CBotGlobals :: boundingBoxTouch3d (
 										const Vector &a1, const Vector &a2,
 										const Vector &bmins, const Vector &bmaxs )
 {
-	const Vector amins = Vector(min(a1.x,a2.x),min(a1.y,a2.y),min(a1.z,a2.z));
-	const Vector amaxs = Vector(max(a1.x,a2.x),max(a1.y,a2.y),max(a1.z,a2.z));
+	Vector amins = Vector(min(a1.x,a2.x),min(a1.y,a2.y),min(a1.z,a2.z));
+	Vector amaxs = Vector(max(a1.x,a2.x),max(a1.y,a2.y),max(a1.z,a2.z));
 
-	return bmins.x >= amins.x && bmins.y >= amins.y && bmins.z >= amins.z && (bmins.x <= amaxs.x && bmins.y <= amaxs.y && bmins.z <= amaxs.z) ||
-		bmaxs.x >= amins.x && bmaxs.y >= amins.y && bmaxs.z >= amins.z && (bmaxs.x <= amaxs.x && bmaxs.y <= amaxs.y && bmaxs.z <= amaxs.z);	
+	return (((bmins.x >= amins.x) && (bmins.y >= amins.y) && (bmins.z >= amins.z)) && ((bmins.x <= amaxs.x) && (bmins.y <= amaxs.y) && (bmins.z <= amaxs.z)) ||
+		    ((bmaxs.x >= amins.x) && (bmaxs.y >= amins.y) && (bmaxs.z >= amins.z)) && ((bmaxs.x <= amaxs.x) && (bmaxs.y <= amaxs.y) && (bmaxs.z <= amaxs.z)));	
 }
 bool CBotGlobals :: onOppositeSides2d (
 		const Vector2D &amins, const Vector2D &amaxs,
 		const Vector2D &bmins, const Vector2D &bmaxs )
 {
-	const float g = (amaxs.x - amins.x) * (bmins.y - amins.y) - 
+  float g = (amaxs.x - amins.x) * (bmins.y - amins.y) - 
 	        (amaxs.y - amins.y) * (bmins.x - amins.x);
 
-	const float h = (amaxs.x - amins.x) * (bmaxs.y - amins.y) - 
+  float h = (amaxs.x - amins.x) * (bmaxs.y - amins.y) - 
 	        (amaxs.y - amins.y) * (bmaxs.x - amins.x);
 
-  return g * h <= 0.0f;
+  return (g * h) <= 0.0f;
 }
 
 bool CBotGlobals :: onOppositeSides3d (
@@ -861,13 +865,13 @@ bool CBotGlobals :: onOppositeSides3d (
 	amins.Cross(bmins);
 	amaxs.Cross(bmaxs);
 
-	const float g = (amaxs.x - amins.x) * (bmins.y - amins.y) * (bmins.z - amins.z) - 
+  float g = (amaxs.x - amins.x) * (bmins.y - amins.y) * (bmins.z - amins.z) - 
 	        (amaxs.z - amins.z) * (amaxs.y - amins.y) * (bmins.x - amins.x);
 
-	const float h = (amaxs.x - amins.x) * (bmaxs.y - amins.y) * (bmaxs.z - amins.z) - 
+  float h = (amaxs.x - amins.x) * (bmaxs.y - amins.y) * (bmaxs.z - amins.z) - 
 	        (amaxs.z - amins.z) * (amaxs.y - amins.y) * (bmaxs.x - amins.x);
 
-  return g * h <= 0.0f;
+  return (g * h) <= 0.0f;
 }
 
 bool CBotGlobals :: linesTouching2d (
@@ -894,8 +898,8 @@ void CBotGlobals :: botMessage ( edict_t *pEntity, int iErr, const char *fmt, ..
 	va_end (argptr); 
 
 	const char *bot_tag = BOT_TAG;
-	const int len = strlen(string);
-	const int taglen = strlen(BOT_TAG);
+	int len = strlen(string);
+	int taglen = strlen(BOT_TAG);
 	// add tag -- push tag into string
 	for ( int i = len + taglen; i >= taglen; i -- )
 		string[i] = string[i-taglen];
@@ -934,13 +938,13 @@ bool CBotGlobals :: makeFolders ( char *szFile )
 	int folderNameSize = 0;
 	szFolderName[0] = 0;
 
-	const int iLen = strlen(szFile);
+	int iLen = strlen(szFile);
 
 	int i = 0;
 
 	while ( i < iLen )
 	{
-		while ( i < iLen && szFile[i] != *delimiter )
+		while ( (i < iLen) && (szFile[i] != *delimiter) )
 		{
 			szFolderName[folderNameSize++]=szFile[i];
 			i++;
@@ -982,7 +986,7 @@ void CBotGlobals :: addDirectoryDelimiter ( char *szString )
 
 bool CBotGlobals :: isBreakableOpen ( edict_t *pBreakable )
 {
-	return (CClassInterface::getEffects(pBreakable) & EF_NODRAW) == EF_NODRAW;
+	return ((CClassInterface::getEffects(pBreakable) & EF_NODRAW) == EF_NODRAW);
 }
 
 Vector CBotGlobals:: getVelocity ( edict_t *pPlayer )
@@ -999,17 +1003,17 @@ FILE *CBotGlobals :: openFile ( char *szFile, char *szMode )
 {
 	FILE *fp = fopen(szFile,szMode);
 
-	if ( fp == nullptr )
+	if ( fp == NULL )
 	{
-		botMessage (nullptr, 0, "file not found/opening error '%s' mode %s", szFile, szMode );
+		botMessage ( NULL, 0, "file not found/opening error '%s' mode %s", szFile, szMode );
 
 		makeFolders(szFile);
 
 		// try again
 		fp = fopen(szFile,szMode);
 
-		if ( fp == nullptr )
-			botMessage (nullptr, 0, "failed to make folders for %s",szFile);
+		if ( fp == NULL )
+			botMessage ( NULL, 0, "failed to make folders for %s",szFile);
 	}
 
 	return fp;
@@ -1017,7 +1021,7 @@ FILE *CBotGlobals :: openFile ( char *szFile, char *szMode )
 
 void CBotGlobals :: buildFileName ( char *szOutput, const char *szFile, const char *szFolder, const char *szExtension, bool bModDependent )
 {
-	if (m_szRCBotFolder == nullptr)
+	if (m_szRCBotFolder == NULL)
 	{
 #ifdef HOMEFOLDER
 		char home[512];
@@ -1055,7 +1059,7 @@ void CBotGlobals :: buildFileName ( char *szOutput, const char *szFile, const ch
 	else
 		strcpy(szOutput, m_szRCBotFolder);
 
-	if ( szOutput[strlen(szOutput)-1] != '\\' && szOutput[strlen(szOutput)-1] != '/' )
+	if ( (szOutput[strlen(szOutput)-1] != '\\') && (szOutput[strlen(szOutput)-1] != '/') )
 		addDirectoryDelimiter(szOutput);
 
 	if ( szFolder )
@@ -1082,7 +1086,7 @@ void CBotGlobals :: buildFileName ( char *szOutput, const char *szFile, const ch
 QAngle CBotGlobals::playerAngles ( edict_t *pPlayer )
 {
 	IPlayerInfo *pPlayerInfo = playerinfomanager->GetPlayerInfo(pPlayer);
-	const CBotCmd lastCmd = pPlayerInfo->GetLastUserCommand();
+	CBotCmd lastCmd = pPlayerInfo->GetLastUserCommand();
 	return lastCmd.viewangles;
 }
 
@@ -1135,13 +1139,14 @@ float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity,Vector vOrigin)
 
 	float fAngle;
 	float fYaw;
-	const QAngle qBotAngles = playerAngles(pEntity);
+	QAngle qBotAngles = playerAngles(pEntity);
 	QAngle qAngles;
+	Vector vAngles;
 	Vector vPlayerOrigin;
 
 	gameclients->ClientEarPosition(pEntity,&vPlayerOrigin);
 
-	Vector vAngles = vOrigin - vPlayerOrigin;
+	vAngles = vOrigin - vPlayerOrigin;
 
 	VectorAngles(vAngles/vAngles.Length(),qAngles);
 

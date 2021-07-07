@@ -150,8 +150,6 @@ typedef enum
 	GETPROP_TF2_CHARGE_RESIST_TYPE,
 	GETPROP_TF2_ROUNDSTATE,
 	GETPROP_TF2DESIREDCLASS, //Jrob
-	GETPROP_SYN_PLAYER_VEHICLE,
-	GETPROP_SYN_VEHICLE_DRIVER,
 	GET_PROPDATA_MAX
 }getpropdata_id;
 
@@ -166,9 +164,9 @@ class CClassInterfaceValue
 public:
 	CClassInterfaceValue ()
 	{
-		m_data = nullptr; 
-		m_class = nullptr;
-		m_value = nullptr;
+		m_data = NULL; 
+		m_class = NULL;
+		m_value = NULL;
 		m_offset = 0;
 	}
 
@@ -196,7 +194,7 @@ public:
 		
 		try
 		{
-			return *static_cast<bool*>(m_data); 
+			return *((bool*)m_data); 
 		}
 
 		catch(...)
@@ -210,9 +208,9 @@ public:
 		getData(edict);  
 				
 		if ( !m_data ) 
-			return nullptr; 
+			return NULL; 
 
-		return static_cast<bool*>(m_data); 
+		return ((bool*)m_data); 
 	}
 
 	inline void *getVoidPointer ( edict_t *edict ) 
@@ -220,7 +218,7 @@ public:
 		getData(edict);  
 				
 		if ( !m_data ) 
-			return nullptr; 
+			return NULL; 
 
 		return m_data; 
 	}
@@ -232,7 +230,7 @@ public:
 		if ( !m_data ) 
 			return defaultvalue; 
 		
-		return *static_cast<float*>(m_data); 
+		return *((float*)m_data); 
 	}
 
 	inline float *getFloatPointer ( edict_t *edict ) 
@@ -240,16 +238,16 @@ public:
 		getData(edict); 
 		
 		if ( !m_data ) 
-			return nullptr; 
+			return NULL; 
 		
-		return static_cast<float*>(m_data); 
+		return ((float*)m_data); 
 	}
 
 	inline char *getString (edict_t *edict ) 
 	{ 
 		getData(edict); 
 
-		return static_cast<char*>(m_data); 
+		return (char*)m_data; 
 	}
 
 	inline Vector *getVectorPointer ( edict_t *edict )
@@ -261,17 +259,18 @@ public:
 			return (Vector*)m_data;
 		}
 
-		return nullptr;
+		return NULL;
 	}
 
 	inline bool getVector ( edict_t *edict, Vector *v )
 	{
+		static float *x;
+
 		getData(edict);
 
 		if ( m_data )
 		{
-			static float *x;
-			x = static_cast<float*>(m_data);
+			x = (float*)m_data;
 			*v = Vector(*x,*(x+1),*(x+2));
 
 			return true;
@@ -289,7 +288,7 @@ public:
 
 		try
 		{
-			return *(int*)m_data;
+			return *((int*)m_data);
 		}
 
 		catch ( ... )
@@ -319,7 +318,7 @@ public:
 		if ( !m_data ) 
 			return defaultvalue; 
 
-		return (float)*(int *)m_data;
+		return (float)(*(int *)m_data);
 	}
 
 	static void resetError () { m_berror = false; }
@@ -354,7 +353,7 @@ public:
 	static const char *FindEntityNetClass(int start, const char *classname);
 	static edict_t *FindEntityByNetClass(int start, const char *classname);
 	static edict_t *FindEntityByNetClassNearest(Vector vstart, const char *classname);
-	static edict_t *FindEntityByClassnameNearest(Vector vstart, const char *classname, float fMinDist = 8192.0f, edict_t *pOwner = nullptr );
+	static edict_t *FindEntityByClassnameNearest(Vector vstart, const char *classname, float fMinDist = 8192.0f, edict_t *pOwner = NULL );
 
 	// TF2
 	static int getTF2Score ( edict_t *edict );
@@ -401,11 +400,11 @@ public:
 	inline static void setTF2Class(edict_t *edict, int _class)
 	{
 		int* p = g_GetProps[GETPROP_TF2DESIREDCLASS].getIntPointer(edict);
-		if (p != nullptr) *p = _class;
+		if (p != NULL) *p = _class;
 	}
 	//end Jrob
 	inline static bool TF2_IsMedievalMode(void*gamerules) { return g_GetProps[GETPROP_TF2_MEDIEVALMODE].getBool(gamerules, false, false);}
-	inline static int TF2_getRoundState(void *gamerules) { return g_GetProps[GETPROP_TF2_ROUNDSTATE].getInt(gamerules, 0, false); }
+	inline static int TF2_getRoundState(void *gamerules) { return g_GetProps[GETPROP_TF2_ROUNDSTATE].getInt(gamerules, 0, 0); }
 	inline static float getTF2SpyCloakMeter ( edict_t *edict ) { return g_GetProps[GETPROP_TF2SPYMETER].getFloat(edict,0); }
 	inline static int getWaterLevel ( edict_t *edict ) { return g_GetProps[GETPROP_WATERLEVEL].getInt(edict,0); }
 	inline static void updateSimulationTime ( edict_t *edict )
@@ -446,9 +445,9 @@ public:
 	inline static edict_t *getMedigunTarget ( edict_t *edict ) { return g_GetProps[GETPROP_TF2MEDIGUN_TARGETTING].getEntity(edict); }
 	inline static edict_t *getSentryEnemy ( edict_t *edict ) { return g_GetProps[GETPROP_SENTRY_ENEMY].getEntity(edict); }
 	inline static edict_t *getOwner ( edict_t *edict ) { return g_GetProps[GETPROP_ALL_ENTOWNER].getEntity(edict); }
-	inline static bool isMedigunTargetting ( edict_t *pgun, edict_t *ptarget) { return g_GetProps[GETPROP_TF2MEDIGUN_TARGETTING].getEntity(pgun) == ptarget; }
+	inline static bool isMedigunTargetting ( edict_t *pgun, edict_t *ptarget) { return (g_GetProps[GETPROP_TF2MEDIGUN_TARGETTING].getEntity(pgun) == ptarget); }
 	//static void setTickBase ( edict_t *edict, int tickbase ) { return ;
-	inline static int isTeleporterMode (edict_t *edict, eTeleMode mode ) { return g_GetProps[GETPROP_TF2TELEPORTERMODE].getInt(edict,-1) == (int)mode; }
+	inline static int isTeleporterMode (edict_t *edict, eTeleMode mode ) { return (g_GetProps[GETPROP_TF2TELEPORTERMODE].getInt(edict,-1) == (int)mode); }
 	inline static edict_t *getCurrentWeapon (edict_t *player) { return g_GetProps[GETPROP_CURRENTWEAPON].getEntity(player); }
 	inline static int getUberChargeLevel (edict_t *pWeapon) { return (int)(g_GetProps[GETPROP_TF2UBERCHARGE_LEVEL].getFloat(pWeapon,0)*100.0); }
 	//static void test ();
@@ -563,27 +562,27 @@ public:
 
 	inline static bool isMoveType ( edict_t *pent, int movetype )
 	{
-		return (g_GetProps[GETPROP_MOVETYPE].getInt(pent,0) & 15) == movetype;
+		return ((g_GetProps[GETPROP_MOVETYPE].getInt(pent,0) & 15) == movetype);
 	}
 
 	inline static byte getTakeDamage ( edict_t *pent )
 	{
-		return (byte)g_GetProps[GETPROP_TAKEDAMAGE].getInt(pent,0);
+		return (byte)(g_GetProps[GETPROP_TAKEDAMAGE].getInt(pent,0));
 	}
 
 	inline static byte *getTakeDamagePointer ( edict_t *pent )
 	{
-		return g_GetProps[GETPROP_TAKEDAMAGE].getBytePointer(pent);
+		return (g_GetProps[GETPROP_TAKEDAMAGE].getBytePointer(pent));
 	}
 
 	inline static int getMoveType ( edict_t *pent )
 	{
-		return g_GetProps[GETPROP_MOVETYPE].getInt(pent,0) & 15;
+		return (g_GetProps[GETPROP_MOVETYPE].getInt(pent,0) & 15);
 	}
 
 	inline static byte *getMoveTypePointer ( edict_t *pent )
 	{
-		return g_GetProps[GETPROP_MOVETYPE].getBytePointer(pent);
+		return (g_GetProps[GETPROP_MOVETYPE].getBytePointer(pent));
 	}
 
 	inline static edict_t *getGrenadeThrower ( edict_t *gren )
@@ -595,21 +594,21 @@ public:
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_SCORE].getIntPointer(resource);
 
-		return score_array!= nullptr ? score_array[ENTINDEX(pPlayer)] : 0;
+		return (score_array!=NULL) ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
 	inline static int getPlayerObjectiveScoreDOD ( edict_t *resource, edict_t *pPlayer )
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_OBJSCORE].getIntPointer(resource);
 
-		return score_array!= nullptr ? score_array[ENTINDEX(pPlayer)] : 0;
+		return (score_array!=NULL) ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
 	inline static int getPlayerDeathsDOD ( edict_t *resource, edict_t *pPlayer )
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_DEATHS].getIntPointer(resource);
 
-		return score_array!= nullptr ? score_array[ENTINDEX(pPlayer)] : 0;
+		return (score_array!=NULL) ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
 	inline static float getSmokeSpawnTime ( edict_t *pSmoke )
@@ -673,20 +672,6 @@ public:
 	{
 		return g_GetProps[GETPROP_SENTRYGUN_PLACING].getBool(pSentry,false);
 	}
-
-	// Synergy
-
-	// Gets the player's current vehicle
-	inline static edict_t* getSynPlayerVehicle(edict_t* pPlayer)
-	{
-		return g_GetProps[GETPROP_SYN_PLAYER_VEHICLE].getEntity(pPlayer);
-	}
-
-	// Gets the driver of the given vehicle
-	inline static edict_t* getSynVehicleDriver(edict_t* pVehicle)
-	{
-		return g_GetProps[GETPROP_SYN_VEHICLE_DRIVER].getEntity(pVehicle);
-	}	
 
 private:
 	static CClassInterfaceValue g_GetProps[GET_PROPDATA_MAX];

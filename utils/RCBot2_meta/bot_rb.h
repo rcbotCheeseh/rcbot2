@@ -1,26 +1,22 @@
 #ifndef __RCBOT_RB_H__
 #define __RCBOT_RB_H__
-#include <vector>
-
-class CBotOperator;
 
 class CBotRule
 {
 public:
 	CBotRule ()
-	= default;
+	{
+	}
 private:
-	std::vector<CBotOperator> m_Rules;
+	vector<CBotOperator> m_Rules;
 };
 
 class CBotOperator
 {
 public:
-	CBotOperator (const CBotFactOpertor& op ) : m_op(op)
+	CBotOperator ( CBotFactOpertor op ) : m_op(op)
 	{		
 	}
-
-	CBotOperator();
 
 	virtual bool operate ( bool bVal, CBotOperator *pNext )
 	{
@@ -40,7 +36,7 @@ public:
 
 	virtual bool value()
 	{
-		return true;
+		return -1;
 	}
 private:
 	CBotFactOperator m_op;
@@ -49,7 +45,7 @@ private:
 class CBotFact : public CBotOperator
 {
 public:
-	CBotFact ( unsigned int iFactId ) : CBotOperator(), m_fid(iFactId)
+	CBotFact ( unsigned int iFactId ) : m_fid(iFactId)
 	{
 	}
 

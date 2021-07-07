@@ -284,7 +284,7 @@ typedef enum
 class CBotTF2FunctionEnemyAtIntel : public IBotFunction
 {
 public:
-	CBotTF2FunctionEnemyAtIntel( int iTeam, Vector vPos, int type, edict_t *pPlayer = nullptr, int capindex = -1 ){m_iTeam = iTeam;m_vPos = vPos;m_iType = type; m_pPlayer = pPlayer; m_iCapIndex = capindex; }
+	CBotTF2FunctionEnemyAtIntel( int iTeam, Vector vPos, int type, edict_t *pPlayer = NULL, int capindex = -1 ){m_iTeam = iTeam;m_vPos = vPos;m_iType = type; m_pPlayer = pPlayer; m_iCapIndex = capindex; }
 
 	void execute (CBot *pBot);
 private:
@@ -403,7 +403,7 @@ public:
 
 	inline edict_t *getHealingEntity () { return m_pHeal; }
 
-	inline void clearHealingEntity () { m_pHeal = nullptr; }
+	inline void clearHealingEntity () { m_pHeal = NULL; }
 
 	virtual unsigned int maxEntityIndex ( ) { return gpGlobals->maxEntities; }
 
@@ -430,7 +430,7 @@ public:
 	virtual void checkHealingValid ();
 
 // linux fix 2
-	virtual edict_t *findEngineerBuiltObject ( eEngiBuild iBuilding, int index ) { return nullptr; }
+	virtual edict_t *findEngineerBuiltObject ( eEngiBuild iBuilding, int index ) { return NULL; }
 
 	virtual void engineerBuild ( eEngiBuild iBuilding, eEngiCmd iEngiCmd ) {};
 
@@ -460,13 +460,13 @@ public:
 
 	virtual bool handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy) { return CBot::handleAttack(pWeapon, pEnemy); }
 
-	void resetAttackingEnemy() { m_pAttackingEnemy = nullptr; }
+	void resetAttackingEnemy() { m_pAttackingEnemy = NULL; }
 
 	virtual bool setVisible ( edict_t *pEntity, bool bVisible );
 
 	virtual void setClass ( TF_Class _class );
 
-	inline edict_t *seeFlag ( bool reset = false ) { if ( reset ) { m_pFlag = nullptr; } return m_pFlag; }
+	inline edict_t *seeFlag ( bool reset = false ) { if ( reset ) { m_pFlag = NULL; } return m_pFlag; }
 
 	virtual bool canAvoid ( edict_t *pEntity );
 
@@ -511,7 +511,7 @@ public:
 
 		if ( pEnemy == m_pPrevSpy )
 		{
-			m_pPrevSpy = nullptr;
+			m_pPrevSpy = NULL;
 			m_fSeeSpyTime = 0.0f;
 		}
 	}
@@ -531,7 +531,7 @@ public:
 	inline void flagReset () { m_fLastKnownFlagTime = 0.0f; }
 	inline void teamFlagReset () { m_fLastKnownTeamFlagTime = 0.0f; }
 
-	virtual bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = nullptr )
+	virtual bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL )
 	{
 		return CBot::canGotoWaypoint(vPrevWaypoint,pWaypoint,pPrev);
 	}
@@ -598,7 +598,7 @@ protected:
 
 	virtual bool thinkSpyIsEnemy ( edict_t *pEdict, TF_Class iDisguise );
 
-	virtual bool checkStuck () { return CBot::checkStuck(); }
+	virtual bool checkStuck ( void ) { return CBot::checkStuck(); }
 
 	float m_fCallMedic;
 	float m_fTauntTime;
@@ -868,7 +868,7 @@ public:
 
 	void sapperDestroyed ( edict_t *pSapper );
 	
-	bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = nullptr );
+	bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL );
 
 	bool deployStickies ( eDemoTrapType type, Vector vStand, Vector vLocation, Vector vSpread, Vector *vPoint, int *iState, int *iStickyNum, bool *bFail, float *fTime, int wptindex );
 
@@ -885,18 +885,18 @@ public:
 
 	void voiceCommand ( int cmd );
 
-	void handleWeapons () ;
+	void handleWeapons ( void ) ;
 
 	virtual bool select_CWeapon ( CWeapon *pWeapon );
 	virtual bool selectBotWeapon ( CBotWeapon *pBotWeapon );
 
-	void checkStuckonSpy ();
+	void checkStuckonSpy ( void );
 
-	bool checkStuck ();
+	bool checkStuck ( void );
 
 	void init (bool bVarInit=false);
 
-	bool checkAttackPoint ();
+	bool checkAttackPoint ( void );
 
 	bool canAvoid ( edict_t *pEntity );
 
@@ -910,7 +910,7 @@ public:
 
 	void healedPlayer ( edict_t *pPlayer, float fAmount );
 
-	void teleportedPlayer ();
+	void teleportedPlayer ( void );
 
 	inline bool isCarrying () { return m_bIsCarryingObj; }
 

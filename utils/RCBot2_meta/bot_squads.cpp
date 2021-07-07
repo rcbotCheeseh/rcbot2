@@ -63,7 +63,7 @@ private:
 
 //-------------
 
-void CBotSquads::FreeMemory ()
+void CBotSquads::FreeMemory ( void )
 {
 	// TODO inline squad or use unique pointers or something so they're freed automatically
 	for (CBotSquad *squad : m_theSquads) {
@@ -101,13 +101,15 @@ edict_t *CBotSquad::getMember ( size_t iMember )
 //              make a new squad
 CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 {
+	CBot *pBot;
+
 	//char msg[120];
 
 	if ( !pLeader )
-		return nullptr;
+		return NULL;
 
 	if ( CClassInterface::getTeam(pLeader) != CClassInterface::getTeam(pMember) )
-		return nullptr;
+		return NULL;
 
 	//CClient *pClient = gBotGlobals.m_Clients.GetClientByEdict(pLeader);
 
@@ -128,14 +130,13 @@ CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 	}
 	
 	// no squad with leader, make one
-	auto*theSquad = new CBotSquad(pLeader, pMember);
+	CBotSquad *theSquad = new CBotSquad(pLeader, pMember);
 	
-	if ( theSquad != nullptr )
+	if ( theSquad != NULL )
 	{
-		CBot *pBot;
 		m_theSquads.push_back(theSquad);
 		
-		if ( (pBot = CBots::getBotPointer(pLeader)) != nullptr )
+		if ( (pBot = CBots::getBotPointer(pLeader)) != NULL )
 			pBot->setSquad(theSquad);
 	}
 	
@@ -146,22 +147,25 @@ CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 //
 CBotSquad *CBotSquads::SquadJoin ( edict_t *pLeader, edict_t *pMember )
 {
+	CBotSquad *theSquad;
+	CBotSquad *joinSquad;
+
 	//char msg[120];
 
 	if ( !pLeader )
-		return nullptr;
+		return NULL;
 
 	if ( CClassInterface::getTeam(pLeader) != CClassInterface::getTeam(pMember) )
-		return nullptr;
+		return NULL;
 
 	// no squad with leader, make pMember join SquadLeader
-	CBotSquad* theSquad = FindSquadByLeader(pMember);
+	theSquad = FindSquadByLeader(pMember);
 
-	if ( theSquad != nullptr )
+	if ( theSquad != NULL )
 	{
 		theSquad->AddMember(pMember);
 
-		CBotSquad* joinSquad = FindSquadByLeader(pLeader);
+		joinSquad = FindSquadByLeader(pLeader);
 
 		if ( joinSquad )
 		{
@@ -174,13 +178,13 @@ CBotSquad *CBotSquads::SquadJoin ( edict_t *pLeader, edict_t *pMember )
 			RemoveSquad(joinSquad);
 		}
 		else
-			return nullptr;
+			return NULL;
 	}
 	
 	// no squad with leader, make pMember join SquadLeader
 	theSquad = FindSquadByLeader(pLeader);
 
-	if ( theSquad != nullptr )
+	if ( theSquad != NULL )
 		theSquad->AddMember(pMember);
 
 	return theSquad;
@@ -204,11 +208,12 @@ void CBotSquads::RemoveSquad ( CBotSquad *pSquad )
 	CBots::botFunction(&func);
 	
 	m_theSquads.erase(std::remove(m_theSquads.begin(), m_theSquads.end(), pSquad), m_theSquads.end());
-
-	delete pSquad;
+	
+	if (pSquad)
+		delete pSquad;
 }
 
-void CBotSquads::UpdateAngles ()
+void CBotSquads::UpdateAngles ( void )
 {
 	for (CBotSquad *squad : m_theSquads) {
 		squad->UpdateAngles();
@@ -217,7 +222,7 @@ void CBotSquads::UpdateAngles ()
 
 //-------------
 
-void CBotSquad::UpdateAngles ()
+void CBotSquad::UpdateAngles ( void )
 {
 	edict_t *pLeader = GetLeader();
 
@@ -242,7 +247,7 @@ void CBotSquad::Init ()
 
 	bCanFire = true;
 
-	if ( (pLeader = GetLeader()) != nullptr )
+	if ( (pLeader = GetLeader()) != NULL )
 	{
 		IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pLeader);
 		m_vLeaderAngle = p->GetLastUserCommand().viewangles;
@@ -256,7 +261,7 @@ void CBotSquads :: ChangeLeader ( CBotSquad *pSquad )
 	pSquad->ChangeLeader();
 
 	// if no leader anymore/no members in group
-	if ( pSquad->IsLeader(nullptr) )
+	if ( pSquad->IsLeader(NULL) )
 	{
 		CRemoveBotFromSquad func(pSquad);
 		CBots::botFunction(&func);
@@ -270,11 +275,11 @@ void CBotSquads :: ChangeLeader ( CBotSquad *pSquad )
  * Make the succeeding squad member the new leader if they have any subordinates, otherwise
  * disband the squad.
  */
-void CBotSquad::ChangeLeader ()
+void CBotSquad::ChangeLeader ( void )
 {
 	if ( m_SquadMembers.empty() )
 	{
-		SetLeader(nullptr);
+		SetLeader(NULL);
 	}
 	else
 	{
@@ -282,7 +287,7 @@ void CBotSquad::ChangeLeader ()
 		m_SquadMembers.pop_front();
 
 		if ( m_SquadMembers.empty() )
-			SetLeader(nullptr);
+			SetLeader(NULL);
 		else
 		{
 			Init(); // new squad init
@@ -292,24 +297,28 @@ void CBotSquad::ChangeLeader ()
 
 Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 {
+	Vector vLeaderOrigin;
 	Vector vBase; 
 	Vector v_forward;
 	Vector v_right;
+	QAngle angle_right;
+	// vBase = first : offset from leader origin without taking into consideration spread and position
+	int iPosition;
 	trace_t *tr = CBotGlobals::getTraceResult();
 
 	edict_t *pLeader = GetLeader();
 	
-	int iPosition = GetFormationPosition(pEdict);
-	Vector vLeaderOrigin = CBotGlobals::entityOrigin(pLeader);
+	iPosition = GetFormationPosition(pEdict);
+	vLeaderOrigin = CBotGlobals::entityOrigin(pLeader);
 
-	const int iMod = iPosition % 2;
+	int iMod = iPosition % 2;
 
 	AngleVectors(m_vLeaderAngle,&v_forward); // leader body angles as base
 
-	QAngle angle_right = m_vLeaderAngle;
+	angle_right = m_vLeaderAngle;
 	angle_right.y += 90.0f;
 
-	CBotGlobals::fixFloatAngle(&angle_right.y);
+	CBotGlobals::fixFloatAngle(&(angle_right.y));
 
 	AngleVectors(angle_right,&v_right); // leader body angles as base
 
@@ -319,9 +328,9 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 	case SQUAD_FORM_VEE:
 		{
 			if ( iMod )			
-				vBase = v_forward-v_right;			
+				vBase = (v_forward-v_right);			
 			else
-				vBase = v_forward+v_right;
+				vBase = (v_forward+v_right);
 		}
 		break;
 	case SQUAD_FORM_WEDGE:
@@ -360,13 +369,13 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 		break;
 	}
 	
-	vBase = vBase * m_fDesiredSpread * iPosition;
+	vBase = (vBase * m_fDesiredSpread) * iPosition;
 
 	CBotGlobals::quickTraceline(pLeader,vLeaderOrigin,vLeaderOrigin+vBase);
 
 	if ( tr->fraction < 1.0 )
 	{
-		return vLeaderOrigin + vBase*tr->fraction*0.5f;
+		return vLeaderOrigin + (vBase*tr->fraction*0.5f);
 	}
 
 	return vLeaderOrigin+vBase;
@@ -377,13 +386,13 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
  */
 int CBotSquad::GetFormationPosition ( edict_t *pEdict )
 {
-	const auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pEdict);
+	auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pEdict);
 	return it != m_SquadMembers.end()? std::distance(m_SquadMembers.begin(), it) : 0;
 }
 
 void CBotSquad::removeMember ( edict_t *pMember )
 {
-	const auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pMember);
+	auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pMember);
 	if (it != m_SquadMembers.end()) {
 		m_SquadMembers.erase(it);
 	}
@@ -393,9 +402,10 @@ void CBotSquad::AddMember ( edict_t *pEdict )
 {
 	if ( !IsMember(pEdict) )
 	{
+		MyEHandle newh;
 		//CBot *pBot;
 
-		MyEHandle newh = pEdict;
+		newh = pEdict;
 
 		m_SquadMembers.push_back(newh);
 
@@ -412,7 +422,7 @@ size_t CBotSquad::numMembers ()
 	return m_SquadMembers.size();
 }
 
-void CBotSquad :: ReturnAllToFormation ()
+void CBotSquad :: ReturnAllToFormation ( void )
 {
 	for (edict_t *member : m_SquadMembers) {
 		CBot *pBot = CBots::getBotPointer(member);

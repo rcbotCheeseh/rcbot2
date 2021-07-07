@@ -60,7 +60,7 @@ public:
 	void getTasks (unsigned int iIgnore=0);
 	bool executeAction ( eBotAction iAction );
 
-	float getArmorPercent () { return 0.01f * m_pPlayerInfo->GetArmorValue(); }
+	float getArmorPercent () { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
 
 	bool setVisible ( edict_t *pEntity, bool bVisible );
 
@@ -73,7 +73,7 @@ public:
 		m_FailedPhysObj = pent; 
 
 		if ( m_NearestPhysObj == pent ) 
-			m_NearestPhysObj = nullptr;
+			m_NearestPhysObj = NULL;
 	}
 
 	bool checkStuck ();

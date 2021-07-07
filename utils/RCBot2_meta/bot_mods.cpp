@@ -51,7 +51,9 @@ std::vector<edict_wpt_pair_t> CHalfLifeDeathmatchMod::m_LiftWaypoints;
 void CBotMods :: parseFile ()
 {
 	char buffer[1024];
+	unsigned int len;
 	char key[64];
+	unsigned int i,j;
 	char val[256];
 
 	eModId modtype;
@@ -63,7 +65,7 @@ void CBotMods :: parseFile ()
 
 	FILE *fp = CBotGlobals::openFile(buffer,"r");
 
-	CBotMod *curmod = nullptr;
+	CBotMod *curmod = NULL;
 
 	if ( !fp )
 	{
@@ -77,12 +79,12 @@ void CBotMods :: parseFile ()
 		return;
 	}
 
-	while ( fgets(buffer,1023,fp) != nullptr )
+	while ( fgets(buffer,1023,fp) != NULL )
 	{
 		if ( buffer[0] == '#' )
 			continue;
 
-		unsigned int len = strlen(buffer);
+		len = strlen(buffer);
 
 		if ( len == 0 )
 			continue;
@@ -90,10 +92,10 @@ void CBotMods :: parseFile ()
 		if ( buffer[len-1] == '\n' )
 			buffer[--len] = 0;
 
-		unsigned int i = 0;
-		unsigned int j = 0;
+		i = 0;
+		j = 0;
 
-		while ( i < len && buffer[i] != '=' )
+		while ( (i < len) && (buffer[i] != '=') )
 		{
 			if ( buffer[i] != ' ' )
 				key[j++] = buffer[i];
@@ -106,9 +108,9 @@ void CBotMods :: parseFile ()
 
 		j = 0;
 
-		while ( i < len && buffer[i] != '\n' && buffer[i] != '\r' )
+		while ( (i < len) && (buffer[i] != '\n') && (buffer[i] != '\r') )
 		{
-			if ( j || buffer[i] != ' ' )
+			if ( j || (buffer[i] != ' ') )
 				val[j++] = buffer[i];
 			i++;
 		}
@@ -123,7 +125,7 @@ void CBotMods :: parseFile ()
 				m_Mods.push_back(curmod);
 			}
 			
-			curmod = nullptr;
+			curmod = NULL;
 			weaponlist[0] = 0;
 
 			bottype = BOTTYPE_GENERIC;
@@ -208,8 +210,6 @@ void CBotMods :: parseFile ()
 				bottype = BOTTYPE_ZOMBIE;
 			else if ( !strcmpi("DOD",val) )
 				bottype = BOTTYPE_DOD;
-			else if ( !strcmpi("SYNERGY",val) )
-				bottype = BOTTYPE_SYN;
 		}
 		else if ( curmod && !strcmpi(key,"gamedir") )
 		{
@@ -238,7 +238,7 @@ void CBotMods :: createFile ()
 
 	FILE *fp = CBotGlobals::openFile(filename,"w");
 
-	CBotGlobals::botMessage(nullptr,0,"Making a %s.%s file for you... Edit it in '%s'",BOT_MOD_FILE,BOT_CONFIG_EXTENSION,filename);
+	CBotGlobals::botMessage(NULL,0,"Making a %s.%s file for you... Edit it in '%s'",BOT_MOD_FILE,BOT_CONFIG_EXTENSION,filename);
 
 	if ( fp )
 	{
@@ -266,7 +266,7 @@ void CBotMods :: createFile ()
 		fprintf(fp,"# ZOMBIE\n");
 		fprintf(fp,"# DOD\n");
 		fprintf(fp,"#\n");
-		fprintf(fp,"# weaponlists are changeable in config / weapons.ini\n");
+		fprintf(fp, "# weaponlists are changeable in config / weapons.ini\n");
 		fprintf(fp,"#\n");
 		fprintf(fp,"#mod = CSS\n");
 		fprintf(fp,"#steamdir = counter-strike source\n");
@@ -293,23 +293,22 @@ void CBotMods :: createFile ()
 		fprintf(fp,"#gamedir = hl1dm\n");
 		fprintf(fp,"#bot = HL1DM\n");
 		fprintf(fp,"#\n");
-		fprintf(fp,"#mod = DOD\n");
-		fprintf(fp,"#steamdir = orangebox\n");
-		fprintf(fp,"#gamedir = dod\n");
-		fprintf(fp,"#bot = DOD\n");
-		fprintf(fp,"#weaponlist = DOD\n");
+		fprintf(fp,"mod = DOD\n");
+		fprintf(fp,"steamdir = orangebox\n");
+		fprintf(fp,"gamedir = dod\n");
+		fprintf(fp,"bot = DOD\n");
+		fprintf(fp, "weaponlist = DOD\n");
 		fprintf(fp,"#\n");
 
 		fclose(fp);
 	}
 	else
-		CBotGlobals::botMessage(nullptr,0,"Error! Couldn't create config file %s",filename);
+		CBotGlobals::botMessage(NULL,0,"Error! Couldn't create config file %s",filename);
 }
 
 void CBotMods :: readMods()
 {
 	// TODO improve game detection
-	// caxanga334: Better game detection required if we want to support multiple mods on the same engine (IE: SDK 2013)
 	#if SOURCE_ENGINE == SE_TF2
 		m_Mods.push_back(new CTeamFortress2Mod());
 	#elif SOURCE_ENGINE == SE_DODS
@@ -318,8 +317,6 @@ void CBotMods :: readMods()
 		m_Mods.push_back(new CCounterStrikeSourceMod());
 	#elif SOURCE_ENGINE == SE_HL2DM
 		m_Mods.push_back(new CHalfLifeDeathmatchMod());
-	#elif SOURCE_ENGINE == SE_SDK2013
-		m_Mods.push_back(new CSynergyMod());
 	#else
 
 		m_Mods.push_back(new CFortressForeverMod());
@@ -375,7 +372,7 @@ void CBotMods :: freeMemory ()
 	{
 		m_Mods[i]->freeMemory();
 		delete m_Mods[i];
-		m_Mods[i] = nullptr;
+		m_Mods[i] = NULL;
 	}
 
 	m_Mods.clear();
@@ -387,22 +384,22 @@ CBotMod *CBotMods :: getMod ( char *szModFolder )
 	{
 		if ( m_Mods[i]->isModFolder(szModFolder) )
 		{
-			CBotGlobals::botMessage(nullptr,1,"HL2 MOD ID %d (Game Folder = %s) FOUND",m_Mods[i]->getModId(), szModFolder);
+			CBotGlobals::botMessage(NULL,1,"HL2 MOD ID %d (Game Folder = %s) FOUND",m_Mods[i]->getModId(), szModFolder);
 
 			return m_Mods[i];
 		}
 	}
 
-	CBotGlobals::botMessage(nullptr,1,"HL2 MODIFICATION \"%s\" NOT FOUND, EXITING... see bot_mods.ini in bot config folder", szModFolder);
+	CBotGlobals::botMessage(NULL,1,"HL2 MODIFICATION \"%s\" NOT FOUND, EXITING... see bot_mods.ini in bot config folder", szModFolder);
 
-	return nullptr;
+	return NULL;
 }
 
 void CBotMod :: initMod ()
 {
 	m_bPlayerHasSpawned = false;
 
-	CWeapons::loadWeapons(m_szWeaponListName, nullptr);
+	CWeapons::loadWeapons(m_szWeaponListName, NULL);
 }
 
 void CBotMod :: mapInit ()
@@ -435,7 +432,7 @@ bool CHalfLifeDeathmatchMod :: playerSpawned ( edict_t *pPlayer )
 void CHalfLifeDeathmatchMod :: initMod ()
 {
 
-	CWeapons::loadWeapons(m_szWeaponListName== nullptr?"HL2DM":m_szWeaponListName, HL2DMWeaps);
+	CWeapons::loadWeapons((m_szWeaponListName==NULL)?"HL2DM":m_szWeaponListName, HL2DMWeaps);
 	
 //	for ( i = 0; i < HL2DM_WEAPON_MAX; i ++ )
 	//	CWeapons::addWeapon(new CWeapon(HL2DMWeaps[i]));//.iSlot,HL2DMWeaps[i].szWeaponName,HL2DMWeaps[i].iId,HL2DMWeaps[i].m_iFlags,HL2DMWeaps[i].m_iAmmoIndex,HL2DMWeaps[i].minPrimDist,HL2DMWeaps[i].maxPrimDist,HL2DMWeaps[i].m_iPreference,HL2DMWeaps[i].m_fProjSpeed));

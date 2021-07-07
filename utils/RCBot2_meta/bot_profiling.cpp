@@ -48,7 +48,7 @@ float CProfileTimers::m_fNextUpdate = 0;
 
 // if windows USE THE QUERYPERFORMANCECOUNTER
 #ifdef _WIN32
-inline unsigned __int64 RDTSC()
+inline unsigned __int64 RDTSC(void)
     {
             _asm    _emit 0x0F
             _asm    _emit 0x31
@@ -104,7 +104,7 @@ void CProfileTimer :: Stop()
 
 	if ( m_last > m_max )
 		m_max = m_last;
-	if ( m_iInvoked==0 || m_last < m_min )
+	if ( (m_iInvoked==0) || (m_last < m_min) )
 		m_min = m_last;
 
 	m_overall = m_overall + m_last;
@@ -116,15 +116,16 @@ void CProfileTimer :: Stop()
 
 // print the values, first work out average (use max/min/previous values), 
 // and work out percentage of power
-void CProfileTimer :: print (const double *high)
+void CProfileTimer :: print (double *high)
 {
-	if (m_iInvoked>0 && m_szFunction )
+	if ((m_iInvoked>0) && m_szFunction )
 	{
 		char str[256];
+		float percent = 1;
 
 		m_average = m_overall/m_iInvoked;
 
-		float percent = (double)m_overall / *high * 100.0f;
+		percent = (((double)m_overall)/(*high))*100.0f;
 		
 		sprintf(str,"%17s|%13lld|%10lld|%10lld|%10lld|%6.1f",m_szFunction,m_overall,m_min,m_max,m_average,percent);			
 
@@ -146,7 +147,7 @@ CProfileTimer *CProfileTimers::getTimer (int id)
 	if ( id >= 0 && id < PROFILING_TIMERS )
 		return &m_Timers[id];
 
-	return nullptr;
+	return NULL;
 }
 // do this every map start
 void CProfileTimers :: reset ()

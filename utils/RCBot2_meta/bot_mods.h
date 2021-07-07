@@ -76,7 +76,6 @@ typedef enum
 	BOTTYPE_ZOMBIE,
 	BOTTYPE_DOD,
 	BOTTYPE_NS2,
-	BOTTYPE_SYN,
 	BOTTYPE_MAX
 }eBotType;
 
@@ -85,9 +84,9 @@ class CBotMod
 public:
 	CBotMod() 
 	{
-		m_szModFolder = nullptr;
-		m_szSteamFolder = nullptr;
-		m_szWeaponListName = nullptr;
+		m_szModFolder = NULL;
+		m_szSteamFolder = NULL;
+		m_szWeaponListName = NULL;
 		m_iModId = MOD_UNSUPPORTED;
 		m_iBotType = BOTTYPE_GENERIC;
 		m_bPlayerHasSpawned = false;
@@ -112,7 +111,7 @@ public:
 
 	eModId getModId ();
 
-	virtual bool isAreaOwnedByTeam (int iArea, int iTeam) { return iArea == 0; }
+	virtual bool isAreaOwnedByTeam (int iArea, int iTeam) { return (iArea == 0); }
 
 	eBotType getBotType () { return m_iBotType; }
 
@@ -193,26 +192,26 @@ public:
 	void init ()
 	{
 		m_iNumControlPoints = 0;
-		m_vCPPositions = nullptr;
+		m_vCPPositions = NULL;
 
-		m_iAlliesReqCappers = nullptr;
-		m_iAxisReqCappers = nullptr;
-		m_iNumAllies = nullptr;
-		m_iNumAxis = nullptr;
-		m_iOwner = nullptr;
-		m_bBombPlanted_Unreliable = nullptr;
-		m_iBombsRequired = nullptr;
-		m_iBombsRemaining = nullptr;
-		m_bBombBeingDefused = nullptr;
+		m_iAlliesReqCappers = NULL;
+		m_iAxisReqCappers = NULL;
+		m_iNumAllies = NULL;
+		m_iNumAxis = NULL;
+		m_iOwner = NULL;
+		m_bBombPlanted_Unreliable = NULL;
+		m_iBombsRequired = NULL;
+		m_iBombsRemaining = NULL;
+		m_bBombBeingDefused = NULL;
 		m_iNumAxisBombsOnMap = 0;
 		m_iNumAlliesBombsOnMap = 0;
 		memset(m_bBombPlanted,0,sizeof(bool)*MAX_DOD_FLAGS);
 		memset(m_pFlags,0,sizeof(edict_t*)*MAX_DOD_FLAGS);
 		memset(m_pBombs,0,sizeof(edict_t*)*MAX_DOD_FLAGS*2);
 
-		for (int& i : m_iWaypoint)
+		for ( short int i = 0; i < MAX_DOD_FLAGS; i ++ )
 		{
-			i = -1;
+			m_iWaypoint[i] = -1;
 		}
 	}
 
@@ -232,12 +231,12 @@ public:
 
 	int setup (edict_t *pResourceEntity);
 
-	bool getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id = nullptr );
-	bool getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id = nullptr );
+	bool getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id = NULL );
+	bool getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id = NULL );
 
-	bool getRandomBombToDefuse ( Vector *position, int iTeam, edict_t **pBombTarget, int *id = nullptr );
-	bool getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id = nullptr );
-	bool getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id = nullptr );
+	bool getRandomBombToDefuse ( Vector *position, int iTeam, edict_t **pBombTarget, int *id = NULL );
+	bool getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id = NULL );
+	bool getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id = NULL );
 
 	int findNearestObjective ( Vector vOrigin );
 
@@ -287,7 +286,7 @@ public:
 
 	inline float isBombExplodeImminent ( int id )
 	{
-		return engine->Time() - m_fBombPlantedTime[id] > DOD_BOMB_EXPLODE_IMMINENT_TIME;
+		return (engine->Time() - m_fBombPlantedTime[id]) > DOD_BOMB_EXPLODE_IMMINENT_TIME;
 	}
 
 	inline void setBombPlanted ( int id, bool val )
@@ -341,7 +340,7 @@ public:
 		if ( iFlag == -1 )
 			return 0;
 
-		return iTeam == TEAM_ALLIES ? m_iAlliesReqCappers[iFlag] : m_iAxisReqCappers[iFlag];
+		return (iTeam == TEAM_ALLIES) ? (m_iAlliesReqCappers[iFlag]) : (m_iAxisReqCappers[iFlag]);
 	}
 
 	inline bool isBombPlanted ( int iId )
@@ -359,26 +358,26 @@ public:
 
 	inline bool canDefendBomb ( int iTeam, int iId )
 	{
-		return m_pBombs[iId][0]!= nullptr&&m_iOwner[iId]!=iTeam && isBombPlanted(iId);
+		return ((m_pBombs[iId][0]!=NULL)&&(m_iOwner[iId]!=iTeam) && isBombPlanted(iId));
 	}
 
 	inline bool canDefuseBomb ( int iTeam, int iId )
 	{
-		return m_pBombs[iId][0]!= nullptr&&m_iOwner[iId]==iTeam && isBombPlanted(iId);
+		return ((m_pBombs[iId][0]!=NULL)&&(m_iOwner[iId]==iTeam) && isBombPlanted(iId));
 	}
 
 	inline bool canPlantBomb ( int iTeam, int iId )
 	{
-		return m_pBombs[iId][0]!= nullptr&&m_iOwner[iId]!=iTeam && !isBombPlanted(iId);
+		return ((m_pBombs[iId][0]!=NULL)&&(m_iOwner[iId]!=iTeam) && !isBombPlanted(iId));
 	}
 
 	bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, int id );
 	bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, int id );
 
-	static bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin );
-	static bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin );
+	bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin );
+	bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin );
 
-	inline int getNumBombsRequired ( int iId ) const
+	inline int getNumBombsRequired ( int iId )
 	{
 		if ( iId == -1 )
 			return false;
@@ -391,7 +390,7 @@ public:
 		return getNumBombsRequired(getBombID(pBomb));
 	}
 
-	inline int getNumBombsRemaining ( int iId ) const
+	inline int getNumBombsRemaining ( int iId )
 	{
 		if ( iId == -1 )
 			return false;
@@ -404,7 +403,7 @@ public:
 		return getNumBombsRemaining(getBombID(pBomb));
 	}
 
-	inline bool isBombBeingDefused ( int iId ) const
+	inline bool isBombBeingDefused ( int iId )
 	{
 		if ( iId == -1 )
 			return false;
@@ -421,28 +420,28 @@ public:
 
 	inline int numFriendliesAtCap ( edict_t *pFlag, int iTeam ) { return numFriendliesAtCap(getFlagID(pFlag),iTeam); }
 
-	inline int numFriendliesAtCap ( int iFlag, int iTeam ) const
+	inline int numFriendliesAtCap ( int iFlag, int iTeam )
 	{
 		if ( iFlag == -1 )
 			return 0;
 
-		return iTeam == TEAM_ALLIES ? m_iNumAllies[iFlag] : m_iNumAxis[iFlag];
+		return (iTeam == TEAM_ALLIES) ? (m_iNumAllies[iFlag]) : (m_iNumAxis[iFlag]);
 	}
 
-	inline int numEnemiesAtCap ( int iFlag, int iTeam ) const
+	inline int numEnemiesAtCap ( int iFlag, int iTeam )
 	{
 		if ( iFlag == -1 )
 			return 0;
 
-		return iTeam == TEAM_ALLIES ? m_iNumAxis[iFlag] : m_iNumAllies[iFlag];
+		return (iTeam == TEAM_ALLIES) ? (m_iNumAxis[iFlag]) : (m_iNumAllies[iFlag]);
 	}
 
 	inline edict_t *getFlagByID ( int id )
 	{
-		if ( id >= 0 && id < m_iNumControlPoints )
+		if ( (id >= 0) && (id < m_iNumControlPoints) )
 			return m_pFlags[id];
 
-		return nullptr;
+		return NULL;
 	}
 
 	inline int getFlagID ( edict_t *pent )
@@ -458,12 +457,12 @@ public:
 
 	inline int getBombID ( edict_t *pent )
 	{
-		if ( pent == nullptr )
+		if ( pent == NULL )
 			return -1;
 
 		for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 		{
-			if ( m_pBombs[i][0] == pent || m_pBombs[i][1] == pent )
+			if ( (m_pBombs[i][0] == pent) || (m_pBombs[i][1] == pent) )
 				return i;
 		}
 
@@ -480,7 +479,7 @@ public:
 		return getBombID(pent) != -1;
 	}
 
-	inline int getNumBombsOnMap ( int iTeam ) const
+	inline int getNumBombsOnMap ( int iTeam )
 	{
 		if ( iTeam == TEAM_ALLIES )
 			return m_iNumAlliesBombsOnMap;
@@ -568,7 +567,7 @@ public:
 				return m_BombWaypoints[i].pWaypoint;
 		}
 
-		return nullptr;
+		return NULL;
 	}
 
 	static inline bool isPathBomb ( edict_t *pBomb )
@@ -673,6 +672,8 @@ public:
 	{
 		setup("FortressForever", MOD_FF, BOTTYPE_FF, "FF");
 	}
+private:
+
 };
 
 class CHLDMSourceMod : public CBotMod
@@ -689,16 +690,12 @@ class CSynergyMod : public CBotMod
 public:
 	CSynergyMod()
 	{
-		setup("synergy",MOD_SYNERGY,BOTTYPE_SYN,"SYNERGY");
+		setup("synergy",MOD_SYNERGY,BOTTYPE_COOP,"SYNERGY");
 	}
 
-	void initMod ();
-	void mapInit ();
+	//void initMod ();
 
-	const char *getPlayerClass () override
-	{
-		return "CSynergyPlayer";
-	}
+	//void mapInit ();
 
 	//void entitySpawn ( edict_t *pEntity );
 };
@@ -761,7 +758,7 @@ public:
 	{
 		setup("tf",MOD_TF2,BOTTYPE_TF2,"TF2");
 
-		m_pResourceEntity = nullptr;
+		m_pResourceEntity = NULL;
 	}
 
 	void mapInit ();
@@ -798,7 +795,7 @@ public:
 
 	bool isWaypointAreaValid ( int iWptArea, int iWptFlags );
 
-	static bool isSuddenDeath();
+	static bool isSuddenDeath(void);
 
 	static bool isHealthKit ( edict_t *pEntity );
 
@@ -906,13 +903,13 @@ public:
 	{
 		if ( iTeam == TF2_TEAM_BLUE )
 		{
-			m_pFlagCarrierBlue = nullptr;
+			m_pFlagCarrierBlue = NULL;
 			m_vFlagLocationBlue = vLoc;
 			m_bFlagLocationValidBlue = true;
 		}
 		else if ( iTeam == TF2_TEAM_RED )
 		{
-			m_pFlagCarrierRed = nullptr;
+			m_pFlagCarrierRed = NULL;
 			m_vFlagLocationRed = vLoc;
 			m_bFlagLocationValidRed = true;
 		}
@@ -942,14 +939,14 @@ public:
 
 	static inline bool isLosingTeam ( int iTeam )
 	{
-		return !m_bHasRoundStarted && m_bRoundOver && m_iWinningTeam && m_iWinningTeam != iTeam; 
+		return !m_bHasRoundStarted && m_bRoundOver && m_iWinningTeam && (m_iWinningTeam != iTeam); 
 	}
 
 	static void roundReset ();
 
 	static inline bool isFlagCarrier (edict_t *pPlayer)
 	{
-		return m_pFlagCarrierBlue==pPlayer||m_pFlagCarrierRed==pPlayer;
+		return (m_pFlagCarrierBlue==pPlayer)||(m_pFlagCarrierRed==pPlayer);
 	}
 
 	static inline edict_t *getFlagCarrier (int iTeam)
@@ -959,15 +956,15 @@ public:
 		else if ( iTeam == TF2_TEAM_RED )
 			return m_pFlagCarrierRed;
 
-		return nullptr;
+		return NULL;
 	}
 
 	static bool isFlagCarried (int iTeam)
 	{
 		if ( iTeam == TF2_TEAM_BLUE )
-			return m_pFlagCarrierBlue != nullptr;
+			return (m_pFlagCarrierBlue != NULL);
 		else if ( iTeam == TF2_TEAM_RED )
-			return m_pFlagCarrierRed != nullptr;
+			return (m_pFlagCarrierRed != NULL);
 
 		return false;
 	}
@@ -981,14 +978,14 @@ public:
 
 	static edict_t *getMySentryGun ( edict_t *pOwner )
 	{
-		const int id = ENTINDEX(pOwner)-1;
+		int id = ENTINDEX(pOwner)-1;
 
 		if ( id>=0 )
 		{
 			return m_SentryGuns[id].sentry.get();
 		}
 
-		return nullptr;
+		return NULL;
 	}
 
 	static edict_t *getSentryOwner ( edict_t *pSentry )
@@ -1000,16 +997,16 @@ public:
 				return INDEXENT(i+1);
 		}
 
-		return nullptr;
+		return NULL;
 	}
 
 	static bool isMySentrySapped ( edict_t *pOwner ) 
 	{
-		const int id = ENTINDEX(pOwner)-1;
+		int id = ENTINDEX(pOwner)-1;
 
 		if ( id>=0 )
 		{
-			return m_SentryGuns[id].sentry.get()!= nullptr&&m_SentryGuns[id].sapper.get()!= nullptr;
+			return (m_SentryGuns[id].sentry.get()!=NULL)&&(m_SentryGuns[id].sapper.get()!=NULL);
 		}
 
 		return false;
@@ -1027,11 +1024,11 @@ public:
 
 	static bool isMyTeleporterSapped ( edict_t *pOwner )
 	{
-		const int id = ENTINDEX(pOwner)-1;
+		int id = ENTINDEX(pOwner)-1;
 
 		if ( id>=0 )
 		{
-			return (m_Teleporters[id].exit.get()!= nullptr||m_Teleporters[id].entrance.get()!= nullptr)&&m_Teleporters[id].sapper.get()!= nullptr;
+			return ((m_Teleporters[id].exit.get()!=NULL)||(m_Teleporters[id].entrance.get()!=NULL))&&(m_Teleporters[id].sapper.get()!=NULL);
 		}
 
 		return false;
@@ -1039,11 +1036,11 @@ public:
 
 	static bool isMyDispenserSapped ( edict_t *pOwner )
 	{
-		const int id = ENTINDEX(pOwner)-1;
+		int id = ENTINDEX(pOwner)-1;
 
 		if ( id>=0 )
 		{
-			return m_Dispensers[id].disp.get()!= nullptr&&m_Dispensers[id].sapper.get()!= nullptr;
+			return (m_Dispensers[id].disp.get()!=NULL)&&(m_Dispensers[id].sapper.get()!=NULL);
 		}
 
 		return false;
@@ -1051,10 +1048,12 @@ public:
 
 	static bool isSentrySapped ( edict_t *pSentry )
 	{
-		for (auto& m_SentryGun : m_SentryGuns)
+		unsigned int i;
+
+		for ( i = 0; i < MAX_PLAYERS; i ++ )
 		{
-			if (m_SentryGun.sentry.get() == pSentry )
-				return m_SentryGun.sapper.get()!= nullptr;
+			if ( m_SentryGuns[i].sentry.get() == pSentry )
+				return m_SentryGuns[i].sapper.get()!=NULL;
 		}
 
 		return false;
@@ -1062,10 +1061,12 @@ public:
 
 	static bool isTeleporterSapped ( edict_t *pTele )
 	{
-		for (auto& m_Teleporter : m_Teleporters)
+		unsigned int i;
+
+		for ( i = 0; i < MAX_PLAYERS; i ++ )
 		{
-			if (m_Teleporter.entrance.get() == pTele || m_Teleporter.exit.get() == pTele )
-				return m_Teleporter.sapper.get()!= nullptr;
+			if ( (m_Teleporters[i].entrance.get() == pTele) || (m_Teleporters[i].exit.get() == pTele) )
+				return m_Teleporters[i].sapper.get()!=NULL;
 		}
 
 		return false;
@@ -1073,10 +1074,12 @@ public:
 
 	static bool isDispenserSapped ( edict_t *pDisp )
 	{
-		for (auto& m_Dispenser : m_Dispensers)
+		unsigned int i;
+
+		for ( i = 0; i < MAX_PLAYERS; i ++ )
 		{
-			if (m_Dispenser.disp.get() == pDisp )
-				return m_Dispenser.sapper.get()!= nullptr;
+			if ( m_Dispensers[i].disp.get() == pDisp )
+				return m_Dispensers[i].sapper.get()!=NULL;
 		}
 
 		return false;
@@ -1084,14 +1087,14 @@ public:
 
 	static edict_t *findResourceEntity ();
 
-	static void addCapDefender(edict_t* pPlayer, int iCapIndex)
+	static void addCapDefender ( edict_t *pPlayer, int iCapIndex )
 	{
-		m_iCapDefenders[iCapIndex] |= (1 << (ENTINDEX(pPlayer) - 1));
+		m_iCapDefenders[iCapIndex] |= (1<<(ENTINDEX(pPlayer)-1));
 	}
 
-	static void removeCapDefender(edict_t* pPlayer, int iCapIndex)
+	static void removeCapDefender ( edict_t *pPlayer, int iCapIndex )
 	{
-		m_iCapDefenders[iCapIndex] &= ~(1 << (ENTINDEX(pPlayer) - 1));
+		m_iCapDefenders[iCapIndex] &= ~(1<<(ENTINDEX(pPlayer)-1));
 	}
 
 	static void resetDefenders ()
@@ -1105,8 +1108,8 @@ public:
 	
 	static void addCapper ( int cp, int capper )
 	{
-		if (capper && (cp < MAX_CAP_POINTS))
-			m_Cappers[cp] |= (1 << (capper - 1));
+		if ( capper && (cp < MAX_CAP_POINTS) )
+			m_Cappers[cp] |= (1<<(capper-1));
 	}
 
 	static void removeCappers ( int cp )
@@ -1128,9 +1131,9 @@ public:
 	static edict_t *getBuildingOwner (eEngiBuild object, short index);
 	static edict_t *getBuilding (eEngiBuild object, edict_t *pOwner);
 
-	static bool isBoss ( edict_t *pEntity, float *fFactor = nullptr );
+	static bool isBoss ( edict_t *pEntity, float *fFactor = NULL );
 
-	static void initBoss ( bool bSummoned ) { m_bBossSummoned = bSummoned; m_pBoss = nullptr; }
+	static void initBoss ( bool bSummoned ) { m_bBossSummoned = bSummoned; m_pBoss = NULL; }
 
 	static bool isBossSummoned () { return m_bBossSummoned; }
 
@@ -1173,7 +1176,7 @@ public:
 			return true;
 		}
 
-		return getFlagLocation(TF2_TEAM_BLUE,vec);
+		return ( getFlagLocation(TF2_TEAM_BLUE,vec) );
 	}
 
 	static bool isMedievalMode();
@@ -1272,7 +1275,7 @@ public:
 				return m_LiftWaypoints[i].pEdict;
 		}
 
-		return nullptr;
+		return NULL;
 	}
 
 	//void entitySpawn ( edict_t *pEntity );

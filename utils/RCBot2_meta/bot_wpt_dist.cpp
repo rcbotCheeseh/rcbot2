@@ -16,24 +16,24 @@ float CWaypointDistances::m_fSaveTime = 0;
 
 void CWaypointDistances :: load ()
 {
+	char filename[1024];	
 	wpt_dist_hdr_t hdr;
 	char *szMapName = CBotGlobals::getMapName();
 
 	if ( szMapName  && *szMapName )
 	{
-		char filename[1024];
 		CBotGlobals::buildFileName(filename,szMapName,BOT_WAYPOINT_FOLDER,BOT_WAYPOINT_DST_EXTENSION,true);
 
 		FILE *bfp = CBotGlobals::openFile(filename,"rb");
 
-		if ( bfp == nullptr )
+		if ( bfp == NULL )
 		{
 			return; // give up
 		}
 
 		fread(&hdr,sizeof(wpt_dist_hdr_t),1,bfp);
 
-		if ( hdr.maxwaypoints == CWaypoints::MAX_WAYPOINTS && hdr.numwaypoints == CWaypoints::numWaypoints() && hdr.version == WPT_DIST_VER )
+		if ( (hdr.maxwaypoints == CWaypoints::MAX_WAYPOINTS) && (hdr.numwaypoints == CWaypoints::numWaypoints()) && (hdr.version == WPT_DIST_VER) )
 		{
 			fread(m_Distances,sizeof(int),CWaypoints::MAX_WAYPOINTS * CWaypoints::MAX_WAYPOINTS,bfp);
 		}
@@ -46,18 +46,20 @@ void CWaypointDistances :: load ()
 
 void CWaypointDistances :: save ()
 {
-	char *szMapName = CBotGlobals::getMapName();
+	//if ( m_fSaveTime < engine->Time() )
+	//{
+		char filename[1024];	
+		char *szMapName = CBotGlobals::getMapName();
 
 		if ( szMapName && *szMapName )
 		{
-			char filename[1024];
 			wpt_dist_hdr_t hdr;
 
 			CBotGlobals::buildFileName(filename,szMapName,BOT_WAYPOINT_FOLDER,BOT_WAYPOINT_DST_EXTENSION,true);
 
 			FILE *bfp = CBotGlobals::openFile(filename,"wb");
 
-			if ( bfp == nullptr )
+			if ( bfp == NULL )
 			{
 				m_fSaveTime = engine->Time() + 100.0f;
 				return; // give up

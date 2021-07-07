@@ -161,9 +161,9 @@ CBotUtility :: CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil
 
 	if ( m_pBot && m_pBot->isTF2() )
 	{
-		const int iClass = CClassInterface::getTF2Class(pBot->getEdict());
+		int iClass = CClassInterface::getTF2Class(pBot->getEdict());
 
-		if ( CTeamFortress2Mod::isAttackDefendMap() && m_pBot->getTeam() == TF2_TEAM_BLUE )
+		if ( CTeamFortress2Mod::isAttackDefendMap() && (m_pBot->getTeam() == TF2_TEAM_BLUE) )
 			m_fUtility += randomFloat(CRCBotTF2UtilFile::m_fUtils[BOT_ATT_UTIL][id][iClass].min,CRCBotTF2UtilFile::m_fUtils[BOT_ATT_UTIL][id][iClass].max);
 		else
 			m_fUtility += randomFloat(CRCBotTF2UtilFile::m_fUtils[BOT_NORM_UTIL][id][iClass].min,CRCBotTF2UtilFile::m_fUtils[BOT_NORM_UTIL][id][iClass].max);
@@ -173,30 +173,38 @@ CBotUtility :: CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil
 // Execute a list of possible actions and put them into order of available actions against utility
 void CBotUtilities :: execute ()
 {
-	m_pBest.head = nullptr;
+	unsigned int i = 0;
+	CBotUtility *pUtil;
+	float fUtil;
 
-	for ( unsigned int i = 0; i < m_Utilities.size(); i ++ )
+	util_node_t *temp;
+	util_node_t *pnew;
+	util_node_t *prev;
+
+	m_pBest.head = NULL;
+
+	for ( i = 0; i < m_Utilities.size(); i ++ )
 	{
-		CBotUtility* pUtil = &m_Utilities[i];
-		float fUtil = pUtil->getUtility();
+		pUtil = &(m_Utilities[i]);
+		fUtil = pUtil->getUtility();
 
 		// if bot can do this action
 		if ( pUtil->canDo() )
 		{			
 			// add to list
-			util_node_t* temp = m_pBest.head;
+			temp = m_pBest.head;
 
 			// put in correct order by making a linked list
-			util_node_t* pnew = (util_node_t*)malloc(sizeof(util_node_t));
+			pnew = (util_node_t*)malloc(sizeof(util_node_t));
 
-			if ( pnew != nullptr )
+			if ( pnew != NULL )
 			{
 				pnew->util = pUtil;
-				pnew->next = nullptr;
+				pnew->next = NULL;
+				prev = NULL;
 
 				if ( temp )
 				{
-					util_node_t * prev = nullptr;
 					while ( temp )
 					{
 						// put into correct position
@@ -220,7 +228,7 @@ void CBotUtilities :: execute ()
 						temp = temp->next;
 					}
 
-					if ( pnew->next == nullptr )
+					if ( pnew->next == NULL )
 						prev->next = pnew;
 				}
 				else
@@ -238,7 +246,7 @@ void CBotUtilities :: freeMemory ()
 	m_Utilities.clear();
 
 	// FREE LIST
-	while ( (temp = m_pBest.head) != nullptr )
+	while ( (temp = m_pBest.head) != NULL )
 	{
 		temp = m_pBest.head;
 		m_pBest.head = m_pBest.head->next;
@@ -248,12 +256,15 @@ void CBotUtilities :: freeMemory ()
 
 CBotUtility *CBotUtilities :: nextBest ()
 {
-	if ( m_pBest.head == nullptr )
-		return nullptr;
+	CBotUtility *pBest;
+	util_node_t *temp;
 
-	CBotUtility* pBest = m_pBest.head->util;
+	if ( m_pBest.head == NULL )
+		return NULL;
 
-	util_node_t* temp = m_pBest.head;
+	pBest = m_pBest.head->util;
+
+	temp = m_pBest.head;
 
 	m_pBest.head = m_pBest.head->next;
 

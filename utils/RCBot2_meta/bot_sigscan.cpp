@@ -38,15 +38,15 @@
 #include "bot_sigscan.h"
 #include "bot_mods.h"
 
-CGameRulesObject *g_pGameRules_Obj = nullptr;
-CCreateGameRulesObject *g_pGameRules_Create_Obj = nullptr;
+CGameRulesObject *g_pGameRules_Obj = NULL;
+CCreateGameRulesObject *g_pGameRules_Create_Obj = NULL;
 
-void **g_pGameRules = nullptr;
+void **g_pGameRules = NULL;
 
 void *GetGameRules()
 {
 	if (!g_pGameRules)
-		return nullptr;
+		return NULL;
 
 	return *g_pGameRules;
 }
@@ -54,7 +54,7 @@ void *GetGameRules()
 size_t CSignatureFunction::decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr)
 {
 	size_t written = 0;
-	const size_t length = strlen(hexstr);
+	size_t length = strlen(hexstr);
 
 	for (size_t i = 0; i < length; i++)
 	{
@@ -88,7 +88,7 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 {
 	uintptr_t baseAddr;
 
-	if (libPtr == nullptr)
+	if (libPtr == NULL)
 	{
 		return false;
 	}
@@ -97,6 +97,10 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 
 
 	MEMORY_BASIC_INFORMATION info;
+	IMAGE_DOS_HEADER *dos;
+	IMAGE_NT_HEADERS *pe;
+	IMAGE_FILE_HEADER *file;
+	IMAGE_OPTIONAL_HEADER *opt;
 
 	if (!VirtualQuery(libPtr, &info, sizeof(MEMORY_BASIC_INFORMATION)))
 	{
@@ -106,10 +110,10 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 	baseAddr = reinterpret_cast<uintptr_t>(info.AllocationBase);
 
 	// All this is for our insane sanity checks :o 
-	auto dos = reinterpret_cast<IMAGE_DOS_HEADER*>(baseAddr);
-	auto pe = reinterpret_cast<IMAGE_NT_HEADERS*>(baseAddr + dos->e_lfanew);
-	IMAGE_FILE_HEADER* file = &pe->FileHeader;
-	IMAGE_OPTIONAL_HEADER* opt = &pe->OptionalHeader;
+	dos = reinterpret_cast<IMAGE_DOS_HEADER *>(baseAddr);
+	pe = reinterpret_cast<IMAGE_NT_HEADERS *>(baseAddr + dos->e_lfanew);
+	file = &pe->FileHeader;
+	opt = &pe->OptionalHeader;
 
 	// Check PE magic and signature 
 	if (dos->e_magic != IMAGE_DOS_SIGNATURE || pe->Signature != IMAGE_NT_SIGNATURE || opt->Magic != IMAGE_NT_OPTIONAL_HDR32_MAGIC)
@@ -211,21 +215,23 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 void *CSignatureFunction::findPattern(const void *libPtr, const char *pattern, size_t len)
 {
 	DynLibInfo lib;
+	bool found;
+	char *ptr, *end;
 
 	memset(&lib, 0, sizeof(DynLibInfo));
 
 	if (!getLibraryInfo(libPtr, lib))
 	{
-		return nullptr;
+		return NULL;
 	}
 
-	char* ptr = static_cast<char*>(lib.baseAddress);
-	char* end = ptr + lib.memorySize - len;
+	ptr = reinterpret_cast<char *>(lib.baseAddress);
+	end = ptr + lib.memorySize - len;
 
 	while (ptr < end)
 	{
-		bool found = true;
-		for (size_t i = 0; i < len; i++)
+		found = true;
+		for (register size_t i = 0; i < len; i++)
 		{
 			if (pattern[i] != '\x2A' && pattern[i] != ptr[i])
 			{
@@ -240,7 +246,7 @@ void *CSignatureFunction::findPattern(const void *libPtr, const char *pattern, s
 		ptr++;
 	}
 
-	return nullptr;
+	return NULL;
 }
 // Sourcemod - Metamod - Allied Modders.net
 void *CSignatureFunction::findSignature(void *addrInBase, const char *signature)
@@ -248,41 +254,42 @@ void *CSignatureFunction::findSignature(void *addrInBase, const char *signature)
 	// First, preprocess the signature 
 	unsigned char real_sig[511];
 
-	size_t real_bytes = decodeHexString(real_sig, sizeof real_sig, signature);
+	size_t real_bytes;
+
+	real_bytes = decodeHexString(real_sig, sizeof(real_sig), signature);
 
 	if (real_bytes >= 1)
 	{
 		return findPattern(addrInBase, (char*)real_sig, real_bytes);
 	}
 
-	return nullptr;
+	return NULL;
 }
 
 
-void CSignatureFunction::findFunc(CRCBotKeyValueList *kv, const char*pKey, void *pAddrBase, const char *defaultsig)
+void CSignatureFunction::findFunc(CRCBotKeyValueList &kv, const char*pKey, void *pAddrBase, const char *defaultsig)
 {
-	char *sig = nullptr;
+	char *sig = NULL;
 
-	if (kv->getString(pKey, &sig) && sig)
+	if (kv.getString(pKey, &sig) && sig)
 		m_func = findSignature(pAddrBase, sig);
 	else
 		m_func = findSignature(pAddrBase, defaultsig);
 }
 
-CGameRulesObject::CGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase)
+CGameRulesObject::CGameRulesObject(CRCBotKeyValueList &list, void *pAddrBase)
 {
 #ifdef _WIN32
-	m_func = nullptr;
+	m_func = NULL;
 #else
 	findFunc(list, "g_pGameRules", pAddrBase, "@g_pGameRules");
 #endif
 }
 
-CCreateGameRulesObject::CCreateGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase)
+CCreateGameRulesObject::CCreateGameRulesObject(CRCBotKeyValueList &list, void *pAddrBase)
 {
 #ifdef _WIN32
-	findFunc(list, "create_gamerules_object_win", pAddrBase,
-	         R"(\x55\x8B\xEC\x8B\x0D\x2A\x2A\x2A\x2A\x85\xC9\x74\x07)");
+	findFunc(list, "create_gamerules_object_win", pAddrBase, "\\x55\\x8B\\xEC\\x8B\\x0D\\x2A\\x2A\\x2A\\x2A\\x85\\xC9\\x74\\x07");
 #else
 	m_func = NULL;
 #endif
@@ -290,6 +297,6 @@ CCreateGameRulesObject::CCreateGameRulesObject(CRCBotKeyValueList *list, void *p
 
 void **CCreateGameRulesObject::getGameRules()
 {
-	char *addr = static_cast<char*>(m_func);
+	char *addr = reinterpret_cast<char*>(m_func);
 	return *reinterpret_cast<void ***>(addr + rcbot_gamerules_offset.GetInt());
 }

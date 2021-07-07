@@ -31,7 +31,7 @@
 #ifndef __RCBOT_WAYPOINT_H__
 #define __RCBOT_WAYPOINT_H__
 
-#include <cstdio>
+#include <stdio.h>
 
 // this must be before bot_client.h to avoid unknown override / missing type warnings
 #include <vector>
@@ -97,7 +97,7 @@ public:
 	inline bool isBitsInFlags ( int iFlags ) { return (iFlags & m_iBit)==m_iBit; }
 	inline int getBits () { return m_iBit; }
 	inline void setMods ( int iMods ){ m_iMods = iMods; }// input bitmask of mods (32 max)
-	inline bool forMod ( int iMod ) { return (1<<iMod&m_iMods)==1<<iMod; }
+	inline bool forMod ( int iMod ) { return ((1<<iMod)&m_iMods)==(1<<iMod); }
 	inline WptColor getColour () { return m_vColour; }
 	inline int getImportance () { return m_iImportance; }
 
@@ -133,46 +133,45 @@ class CWaypointTypes
 {
 public:
 
-// if you're adding a new waypoint type, don't forget to update CWaypointTypes :: setup()
+	// if you're adding a new waypoint type, don't forget to update CWaypointTypes :: setup()
 	static const int W_FL_NONE           = 0;
-	static const int W_FL_JUMP           = 1 << 0;
-	static const int W_FL_CROUCH         = 1 << 1;
-	static const int W_FL_UNREACHABLE    = 1 << 2;
-	static const int W_FL_LADDER         = 1 << 3;
-	static const int W_FL_FLAG           = 1 << 4;
-	static const int W_FL_CAPPOINT       = 1 << 5;
-	static const int W_FL_GOAL           = 1 << 5; // Synergy: Map Goal
-	static const int W_FL_NOBLU          = 1 << 6;
-	static const int W_FL_NOAXIS         = 1 << 6;
-	static const int W_FL_NORED          = 1 << 7;
-	static const int W_FL_NOALLIES       = 1 << 7;
-	static const int W_FL_HEALTH         = 1 << 8;
-	static const int W_FL_OPENS_LATER    = 1 << 9;
-	static const int W_FL_ROCKET_JUMP    = 1 << 10;
-	static const int W_FL_BOMB_TO_OPEN   = 1 << 10; // DOD:S
-	static const int W_FL_SNIPER         = 1 << 11;
-	static const int W_FL_AMMO           = 1 << 12;
-	static const int W_FL_RESUPPLY       = 1 << 13;
-	static const int W_FL_BOMBS_HERE     = 1 << 13;
-	static const int W_FL_SENTRY         = 1 << 14;
-	static const int W_FL_MACHINEGUN     = 1 << 14;
-	static const int W_FL_DOUBLEJUMP     = 1 << 15;
-	static const int W_FL_PRONE          = 1 << 15;
-	static const int W_FL_TELE_ENTRANCE  = 1 << 16;
-	static const int W_FL_TELE_EXIT      = 1 << 17;
-	static const int W_FL_DEFEND         = 1 << 18;
-	static const int W_FL_AREAONLY       = 1 << 19;
-	static const int W_FL_ROUTE          = 1 << 20;
-	static const int W_FL_WAIT_GROUND    = 1 << 21;
-	static const int W_FL_NO_FLAG        = 1 << 22;
-	static const int W_FL_COVER_RELOAD   = 1 << 22; // DOD:S only
-	static const int W_FL_LIFT           = 1 << 23;
-	static const int W_FL_FLAGONLY       = 1 << 24;
-	static const int W_FL_FALL           = 1 << 25;
-	static const int W_FL_BREAKABLE      = 1 << 26;
-	static const int W_FL_SPRINT         = 1 << 27;
-	static const int W_FL_TELEPORT_CHEAT = 1 << 28; // teleports bots to the next waypoint (cheat)
-	static const int W_FL_OWNER_ONLY     = 1 << 29; // Only owners of this area can use the waypoint
+	static const int W_FL_JUMP           = (1 << 0);
+	static const int W_FL_CROUCH         = (1 << 1);
+	static const int W_FL_UNREACHABLE    = (1 << 2);
+	static const int W_FL_LADDER         = (1 << 3);
+	static const int W_FL_FLAG           = (1 << 4);
+	static const int W_FL_CAPPOINT       = (1 << 5);
+	static const int W_FL_NOBLU          = (1 << 6);
+	static const int W_FL_NOAXIS         = (1 << 6);
+	static const int W_FL_NORED          = (1 << 7);
+	static const int W_FL_NOALLIES       = (1 << 7);
+	static const int W_FL_HEALTH         = (1 << 8);
+	static const int W_FL_OPENS_LATER    = (1 << 9);
+	static const int W_FL_ROCKET_JUMP    = (1 << 10);
+	static const int W_FL_BOMB_TO_OPEN   = (1 << 10); // DOD:S
+	static const int W_FL_SNIPER         = (1 << 11);
+	static const int W_FL_AMMO           = (1 << 12);
+	static const int W_FL_RESUPPLY       = (1 << 13);
+	static const int W_FL_BOMBS_HERE     = (1 << 13);
+	static const int W_FL_SENTRY         = (1 << 14);
+	static const int W_FL_MACHINEGUN     = (1 << 14);
+	static const int W_FL_DOUBLEJUMP     = (1 << 15);
+	static const int W_FL_PRONE          = (1 << 15);
+	static const int W_FL_TELE_ENTRANCE  = (1 << 16);
+	static const int W_FL_TELE_EXIT      = (1 << 17);
+	static const int W_FL_DEFEND         = (1 << 18);
+	static const int W_FL_AREAONLY       = (1 << 19);
+	static const int W_FL_ROUTE          = (1 << 20);
+	static const int W_FL_WAIT_GROUND    = (1 << 21);
+	static const int W_FL_NO_FLAG        = (1 << 22);
+	static const int W_FL_COVER_RELOAD   = (1 << 22); // DOD:S only
+	static const int W_FL_LIFT           = (1 << 23);
+	static const int W_FL_FLAGONLY       = (1 << 24);
+	static const int W_FL_FALL           = (1 << 25);
+	static const int W_FL_BREAKABLE      = (1 << 26);
+	static const int W_FL_SPRINT         = (1 << 27);
+	static const int W_FL_TELEPORT_CHEAT = (1 << 28); // teleports bots to the next waypoint (cheat)
+	static const int W_FL_OWNER_ONLY     = (1 << 29); // Only owners of this area can use the waypoint
 	//static const int W_FL_ATTACKPOINT = (1 << 30); // Tactical waypoint -- each squad will go to different attack points and signal others to go
 
 	static void setup ();
@@ -206,7 +205,7 @@ private:
 class CWaypointTest
 {
 public:
-	static void go ( edict_t *pPlayer );
+	void go ( edict_t *pPlayer );
 };
 
 typedef struct
@@ -376,7 +375,7 @@ public:
 
 	Vector applyRadius ();
 
-	bool isAiming ();
+	bool isAiming ( void );
 
 private:
 	Vector m_vOrigin;
@@ -408,11 +407,11 @@ public:
 
 	static const int W_FILE_FL_VISIBILITY = 1;
 
-	static void init (const char *pszAuthor = nullptr, const char *pszModifiedBy = nullptr);
+	static void init (const char *pszAuthor = NULL, const char *pszModifiedBy = NULL);
 
 	static inline int getWaypointIndex ( CWaypoint *pWpt )
 	{
-		if ( pWpt == nullptr )
+		if ( pWpt == NULL )
 			return -1;
 
 		return ((int)pWpt - (int)m_theWaypoints)/sizeof(CWaypoint);
@@ -448,7 +447,7 @@ public:
 	static inline CWaypoint *getWaypoint ( int iIndex )
 	{
 		if ( !validWaypointIndex(iIndex) )
-			return nullptr;
+			return NULL;
 
 		return &m_theWaypoints[iIndex];
 	}
@@ -456,13 +455,13 @@ public:
 	static CWaypoint *getNextCoverPoint ( CBot *pBot, CWaypoint *pCurrent, CWaypoint *pBlocking );
 
 	// save waypoints
-	static bool save ( bool bVisiblityMade, edict_t *pPlayer = nullptr, const char *pszAuthor = nullptr, const char *pszModifier = nullptr );
+	static bool save ( bool bVisiblityMade, edict_t *pPlayer = NULL, const char *pszAuthor = NULL, const char *pszModifier = NULL );
 	// load waypoints
-	static bool load (const char *szMapName = nullptr);
+	static bool load (const char *szMapName = NULL);
 
 	static inline bool validWaypointIndex ( int iIndex )
 	{
-		return iIndex >= 0 && iIndex < m_iNumWaypoints;
+		return ((iIndex >= 0) && (iIndex < m_iNumWaypoints));
 	}
 
 	static void precacheWaypointTexture ();
@@ -473,11 +472,11 @@ public:
 
 	static void freeMemory ();
 
-	static int getClosestFlagged ( int iFlags, Vector &vOrigin, int iTeam,float *fReturnDist = nullptr, const unsigned char *failedwpts = nullptr );
+	static int getClosestFlagged ( int iFlags, Vector &vOrigin, int iTeam,float *fReturnDist =NULL, unsigned char *failedwpts = NULL );
 
 	static int nearestWaypointGoal ( int iFlags, Vector &origin, float fDist, int iTeam = 0 );
 	static CWaypoint *randomRouteWaypoint ( CBot *pBot, Vector vOrigin, Vector vGoal, int iTeam, int iArea );
-	static CWaypoint *randomWaypointGoal ( int iFlags, int iTeam = 0, int iArea = 0, bool bForceArea = false, CBot *pBot = nullptr, bool bHighDanger = false, int iSearchFlags = 0, int iIgnore = -1 );
+	static CWaypoint *randomWaypointGoal ( int iFlags, int iTeam = 0, int iArea = 0, bool bForceArea = false, CBot *pBot = NULL, bool bHighDanger = false, int iSearchFlags = 0, int iIgnore = -1 );
 	static CWaypoint *randomWaypointGoalBetweenArea ( int iFlags, int iTeam, int iArea, bool bForceArea, CBot *pBot, bool bHighDanger, Vector *org1, Vector *org2, bool bIgnoreBelief = false, int iWpt1 = -1, int iWpt2 = -1 );
 	static CWaypoint *randomWaypointGoalNearestArea ( int iFlags, int iTeam, int iArea, bool bForceArea, CBot *pBot, bool bHighDanger, Vector *origin, int iIgnore = -1, bool bIgnoreBelief = false, int iWpt1 = -1 );
 	static int randomFlaggedWaypoint (int iTeam = 0);
@@ -485,12 +484,12 @@ public:
 	static CWaypointVisibilityTable *getVisiblity () { return m_pVisibilityTable; }
 	static void setupVisibility ();
 	static CWaypoint *getPinchPointFromWaypoint ( Vector vPlayerOrigin, Vector vPinchOrigin );
-	static CWaypoint *getNestWaypoint ( int iTeam, int iArea, bool bForceArea = false, CBot *pBot = nullptr );
+	static CWaypoint *getNestWaypoint ( int iTeam, int iArea, bool bForceArea = false, CBot *pBot = NULL );
 
 	static void updateWaypointPairs ( std::vector<edict_wpt_pair_t> *pPairs, int iWptFlag, const char *szClassname );
-	static bool hasAuthor () { return m_szAuthor[0]!=0; }
+	static bool hasAuthor () { return (m_szAuthor[0]!=0); }
 	static const char *getAuthor() { return m_szAuthor; }
-	static bool isModified () { return m_szModifiedBy[0]!=0; }
+	static bool isModified () { return (m_szModifiedBy[0]!=0); }
 	static const char *getModifier() { return m_szModifiedBy; }
 	static const char *getWelcomeMessage () { return m_szWelcomeMessage; }
 private:

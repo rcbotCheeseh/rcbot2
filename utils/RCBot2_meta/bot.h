@@ -107,7 +107,7 @@ bool BotFunc_BreakableIsEnemy ( edict_t *pBreakable, edict_t *pEdict );
 // Misc useful
 inline bool FStrEq(const char *sz1, const char *sz2)
 {
-	return sz1 == sz2 || Q_stricmp(sz1, sz2) == 0;
+	return ( sz1 == sz2 || Q_stricmp(sz1, sz2) == 0 );
 }
 
 /////////// Voice commands
@@ -202,7 +202,7 @@ public:
 
 	inline void reset ()
 	{
-		m_pLastSee = nullptr; // edict
+		m_pLastSee = NULL; // edict
 		m_fLastSeeTime = 0.0f; // time
 	}
 
@@ -212,7 +212,7 @@ public:
 
 	inline bool check ( edict_t *pEdict )
 	{
-		return pEdict == m_pLastSee.get();
+		return (pEdict == (m_pLastSee.get()));
 	}
 
 	bool hasSeen ( float fTime );
@@ -413,7 +413,7 @@ public:
 
 	inline bool hasAllConditions ( int iConditions )
 	{
-		return (m_iConditions & static_cast<ConditionBitSet>(iConditions)) == iConditions;
+		return (m_iConditions & static_cast<ConditionBitSet>(iConditions)) == static_cast<ConditionBitSet>(iConditions);
 	}
 
 	inline void updateCondition ( int iCondition )
@@ -447,14 +447,14 @@ public:
 	 */
 	inline bool inUse ()
 	{
-		return m_bUsed && m_pEdict!= nullptr;
+		return (m_bUsed && (m_pEdict!=NULL));
 	}
 
 	edict_t *getEdict ();
 
 	void setEdict ( edict_t *pEdict);
 
-	bool FVisible ( Vector &vOrigin, edict_t *pDest = nullptr );
+	bool FVisible ( Vector &vOrigin, edict_t *pDest = NULL );
 
 	Vector getEyePosition ();
 
@@ -484,7 +484,7 @@ public:
 
 	inline bool moveFailed ()
 	{
-		const bool ret = m_bFailNextMove;
+		bool ret = m_bFailNextMove;
 
 		m_bFailNextMove = false;
 
@@ -523,7 +523,7 @@ public:
 		}
 	}
 
-	void findEnemy ( edict_t *pOldEnemy = nullptr );
+	void findEnemy ( edict_t *pOldEnemy = NULL );
 	virtual void enemyFound ( edict_t *pEnemy );
 
 	virtual void checkDependantEntities ();
@@ -554,7 +554,7 @@ public:
 
 	inline void setLookAtTask ( eLookTask lookTask, float fTime = 0 ) 
 	{ 
-		if ( m_iMoveLookPriority >= m_iLookPriority && (fTime > 0 || m_fLookSetTime < engine->Time()) )
+		if ( (m_iMoveLookPriority >= m_iLookPriority) && ((fTime > 0) || ( m_fLookSetTime < engine->Time())) )
 		{
 			m_iLookPriority = m_iMoveLookPriority;
 			m_iLookTask = lookTask; 
@@ -574,14 +574,13 @@ public:
 			updateCondition(CONDITION_ENEMY_DEAD); 
 		if ( pEnemy == m_pLastEnemy )
 		{
-			m_pLastEnemy = nullptr;
+			m_pLastEnemy = NULL;
 		}
 	}
 	//////////////////////
 	virtual bool isCSS () { return false; }
 	virtual bool isHLDM () { return false; }
 	virtual bool isTF () { return false; }
-	virtual bool isSYN () { return false; }
 
 	virtual void spawnInit ();
 
@@ -652,7 +651,7 @@ public:
 
 	inline CBotProfile *getProfile () { return m_pProfile; }
 
-	virtual bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = nullptr );
+	virtual bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL );
 
 	void tapButton ( int iButton );
 
@@ -702,7 +701,7 @@ public:
 
 	virtual bool wantToInvestigateSound ();
 	inline void wantToInvestigateSound ( bool bSet ) { m_bWantToInvestigateSound = bSet; }
-	inline bool wantToShoot () const { return m_bOpenFire; }
+	inline bool wantToShoot ( void ) { return m_bOpenFire; }
 	inline void wantToShoot ( bool bSet ) { m_bOpenFire = bSet; }
 	inline void wantToListen ( bool bSet ) { m_bWantToListen = bSet; }
 	bool wantToListen ();
@@ -712,7 +711,7 @@ public:
 	
 	bool isFacing ( Vector vOrigin );
 
-	bool isOnLift ();
+	bool isOnLift (void);
 
 	virtual bool isDOD () { return false; }
 
@@ -759,17 +758,17 @@ public:
 	inline void resetAreaClear () { m_uSquadDetail.b1.said_area_clear = false; }
 
 
-	inline bool inSquad ( CBotSquad *pSquad ) const
+	inline bool inSquad ( CBotSquad *pSquad )
 	{
 		return m_pSquad == pSquad;
 	}
 
-	inline bool inSquad () const
+	inline bool inSquad ( void )
 	{
-		return m_pSquad != nullptr;
+		return m_pSquad != NULL;
 	}
 
-	bool isSquadLeader ();
+	bool isSquadLeader ( void );
 
 	inline void setSquadIdleTime ( float fTime )
 	{
@@ -787,13 +786,13 @@ public:
 	virtual void sayInPosition() { }
 	virtual void sayMoveOut() { }
 
-	bot_statistics_t *getStats() { if ( m_bStatsCanUse ) return &m_StatsCanUse; return nullptr; }
+	bot_statistics_t *getStats() { if ( m_bStatsCanUse ) return &m_StatsCanUse; return NULL; }
 
 	virtual void hearPlayerAttack( edict_t *pAttacker, int iWeaponID );
 
 	inline bool isListeningToPlayer ( edict_t *pPlayer ) 
 	{
-		return m_PlayerListeningTo.get() == pPlayer;
+		return (m_PlayerListeningTo.get() == pPlayer);
 	}
 
 	inline IBotController *getController () const 
@@ -810,7 +809,7 @@ public:
 
 	bool recentlyHurt ( float fTime );
 
-	eBotAction getCurrentUtil () const { return m_CurrentUtil;}
+	eBotAction getCurrentUtil ( void ) { return m_CurrentUtil;}
 
 	bool recentlySpawned ( float fTime );
 
@@ -833,7 +832,7 @@ protected:
 	void doButtons ();
 	/////////////////////////
 
-	void changeAngles ( float fSpeed, const float *fIdeal, float *fCurrent, float *fUpdate );
+	void changeAngles ( float fSpeed, float *fIdeal, float *fCurrent, float *fUpdate );
 
 	// look for new tasks
 	virtual void getTasks (unsigned int iIgnore=0);

@@ -167,11 +167,11 @@ public:
 	//////////////////////////////////////////////////////	
 	inline void setHeuristic ( float fHeuristic ) { m_fHeuristic = fHeuristic; setFlag(FL_HEURISTIC_SET); }
 	inline bool heuristicSet () { return hasFlag(FL_HEURISTIC_SET); }
-	inline float getHeuristic() { return m_fHeuristic; }
-
+	inline const float getHeuristic () { return m_fHeuristic; } const
+	
 	////////////////////////////////////////////////////////
-	inline void setFlag(int iFlag) { m_iFlags |= iFlag; }
-	inline bool hasFlag ( int iFlag ) { return (m_iFlags & iFlag) == iFlag; }
+	inline void setFlag ( int iFlag ) { m_iFlags |= iFlag; }
+	inline bool hasFlag ( int iFlag ) { return ((m_iFlags & iFlag) == iFlag); }
 	inline void removeFlag ( int iFlag ) { m_iFlags &= ~iFlag; }
 	/////////////////////////////////////////////////////////
 	inline int getParent () { if ( hasFlag(FL_ASTAR_PARENT) ) return m_iParent; else return -1; }
@@ -185,13 +185,13 @@ public:
 			setFlag(FL_ASTAR_PARENT);
 	}
 	////////////////////////////////////////////////////////
-	inline float getCost() { return m_fCost; }
-	inline void setCost(float fCost) { m_fCost = fCost; }
+	inline const float getCost () { return m_fCost; } const
+	inline void setCost ( float fCost ) { m_fCost = fCost; }
 	////////////////////////////////////////////////////////
 	// for comparison
 	bool precedes ( AStarNode *other ) const
 	{
-		return m_fCost+m_fHeuristic < other->getCost() + other->getHeuristic();
+		return (m_fCost+m_fHeuristic) < (other->getCost() + other->getHeuristic());
 	}
 	void setWaypoint ( int iWpt ) { m_iWaypoint = iWpt; }
 	inline int getWaypoint () { return m_iWaypoint; }
@@ -209,7 +209,7 @@ public:
 	AStarListNode ( AStarNode *data )
 	{
 		m_Data = data;
-		m_Next = nullptr;
+		m_Next = NULL;
 	}
 	AStarNode *m_Data;
 	AStarListNode *m_Next;
@@ -220,25 +220,25 @@ class AStarOpenList
 public:
 	AStarOpenList()
 	{
-		m_Head = nullptr;
+		m_Head = NULL;
 	}
 
 	bool empty ()
 	{
-		return m_Head== nullptr;
+		return (m_Head==NULL);
 	}
 
 	AStarNode *top ()
 	{
-		if ( m_Head == nullptr )
-			return nullptr;
+		if ( m_Head == NULL )
+			return NULL;
 		
 		return m_Head->m_Data;
 	}
 
 	void pop ()
 	{
-		if ( m_Head != nullptr )
+		if ( m_Head != NULL )
 		{
 			AStarListNode *t = m_Head;
 
@@ -251,9 +251,11 @@ public:
 
 	void add ( AStarNode *data )
 	{
-		auto*newNode = new AStarListNode(data);
+		AStarListNode *newNode = new AStarListNode(data);
+		AStarListNode *t;
+		AStarListNode *p;
 
-		if ( m_Head == nullptr )
+		if ( m_Head == NULL )
 			m_Head = newNode;
 		else
 		{
@@ -264,10 +266,10 @@ public:
 			}
 			else
 			{
-				AStarListNode* p = m_Head;
-				AStarListNode* t = m_Head->m_Next;
+				p = m_Head;
+				t = m_Head->m_Next;
 
-				while ( t != nullptr )
+				while ( t != NULL )
 				{
 					if ( data->precedes(t->m_Data) )
 					{
@@ -280,7 +282,7 @@ public:
 					t = t->m_Next;
 				}
 
-				if ( t == nullptr )
+				if ( t == NULL )
 					p->m_Next = newNode;
 
 			}
@@ -289,15 +291,17 @@ public:
 
 	void destroy ()
 	{
-		while ( m_Head != nullptr )
+		AStarListNode *t;
+
+		while ( m_Head != NULL )
 		{
-			AStarListNode* t = m_Head;
+			t = m_Head;
 			m_Head = m_Head->m_Next;
 			delete t;
-			t = nullptr;
+			t = NULL;
 		}
 
-		m_Head = nullptr;
+		m_Head = NULL;
 	}
 	
 private:
@@ -360,8 +364,8 @@ class CWaypointNavigator : public IBotNavigator
 {
 public:
 	CWaypointNavigator ( CBot *pBot ) 
-	{
-		CWaypointNavigator::init();
+	{ 
+		init();
 		m_pBot = pBot; 
 		m_fNextClearFailedGoals = 0;
 		m_bDangerPoint = false;

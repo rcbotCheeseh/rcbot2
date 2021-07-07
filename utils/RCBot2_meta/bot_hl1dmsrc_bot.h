@@ -35,7 +35,8 @@
 class CHL1DMSrcBot : public CBot
 {
 public:
-	static bool isHL1DMSrc () { return true; }
+
+	bool isHL1DMSrc () { return true; }
 
 	void modThink ();
 
@@ -45,11 +46,12 @@ public:
 	bool startGame ();
 
 	void died ( edict_t *pKiller );
-	static void killed ( edict_t *pVictim );
+	void killed ( edict_t *pVictim );
 
 	void spawnInit ();
 
 	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true );
+private:
 	// blah blah
 };
 

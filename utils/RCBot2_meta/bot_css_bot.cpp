@@ -27,7 +27,7 @@ bool CCSSBot :: isAlive ()
 {
 	if ( !CBot::isAlive() )
 		return false;
-	return getOrigin() != Vector(0,0,0);
+	return (getOrigin() != Vector(0,0,0));
 }
 
 bool CCSSBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
@@ -42,14 +42,14 @@ bool CCSSBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
  
 	IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEdict);
 
-	if ( p == nullptr )
+	if ( p == NULL )
 		return false;
 	if ( m_pEdict == pEdict )
 		return false;
 	if ( !CBotGlobals::entityIsAlive ( pEdict ) )
 		return false;
 
-	return p->GetTeamIndex() != getTeam();
+	return (p->GetTeamIndex() != getTeam());
 }
 
 bool CCSSBot :: startGame ()
@@ -62,7 +62,7 @@ bool CCSSBot :: startGame ()
 		pInfo->ChangeTeam(randomInt(2,3));
 	}
 
-	return pInfo->GetTeamIndex() != 0;
+	return (pInfo->GetTeamIndex() != 0);
 }
 
 void CCSSBot :: died ()

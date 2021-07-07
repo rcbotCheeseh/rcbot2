@@ -14,6 +14,8 @@ void CBotCoop :: modThink ()
 
 bool CBotCoop :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 {
+	const char *classname;
+
 	if ( ENTINDEX(pEdict) == 0 ) 
 		return false;
 
@@ -23,7 +25,7 @@ bool CBotCoop :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 		return false;
 	}
 
-	const char* classname = pEdict->GetClassName();
+	classname = pEdict->GetClassName();
 
 	if ( strncmp(classname,"npc_",4) == 0 )
 	{

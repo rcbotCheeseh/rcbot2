@@ -49,11 +49,11 @@ public:
 		m_bReliable = false;
 	}
 
-	bool	IsReliable() const { return m_bReliable; }
+	bool	IsReliable( void ) const { return m_bReliable; }
 
-	bool	IsInitMessage() const { return false; }
+	bool	IsInitMessage( void ) const { return false; }
 
-	int		GetRecipientCount() const { return 1; }
+	int		GetRecipientCount( void ) const { return 1; }
 	int		GetRecipientIndex( int slot ) const { return ENTINDEX(m_pEdict); } // only 1 stored
 private:
 	edict_t *m_pEdict;

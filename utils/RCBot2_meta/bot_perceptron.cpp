@@ -28,7 +28,7 @@
  *    version.
  *
  */
-#include <cmath>
+#include <math.h>
 #include <mem.h>
 //#include "vstdlib/random.h" // for random functions
 #include "bot_mtrand.h"
@@ -39,13 +39,8 @@ ga_nn_value CPerceptron::m_fDefaultBias = 1.0f;
 
 CNeuron :: CNeuron ()
 {
-	m_iInputs = 0;
-	m_LearnRate = 0;
-	m_output = 0;
-	m_Bias = 0;
-	
-	m_weights = nullptr;
-	m_inputs = nullptr;
+	m_weights = NULL;
+	m_inputs = NULL;
 }
 
 CPerceptron :: CPerceptron (unsigned short int iInputs)
@@ -85,7 +80,7 @@ ga_nn_value CPerceptron :: execute ()
 	
 	for ( i = 0; i < m_iInputs; i ++ )
 	{
-		m_output += *w * *x;
+		m_output += (*w) * (*x);
 		w++;
 		x++;
 	}
@@ -120,7 +115,7 @@ void CPerceptron :: train ( ga_nn_value expectedOutput )
 	
 	for ( i = 0; i < m_iInputs; i ++ )
 	{
-		*w = *w + m_LearnRate*(expectedOutput-m_output)* *x;
+		*w = *w + m_LearnRate*(expectedOutput-m_output)* (*x);
 		w++;
 		x++;
 	}
@@ -138,7 +133,7 @@ void CLogisticalNeuron :: train ()// ITransfer *transferFunction, bool usebias )
 
 	for ( i = 0; i < m_iInputs; i ++ )
 	{
-		delta = m_LearnRate * *x * m_error;
+		delta = (m_LearnRate * (*x) * m_error);
 		delta += m_momentum * 0.9f;
 		*w = *w + delta;
 		m_momentum = delta;
@@ -160,11 +155,11 @@ ga_nn_value CLogisticalNeuron :: execute (  )//, bool usebias )
 	x = m_inputs;
 
 	// bias weight
-	m_netinput = m_Bias;//m_netinput assigned twice? [APG]RoboCop[CL]
+	m_netinput = m_Bias;
 	
 	for ( i = 0; i < m_iInputs; i ++ )	
 	{
-		m_netinput += *w * *x;
+		m_netinput += (*w) * (*x);
 		w++;
 		x++;
 	}
@@ -197,7 +192,8 @@ CBotNeuralNet :: CBotNeuralNet ( unsigned short int numinputs, unsigned short in
 							  unsigned short int neuronsperhiddenlayer, unsigned short int numoutputs, 
 								ga_nn_value learnrate)
 {
-	unsigned short int i;
+	register unsigned short int i;
+	register unsigned short int j;
 
 	m_pOutputs = new CLogisticalNeuron[numoutputs];
 	m_pHidden = new CLogisticalNeuron*[numhiddenlayers];
@@ -205,7 +201,7 @@ CBotNeuralNet :: CBotNeuralNet ( unsigned short int numinputs, unsigned short in
 	m_layerinput = new ga_nn_value[_MAX(numinputs,neuronsperhiddenlayer)];
 	m_layeroutput = new ga_nn_value[_MAX(numoutputs,_MAX(numinputs,neuronsperhiddenlayer))];
 
-	for ( unsigned short int j = 0; j < numhiddenlayers; j ++ )
+	for ( j = 0; j < numhiddenlayers; j ++ )
 	{
 		m_pHidden[j] = new CLogisticalNeuron[neuronsperhiddenlayer];
 
@@ -228,23 +224,31 @@ CBotNeuralNet :: CBotNeuralNet ( unsigned short int numinputs, unsigned short in
 	m_numHidden = neuronsperhiddenlayer;
 	m_numHiddenLayers = numhiddenlayers;
 
+
 }
 
 #define RCPP_VERB_EPOCHS 1000
 
 void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epochs )
 {
-	unsigned short int i; // ith node
-	unsigned short int j; //jth output
-	CLogisticalNeuron*pOutputNode;
-	const unsigned short int numbatches = tset->getNumBatches();
+	ga_nn_value *outs;
+	ga_nn_value exp_out; // expected
+	ga_nn_value act_out; // actual
+	ga_nn_value out_error;
+	unsigned short int e; // epoch
+	register unsigned short int bi; // batch iterator
+	register unsigned short int i; // ith node
+	register unsigned short int j; //jth output
+	register signed short int l; // layer
+	CLogisticalNeuron *pNode, *pOutputNode;
+	unsigned short int numbatches = tset->getNumBatches();
 	training_batch_t *batches = tset->getBatches();
-	const ga_nn_value min_value = tset->getMinScale();
-	const ga_nn_value max_value = tset->getMaxScale();
+	ga_nn_value min_value = tset->getMinScale();
+	ga_nn_value max_value = tset->getMaxScale();
 
-	auto* outs = new ga_nn_value [m_numOutputs];
+	outs = new ga_nn_value [m_numOutputs];
 
-	for ( unsigned short int e = 0; e < epochs; e ++ )
+	for ( e = 0; e < epochs; e ++ )
 	{
 		/*if ( !(e%RCPP_VERB_EPOCHS) )
 		{
@@ -254,20 +258,20 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 			printf("in1\tin2\texp\tact\terr\n");
 		}*/
 
-		for ( unsigned short int bi = 0; bi < numbatches; bi ++ )
+		for ( bi = 0; bi < numbatches; bi ++ )
 		{
 			memset(outs,0,sizeof(ga_nn_value)*m_numOutputs);
 
 			execute(batches[bi].in,outs,min_value,max_value);
 
-			CLogisticalNeuron* pNode = m_pOutputs;
+			pNode = m_pOutputs;
 
 			// work out error for output layer
 			for ( j = 0; j < m_numOutputs; j ++ )
 			{
-				ga_nn_value act_out = pNode->getOutput();
-				ga_nn_value exp_out = batches[bi].out[j];
-				ga_nn_value out_error = act_out * (1.0f - act_out) * (exp_out - act_out);
+				act_out = pNode->getOutput();
+				exp_out = batches[bi].out[j];
+				out_error = act_out * (1.0f-act_out) * (exp_out - act_out);
 				pNode->setError(out_error);
 				pNode++;
 			}
@@ -297,7 +301,7 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 				pNode++;
 			}
 
-			for ( signed short int l = m_numHiddenLayers - 2; l >= 0; l -- )
+			for ( l = (m_numHiddenLayers-2); l >= 0; l -- )
 			{
 				pOutputNode = m_pHidden[l];
 				//Send Error back to Input Layer
@@ -314,7 +318,7 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 						pNode++;
 					}
 
-					pOutputNode->setError(pOutputNode->getOutput() * (1.0f-pOutputNode->getOutput()) * err);
+					pOutputNode->setError((pOutputNode->getOutput() * (1.0f-pOutputNode->getOutput())) * err);
 					pOutputNode ++;
 				}
 			}
@@ -393,3 +397,4 @@ void CBotNeuralNet :: execute ( ga_nn_value *inputs, ga_nn_value *outputs, ga_nn
 		outputs[i] = gdescale(pNode->getOutput(),fMin,fMax);
 	}
 }
+

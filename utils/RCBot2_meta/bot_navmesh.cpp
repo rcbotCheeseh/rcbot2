@@ -28,8 +28,8 @@
  *    version.
  *
  */
-#include <cstdio>
-#include <cstdlib>
+#include <stdio.h>
+#include <stdlib.h>
 #include "bot_navigator.h"
 
 //#include "nav_mesh.h"

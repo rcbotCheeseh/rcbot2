@@ -77,11 +77,12 @@ public:
 	}
 
 	~CBotSquad()
-	= default;
+	{
+	}
 
 	void Init ();
 
-	void ReturnAllToFormation ();
+	void ReturnAllToFormation ( void );
 
 	inline void SetLeader ( edict_t *pLeader )
 	{
@@ -90,7 +91,7 @@ public:
 
 	edict_t *getMember ( size_t iMember );
 
-	void ToggleFireMode ()
+	void ToggleFireMode ( void )
 	{
 		bCanFire = !bCanFire;
 
@@ -100,29 +101,29 @@ public:
 			BotPrintTalkMessageOne(m_pLeader.Get(),"Squad is now HOLDING FIRE");*/
 	}
 
-	inline bool SquadCanShoot ()
+	inline bool SquadCanShoot ( void )
 	{
 		return bCanFire;
 	}
 
-	inline bool IsStealthMode ()
+	inline bool IsStealthMode ( void )
 	{
-		return m_CombatType == COMBAT_STEALTH;
+		return (m_CombatType == COMBAT_STEALTH);
 	}
 
-	inline bool IsProneMode ()
+	inline bool IsProneMode ( void )
 	{
-		return m_CombatType == COMBAT_PRONE;
+		return (m_CombatType == COMBAT_PRONE);
 	}
 
-	inline bool IsCrouchMode ()
+	inline bool IsCrouchMode ( void )
 	{
-		return m_CombatType == COMBAT_CROUCH;
+		return (m_CombatType == COMBAT_CROUCH);
 	}
 
-	inline edict_t *GetLeader ()
+	inline edict_t *GetLeader ( void )
 	{
-		return m_pLeader.get();
+		return (edict_t*)m_pLeader.get();
 	}
 
 	void SetCombatType ( eCombatType iCombatType )
@@ -158,13 +159,13 @@ public:
 		//BotPrintTalkMessageOne ( pLeader, "Combat mode is now %s\n", szCombatType );
 	}
 
-	void ChangeLeader ();
+	void ChangeLeader ( void );
 
 	void removeMember ( edict_t *pMember );
 
 	inline bool IsLeader ( edict_t *pLeader )
 	{
-		return GetLeader() == pLeader;
+		return (GetLeader() == pLeader);
 	}
 
 	void AddMember ( edict_t *pEdict );
@@ -183,7 +184,7 @@ public:
 		m_theDesiredFormation = theNewFormation;
 	}
 
-	inline float GetSpread () const
+	inline float GetSpread ( void ) const
 	{
 		return m_fDesiredSpread;
 	}
@@ -197,7 +198,7 @@ public:
 
 	Vector GetFormationVector ( edict_t *pEdict );
 
-	void UpdateAngles ();
+	void UpdateAngles ( void );
 
 	bool isDefensive () { return m_Tactics == TACTIC_DEFEND; }
 
@@ -238,7 +239,8 @@ class CBotSquads
 {
 public:
 
-	static void FreeMemory ();
+	static void FreeMemory ( void );
+
 	static void removeSquadMember ( CBotSquad *pSquad, edict_t *pMember );
 
 	// AddSquadMember can have many effects
@@ -248,13 +250,16 @@ public:
 	//              assign bot to 'squad leaders' squad
 	// 3. scenario: no squad has 'squad leader' 
 	//              make a new squad
-	
 	static CBotSquad *AddSquadMember ( edict_t *pLeader, edict_t *pMember );
+
 	static CBotSquad *SquadJoin ( edict_t *pLeader, edict_t *pMember );
+
 	static CBotSquad *FindSquadByLeader ( edict_t *pLeader );
 
 	static void RemoveSquad ( CBotSquad *pSquad );
-	static void UpdateAngles ();
+
+	static void UpdateAngles ( void );
+
 	static void ChangeLeader ( CBotSquad *theSquad );
 
 private:

@@ -164,7 +164,7 @@ public:
 
 	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true );
 
-	float getArmorPercent () { return 0.01f * m_pPlayerInfo->GetArmorValue(); }
+	float getArmorPercent () { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
 
 	void getTasks (unsigned int iIgnore);
 
@@ -180,7 +180,7 @@ public:
 
 	bool selectBotWeapon ( CBotWeapon *pBotWeapon );
 
-	bool canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = nullptr);
+	bool canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL);
 
 	void defending ();
 

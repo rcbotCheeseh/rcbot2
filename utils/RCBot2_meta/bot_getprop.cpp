@@ -13,17 +13,19 @@ extern IServerGameDLL *servergamedll;
 
 void UTIL_FindServerClassnamePrint(const char *name_cmd)
 {
+	edict_t *current;
+
 	for (int i = 0; i < gpGlobals->maxEntities; i++)
 	{
-		edict_t* current = engine->PEntityOfEntIndex(i);
-		if (current == nullptr)
+		current = engine->PEntityOfEntIndex(i);
+		if (current == NULL)
 		{
 			continue;
 		}
 
 		IServerNetworkable *network = current->GetNetworkable();
 
-		if (network == nullptr)
+		if (network == NULL)
 		{
 			continue;
 		}
@@ -34,12 +36,12 @@ void UTIL_FindServerClassnamePrint(const char *name_cmd)
 
 		if (strcmp(name, name_cmd) == 0)
 		{
-			CBotGlobals::botMessage(nullptr,0,"%s",current->GetClassName());
+			CBotGlobals::botMessage(NULL,0,"%s",current->GetClassName());
 			return;
 		}
 	}
 
-	CBotGlobals::botMessage(nullptr,0,"Not found");
+	CBotGlobals::botMessage(NULL,0,"Not found");
 }
 
 
@@ -62,9 +64,9 @@ void UTIL_FindServerClassPrint(const char *name_cmd)
 
 		__strlow(temp);
 
-		if (strstr(temp,name) != nullptr )
+		if (strstr(temp,name) != NULL )
 		{
-			CBotGlobals::botMessage(nullptr,0,"%s",pClass->m_pNetworkName);
+			CBotGlobals::botMessage(NULL,0,"%s",pClass->m_pNetworkName);
 			//break;
 		}
 		pClass = pClass->m_pNext;
@@ -89,7 +91,7 @@ ServerClass *UTIL_FindServerClass(const char *name)
 		pClass = pClass->m_pNext;
 	}
 
-	return nullptr;
+	return NULL;
 	
 }
 
@@ -104,10 +106,12 @@ bool g_PrintProps = false;
 
 SendProp *UTIL_FindSendProp(SendTable *pTable, const char *name)
 {
-	const int count = pTable->GetNumProps();
+	int count = pTable->GetNumProps();
+	//SendTable *pTable;
+	SendProp *pProp;
 	for (int i=0; i<count; i++)
 	{
-		SendProp* pProp = pTable->GetProp(i);
+		pProp = pTable->GetProp(i);
 
 		if ( g_PrintProps )
 			Msg("%s\n",pProp->GetName());
@@ -118,14 +122,14 @@ SendProp *UTIL_FindSendProp(SendTable *pTable, const char *name)
 		}
 		if (pProp->GetDataTable())
 		{
-			if ((pProp=UTIL_FindSendProp(pProp->GetDataTable(), name)) != nullptr)
+			if ((pProp=UTIL_FindSendProp(pProp->GetDataTable(), name)) != NULL)
 			{
 				return pProp;
 			}
 		}
 	}
  
-	return nullptr;
+	return NULL;
 }
 /**
  * vim: set ts=4 :
@@ -169,12 +173,14 @@ bool UTIL_FindInSendTable(SendTable *pTable,
 						  sm_sendprop_info_t *info,
 						  unsigned int offset)
 {
-	const int props = pTable->GetNumProps();
+	const char *pname;
+	int props = pTable->GetNumProps();
+	SendProp *prop;
 
 	for (int i=0; i<props; i++)
 	{
-		SendProp* prop = pTable->GetProp(i);
-		const char* pname = prop->GetName();
+		prop = pTable->GetProp(i);
+		pname = prop->GetName();
 
 		if ( g_PrintProps )
 			Msg("%d : %s\n",offset + prop->GetOffset(),pname);
@@ -239,27 +245,29 @@ edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict )
 
 
 	if (m_berror)
-		return nullptr;
+		return NULL;
 
 	hndl = (CBaseHandle *)m_data; 
 
 	if ( hndl )
 		return INDEXENT(hndl->GetEntryIndex());
 
-	return nullptr;
+	return NULL;
 }
 
 void CClassInterfaceValue :: init ( char *key, char *value, unsigned int preoffset )
 {
 	m_class = CStrings::getString(key);
 	m_value = CStrings::getString(value);
-	m_data = nullptr;
+	m_data = NULL;
 	m_preoffset = preoffset;
 	m_offset = 0;
 }
 
 void UTIL_FindPropPrint(const char *prop_name)
 {
+	bool bInterfaceErr = false;
+
 	unsigned int offset;
 
 	try
@@ -274,7 +282,7 @@ void UTIL_FindPropPrint(const char *prop_name)
 
 			if ( offset != 0 )
 			{
-				CBotGlobals::botMessage(nullptr,0,"found in %s : offset %d",pClass->m_pNetworkName, offset);
+				CBotGlobals::botMessage(NULL,0,"found in %s : offset %d",pClass->m_pNetworkName, offset);
 				//break;
 			}
 			pClass = pClass->m_pNext;
@@ -282,7 +290,7 @@ void UTIL_FindPropPrint(const char *prop_name)
 	}
 	catch (...)
 	{
-		bool bInterfaceErr = true;
+		bInterfaceErr = true;
 	}
 }
 
@@ -299,7 +307,7 @@ void CClassInterfaceValue :: findOffset ( )
 #ifdef _DEBUG	
 	else
 	{
-		CBotGlobals::botMessage(nullptr,1,"Warning: Couldn't find CLASS %s",m_class);
+		CBotGlobals::botMessage(NULL,1,"Warning: Couldn't find CLASS %s",m_class);
 		return;
 	}
 #endif
@@ -309,7 +317,7 @@ void CClassInterfaceValue :: findOffset ( )
 #ifdef _DEBUG	
 	else
 	{
-		CBotGlobals::botMessage(nullptr,1,"Warning: Couldn't find getprop %s for class %s",m_value,m_class);
+		CBotGlobals::botMessage(NULL,1,"Warning: Couldn't find getprop %s for class %s",m_value,m_class);
 	}
 #endif
 }
@@ -476,14 +484,10 @@ void CClassInterface:: init ()
 		DEFINE_GETPROP(GETPROP_TF2_ROUNDSTATE, "CTFGameRulesProxy", "m_iRoundState", 0);
 		DEFINE_GETPROP(GETPROP_TF2DESIREDCLASS, "CTFPlayer", "m_iDesiredPlayerClass", 0);
 
-		// Synergy
-		DEFINE_GETPROP(GETPROP_SYN_PLAYER_VEHICLE, "CSynergyPlayer", "m_hVehicle", 0);
-		DEFINE_GETPROP(GETPROP_SYN_VEHICLE_DRIVER, "CPropVehicleDriveable", "m_hPlayer", 0);
-
-		for (auto& g_GetProp : g_GetProps)
+		for ( unsigned int i = 0; i < GET_PROPDATA_MAX; i ++ )
 		{
 			//if ( g_GetProps[i]
-			g_GetProp.findOffset();
+			g_GetProps[i].findOffset();
 		}
 }
 
@@ -536,24 +540,25 @@ bool CClassInterface :: getTF2ObjectiveResource ( CTFObjectiveResource *pResourc
 
 void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 {
-	if (!m_offset || edict== nullptr)
+	static IServerUnknown *pUnknown;
+	static CBaseEntity *pEntity;
+
+	if (!m_offset || (edict==NULL))
 	{
-		m_data = nullptr;
+		m_data = NULL;
 		m_berror = true;
 		return;
 	}
 
 	if (bIsEdict)
 	{
-		static CBaseEntity *pEntity;
-		static IServerUnknown *pUnknown;
-		auto*pEdict = static_cast<edict_t*>(edict);
+		edict_t *pEdict = reinterpret_cast<edict_t*>(edict);
 
-		pUnknown = pEdict->GetUnknown();
+		pUnknown = (IServerUnknown *)pEdict->GetUnknown();
 
 		if (!pUnknown)
 		{
-			m_data = nullptr;
+			m_data = NULL;
 			m_berror = true;
 			return;
 		}
@@ -572,33 +577,36 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 
 edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char *classname, float fMindist, edict_t *pOwner)
 {
-	edict_t *pfound = nullptr;
+	edict_t *current;
+	edict_t *pfound = NULL;
+	float fDist;
+	const char *pszClassname;
 	// speed up loop by by using smaller ints in register
-	const auto max = (short int)gpGlobals->maxEntities;
+	register short int max = (short int)gpGlobals->maxEntities;
 
-	for (short int i = 0; i < max; i++)
+	for (register short int i = 0; i < max; i++)
 	{
-		edict_t* current = engine->PEntityOfEntIndex(i);
+		current = engine->PEntityOfEntIndex(i);
 
-		if (current == nullptr)
+		if (current == NULL)
 			continue;
 
 		if ( current->IsFree() )
 			continue;
 
-		if ( pOwner != nullptr )
+		if ( pOwner != NULL )
 		{
 			if ( getOwner(current) != pOwner )
 				continue;
 		}
 
-		const char* pszClassname = current->GetClassName(); // For Debugging purposes
+		pszClassname = current->GetClassName(); // For Debugging purposes
 
 		if (strcmp(classname, pszClassname) == 0)
 		{
-			float fDist = (vstart - CBotGlobals::entityOrigin(current)).Length();
+			fDist = (vstart - CBotGlobals::entityOrigin(current)).Length();
 
-			if ( !pfound  || fDist < fMindist)
+			if ( !pfound  || (fDist < fMindist))
 			{
 				fMindist = fDist;
 				pfound = current;
@@ -611,24 +619,26 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 
 edict_t *CClassInterface::FindEntityByNetClassNearest(Vector vstart, const char *classname)
 {
-	edict_t *pfound = nullptr;
+	edict_t *current;
+	edict_t *pfound = NULL;
 	float fMindist = 8192.0f;
+	float fDist;
 
 	for (short int i = 0; i < gpGlobals->maxEntities; i++)
 	{
-		edict_t* current = engine->PEntityOfEntIndex(i);
-		if (current == nullptr)
+		current = engine->PEntityOfEntIndex(i);
+		if (current == NULL)
 		{
 			continue;
 		}
 		if ( current->IsFree() )
 			continue;
-		if ( current->GetUnknown() == nullptr )
+		if ( current->GetUnknown() == NULL )
 			continue;
 		
 		IServerNetworkable *network = current->GetNetworkable();
 
-		if (network == nullptr)
+		if (network == NULL)
 		{
 			continue;
 		}
@@ -638,9 +648,9 @@ edict_t *CClassInterface::FindEntityByNetClassNearest(Vector vstart, const char 
 		
 		if (strcmp(name, classname) == 0)
 		{
-			float fDist = (vstart - CBotGlobals::entityOrigin(current)).Length();
+			fDist = (vstart - CBotGlobals::entityOrigin(current)).Length();
 
-			if ( !pfound  || fDist < fMindist)
+			if ( !pfound  || (fDist < fMindist))
 			{
 				fMindist = fDist;
 				pfound = current;
@@ -653,17 +663,19 @@ edict_t *CClassInterface::FindEntityByNetClassNearest(Vector vstart, const char 
 
 const char *CClassInterface::FindEntityNetClass(int start, const char *classname)
 {
-	for (int i = start != -1 ? start : 0; i < gpGlobals->maxEntities; i++)
+	edict_t *current;
+
+	for (int i = ((start != -1) ? start : 0); i < gpGlobals->maxEntities; i++)
 	{
-		edict_t* current = engine->PEntityOfEntIndex(i);
-		if (current == nullptr)
+		current = engine->PEntityOfEntIndex(i);
+		if (current == NULL)
 		{
 			continue;
 		}
 
 		IServerNetworkable *network = current->GetNetworkable();
 
-		if (network == nullptr)
+		if (network == NULL)
 		{
 			continue;
 		}
@@ -677,22 +689,24 @@ const char *CClassInterface::FindEntityNetClass(int start, const char *classname
 		}
 	}
 
-	return nullptr;
+	return NULL;
 }
 // http://svn.alliedmods.net/viewvc.cgi/trunk/extensions/tf2/extension.cpp?revision=2183&root=sourcemod&pathrev=2183
 edict_t *CClassInterface::FindEntityByNetClass(int start, const char *classname)
 {
-	for (int i = start != -1 ? start : 0; i < gpGlobals->maxEntities; i++)
+	edict_t *current;
+
+	for (int i = ((start != -1) ? start : 0); i < gpGlobals->maxEntities; i++)
 	{
-		edict_t* current = engine->PEntityOfEntIndex(i);
-		if (current == nullptr)
+		current = engine->PEntityOfEntIndex(i);
+		if (current == NULL)
 		{
 			continue;
 		}
 
 		IServerNetworkable *network = current->GetNetworkable();
 
-		if (network == nullptr)
+		if (network == NULL)
 		{
 			continue;
 		}
@@ -707,17 +721,18 @@ edict_t *CClassInterface::FindEntityByNetClass(int start, const char *classname)
 		}
 	}
 
-	return nullptr;
+	return NULL;
 }
 
 
  int CClassInterface::getTF2Score ( edict_t *edict ) 
 	{ 
 		edict_t *res = CTeamFortress2Mod::findResourceEntity();
+		int *score_array = NULL;
 
 		if ( res )
 		{
-			int* score_array = g_GetProps[GETPROP_TF2SCORE].getIntPointer(res);
+			score_array = g_GetProps[GETPROP_TF2SCORE].getIntPointer(res);
 
 			if ( score_array )
 				return score_array[ENTINDEX(edict)-1];

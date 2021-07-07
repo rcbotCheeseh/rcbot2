@@ -83,10 +83,10 @@ public:
 	CBotTask();	
 	~CBotTask()
 	{
-		if ( m_pInterruptFunc!= nullptr )
+		if ( m_pInterruptFunc!=NULL )
 		{
 			delete m_pInterruptFunc;
-			m_pInterruptFunc = nullptr;
+			m_pInterruptFunc = NULL;
 		}
 	}
 	void _init();
@@ -142,7 +142,7 @@ class CFindPathTask : public CBotTask
 public:
 	CFindPathTask ()
 	{
-		m_pEdict = nullptr;
+		m_pEdict = NULL;
 		m_LookTask = LOOK_WAYPOINT;
 		m_iWaypointId = -1;
 		m_flags.m_data = 0;
@@ -154,7 +154,7 @@ public:
 	CFindPathTask ( Vector vOrigin, eLookTask looktask = LOOK_WAYPOINT )
 	{
 		m_vVector = vOrigin;
-		m_pEdict = nullptr; // no edict
+		m_pEdict = NULL; // no edict
 		m_LookTask = looktask;
 		m_iWaypointId = -1;
 		m_flags.m_data = 0;
@@ -1213,7 +1213,7 @@ public:
 	CMoveToTask ( Vector vOrigin )
 	{
 		m_vVector = vOrigin;
-		m_pEdict = nullptr;
+		m_pEdict = NULL;
 
 		setFailInterrupt(CONDITION_SEE_CUR_ENEMY);
 	}
@@ -1340,7 +1340,7 @@ private:
 class CSpyCheckAir : public CBotTask
 {
 public:
-	CSpyCheckAir () { m_fTime = 0.0f; m_pUnseenBefore = nullptr; m_bHitPlayer = false; }
+	CSpyCheckAir () { m_fTime = 0.0f; m_pUnseenBefore = NULL; m_bHitPlayer = false; }
 
 	void execute ( CBot *pBot, CBotSchedule *pSchedule );
 

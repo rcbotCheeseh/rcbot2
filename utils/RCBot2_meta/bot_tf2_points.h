@@ -30,7 +30,7 @@ class CTFGameRulesProxy
 };
 
 
-#define TEAM_ARRAY( index, team )		((index) + ((team) * MAX_CONTROL_POINTS))
+#define TEAM_ARRAY( index, team )		(index + (team * MAX_CONTROL_POINTS))
 
 typedef enum ePointAttackDefend_s
 {
@@ -70,7 +70,7 @@ public:
 
 	bool testProbWptArea ( int iWptArea, int iTeam );
 
-	void debugprint ();
+	void debugprint ( void );
 	void updatePoints();
 	bool TeamCanCapPoint( int index, int team )
 	{
@@ -130,7 +130,7 @@ public:
 
 	int GetCPCappingIcon( int index )
 	{
-		const int iCapper = GetCappingTeam(index);
+		int iCapper = GetCappingTeam(index);
 
 		return GetIconForTeam( index, iCapper );
 	}
@@ -171,9 +171,9 @@ public:
 	}
 
 	// Data functions, called to set up the state at the beginning of a round
-	inline int GetNumControlPoints() 
+	inline int	 GetNumControlPoints( void ) 
 	{ 
-		if ( m_iNumControlPoints== nullptr )
+		if ( m_iNumControlPoints==NULL )
 			return 0;
 		return *m_iNumControlPoints;
 	}
@@ -206,7 +206,7 @@ public:
 
 
 	// Mini-rounds data
-	bool PlayingMiniRounds(){ return *m_bPlayingMiniRounds; }
+	bool PlayingMiniRounds( void ){ return *m_bPlayingMiniRounds; }
 	bool IsInMiniRound( int index ) { return m_bInMiniRound[index]; }
 	void updateCaptureTime(int index);
 	void setup ();
@@ -275,18 +275,18 @@ public:
 	{ 
 		memset(m_ValidAreas,0,sizeof(bool)*MAX_CONTROL_POINTS); 
 	}
-	void updateValidWaypointAreas ()
+	void updateValidWaypointAreas ( void )
 	{
 		resetValidWaypointAreas();
 
-		for (auto& m_ValidPoint : m_ValidPoints)
+		for ( int i = 0; i < 2; i ++ )
 		{
-			for (auto& j : m_ValidPoint)
+			for ( int j = 0; j < 2; j ++ )
 			{
 				for ( int k = 0; k < MAX_CONTROL_POINTS; k ++ )
 				{
 					// OR
-					m_ValidAreas[k] = (m_ValidAreas[k] || j[k].bValid);
+					m_ValidAreas[k] = (m_ValidAreas[k] || m_ValidPoints[i][j][k].bValid);
 				}
 			}
 		}
@@ -304,7 +304,7 @@ public:
 
 	float getSetupTime ()
 	{
-		if ((m_Resource.get() != nullptr) && m_nSetupTimeLength)
+		if ((m_Resource.get() != NULL) && m_nSetupTimeLength)
 			return (float)*m_nSetupTimeLength;
 		return 0.0f;
 	}
@@ -419,9 +419,9 @@ public:
 			iszOverlay = NULL_STRING;
 			iPlayersRequired = 0;
 			iTimedPoints = 0;
-			for (auto& i : iszPreviousPoint)
+			for ( int i = 0; i < MAX_PREVIOUS_POINTS; i++ )
 			{
-				i = NULL_STRING;
+				iszPreviousPoint[i] = NULL_STRING;
 			}
 			iTeamPoseParam = 0;
 		}

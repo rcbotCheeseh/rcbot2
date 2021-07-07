@@ -40,7 +40,7 @@ public:
 
 	CBotGAValues( std::vector<float> values );
 
-	void init ();
+	void init (void);
 
 	// crossover with other individual
 	void crossOver ( IIndividual *other );
@@ -97,7 +97,7 @@ public:
 
 	virtual IIndividual *copy ()
 	{
-		auto*p = new CBotStuckValues();
+		CBotStuckValues *p = new CBotStuckValues();
 		p->setVector(m_theValues);
 		p->setFitness(getFitness());
 		return p;

@@ -37,7 +37,7 @@
 #include "bot_kv.h"
 
 std::vector <CBotProfile*> CBotProfiles :: m_Profiles;
-CBotProfile *CBotProfiles :: m_pDefaultProfile = nullptr;
+CBotProfile *CBotProfiles :: m_pDefaultProfile = NULL;
 
 CBotProfile :: CBotProfile ( CBotProfile &other )
 {
@@ -76,18 +76,23 @@ void CBotProfiles :: deleteProfiles ()
 	for ( unsigned int i = 0; i < m_Profiles.size(); i ++ )
 	{
 		delete m_Profiles[i];
-		m_Profiles[i] = nullptr;
+		m_Profiles[i] = NULL;
 	}
 
 	m_Profiles.clear();
 
 	delete m_pDefaultProfile;
-	m_pDefaultProfile = nullptr;
+	m_pDefaultProfile = NULL;
 }
 
 // find profiles and setup list
 void CBotProfiles :: setupProfiles ()
 {
+	unsigned int iId;
+	bool bDone;
+	char szId[4];
+	char filename[512];
+
 	// Setup Default profile
 	m_pDefaultProfile = new CBotProfile(
 		DEFAULT_BOT_NAME, // name
@@ -103,13 +108,11 @@ void CBotProfiles :: setupProfiles ()
 		);	
 
 	// read profiles
-	unsigned int iId = 1;
-	bool bDone = false;
+	iId = 1;
+	bDone = false;
 
-	while ( iId < 999 && !bDone )
+	while ( (iId < 999) && (!bDone) )
 	{
-		char filename[512];
-		char szId[4];
 		sprintf(szId,"%d",iId);
 		CBotGlobals::buildFileName(filename,szId,BOT_PROFILE_FOLDER,BOT_CONFIG_EXTENSION);
 
@@ -121,7 +124,7 @@ void CBotProfiles :: setupProfiles ()
 			CBotProfile read = *m_pDefaultProfile;
 			CRCBotKeyValueList kvl;
 
-			CBotGlobals::botMessage(nullptr,0,"Reading bot profile \"%s\"",filename);
+			CBotGlobals::botMessage(NULL,0,"Reading bot profile \"%s\"",filename);
 
 			kvl.parseFile(fp);
 
@@ -141,9 +144,9 @@ void CBotProfiles :: setupProfiles ()
 				// *someone* wrote a broken bot profile generator.
 				// most of the profiles did not actually have working aim skill values
 				// we'll go ahead and allow it, but I have to express my displeasure about the matter in some way
-				CBotGlobals::botMessage(nullptr, 0,
-				                        "Warning: Incorrect option 'aimskill' on bot profile \"%s\". "
-				                        "Did you mean 'aim_skill'?", filename);
+				CBotGlobals::botMessage(NULL, 0,
+						"Warning: Incorrect option 'aimskill' on bot profile \"%s\". "
+						"Did you mean 'aim_skill'?", filename);
 				read.m_fAimSkill = flWholeValuePercent / 100.0f;
 			}
 			
@@ -160,7 +163,7 @@ void CBotProfiles :: setupProfiles ()
 		else
 		{
 			bDone = true;
-			CBotGlobals::botMessage(nullptr,0,"Bot profile \"%s\" not found",filename);
+			CBotGlobals::botMessage(NULL,0,"Bot profile \"%s\" not found",filename);
 		}
 
 		iId ++;
@@ -170,8 +173,8 @@ void CBotProfiles :: setupProfiles ()
 
 CBotProfile *CBotProfiles :: getDefaultProfile ()
 {
-	if ( m_pDefaultProfile == nullptr )
-		CBotGlobals::botMessage(nullptr,1,"Error, default profile is NULL (Caused by memory problem, bad initialisation or overwrite) Exiting..");
+	if ( m_pDefaultProfile == NULL )
+		CBotGlobals::botMessage(NULL,1,"Error, default profile is NULL (Caused by memory problem, bad initialisation or overwrite) Exiting..");
 
 	return m_pDefaultProfile;
 }
@@ -179,9 +182,10 @@ CBotProfile *CBotProfiles :: getDefaultProfile ()
 // return a profile unused by a bot
 CBotProfile *CBotProfiles :: getRandomFreeProfile ()
 {
+	unsigned int i;
 	std::vector<CBotProfile*> freeProfiles;
 	
-	for ( unsigned int i = 0; i < m_Profiles.size(); i ++ )
+	for ( i = 0; i < m_Profiles.size(); i ++ )
 	{
 		if ( !CBots::findBotByProfile(m_Profiles[i]) )
 			freeProfiles.push_back(m_Profiles[i]);

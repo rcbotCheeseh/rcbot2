@@ -50,6 +50,7 @@ public:
 	bool isAlive ();
 
 	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true );
+private:
 	// blah blah
 };
 

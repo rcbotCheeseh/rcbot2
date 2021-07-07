@@ -33,7 +33,7 @@
 
 #include "bot_waypoint.h"
 
-const int g_iMaxVisibilityByte = CWaypoints::MAX_WAYPOINTS*CWaypoints::MAX_WAYPOINTS/8; // divide by 8 bits, need byte number
+const int g_iMaxVisibilityByte = (CWaypoints::MAX_WAYPOINTS*CWaypoints::MAX_WAYPOINTS)/8; // divide by 8 bits, need byte number
 
 typedef struct
 {
@@ -47,7 +47,7 @@ class CWaypointVisibilityTable
 public:
 	CWaypointVisibilityTable()
 	{
-		m_VisTable = nullptr;
+		m_VisTable = NULL;
 		bWorkVisibility = false;
 		iCurFrom = 0;
 		iCurTo = 0;
@@ -59,7 +59,7 @@ public:
 
 	void init ()
 	{
-		const int iSize = g_iMaxVisibilityByte;
+		int iSize = g_iMaxVisibilityByte;
 
 		/////////////////////////////
 		// for "concurrent" reading of 
@@ -77,7 +77,7 @@ public:
 		memset(m_VisTable,0,iSize);
 	}
 
-	bool SaveToFile ();
+	bool SaveToFile ( void );
 
 	bool ReadFromFile ( int numwaypoints );
 
@@ -86,22 +86,22 @@ public:
 	bool GetVisibilityFromTo ( int iFrom, int iTo )
 	{
 		// work out the position 
-		const int iPosition = iFrom*CWaypoints::MAX_WAYPOINTS+iTo;
+		int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
 
-		const int iByte = iPosition/8;
-		const int iBit = iPosition%8;
+		int iByte = (int)(iPosition/8);
+		int iBit = iPosition%8;
 
 		if ( iByte < g_iMaxVisibilityByte )
 		{			
-			unsigned char *ToReturn = m_VisTable+iByte;
+			unsigned char *ToReturn = (m_VisTable+iByte);
 			
-			return (*ToReturn & 1<<iBit) > 0;
+			return ( (*ToReturn & (1<<iBit)) > 0 );
 		}
 
 		return false;
 	}
 
-	void ClearVisibilityTable ()
+	void ClearVisibilityTable ( void )
 	{
 		if ( m_VisTable )
 			memset(m_VisTable,0,g_iMaxVisibilityByte);
@@ -115,12 +115,12 @@ public:
 		////////////////////////////
 	}
 
-	void FreeVisibilityTable ()
+	void FreeVisibilityTable ( void )
 	{
-		if ( m_VisTable != nullptr )
+		if ( m_VisTable != NULL )
 		{
 			delete m_VisTable;
-			m_VisTable = nullptr;
+			m_VisTable = NULL;
 		}
 
 		/////////////////////////////
@@ -134,17 +134,17 @@ public:
 
 	void SetVisibilityFromTo ( int iFrom, int iTo, bool bVisible )
 	{
-		const int iPosition = iFrom*CWaypoints::MAX_WAYPOINTS+iTo;
+		int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
 
-		const int iByte = iPosition/8;
-		const int iBit = iPosition%8;
+		int iByte = (int)(iPosition/8);
+		int iBit = iPosition%8;
 
 		if ( iByte < g_iMaxVisibilityByte )
 		{
-			unsigned char *ToChange = m_VisTable+iByte;
+			unsigned char *ToChange = (m_VisTable+iByte);
 			
 			if ( bVisible )
-				*ToChange |= 1<<iBit;
+				*ToChange |= (1<<iBit);
 			else
 				*ToChange &= ~(1<<iBit);
 		}

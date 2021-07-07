@@ -74,7 +74,7 @@ public:
 		m_bVectorSet = TRUE;
 	}
 
-	inline Vector GetVector () const
+	inline Vector GetVector ( void ) const
 	{
 		return Vector((float)m_x,(float)m_y,(float)m_z);
 	}
@@ -115,13 +115,13 @@ public:
 		m_iFlags = 0;
 	}
 private:
-	int m_iFlags = 0;
+	int m_iFlags;
 };
 
 class CToolTip
 {
 public:
-	CToolTip ( const char *pszMessage, const char *pszSound = nullptr )
+	CToolTip ( const char *pszMessage, const char *pszSound = NULL )
 	{
 		m_pszMessage = pszMessage;
 		m_pszSound = pszSound;
@@ -136,36 +136,13 @@ private:
 class CClient
 {
 public:
-	CClient (): m_pPlayer(nullptr), m_bWaypointOn(false), m_iCurrentWaypoint(0), m_iPathFrom(0), m_iPathTo(0),
-	            m_iAccessLevel(0),
-	            m_iWptArea(0),
-	            m_bAutoPaths(false),
-	            m_bPathWaypointOn(false),
-	            m_iDebugLevels(0),
-	            m_bShowMenu(false),
-	            m_fCopyWptRadius(0),
-	            m_iCopyWptFlags(0), m_iCopyWptArea(0),
-	            m_fNextPrintDebugInfo(0), m_iPrevMenu(0),
-	            m_bDebugAutoWaypoint(false),
-	            m_bAutoWaypoint(false),
-	            m_fLastAutoWaypointCheckTime(0),
-	            m_bSetUpAutoWaypoint(false),
-	            m_fCanPlaceJump(0), m_iLastButtons(0),
-	            m_iLastJumpWaypointIndex(0),
-	            m_iLastLadderWaypointIndex(0),
-	            m_iLastMoveType(0),
-	            m_fCanPlaceLadder(0),
-	            m_iJoinLadderWaypointIndex(0),
-	            m_iAutoEventWaypointTeamOn(0),
-	            m_iAutoEventWaypointTeamOff(0),
-	            m_iAutoEventWaypointTeam(0),
-	            m_bIsTeleporting(false), m_fTeleportTime(0)
+	CClient ()
 	{
-		m_szSteamID = nullptr;
-		m_pPlayerInfo = nullptr;
-		m_pDebugBot = nullptr;
+		m_szSteamID = NULL;
+		m_pPlayerInfo = NULL;
+		m_pDebugBot = NULL;
 		m_WaypointCopyType = WPT_COPY_NONE;
-		m_pMenu = nullptr;
+		m_pMenu = NULL;
 		m_iMenuCommand = -1;
 		m_fNextUpdateMenuTime = 0.0f;
 		m_iWaypointShowFlags = 0;
@@ -173,7 +150,7 @@ public:
 		m_szSoundToPlay[0] = 0;
 		m_iAutoEventWaypoint = 0;
 		m_fAutoEventWaypointRadius = 0.0f;
-		m_vAutoEventWaypointOrigin = Vector(0, 0, 0);
+		m_vAutoEventWaypointOrigin = Vector(0,0,0);
 		m_bAutoEventWaypointAutoType = false;
 		m_iAutoEventWaypointArea = 0;
 		m_fNextBotServerMessage = 0;
@@ -181,7 +158,7 @@ public:
 		m_fSpeed = 0;
 		m_fUpdatePos = 0;
 		m_bTeleportVectorValid = false;
-		m_vTeleportVector = Vector(0, 0, 0);
+		m_vTeleportVector = Vector(0,0,0);
 		m_fMonitorHighFiveTime = 0;
 	}
 
@@ -196,14 +173,14 @@ public:
 	void resetMenuCommands ();
 
 	void setTeleportVector ();
-	Vector *getTeleportVector () { if ( m_bTeleportVectorValid ) return &m_vTeleportVector; return nullptr; }
+	Vector *getTeleportVector () { if ( m_bTeleportVectorValid ) return &m_vTeleportVector; return NULL; }
 
-	inline bool isUsingMenu () { return m_pMenu != nullptr; }
+	inline bool isUsingMenu () { return (m_pMenu != NULL); }
 	inline void setCurrentMenu ( CBotMenu *pMenu ) 
 	{ 
 		m_pMenu = pMenu; 
 
-		if ( pMenu == nullptr )
+		if ( pMenu == NULL )
 			resetMenuCommands();
 		else
 			setupMenuCommands();
@@ -267,10 +244,10 @@ public:
 
 	void clientActive ();
 
-	void setDebug ( int iLevel, bool bSet ) { if ( bSet ) { m_iDebugLevels |= 1<<iLevel; } else { m_iDebugLevels &= ~(1<<iLevel); } }
-	bool isDebugOn ( int iLevel ) { return (m_iDebugLevels & 1<<iLevel)>0; }
+	void setDebug ( int iLevel, bool bSet ) { if ( bSet ) { m_iDebugLevels |= (1<<iLevel); } else { m_iDebugLevels &= ~(1<<iLevel); } }
+	bool isDebugOn ( int iLevel ) { return (m_iDebugLevels & (1<<iLevel))>0; }
 	void clearDebug ( ) { m_iDebugLevels = 0; }
-	bool isDebugging () { return m_iDebugLevels != 0; }
+	bool isDebugging () { return (m_iDebugLevels != 0); }
 
 	inline void setDebugBot ( edict_t *pBot ) { m_pDebugBot = pBot; }	
 	inline bool isDebuggingBot ( edict_t *pBot ) { return m_pDebugBot == pBot; }
@@ -300,7 +277,7 @@ public:
 	}
 	inline bool autoWaypointOn () { return m_bAutoWaypoint; }
 	void autoEventWaypoint ( int iType, float fRadius, bool bAtOtherOrigin = false, int iTeam = 0, Vector vOrigin = Vector(0,0,0), bool bIgnoreTeam = false, bool bAutoType = false );
-	void giveMessage(char*msg, float fTime=0.1f);
+	void giveMessage(const char* msg, float fTime=0.1f);
 private:
 	edict_t *m_pPlayer;
 	// steam id
@@ -344,8 +321,6 @@ private:
 	WaypointList m_WaypointCutPaths;
 	
 	eWptCopyType m_WaypointCopyType;
-	// TODO: tooltips queue
-	// vector<CToolTip*> tooltips
 
 	float m_fNextPrintDebugInfo;
 
@@ -387,7 +362,7 @@ private:
 	int m_iAutoEventWaypointArea;
 	bool m_bAutoEventWaypointAutoType;
 	float m_fNextBotServerMessage;
-	std::queue<CToolTip*> m_NextTooltip;
+	std::queue<CToolTip> m_NextTooltip;
 	bool m_bSentWelcomeMessage;
 
 	bool m_bTeleportVectorValid;
@@ -414,16 +389,16 @@ public:
 	static CClient *get ( edict_t *pPlayer ) { return &m_Clients[slotOfEdict(pPlayer)]; }
 	static void setListenServerClient ( CClient *pClient ) { m_pListenServerClient = pClient; }
 	static bool isListenServerClient ( CClient *pClient ) { return m_pListenServerClient == pClient; }
-	static bool noListenServerClient () { return m_pListenServerClient == nullptr; }
+	static bool noListenServerClient () { return m_pListenServerClient == NULL; }
 	static void clientThink ();
 	static bool clientsDebugging ( int iLev = 0 );
-	static void clientDebugMsg ( int iLev, const char *szMsg, CBot *pBot = nullptr );
+	static void clientDebugMsg ( int iLev, const char *szMsg, CBot *pBot = NULL );
 	static void clientDebugMsg(CBot *pBot, int iLev, const char *fmt, ... );
 	static CClient *findClientBySteamID ( char *szSteamID );
-	static edict_t *getListenServerClient() { if ( m_pListenServerClient ) return m_pListenServerClient->getPlayer(); else return nullptr; }
+	static edict_t *getListenServerClient() { if ( m_pListenServerClient ) return m_pListenServerClient->getPlayer(); else return NULL; }
 
-	static void initall () { for (auto& m_Client : m_Clients) { m_Client.init(); } }
-	static void giveMessage (char *msg, float fTime = 0.1, edict_t *pPlayer = nullptr );// NULL to everyone
+	static void initall () { for ( int i = 0; i < MAX_PLAYERS; i ++ ) { m_Clients[i].init(); } }
+	static void giveMessage (char *msg, float fTime = 0.1, edict_t *pPlayer = NULL );// NULL to everyone
 private:
 	static CClient m_Clients[MAX_PLAYERS];
 	static CClient *m_pListenServerClient;

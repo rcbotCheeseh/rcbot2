@@ -1,0 +1,157 @@
+name: Build Workflow
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  create_release:
+    name: Create release
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Get short SHA
+        id: vars
+        run: |
+          echo "::set-output name=sha_short::${GITHUB_SHA::7}"
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: r${{ github.run_number }}-nosoop
+          release_name: Build ${{ steps.vars.outputs.sha_short }}
+          draft: false
+          prerelease: false
+
+  run:
+    name: Build for ${{ matrix.os_short }}
+    needs: create_release
+    runs-on: ${{ matrix.os }}
+
+    # skip build on '[ci skip]'
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-18.04
+          - windows-latest
+        include:
+          - meta_branch: "1.10-dev"
+            sm_branch: "1.10-dev"
+
+          - os: ubuntu-18.04
+            os_short: linux
+            package_ext: tar.gz
+
+          - os: windows-latest
+            os_short: win
+            package_ext: zip
+
+    steps:
+    - name: Install (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        sudo apt-get install -y clang g++-multilib
+        echo "CC=clang" >> $GITHUB_ENV
+        echo "CXX=clang++" >> $GITHUB_ENV
+
+    - name: Add msbuild to PATH (Windows)
+      if: runner.os == 'Windows'
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Install (Windows)
+      if: runner.os == 'Windows'
+      shell: cmd
+      run: |
+        :: See https://github.com/microsoft/vswhere/wiki/Find-VC
+        for /f "usebackq delims=*" %%i in (`vswhere -latest -property installationPath`) do (
+          call "%%i"\Common7\Tools\vsdevcmd.bat -arch=x86 -host_arch=x64
+        )
+        
+        :: Loop over all environment variables and make them global.
+        for /f "delims== tokens=1,2" %%a in ('set') do (
+          echo>>"%GITHUB_ENV%" %%a=%%b
+        )
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+
+    - name: Setup ambuild
+      run: |
+        python -m pip install wheel
+        pip install git+https://github.com/alliedmodders/ambuild
+
+    - name: Fetch Metamod:Source ${{ matrix.meta_branch }}
+      uses: actions/checkout@v2
+      with:
+        repository: alliedmodders/metamod-source
+        ref: ${{ matrix.meta_branch }}
+        path: mmsource
+
+    - name: Fetch SourceMod ${{ matrix.sm_branch }}
+      uses: actions/checkout@v2
+      with:
+        repository: alliedmodders/sourcemod
+        ref: ${{ matrix.sm_branch }}
+        path: sourcemod
+        submodules: recursive
+
+    - name: Fetch SDKs
+      shell: bash
+      run: |
+        git clone --mirror https://github.com/alliedmodders/hl2sdk hl2sdk-proxy-repo
+        sdks=(tf2 css hl2dm dods)
+        for sdk in "${sdks[@]}"
+        do
+          git clone hl2sdk-proxy-repo -b $sdk hl2sdk-$sdk
+        done
+
+    - name: Fetch RCBot2
+      uses: actions/checkout@v2
+      with:
+        path: rcbot2
+
+    - name: Build Files
+      working-directory: rcbot2
+      run: |
+        mkdir build
+        cd build
+        python3 ../configure.py --sdks=present --sm-path="${{ github.workspace }}/sourcemod" --mms_path="${{ github.workspace }}/mmsource" --symbol-files
+        ambuild
+
+    - name: Build Package (Windows)
+      if: runner.os == 'Windows'
+      working-directory: rcbot2/build
+      shell: cmd
+      run: |
+        pushd package
+        7z a -r "../package.${{ matrix.package_ext }}" addons
+        popd
+
+    - name: Build Package (Linux)
+      if: runner.os == 'Linux'
+      working-directory: rcbot2/build
+      shell: bash
+      run: |
+        pushd package
+        tar -czf "../package.${{ matrix.package_ext }}" --owner=0 --group=0 addons
+        popd
+
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create_release.outputs.upload_url }}
+        asset_path: ./rcbot2/build/package.${{ matrix.package_ext }}
+        asset_name: package.${{ matrix.package_ext }}
+        asset_content_type: application/octet-stream

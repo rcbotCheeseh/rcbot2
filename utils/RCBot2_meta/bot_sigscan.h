@@ -14,17 +14,17 @@ class CRCBotKeyValueList;
 class CSignatureFunction
 {
 public:
-	CSignatureFunction() { m_func = nullptr; }
+	CSignatureFunction() { m_func = 0x0; }
 private:
-	static size_t decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr);
+	size_t decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr);
 
-	static bool getLibraryInfo(const void *libPtr, DynLibInfo &lib);
+	bool getLibraryInfo(const void *libPtr, DynLibInfo &lib);
 
-	static void *findPattern(const void *libPtr, const char *pattern, size_t len);
+	void *findPattern(const void *libPtr, const char *pattern, size_t len);
 
 	void *findSignature ( void *addrInBase, const char *signature );
 protected:
-	void findFunc ( CRCBotKeyValueList *kv, const char *pKey, void *pAddrBase, const char *defaultsig );
+	void findFunc ( CRCBotKeyValueList &kv, const char *pKey, void *pAddrBase, const char *defaultsig );
 
 	void *m_func;
 };
@@ -32,19 +32,19 @@ protected:
 class CGameRulesObject : public CSignatureFunction
 {
 public:
-	CGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase);
+	CGameRulesObject(CRCBotKeyValueList &list, void *pAddrBase);
 
-	bool found() const { return m_func != nullptr; }
+	bool found() { return m_func != NULL; }
 
-	void **getGameRules() const { return static_cast<void **>(m_func); }
+	void **getGameRules() { return reinterpret_cast<void **>(m_func); }
 };
 
 class CCreateGameRulesObject : public CSignatureFunction
 {
 public:
-	CCreateGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase);
+	CCreateGameRulesObject(CRCBotKeyValueList &list, void *pAddrBase);
 
-	bool found() const { return m_func != nullptr; }
+	bool found() { return m_func != NULL; }
 
 	void **getGameRules();
 };
