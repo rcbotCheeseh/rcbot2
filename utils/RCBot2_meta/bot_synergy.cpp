@@ -453,7 +453,7 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 			**/
 			CTraceFilterHitAll filter;
 			trace_t *tr = CBotGlobals::getTraceResult();
-            int iEntity = tr->GetEntityIndex();
+            //int iEntity = tr->GetEntityIndex();
 			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), pNext->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), MASK_PLAYERSOLID, &filter);
 			if(tr->fraction < 1.0f)
 			{
