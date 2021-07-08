@@ -81,6 +81,7 @@
 #include "bot_getprop.h"
 #include "bot_profiling.h"
 
+#include <random>
 #include <vector>
 #include <algorithm>
 
@@ -3460,7 +3461,7 @@ void CBots :: kickRandomBot (size_t count)
 		return;
 	}
 
-	std::random_shuffle ( botList.begin(), botList.end() );
+	std::shuffle( botList.begin(), botList.end(), std::mt19937(std::random_device()()));
 
 	size_t numBotsKicked = 0;
 	while (numBotsKicked < count && botList.size()) {
