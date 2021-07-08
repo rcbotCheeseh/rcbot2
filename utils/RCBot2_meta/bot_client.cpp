@@ -431,7 +431,7 @@ void CClient :: think ()
 	{
 		if ( !m_NextTooltip.empty() )
 		{
-			m_NextTooltip.front().send(m_pPlayer);
+			m_NextTooltip.pop();
 
 			m_fNextBotServerMessage = engine->Time() + 11.0f;
 		}

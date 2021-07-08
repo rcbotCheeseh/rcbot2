@@ -54,6 +54,7 @@
 #include "bot_mtrand.h"
 
 extern IVDebugOverlay *debugoverlay;
+extern IServerGameEnts *servergameents; // for accessing the server game entities
 
 void CBotSynergy::init(bool bVarInit)
 {
@@ -449,15 +450,26 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 			 * Perform a trace to check if there is something blocking the path between the current waypoint and the next waypoint.
 			 * Originally I wanted to use tr->GetEntityIndex() and check if the hit entity is a door
 			 * but that function causes link errors when compiling, so I had to fall back to manually searching for door entities.
-			 * BUGBUG!! Because RCBot2 currently lacks the ability to read datamaps, it's impossible to prevent the bot from trying to open a locked door.
 			**/
 			CTraceFilterHitAll filter;
 			trace_t *tr = CBotGlobals::getTraceResult();
 			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), pNext->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), MASK_PLAYERSOLID, &filter);
 			if(tr->fraction < 1.0f)
 			{
-				edict_t *pDoor;
-				pDoor = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "prop_door_rotating", rcbot_syn_use_search_range.GetFloat());
+				if(tr->m_pEnt)
+				{
+					edict_t *pDoor = servergameents->BaseEntityToEdict(tr->m_pEnt);
+					const char *szclassname = pDoor->GetClassName();
+					if(strncmp(szclassname, "prop_door_rotating", 18) == 0 || strncmp(szclassname, "func_door", 9) == 0 || strncmp(szclassname, "func_door_rotating", 18) == 0)
+					{
+						if(!CSynergyMod::IsEntityLocked(pDoor))
+						{
+							m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
+						}
+
+					}
+				}
+			/*	pDoor = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "prop_door_rotating", rcbot_syn_use_search_range.GetFloat());
 				if(pDoor != NULL && !CSynergyMod::IsEntityLocked(pDoor))
 				{
 					m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
@@ -477,7 +489,7 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 							m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
 						}
 					}
-				}
+				}*/
 			}
 		}
 	}
