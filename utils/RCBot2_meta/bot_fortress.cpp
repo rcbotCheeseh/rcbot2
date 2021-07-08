@@ -1519,7 +1519,7 @@ void CBotFortress :: selectTeam ()
 
 void CBotFortress :: selectClass ()
 {
-	char buffer[32];
+	const char* cmd;
 	TF_Class _class;
 
 	if ( m_iDesiredClass == 0 )
@@ -1536,41 +1536,41 @@ void CBotFortress :: selectClass ()
 	m_iClass = _class;
 	if (_class == TF_CLASS_SCOUT)
 	{
-		sprintf(buffer, "joinclass scout");
+		cmd = "joinclass scout";
 	}
 	else if (_class == TF_CLASS_ENGINEER)
 	{
-		sprintf(buffer, "joinclass engineer");
+		cmd = "joinclass engineer";
 	}
 	else if (_class == TF_CLASS_DEMOMAN)
 	{
-		sprintf(buffer, "joinclass demoman");
+		cmd = "joinclass demoman";
 	}
 	else if (_class == TF_CLASS_SOLDIER)
 	{
-		sprintf(buffer, "joinclass soldier");
+		cmd = "joinclass soldier";
 	}
 	else if (_class == TF_CLASS_HWGUY)
 	{
-		sprintf(buffer, "joinclass heavyweapons");
+		cmd = "joinclass heavyweapons";
 	}
 	else if (_class == TF_CLASS_MEDIC)
 	{
-		sprintf(buffer, "joinclass medic");
+		cmd = "joinclass medic";
 	}
 	else if (_class == TF_CLASS_SPY)
 	{
-		sprintf(buffer, "joinclass spy");
+		cmd = "joinclass spy";
 	}
 	else if (_class == TF_CLASS_PYRO)
 	{
-		sprintf(buffer, "joinclass pyro");
+		cmd = "joinclass pyro";
 	}
 	else
 	{
-		sprintf(buffer, "joinclass sniper");
+		cmd = "joinclass sniper";
 	}
-	helpers->ClientCommand(m_pEdict, buffer);
+	helpers->ClientCommand(m_pEdict, cmd);
 
 	m_fChangeClassTime = engine->Time() + randomFloat(bot_min_cc_time.GetFloat(), bot_max_cc_time.GetFloat());
 }
@@ -4483,7 +4483,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		{
 			bSentryHasEnemy = (CClassInterface::getSentryEnemy(m_pSentryGun) != NULL);
 			iSentryLevel = CClassInterface::getTF2UpgradeLevel(m_pSentryGun);//CTeamFortress2Mod::getSentryLevel(m_pSentryGun);
-			fSentryHealthPercent = CClassInterface::getSentryHealth(m_pSentryGun)/CClassInterface::getTF2GetBuildingMaxHealth(m_pSentryGun);
+			fSentryHealthPercent = ((float)CClassInterface::getSentryHealth(m_pSentryGun))/CClassInterface::getTF2GetBuildingMaxHealth(m_pSentryGun);
 			// move sentry
 			ADD_UTILITY(BOT_UTIL_ENGI_MOVE_SENTRY,(CTeamFortress2Mod::hasRoundStarted()||CTeamFortress2Mod::isMapType(TF_MAP_MVM)) && (!m_bIsCarryingObj || m_bIsCarryingSentry) && 
 				bMoveObjs && (m_fSentryPlaceTime>0.0f) && !bHasFlag && m_pSentryGun && (CClassInterface::getSentryEnemy(m_pSentryGun) == NULL) && ((m_fLastSentryEnemyTime + 15.0f) < engine->Time()) &&
@@ -4497,7 +4497,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		{
 			iMetalInDisp = CClassInterface::getTF2DispMetal(m_pDispenser);
 			iDispenserLevel = CClassInterface::getTF2UpgradeLevel(m_pDispenser); // CTeamFortress2Mod::getDispenserLevel(m_pDispenser);
-			fDispenserHealthPercent = CClassInterface::getDispenserHealth(m_pDispenser) / CClassInterface::getTF2GetBuildingMaxHealth(m_pDispenser);
+			fDispenserHealthPercent = ((float)CClassInterface::getDispenserHealth(m_pDispenser)) / CClassInterface::getTF2GetBuildingMaxHealth(m_pDispenser);
 
 			fUseDispFactor = (((float)iMetalInDisp)/400) * (1.0f-fMetalPercent) * ((float)iDispenserLevel/3) * (1000.0f/distanceFrom(m_pDispenser));
 
@@ -4510,7 +4510,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		{
 			iMetalInDisp = CClassInterface::getTF2DispMetal(m_pNearestDisp);
 			iAllyDispLevel = CClassInterface::getTF2UpgradeLevel(m_pNearestDisp); // CTeamFortress2Mod::getDispenserLevel(m_pDispenser);
-			fAllyDispenserHealthPercent = CClassInterface::getDispenserHealth(m_pNearestDisp) / CClassInterface::getTF2GetBuildingMaxHealth(m_pNearestDisp);
+			fAllyDispenserHealthPercent = ((float)CClassInterface::getDispenserHealth(m_pNearestDisp)) / CClassInterface::getTF2GetBuildingMaxHealth(m_pNearestDisp);
 
 			fUseDispFactor = (((float)iMetalInDisp)/400) * (1.0f-fMetalPercent) * ((float)iAllyDispLevel/3) * (1000.0f/distanceFrom(m_pNearestDisp));
 

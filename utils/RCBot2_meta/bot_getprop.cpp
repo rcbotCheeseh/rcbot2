@@ -385,7 +385,7 @@ datamap_t* VGetDataDescMap(CBaseEntity* pThisPtr, int offset)
 	u.s.adjustor = 0;
 #endif
 
-	return (reinterpret_cast<VEmptyClass*>(this_ptr)->*u.mfpnew)();
+	return (datamap_t*)(reinterpret_cast<VEmptyClass*>(this_ptr)->*u.mfpnew)();
 }
 
 datamap_t* CBaseEntity_GetDataDescMap(CBaseEntity* pEntity)
@@ -637,7 +637,7 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 	{
 		edict_t *pEdict = reinterpret_cast<edict_t*>(edict);
 
-		pUnknown = pEdict->GetUnknown();
+		pUnknown = (IServerUnknown *)pEdict->GetUnknown();
 
 		if (!pUnknown)
 		{

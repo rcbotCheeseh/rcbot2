@@ -267,17 +267,17 @@ void *CSignatureFunction::findSignature(void *addrInBase, const char *signature)
 }
 
 
-void CSignatureFunction::findFunc(CRCBotKeyValueList *kv, const char*pKey, void *pAddrBase, const char *defaultsig)
+void CSignatureFunction::findFunc(CRCBotKeyValueList &kv, const char*pKey, void *pAddrBase, const char *defaultsig)
 {
 	char *sig = NULL;
 
-	if (kv->getString(pKey, &sig) && sig)
+	if (kv.getString(pKey, &sig) && sig)
 		m_func = findSignature(pAddrBase, sig);
 	else
 		m_func = findSignature(pAddrBase, defaultsig);
 }
 
-CGameRulesObject::CGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase)
+CGameRulesObject::CGameRulesObject(CRCBotKeyValueList &list, void *pAddrBase)
 {
 #ifdef _WIN32
 	m_func = NULL;
@@ -286,7 +286,7 @@ CGameRulesObject::CGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase)
 #endif
 }
 
-CCreateGameRulesObject::CCreateGameRulesObject(CRCBotKeyValueList *list, void *pAddrBase)
+CCreateGameRulesObject::CCreateGameRulesObject(CRCBotKeyValueList &list, void *pAddrBase)
 {
 #ifdef _WIN32
 	findFunc(list, "create_gamerules_object_win", pAddrBase, "\\x55\\x8B\\xEC\\x8B\\x0D\\x2A\\x2A\\x2A\\x2A\\x85\\xC9\\x74\\x07");

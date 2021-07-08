@@ -1590,10 +1590,10 @@ void CWaypoint :: draw ( edict_t *pEdict, bool bDrawPaths, unsigned short int iD
 
 	//////////////////////////////////////////
 
-	unsigned char r = colour.r;
-	unsigned char g = colour.g;
-	unsigned char b = colour.b;
-	unsigned char a = colour.a;
+	unsigned char r = (unsigned char)colour.r;
+	unsigned char g = (unsigned char)colour.g;
+	unsigned char b = (unsigned char)colour.b;
+	unsigned char a = (unsigned char)colour.a;
 
 	qAim = QAngle(0,m_iAimYaw,0);
 
@@ -1738,7 +1738,7 @@ void CWaypoints :: updateWaypointPairs ( std::vector<edict_wpt_pair_t> *pPairs, 
 
 	Vector vOrigin;
 
-	for (short int i = 0; i < iSize; i ++ )
+	for ( short int i = 0; i < iSize; i ++ )
 	{
 		if ( pWpt->isUsed() && pWpt->hasFlag(iWptFlag) )
 		{
@@ -2647,7 +2647,7 @@ CWaypoint *CWaypoints :: nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, i
 
 	CWaypoint *pTempi,*pTempj; 
 	
-	for (short int i = 0; i < numwaypoints; i ++ )
+	for ( short int i = 0; i < numwaypoints; i ++ )
 	{
 		if ( iTarget == i )
 			continue;
@@ -2657,9 +2657,9 @@ CWaypoint *CWaypoints :: nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, i
 		if ( (fidist=pTarget->distanceFrom(pTempi->getOrigin())) > finearestdist )
 			continue;
 
-		if ( pTable->GetVisibilityFromTo(iTarget,i) )
+		if ( pTable->GetVisibilityFromTo((int)iTarget,(int)i) )
 		{
-			for (short int j = 0; j < numwaypoints; j ++ )
+			for ( short int j = 0; j < numwaypoints; j ++ )
 			{				
 				if ( j == i )
 					continue;
@@ -2671,7 +2671,7 @@ CWaypoint *CWaypoints :: nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, i
 				if ( (fjdist=pTempj->distanceFrom(vOrigin)) > fjnearestdist )
 					continue;
 
-				if ( pTable->GetVisibilityFromTo(i,j) && !pTable->GetVisibilityFromTo(iTarget,j) )
+				if ( pTable->GetVisibilityFromTo((int)i,(int)j) && !pTable->GetVisibilityFromTo((int)iTarget,(int)j) )
 				{					
 					finearestdist = fidist;
 					fjnearestdist = fjdist;

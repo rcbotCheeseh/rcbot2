@@ -277,7 +277,7 @@ public:
 	}
 	inline bool autoWaypointOn () { return m_bAutoWaypoint; }
 	void autoEventWaypoint ( int iType, float fRadius, bool bAtOtherOrigin = false, int iTeam = 0, Vector vOrigin = Vector(0,0,0), bool bIgnoreTeam = false, bool bAutoType = false );
-	void giveMessage(char*msg, float fTime=0.1f);
+	void giveMessage(const char*msg, float fTime=0.1f);
 private:
 	edict_t *m_pPlayer;
 	// steam id
@@ -321,8 +321,6 @@ private:
 	WaypointList m_WaypointCutPaths;
 	
 	eWptCopyType m_WaypointCopyType;
-	// TODO: tooltips queue
-	// vector<CToolTip*> tooltips
 
 	float m_fNextPrintDebugInfo;
 
@@ -364,7 +362,7 @@ private:
 	int m_iAutoEventWaypointArea;
 	bool m_bAutoEventWaypointAutoType;
 	float m_fNextBotServerMessage;
-	std::queue<CToolTip*> m_NextTooltip;
+	std::queue<CToolTip> m_NextTooltip;
 	bool m_bSentWelcomeMessage;
 
 	bool m_bTeleportVectorValid;

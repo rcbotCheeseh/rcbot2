@@ -1,36 +1,5 @@
-In file included from /home/desktop/Dropbox/src/rcbot2/sm_ext/bot_sm_ext.cpp:1:
-In file included from /home/desktop/Dropbox/src/rcbot2/sm_ext/bot_sm_ext.h:7:
-In file included from /home/desktop/Dropbox/src/rcbot2/utils/RCBot2_meta/bot_plugin_meta.h:47:
-In file included from /home/desktop/Dropbox/src/rcbot2/alliedmodders/mmsource-1.11/core/ISmmPlugin.h:39:
-In file included from /home/desktop/Dropbox/src/rcbot2/alliedmodders/mmsource-1.11/core/ISmmAPI.h:45:
-In file included from /home/desktop/Dropbox/src/rcbot2/alliedmodders/hl2sdk-sdk2013/public/eiface.h:25:
-/home/desktop/Dropbox/src/rcbot2/alliedmodders/hl2sdk-sdk2013/public/tier1/bitbuf.h:398:54: error: 'this' argument to member function 'GetDebugName' has type '__restrict bf_write', but function is not marked restrict
-                        CallErrorHandler( BITBUFERROR_VALUE_OUT_OF_RANGE, GetDebugName() );
-                                                                          ^~~~~~~~~~~~
-/home/desktop/Dropbox/src/rcbot2/alliedmodders/hl2sdk-sdk2013/public/tier1/bitbuf.h:61:91: note: expanded from macro 'CallErrorHandler'
-        #define CallErrorHandler( errorType, pDebugName ) InternalBitBufErrorHandler( errorType, pDebugName );
-                                                                                                 ^~~~~~~~~~
-/home/desktop/Dropbox/src/rcbot2/alliedmodders/hl2sdk-sdk2013/public/tier1/bitbuf.h:166:15: note: 'GetDebugName' declared here
-        const char*             GetDebugName();
-                                ^
-/home/desktop/Dropbox/src/rcbot2/alliedmodders/hl2sdk-sdk2013/public/tier1/bitbuf.h:408:49: error: 'this' argument to member function 'GetDebugName' has type '__restrict bf_write', but function is not marked restrict
-                CallErrorHandler( BITBUFERROR_BUFFER_OVERRUN, GetDebugName() );
-                                                              ^~~~~~~~~~~~
-/home/desktop/Dropbox/src/rcbot2/alliedmodders/hl2sdk-sdk2013/public/tier1/bitbuf.h:61:91: note: expanded from macro 'CallErrorHandler'
-        #define CallErrorHandler( errorType, pDebugName ) InternalBitBufErrorHandler( errorType, pDebugName );
-                                                                                                 ^~~~~~~~~~
-/home/desktop/Dropbox/src/rcbot2/alliedmodders/hl2sdk-sdk2013/public/tier1/bitbuf.h:166:15: note: 'GetDebugName' declared here
-        const char*             GetDebugName();
-                                ^
-/home/desktop/Dropbox/src/rcbot2/alliedmodders/hl2sdk-sdk2013/public/tier1/bitbuf.h:777:49: error: 'this' argument to member function 'GetDebugName' has type '__restrict bf_read', but function is not marked restrict
-                CallErrorHandler( BITBUFERROR_BUFFER_OVERRUN, GetDebugName() );
-                                                              ^~~~~~~~~~~~
-/home/desktop/Dropbox/src/rcbot2/alliedmodders/hl2sdk-sdk2013/public/tier1/bitbuf.h:61:91: note: expanded from macro 'CallErrorHandler'
-        #define CallErrorHandler( errorType, pDebugName ) InternalBitBufErrorHandler( errorType, pDebugName );
-                                                                                                 ^~~~~~~~~~
-/home/desktop/Dropbox/src/rcbot2/alliedmodders/hl2sdk-sdk2013/public/tier1/bitbuf.h:520:15: note: 'GetDebugName' declared here
-        const char*             GetDebugName() const { return m_pDebugName; }
-                                ^
-3 errors generated.
-Build failed: rcbot.2.sdk2013/_home_desktop_Dropbox_src_rcbot2_sm_ext_bot_sm_ext.o
+/usr/bin/ld: utils_RCBot2_meta_bot_synergy.o: in function `CBotSynergy::touchedWpt(CWaypoint*, int, int)':
+/home/desktop/Dropbox/src/rcbot2/utils/RCBot2_meta/bot_synergy.cpp:454: undefined reference to `CGameTrace::GetEntityIndex() const'
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+Build failed: rcbot.2.sdk2013/rcbot.2.sdk2013.so
 

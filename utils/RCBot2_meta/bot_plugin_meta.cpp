@@ -26,7 +26,6 @@
 #include "ndebugoverlay.h"
 #include "irecipientfilter.h"
 
-#include "KeyValues.h"
 
 #include "bot_cvars.h"
 
@@ -49,7 +48,6 @@
 #include "bot_mods.h"
 
 #include <build_info.h>
-#include <ctime>
 
 SH_DECL_HOOK6(IServerGameDLL, LevelInit, SH_NOATTRIB, 0, bool, char const *, char const *, char const *, char const *, bool, bool);
 SH_DECL_HOOK3_void(IServerGameDLL, ServerActivate, SH_NOATTRIB, 0, edict_t *, int, int);
@@ -386,37 +384,35 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 	FILE *fp = fopen(filename, "r");
 
-	CRCBotKeyValueList *pKVL = new CRCBotKeyValueList();
+	CRCBotKeyValueList kvl;
 
 	if (fp)
-		pKVL->parseFile(fp);
+		kvl.parseFile(fp);
 
 	void *gameServerFactory = reinterpret_cast<void*>(ismm->GetServerFactory(false));
 
 	int val;
 
 #ifdef _WIN32
-	if (pKVL->getInt("runplayermove_dods_win", &val))
+	if (kvl.getInt("runplayermove_dods_win", &val))
 		rcbot_runplayercmd_dods.SetValue(val);
-	if (pKVL->getInt("gamerules_win", &val))
+	if (kvl.getInt("gamerules_win", &val))
 		rcbot_gamerules_offset.SetValue(val);
-	if (pKVL->getInt("runplayermove_synergy_win", &val))
+	if (kvl.getInt("runplayermove_synergy_win", &val))
 		rcbot_runplayercmd_syn.SetValue(val);
-	if (pKVL->getInt("getdatadescmap_win", &val))
+	if (kvl.getInt("getdatadescmap_win", &val))
 		rcbot_datamap_offset.SetValue(val);
 #else
-	if (pKVL->getInt("runplayermove_dods_linux", &val))
+	if (kvl.getInt("runplayermove_dods_linux", &val))
 		rcbot_runplayercmd_dods.SetValue(val);
-	if (pKVL->getInt("runplayermove_synergy_linux", &val))
+	if (kvl.getInt("runplayermove_synergy_linux", &val))
 		rcbot_runplayercmd_syn.SetValue(val);
-	if (pKVL->getInt("getdatadescmap_linux", &val))
+	if (kvl.getInt("getdatadescmap_linux", &val))
 		rcbot_datamap_offset.SetValue(val);
 #endif
 
-	g_pGameRules_Obj = new CGameRulesObject(pKVL, gameServerFactory);
-	g_pGameRules_Create_Obj = new CCreateGameRulesObject(pKVL, gameServerFactory);
-
-	delete pKVL;
+	g_pGameRules_Obj = new CGameRulesObject(kvl, gameServerFactory);
+	g_pGameRules_Create_Obj = new CCreateGameRulesObject(kvl, gameServerFactory);
 
 	if (fp)
 		fclose(fp);
@@ -540,7 +536,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 bool RCBotPluginMeta::FireGameEvent(IGameEvent * pevent, bool bDontBroadcast)
 {
-	CBotEvents::executeEvent(pevent,TYPE_IGAMEEVENT);
+	CBotEvents::executeEvent((void*)pevent,TYPE_IGAMEEVENT);
 
 	RETURN_META_VALUE(MRES_IGNORED, true);
 }
@@ -550,6 +546,8 @@ bool RCBotPluginMeta::Unload(char *error, size_t maxlen)
 #if defined SM_EXT
 	SM_UnloadExtension();
 #endif
+
+	CBots::kickRandomBot(MAX_PLAYERS);
 	
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameDLL, LevelInit, server, this, &RCBotPluginMeta::Hook_LevelInit, true);
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameDLL, ServerActivate, server, this, &RCBotPluginMeta::Hook_ServerActivate, true);

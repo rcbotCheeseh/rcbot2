@@ -431,13 +431,7 @@ void CClient :: think ()
 	{
 		if ( !m_NextTooltip.empty() )
 		{
-			CToolTip *pTooltip = m_NextTooltip.front();
-			
-			pTooltip->send(m_pPlayer);
-
-			m_NextTooltip.pop();
-
-			delete pTooltip;
+			m_NextTooltip.front().send(m_pPlayer);
 
 			m_fNextBotServerMessage = engine->Time() + 11.0f;
 		}
@@ -537,7 +531,9 @@ void CClient :: think ()
 			//g_pBotManager->GetBotController(m_pPlayer)->IsEFlagSet();
 
 			if ( /*(pev->waterlevel < 3) &&*/ (m_fCanPlaceJump < engine->Time()) )
-			{
+			{	
+				Vector v_floor;
+
 				if ( (m_fCanPlaceJump != -1) && (m_iLastButtons & IN_JUMP) && !(iPlayerFlags & FL_ONGROUND) )
 				{
 					int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 80.0, -1, true, false, false, NULL);
@@ -570,8 +566,6 @@ void CClient :: think ()
 
 							if ( iNewWpt != -1 )
 							{
-								Vector v_floor;
-								
 								CWaypoint *pWpt = CWaypoints::getWaypoint(iNewWpt);
 								CWaypoint *pJumpWpt = CWaypoints::getWaypoint(m_iLastJumpWaypointIndex);
 
@@ -934,11 +928,11 @@ void CClient :: think ()
 	}
 }
 
-void CClient::giveMessage(char *msg,float fTime)
+void CClient::giveMessage(const char *msg,float fTime)
 {
 	if ( rcbot_tooltips.GetBool() )
 	{
-		m_NextTooltip.push(new CToolTip(msg,NULL));
+		m_NextTooltip.emplace(CToolTip(msg, NULL));
 		m_fNextBotServerMessage = engine->Time() + fTime;
 	}
 }

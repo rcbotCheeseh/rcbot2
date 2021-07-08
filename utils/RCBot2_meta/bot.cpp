@@ -3451,7 +3451,7 @@ void CBots :: kickRandomBot (size_t count)
 	for ( size_t i = 0; i < MAX_PLAYERS; i ++ )
 	{
 		if ( m_Bots[i]->inUse() )
-			botList.push_back(i);
+			botList.push_back(m_Bots[i]->getPlayerID());
 	}
 
 	if ( botList.empty() )
@@ -3464,15 +3464,11 @@ void CBots :: kickRandomBot (size_t count)
 
 	size_t numBotsKicked = 0;
 	while (numBotsKicked < count && botList.size()) {
-		const size_t index = botList.back();
-		botList.pop_back();
-		
-		CBot *tokick = m_Bots[index];
-
-		sprintf(szCommand,"kickid %d\n",tokick->getPlayerID());
-
+		sprintf(szCommand, "kickid %d\n", botList.back());
 		engine->ServerCommand(szCommand);
 		numBotsKicked++;
+		
+		botList.pop_back();
 	}
 
 	m_flAddKickBotTime = engine->Time() + 2.0f;
@@ -3481,15 +3477,13 @@ void CBots :: kickRandomBot (size_t count)
 void CBots :: kickRandomBotOnTeam ( int team )
 {
 	std::vector<int> botList;
-	int index;
-	CBot *tokick;
 	char szCommand[512];
 	//gather list of bots
 	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
 	{
 		if ( m_Bots[i]->inUse() && m_Bots[i]->getTeam() == team )
 		{
-			botList.push_back(i);
+			botList.push_back(m_Bots[i]->getPlayerID());
 		}
 	}
 
@@ -3499,12 +3493,7 @@ void CBots :: kickRandomBotOnTeam ( int team )
 		return;
 	}
 
-	// TODO change this to container function
-	index = botList[ randomInt(0, botList.size() - 1) ];
-	
-	tokick = m_Bots[index];
-	
-	sprintf(szCommand,"kickid %d\n",tokick->getPlayerID());
+	sprintf(szCommand,"kickid %d\n", botList[ randomInt(0, botList.size() - 1) ]);
 
 	m_flAddKickBotTime = engine->Time() + 2.0f;
 

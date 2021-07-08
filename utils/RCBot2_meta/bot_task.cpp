@@ -2312,7 +2312,7 @@ void CBotTF2FindPipeWaypoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 				}
 
 				// If this waypoint is NOT visible to target it is good
-				if ( !m_pTable->GetVisibilityFromTo(m_iTargetWaypoint,m_WaypointsJ[m_j]) )
+				if ( !m_pTable->GetVisibilityFromTo((int)m_iTargetWaypoint,(int)m_WaypointsJ[m_j]) )
 				{			
 					m_fNearesti = fidist;
 					m_fNearestj = fjdist;

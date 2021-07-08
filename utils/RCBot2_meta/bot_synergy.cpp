@@ -51,7 +51,7 @@
 #include "bot_perceptron.h"
 #include "bot_plugin_meta.h"
 #include "bot_waypoint_visibility.h"
-#include "random.h"
+#include "bot_mtrand.h"
 
 extern IVDebugOverlay *debugoverlay;
 
@@ -342,7 +342,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		CWaypoint* pWaypoint = NULL;
 		CWaypoint* pRoute = NULL;
 		CBotSchedule* pSched = new CBotSchedule();
-		m_fGoToGoalTime = engine->Time() + 90.0f + RandomFloat(30.0f, 150.0f);
+		m_fGoToGoalTime = engine->Time() + 90.0f + randomFloat(30.0f, 150.0f);
 
 		pSched->setID(SCHED_ATTACKPOINT);
 
@@ -453,7 +453,6 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 			**/
 			CTraceFilterHitAll filter;
 			trace_t *tr = CBotGlobals::getTraceResult();
-            //int iEntity = tr->GetEntityIndex();
 			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), pNext->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), MASK_PLAYERSOLID, &filter);
 			if(tr->fraction < 1.0f)
 			{
@@ -492,7 +491,7 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 			sched->setID(SCHED_GOTO_ORIGIN);
 			sched->addTask(new CMoveToTask(pEntity));
 			sched->addTask(new CBotHL2DMUseButton(pEntity));
-			sched->addTask(new CBotWaitTask(RandomFloat(3.0f, 6.0f)));
+			sched->addTask(new CBotWaitTask(randomFloat(3.0f, 6.0f)));
 			m_pSchedules->addFront(sched);
 		}
 	}
