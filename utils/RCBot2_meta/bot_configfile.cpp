@@ -64,15 +64,17 @@ void CBotConfigFile :: load ()
 
 		size_t len = strlen(line);
 
-		if (line[len-1] == '\n') {
+		if (len && line[len-1] == '\n') {
 			line[--len] = '\0';
 		}
 
-		if (line[len-1] == '\r') {
+		if (len && line[len-1] == '\r') {
 			line[--len] = '\0';
 		}
 
-		CBotGlobals::botMessage(NULL, 0, line);
+		if (!len)
+			continue;
+
 		m_Commands.push_back(CStrings::getString(line));
 	}
 
