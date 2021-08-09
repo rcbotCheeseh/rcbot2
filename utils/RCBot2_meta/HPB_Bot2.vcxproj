@@ -311,30 +311,7 @@
     <ClInclude Include="bot_wpt_color.h" />
     <ClInclude Include="bot_wpt_dist.h" />
     <ClInclude Include="bot_zombie.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\Color.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\const.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\dbg.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\dt_send.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\eiface.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\FileSystem.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\icommandline.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\icvar.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\igameevents.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\interface.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\game\server\iplayerinfo.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\engine\iserverplugin.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\KeyValues.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\mathlib\mathlib.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\mem.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\memalloc.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\memdbgon.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\server_class.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\strtools.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\utlbuffer.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\utlmemory.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\utlvector.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\mathlib\vector.h" />
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\vstdlib\vstdlib.h" />
+    <ClInclude Include="engine_wrappers.h" />
     <ClInclude Include="logging.h" />
   </ItemGroup>
   <ItemGroup>

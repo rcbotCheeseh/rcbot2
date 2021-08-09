@@ -79,7 +79,7 @@ public:
 		return Vector((float)m_x,(float)m_y,(float)m_z);
 	}
 
-	inline BOOL IsVectorSet ()
+	inline BOOL IsVectorSet () const
 	{
 		return m_bVectorSet;
 	}
@@ -104,7 +104,7 @@ public:
 		SetVector(vec);
 	}
 
-	int getFlags ()
+	int getFlags () const
 	{
 		return m_iFlags;
 	}
@@ -127,7 +127,7 @@ public:
 		m_pszSound = pszSound;
 	}
 
-	void send(edict_t *pPlayer);
+	void send(edict_t *pPlayer) const;
 private:
 	const char *m_pszMessage;
 	const char *m_pszSound;
@@ -169,13 +169,13 @@ public:
 
 	void init ();
 
-	void setupMenuCommands ();
-	void resetMenuCommands ();
+	void setupMenuCommands () const;
+	void resetMenuCommands () const;
 
 	void setTeleportVector ();
 	Vector *getTeleportVector () { if ( m_bTeleportVectorValid ) return &m_vTeleportVector; return NULL; }
 
-	inline bool isUsingMenu () { return (m_pMenu != NULL); }
+	inline bool isUsingMenu () const { return (m_pMenu != NULL); }
 	inline void setCurrentMenu ( CBotMenu *pMenu ) 
 	{ 
 		m_pMenu = pMenu; 
@@ -185,13 +185,13 @@ public:
 		else
 			setupMenuCommands();
 	}
-	inline CBotMenu *getCurrentMenu () { return m_pMenu; }
+	inline CBotMenu *getCurrentMenu () const { return m_pMenu; }
 	inline void setMenuCommand ( int iCommand ) { m_iMenuCommand = iCommand; }
-	inline int getLastMenuCommand () { return m_iMenuCommand; }
-	bool needToRenderMenu ();
+	inline int getLastMenuCommand () const { return m_iMenuCommand; }
+	bool needToRenderMenu () const;
 	void updateRenderMenuTime ();
 
-	int accessLevel ();
+	int accessLevel () const;
 	// this player joins with pPlayer edict
 	void clientConnected ( edict_t *pPlayer );
 	// this player disconnects
@@ -199,55 +199,55 @@ public:
 
 	inline void showMenu () { m_bShowMenu = true; };
 
-	bool isUsed ();
+	bool isUsed () const;
 
-	Vector getOrigin ();
+	Vector getOrigin () const;
 
-	inline float getSpeed () { return m_fSpeed; }
-	inline Vector getVelocity () { return m_vVelocity; }
+	inline float getSpeed () const { return m_fSpeed; }
+	inline Vector getVelocity () const { return m_vVelocity; }
 
 	void setWaypointCut ( CWaypoint *pWaypoint );
 	void setWaypointCopy (CWaypoint *pWaypoint); 
 	void setEdict ( edict_t *pPlayer );
 
-	edict_t *getPlayer () { return m_pPlayer; }
+	edict_t *getPlayer () const { return m_pPlayer; }
 
-	inline bool isPlayer ( edict_t *pPlayer ) { return m_pPlayer == pPlayer; }
+	inline bool isPlayer ( edict_t *pPlayer ) const { return m_pPlayer == pPlayer; }
 
-	inline bool isWaypointOn () { return m_bWaypointOn; }
+	inline bool isWaypointOn () const { return m_bWaypointOn; }
 	inline void setWaypointOn ( bool bOn ) { m_bWaypointOn = bOn; }
 	inline void setWaypoint ( int iWpt ) { m_iCurrentWaypoint = iWpt; }
-	inline int currentWaypoint () { return m_iCurrentWaypoint; }
+	inline int currentWaypoint () const { return m_iCurrentWaypoint; }
 
 	inline void setAccessLevel ( int iLev ) { m_iAccessLevel = iLev; }
 
-	inline bool isAutoPathOn () { return m_bAutoPaths; }
+	inline bool isAutoPathOn () const { return m_bAutoPaths; }
 	inline void setAutoPath ( bool bOn ) { m_bAutoPaths = bOn; }
-	inline bool isPathWaypointOn () { return m_bPathWaypointOn; }
+	inline bool isPathWaypointOn () const { return m_bPathWaypointOn; }
 	inline void setPathWaypoint ( bool bOn ) { m_bPathWaypointOn = bOn; }
 
-	inline int getWptArea () { return m_iWptArea; }
+	inline int getWptArea () const { return m_iWptArea; }
 	inline void setWptArea ( int area ) { m_iWptArea = area; }	
 
 	inline void setPathFrom ( int iWpt ) { m_iPathFrom = iWpt; }
 	inline void setPathTo ( int iWpt ) { m_iPathTo = iWpt; }
 
-	inline int getPathFrom () { return m_iPathFrom; }
-	inline int getPathTo () { return m_iPathTo; }
+	inline int getPathFrom () const { return m_iPathFrom; }
+	inline int getPathTo () const { return m_iPathTo; }
 
 	void teleportTo ( Vector vOrigin );
 
-	inline const char *getSteamID () { return m_szSteamID; }
-	const char *getName ();
+	inline const char *getSteamID () const { return m_szSteamID; }
+	const char *getName () const;
 
 	void updateCurrentWaypoint ();
 
 	void clientActive ();
 
 	void setDebug ( int iLevel, bool bSet ) { if ( bSet ) { m_iDebugLevels |= (1<<iLevel); } else { m_iDebugLevels &= ~(1<<iLevel); } }
-	bool isDebugOn ( int iLevel ) { return (m_iDebugLevels & (1<<iLevel))>0; }
+	bool isDebugOn ( int iLevel ) const { return (m_iDebugLevels & (1<<iLevel))>0; }
 	void clearDebug ( ) { m_iDebugLevels = 0; }
-	bool isDebugging () { return (m_iDebugLevels != 0); }
+	bool isDebugging () const { return (m_iDebugLevels != 0); }
 
 	inline void setDebugBot ( edict_t *pBot ) { m_pDebugBot = pBot; }	
 	inline bool isDebuggingBot ( edict_t *pBot ) { return m_pDebugBot == pBot; }
@@ -256,26 +256,26 @@ public:
 	void think ();
 
 	inline void setDrawType ( unsigned short int iType ) { m_iWaypointDrawType = iType; }
-	inline unsigned short int getDrawType () { return m_iWaypointDrawType; }
+	inline unsigned short int getDrawType () const { return m_iWaypointDrawType; }
 
-	inline float getWptCopyRadius() { return m_fCopyWptRadius; }
-	inline int getWptCopyFlags () { return m_iCopyWptFlags; }
-	inline int getWptCopyArea () { return m_iCopyWptArea; }
+	inline float getWptCopyRadius() const { return m_fCopyWptRadius; }
+	inline int getWptCopyFlags () const { return m_iCopyWptFlags; }
+	inline int getWptCopyArea () const { return m_iCopyWptArea; }
 
-	inline eWptCopyType getWptCopyType () { return m_WaypointCopyType; }
+	inline eWptCopyType getWptCopyType () const { return m_WaypointCopyType; }
 
-	inline bool isShowingWaypoint ( int iFlags ) { return (m_iWaypointShowFlags & iFlags) > 0; }
+	inline bool isShowingWaypoint ( int iFlags ) const { return (m_iWaypointShowFlags & iFlags) > 0; }
 	inline void showWaypoints ( int iFlags ) { m_iWaypointShowFlags |= iFlags; }
 	inline void dontShowWaypoints ( int iFlags ) { m_iWaypointShowFlags &= ~iFlags; }
-	inline bool isShowingAllWaypoints () { return m_iWaypointShowFlags == 0; }
-	inline int getShowWaypointFlags () { return m_iWaypointShowFlags; }
+	inline bool isShowingAllWaypoints () const { return m_iWaypointShowFlags == 0; }
+	inline int getShowWaypointFlags () const { return m_iWaypointShowFlags; }
 	void playSound ( const char *pszSound );
 	inline void setAutoWaypointMode ( bool mode, bool debug ) 
 	{ 
 		m_bAutoWaypoint = mode; 
 		m_bDebugAutoWaypoint = debug; 
 	}
-	inline bool autoWaypointOn () { return m_bAutoWaypoint; }
+	inline bool autoWaypointOn () const { return m_bAutoWaypoint; }
 	void autoEventWaypoint ( int iType, float fRadius, bool bAtOtherOrigin = false, int iTeam = 0, Vector vOrigin = Vector(0,0,0), bool bIgnoreTeam = false, bool bAutoType = false );
 	void giveMessage(const char*msg, float fTime=0.1f);
 private:

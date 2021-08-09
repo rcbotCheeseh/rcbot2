@@ -147,7 +147,7 @@ bool CWaypointNavigator :: beliefLoad ( )
 
    // convert from short int to float
 
-	const unsigned short int num = (unsigned short int)CWaypoints::numWaypoints();
+	const auto num = (unsigned short int)CWaypoints::numWaypoints();
 
    // quick loop
    for ( unsigned short int i = 0; i < num; i ++ )
@@ -214,7 +214,7 @@ bool CWaypointNavigator :: beliefSave ( bool bOverride )
 
    // convert from short int to float
 
-	const unsigned short int num = (unsigned short int)CWaypoints::numWaypoints();
+	const auto num = (unsigned short int)CWaypoints::numWaypoints();
 
    // quick loop
    for ( unsigned short int i = 0; i < num; i ++ )
@@ -1453,7 +1453,7 @@ void CWaypoint :: drawPaths ( edict_t *pEdict, unsigned short int iDrawType )
 	}
 }
 // draws one path beam
-void CWaypoint :: drawPathBeam ( CWaypoint *to, unsigned short int iDrawType )
+void CWaypoint :: drawPathBeam ( CWaypoint *to, unsigned short int iDrawType ) const
 {
 	static int r,g,b;
 
@@ -1686,7 +1686,7 @@ void CWaypoint :: clearPaths ()
 	m_thePaths.clear();
 }
 // get the distance from this waypoint from vector position vOrigin
-float CWaypoint :: distanceFrom ( Vector vOrigin )
+float CWaypoint :: distanceFrom ( Vector vOrigin ) const
 {
 	return (m_vOrigin - vOrigin).Length();
 }
@@ -2585,7 +2585,7 @@ CWaypoint *CWaypoints :: nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, i
 
 	CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 
-	const short int numwaypoints = (short int)numWaypoints();
+	const auto numwaypoints = (short int)numWaypoints();
 
 	float finearestdist = 9999.0f;
 	float fjnearestdist = 9999.0f;
@@ -2935,7 +2935,7 @@ bool CWaypoint :: checkReachable ()
 	return m_bIsReachable;
 }
 
-int CWaypoint :: numPaths ()
+int CWaypoint :: numPaths () const
 {
 	return m_thePaths.size();
 }
@@ -2983,7 +2983,7 @@ void CWaypoint :: removePathFrom ( int iWaypointIndex )
 	m_PathsTo.erase(std::remove(m_PathsTo.begin(), m_PathsTo.end(), iWaypointIndex), m_PathsTo.end());
 }
 
-int CWaypoint :: numPathsToThisWaypoint ()
+int CWaypoint :: numPathsToThisWaypoint () const
 {
 	return m_PathsTo.size();
 }
@@ -3012,7 +3012,7 @@ bool CWaypoint :: addPathTo ( int iWaypointIndex )
 	return true;
 }
 
-Vector CWaypoint :: applyRadius ()
+Vector CWaypoint :: applyRadius () const
 {
 	if ( m_fRadius > 0 )
 		return Vector(randomFloat(-m_fRadius,m_fRadius),randomFloat(m_fRadius,m_fRadius),0);
@@ -3038,7 +3038,7 @@ void CWaypoint :: info ( edict_t *pEdict )
 	CWaypointTypes::printInfo(this,pEdict);
 }
 
-bool CWaypoint ::isAiming()
+bool CWaypoint ::isAiming() const
 {
 	return (m_iFlags & (CWaypointTypes::W_FL_DEFEND | 
 		CWaypointTypes::W_FL_ROCKET_JUMP | 

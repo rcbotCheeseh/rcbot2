@@ -287,7 +287,7 @@ CCreateGameRulesObject::CCreateGameRulesObject(CRCBotKeyValueList &list, void *p
 #endif
 }
 
-void **CCreateGameRulesObject::getGameRules()
+void **CCreateGameRulesObject::getGameRules() const
 {
 	const auto addr = static_cast<char*>(m_func);
 	return *reinterpret_cast<void ***>(addr + rcbot_gamerules_offset.GetInt());

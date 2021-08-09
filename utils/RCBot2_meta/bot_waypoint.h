@@ -91,17 +91,17 @@ public:
 
 	CWaypointType ( int iBit, const char *szName, const char *szDescription, WptColor vColour, int iModBits = BITS_MOD_ALL, int iImportance = 0 );
 
-	inline const char *getName () { return m_szName; }
-	inline const char *getDescription () { return m_szDescription; }
+	inline const char *getName () const { return m_szName; }
+	inline const char *getDescription () const { return m_szDescription; }
 
-	inline bool isBitsInFlags ( int iFlags ) { return (iFlags & m_iBit)==m_iBit; }
-	inline int getBits () { return m_iBit; }
+	inline bool isBitsInFlags ( int iFlags ) const { return (iFlags & m_iBit)==m_iBit; }
+	inline int getBits () const { return m_iBit; }
 	inline void setMods ( int iMods ){ m_iMods = iMods; }// input bitmask of mods (32 max)
-	inline bool forMod ( int iMod ) { return ((1<<iMod)&m_iMods)==(1<<iMod); }
-	inline WptColor getColour () { return m_vColour; }
-	inline int getImportance () { return m_iImportance; }
+	inline bool forMod ( int iMod ) const { return ((1<<iMod)&m_iMods)==(1<<iMod); }
+	inline WptColor getColour () const { return m_vColour; }
+	inline int getImportance () const { return m_iImportance; }
 
-	bool operator < ( CWaypointType *other )
+	bool operator < ( CWaypointType *other ) const
 	{
 		return m_iImportance < other->getImportance();
 	}
@@ -207,7 +207,7 @@ private:
 class CWaypointTest
 {
 public:
-	void go ( edict_t *pPlayer );
+	static void go ( edict_t *pPlayer );
 };
 
 typedef struct
@@ -259,12 +259,12 @@ public:
 		m_iAimYaw = iYaw;
 	}
 
-	inline float getAimYaw ()
+	inline float getAimYaw () const
 	{
 		return (float)m_iAimYaw;
 	}
 
-	inline Vector getOrigin ()
+	inline Vector getOrigin () const
 	{
 		return m_vOrigin;
 	}
@@ -287,12 +287,12 @@ public:
 		m_iFlags = 0;
 	}
 
-	inline bool hasFlag ( int iFlag )
+	inline bool hasFlag ( int iFlag ) const
 	{
 		return (m_iFlags & iFlag) == iFlag;
 	}
 
-	inline bool hasSomeFlags ( int iFlag )
+	inline bool hasSomeFlags ( int iFlag ) const
 	{
 		return (m_iFlags & iFlag) > 0;
 	}
@@ -323,7 +323,7 @@ public:
 
 	bool isPathOpened ( Vector vPath );
 
-	inline bool isUsed ()
+	inline bool isUsed () const
 	{
 		return m_bUsed;
 	}
@@ -338,27 +338,27 @@ public:
 		m_thePaths.clear();
 	}
 
-	inline int getArea () { return m_iArea; }
+	inline int getArea () const { return m_iArea; }
 	inline void setArea (int area) { m_iArea = area; }
 
 	void drawPaths ( edict_t *pEdict, unsigned short int iDrawType );
 
-	void drawPathBeam ( CWaypoint *to, unsigned short int iDrawType );
+	void drawPathBeam ( CWaypoint *to, unsigned short int iDrawType ) const;
 
 	inline void setUsed ( bool bUsed ){	m_bUsed = bUsed;}
 
 	inline void clearPaths ();
 
-	inline float distanceFrom ( CWaypoint *other )
+	inline float distanceFrom ( CWaypoint *other ) const
 	{
 		return distanceFrom(other->getOrigin());
 	}
 
-	float distanceFrom ( Vector vOrigin );
+	float distanceFrom ( Vector vOrigin ) const;
 
-	int numPaths ();
+	int numPaths () const;
 
-	int numPathsToThisWaypoint ();
+	int numPathsToThisWaypoint () const;
 	int getPathToThisWaypoint ( int i );
 
 	int getPath ( int i );
@@ -367,17 +367,17 @@ public:
 
 	void save ( FILE *bfp );
 
-	inline int getFlags (){return m_iFlags;}
+	inline int getFlags () const {return m_iFlags;}
 
 	bool forTeam ( int iTeam );
 
-	inline float getRadius () { return m_fRadius; }
+	inline float getRadius () const { return m_fRadius; }
 
 	inline void setRadius ( float fRad ) { m_fRadius = fRad; }
 
-	Vector applyRadius ();
+	Vector applyRadius () const;
 
-	bool isAiming ();
+	bool isAiming () const;
 
 private:
 	Vector m_vOrigin;

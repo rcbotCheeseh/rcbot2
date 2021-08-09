@@ -4610,7 +4610,7 @@ CBotTF2Spam :: CBotTF2Spam ( Vector vStart, Vector vTarget, CBotWeapon *pWeapon 
 	m_fTime = 0.0f;
 }
 
-float CBotTF2Spam :: getDistance ()
+float CBotTF2Spam :: getDistance () const
 {
 	return (m_vStart - m_vTarget).Length();
 }
@@ -5431,7 +5431,7 @@ CBotTask :: CBotTask ()
 	_init();
 }
 
-bool CBotTask :: timedOut ()
+bool CBotTask :: timedOut () const
 {
 	return (this->m_fTimeOut != 0) && (engine->Time() < this->m_fTimeOut);
 }
@@ -5506,12 +5506,12 @@ void CBotTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 	return;
 }
 
-bool CBotTask :: hasFailed ()
+bool CBotTask :: hasFailed () const
 {
 	return m_iState == STATE_FAIL;
 }
 
-bool CBotTask :: isComplete ()
+bool CBotTask :: isComplete () const
 {
 	return m_iState == STATE_COMPLETE;
 }

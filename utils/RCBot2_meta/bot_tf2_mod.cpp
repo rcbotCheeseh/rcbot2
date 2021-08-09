@@ -905,7 +905,7 @@ int CTeamFortress2Mod ::getHighestScore ()
 
 		if ( edict && CBotGlobals::entityIsValid(edict) )
 		{
-			const short int score = (short int)CClassInterface::getTF2Score(edict);
+			const auto score = (short int)CClassInterface::getTF2Score(edict);
 		
 			if ( score > highest )
 			{

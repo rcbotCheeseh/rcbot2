@@ -120,19 +120,19 @@ public:
 
 	void execute ( CBot *pBot );
 
-	const char *getIDString ();
+	const char *getIDString () const;
 
 	CBotTask *currentTask ()
 	{
 		return m_Tasks.empty() ? NULL : m_Tasks.front();
 	}
 
-	bool hasFailed ()
+	bool hasFailed () const
 	{
 		return m_bFailed;
 	}
 
-	bool isComplete ()
+	bool isComplete () const
 	{
 		return m_Tasks.empty();
 	}
@@ -157,18 +157,18 @@ public:
 	void passEdict(edict_t *p);
 	//////////////////////////
 
-	bool hasPassInfo () { return (m_bitsPass!=0); }
+	bool hasPassInfo () const { return (m_bitsPass!=0); }
 
-	inline int passedInt () { return iPass; }
-	inline float passedFloat() { return fPass; }
-	inline Vector passedVector() { return vPass; }
-	inline edict_t *passedEdict() { return pPass; }
-	inline bool isID ( eBotSchedule iId ) { return m_iSchedId == iId; }
+	inline int passedInt () const { return iPass; }
+	inline float passedFloat() const { return fPass; }
+	inline Vector passedVector() const { return vPass; }
+	inline edict_t *passedEdict() const { return pPass; }
+	inline bool isID ( eBotSchedule iId ) const { return m_iSchedId == iId; }
 
-	inline bool hasPassInt () { return ((m_bitsPass&BITS_SCHED_PASS_INT)>0); }
-	inline bool hasPassFloat () { return ((m_bitsPass&BITS_SCHED_PASS_FLOAT)>0); }
-	inline bool hasPassVector () { return ((m_bitsPass&BITS_SCHED_PASS_VECTOR)>0); }
-	inline bool hasPassEdict () { return ((m_bitsPass&BITS_SCHED_PASS_EDICT)>0); }
+	inline bool hasPassInt () const { return ((m_bitsPass&BITS_SCHED_PASS_INT)>0); }
+	inline bool hasPassFloat () const { return ((m_bitsPass&BITS_SCHED_PASS_FLOAT)>0); }
+	inline bool hasPassVector () const { return ((m_bitsPass&BITS_SCHED_PASS_VECTOR)>0); }
+	inline bool hasPassEdict () const { return ((m_bitsPass&BITS_SCHED_PASS_EDICT)>0); }
 
 	inline void setID ( eBotSchedule iId ) { m_iSchedId = iId; }
 
@@ -265,7 +265,7 @@ public:
 		m_Schedules.push_front(pSchedule);
 	}
 
-	inline bool isEmpty ()
+	inline bool isEmpty () const
 	{
 		return m_Schedules.empty();
 	}

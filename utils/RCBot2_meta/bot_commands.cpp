@@ -135,14 +135,14 @@ CBotCommandInline KickBotCommand("kickbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATE
 	return COMMAND_ACCESSED;
 }, R"(usage "kickbot" or "kickbot <team>" : kicks random bot or bot on team: <team>)");
 
-bool CBotCommand :: hasAccess ( CClient *pClient )
+bool CBotCommand :: hasAccess ( CClient *pClient ) const
 {
 	// check access level excluding dedicated server flag
 	const int iClientAccessLevel = this->m_iAccessLevel & ~CMD_ACCESS_DEDICATED;
 	return (iClientAccessLevel & pClient->accessLevel()) == iClientAccessLevel;
 }
 
-bool CBotCommand :: isCommand ( const char *szCommand )
+bool CBotCommand :: isCommand ( const char *szCommand ) const
 {
 	return FStrEq(szCommand,m_szCommand);
 }

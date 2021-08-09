@@ -135,7 +135,7 @@ public:
 
 	bool withinTeammate ( );
 
-	bool hasBomb () { return m_bHasBomb; }
+	bool hasBomb () const { return m_bHasBomb; }
 	void removeBomb () { m_bHasBomb = false; }
 	void bombEvent ( int iEvent, int iCP, int iTeam );
 
@@ -164,7 +164,7 @@ public:
 
 	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true );
 
-	float getArmorPercent () { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
+	float getArmorPercent () const { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
 
 	void getTasks (unsigned int iIgnore);
 
@@ -196,10 +196,10 @@ public:
 
 	bool checkStuck ();
 
-	bool hasMG ();
-	CBotWeapon *getMG();
-	CBotWeapon *getSniperRifle ();
-	bool hasSniperRifle ();
+	bool hasMG () const;
+	CBotWeapon *getMG() const;
+	CBotWeapon *getSniperRifle () const;
+	bool hasSniperRifle () const;
 
 	void voiceCommand ( int cmd );
 
@@ -225,7 +225,7 @@ public:
 
 	void listenForPlayers ();
 
-	void signal ( const char *signal );
+	void signal ( const char *signal ) const;
 
 	void sayInPosition ();
 

@@ -308,7 +308,7 @@ private:
 class CBroadcastOvertime : public IBotFunction
 {
 public:
-	CBroadcastOvertime () {};
+	CBroadcastOvertime () = default;
 	void execute (CBot *pBot);
 };
 
@@ -497,7 +497,7 @@ public:
 
 	void pickedUpFlag ();
 
-	inline bool hasFlag () { return m_bHasFlag; }
+	inline bool hasFlag () const { return m_bHasFlag; }
 
 	inline void droppedFlag () { m_bHasFlag = false; }
 
@@ -522,7 +522,7 @@ public:
 
 	void flagDropped ( Vector vOrigin );
 	void teamFlagDropped ( Vector vOrigin );
-	void teamFlagPickup ();
+	void teamFlagPickup () const;
 
 	virtual bool wantToListenToPlayer ( edict_t *pPlayer, int iWeaponID = -1 ) { return true; }
 	virtual bool wantToListenToPlayerFootsteps ( edict_t *pPlayer ) { return true; }
@@ -571,7 +571,7 @@ public:
 	// return an enemy sentry gun / special visible (e.g.) for quick checking
 	virtual edict_t *getVisibleSpecial ();
 
-	inline bool isBeingHealed () { return m_bIsBeingHealed; }
+	inline bool isBeingHealed () const { return m_bIsBeingHealed; }
 
 	virtual void handleWeapons () { CBot::handleWeapons(); }
 
@@ -741,9 +741,9 @@ public:
 	void MannVsMachineWaveComplete();
 	void MannVsMachineAlarmTriggered (Vector vLoc);
 
-	bool sentryRecentlyHadEnemy ();
+	bool sentryRecentlyHadEnemy () const;
 
-	void highFivePlayer ( edict_t *pPlayer, float fYaw );
+	void highFivePlayer ( edict_t *pPlayer, float fYaw ) const;
 
 	virtual bool hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide  = false );
 
@@ -770,8 +770,8 @@ public:
 
 	void getAttackArea ( std::vector<int> *m_iAreas );
 
-	int getCurrentAttackArea () { return m_iCurrentAttackArea; }
-	int getCurrentDefendArea () { return m_iCurrentDefendArea; }
+	int getCurrentAttackArea () const { return m_iCurrentAttackArea; }
+	int getCurrentDefendArea () const { return m_iCurrentDefendArea; }
 
 	void pointsUpdated ( );
 
@@ -866,7 +866,7 @@ public:
 
 	void buildingSapped ( eEngiBuild building, edict_t *pSapper, edict_t *pSpy );
 
-	void sapperDestroyed ( edict_t *pSapper );
+	void sapperDestroyed ( edict_t *pSapper ) const;
 	
 	bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL );
 
@@ -912,7 +912,7 @@ public:
 
 	void teleportedPlayer ();
 
-	inline bool isCarrying () { return m_bIsCarryingObj; }
+	inline bool isCarrying () const { return m_bIsCarryingObj; }
 
 	void updateCarrying ();
 

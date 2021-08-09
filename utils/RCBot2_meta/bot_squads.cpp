@@ -408,7 +408,7 @@ void CBotSquad::AddMember ( edict_t *pEdict )
 	}
 }
 
-size_t CBotSquad::numMembers ()
+size_t CBotSquad::numMembers () const
 {
 	return m_SquadMembers.size();
 }

@@ -69,7 +69,7 @@ public:
 		return NULL;
 	}
 
-	inline edict_t *get_old ()
+	inline edict_t *get_old () const
 	{
 		return m_pEnt;
 	}

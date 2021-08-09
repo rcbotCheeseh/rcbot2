@@ -27,7 +27,7 @@ enum LogLevel {
 
 class CBotLogger {
 	public:
-	void Log(LogLevel level, const char* fmt, ...);
+	static void Log(LogLevel level, const char* fmt, ...);
 };
 
 extern CBotLogger *logger;

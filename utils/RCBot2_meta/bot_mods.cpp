@@ -353,17 +353,17 @@ void CBotMod :: setup ( const char *szModFolder, eModId iModId, eBotType iBotTyp
 	return NULL;
 }*/
 
-bool CBotMod :: isModFolder ( char *szModFolder )
+bool CBotMod :: isModFolder ( char *szModFolder ) const
 {
 	return FStrEq(m_szModFolder,szModFolder);
 }
 
-char *CBotMod :: getModFolder ()
+char *CBotMod :: getModFolder () const
 {
 	return m_szModFolder;
 }
 
-eModId CBotMod :: getModId ()
+eModId CBotMod :: getModId () const
 {
 	return m_iModId;
 }

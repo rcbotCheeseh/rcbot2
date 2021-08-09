@@ -41,8 +41,8 @@ public:
     void spawnInit() override;
 	void died(edict_t *pKiller, const char *pszWeapon) override;
 	void setup();
-	void selectTeam();
-	void selectModel();
+	void selectTeam() const;
+	void selectModel() const;
 	bool startGame() override;
 	bool isAlive();
 	bool isEnemy(edict_t *pEdict,bool bCheckWeapons = true) override;

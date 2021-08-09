@@ -199,7 +199,7 @@ bool CBotGlobals::dirExists(const char *path)
 
 void CBotGlobals::readRCBotFolder()
 {
-	KeyValues *mainkv = new KeyValues("Metamod Plugin");
+	auto*mainkv = new KeyValues("Metamod Plugin");
 
 	if (mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD")) {
 		char folder[256] = "\0";

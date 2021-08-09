@@ -126,14 +126,14 @@ void CCSSBot::spawnInit()
 	m_fCheckStuckTime = engine->Time() + 6.0;
 }
 
-void CCSSBot::selectTeam()
+void CCSSBot::selectTeam() const
 {
 	const char* cmd;
 	cmd = "jointeam 0";
 	helpers->ClientCommand(m_pEdict,cmd);
 }
 
-void CCSSBot::selectModel()
+void CCSSBot::selectModel() const
 {
 	const char* cmd;
 	cmd = "joinclass 0";

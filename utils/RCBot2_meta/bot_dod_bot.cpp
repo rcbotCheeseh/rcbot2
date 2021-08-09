@@ -1430,7 +1430,7 @@ void CDODBot ::voiceCommand ( int cmd )
 	helpers->ClientCommand(m_pEdict,scmd);
 }
 
-void CDODBot ::signal ( const char *signal )
+void CDODBot ::signal ( const char *signal ) const
 {
 	char scmd[64];
 
@@ -2963,22 +2963,22 @@ bool CDODBot :: handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy )
 	return true;
 }
 
-CBotWeapon *CDODBot::getMG ()
+CBotWeapon *CDODBot::getMG () const
 {
 	return m_pWeapons->hasWeapon(DOD_WEAPON_20CAL) ? m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_20CAL)) : m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_MG42));
 }
 
-bool CDODBot :: hasMG ()
+bool CDODBot :: hasMG () const
 {
 	return m_pWeapons->hasWeapon(DOD_WEAPON_20CAL) || m_pWeapons->hasWeapon(DOD_WEAPON_MG42);
 }
 
-CBotWeapon *CDODBot::getSniperRifle ()
+CBotWeapon *CDODBot::getSniperRifle () const
 {
 	return m_pWeapons->hasWeapon(DOD_WEAPON_K98_SCOPED) ? m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_K98_SCOPED)) : m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_SPRING));
 }
 
-bool CDODBot :: hasSniperRifle ()
+bool CDODBot :: hasSniperRifle () const
 {
 	return m_pWeapons->hasWeapon(DOD_WEAPON_K98_SCOPED) || m_pWeapons->hasWeapon(DOD_WEAPON_SPRING);
 }

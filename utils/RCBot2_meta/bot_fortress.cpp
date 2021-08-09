@@ -303,7 +303,7 @@ bool CBotFortress::someoneCalledMedic()
 			((m_fLastCalledMedicTime+30.0f)>engine->Time());
 }
 
-bool CBotTF2 :: sentryRecentlyHadEnemy ()
+bool CBotTF2 :: sentryRecentlyHadEnemy () const
 {
 	return (m_fLastSentryEnemyTime + 15.0f) > engine->Time();
 }
@@ -1801,7 +1801,7 @@ void CBotTF2 :: setClass ( TF_Class _class )
 	m_iClass = _class;
 }
 
-void CBotTF2 :: highFivePlayer ( edict_t *pPlayer, float fYaw )
+void CBotTF2 :: highFivePlayer ( edict_t *pPlayer, float fYaw ) const
 {
 	if ( !m_pSchedules->isCurrentSchedule(SCHED_TAUNT) )
 		m_pSchedules->addFront(new CBotTauntSchedule(pPlayer,fYaw));
@@ -6961,7 +6961,7 @@ bool CBotTF2 :: upgradeBuilding ( edict_t *pBuilding, bool removesapper )
 	return true;
 }
 
-void CBotFortress::teamFlagPickup ()
+void CBotFortress::teamFlagPickup () const
 {
 	if ( CTeamFortress2Mod::isMapType(TF_MAP_SD) && m_pSchedules->hasSchedule(SCHED_TF2_GET_FLAG) )
 		m_pSchedules->removeSchedule(SCHED_TF2_GET_FLAG); 
@@ -7615,7 +7615,7 @@ void CBotTF2 :: buildingSapped ( eEngiBuild building, edict_t *pSapper, edict_t 
 
 }
 
-void CBotTF2 :: sapperDestroyed ( edict_t *pSapper )
+void CBotTF2 :: sapperDestroyed ( edict_t *pSapper ) const
 {
 	m_pSchedules->freeMemory();
 }

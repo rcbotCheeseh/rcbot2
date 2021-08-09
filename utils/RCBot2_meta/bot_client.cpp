@@ -54,7 +54,7 @@ bool CClients::m_bClientsDebugging = false;
 extern IVDebugOverlay *debugoverlay;
 
 
-void CToolTip::send(edict_t *pPlayer)
+void CToolTip::send(edict_t *pPlayer) const
 {
 	//CRCBotPlugin::HudTextMessage(pPlayer,m_pszMessage);
 
@@ -101,7 +101,7 @@ void CClient :: init ()
 	m_fUpdatePos = 0;
 }
 
-bool CClient :: needToRenderMenu () 
+bool CClient :: needToRenderMenu () const
 { 
 	return m_fNextUpdateMenuTime < engine->Time(); 
 }
@@ -117,7 +117,7 @@ void CClient :: setEdict ( edict_t *pPlayer )
 	m_pPlayerInfo = playerinfomanager->GetPlayerInfo(pPlayer);
 }
 	
-void CClient :: setupMenuCommands ()
+void CClient :: setupMenuCommands () const
 {
 	/*engine->ClientCommand(m_pPlayer,"alias \"rcbot_setup\" \"bind 0 menuselect0\"");
 	engine->ClientCommand(m_pPlayer,"rcbot_setup");bind 2 \"menuselect 2\"");*/
@@ -133,7 +133,7 @@ void CClient :: setupMenuCommands ()
 	engine->ClientCommand(m_pPlayer,"bind 0 \"menuselect 0\"");
 }
 	
-void CClient :: resetMenuCommands ()
+void CClient :: resetMenuCommands () const
 {
 	/*engine->ClientCommand(m_pPlayer,"alias \"rcbot_reset\" \"bind 0 slot10\"");
 	engine->ClientCommand(m_pPlayer,"rcbot_reset");bind 2 \"menuselect 2\"");*/
@@ -230,7 +230,7 @@ public:
 		}
 	}
 
-	CBot *getNearestBot ()
+	CBot *getNearestBot () const
 	{
 		return m_pNearestBot;
 	}
@@ -962,7 +962,7 @@ void CClients::giveMessage(char *msg,float fTime, edict_t *pPlayer )
 	}
 }
 
-const char *CClient :: getName ()
+const char *CClient :: getName () const
 {
 	IPlayerInfo *playerinfo = playerinfomanager->GetPlayerInfo( m_pPlayer );
 
@@ -1039,17 +1039,17 @@ void CClient :: clientDisconnected ()
 	init();
 }
 
-int CClient :: accessLevel ()
+int CClient :: accessLevel () const
 {
 	return m_iAccessLevel;
 }
 
-bool CClient :: isUsed ()
+bool CClient :: isUsed () const
 {
 	return (m_pPlayer != NULL);
 }
 
-Vector CClient :: getOrigin ()
+Vector CClient :: getOrigin () const
 {
 	IPlayerInfo *playerinfo = playerinfomanager->GetPlayerInfo( m_pPlayer );
 

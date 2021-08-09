@@ -157,7 +157,7 @@ bool CTFObjectiveResource::testProbWptArea ( int iWptArea, int iTeam )
 	return isCPValid(iCpIndex,iTeam,TF2_POINT_ATTACK) ? (randomFloat(0.0f,1.0f) > m_ValidPoints[iTeam-2][TF2_POINT_ATTACK][iCpIndex].fProb) : ( isCPValid(iCpIndex,iTeam,TF2_POINT_DEFEND) ? (randomFloat(0.0f,1.0f) > m_ValidPoints[iTeam-2][TF2_POINT_DEFEND][iCpIndex].fProb) : true );
 }
 
-bool CTFObjectiveResource::isCPValid ( int iCPIndex, int iTeam, ePointAttackDefend_s type )
+bool CTFObjectiveResource::isCPValid ( int iCPIndex, int iTeam, ePointAttackDefend_s type ) const
 {
 	if ( (iCPIndex < 0) || (iCPIndex >= MAX_CONTROL_POINTS) )
 		return false;
@@ -374,7 +374,7 @@ int CTFObjectiveResource :: getControlPointArea ( edict_t *pPoint )
 
 	return 0;
 }
-void CTFObjectiveResource::	debugprint ()
+void CTFObjectiveResource::	debugprint () const
 {
 	edict_t *pEdict = CClients::getListenServerClient();
 

@@ -46,7 +46,7 @@ int CWaypointVisibilityTable :: iCurTo = 0;*/
 void CWaypointVisibilityTable :: workVisibility ()
 {
 	int iTicks = 0;
-	const unsigned short int iSize = (unsigned short int) CWaypoints::numWaypoints();
+	const auto iSize = static_cast<unsigned short>(CWaypoints::numWaypoints());
 
 	for ( iCurFrom = iCurFrom; iCurFrom < iSize; iCurFrom ++ )
 	{
@@ -149,7 +149,7 @@ void CWaypointVisibilityTable :: WorkOutVisibilityTable ()
 	}
 }
 
-bool CWaypointVisibilityTable :: SaveToFile ()
+bool CWaypointVisibilityTable :: SaveToFile () const
 {
     char filename[1024];
 	wpt_vis_header_t header;
@@ -176,7 +176,7 @@ bool CWaypointVisibilityTable :: SaveToFile ()
    return true;
 }
 
-bool CWaypointVisibilityTable :: ReadFromFile ( int numwaypoints )
+bool CWaypointVisibilityTable :: ReadFromFile ( int numwaypoints ) const
 {
     char filename[1024];
 

@@ -50,7 +50,7 @@ public:
 		m_pFlag = NULL;
 	}
 
-	edict_t *getFlag ( Vector &vOrigin )
+	edict_t *getFlag ( Vector &vOrigin ) const
 	{
 		return m_pFlag;
 	}
@@ -74,12 +74,12 @@ public:
 		m_pBest = NULL;
 	}
 
-	edict_t *getBestEnemy ()
+	edict_t *getBestEnemy () const
 	{
 		return m_pBest;
 	}
 
-	float getFactor ( edict_t *pEntity );
+	float getFactor ( edict_t *pEntity ) const;
 	void setOldEnemy ( edict_t *pEntity );
 	void init ();
 
@@ -99,14 +99,14 @@ public:
 	void reset ();
 	void updateVisibles ();
 
-	bool isVisible ( edict_t *pEdict );
+	bool isVisible ( edict_t *pEdict ) const;
 	void setVisible ( edict_t *pEdict, bool bVisible );
 
 	void eachVisible ( CVisibleFunc *pFunc );
 
-	void checkVisible ( edict_t *pEntity, int *iTicks, bool *bVisible, int &iIndex, bool bCheckHead = false );
+	void checkVisible ( edict_t *pEntity, int *iTicks, bool *bVisible, int &iIndex, bool bCheckHead = false ) const;
 
-	void debugString ( char *string );
+	static void debugString ( char *string );
 
 	static const int DEFAULT_MAX_TICKS = 10; // max number of PVS checks fired every visible check
 

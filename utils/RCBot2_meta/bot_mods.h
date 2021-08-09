@@ -101,20 +101,20 @@ public:
 // linux fix
 	void setup ( const char *szModFolder, eModId iModId, eBotType iBotType, const char *szWeaponListName );
 
-	bool isModFolder ( char *szModFolder );
+	bool isModFolder ( char *szModFolder ) const;
 
-	char *getModFolder ();
+	char *getModFolder () const;
 
 	virtual const char *getPlayerClass ()
 	{
 		return "CBasePlayer";
 	}
 
-	eModId getModId ();
+	eModId getModId () const;
 
 	virtual bool isAreaOwnedByTeam (int iArea, int iTeam) { return (iArea == 0); }
 
-	eBotType getBotType () { return m_iBotType; }
+	eBotType getBotType () const { return m_iBotType; }
 
 	virtual void addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags, int *iArea, float *fMaxDistance ){ return; }
 
@@ -139,7 +139,7 @@ public:
 		*iOff = 0;
 	}
 
-	inline bool needResetCheatFlag ()
+	inline bool needResetCheatFlag () const
 	{
 		return m_bBotCommand_ResetCheatFlag;
 	}
@@ -216,8 +216,8 @@ public:
 		}
 	}
 
-	int getNumFlags () { return m_iNumControlPoints; }
-	int getNumFlagsOwned (int iTeam)
+	int getNumFlags () const { return m_iNumControlPoints; }
+	int getNumFlagsOwned (int iTeam) const
 	{
 		int count = 0;
 
@@ -314,7 +314,7 @@ public:
 	}
 
 	inline bool ownsFlag ( edict_t *pFlag, int iTeam ) { return ownsFlag(getFlagID(pFlag),iTeam); }
-	inline bool ownsFlag ( int iFlag, int iTeam )
+	inline bool ownsFlag ( int iFlag, int iTeam ) const
 	{
 		if ( iFlag == -1 )
 			return false;
@@ -322,7 +322,7 @@ public:
 		return m_iOwner[iFlag] == iTeam;
 	}
 
-	inline int numFlagsOwned (int iTeam)
+	inline int numFlagsOwned (int iTeam) const
 	{
 		int count = 0;
 
@@ -336,7 +336,7 @@ public:
 	}
 
 	inline int numCappersRequired ( edict_t *pFlag, int iTeam ) { return numCappersRequired(getFlagID(pFlag),iTeam); }
-	inline int numCappersRequired ( int iFlag, int iTeam )
+	inline int numCappersRequired ( int iFlag, int iTeam ) const
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -378,7 +378,7 @@ public:
 	bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin );
 	bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin );
 
-	inline int getNumBombsRequired ( int iId )
+	inline int getNumBombsRequired ( int iId ) const
 	{
 		if ( iId == -1 )
 			return false;
@@ -391,7 +391,7 @@ public:
 		return getNumBombsRequired(getBombID(pBomb));
 	}
 
-	inline int getNumBombsRemaining ( int iId )
+	inline int getNumBombsRemaining ( int iId ) const
 	{
 		if ( iId == -1 )
 			return false;
@@ -404,7 +404,7 @@ public:
 		return getNumBombsRemaining(getBombID(pBomb));
 	}
 
-	inline bool isBombBeingDefused ( int iId )
+	inline bool isBombBeingDefused ( int iId ) const
 	{
 		if ( iId == -1 )
 			return false;
@@ -421,7 +421,7 @@ public:
 
 	inline int numFriendliesAtCap ( edict_t *pFlag, int iTeam ) { return numFriendliesAtCap(getFlagID(pFlag),iTeam); }
 
-	inline int numFriendliesAtCap ( int iFlag, int iTeam )
+	inline int numFriendliesAtCap ( int iFlag, int iTeam ) const
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -429,7 +429,7 @@ public:
 		return (iTeam == TEAM_ALLIES) ? (m_iNumAllies[iFlag]) : (m_iNumAxis[iFlag]);
 	}
 
-	inline int numEnemiesAtCap ( int iFlag, int iTeam )
+	inline int numEnemiesAtCap ( int iFlag, int iTeam ) const
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -480,7 +480,7 @@ public:
 		return getBombID(pent) != -1;
 	}
 
-	inline int getNumBombsOnMap ( int iTeam )
+	inline int getNumBombsOnMap ( int iTeam ) const
 	{
 		if ( iTeam == TEAM_ALLIES )
 			return m_iNumAlliesBombsOnMap;

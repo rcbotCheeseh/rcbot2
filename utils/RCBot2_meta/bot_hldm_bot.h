@@ -60,7 +60,7 @@ public:
 	void getTasks (unsigned int iIgnore=0);
 	bool executeAction ( eBotAction iAction );
 
-	float getArmorPercent () { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
+	float getArmorPercent () const { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
 
 	bool setVisible ( edict_t *pEntity, bool bVisible );
 
@@ -80,7 +80,7 @@ public:
 
 	bool willCollide ( edict_t *pEntity, bool *bCanJump, float *fTime );
 
-	edict_t *getFailedObject () { return m_FailedPhysObj; }
+	edict_t *getFailedObject () const { return m_FailedPhysObj; }
 
 	virtual void touchedWpt ( CWaypoint *pWaypoint );
 

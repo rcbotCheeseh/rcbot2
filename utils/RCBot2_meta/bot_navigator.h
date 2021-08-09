@@ -48,7 +48,7 @@ class CWaypointVisibilityTable;
 class INavigatorNode
 {
 public:
-	inline Vector getOrigin () { return m_vOrigin; }
+	inline Vector getOrigin () const { return m_vOrigin; }
 protected:
 	Vector m_vOrigin;
 };
@@ -69,7 +69,7 @@ public:
 
 	virtual bool getNextRoutePoint ( Vector *vPoint ) = 0;
 
-	inline Vector getPreviousPoint () { return m_vPreviousPoint; }
+	inline Vector getPreviousPoint () const { return m_vPreviousPoint; }
 
 	virtual bool hasNextPoint () = 0;
 
@@ -102,7 +102,7 @@ public:
 
 	virtual void getFailedGoals (WaypointList **goals) = 0;
 
-	inline Vector getGoalOrigin () { return m_vGoal; }
+	inline Vector getGoalOrigin () const { return m_vGoal; }
 
 	virtual bool nextPointIsOnLadder () { return false; }
 
@@ -129,11 +129,12 @@ public:
 
 	virtual bool randomDangerPath (Vector *vec) { return false; }
 
-	bool getDangerPoint ( Vector *vec ) { *vec = m_bDangerPoint ? m_vDangerPoint : Vector(0,0,0); return m_bDangerPoint; }
+	bool getDangerPoint ( Vector *vec ) const
+	{ *vec = m_bDangerPoint ? m_vDangerPoint : Vector(0,0,0); return m_bDangerPoint; }
 
-	bool wantToLoadBelief () { return m_bLoadBelief; }
+	bool wantToLoadBelief () const { return m_bLoadBelief; }
 	virtual bool wantToSaveBelief () { return false; }
-	float getGoalDistance () { return m_fGoalDistance; }
+	float getGoalDistance () const { return m_fGoalDistance; }
 
 	static const int MAX_PATH_TICKS = 200;
 
@@ -160,21 +161,21 @@ public:
 	///////////////////////////////////////////////////////
 	inline void close () { setFlag(FL_ASTAR_CLOSED); }
 	inline void unClose () { removeFlag(FL_ASTAR_CLOSED); }
-	inline bool isOpen () { return hasFlag(FL_ASTAR_OPEN); }
+	inline bool isOpen () const { return hasFlag(FL_ASTAR_OPEN); }
 	inline void unOpen () { removeFlag(FL_ASTAR_OPEN); }
-	inline bool isClosed () { return hasFlag(FL_ASTAR_CLOSED); }
+	inline bool isClosed () const { return hasFlag(FL_ASTAR_CLOSED); }
 	inline void open () { setFlag(FL_ASTAR_OPEN); }
 	//////////////////////////////////////////////////////	
 	inline void setHeuristic ( float fHeuristic ) { m_fHeuristic = fHeuristic; setFlag(FL_HEURISTIC_SET); }
-	inline bool heuristicSet () { return hasFlag(FL_HEURISTIC_SET); }
-	inline const float getHeuristic () { return m_fHeuristic; } const
-	
+	inline bool heuristicSet () const { return hasFlag(FL_HEURISTIC_SET); }
+	inline float getHeuristic() const { return m_fHeuristic; }
+
 	////////////////////////////////////////////////////////
 	inline void setFlag ( int iFlag ) { m_iFlags |= iFlag; }
-	inline bool hasFlag ( int iFlag ) { return ((m_iFlags & iFlag) == iFlag); }
+	inline bool hasFlag ( int iFlag ) const { return ((m_iFlags & iFlag) == iFlag); }
 	inline void removeFlag ( int iFlag ) { m_iFlags &= ~iFlag; }
 	/////////////////////////////////////////////////////////
-	inline int getParent () { if ( hasFlag(FL_ASTAR_PARENT) ) return m_iParent; else return -1; }
+	inline int getParent () const { if ( hasFlag(FL_ASTAR_PARENT) ) return m_iParent; else return -1; }
 	inline void setParent ( short int iParent ) 
 	{ 
 		m_iParent = iParent; 
@@ -185,7 +186,7 @@ public:
 			setFlag(FL_ASTAR_PARENT);
 	}
 	////////////////////////////////////////////////////////
-	inline const float getCost () { return m_fCost; } const
+	inline const float getCost () const { return m_fCost; } const
 	inline void setCost ( float fCost ) { m_fCost = fCost; }
 	////////////////////////////////////////////////////////
 	// for comparison
@@ -194,7 +195,7 @@ public:
 		return (m_fCost+m_fHeuristic) < (other->getCost() + other->getHeuristic());
 	}
 	void setWaypoint ( int iWpt ) { m_iWaypoint = iWpt; }
-	inline int getWaypoint () { return m_iWaypoint; }
+	inline int getWaypoint () const { return m_iWaypoint; }
 private:
 	float m_fCost;
 	float m_fHeuristic;
@@ -223,12 +224,12 @@ public:
 		m_Head = NULL;
 	}
 
-	bool empty ()
+	bool empty () const
 	{
 		return (m_Head==NULL);
 	}
 
-	AStarNode *top ()
+	AStarNode *top () const
 	{
 		if ( m_Head == NULL )
 			return NULL;

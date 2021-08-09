@@ -318,7 +318,7 @@ WeaponsData_t CSSWeaps[] =
 	{ 0, 0, "\0", 0, 0, 0, 0, 0, 0 }//signal last weapon
 };
 
-bool CBotWeapon :: needToReload (CBot *pBot) 
+bool CBotWeapon :: needToReload (CBot *pBot) const
 { 
 	if ( m_iClip1 )
 	{
@@ -331,7 +331,7 @@ bool CBotWeapon :: needToReload (CBot *pBot)
 // static init (all weapons in game)
 std::vector<CWeapon*> CWeapons :: m_theWeapons;
 
-int CBotWeapon :: getAmmo (CBot *pBot, int type )
+int CBotWeapon :: getAmmo (CBot *pBot, int type ) const
 {
 	if ( type == AMMO_PRIM )
 		return pBot->getAmmo(m_pWeaponInfo->getAmmoIndex1());
@@ -948,7 +948,7 @@ bool CBotWeaponGravGun ::outOfAmmo (CBot *pBot)
 	return true;
 }
 */
-bool CBotWeapon :: outOfAmmo(CBot *pBot)
+bool CBotWeapon :: outOfAmmo(CBot *pBot) const
 {
 	if ( m_pWeaponInfo->isGravGun() && m_pEnt )
 		return (CClassInterface::gravityGunObject(m_pEnt) == NULL);
@@ -989,7 +989,7 @@ public:
 			m_pFound = pWeapon;
 	}
 
-	CWeapon *get ()
+	CWeapon *get () const
 	{
 		return m_pFound;
 	}
@@ -1014,7 +1014,7 @@ public:
 			m_pFound = pWeapon;
 	}
 
-	CWeapon *get ()
+	CWeapon *get () const
 	{
 		return m_pFound;
 	}
@@ -1038,7 +1038,7 @@ public:
 			m_pFound = pWeapon;
 	}
 
-	CWeapon *get ()
+	CWeapon *get () const
 	{
 		return m_pFound;
 	}

@@ -38,7 +38,7 @@ class IIndividual
 {
 public:
 	// get fitness for this individual
-	inline ga_nn_value getFitness () { return m_fFitness; }
+	inline ga_nn_value getFitness () const { return m_fFitness; }
 	inline void setFitness ( float fVal ) { m_fFitness = fVal; }
 
 	// crossover with other individual
@@ -64,7 +64,7 @@ public:
 
 	inline void setGA ( CGA *ga ) { m_ga = ga; }
 	// size of population
-	inline unsigned int size () { return m_theIndividuals.size(); };
+	inline unsigned int size () const { return m_theIndividuals.size(); };
 
 	// get from population index
 	IIndividual *get ( int iIndex );

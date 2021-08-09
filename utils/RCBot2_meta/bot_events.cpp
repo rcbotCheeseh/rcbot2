@@ -1162,7 +1162,7 @@ void CBotEvent :: setType ( char *szType )
 	m_szType = CStrings::getString(szType);
 }
 
-bool CBotEvent :: forCurrentMod ()
+bool CBotEvent :: forCurrentMod () const
 {
 	return ((m_iModId == MOD_ANY) || (CBotGlobals::isMod(m_iModId)));
 }
@@ -1243,9 +1243,9 @@ eyeball_boss_escaped */
 
 void CBotEvents :: addEvent ( CBotEvent *pEvent )
 {
-	extern IGameEventManager2 *gameeventmanager;
+	//extern IGameEventManager2 *gameeventmanager;
 	//extern CRCBotMetaPlugin g_RCBOTServerPlugin;
-	extern RCBotPluginMeta g_RCBotPluginMeta;
+	//extern RCBotPluginMeta g_RCBotPluginMeta;
 
 	//if ( gameeventmanager )
 	//	gameeventmanager->AddListener( g_RCBotPluginMeta.getEventListener(), pEvent->getName(), true );

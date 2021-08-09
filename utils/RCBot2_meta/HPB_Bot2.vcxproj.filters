@@ -310,79 +310,10 @@
     <ClInclude Include="bot_plugin_meta.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\Color.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\const.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\dbg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\dt_send.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\eiface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\FileSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\icommandline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\icvar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\igameevents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\interface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\game\server\iplayerinfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\engine\iserverplugin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\KeyValues.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\mathlib\mathlib.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\mem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\memalloc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier0\memdbgon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\server_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\strtools.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\utlbuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\utlmemory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\utlvector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\mathlib\vector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\vstdlib\vstdlib.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="logging.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine_wrappers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

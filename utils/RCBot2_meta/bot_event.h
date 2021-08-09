@@ -56,7 +56,7 @@ public:
 		m_iModId = iModId;
 	}
 
-	bool forCurrentMod ();
+	bool forCurrentMod () const;
 
 	void setType ( char *szType );
 
@@ -71,17 +71,17 @@ public:
 		m_iEventId = iEventId;
 	}
 
-	inline bool isEventId ( int iEventId )
+	inline bool isEventId ( int iEventId ) const
 	{
 		return forCurrentMod() && (m_iEventId == iEventId);
 	}
 
-	inline bool hasEventId ()
+	inline bool hasEventId () const
 	{
 		return (m_iEventId != -1);
 	}
 
-	const char *getName ()
+	const char *getName () const
 	{
 		return m_szType;
 	}

@@ -34,9 +34,9 @@ class CGameRulesObject : public CSignatureFunction
 public:
 	CGameRulesObject(CRCBotKeyValueList &list, void *pAddrBase);
 
-	bool found() { return m_func != NULL; }
+	bool found() const { return m_func != NULL; }
 
-	void **getGameRules() { return static_cast<void **>(m_func); }
+	void **getGameRules() const { return static_cast<void **>(m_func); }
 };
 
 class CCreateGameRulesObject : public CSignatureFunction
@@ -44,9 +44,9 @@ class CCreateGameRulesObject : public CSignatureFunction
 public:
 	CCreateGameRulesObject(CRCBotKeyValueList &list, void *pAddrBase);
 
-	bool found() { return m_func != NULL; }
+	bool found() const { return m_func != NULL; }
 
-	void **getGameRules();
+	void **getGameRules() const;
 };
 
 extern CGameRulesObject *g_pGameRules_Obj;

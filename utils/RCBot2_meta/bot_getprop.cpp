@@ -653,7 +653,7 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 {
 	edict_t *pfound = NULL;
 	// speed up loop by by using smaller ints in register
-	const short int max = static_cast<short>(gpGlobals->maxEntities);
+	const auto max = static_cast<short>(gpGlobals->maxEntities);
 
 	for (short int i = 0; i < max; i++)
 	{

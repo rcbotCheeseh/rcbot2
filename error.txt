@@ -1,5 +1,0 @@
-/usr/bin/ld: utils_RCBot2_meta_bot_synergy.o: in function `CBotSynergy::touchedWpt(CWaypoint*, int, int)':
-/home/desktop/Dropbox/src/rcbot2/utils/RCBot2_meta/bot_synergy.cpp:454: undefined reference to `CGameTrace::GetEntityIndex() const'
-clang: error: linker command failed with exit code 1 (use -v to see invocation)
-Build failed: rcbot.2.sdk2013/rcbot.2.sdk2013.so
-

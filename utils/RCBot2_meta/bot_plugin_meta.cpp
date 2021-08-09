@@ -644,7 +644,7 @@ void RCBotPluginMeta::Hook_ClientActive(edict_t *pEntity, bool bLoadGame)
 }
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
-void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity, const CCommand &args)
+void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity, const CCommand &args) const
 #else
 void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 #endif

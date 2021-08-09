@@ -328,7 +328,7 @@ public:
 	static void resetError () { m_berror = false; }
 	static bool isError () { return m_berror; }
 
-	int getOffset()
+	int getOffset() const
 	{
 		return m_offset;
 	}

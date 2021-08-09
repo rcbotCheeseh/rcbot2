@@ -120,12 +120,12 @@ void CRCBotTF2UtilFile :: init()
 {
 	for (auto& m_fUtil : m_fUtils)
 	{
-		for ( short unsigned int j = 0; j < BOT_UTIL_MAX; j ++ )
+		for (auto& j : m_fUtil)
 		{
 			for ( short unsigned int k = 0; k < 9; k ++ )
 			{
-				m_fUtil[j][k].min = 0;
-				m_fUtil[j][k].max = 0;
+				j[k].min = 0;
+				j[k].max = 0;
 			}
 		}
 	}

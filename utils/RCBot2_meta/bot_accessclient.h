@@ -43,15 +43,15 @@ public:
 
 	bool isForSteamId ( const char *szSteamId ) const;
 
-	void giveAccessToClient ( CClient *pClient );
+	void giveAccessToClient ( CClient *pClient ) const;
 
-	void save ( FILE *fp );
+	void save ( FILE *fp ) const;
 
 	bool forBot () const;
 
-	inline char *getSteamID () { return m_szSteamId; }
+	inline char *getSteamID () const { return m_szSteamId; }
 
-	inline int getAccessLevel () { return m_iAccessLevel; }
+	inline int getAccessLevel () const { return m_iAccessLevel; }
 private:
 	char *m_szSteamId;
 	int m_iAccessLevel;

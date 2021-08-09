@@ -44,12 +44,12 @@ public:
 
 	CSomNeuron ( unsigned short id, int iInp, int iX, int iY );
 
-	inline float getX()
+	inline float getX() const
 	{
 		return m_iX;
 	}
 
-	inline float getY()	
+	inline float getY() const
 	{
 		return m_iY;
 	}
@@ -66,7 +66,7 @@ public:
 
 	inline void setClassID ( unsigned short iId ) { m_iId = iId; }
 
-	inline unsigned short getClassID () { return m_iId; }
+	inline unsigned short getClassID () const { return m_iId; }
 
 private:
 	std::vector<float> fWeights;
@@ -96,7 +96,7 @@ public:
 
 	void display ();
 
-	inline unsigned int epochs ()
+	inline unsigned int epochs () const
 	{
 		return m_iEpochs;
 	}

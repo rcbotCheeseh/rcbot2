@@ -101,7 +101,7 @@ public: //hooks
 	static void BroadcastTextMessage(const char *szMessage);
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
-	void Hook_ClientCommand(edict_t *pEntity, const CCommand &args);
+	void Hook_ClientCommand(edict_t *pEntity, const CCommand &args) const;
 #else
 	void Hook_ClientCommand(edict_t *pEntity);
 #endif

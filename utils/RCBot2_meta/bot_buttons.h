@@ -45,17 +45,17 @@ public:
 
 	inline void tap () { m_bTapped = true; }
 
-	inline bool held ( float fTime )
+	inline bool held ( float fTime ) const
 	{
 		return m_bTapped || ((fTime >= m_fTimeStart) && (fTime <= m_fTimeEnd));// && (!m_fLetGoTime||(fTime > m_fLetGoTime));
 	}
 
-	inline bool canPress (float fTime)
+	inline bool canPress (float fTime) const
 	{
 		return !m_bTapped || (m_fLetGoTime < fTime);
 	}
 
-	inline int getID ()
+	inline int getID () const
 	{
 		return m_iButtonId;
 	}

@@ -59,12 +59,12 @@ bool CAccessClient :: isForSteamId ( const char *szSteamId ) const
 	return FStrEq(m_szSteamId,szSteamId);
 }
 
-void CAccessClient :: save ( FILE *fp )
+void CAccessClient :: save ( FILE *fp ) const
 {
 	fprintf(fp,"\"%s\":%d\n",m_szSteamId,m_iAccessLevel);
 }
 
-void CAccessClient :: giveAccessToClient ( CClient *pClient )
+void CAccessClient :: giveAccessToClient ( CClient *pClient ) const
 {
 	// notify player
 	if ( !forBot() )
