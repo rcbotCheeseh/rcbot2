@@ -217,6 +217,39 @@ enum
 	SYN_WEAPON_MAX
 };
 
+enum
+{
+	CS_WEAPON_KNIFE = 0,
+	CS_WEAPON_USP,
+	CS_WEAPON_GLOCK,
+	CS_WEAPON_228C,
+	CS_WEAPON_FIVESEVEN,
+	CS_WEAPON_ELITES,
+	CS_WEAPON_DEAGLE,
+	CS_WEAPON_SUPERSHOTGUN, // M3 pump action shotgun
+	CS_WEAPON_AUTOSHOTGUN, // XM1014 auto shotgun
+	CS_WEAPON_TMP,
+	CS_WEAPON_MAC10,
+	CS_WEAPON_MP5,
+	CS_WEAPON_UMP45,
+	CS_WEAPON_P90,
+	CS_WEAPON_FAMAS,
+	CS_WEAPON_GALIL,
+	CS_WEAPON_AK47,
+	CS_WEAPON_M4A1,
+	CS_WEAPON_AUG,
+	CS_WEAPON_SG552, // Krieg 552 (T Rifle)
+	CS_WEAPON_SCOUT,
+	CS_WEAPON_AWP,
+	CS_WEAPON_SG550, // CT Auto Sniper
+	CS_WEAPON_G3SG1, // T Auto Sniper
+	CS_WEAPON_M249,
+	CS_WEAPON_HE_GRENADE,
+	CS_WEAPON_FLASH_GRENADE,
+	CS_WEAPON_SMOKE_GRENADE,
+	CS_WEAPON_C4,
+	CS_WEAPON_MAX
+};
 
 #define WEAP_FL_NONE			0
 #define WEAP_FL_PRIM_ATTACK		(1 << 0)
@@ -244,6 +277,7 @@ extern WeaponsData_t TF2Weaps[];
 extern WeaponsData_t HL2DMWeaps[];
 extern WeaponsData_t DODWeaps[];
 extern WeaponsData_t SYNERGYWeaps[];
+extern WeaponsData_t CSSWeaps[];
 
 class CWeapon
 {
@@ -529,7 +563,7 @@ public:
 
 	static inline void addWeapon ( CWeapon *pWeapon ) { m_theWeapons.push_back(pWeapon); }
 
-	static CWeapon *getWeapon ( const int iId );
+	static CWeapon *getWeapon ( int iId );
 
 	static CWeapon *getWeapon ( const char *szWeapon );
 
@@ -769,14 +803,14 @@ public:
 
 	CBotWeapon *getGrenade ()
 	{
-		for ( int i = 0; i < MAX_WEAPONS; i ++ )
+		for (auto& m_theWeapon : m_theWeapons)
 		{
-			if ( m_theWeapons[i].hasWeapon() )
+			if (m_theWeapon.hasWeapon() )
 			{
-				if ( m_theWeapons[i].getWeaponInfo() )
+				if (m_theWeapon.getWeaponInfo() )
 				{
-					if ( m_theWeapons[i].getWeaponInfo()->isGrenade() )
-						return &(m_theWeapons[i]);
+					if (m_theWeapon.getWeaponInfo()->isGrenade() )
+						return &m_theWeapon;
 				}
 			}
 		}

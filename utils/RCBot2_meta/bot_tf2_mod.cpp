@@ -50,6 +50,8 @@
 #include "bot_tf2_points.h"
 #include "bot_sigscan.h"
 
+#include "logging.h"
+
 eTFMapType CTeamFortress2Mod :: m_MapType = TF_MAP_CTF;
 tf_tele_t CTeamFortress2Mod :: m_Teleporters[MAX_PLAYERS];
 int CTeamFortress2Mod :: m_iArea = 0;
@@ -181,7 +183,7 @@ void CTeamFortress2Mod ::modFrame ()
 			{
 				const char *classname = m_pGameRules.get()->GetClassName();
 
-				CBotGlobals::botMessage(NULL, 0, "Found gamerules %s", classname);
+				logger->Log(LogLevel::DEBUG, "Found gamerules %s", classname);
 			}
 		}*/
 	}
@@ -211,7 +213,6 @@ void CTeamFortress2Mod :: mapInit ()
 
 	m_vNearestTankLocation = Vector(0, 0, 0);
 
-	unsigned int i = 0;
 	const string_t mapname = gpGlobals->mapname;
 
 	const char *szmapname = mapname.ToCStr();
@@ -273,7 +274,7 @@ void CTeamFortress2Mod :: mapInit ()
 	m_iFlagCarrierTeam = 0;
 	m_bDontClearPoints = false;
 
-	for ( i = 0; i < MAX_PLAYERS; i ++ )
+	for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
 	{
 		m_Teleporters[i].m_iWaypoint = -1;
 		m_Teleporters[i].m_fLastTeleported = 0.0f;
@@ -298,12 +299,10 @@ void CTeamFortress2Mod :: mapInit ()
 
 int CTeamFortress2Mod :: getTeleporterWaypoint ( edict_t *pTele )
 {
-	int i;
-
-	for ( i = 0; i < MAX_PLAYERS; i ++ )
+	for (auto& m_Teleporter : m_Teleporters)
 	{
-		if ( m_Teleporters[i].exit.get() == pTele )
-			return m_Teleporters[i].m_iWaypoint; 
+		if (m_Teleporter.exit.get() == pTele )
+			return m_Teleporter.m_iWaypoint; 
 	}
 
 	return -1;
@@ -368,13 +367,11 @@ bool CTeamFortress2Mod :: TF2_IsPlayerOnFire(edict_t *pPlayer)
 
 int CTeamFortress2Mod ::numClassOnTeam( int iTeam, int iClass )
 {
-	int i = 0;
 	int num = 0;
-	edict_t *pEdict;
 
-	for ( i = 1; i <= CBotGlobals::numClients(); i ++ )
+	for ( int i = 1; i <= CBotGlobals::numClients(); i ++ )
 	{
-		pEdict = INDEXENT(i);
+		edict_t* pEdict = INDEXENT(i);
 
 		if ( CBotGlobals::entityIsValid(pEdict) )
 		{
@@ -639,14 +636,13 @@ void CTeamFortress2Mod :: findMediGun ( edict_t *pPlayer )
 // get the teleporter exit of an entrance
 edict_t *CTeamFortress2Mod :: getTeleporterExit ( edict_t *pTele )
 {
-	int i;
 	edict_t *pExit;
 
-	for ( i = 0; i < MAX_PLAYERS; i ++ )
+	for (auto& m_Teleporter : m_Teleporters)
 	{
-		if ( m_Teleporters[i].entrance.get() == pTele )
+		if (m_Teleporter.entrance.get() == pTele )
 		{
-			if ( (pExit = m_Teleporters[i].exit.get()) != NULL )
+			if ( (pExit = m_Teleporter.exit.get()) != NULL )
 			{
 				return pExit;
 			}
@@ -857,7 +853,7 @@ void CTeamFortress2Mod:: clientCommand ( edict_t *pEntity, int argc, const char 
 			vcmd.b1.v1 = atoi(arg1);
 			vcmd.b1.v2 = atoi(arg2);
 
-			CBroadcastVoiceCommand voicecmd = CBroadcastVoiceCommand(pEntity,vcmd.voicecmd); 
+			auto voicecmd = CBroadcastVoiceCommand(pEntity,vcmd.voicecmd); 
 
 			CBots::botFunction(&voicecmd);
 		}
@@ -879,8 +875,6 @@ void CTeamFortress2Mod:: clientCommand ( edict_t *pEntity, int argc, const char 
 // to fixed
 void CTeamFortress2Mod :: teleporterBuilt ( edict_t *pOwner, eEngiBuild type, edict_t *pBuilding )
 {
-	int team;
-
 	if ( (type != ENGI_TELE ) ) //(type != ENGI_ENTRANCE) && (type != ENGI_EXIT) )
 		return;
 
@@ -889,7 +883,7 @@ void CTeamFortress2Mod :: teleporterBuilt ( edict_t *pOwner, eEngiBuild type, ed
 	if ( (iIndex < 0) || (iIndex > gpGlobals->maxClients) )
 		return;
 
-	team = getTeam(pOwner);
+	const int team = getTeam(pOwner);
 
 	if ( CTeamFortress2Mod::isTeleporterEntrance(pBuilding,team) )
 		m_Teleporters[iIndex].entrance = MyEHandle(pBuilding);
@@ -904,17 +898,14 @@ void CTeamFortress2Mod :: teleporterBuilt ( edict_t *pOwner, eEngiBuild type, ed
 int CTeamFortress2Mod ::getHighestScore ()
 {
 	short int highest = 0;
-	short int score;
-	short int i = 0;
-	edict_t *edict;
 
-	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( short int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
-		edict = INDEXENT(i);
+		edict_t* edict = INDEXENT(i);
 
 		if ( edict && CBotGlobals::entityIsValid(edict) )
 		{
-			score = (short int)CClassInterface::getTF2Score(edict);
+			const short int score = (short int)CClassInterface::getTF2Score(edict);
 		
 			if ( score > highest )
 			{
@@ -930,19 +921,15 @@ int CTeamFortress2Mod ::getHighestScore ()
 // check quickly by using the storage of sentryguns etc in the mod class
 bool CTeamFortress2Mod::buildingNearby ( int iTeam, Vector vOrigin )
 {
-	edict_t *pPlayer;
-	short int i;
-	short int sentryIndex;
-
-	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( short int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
-		pPlayer = INDEXENT(i);
+		edict_t* pPlayer = INDEXENT(i);
 
 		// crash bug fix 
 		if ( !pPlayer || pPlayer->IsFree() )
 			continue;
 
-		sentryIndex = i - 1;
+		const short int sentryIndex = i - 1;
 
 		if ( CClassInterface::getTF2Class(pPlayer) != TF_CLASS_ENGINEER )
 			continue;
@@ -1012,11 +999,10 @@ edict_t *CTeamFortress2Mod::getBuilding (eEngiBuild object, edict_t *pOwner)
 // get the owner of 
 edict_t *CTeamFortress2Mod ::getBuildingOwner (eEngiBuild object, short index)
 {
-	static short int i;
-	static tf_tele_t *tele;
-
 	switch ( object )
 	{
+		static short int i;
+		static tf_tele_t *tele;
 	case ENGI_DISP:
 		for ( i = 0; i < MAX_PLAYERS; i ++ )
 		{
@@ -1053,20 +1039,18 @@ edict_t *CTeamFortress2Mod ::getBuildingOwner (eEngiBuild object, short index)
 edict_t *CTeamFortress2Mod :: nearestDispenser ( Vector vOrigin, int team )
 {
 	edict_t *pNearest = NULL;
-	edict_t *pDisp;
-	float fDist;
 	float fNearest = bot_use_disp_dist.GetFloat();
 
-	for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
+	for (auto& m_Dispenser : m_Dispensers)
 	{
 		//m_Dispensers[i]
-		pDisp = m_Dispensers[i].disp.get();
+		edict_t* pDisp = m_Dispenser.disp.get();
 
 		if ( pDisp )
 		{
 			if ( CTeamFortress2Mod::getTeam(pDisp) == team )
 			{
-				fDist = (CBotGlobals::entityOrigin(pDisp) - vOrigin).Length();
+				const float fDist = (CBotGlobals::entityOrigin(pDisp) - vOrigin).Length();
 
 				if ( fDist < fNearest )
 				{
@@ -1174,7 +1158,7 @@ void CTeamFortress2Mod::updatePointMaster()
 			m_PointMaster = (CTeamControlPointMaster*) pMasterMembers;
 			m_PointMasterResource = pMaster;
 			
-			CBotGlobals::botMessage(NULL, 0, "Computed point master offset %d", baseEntityOffset);
+			logger->Log(LogLevel::INFO, "Computed point master offset %d", baseEntityOffset);
 
 			const int idx = m_PointMaster->m_iCurrentRoundIndex;
 			const int size = m_PointMaster->m_ControlPointRounds.Size();
@@ -1188,9 +1172,9 @@ void CTeamFortress2Mod::updatePointMaster()
 					try
 					{
 						CBaseEntity *pent = m_PointMaster->m_ControlPointRounds[r];
-						CTeamControlPointRound* pointRound = (CTeamControlPointRound*)(reinterpret_cast<uintptr_t>(pent) + baseEntityOffset);
+						auto pointRound = (CTeamControlPointRound*)(reinterpret_cast<uintptr_t>(pent) + baseEntityOffset);
 
-						CBotGlobals::botMessage(NULL, 0, "Control Points for Round %d", r);
+						logger->Log(LogLevel::DEBUG, "Control Points for Round %d", r);
 
 						for (int i = 0; i < pointRound->m_ControlPoints.Count(); ++i)
 						{
@@ -1203,7 +1187,7 @@ void CTeamFortress2Mod::updatePointMaster()
 								if (!edict->IsFree())
 								{
 									infoCount++;
-									CBotGlobals::botMessage(NULL, 0, "%d, %d, %d, %s", r, i, handle->GetSerialNumber(), edict->GetClassName());
+									logger->Log(LogLevel::DEBUG, "%d, %d, %d, %s", r, i, handle->GetSerialNumber(), edict->GetClassName());
 								}
 							}
 						}
@@ -1217,12 +1201,12 @@ void CTeamFortress2Mod::updatePointMaster()
 
 				if (infoCount == 0) 
 				{
-					CBotGlobals::botMessage(NULL, 0, "If you are playing cp_* maps, and you get this message, something might be wrong with your mstr_offset!");
+					logger->Log(LogLevel::WARN, "If you are playing cp_* maps, and you get this message, something might be wrong with your mstr_offset!");
 				}
 			} 
 			else 
 			{
-				CBotGlobals::botMessage(NULL, 0, "If you are playing cp_* maps, and you get this message, something might be wrong with your mstr_offset!");
+				logger->Log(LogLevel::WARN, "If you are playing cp_* maps, and you get this message, something might be wrong with your mstr_offset!");
 			}
 		}
 	}
@@ -1332,14 +1316,14 @@ void CTeamFortress2Mod :: roundReset ()
 void CTeamFortress2Mod::sentryBuilt(edict_t *pOwner, eEngiBuild type, edict_t *pBuilding )
 {
 	static short int index;
-	static tf_sentry_t *temp;
-	
+
 	index = ENTINDEX(pOwner)-1;
 
 	if ( (index>=0) && (index<MAX_PLAYERS) )
 	{
 		if ( type == ENGI_SENTRY )
 		{
+			static tf_sentry_t *temp;
 			temp = &(m_SentryGuns[index]);
 			temp->sentry = MyEHandle(pBuilding);
 			temp->sapper = MyEHandle();
@@ -1369,14 +1353,14 @@ bool CTeamFortress2Mod::isSentryGun (edict_t *pEdict )
 void CTeamFortress2Mod::dispenserBuilt(edict_t *pOwner, eEngiBuild type, edict_t *pBuilding )
 {
 	static short int index;
-	static tf_disp_t *temp;
-	
+
 	index = ENTINDEX(pOwner)-1;
 
 	if ( (index>=0) && (index<MAX_PLAYERS) )
 	{
 		if ( type == ENGI_DISP )
 		{
+			static tf_disp_t *temp;
 			temp = &(m_Dispensers[index]);
 			temp->disp = MyEHandle(pBuilding);
 			temp->sapper = MyEHandle();
@@ -1435,9 +1419,7 @@ bool CTeamFortress2Mod::isCapping ( edict_t *pPlayer )//, int iCapIndex = -1 )
 	{
 		const int iTeam = CClassInterface::getTeam(pPlayer);
 
-		int i = 0;
-
-		for ( i = 0; i < MAX_CAP_POINTS; i ++ )
+		for ( int i = 0; i < MAX_CAP_POINTS; i ++ )
 		{				
 			if ( m_ObjectiveResource.isCPValid(i,iTeam,TF2_POINT_ATTACK) )
 			{

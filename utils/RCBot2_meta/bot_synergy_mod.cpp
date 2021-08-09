@@ -45,6 +45,8 @@
 #include "bot_waypoint_locations.h"
 #include "bot_perceptron.h"
 
+#include "logging.h"
+
 void CSynergyMod::initMod()
 {
     //Load weapons
@@ -53,7 +55,7 @@ void CSynergyMod::initMod()
 
 void CSynergyMod::mapInit()
 {
-    CBotGlobals::botMessage(NULL, 0, "CSynergyMod::mapInit called!");
+    logger->Log(LogLevel::DEBUG, "[Synergy Mod] map Init.");
 }
 
 /**
@@ -66,14 +68,14 @@ bool CSynergyMod::IsEntityLocked(edict_t *pEntity)
 {
     CBaseEntity *pBaseEntity = pEntity->GetUnknown()->GetBaseEntity();
 	datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pBaseEntity);
-	int offset = UTIL_FindInDataMap(pDataMap, "m_bLocked");
+    const int offset = UTIL_FindInDataMap(pDataMap, "m_bLocked");
     if(offset == 0)
     {
         const char *szclassname = pEntity->GetClassName();
-        CBotGlobals::botMessage(NULL, 0 , "Offset 0 for entity %s!", szclassname);
+        logger->Log(LogLevel::ERROR, "Offset 0 for entity \"%s\"", szclassname);
         return false;
     }
-    int value = *(int*)((char*)pBaseEntity + offset);
+    const int value = *(int*)((char*)pBaseEntity + offset);
     if(value == 1)
         return true; // Locked
     else
@@ -90,8 +92,8 @@ bool CSynergyMod::IsCombineMinePlayerPlaced(edict_t *pMine)
 {
     CBaseEntity *pBaseEntity = pMine->GetUnknown()->GetBaseEntity();
 	datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pBaseEntity);
-	int offset = UTIL_FindInDataMap(pDataMap, "m_bPlacedByPlayer");
-    int value = *(int*)((char*)pBaseEntity + offset);
+    const int offset = UTIL_FindInDataMap(pDataMap, "m_bPlacedByPlayer");
+    const int value = *(int*)((char*)pBaseEntity + offset);
     if(value == 1)
         return true;
 
@@ -108,8 +110,8 @@ bool CSynergyMod::IsCombineMineDisarmed(edict_t *pMine)
 {
     CBaseEntity *pBaseEntity = pMine->GetUnknown()->GetBaseEntity();
 	datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pBaseEntity);
-	int offset = UTIL_FindInDataMap(pDataMap, "m_bDisarmed");
-    int value = *(int*)((char*)pBaseEntity + offset);
+    const int offset = UTIL_FindInDataMap(pDataMap, "m_bDisarmed");
+    const int value = *(int*)((char*)pBaseEntity + offset);
     if(value == 1)
         return true;
 
@@ -126,8 +128,8 @@ bool CSynergyMod::IsCombineMineArmed(edict_t *pMine)
 {
     CBaseEntity *pBaseEntity = pMine->GetUnknown()->GetBaseEntity();
 	datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pBaseEntity);
-	int offset = UTIL_FindInDataMap(pDataMap, "m_iMineState");
-    int value = *(int*)((char*)pBaseEntity + offset);
+    const int offset = UTIL_FindInDataMap(pDataMap, "m_iMineState");
+    const int value = *(int*)((char*)pBaseEntity + offset);
     if(value > 0)
         return true;
 
@@ -144,8 +146,8 @@ bool CSynergyMod::IsCombineMineHeldByPhysgun(edict_t *pMine)
 {
     CBaseEntity *pBaseEntity = pMine->GetUnknown()->GetBaseEntity();
 	datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pBaseEntity);
-	int offset = UTIL_FindInDataMap(pDataMap, "m_bHeldByPhysgun");
-    int value = *(int*)((char*)pBaseEntity + offset);
+    const int offset = UTIL_FindInDataMap(pDataMap, "m_bHeldByPhysgun");
+    const int value = *(int*)((char*)pBaseEntity + offset);
     if(value > 0)
         return true;
 

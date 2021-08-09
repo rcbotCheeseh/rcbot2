@@ -38,6 +38,8 @@
 #include "ndebugoverlay.h"
 
 #include "bot_fortress.h"
+
+#include <cmath>
 #include "bot_buttons.h"
 #include "bot_globals.h"
 #include "bot_profile.h"
@@ -377,8 +379,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 	float fLastCalledMedic = 0.0f;
 	bool bHeavyClass = false;
 	edict_t *pMedigun = CTeamFortress2Mod::getMediGun(m_pEdict);
-	float fHealthPercent;
-	Vector vVel = Vector(0,0,0);
+	auto vVel = Vector(0,0,0);
 	int iHighestScore = CTeamFortress2Mod::getHighestScore();
 	// adds extra factor to players who have recently shouted MEDIC!
 	if (!CBotGlobals::isPlayer(pPlayer))
@@ -401,7 +402,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 	CClassInterface::getVelocity(pPlayer,&vVel);
 
 	IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pPlayer);
-	const TF_Class iclass = (TF_Class)CClassInterface::getTF2Class(pPlayer);
+	const auto iclass = (TF_Class)CClassInterface::getTF2Class(pPlayer);
 	
 	if ( !CBotGlobals::entityIsAlive(pPlayer) || !p || p->IsDead() || p->IsObserver() || !p->IsConnected() )
 		return 0.0f;
@@ -409,7 +410,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 	if ( CClassInterface::getTF2NumHealers(pPlayer) > 1 )
 		return 0.0f;
 
-	fHealthPercent = (p->GetHealth()/p->GetMaxHealth());
+	const float fHealthPercent = (p->GetHealth() / p->GetMaxHealth());
 
 	switch ( iclass )
 	{
@@ -466,9 +467,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 
 		if ( bHeavyClass )
 		{
-			IPlayerInfo *p;
-
-			p = playerinfomanager->GetPlayerInfo(pPlayer);
+			IPlayerInfo* p = playerinfomanager->GetPlayerInfo(pPlayer);
 
 			if ( p )
 			{
@@ -825,7 +824,7 @@ void CBotFortress :: died ( edict_t *pKiller, const char *pszWeapon )
 
 void CBotTF2 :: buildingDestroyed ( int iType, edict_t *pAttacker, edict_t *pEdict )
 {
-	const eEngiBuild type = (eEngiBuild)iType;
+	const auto type = (eEngiBuild)iType;
 
 	switch ( type )
 	{
@@ -894,9 +893,9 @@ void CBotFortress :: detectedAsSpy( edict_t *pDetector, bool bDisguiseComprimise
 		else
 			m_fClassDisguiseTime [m_iDisguiseClass] = (m_fClassDisguiseTime [m_iDisguiseClass] * 0.5f) + (fTime * 0.5f);
 
-		for ( unsigned short int i = 0; i < 10; i ++ )
+		for (float i : m_fClassDisguiseTime)
 		{
-			fTotal += m_fClassDisguiseTime[i];
+			fTotal += i;
 		}
 		
 		for ( unsigned short int i = 0; i < 10; i ++ )
@@ -1017,17 +1016,13 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 		QAngle eyes = CBotGlobals::playerAngles(m_pEdict);
 		QAngle turn;
 		Vector forward;
-		Vector building;
 		Vector vchosen;
-		Vector v_right, v_up, v_left;
+		Vector v_right, v_up;
 		const Vector v_src = getEyePosition();
 		// find best place to turn it to
 		trace_t *tr = CBotGlobals::getTraceResult();
-		int iNextState = 2;
 
-//		CBotWeapon *pWeapon = getCurrentWeapon();
-
-		float bestfraction = 0.0f;
+		//		CBotWeapon *pWeapon = getCurrentWeapon();
 
 		m_fWaitTurnSentry = 0.0f;
 		// unselect current weapon
@@ -1046,21 +1041,21 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 		}*/
 
 		*iTries = 0;
-			iNextState = 8;
+			int iNextState = 8;
 			eyes.x = 0; // nullify pitch / we want yaw only
 			AngleVectors(eyes,&forward,&v_right,&v_up);
-			building = v_src + (forward*100);
+		const Vector building = v_src + (forward * 100);
 			//////////////////////////////////////////
 
 			// forward
 			CBotGlobals::traceLine(building,building + forward*4096.0,MASK_SOLID_BRUSHONLY,&filter);
 
 			iNextState = 8;
-			bestfraction = tr->fraction;
+			float bestfraction = tr->fraction;
 
 			////////////////////////////////////////
 
-			v_left = -v_right;
+		const Vector v_left = -v_right;
 
 			// left
 			CBotGlobals::traceLine(building,building - v_right*4096.0,MASK_SOLID_BRUSHONLY,&filter);
@@ -1440,7 +1435,7 @@ void CBotFortress :: modThink ()
 	{
 		if ( !m_pSchedules->hasSchedule(SCHED_GOOD_HIDE_SPOT) && (distanceFrom(m_pNearestPipeGren)<BLAST_RADIUS) )
 		{
-			CGotoHideSpotSched *pSchedule = new CGotoHideSpotSched(this,m_pNearestPipeGren.get(),true);
+			const auto pSchedule = new CGotoHideSpotSched(this,m_pNearestPipeGren.get(),true);
 
 			m_pSchedules->addFront(pSchedule);
 		}
@@ -1478,13 +1473,11 @@ bool CBotFortress :: isTeleporterUseful ( edict_t *pTele )
 				const float fDuration = CClassInterface::getTF2TeleRechargeDuration(pTele);
 
 				edict_t *pOwner = CTeamFortress2Mod::getBuildingOwner(ENGI_TELE,ENTINDEX(pTele));
-				float fRunTime;
-				float fWaitTime;
 				const float fTime = engine->Time();
 
 				const float fTeleRechargeTime = CTeamFortress2Mod::getTeleportTime(pOwner);
 
-				fWaitTime = (fEntranceDist / fMaxSpeed);
+				float fWaitTime = (fEntranceDist / fMaxSpeed);
 
 				// Teleporter never been used before and is ready to teleport
 				if ( fTeleRechargeTime > 0 )
@@ -1496,7 +1489,7 @@ bool CBotFortress :: isTeleporterUseful ( edict_t *pTele )
 				}
 
 				// see if i can run it myself in this time
-				fRunTime = fGoalDistance / fMaxSpeed;
+				const float fRunTime = fGoalDistance / fMaxSpeed;
 
 				return ( fWaitTime < fRunTime );
 			}
@@ -1649,12 +1642,12 @@ bool CBotTF2 :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 			{
 				if ( wantToNest() )
 				{
-					CBotSchedule *pSchedule = new CBotSchedule();
+					auto pSchedule = new CBotSchedule();
 
 					pSchedule->setID(SCHED_GOOD_HIDE_SPOT);
 
 					// run at flank while shooting	
-					CFindPathTask *pHideGoalPoint = new CFindPathTask();
+					auto pHideGoalPoint = new CFindPathTask();
 					const Vector vOrigin = CBotGlobals::entityOrigin(pAttacker);
 					
 
@@ -2575,7 +2568,7 @@ bool CBotFortress:: wantToUnCloak ()
 	if ( wantToShoot() && m_pEnemy && hasSomeConditions(CONDITION_SEE_CUR_ENEMY) )
 	{
 		// hopefully the enemy can't see me
-		if ( CBotGlobals::isAlivePlayer(m_pEnemy) && ( fabs(CBotGlobals::yawAngleFromEdict(m_pEnemy,getOrigin())) > bot_spyknifefov.GetFloat() ) ) 
+		if ( CBotGlobals::isAlivePlayer(m_pEnemy) && ( std::fabs(CBotGlobals::yawAngleFromEdict(m_pEnemy,getOrigin())) > bot_spyknifefov.GetFloat() ) ) 
 			return true;
 		else if ( !m_pEnemy || !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) )
 			return (m_fCurrentDanger < 1.0f);
@@ -2647,13 +2640,10 @@ void CBotFortress::chooseClass()
 	{
 		float fClassFitness[10];
 		float fTotalFitness = 0;
-		float fRandom;
 
 		int iNumMedics = 0;
 		int i = 0;
 		const int iTeam = getTeam();
-		int iClass;
-		edict_t *pPlayer;
 
 		for (i = 1; i < 10; i++)
 			fClassFitness[i] = 1.0f;
@@ -2663,11 +2653,11 @@ void CBotFortress::chooseClass()
 
 		for (i = 1; i <= gpGlobals->maxClients; i++)
 		{
-			pPlayer = INDEXENT(i);
+			edict_t* pPlayer = INDEXENT(i);
 
 			if (CBotGlobals::entityIsValid(pPlayer) && (CTeamFortress2Mod::getTeam(pPlayer) == iTeam))
 			{
-				iClass = CClassInterface::getTF2Class(pPlayer);
+				const int iClass = CClassInterface::getTF2Class(pPlayer);
 
 				if (iClass == TF_CLASS_MEDIC)
 					iNumMedics++;
@@ -2721,7 +2711,7 @@ void CBotFortress::chooseClass()
 		for (int i = 1; i < 10; i++)
 			fTotalFitness += fClassFitness[i];
 
-		fRandom = randomFloat(0, fTotalFitness);
+		const float fRandom = randomFloat(0, fTotalFitness);
 
 		fTotalFitness = 0;
 
@@ -2904,7 +2894,7 @@ void CBotTF2::modThink()
 
 				if (m_pNavigator->hasNextPoint() && !m_pSchedules->isCurrentSchedule(SCHED_TF_SPYCHECK))
 				{
-					CBotSchedule *newSchedule = new CBotSchedule(new CSpyCheckAir());
+					auto newSchedule = new CBotSchedule(new CSpyCheckAir());
 
 					newSchedule->setID(SCHED_TF_SPYCHECK);
 
@@ -3003,9 +2993,7 @@ void CBotTF2::modThink()
 		break;
 	case TF_CLASS_HWGUY:
 	{
-		bool bRevMiniGun;
-
-		bRevMiniGun = false;
+		bool bRevMiniGun = false;
 
 		// hwguys dont rev minigun if they have the flag
 		if (wantToShoot() && !m_bHasFlag)
@@ -3242,9 +3230,8 @@ void CBotTF2::handleWeapons()
 		hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && wantToShoot() && 
 		isVisible(m_pEnemy) && isEnemy(m_pEnemy) )
 	{
-		CBotWeapon *pWeapon;
-
-		pWeapon = m_pWeapons->getBestWeapon(m_pEnemy,!hasFlag(),!hasFlag(),rcbot_melee_only.GetBool(),false,CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict));
+		CBotWeapon* pWeapon = m_pWeapons->getBestWeapon(m_pEnemy, !hasFlag(), !hasFlag(), rcbot_melee_only.GetBool(), false,
+		                                                CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict));
 
 		setLookAtTask(LOOK_ENEMY);
 
@@ -3290,10 +3277,6 @@ bool CBotFortress :: canAvoid ( edict_t *pEntity )
 
 bool CBotTF2::canAvoid(edict_t *pEntity)
 {
-	float distance;
-	Vector vAvoidOrigin;
-	int index;
-
 	if ( !CBotGlobals::entityIsValid(pEntity) )
 		return false;
 	if ( pEntity == m_pLookEdict )
@@ -3330,17 +3313,17 @@ bool CBotTF2::canAvoid(edict_t *pEntity)
 			return true;
 	}
 
-	index = ENTINDEX(pEntity);
+	const int index = ENTINDEX(pEntity);
 
 	if ( !index )
 		return false;
 
-	vAvoidOrigin = CBotGlobals::entityOrigin(pEntity);
+	const Vector vAvoidOrigin = CBotGlobals::entityOrigin(pEntity);
 
 	if ( vAvoidOrigin == m_vMoveTo )
 		return false;
 
-	distance = distanceFrom(vAvoidOrigin);
+	const float distance = distanceFrom(vAvoidOrigin);
 
 
 	if ((distance > 1) && (distance < bot_avoid_radius.GetFloat()) && (vAvoidOrigin.z >= getOrigin().z) && (fabs(getOrigin().z - vAvoidOrigin.z) < 64))
@@ -3448,18 +3431,16 @@ bool CBotTF2:: wantToListenToPlayerAttack ( edict_t *pPlayer, int iWeaponID )
 
 void CBotTF2::checkStuckonSpy()
 {
-	edict_t *pPlayer;
 	edict_t *pStuck = NULL;
 
-	int i = 0;
 	const int iTeam = getTeam();
 
 	float fDistance;
 	float fMaxDistance = 80;
 
-	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
-		pPlayer = INDEXENT(i);
+		edict_t* pPlayer = INDEXENT(i);
 
 		if ( pPlayer == m_pEdict )
 			continue;
@@ -3498,12 +3479,9 @@ void CBotTF2::checkStuckonSpy()
 
 bool CBotFortress :: isClassOnTeam ( int iClass, int iTeam )
 {
-	int i = 0;
-	edict_t *pPlayer;
-
-	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
-		pPlayer = INDEXENT(i);
+		edict_t* pPlayer = INDEXENT(i);
 
 		if ( CBotGlobals::entityIsValid(pPlayer) && (CTeamFortress2Mod::getTeam(pPlayer) == iTeam))
 		{
@@ -3648,20 +3626,15 @@ void CBotTF2 :: foundSpy (edict_t *pEdict,TF_Class iDisguise)
 
 int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 {
-	int i = 0;
-	edict_t *pPlayer;
 	std::vector<int> availableClasses;
-	int _class;
-	float fTotal;
-	float fRand;
 
-	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
-		pPlayer = INDEXENT(i);
+		edict_t* pPlayer = INDEXENT(i);
 
 		if ( CBotGlobals::entityIsValid(pPlayer) && (CTeamFortress2Mod::getTeam(pPlayer) == iTeam))
 		{
-			_class = CClassInterface::getTF2Class(pPlayer);
+			int _class = CClassInterface::getTF2Class(pPlayer);
 
 			if ( _class )
 				availableClasses.push_back(_class);
@@ -3672,26 +3645,25 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 	if ( availableClasses.empty() )
 		return randomInt(1,9);
 	
-	fTotal = 0;
+	float fTotal = 0;
 
-	for ( int i = 0; i < availableClasses.size(); i ++ )
+	for (int availableClasse : availableClasses)
 	{
-		fTotal += m_fClassDisguiseFitness[ availableClasses[i] ];
+		fTotal += m_fClassDisguiseFitness[availableClasse];
 	}
 
 	if ( fTotal > 0 )
 	{
-
-		fRand = randomFloat(0.0,fTotal);
+		const float fRand = randomFloat(0.0, fTotal);
 
 		fTotal = 0;
 
-		for ( int i = 0; i < availableClasses.size(); i ++ )
+		for (int availableClasse : availableClasses)
 		{
-			fTotal += m_fClassDisguiseFitness[ availableClasses[i] ];
+			fTotal += m_fClassDisguiseFitness[availableClasse];
 
 			if ( fRand <= fTotal )
-				return availableClasses[i];
+				return availableClasse;
 		}
 
 	}
@@ -3708,7 +3680,6 @@ bool CBotFortress :: incomingRocket ( float fRange )
 	{
 		Vector vel;
 		const Vector vorg = CBotGlobals::entityOrigin(pRocket);
-		Vector vcomp;
 		const float fDist = distanceFrom(pRocket);
 
 		if ( fDist < fRange )
@@ -3716,7 +3687,7 @@ bool CBotFortress :: incomingRocket ( float fRange )
 			CClassInterface::getVelocity(pRocket,&vel);
 
 			vel = vel/vel.Length();
-			vcomp = vorg + vel*fDist;
+			const Vector vcomp = vorg + vel * fDist;
 
 			return ( distanceFrom(vcomp) < BLAST_RADIUS );
 		}
@@ -3806,7 +3777,7 @@ bool CBotTF2 :: setVisible ( edict_t *pEntity, bool bVisible )
 	{
 		if ( bVisible )
 		{
-			const TF_Class iPlayerclass = (TF_Class)CClassInterface::getTF2Class(pEntity);
+			const auto iPlayerclass = (TF_Class)CClassInterface::getTF2Class(pEntity);
 
 			if ( iPlayerclass == TF_CLASS_SPY )
 			{
@@ -3966,10 +3937,7 @@ bool CBotTF2::healPlayer()
 
 	if (m_fMedicUpdatePosTime < engine->Time())
 	{
-		float fRand;
-
-
-		fRand = randomFloat(1.0f, 2.0f);
+		const float fRand = randomFloat(1.0f, 2.0f);
 
 		pClient = CClients::get(m_pHeal);
 
@@ -4040,24 +4008,12 @@ bool CBotTF2::healPlayer()
 
 	m_bIncreaseSensitivity = true;
 
-	//!!!CRASH!!!
-	/*if ( !CClassInterface::getMedigunHealing(pWeapon) )
-	{
-		if ( (m_fHealClickTime < engine->Time()) && (DotProductFromOrigin(vOrigin) > 0.98f) )		
-			primaryAttack();
-		//else
-			//m_pButtons->letGo(IN_ATTACK);
-	}
-	else
-	{*/
-		edict_t *pent;
-
-		edict_t *pPlayer = NULL;
+	edict_t *pPlayer = NULL;
 
 		// Find the player I'm currently healing
 		for ( unsigned short i = 1; i <= gpGlobals->maxClients; i++ )
 		{
-			pent = INDEXENT(i);
+			edict_t* pent = INDEXENT(i);
 
 			if ( pent && CBotGlobals::entityIsValid(pent) )
 			{
@@ -4301,7 +4257,6 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	static float fSentryUtil;
 	static int iMetalInDisp;
 
-
 	static int numplayersonteam;
 	static int numplayersonteam_alive;
 
@@ -4483,7 +4438,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		{
 			bSentryHasEnemy = (CClassInterface::getSentryEnemy(m_pSentryGun) != NULL);
 			iSentryLevel = CClassInterface::getTF2UpgradeLevel(m_pSentryGun);//CTeamFortress2Mod::getSentryLevel(m_pSentryGun);
-			fSentryHealthPercent = ((float)CClassInterface::getSentryHealth(m_pSentryGun))/CClassInterface::getTF2GetBuildingMaxHealth(m_pSentryGun);
+			fSentryHealthPercent = CClassInterface::getSentryHealth(m_pSentryGun)/CClassInterface::getTF2GetBuildingMaxHealth(m_pSentryGun);
 			// move sentry
 			ADD_UTILITY(BOT_UTIL_ENGI_MOVE_SENTRY,(CTeamFortress2Mod::hasRoundStarted()||CTeamFortress2Mod::isMapType(TF_MAP_MVM)) && (!m_bIsCarryingObj || m_bIsCarryingSentry) && 
 				bMoveObjs && (m_fSentryPlaceTime>0.0f) && !bHasFlag && m_pSentryGun && (CClassInterface::getSentryEnemy(m_pSentryGun) == NULL) && ((m_fLastSentryEnemyTime + 15.0f) < engine->Time()) &&
@@ -4497,7 +4452,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		{
 			iMetalInDisp = CClassInterface::getTF2DispMetal(m_pDispenser);
 			iDispenserLevel = CClassInterface::getTF2UpgradeLevel(m_pDispenser); // CTeamFortress2Mod::getDispenserLevel(m_pDispenser);
-			fDispenserHealthPercent = ((float)CClassInterface::getDispenserHealth(m_pDispenser)) / CClassInterface::getTF2GetBuildingMaxHealth(m_pDispenser);
+			fDispenserHealthPercent = CClassInterface::getDispenserHealth(m_pDispenser) / CClassInterface::getTF2GetBuildingMaxHealth(m_pDispenser);
 
 			fUseDispFactor = (((float)iMetalInDisp)/400) * (1.0f-fMetalPercent) * ((float)iDispenserLevel/3) * (1000.0f/distanceFrom(m_pDispenser));
 
@@ -4510,7 +4465,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		{
 			iMetalInDisp = CClassInterface::getTF2DispMetal(m_pNearestDisp);
 			iAllyDispLevel = CClassInterface::getTF2UpgradeLevel(m_pNearestDisp); // CTeamFortress2Mod::getDispenserLevel(m_pDispenser);
-			fAllyDispenserHealthPercent = ((float)CClassInterface::getDispenserHealth(m_pNearestDisp)) / CClassInterface::getTF2GetBuildingMaxHealth(m_pNearestDisp);
+			fAllyDispenserHealthPercent = CClassInterface::getDispenserHealth(m_pNearestDisp) / CClassInterface::getTF2GetBuildingMaxHealth(m_pNearestDisp);
 
 			fUseDispFactor = (((float)iMetalInDisp)/400) * (1.0f-fMetalPercent) * ((float)iAllyDispLevel/3) * (1000.0f/distanceFrom(m_pNearestDisp));
 
@@ -4954,7 +4909,7 @@ bool CBotTF2 :: canDeployStickies ()
 #define STICKY_SELECTWEAP	1
 #define STICKY_RELOAD		2
 #define STICKY_FACEVECTOR   3
-#define IN_RANGE(x,low,high) ((x>low)&&(x<high))
+#define IN_RANGE(x,low,high) (((x)>(low))&&((x)<(high)))
 
 // returns true when finished
 bool CBotTF2::deployStickies(eDemoTrapType type, Vector vStand, Vector vLocation, Vector vSpread, Vector *vPoint, int *iState, int *iStickyNum, bool *bFail, float *fTime, int wptindex)
@@ -5109,8 +5064,7 @@ bool CBotTF2::lookAfterBuildings ( float *fTime )
 
 bool CBotTF2 :: select_CWeapon ( CWeapon *pWeapon )
 {
-	CBotWeapon *pBotWeapon;
-	pBotWeapon = m_pWeapons->getWeapon(pWeapon);
+	CBotWeapon* pBotWeapon = m_pWeapons->getWeapon(pWeapon);
 
 	if ( pBotWeapon && !pBotWeapon->hasWeapon() )
 		return false;
@@ -5278,7 +5232,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 			if ( pWaypoint && pWaypoint->checkReachable() )
 			{
 				CWaypoint *pRoute = NULL;
-				Vector vRoute = Vector(0,0,0);
+				auto vRoute = Vector(0,0,0);
 				bool bUseRoute = false;
 				int iRouteWpt = -1;
 				bool bNest = false;
@@ -5380,13 +5334,13 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 							if (pWeapon && !pWeapon->outOfAmmo(this))
 							{
-								CBotTF2Spam *spam = new CBotTF2Spam(this,pWaypoint->getOrigin(),pWaypoint->getAimYaw(),pWeapon);
+								auto spam = new CBotTF2Spam(this,pWaypoint->getOrigin(),pWaypoint->getAimYaw(),pWeapon);
 
 								if ( spam->getDistance() > 600 )
 								{
-									CFindPathTask *path = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
-								
-									CBotSchedule *newSched = new CBotSchedule();
+									auto path = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
+
+									auto newSched = new CBotSchedule();
 
 									newSched->passVector(spam->getTarget());
 
@@ -5448,9 +5402,9 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 				if ( pWaypoint )
 				{
-					CBotTFEngiBuildTask *buildtask = new CBotTFEngiBuildTask(ENGI_ENTRANCE,pWaypoint);
+					auto buildtask = new CBotTFEngiBuildTask(ENGI_ENTRANCE,pWaypoint);
 
-					CBotSchedule *newSched = new CBotSchedule();
+					auto newSched = new CBotSchedule();
 
 					newSched->addTask(new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint))); // first
 					newSched->addTask(buildtask);
@@ -5671,12 +5625,12 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 			break;
 		case BOT_UTIL_HIDE_FROM_ENEMY:
 			{
-				CBotSchedule *pSchedule = new CBotSchedule();
+				auto pSchedule = new CBotSchedule();
 
 				pSchedule->setID(SCHED_GOOD_HIDE_SPOT);
 
 				// run at flank while shooting	
-				CFindPathTask *pHideGoalPoint = new CFindPathTask();
+				auto pHideGoalPoint = new CFindPathTask();
 				Vector vOrigin = CBotGlobals::entityOrigin(m_pEnemy);
 
 				
@@ -5960,10 +5914,10 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 				int iWpt = CWaypointLocations::NearestWaypoint(vLoc,400,-1,true,false,true,0,false,getTeam(),true);
 				if ( iWpt != -1 )
 				{
-					CFindPathTask *findpath = new CFindPathTask(iWpt,LOOK_WAYPOINT);
-					CTaskVoiceCommand *shoutMedic = new CTaskVoiceCommand(TF_VC_MEDIC);
-					CBotTF2WaitHealthTask *wait = new CBotTF2WaitHealthTask(vLoc);
-					CBotSchedule *newSched = new CBotSchedule();
+					auto findpath = new CFindPathTask(iWpt,LOOK_WAYPOINT);
+					auto shoutMedic = new CTaskVoiceCommand(TF_VC_MEDIC);
+					auto wait = new CBotTF2WaitHealthTask(vLoc);
+					auto newSched = new CBotSchedule();
 
 					findpath->setCompleteInterrupt(0,CONDITION_NEED_HEALTH);
 					shoutMedic->setCompleteInterrupt(0,CONDITION_NEED_HEALTH);
@@ -6047,12 +6001,12 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					CWaypointLocations::GetAllVisible(iWptFrom,iWptFrom,vPoint,vPoint,2048.0,&m_iVisibles,&m_iInvisibles);
 
-					for ( int i = 0; i < m_iVisibles.size(); i ++ )
+					for (int m_iVisible : m_iVisibles)
 					{
-						if ( m_iVisibles[i] == CWaypoints::getWaypointIndex(pWaypoint) )
+						if (m_iVisible == CWaypoints::getWaypointIndex(pWaypoint) )
 							continue;
 
-						pTemp = CWaypoints::getWaypoint(m_iVisibles[i]);
+						pTemp = CWaypoints::getWaypoint(m_iVisible);
 
 						if ( pTemp->distanceFrom(pWaypoint) < 512 )
 						{
@@ -6154,9 +6108,9 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					if ( pWpt )
 					{
-						CFindPathTask *findpath = new CFindPathTask(pEnemy);
+						auto findpath = new CFindPathTask(pEnemy);
 						CBotTask *pipetask = new CBotTF2Spam(pWpt->getOrigin(),vEnemy,util->getWeaponChoice());
-						CBotSchedule *pipesched = new CBotSchedule();
+						auto pipesched = new CBotSchedule();
 
 						pipesched->addTask(new CBotTF2FindPipeWaypoint(vLoc,vEnemy));
 						pipesched->addTask(findpath);
@@ -6207,11 +6161,9 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					if ( pWpt )
 					{
-				
-
-						CFindPathTask *findpath = new CFindPathTask(pEnemy);
+						auto findpath = new CFindPathTask(pEnemy);
 						CBotTask *pipetask = new CBotTF2DemomanPipeEnemy(getWeapons()->getWeapon(CWeapons::getWeapon(TF2_WEAPON_PIPEBOMBS)),vEnemy,pEnemy);
-						CBotSchedule *pipesched = new CBotSchedule();
+						auto pipesched = new CBotSchedule();
 
 						pipetask->setInterruptFunction(new CBotTF2HurtInterrupt(this));
 						pipesched->addTask(new CBotTF2FindPipeWaypoint(vLoc,vEnemy));
@@ -6401,7 +6353,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 			if ( pWaypoint )
 			{
 				CWaypoint *pRoute = NULL;
-				Vector vRoute = Vector(0,0,0);
+				auto vRoute = Vector(0,0,0);
 				bool bUseRoute = false;
 
 				if ( (m_fUseRouteTime < engine->Time()) )
@@ -6861,7 +6813,6 @@ bool CBotTF2 :: handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy )
 
 	if ( pWeapon )
 	{
-		Vector vEnemyOrigin;
 		bool bSecAttack = false;
 		bool bIsPlayer = false;
 
@@ -6934,7 +6885,7 @@ bool CBotTF2 :: handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy )
 			tapButton(IN_ATTACK2);
 		}
 
-		vEnemyOrigin = CBotGlobals::entityOrigin(pEnemy);
+		const Vector vEnemyOrigin = CBotGlobals::entityOrigin(pEnemy);
 // enemy below me!
 		if ( pWeapon->isMelee() && (distanceFrom2D(pEnemy)<64.0f) && (vEnemyOrigin.z < getOrigin().z) && (vEnemyOrigin.z > (getOrigin().z-128))  )
 		{
@@ -6972,14 +6923,13 @@ bool CBotTF2 :: upgradeBuilding ( edict_t *pBuilding, bool removesapper )
 	const Vector vOrigin = CBotGlobals::entityOrigin(pBuilding);
 
 	CBotWeapon *pWeapon = getCurrentWeapon();
-	int iMetal = 0;
 
 	wantToListen(false);
 
 	if ( !pWeapon )
 		return false;
 
-	iMetal = pWeapon->getAmmo(this);
+	const int iMetal = pWeapon->getAmmo(this);
 	
 	if ( pWeapon->getID() != TF2_WEAPON_WRENCH )
 	{
@@ -7179,7 +7129,7 @@ void CBotTF2::pointCaptured(int iPoint, int iTeam, const char *szPointName)
 // take a pEdict entity to check if its an enemy
 // return TRUE to "OPEN FIRE" (Attack)
 // return FALSE to ignore
-#define RCBOT_ISENEMY_UNDEF -1
+#define RCBOT_ISENEMY_UNDEF (-1)
 #define RCBOT_ISENEMY_TRUE 1
 #define RCBOT_ISENEMY_FALSE 0
 
@@ -7712,8 +7662,8 @@ CBotTF2::CBotTF2()
 		m_iTeleEntranceArea = 0;
 		m_iTeleExitArea = 0;
 
-		for ( unsigned int i = 0; i < 10; i ++ )
-			m_fClassDisguiseFitness[i] = 1.0f;
+		for (float& m_fClassDisguiseFitnes : m_fClassDisguiseFitness)
+			m_fClassDisguiseFitnes = 1.0f;
 
 		memset(m_fClassDisguiseTime,0,sizeof(float)*10);
 }

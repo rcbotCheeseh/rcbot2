@@ -210,9 +210,9 @@ public:
 		memset(m_pFlags,0,sizeof(edict_t*)*MAX_DOD_FLAGS);
 		memset(m_pBombs,0,sizeof(edict_t*)*MAX_DOD_FLAGS*2);
 
-		for ( short int i = 0; i < MAX_DOD_FLAGS; i ++ )
+		for (int& i : m_iWaypoint)
 		{
-			m_iWaypoint[i] = -1;
+			i = -1;
 		}
 	}
 
@@ -562,10 +562,10 @@ public:
 
 	static inline CWaypoint *getBombWaypoint ( edict_t *pBomb )
 	{
-		for ( unsigned int i = 0; i < m_BombWaypoints.size(); i ++ )
+		for (auto& m_BombWaypoint : m_BombWaypoints)
 		{
-			if ( m_BombWaypoints[i].pEdict == pBomb )
-				return m_BombWaypoints[i].pWaypoint;
+			if (m_BombWaypoint.pEdict == pBomb )
+				return m_BombWaypoint.pWaypoint;
 		}
 
 		return NULL;
@@ -573,9 +573,9 @@ public:
 
 	static inline bool isPathBomb ( edict_t *pBomb )
 	{
-		for ( unsigned int i = 0; i < m_BombWaypoints.size(); i ++ )
+		for (auto& m_BombWaypoint : m_BombWaypoints)
 		{
-			if ( m_BombWaypoints[i].pEdict == pBomb )
+			if (m_BombWaypoint.pEdict == pBomb )
 				return true;
 		}
 
@@ -619,12 +619,22 @@ protected:
 class CCounterStrikeSourceMod : public CBotMod
 {
 public:
+	static const int CS_TEAM_UNASSIGNED = 0;
+	static const int CS_TEAM_SPECTATOR = 1;
+	static const int CS_TEAM_TERRORIST = 2;
+	static const int CS_TEAM_COUNTERTERRORIST = 3;
+
 	CCounterStrikeSourceMod()
 	{
 		setup("cstrike", MOD_CSS, BOTTYPE_CSS, "CSS");
 	}
 
-	//void initMod ();
+	const char *getPlayerClass () override
+	{
+		return "CCSPlayer";
+	}
+
+	void initMod();
 
 	//void mapInit ();
 
@@ -673,8 +683,6 @@ public:
 	{
 		setup("FortressForever", MOD_FF, BOTTYPE_FF, "FF");
 	}
-private:
-
 };
 
 class CHLDMSourceMod : public CBotMod
@@ -1059,12 +1067,10 @@ public:
 
 	static bool isSentrySapped ( edict_t *pSentry )
 	{
-		unsigned int i;
-
-		for ( i = 0; i < MAX_PLAYERS; i ++ )
+		for (auto& m_SentryGun : m_SentryGuns)
 		{
-			if ( m_SentryGuns[i].sentry.get() == pSentry )
-				return m_SentryGuns[i].sapper.get()!=NULL;
+			if (m_SentryGun.sentry.get() == pSentry )
+				return m_SentryGun.sapper.get()!=NULL;
 		}
 
 		return false;
@@ -1072,12 +1078,10 @@ public:
 
 	static bool isTeleporterSapped ( edict_t *pTele )
 	{
-		unsigned int i;
-
-		for ( i = 0; i < MAX_PLAYERS; i ++ )
+		for (auto& m_Teleporter : m_Teleporters)
 		{
-			if ( (m_Teleporters[i].entrance.get() == pTele) || (m_Teleporters[i].exit.get() == pTele) )
-				return m_Teleporters[i].sapper.get()!=NULL;
+			if ( (m_Teleporter.entrance.get() == pTele) || (m_Teleporter.exit.get() == pTele) )
+				return m_Teleporter.sapper.get()!=NULL;
 		}
 
 		return false;
@@ -1085,12 +1089,10 @@ public:
 
 	static bool isDispenserSapped ( edict_t *pDisp )
 	{
-		unsigned int i;
-
-		for ( i = 0; i < MAX_PLAYERS; i ++ )
+		for (auto& m_Dispenser : m_Dispensers)
 		{
-			if ( m_Dispensers[i].disp.get() == pDisp )
-				return m_Dispensers[i].sapper.get()!=NULL;
+			if (m_Dispenser.disp.get() == pDisp )
+				return m_Dispenser.sapper.get()!=NULL;
 		}
 
 		return false;
@@ -1280,10 +1282,10 @@ public:
 
 	static inline edict_t *getButtonAtWaypoint ( CWaypoint *pWaypoint )
 	{
-		for ( unsigned int i = 0; i < m_LiftWaypoints.size(); i ++ )
+		for (auto& m_LiftWaypoint : m_LiftWaypoints)
 		{
-			if ( m_LiftWaypoints[i].pWaypoint == pWaypoint )
-				return m_LiftWaypoints[i].pEdict;
+			if (m_LiftWaypoint.pWaypoint == pWaypoint )
+				return m_LiftWaypoint.pEdict;
 		}
 
 		return NULL;

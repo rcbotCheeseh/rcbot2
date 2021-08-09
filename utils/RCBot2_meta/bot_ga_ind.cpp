@@ -32,6 +32,8 @@
 #include "bot_mtrand.h"
 #include "bot_ga.h"
 #include "bot_ga_ind.h"
+
+#include <utility>
 #include "bot_mtrand.h"
 
 CBotGAValues :: CBotGAValues()
@@ -50,7 +52,7 @@ CBotGAValues :: CBotGAValues( std::vector<float> values )
 	clear();	
 	setFitness(0);
 
-	setVector(values);
+	setVector(std::move(values));
 }
 
 void CBotGAValues :: clear ()
@@ -64,7 +66,7 @@ void CBotGAValues :: crossOver ( IIndividual *other )
 	const unsigned int iPoint = randomInt(0,m_theValues.size());
 	float fTemp;
 
-	CBotGAValues *vother = (CBotGAValues*)other;
+	auto vother = (CBotGAValues*)other;
 
 	unsigned int i;
 
@@ -126,8 +128,8 @@ IIndividual *CBotGAValues :: copy ()
 
 void CBotGAValues :: setVector ( std::vector<float> values )
 {
-	for ( unsigned int i = 0; i < values.size(); i ++ )
-		m_theValues.push_back(values[i]);
+	for (float value : values)
+		m_theValues.push_back(value);
 }
 
 void CBotGAValues :: freeMemory ()

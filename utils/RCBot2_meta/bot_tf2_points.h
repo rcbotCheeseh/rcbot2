@@ -30,7 +30,7 @@ class CTFGameRulesProxy
 };
 
 
-#define TEAM_ARRAY( index, team )		(index + (team * MAX_CONTROL_POINTS))
+#define TEAM_ARRAY( index, team )		((index) + ((team) * MAX_CONTROL_POINTS))
 
 typedef enum ePointAttackDefend_s
 {
@@ -182,7 +182,7 @@ public:
 	{
 		AssertValidIndex(index);
 		Assert( iPrevIndex >= 0 && iPrevIndex < MAX_PREVIOUS_POINTS );
-		int iIntIndex = iPrevIndex + (index * MAX_PREVIOUS_POINTS) + (team * MAX_CONTROL_POINTS * MAX_PREVIOUS_POINTS);
+		const int iIntIndex = iPrevIndex + (index * MAX_PREVIOUS_POINTS) + (team * MAX_CONTROL_POINTS * MAX_PREVIOUS_POINTS);
 		return m_iPreviousPoints[ iIntIndex ];
 	}
 
@@ -279,14 +279,14 @@ public:
 	{
 		resetValidWaypointAreas();
 
-		for ( int i = 0; i < 2; i ++ )
+		for (auto& m_ValidPoint : m_ValidPoints)
 		{
-			for ( int j = 0; j < 2; j ++ )
+			for (auto& j : m_ValidPoint)
 			{
 				for ( int k = 0; k < MAX_CONTROL_POINTS; k ++ )
 				{
 					// OR
-					m_ValidAreas[k] = (m_ValidAreas[k] || m_ValidPoints[i][j][k].bValid);
+					m_ValidAreas[k] = (m_ValidAreas[k] || j[k].bValid);
 				}
 			}
 		}
@@ -419,9 +419,9 @@ public:
 			iszOverlay = NULL_STRING;
 			iPlayersRequired = 0;
 			iTimedPoints = 0;
-			for ( int i = 0; i < MAX_PREVIOUS_POINTS; i++ )
+			for (auto& i : iszPreviousPoint)
 			{
-				iszPreviousPoint[i] = NULL_STRING;
+				i = NULL_STRING;
 			}
 			iTeamPoseParam = 0;
 		}

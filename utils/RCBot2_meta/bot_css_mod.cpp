@@ -28,67 +28,27 @@
  *    version.
  *
  */
-#include <cstdlib>
-#include <cstring>
+#include "server_class.h"
 
 #include "bot.h"
-#include "bot_strings.h"
-#include <vector>    //bir3yk
 
-std::vector<char *> CStrings::m_Strings[MAX_STRINGS_HASH];
+#include "in_buttons.h"
 
-CStrings :: CStrings ()
+#include "bot_mods.h"
+#include "bot_globals.h"
+#include "bot_weapons.h"
+#include "bot_configfile.h"
+#include "bot_getprop.h"
+#include "bot_css_bot.h"
+#include "bot_navigator.h"
+#include "bot_waypoint.h"
+#include "bot_waypoint_locations.h"
+#include "bot_perceptron.h"
+
+#include "logging.h"
+
+void CCounterStrikeSourceMod::initMod()
 {
-	return;
-}
-
-void CStrings :: freeAllMemory()
-{
-	// clear strings 
-	for (auto& m_String : m_Strings)
-	{
-		for (auto& j : m_String)
-		{
-			char* pszFree = j;
-
-			if ( pszFree )
-				delete pszFree;
-
-			j = NULL;
-		}
-
-		m_String.clear();
-	}
-}
-
-// Either : 1 . Return the existing string or 2 . make a new string and return it.
-char *CStrings :: getString ( const char *szString )
-{
-	if ( szString == NULL )
-		return NULL;
-
-	const unsigned short int iHash = szString[0]%MAX_STRINGS_HASH;
-	
-	for (auto szCompString : m_Strings[iHash])
-	{
-		// check if pointers match first
-		if ( szCompString == szString )
-			return szCompString;
-
-		// if not do a full string comparison
-		if ( FStrEq(szString,szCompString) )
-			return szCompString;
-	}
-
-	const unsigned int len = strlen(szString);
-
-	const auto szNew = new char[len+1];
-
-	strcpy(szNew,szString);
-
-	szNew[len] = 0;
-
-	m_Strings[iHash].push_back(szNew);
-
-    return szNew;
+    CWeapons::loadWeapons((m_szWeaponListName == NULL) ? "CSSWEAPONS" : m_szWeaponListName, CSSWeaps); // Load weapon list
+    logger->Log(LogLevel::TRACE, "CCounterStrikeSourceMod::initMod()");
 }

@@ -833,7 +833,7 @@ protected:
 	void doButtons ();
 	/////////////////////////
 
-	void changeAngles ( float fSpeed, float *fIdeal, float *fCurrent, float *fUpdate );
+	void changeAngles ( float fSpeed, const float *fIdeal, float *fCurrent, float *fUpdate );
 
 	// look for new tasks
 	virtual void getTasks (unsigned int iIgnore=0);

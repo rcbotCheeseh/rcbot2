@@ -648,9 +648,9 @@ void CClient :: think ()
 				m_fCanPlaceLadder = 0;
 
 				// need to unset every check point when going on ladder first time
-				for ( int i = 0; i < MAX_STORED_AUTOWAYPOINT; i ++ )
+				for (auto& m_vLastAutoWaypointCheckPo : m_vLastAutoWaypointCheckPos)
 				{
-						m_vLastAutoWaypointCheckPos[i].UnSetPoint();					
+					m_vLastAutoWaypointCheckPo.UnSetPoint();					
 				}
 			}
 			else if ( !(iMoveType == MOVETYPE_FLY) && (m_iLastMoveType == MOVETYPE_FLY) )
@@ -1093,20 +1093,18 @@ void CClients :: clientThink ()
 {
 	static CClient *pClient;
 
-	edict_t *pPlayer;
-
 	m_bClientsDebugging = false;
 
-	for ( int i = 0; i < MAX_PLAYERS; i ++ )
+	for (auto& m_Client : m_Clients)
 	{
-		pClient = &m_Clients[i];
+		pClient = &m_Client;
 
 		if ( !pClient->isUsed() )
 			continue;
 		if ( !m_bClientsDebugging && pClient->isDebugging() )
 			m_bClientsDebugging = true;
 
-		pPlayer = pClient->getPlayer();
+		edict_t* pPlayer = pClient->getPlayer();
 	
 		if ( pPlayer && pPlayer->GetIServerEntity() )
 			pClient->think();
@@ -1115,11 +1113,9 @@ void CClients :: clientThink ()
 
 CClient *CClients :: findClientBySteamID ( char *szSteamID )
 {
-	CClient *pClient;
-
-	for ( int i = 0; i < MAX_PLAYERS; i ++ )
+	for (auto& m_Client : m_Clients)
 	{
-		pClient = &m_Clients[i];
+		CClient* pClient = &m_Client;
 
 		if ( pClient->isUsed() )
 		{
@@ -1165,11 +1161,9 @@ const char *g_szDebugTags[15] =
 
 void CClients :: clientDebugMsg ( int iLev, const char *szMsg, CBot *pBot )
 {
-	CClient *pClient;
-
-	for ( int i = 0; i < MAX_PLAYERS; i ++ )
+	for (auto& m_Client : m_Clients)
 	{
-		pClient = &m_Clients[i];
+		CClient* pClient = &m_Client;
 
 		if ( !pClient->isUsed() )
 			continue;
@@ -1200,12 +1194,9 @@ bool CClients :: clientsDebugging (int iLev)
 		return m_bClientsDebugging;
 	else if ( m_bClientsDebugging )
 	{
-		int i;
-		CClient *pClient;
-
-		for ( i = 0; i < MAX_PLAYERS; i ++ )
+		for ( int i = 0; i < MAX_PLAYERS; i ++ )
 		{
-			pClient = CClients::get(i);
+			CClient* pClient = CClients::get(i);
 
 			if ( pClient->isUsed() )
 			{
@@ -1222,13 +1213,11 @@ void CClient :: setWaypointCut (CWaypoint *pWaypoint)
 {
 	if ( pWaypoint )
 	{
-		int i = 0;
-
 		setWaypointCopy(pWaypoint);
 
 		m_WaypointCutPaths.clear();
 
-		for ( i = 0; i < pWaypoint->numPaths(); i ++ )
+		for ( int i = 0; i < pWaypoint->numPaths(); i ++ )
 		{
 			m_WaypointCutPaths.push_back(pWaypoint->getPath(i));
 		}

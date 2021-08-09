@@ -218,6 +218,7 @@
     <ClCompile Include="bot_configfile.cpp" />
     <ClCompile Include="bot_coop.cpp" />
     <ClCompile Include="bot_css_bot.cpp" />
+    <ClCompile Include="bot_css_mod.cpp" />
     <ClCompile Include="bot_dod_bot.cpp" />
     <ClCompile Include="bot_dod_mod.cpp" />
     <ClCompile Include="bot_events.cpp" />
@@ -256,6 +257,7 @@
     <ClCompile Include="bot_sigscan.cpp" />
     <ClCompile Include="bot_cvars.cpp" />
     <ClCompile Include="bot_plugin_meta.cpp" />
+    <ClCompile Include="logging.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bot.h" />
@@ -333,10 +335,7 @@
     <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\tier1\utlvector.h" />
     <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\mathlib\vector.h" />
     <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\vstdlib\vstdlib.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="tf2weaponsgive.txt" />
-    <Text Include="update.txt" />
+    <ClInclude Include="logging.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\alliedmodders\hl2sdk-tf2\lib\public\mathlib.lib" />

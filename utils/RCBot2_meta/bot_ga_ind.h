@@ -97,7 +97,7 @@ public:
 
 	virtual IIndividual *copy ()
 	{
-		CBotStuckValues *p = new CBotStuckValues();
+		auto p = new CBotStuckValues();
 		p->setVector(m_theValues);
 		p->setFitness(getFitness());
 		return p;

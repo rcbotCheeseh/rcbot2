@@ -177,13 +177,11 @@ bool CBotSynergy::isEnemy(edict_t *pEdict, bool bCheckWeapons)
 
 bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 {
-	bool bValid = CBot::setVisible(pEntity, bVisible);
+	const bool bValid = CBot::setVisible(pEntity, bVisible);
 
 	static float fDist = distanceFrom(pEntity);
-	Vector entityorigin = Vector(0,0,0);
-	entityorigin = CBotGlobals::entityOrigin(pEntity);
+	Vector entityorigin = CBotGlobals::entityOrigin(pEntity);
 	const char* szclassname = pEntity->GetClassName();
-	CBotWeapon* pWeapon = NULL;
 
 	// Is valid and NOT invisible
 	if (bValid && bVisible && !(CClassInterface::getEffects(pEntity) & EF_NODRAW))
@@ -195,7 +193,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 		else if(strncmp(szclassname, "item_ammo", 9) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
 		{
 			m_pNearbyAmmo = pEntity;
-			if(strncmp(szclassname, "item_ammo_crate", 15))
+			if(strncmp(szclassname, "item_ammo_crate", 15) != 0)
 			{
 				m_pNearbyAmmo = NULL; // Invalidate if this entity is an ammo crate
 			}
@@ -215,7 +213,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 		}
 		else if(strncmp(szclassname, "weapon_", 7) == 0 && (!m_pNearbyWeapon.get() || fDist < distanceFrom(m_pNearbyWeapon.get())))
 		{
-			pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(szclassname));
+			CBotWeapon* pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(szclassname));
 			if(pWeapon && pWeapon->hasWeapon())
 			{
 				m_pNearbyWeapon = NULL; // bot already has this weapon
@@ -245,7 +243,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 			if(!CSynergyMod::IsCombineMinePlayerPlaced(pEntity)) // Ignore player placed (friendly) mines
 			{
 				m_pNearbyMine = pEntity;
-				int iWaypoint = CWaypoints::nearestWaypointGoal(-1, entityorigin,512.0f);
+				const int iWaypoint = CWaypoints::nearestWaypointGoal(-1, entityorigin,512.0f);
 				if(iWaypoint != -1)
 				{
 					m_pNavigator->beliefOne(iWaypoint, BELIEF_DANGER, distanceFrom(pEntity));
@@ -339,10 +337,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 	break;
     case BOT_UTIL_ATTACK_POINT:
     {
-		// roam
-		CWaypoint* pWaypoint = NULL;
-		CWaypoint* pRoute = NULL;
-		CBotSchedule* pSched = new CBotSchedule();
+	    auto pSched = new CBotSchedule();
 		m_fGoToGoalTime = engine->Time() + 90.0f + randomFloat(30.0f, 150.0f);
 
 		pSched->setID(SCHED_ATTACKPOINT);
@@ -353,17 +348,17 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		else
 			removeCondition(CONDITION_COVERT);
 
-        pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_GOAL);
+        CWaypoint* pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_GOAL);
 
 		if (pWaypoint)
 		{
-			pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), 0, 0);
+			CWaypoint* pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), 0, 0);
 			if ((m_fUseRouteTime <= engine->Time()))
 			{
 				if (pRoute)
 				{
-					int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
-					int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint); // Goal Waypoint
+					const int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
+					const int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint); // Goal Waypoint
 					pSched->addTask(new CFindPathTask(iRoute, LOOK_WAYPOINT));
 					pSched->addTask(new CMoveToTask(pRoute->getOrigin()));
 					pSched->addTask(new CFindPathTask(iWaypoint, LOOK_WAYPOINT));
@@ -375,7 +370,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 
 			if (pRoute == NULL)
 			{
-				int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
+				const int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
 				pSched->addTask(new CFindPathTask(iWaypoint, LOOK_WAYPOINT));
 				pSched->addTask(new CMoveToTask(pWaypoint->getOrigin()));
 				m_pSchedules->add(pSched);
@@ -388,10 +383,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
     }
     case BOT_UTIL_ROAM:
     {
-		// roam
-		CWaypoint* pWaypoint = NULL;
-		CWaypoint* pRoute = NULL;
-		CBotSchedule* pSched = new CBotSchedule();
+	    auto pSched = new CBotSchedule();
 
 		pSched->setID(SCHED_GOTO_ORIGIN);
 
@@ -401,17 +393,17 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		else
 			removeCondition(CONDITION_COVERT);
 
-        pWaypoint = CWaypoints::randomWaypointGoal(-1);
+        CWaypoint* pWaypoint = CWaypoints::randomWaypointGoal(-1);
 
 		if (pWaypoint)
 		{
-			pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), 0, 0);
+			CWaypoint* pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), 0, 0);
 			if ((m_fUseRouteTime <= engine->Time()))
 			{
 				if (pRoute)
 				{
-					int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
-					int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint); // Goal Waypoint
+					const int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
+					const int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint); // Goal Waypoint
 					pSched->addTask(new CFindPathTask(iRoute, LOOK_WAYPOINT));
 					pSched->addTask(new CMoveToTask(pRoute->getOrigin()));
 					pSched->addTask(new CFindPathTask(iWaypoint, LOOK_WAYPOINT));
@@ -423,7 +415,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 
 			if (pRoute == NULL)
 			{
-				int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
+				const int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
 				pSched->addTask(new CFindPathTask(iWaypoint, LOOK_WAYPOINT));
 				pSched->addTask(new CMoveToTask(pWaypoint->getOrigin()));
 				m_pSchedules->add(pSched);
@@ -495,11 +487,11 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 	}
 	else // Check for button
 	{
-		edict_t *pEntity;
-		pEntity = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_button", rcbot_syn_use_search_range.GetFloat());
+		edict_t* pEntity = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_button",
+		                                                                 rcbot_syn_use_search_range.GetFloat());
 		if(pEntity != NULL && !CSynergyMod::IsEntityLocked(pEntity))
 		{
-			CBotSchedule *sched = new CBotSchedule();
+			auto sched = new CBotSchedule();
 			sched->setID(SCHED_GOTO_ORIGIN);
 			sched->addTask(new CMoveToTask(pEntity));
 			sched->addTask(new CBotHL2DMUseButton(pEntity));

@@ -474,7 +474,7 @@ public:
 
 	static void freeMemory ();
 
-	static int getClosestFlagged ( int iFlags, Vector &vOrigin, int iTeam,float *fReturnDist =NULL, unsigned char *failedwpts = NULL );
+	static int getClosestFlagged ( int iFlags, Vector &vOrigin, int iTeam,float *fReturnDist =NULL, const unsigned char *failedwpts = NULL );
 
 	static int nearestWaypointGoal ( int iFlags, Vector &origin, float fDist, int iTeam = 0 );
 	static CWaypoint *randomRouteWaypoint ( CBot *pBot, Vector vOrigin, Vector vGoal, int iTeam, int iArea );

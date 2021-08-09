@@ -31,6 +31,7 @@
 #ifndef __BOT_COMMANDS_H__
 #define __BOT_COMMANDS_H__
 
+#include <utility>
 #include <vector>
 #include <functional>
 
@@ -44,7 +45,7 @@ typedef enum
 	COMMAND_REQUIRE_ACCESS // dont have access to command
 }eBotCommandResult;
 
-#define NEED_ARG(x) if ( !x || !*x ) return COMMAND_ERROR;
+#define NEED_ARG(x) if ( !(x) || !*(x) ) return COMMAND_ERROR;
 
 
 #define CMD_ACCESS_NONE				0
@@ -98,7 +99,10 @@ protected:
 class CBotCommandInline : public CBotCommand
 {
 public:
-	CBotCommandInline(const char* cmd, int iAccessLevel, BotCommandCallback callback, const char* help = nullptr) : CBotCommand(cmd, iAccessLevel, help), m_Callback(callback) {}
+	CBotCommandInline(const char* cmd, int iAccessLevel, BotCommandCallback callback,
+	                  const char* help = nullptr) : CBotCommand(cmd, iAccessLevel, help), m_Callback(std::move(callback))
+	{
+	}
 	
 	eBotCommandResult execute( CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5);
 	
@@ -108,7 +112,10 @@ public:
 class CBotSubcommands : public CBotCommand
 {
 public:
-	CBotSubcommands(const char* cmd, int iAccessLevel, std::vector<CBotCommand*> subcommands) : CBotCommand(cmd, iAccessLevel, nullptr), m_theCommands{subcommands} {}
+	CBotSubcommands(const char* cmd, int iAccessLevel, std::vector<CBotCommand*> subcommands) :
+		CBotCommand(cmd, iAccessLevel, nullptr), m_theCommands{std::move(subcommands)}
+	{
+	}
 	
 	eBotCommandResult execute(CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5);
 	

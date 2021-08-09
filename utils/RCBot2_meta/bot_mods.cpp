@@ -46,6 +46,8 @@
 #include "bot_waypoint_locations.h"
 #include "bot_perceptron.h"
 
+#include "logging.h"
+
 std::vector<edict_wpt_pair_t> CHalfLifeDeathmatchMod::m_LiftWaypoints;
 
 void CBotMods :: parseFile ()
@@ -268,7 +270,7 @@ void CBotMods :: createFile ()
 		fprintf(fp,"# ZOMBIE\n");
 		fprintf(fp,"# DOD\n");
 		fprintf(fp,"#\n");
-		fprintf(fp, "# weaponlists are changeable in config / weapons.ini\n");
+		fprintf(fp,"# weaponlists are changeable in config / weapons.ini\n");
 		fprintf(fp,"#\n");
 		fprintf(fp,"#mod = CSS\n");
 		fprintf(fp,"#steamdir = counter-strike source\n");
@@ -295,17 +297,17 @@ void CBotMods :: createFile ()
 		fprintf(fp,"#gamedir = hl1dm\n");
 		fprintf(fp,"#bot = HL1DM\n");
 		fprintf(fp,"#\n");
-		fprintf(fp,"mod = DOD\n");
-		fprintf(fp,"steamdir = orangebox\n");
-		fprintf(fp,"gamedir = dod\n");
-		fprintf(fp,"bot = DOD\n");
-		fprintf(fp, "weaponlist = DOD\n");
+		fprintf(fp,"#mod = DOD\n");
+		fprintf(fp,"#steamdir = orangebox\n");
+		fprintf(fp,"#gamedir = dod\n");
+		fprintf(fp,"#bot = DOD\n");
+		fprintf(fp,"#weaponlist = DOD\n");
 		fprintf(fp,"#\n");
 
 		fclose(fp);
 	}
 	else
-		CBotGlobals::botMessage(NULL,0,"Error! Couldn't create config file %s",filename);
+		logger->Log(LogLevel::ERROR, "Couldn't create config file %s", filename);
 }
 
 void CBotMods :: readMods()
@@ -373,11 +375,11 @@ std::vector<CBotMod*> CBotMods::m_Mods;
 
 void CBotMods :: freeMemory ()
 {
-	for ( unsigned int i = 0; i < m_Mods.size(); i ++ )
+	for (auto& m_Mod : m_Mods)
 	{
-		m_Mods[i]->freeMemory();
-		delete m_Mods[i];
-		m_Mods[i] = NULL;
+		m_Mod->freeMemory();
+		delete m_Mod;
+		m_Mod = NULL;
 	}
 
 	m_Mods.clear();
@@ -385,17 +387,17 @@ void CBotMods :: freeMemory ()
 
 CBotMod *CBotMods :: getMod ( char *szModFolder )
 {
-	for ( unsigned int i = 0; i < m_Mods.size(); i ++ )
+	for (auto& m_Mod : m_Mods)
 	{
-		if ( m_Mods[i]->isModFolder(szModFolder) )
+		if (m_Mod->isModFolder(szModFolder) )
 		{
-			CBotGlobals::botMessage(NULL,1,"HL2 MOD ID %d (Game Folder = %s) FOUND",m_Mods[i]->getModId(), szModFolder);
+			logger->Log(LogLevel::INFO, "HL2 MOD ID %d (Game Folder = %s) FOUND", m_Mod->getModId(), szModFolder);
 
-			return m_Mods[i];
+			return m_Mod;
 		}
 	}
 
-	CBotGlobals::botMessage(NULL,1,"HL2 MODIFICATION \"%s\" NOT FOUND, EXITING... see bot_mods.ini in bot config folder", szModFolder);
+	logger->Log(LogLevel::FATAL, "HL2 MODIFICATION \"%s\" NOT FOUND, EXITING... see bot_mods.ini in bot config folder", szModFolder);
 
 	return NULL;
 }

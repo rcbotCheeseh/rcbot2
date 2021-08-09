@@ -9,9 +9,6 @@
       <UniqueIdentifier>{16586188-ff32-4199-a515-f5a8fb020e68}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
-    <Filter Include="text">
-      <UniqueIdentifier>{3933157c-eb73-42a0-8f99-381e563f566c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bot.cpp">
@@ -150,6 +147,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="bot_synergy_mod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bot_css_mod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="logging.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -379,14 +382,9 @@
     <ClInclude Include="..\..\alliedmodders\hl2sdk-tf2\public\vstdlib\vstdlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="update.txt">
-      <Filter>text</Filter>
-    </Text>
-    <Text Include="tf2weaponsgive.txt">
-      <Filter>text</Filter>
-    </Text>
+    <ClInclude Include="logging.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\alliedmodders\hl2sdk-tf2\lib\public\mathlib.lib" />

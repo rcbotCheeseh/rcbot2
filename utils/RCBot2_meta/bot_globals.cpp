@@ -48,9 +48,15 @@
 
 #include "ndebugoverlay.h"
 
+// some Windows-specific include is redefining ERROR
+#undef ERROR
+#include "logging.h"
+
 #ifndef __linux__
 #include <direct.h> // for mkdir
 #include <sys/stat.h>
+
+#include <cmath>
 #else
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -200,16 +206,16 @@ void CBotGlobals::readRCBotFolder()
 		const char *szRCBotFolder = mainkv->GetString("rcbot2path");
 
 		if (szRCBotFolder && *szRCBotFolder) {
-			CBotGlobals::botMessage(NULL, 0, "RCBot Folder -> trying %s", szRCBotFolder);
+			logger->Log(LogLevel::INFO, "RCBot Folder -> trying %s", szRCBotFolder);
 
 			if (!dirExists(szRCBotFolder)) {
 				snprintf(folder, sizeof(folder), "%s/%s", CBotGlobals::modFolder(), szRCBotFolder);
 
 				szRCBotFolder = CStrings::getString(folder);
-				CBotGlobals::botMessage(NULL, 0, "RCBot Folder -> trying %s", szRCBotFolder);
+				logger->Log(LogLevel::INFO, "RCBot Folder -> trying %s", szRCBotFolder);
 
 				if (!dirExists(szRCBotFolder)) {
-					CBotGlobals::botMessage(NULL, 0, "RCBot Folder -> not found ...");
+					logger->Log(LogLevel::ERROR, "RCBot Folder -> not found ...");
 				}
 			}
 
@@ -220,7 +226,8 @@ void CBotGlobals::readRCBotFolder()
 	mainkv->deleteThis();
 }
 
-float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fProjSpeed, float fGrenadePrimeTime, float *fAngle )
+float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fProjSpeed, float fGrenadePrimeTime,
+                                       const float *fAngle )
 {
 	static float g;
 	Vector v_comp = vEnemy-vOrigin;
@@ -250,11 +257,11 @@ float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fPro
 		const float t = fDistance/vhorz;
 
 		// within one second of going off
-		if ( fabs(t-fGrenadePrimeTime) < 1.0f )
+		if ( std::fabs(t-fGrenadePrimeTime) < 1.0f )
 		{
 			const float ffinaly =  vOrigin.z + (vvert*t) - ((g*0.5)*(t*t));
 
-			return ( fabs(ffinaly - vEnemy.z) < BLAST_RADIUS ); // ok why not
+			return ( std::fabs(ffinaly - vEnemy.z) < BLAST_RADIUS ); // ok why not
 		}
 	}
 
@@ -543,8 +550,7 @@ bool CBotGlobals :: gameStart ()
 	}
 	else
 	{
-		Msg("[BOT ERROR] Mod not found. Please edit the bot_mods.ini in the bot config folder\n\ngamedir = %s\n",m_szModFolder);
-
+		logger->Log(LogLevel::ERROR, "Mod not found. Please edit the bot_mods.ini in the bot config folder (gamedir = %s)",m_szModFolder);
 		return false;
 	}
 }
@@ -666,12 +672,10 @@ inline Vector CBotGlobals :: entityOrigin ( edict_t *pEntity )
 	return pEntity->GetIServerEntity()->GetCollideable()->GetCollisionOrigin();
 	
 	Vector vOrigin;
-
 	if ( pEntity && pEntity->GetIServerEntity() && pEntity->GetIServerEntity()->GetCollideable() )//fix?
 		vOrigin = pEntity->GetIServerEntity()->GetCollideable()->GetCollisionOrigin();
 	else
 		vOrigin = Vector(0,0,0);
-
 	return vOrigin;
 }*/
 
@@ -961,12 +965,12 @@ bool CBotGlobals :: makeFolders ( char *szFile )
         mkdir(szFolderName);
 #else
 		if ( mkdir(szFolderName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0 ) {
-			botMessage(NULL,0,"Trying to create folder '%s' successful",szFolderName);
+			logger->Log(LogLevel::INFO, "Trying to create folder '%s' successful", szFolderName);
 		} else {
 			if (dirExists(szFolderName)) {
-				botMessage(NULL,0,"Folder '%s' already exists", szFolderName);
+				logger->Log(LogLevel::DEBUG, "Folder '%s' already exists", szFolderName);
 			} else {
-				botMessage(NULL,0,"Trying to create folder '%s' failed",szFolderName);
+				logger->Log(LogLevel::ERROR, "Trying to create folder '%s' failed", szFolderName);
 			}
 		}
 #endif   
@@ -1005,7 +1009,7 @@ FILE *CBotGlobals :: openFile ( char *szFile, char *szMode )
 
 	if ( fp == NULL )
 	{
-		botMessage ( NULL, 0, "file not found/opening error '%s' mode %s", szFile, szMode );
+		logger->Log(LogLevel::INFO, "file not found/opening error '%s' mode %s", szFile, szMode);
 
 		makeFolders(szFile);
 
@@ -1013,7 +1017,7 @@ FILE *CBotGlobals :: openFile ( char *szFile, char *szMode )
 		fp = fopen(szFile,szMode);
 
 		if ( fp == NULL )
-			botMessage ( NULL, 0, "failed to make folders for %s",szFile);
+			logger->Log(LogLevel::ERROR, "failed to make folders for %s", szFile);
 	}
 
 	return fp;
@@ -1126,15 +1130,10 @@ float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity,Vector vOrigin)
 	Vector v2;
 	Vector v1 = (vOrigin - entityOrigin(pEntity));
 	Vector t;
-
 	v1 = v1 / v1.Length();
-
 	AngleVectors(qBotAngles,&v2);
-
 	fAngle = atan2((v1.x*v2.y) - (v1.y*v2.x), (v1.x*v2.x) + (v1.y * v2.y));
-
 	fAngle = RAD2DEG(fAngle);
-
 	return (float)fAngle;*/
 
 	float fAngle;
@@ -1169,16 +1168,13 @@ void CBotGlobals::teleportPlayer ( edict_t *pPlayer, Vector v_dest )
 		pClient->teleportTo(v_dest);
 }
 /*
-
 static void TeleportEntity( CBaseEntity *pSourceEntity, TeleportListEntry_t &entry, const Vector *newPosition, const QAngle *newAngles, const Vector *newVelocity )
 {
 	CBaseEntity *pTeleport = entry.pEntity;
 	Vector prevOrigin = entry.prevAbsOrigin;
 	QAngle prevAngles = entry.prevAbsAngles;
-
 	int nSolidFlags = pTeleport->GetSolidFlags();
 	pTeleport->AddSolidFlags( FSOLID_NOT_SOLID );
-
 	// I'm teleporting myself
 	if ( pSourceEntity == pTeleport )
 	{
@@ -1191,13 +1187,11 @@ static void TeleportEntity( CBaseEntity *pSourceEntity, TeleportListEntry_t &ent
 				pPlayer->SnapEyeAngles( *newAngles );
 			}
 		}
-
 		if ( newVelocity )
 		{
 			pTeleport->SetAbsVelocity( *newVelocity );
 			pTeleport->SetBaseVelocity( vec3_origin );
 		}
-
 		if ( newPosition )
 		{
 			pTeleport->AddEffects( EF_NOINTERP );
@@ -1211,7 +1205,6 @@ static void TeleportEntity( CBaseEntity *pSourceEntity, TeleportListEntry_t &ent
 	}
 	IPhysicsObject *pPhys = pTeleport->VPhysicsGetObject();
 	bool rotatePhysics = false;
-
 	// handle physics objects / shadows
 	if ( pPhys )
 	{
@@ -1229,12 +1222,9 @@ static void TeleportEntity( CBaseEntity *pSourceEntity, TeleportListEntry_t &ent
 		{
 			rotatePhysics = true;
 		}
-
 		pPhys->SetPosition( pTeleport->GetAbsOrigin(), *rotAngles, true );
 	}
-
 	g_pNotify->ReportTeleportEvent( pTeleport, prevOrigin, prevAngles, rotatePhysics );
-
 	pTeleport->SetSolidFlags( nSolidFlags );
 }
 */

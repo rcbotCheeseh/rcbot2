@@ -269,12 +269,11 @@ public:
 
 	inline bool getVector ( edict_t *edict, Vector *v )
 	{
-		static float *x;
-
 		getData(edict);
 
 		if ( m_data )
 		{
+			static float *x;
 			x = (float*)m_data;
 			*v = Vector(*x,*(x+1),*(x+2));
 
@@ -711,8 +710,8 @@ public:
 	inline static int GetEntPropInt(CBaseEntity *pEntity, const char *prop)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
-		int offset = UTIL_FindInDataMap(pDataMap, prop);
-		int propvalue = *(int *)((uint8_t *)pEntity + offset); // to-do: bit count?
+		const int offset = UTIL_FindInDataMap(pDataMap, prop);
+		const int propvalue = *(int *)((uint8_t *)pEntity + offset); // to-do: bit count?
 		return propvalue;
 	}
 
@@ -726,8 +725,8 @@ public:
 	inline static float GetEntPropFloat(CBaseEntity *pEntity, const char *prop)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
-		int offset = UTIL_FindInDataMap(pDataMap, prop);
-		float propvalue = *(float *)((uint8_t *)pEntity + offset);
+		const int offset = UTIL_FindInDataMap(pDataMap, prop);
+		const float propvalue = *(float *)((uint8_t *)pEntity + offset);
 		return propvalue;
 	}
 
@@ -741,7 +740,7 @@ public:
 	inline static edict_t *GetEntPropEdict(CBaseEntity *pEntity, const char *prop)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
-		int offset = UTIL_FindInDataMap(pDataMap, prop);
+		const int offset = UTIL_FindInDataMap(pDataMap, prop);
 		edict_t *pEdict = *(edict_t **) ((uint8_t *) pEntity + offset);
 		if(!pEdict || pEdict->IsFree())
 		{
@@ -761,8 +760,8 @@ public:
 	inline static Vector *GetEntPropVector(CBaseEntity *pEntity, const char *prop)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
-		int offset = UTIL_FindInDataMap(pDataMap, prop);
-		Vector *propvalue = (Vector *)((uint8_t *)pEntity + offset);
+		const int offset = UTIL_FindInDataMap(pDataMap, prop);
+		const auto propvalue = (Vector *)((uint8_t *)pEntity + offset);
 		return propvalue;
 	}
 
@@ -775,8 +774,8 @@ public:
 	inline static int GetEntityHealth(CBaseEntity* pEntity)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
-		int offset = UTIL_FindInDataMap(pDataMap, "m_iHealth");
-		int iHealth = *(int*)((char*)pEntity + offset);
+		const int offset = UTIL_FindInDataMap(pDataMap, "m_iHealth");
+		const int iHealth = *(int*)((char*)pEntity + offset);
 		return iHealth;
 	}
 	/**
@@ -788,8 +787,8 @@ public:
 	inline static int GetEntityMaxHealth(CBaseEntity* pEntity)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
-		int offset = UTIL_FindInDataMap(pDataMap, "m_iMaxHealth");
-		int iMaxHealth = *(int*)((char*)pEntity + offset);
+		const int offset = UTIL_FindInDataMap(pDataMap, "m_iMaxHealth");
+		const int iMaxHealth = *(int*)((char*)pEntity + offset);
 		return iMaxHealth;
 	}
 	/**
@@ -801,10 +800,10 @@ public:
 	inline static float GetEntityHealthPercent(CBaseEntity* pEntity)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
-		int offset = UTIL_FindInDataMap(pDataMap, "m_iHealth");
+		const int offset = UTIL_FindInDataMap(pDataMap, "m_iHealth");
 		int offset2 = UTIL_FindInDataMap(pDataMap, "m_iMaxHealth");
-		int iHealth = *(int*)((char*)pEntity + offset);
-		int iMaxHealth = *(int*)((char*)pEntity + offset);
+		const int iHealth = *(int*)((char*)pEntity + offset);
+		const int iMaxHealth = *(int*)((char*)pEntity + offset);
 		return (static_cast<float>(iHealth / iMaxHealth));
 	}
 };

@@ -101,8 +101,6 @@ edict_t *CBotSquad::getMember ( size_t iMember )
 //              make a new squad
 CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 {
-	CBot *pBot;
-
 	//char msg[120];
 
 	if ( !pLeader )
@@ -130,10 +128,11 @@ CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 	}
 	
 	// no squad with leader, make one
-	CBotSquad *theSquad = new CBotSquad(pLeader, pMember);
+	const auto theSquad = new CBotSquad(pLeader, pMember);
 	
 	if ( theSquad != NULL )
 	{
+		CBot *pBot;
 		m_theSquads.push_back(theSquad);
 		
 		if ( (pBot = CBots::getBotPointer(pLeader)) != NULL )
@@ -147,9 +146,6 @@ CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 //
 CBotSquad *CBotSquads::SquadJoin ( edict_t *pLeader, edict_t *pMember )
 {
-	CBotSquad *theSquad;
-	CBotSquad *joinSquad;
-
 	//char msg[120];
 
 	if ( !pLeader )
@@ -159,13 +155,13 @@ CBotSquad *CBotSquads::SquadJoin ( edict_t *pLeader, edict_t *pMember )
 		return NULL;
 
 	// no squad with leader, make pMember join SquadLeader
-	theSquad = FindSquadByLeader(pMember);
+	CBotSquad* theSquad = FindSquadByLeader(pMember);
 
 	if ( theSquad != NULL )
 	{
 		theSquad->AddMember(pMember);
 
-		joinSquad = FindSquadByLeader(pLeader);
+		CBotSquad* joinSquad = FindSquadByLeader(pLeader);
 
 		if ( joinSquad )
 		{
@@ -297,25 +293,21 @@ void CBotSquad::ChangeLeader ()
 
 Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 {
-	Vector vLeaderOrigin;
 	Vector vBase; 
 	Vector v_forward;
 	Vector v_right;
-	QAngle angle_right;
-	// vBase = first : offset from leader origin without taking into consideration spread and position
-	int iPosition;
 	trace_t *tr = CBotGlobals::getTraceResult();
 
 	edict_t *pLeader = GetLeader();
-	
-	iPosition = GetFormationPosition(pEdict);
-	vLeaderOrigin = CBotGlobals::entityOrigin(pLeader);
+
+	const int iPosition = GetFormationPosition(pEdict);
+	const Vector vLeaderOrigin = CBotGlobals::entityOrigin(pLeader);
 
 	const int iMod = iPosition % 2;
 
 	AngleVectors(m_vLeaderAngle,&v_forward); // leader body angles as base
 
-	angle_right = m_vLeaderAngle;
+	QAngle angle_right = m_vLeaderAngle;
 	angle_right.y += 90.0f;
 
 	CBotGlobals::fixFloatAngle(&(angle_right.y));
@@ -402,10 +394,9 @@ void CBotSquad::AddMember ( edict_t *pEdict )
 {
 	if ( !IsMember(pEdict) )
 	{
-		MyEHandle newh;
 		//CBot *pBot;
 
-		newh = pEdict;
+		const MyEHandle newh = pEdict;
 
 		m_SquadMembers.push_back(newh);
 

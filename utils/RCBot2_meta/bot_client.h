@@ -397,7 +397,7 @@ public:
 	static CClient *findClientBySteamID ( char *szSteamID );
 	static edict_t *getListenServerClient() { if ( m_pListenServerClient ) return m_pListenServerClient->getPlayer(); else return NULL; }
 
-	static void initall () { for ( int i = 0; i < MAX_PLAYERS; i ++ ) { m_Clients[i].init(); } }
+	static void initall () { for (auto& m_Client : m_Clients) { m_Client.init(); } }
 	static void giveMessage (char *msg, float fTime = 0.1, edict_t *pPlayer = NULL );// NULL to everyone
 private:
 	static CClient m_Clients[MAX_PLAYERS];

@@ -33,6 +33,8 @@
 #include "bot_globals.h"
 #include "bot_configfile.h"
 
+#include "logging.h"
+
 std::vector <char *> CBotConfigFile::m_Commands;
 unsigned int CBotConfigFile::m_iCmd = 0; // current command (time delayed)
 float CBotConfigFile::m_fNextCommandTime = 0.0f;
@@ -53,7 +55,7 @@ void CBotConfigFile :: load ()
 
 	if ( !fp )
 	{
-		CBotGlobals::botMessage(NULL,0,"config file not found");
+		logger->Log(LogLevel::WARN, "config file not found");
 		return;
 	}
 
@@ -74,7 +76,8 @@ void CBotConfigFile :: load ()
 
 		if (!len)
 			continue;
-
+		
+		logger->Log(LogLevel::TRACE, "Config entry '%s' read", line);
 		m_Commands.push_back(CStrings::getString(line));
 	}
 
@@ -91,7 +94,7 @@ void CBotConfigFile :: doNextCommand ()
 		snprintf(cmd, sizeof(cmd), "%s\n", m_Commands[m_iCmd]);
 		engine->ServerCommand(cmd);
 
-		CBotGlobals::botMessage(NULL,0,"Bot Command '%s' executed",m_Commands[m_iCmd]);
+		logger->Log(LogLevel::TRACE, "Bot Command '%s' executed", m_Commands[m_iCmd]);
 		m_iCmd ++;
 		m_fNextCommandTime = engine->Time() + 0.1f;
 	}
@@ -106,7 +109,7 @@ void CBotConfigFile :: executeCommands ()
 		snprintf(cmd, sizeof(cmd), "%s\n", m_Commands[m_iCmd]);
 		engine->ServerCommand(cmd);
 
-		CBotGlobals::botMessage(NULL,0,"Bot Command '%s' executed",m_Commands[m_iCmd]);
+		logger->Log(LogLevel::TRACE, "Bot Command '%s' executed", m_Commands[m_iCmd]);
 		m_iCmd ++;
 	}
 
@@ -115,16 +118,14 @@ void CBotConfigFile :: executeCommands ()
 
 void CRCBotTF2UtilFile :: init()
 {
-	short unsigned int i,j,k;
-
-	for ( i = 0; i < UTIL_TYPE_MAX; i ++ )
+	for (auto& m_fUtil : m_fUtils)
 	{
-		for ( j = 0; j < BOT_UTIL_MAX; j ++ )
+		for ( short unsigned int j = 0; j < BOT_UTIL_MAX; j ++ )
 		{
-			for ( k = 0; k < 9; k ++ )
+			for ( short unsigned int k = 0; k < 9; k ++ )
 			{
-				m_fUtils[i][j][k].min = 0;
-				m_fUtils[i][j][k].max = 0;
+				m_fUtil[j][k].min = 0;
+				m_fUtil[j][k].max = 0;
 			}
 		}
 	}
@@ -132,9 +133,7 @@ void CRCBotTF2UtilFile :: init()
 
 void CRCBotTF2UtilFile :: addUtilPerturbation (eBotAction iAction, eTF2UtilType iUtil, float fUtility[9][2])
 {
-	short unsigned int i;
-
-	for ( i = 0; i < 9; i ++ )
+	for ( short unsigned int i = 0; i < 9; i ++ )
 	{
 		m_fUtils[iUtil][iAction][i].min = fUtility[i][0];
 		m_fUtils[iUtil][iAction][i].max = fUtility[i][1];
@@ -143,15 +142,13 @@ void CRCBotTF2UtilFile :: addUtilPerturbation (eBotAction iAction, eTF2UtilType 
 
 void CRCBotTF2UtilFile :: loadConfig()
 {
-	 eTF2UtilType iFile;
-	 char szFullFilename[512];
+	char szFullFilename[512];
 	 char szFilename[64];
 	 char line[256];
-	 FILE *fp;
 
-	 init();
+	init();
 
-	 for ( iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = (eTF2UtilType)((int)iFile+1) )
+	 for ( eTF2UtilType iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = (eTF2UtilType)((int)iFile+1) )
 	 {
 		 if ( iFile == BOT_ATT_UTIL )
 		 {
@@ -163,11 +160,11 @@ void CRCBotTF2UtilFile :: loadConfig()
 		}
 
 		CBotGlobals::buildFileName(szFullFilename,szFilename,BOT_CONFIG_FOLDER);
-		fp = CBotGlobals::openFile(szFullFilename,"r");
+		FILE* fp = CBotGlobals::openFile(szFullFilename, "r");
 
 		if ( fp )
 		{
-			eBotAction iUtil = (eBotAction)0;
+			auto iUtil = (eBotAction)0;
 
 			while ( fgets(line,255,fp) != NULL )
 			{

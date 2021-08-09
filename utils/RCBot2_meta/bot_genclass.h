@@ -126,8 +126,7 @@ class dataStack
 
 		bool RemoveByPointer ( const T *pObj )
 		{
-			dataNode<T> *tempNode = m_Head;			
-			dataNode<T> *deleteNode;
+			dataNode<T> *tempNode = m_Head;
 
 			if ( m_Head == NULL )
 				return false;
@@ -145,7 +144,7 @@ class dataStack
 			{
 				if ( &tempNode->m_Next->m_NodeData == pObj )
 				{
-					deleteNode = tempNode->m_Next;
+					dataNode<T>* deleteNode = tempNode->m_Next;
 
 					tempNode->m_Next = tempNode->m_Next->m_Next;
 
@@ -166,8 +165,7 @@ class dataStack
 
 		bool Remove ( const T pObj )
 		{
-			dataNode<T> *tempNode = m_Head;			
-			dataNode<T> *deleteNode;
+			dataNode<T> *tempNode = m_Head;
 
 			if ( m_Head == NULL )
 				return false;
@@ -185,7 +183,7 @@ class dataStack
 			{
 				if ( tempNode->m_Next->m_NodeData == pObj )
 				{
-					deleteNode = tempNode->m_Next;
+					dataNode<T>* deleteNode = tempNode->m_Next;
 
 					tempNode->m_Next = tempNode->m_Next->m_Next;
 
@@ -205,11 +203,9 @@ class dataStack
 
 		void Destroy ()
 		{
-			dataNode<T> *tempNode;
-
 			while ( m_Head )
 			{
-				tempNode = m_Head;
+				dataNode<T>* tempNode = m_Head;
 
 				m_Head = m_Head->m_Next;
 
@@ -903,8 +899,6 @@ class dataQueue
 
 		void RemoveFront ()
 		{
-			dataNode<T> *tempNode = m_Head;
-
 			if ( m_Head == NULL )
 			{
 				// just set tail to null incase
@@ -915,7 +909,7 @@ class dataQueue
 			
 			try
 			{				
-				tempNode = m_Head;
+				dataNode<T>* tempNode = m_Head;
 				
 				if ( m_Tail == m_Head )
 				{
@@ -961,8 +955,7 @@ class dataQueue
 
 		bool Remove ( const T pObj )
 		{
-			dataNode<T> *tempNode = m_Head;			
-			dataNode<T> *deleteNode = NULL;
+			dataNode<T> *tempNode = m_Head;
 
 			if ( m_Head == NULL )
 				return false;
@@ -991,7 +984,7 @@ class dataQueue
 			{
 				if ( tempNode->m_Next->m_NodeData == pObj )
 				{
-					deleteNode = tempNode->m_Next;
+					dataNode<T>* deleteNode = tempNode->m_Next;
 
 					if ( deleteNode == m_Tail )
 					{
@@ -1017,8 +1010,7 @@ class dataQueue
 
 		bool RemoveByPointer ( const T *pObj )
 		{
-			dataNode<T> *tempNode = m_Head;			
-			dataNode<T> *deleteNode = NULL;
+			dataNode<T> *tempNode = m_Head;
 
 			if ( m_Head == NULL )
 				return false;
@@ -1045,7 +1037,7 @@ class dataQueue
 			{
 				if ( &tempNode->m_Next->m_NodeData == pObj )
 				{
-					deleteNode = tempNode->m_Next;
+					dataNode<T>* deleteNode = tempNode->m_Next;
 
 					if ( deleteNode == m_Tail )
 					{

@@ -121,7 +121,7 @@ void CBotTF2DemoPipeTrapSched :: init()
 //////////////////////////////////////
 CBotTF2HealSched::CBotTF2HealSched(edict_t *pHeal)
 {
-	CFindPathTask *findpath = new CFindPathTask(pHeal);
+	auto findpath = new CFindPathTask(pHeal);
 	findpath->setCompleteInterrupt(CONDITION_SEE_HEAL);
 	addTask(findpath);
 	addTask(new CBotTF2MedicHeal());
@@ -136,7 +136,7 @@ void CBotTF2HealSched::init()
 
 CBotTFEngiBuild :: CBotTFEngiBuild ( CBot *pBot, eEngiBuild iObject, CWaypoint *pWaypoint )
 {
-	CFindPathTask *pathtask = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
+	auto pathtask = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
 	addTask(pathtask); // first
 
 	pathtask->setInterruptFunction(new CBotTF2EngineerInterrupt(pBot));
@@ -152,9 +152,8 @@ void CBotTFEngiBuild :: init ()
 
 CBotGetMetalSched :: CBotGetMetalSched ( Vector vOrigin )
 {
-
-	CFindPathTask *task1 = new CFindPathTask(vOrigin);
-	CBotTF2WaitAmmoTask *task2 = new CBotTF2WaitAmmoTask(vOrigin);
+	auto task1 = new CFindPathTask(vOrigin);
+	auto task2 = new CBotTF2WaitAmmoTask(vOrigin);
 
 	task1->setCompleteInterrupt(0,CONDITION_NEED_AMMO);
 	task2->setCompleteInterrupt(0,CONDITION_NEED_AMMO);
@@ -218,7 +217,7 @@ void CBotTF2DefendPayloadBombSched :: init ()
 
 CBotTFEngiUpgrade :: CBotTFEngiUpgrade ( CBot *pBot, edict_t *pBuilding )
 {
-	CFindPathTask *pathtask = new CFindPathTask(pBuilding);
+	auto pathtask = new CFindPathTask(pBuilding);
 
 	addTask(pathtask);
 
@@ -230,7 +229,7 @@ CBotTFEngiUpgrade :: CBotTFEngiUpgrade ( CBot *pBot, edict_t *pBuilding )
 	{
 		pathtask->setInterruptFunction(new CBotTF2EngineerInterrupt(pBot));
 
-		CBotTF2UpgradeBuilding *upgbuilding = new CBotTF2UpgradeBuilding(pBuilding);
+		auto upgbuilding = new CBotTF2UpgradeBuilding(pBuilding);
 		addTask(upgbuilding);
 		upgbuilding->setInterruptFunction(new CBotTF2EngineerInterrupt(pBot));
 
@@ -249,11 +248,10 @@ void CBotTFEngiUpgrade :: init ()
 //////////////////////////////////////////////////
 CBotBackstabSched :: CBotBackstabSched ( edict_t *pEnemy )
 {
-	Vector vrear;
 	Vector vangles;
 
 	AngleVectors(CBotGlobals::entityEyeAngles(pEnemy),&vangles);
-	vrear = CBotGlobals::entityOrigin(pEnemy) - (vangles * 45) + Vector(0,0,32);
+	const Vector vrear = CBotGlobals::entityOrigin(pEnemy) - (vangles * 45) + Vector(0, 0, 32);
 
 	addTask(new CFindPathTask(vrear));
 	addTask(new CBotBackstab(pEnemy));
@@ -320,8 +318,8 @@ void CBotTFEngiLookAfterSentry :: init ()
 ////////////
 CBotTF2GetHealthSched :: CBotTF2GetHealthSched ( Vector vOrigin )
 {
-	CFindPathTask *task1 = new CFindPathTask(vOrigin);
-	CBotTF2WaitHealthTask *task2 = new CBotTF2WaitHealthTask(vOrigin);
+	auto task1 = new CFindPathTask(vOrigin);
+	auto task2 = new CBotTF2WaitHealthTask(vOrigin);
 
 	// if bot doesn't have need ammo flag anymore ....
 	// fail so that the bot doesn't move onto the next task
@@ -340,8 +338,8 @@ void CBotTF2GetHealthSched :: init ()
 
 CBotTF2GetAmmoSched :: CBotTF2GetAmmoSched ( Vector vOrigin )
 {
-	CFindPathTask *task1 = new CFindPathTask(vOrigin);
-	CBotTF2WaitAmmoTask *task2 = new CBotTF2WaitAmmoTask(vOrigin);
+	auto task1 = new CFindPathTask(vOrigin);
+	auto task2 = new CBotTF2WaitAmmoTask(vOrigin);
 
 	// if bot doesn't have need ammo flag anymore ....
 	// fail so that the bot doesn't move onto the next task
@@ -386,8 +384,8 @@ void CBotUseTeleSched :: init ()
 
 CBotUseDispSched :: CBotUseDispSched ( CBot *pBot, edict_t *pDisp )//, bool bNest )
 {
-	CFindPathTask *pathtask = new CFindPathTask(pDisp);
-	CBotTF2WaitHealthTask *gethealth = new CBotTF2WaitHealthTask(CBotGlobals::entityOrigin(pDisp));
+	auto pathtask = new CFindPathTask(pDisp);
+	auto gethealth = new CBotTF2WaitHealthTask(CBotGlobals::entityOrigin(pDisp));
 	addTask(pathtask);
 	pathtask->setInterruptFunction(new CBotTF2EngineerInterrupt(pBot));
 
@@ -412,7 +410,7 @@ void CBotSpySapBuildingSched :: init ()
 
 CBotSpySapBuildingSched :: CBotSpySapBuildingSched ( edict_t *pBuilding, eEngiBuild id )
 {
-	CFindPathTask *findpath = new CFindPathTask(pBuilding);
+	auto findpath = new CFindPathTask(pBuilding);
 
 	addTask(findpath); // first
 	addTask(new CBotTF2SpySap(pBuilding,id)); // second
@@ -422,10 +420,8 @@ CBotSpySapBuildingSched :: CBotSpySapBuildingSched ( edict_t *pBuilding, eEngiBu
 //////////////////////////////////////
 CBotTauntSchedule :: CBotTauntSchedule ( edict_t *pPlayer, float fYaw )
 {
-	const QAngle angles = QAngle(0,fYaw,0);
+	const auto angles = QAngle(0,fYaw,0);
 	Vector forward;
-	Vector vOrigin;
-	Vector vGoto;
 	const float fTauntDist = 40.0f;
 
 	m_pPlayer = pPlayer;
@@ -434,9 +430,9 @@ CBotTauntSchedule :: CBotTauntSchedule ( edict_t *pPlayer, float fYaw )
 	AngleVectors(angles,&forward);
 
 	forward = forward/forward.Length();
-	vOrigin = CBotGlobals::entityOrigin(pPlayer);
+	const Vector vOrigin = CBotGlobals::entityOrigin(pPlayer);
 
-	vGoto = vOrigin + (forward*fTauntDist);
+	const Vector vGoto = vOrigin + (forward * fTauntDist);
 
 	CBotGlobals::fixFloatAngle(&m_fYaw);
 
@@ -524,9 +520,7 @@ CBotDefendSched ::CBotDefendSched ( Vector vOrigin, float fMaxTime )
 
 CBotDefendSched::CBotDefendSched ( int iWaypointID, float fMaxTime )
 {
-	CWaypoint *pWaypoint;
-
-	pWaypoint = CWaypoints::getWaypoint(iWaypointID);
+	CWaypoint* pWaypoint = CWaypoints::getWaypoint(iWaypointID);
 
 	addTask(new CFindPathTask(iWaypointID));
 	addTask(new CBotDefendTask(pWaypoint->getOrigin(),fMaxTime,8,false,Vector(0,0,0),LOOK_SNIPE,pWaypoint->getFlags()));
@@ -541,7 +535,7 @@ void CBotDefendSched :: init ()
 
 CBotRemoveSapperSched :: CBotRemoveSapperSched ( edict_t *pBuilding, eEngiBuild id )
 {
-	CFindPathTask *pathtask = new CFindPathTask(pBuilding);
+	auto pathtask = new CFindPathTask(pBuilding);
 	addTask(pathtask);
 	pathtask->completeInRangeFromEdict();
 	pathtask->setRange(150.0f);
@@ -556,7 +550,7 @@ void CBotRemoveSapperSched :: init ()
 CGotoHideSpotSched :: CGotoHideSpotSched ( CBot *pBot, edict_t *pEdict, bool bIsGrenade )
 {
 	// run at flank while shooting	
-	CFindPathTask *pHideGoalPoint = new CFindPathTask(pEdict);
+	auto pHideGoalPoint = new CFindPathTask(pEdict);
 
 	pBot->setCoverFrom(pEdict);
 	addTask(new CFindGoodHideSpot(pEdict));
@@ -582,7 +576,7 @@ CGotoHideSpotSched :: CGotoHideSpotSched ( CBot *pBot, edict_t *pEdict, bool bIs
 CGotoHideSpotSched :: CGotoHideSpotSched (CBot *pBot, Vector vOrigin, IBotTaskInterrupt *interrupt )
 {
 	// run at flank while shooting	
-	CFindPathTask *pHideGoalPoint = new CFindPathTask();
+	auto pHideGoalPoint = new CFindPathTask();
 	
 	pBot->setCoverFrom(NULL);
 	addTask(new CFindGoodHideSpot(vOrigin));
@@ -624,7 +618,7 @@ void CCrouchHideSched :: init ()
 /////////////
 CBotTF2AttackSentryGun::CBotTF2AttackSentryGun( edict_t *pSentry, CBotWeapon *pWeapon )
 {
-	CFindPathTask *path = new CFindPathTask(pSentry);
+	auto path = new CFindPathTask(pSentry);
 
 	addTask(path);
 	addTask(new CBotTF2AttackSentryGunTask(pSentry,pWeapon));
@@ -657,7 +651,7 @@ CBotAttackPointSched :: CBotAttackPointSched ( Vector vPoint, int iRadius, int i
 	// First find random route 
 	if ( bHasRoute )
 	{
-		CFindPathTask *toRoute = new CFindPathTask(vRoute);
+		auto toRoute = new CFindPathTask(vRoute);
 		addTask(toRoute); // first
 		toRoute->setDangerPoint(iDangerWpt);
 
@@ -665,7 +659,7 @@ CBotAttackPointSched :: CBotAttackPointSched ( Vector vPoint, int iRadius, int i
 			addTask(new CBotNest());
 	}
 
-	CFindPathTask *toPoint = new CFindPathTask(vPoint);
+	auto toPoint = new CFindPathTask(vPoint);
 	addTask(toPoint); // second / first
 	toPoint->setDangerPoint(iDangerWpt);
 	addTask(new CBotTF2AttackPoint(iArea,vPoint,iRadius)); // third / second 
@@ -689,10 +683,10 @@ void CBotTF2MessAroundSched :: init()
 
 CBotFollowLastEnemy ::	CBotFollowLastEnemy ( CBot *pBot, edict_t *pEnemy, Vector vLastSee )
 {
-	Vector vVelocity = Vector(0,0,0);
+	auto vVelocity = Vector(0,0,0);
 	CClient *pClient = CClients::get(pEnemy);
 
-	CFindPathTask *pFindPath = new CFindPathTask(vLastSee,LOOK_LAST_ENEMY);	
+	auto pFindPath = new CFindPathTask(vLastSee,LOOK_LAST_ENEMY);	
 
 	if ( CClassInterface :: getVelocity(pEnemy,&vVelocity) )
 	{

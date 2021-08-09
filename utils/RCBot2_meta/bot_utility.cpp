@@ -173,38 +173,30 @@ CBotUtility :: CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil
 // Execute a list of possible actions and put them into order of available actions against utility
 void CBotUtilities :: execute ()
 {
-	unsigned int i = 0;
-	CBotUtility *pUtil;
-	float fUtil;
-
-	util_node_t *temp;
-	util_node_t *pnew;
-	util_node_t *prev;
-
 	m_pBest.head = NULL;
 
-	for ( i = 0; i < m_Utilities.size(); i ++ )
+	for (auto& m_Utilitie : m_Utilities)
 	{
-		pUtil = &(m_Utilities[i]);
-		fUtil = pUtil->getUtility();
+		CBotUtility* pUtil = &m_Utilitie;
+		const float fUtil = pUtil->getUtility();
 
 		// if bot can do this action
 		if ( pUtil->canDo() )
 		{			
 			// add to list
-			temp = m_pBest.head;
+			util_node_t* temp = m_pBest.head;
 
 			// put in correct order by making a linked list
-			pnew = (util_node_t*)malloc(sizeof(util_node_t));
+			const auto pnew = (util_node_t*)malloc(sizeof(util_node_t));
 
 			if ( pnew != NULL )
 			{
 				pnew->util = pUtil;
 				pnew->next = NULL;
-				prev = NULL;
 
 				if ( temp )
 				{
+					util_node_t * prev = NULL;
 					while ( temp )
 					{
 						// put into correct position
@@ -256,15 +248,12 @@ void CBotUtilities :: freeMemory ()
 
 CBotUtility *CBotUtilities :: nextBest ()
 {
-	CBotUtility *pBest;
-	util_node_t *temp;
-
 	if ( m_pBest.head == NULL )
 		return NULL;
 
-	pBest = m_pBest.head->util;
+	CBotUtility* pBest = m_pBest.head->util;
 
-	temp = m_pBest.head;
+	util_node_t* temp = m_pBest.head;
 
 	m_pBest.head = m_pBest.head->next;
 

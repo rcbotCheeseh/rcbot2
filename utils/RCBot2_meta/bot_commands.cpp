@@ -93,6 +93,11 @@ CBotCommandInline AddBotCommand("addbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED,
 
 	if ( pClient )
 		pEntity = pClient->getPlayer();
+	
+		if (rcbot_bot_quota_interval.GetFloat() > 0) {
+		CBotGlobals::botMessage(pEntity, 0, "error: cannot manually add bot while rcbot_bot_quota_interval is active");
+		return COMMAND_ACCESSED;
+	}	
 
 	//if ( !bot_sv_cheat_warning.GetBool() || bot_sv_cheats_auto.GetBool() || (!sv_cheats || sv_cheats->GetBool()) )
 	//{
@@ -128,7 +133,7 @@ CBotCommandInline KickBotCommand("kickbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATE
 
 	
 	return COMMAND_ACCESSED;
-}, "usage \"kickbot\" or \"kickbot <team>\" : kicks random bot or bot on team: <team>");
+}, R"(usage "kickbot" or "kickbot <team>" : kicks random bot or bot on team: <team>)");
 
 bool CBotCommand :: hasAccess ( CClient *pClient )
 {
@@ -194,9 +199,9 @@ void CBotSubcommands::printCommand(edict_t *pPrintTo, int indent)
 	else
 		CBotGlobals::botMessage(pPrintTo,0,"[%s]",m_szCommand);
 
-	for ( unsigned int i = 0; i < m_theCommands.size(); i ++ )
+	for (auto& m_theCommand : m_theCommands)
 	{
-		m_theCommands[i]->printCommand(pPrintTo,indent+1);
+		m_theCommand->printCommand(pPrintTo,indent+1);
 	}
 }
 

@@ -57,8 +57,8 @@ void CPopulation :: add ( IIndividual *individual )
 
 void CPopulation :: freeMemory ()
 {
-	for ( unsigned int i = 0; i < m_theIndividuals.size(); i ++ )
-		delete m_theIndividuals[i];
+	for (auto& m_theIndividual : m_theIndividuals)
+		delete m_theIndividual;
 
 	m_theIndividuals.clear();
 }
@@ -82,13 +82,12 @@ ga_nn_value CPopulation :: totalFitness ()
 
 ga_nn_value CPopulation :: bestFitness ()
 {
-	float fFitness = 0.0f;
 	BOOL gotBestFitness = FALSE;
 	float fBestFitness = 0.0f;
 
 	for ( unsigned int i = 0; i < size(); i ++ )
 	{
-		fFitness = m_theIndividuals[i]->getFitness();
+		const float fFitness = m_theIndividuals[i]->getFitness();
 
 		if ( !gotBestFitness || (fFitness > fBestFitness) )
 		{

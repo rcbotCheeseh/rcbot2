@@ -148,7 +148,8 @@ public:
 		const Vector &amins, const Vector &amaxs,
 		const Vector &bmins, const Vector &bmaxs );
 
-	static float grenadeWillLand (  Vector vOrigin, Vector vEnemy, float fProjSpeed = 400.0f, float fGrenadePrimeTime = 5.0f, float *fAngle = NULL );
+	static float grenadeWillLand (Vector vOrigin, Vector vEnemy, float fProjSpeed = 400.0f, float fGrenadePrimeTime = 5.0f,
+	                              const float* fAngle = NULL);
 	////////////////////////////////////////////////////////////////////////
 
 	/*static Vector forwardVec ();

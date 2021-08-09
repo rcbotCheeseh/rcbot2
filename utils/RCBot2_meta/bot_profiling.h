@@ -55,7 +55,7 @@ public:
 
     void Stop();
 
-	void print(double *high);
+	void print(const double *high);
 
 #ifndef __linux__
     inline __int64 getOverall ()

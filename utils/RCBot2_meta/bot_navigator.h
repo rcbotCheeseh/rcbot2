@@ -251,9 +251,7 @@ public:
 
 	void add ( AStarNode *data )
 	{
-		AStarListNode *newNode = new AStarListNode(data);
-		AStarListNode *t;
-		AStarListNode *p;
+		const auto newNode = new AStarListNode(data);
 
 		if ( m_Head == NULL )
 			m_Head = newNode;
@@ -266,8 +264,8 @@ public:
 			}
 			else
 			{
-				p = m_Head;
-				t = m_Head->m_Next;
+				AStarListNode* p = m_Head;
+				AStarListNode* t = m_Head->m_Next;
 
 				while ( t != NULL )
 				{
@@ -291,11 +289,9 @@ public:
 
 	void destroy ()
 	{
-		AStarListNode *t;
-
 		while ( m_Head != NULL )
 		{
-			t = m_Head;
+			AStarListNode* t = m_Head;
 			m_Head = m_Head->m_Next;
 			delete t;
 			t = NULL;

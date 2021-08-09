@@ -12,6 +12,7 @@ sourceFiles = [
   "utils/RCBot2_meta/bot_configfile.cpp",
   "utils/RCBot2_meta/bot_coop.cpp",
   "utils/RCBot2_meta/bot_css_bot.cpp",
+  "utils/RCBot2_meta/bot_css_mod.cpp",
   "utils/RCBot2_meta/bot_dod_bot.cpp",
   "utils/RCBot2_meta/bot_dod_mod.cpp",
   "utils/RCBot2_meta/bot_events.cpp",
@@ -49,7 +50,8 @@ sourceFiles = [
   "utils/RCBot2_meta/bot_zombie.cpp",
   "utils/RCBot2_meta/bot_sigscan.cpp",
   "utils/RCBot2_meta/bot_cvars.cpp",
-  "utils/RCBot2_meta/bot_plugin_meta.cpp"
+  "utils/RCBot2_meta/bot_plugin_meta.cpp",
+  "utils/RCBot2_meta/logging.cpp"
 ]
 
 include_paths = []

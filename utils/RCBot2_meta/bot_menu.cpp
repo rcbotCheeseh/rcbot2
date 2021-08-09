@@ -115,15 +115,11 @@ CWaypointFlagMenu :: CWaypointFlagMenu ( CBotMenu *pPrev )
 	const int iNumTypes = CWaypointTypes::getNumTypes();
 
 	int iNumAdded = 0;
-	CBotMenu *pParent;
-	CBotMenu *pCurrent;
 
-	int i;
+	CBotMenu* pCurrent = this;
+	CBotMenu* pParent = pPrev;
 
-	pCurrent = this;
-	pParent = pPrev;
-
-	for ( i = 0; i < iNumTypes; i ++ )
+	for ( int i = 0; i < iNumTypes; i ++ )
 	{
 		if ( !CWaypointTypes::getTypeByIndex(i)->forMod(iMod) )
 			continue;
@@ -339,32 +335,26 @@ void CWaypointPasteMenuItem :: activate ( CClient *pClient )
 
 void CBotMenu ::render (CClient *pClient)
 {
-	CBotMenuItem *item;
 	WptColor color;
-	unsigned int i;
-	Vector vOrigin;
 	Vector vForward;
-	Vector vRight;
-	QAngle angles;
-	const char *pszCaption;
 	IPlayerInfo *pPlayerInfo = playerinfomanager->GetPlayerInfo(pClient->getPlayer());
 	const CBotCmd lastCmd = pPlayerInfo->GetLastUserCommand();
 	const float fUpdateTime = rcbot_menu_update_time1.GetFloat();
 
-	angles = lastCmd.viewangles;
+	const QAngle angles = lastCmd.viewangles;
 
-	vOrigin = pPlayerInfo->GetAbsOrigin();
+	Vector vOrigin = pPlayerInfo->GetAbsOrigin();
 
 	AngleVectors(angles,&vForward);
 
 	vForward = vForward / vForward.Length();
 
-	vRight = vForward.Cross(Vector(0,0,1));
+	const Vector vRight = vForward.Cross(Vector(0, 0, 1));
 
 	vOrigin = vOrigin + (vForward * 100) - (vRight * 100);
 	vOrigin.z += 72.0f;
 
-	pszCaption = getCaption(pClient,color);
+	const char* pszCaption = getCaption(pClient, color);
 
 	debugoverlay->AddTextOverlayRGB(vOrigin,0,fUpdateTime,color.r,color.g,color.b,color.a,pszCaption);
 	debugoverlay->AddTextOverlayRGB(vOrigin,1,fUpdateTime,color.r,color.g,color.b,color.a,"----------------");
@@ -375,9 +365,9 @@ void CBotMenu ::render (CClient *pClient)
 	debugoverlay->ScreenPosition(0.5f, 0.5f, screen);
 	debugoverlay->ScreenPosition(point,screen);*/
 
-	for ( i = 0; i < m_MenuItems.size(); i ++ )
+	for ( unsigned int i = 0; i < m_MenuItems.size(); i ++ )
 	{
-		item = m_MenuItems[i];
+		CBotMenuItem* item = m_MenuItems[i];
 
 		pszCaption = item->getCaption(pClient,color);
 
@@ -438,13 +428,10 @@ CWaypointFlagShowMenu :: CWaypointFlagShowMenu (CBotMenu *pParent)
 
 	const int iNumTypes = CWaypointTypes::getNumTypes();
 	int iNumAdded = 0;
-	CBotMenu *pCurrent;
 
-	int i;
+	CBotMenu* pCurrent = this;
 
-	pCurrent = this;
-
-	for ( i = 0; i < iNumTypes; i ++ )
+	for ( int i = 0; i < iNumTypes; i ++ )
 	{
 		if ( !CWaypointTypes::getTypeByIndex(i)->forMod(iMod) )
 			continue;
@@ -520,10 +507,8 @@ void CBotMenuItem :: freeMemory ()
 
 void CBotMenu :: freeMemory ()
 {
-	for ( unsigned int i = 0; i < m_MenuItems.size(); i ++ )
+	for (auto temp : m_MenuItems)
 	{
-		CBotMenuItem *temp = m_MenuItems[i];
-
 		temp->freeMemory();
 
 		delete temp;
@@ -532,10 +517,8 @@ void CBotMenu :: freeMemory ()
 
 void CBotMenuList :: freeMemory ()
 {
-	for ( unsigned int i = 0; i < BOT_MENU_MAX; i ++ )
+	for (auto temp : m_MenuList)
 	{
-		CBotMenu *temp = m_MenuList[i];
-
 		temp->freeMemory();
 
 		delete temp;

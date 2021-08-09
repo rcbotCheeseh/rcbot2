@@ -69,7 +69,9 @@ public:
 
 	CNeuron (unsigned short int iInputs);
 
-	~CNeuron() { if ( m_inputs ) delete[] m_inputs; if ( m_weights ) delete[] m_weights; }
+	~CNeuron() {
+		delete[] m_inputs;
+		delete[] m_weights; }
 
 	void setWeights ( ga_nn_value *weights );
 
