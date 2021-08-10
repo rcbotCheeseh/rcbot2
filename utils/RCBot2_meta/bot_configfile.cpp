@@ -142,14 +142,12 @@ void CRCBotTF2UtilFile :: addUtilPerturbation (eBotAction iAction, eTF2UtilType 
 
 void CRCBotTF2UtilFile :: loadConfig()
 {
-	char szFullFilename[512];
-	 char szFilename[64];
-	 char line[256];
-
 	init();
 
-	 for ( eTF2UtilType iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = (eTF2UtilType)((int)iFile+1) )
+	 for ( eTF2UtilType iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = static_cast<eTF2UtilType>(static_cast<int>(iFile) + 1) )
 	 {
+		 char szFilename[64];
+		 char szFullFilename[512];
 		 if ( iFile == BOT_ATT_UTIL )
 		 {
 			sprintf(szFilename,"attack_util.csv");
@@ -164,16 +162,16 @@ void CRCBotTF2UtilFile :: loadConfig()
 
 		if ( fp )
 		{
-			auto iUtil = (eBotAction)0;
+			char line[256];
+			auto iUtil = static_cast<eBotAction>(0);
 
 			while ( fgets(line,255,fp) != NULL )
 			{
-				float iClassList[TF_CLASS_MAX][2];
-				char utiltype[64];
-
 				if ( line[0] == 'B' && line[1] == 'O' && 
 					 line[2] == 'T' && line[3] == '_') // OK
 				{
+					char utiltype[64];
+					float iClassList[TF_CLASS_MAX][2];
 
 					// Format:    U, 1, 2, 3, 4, 5, 6, 7, 8, 9
 					//                
@@ -196,7 +194,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 
 						addUtilPerturbation(iUtil,iFile,iClassList);
 
-						iUtil = (eBotAction)((int)iUtil+1);
+						iUtil = static_cast<eBotAction>(static_cast<int>(iUtil) + 1);
 
 						if ( iUtil >= BOT_UTIL_MAX )
 							break;

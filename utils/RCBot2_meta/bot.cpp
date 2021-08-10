@@ -1584,7 +1584,7 @@ bool CBot :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 	if ( m_fUpdateDamageTime < fTime )
 	{
 		m_fUpdateDamageTime = fTime + 0.5;
-		m_fCurrentDanger += (((float)m_iAccumulatedDamage)/m_pPlayerInfo->GetMaxHealth())*MAX_BELIEF;
+		m_fCurrentDanger += (static_cast<float>(m_iAccumulatedDamage)/m_pPlayerInfo->GetMaxHealth())*MAX_BELIEF;
 		m_iAccumulatedDamage = 0;
 	}
 
@@ -1592,7 +1592,7 @@ bool CBot :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 	m_iAccumulatedDamage += (m_iPrevHealth-iHealthNow);
 	m_iPrevHealth = iHealthNow;	
 
-	// TO DO: replace with perceptron method
+	// TODO: replace with perceptron method
 	if ( m_iAccumulatedDamage > (m_pPlayerInfo->GetMaxHealth()*m_pProfile->m_fBraveness) )
 	{
 		if ( !bDontHide )
@@ -1774,7 +1774,7 @@ void CBot ::debugBot(char *msg)
 int CBot :: nearbyFriendlies (float fDistance)
 {
 	int num = 0;
-	const auto maxclients = (short int)CBotGlobals::maxClients();
+	const auto maxclients = static_cast<short>(CBotGlobals::maxClients());
 
 	for ( short int i = 0; i <= maxclients; i ++ )
 	{
@@ -2320,7 +2320,7 @@ Vector CBot::getAimVector ( edict_t *pEntity )
 	v_size = pEntity->GetCollideable()->OBBMaxs() - pEntity->GetCollideable()->OBBMins();
 	v_size = v_size * 0.5f;
 
-	fSensitivity = (float)m_pProfile->m_iSensitivity/20;
+	fSensitivity = static_cast<float>(m_pProfile->m_iSensitivity)/20;
 
 	v_origin = CBotGlobals::entityOrigin(pEntity);
 
@@ -2810,7 +2810,7 @@ void CBot :: doLook ()
 		if ( rcbot_supermode.GetBool() || m_bIncreaseSensitivity || onLadder() )
 			fSensitivity = 15.0f;
 		else
-			fSensitivity = (float)m_pProfile->m_iSensitivity;
+			fSensitivity = static_cast<float>(m_pProfile->m_iSensitivity);
 
 		QAngle requiredAngles;
 
@@ -3397,7 +3397,6 @@ bool CBots :: needToKickBot ()
 void CBots :: kickRandomBot (size_t count)
 {
 	std::vector<int> botList;
-	char szCommand[512];
 	//gather list of bots
 	for ( size_t i = 0; i < MAX_PLAYERS; i ++ )
 	{
@@ -3415,6 +3414,7 @@ void CBots :: kickRandomBot (size_t count)
 
 	size_t numBotsKicked = 0;
 	while (numBotsKicked < count && !botList.empty()) {
+		char szCommand[512];
 		sprintf(szCommand, "kickid %d\n", botList.back());
 		engine->ServerCommand(szCommand);
 		numBotsKicked++;

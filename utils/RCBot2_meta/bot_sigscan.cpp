@@ -252,7 +252,7 @@ void *CSignatureFunction::findSignature(void *addrInBase, const char *signature)
 
 	if (real_bytes >= 1)
 	{
-		return findPattern(addrInBase, (char*)real_sig, real_bytes);
+		return findPattern(addrInBase, reinterpret_cast<char*>(real_sig), real_bytes);
 	}
 
 	return NULL;

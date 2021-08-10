@@ -15,7 +15,7 @@ public:
 	void execute ( CBot *pBot )
 	{
 		if ( pBot->getTeam() == iTeam )
-			((CBotTF2*)pBot)->updateAttackPoints();
+			static_cast<CBotTF2*>(pBot)->updateAttackPoints();
 	}
 private:
 	int iTeam;	
@@ -28,7 +28,7 @@ public:
 	void execute ( CBot *pBot )
 	{
 		if ( pBot->getTeam() == iTeam )
-			((CBotTF2*)pBot)->updateDefendPoints();
+			static_cast<CBotTF2*>(pBot)->updateDefendPoints();
 	}
 private:
 	int iTeam;	
@@ -40,7 +40,7 @@ class CBotFuncPointsUpdated : public IBotFunction
 public:
 	void execute ( CBot *pBot )
 	{
-		((CBotTF2*)pBot)->pointsUpdated();
+		static_cast<CBotTF2*>(pBot)->pointsUpdated();
 	}	
 };
 
@@ -205,7 +205,7 @@ int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDef
 					// IF this is not base point and a lot of players are here, reduce probability of defending
 					if ( (i != GetBaseControlPointForTeam(team)) && (numplayers > 1)  )
 					{
-						arr[i].fProbMultiplier = 1.0f - ((float)numplayers/(gpGlobals->maxClients/4));
+						arr[i].fProbMultiplier = 1.0f - (static_cast<float>(numplayers)/(gpGlobals->maxClients/4));
 
 						if ( arr[i].fProbMultiplier <= 0.0f )
 							arr[i].fProbMultiplier = 0.1f;
@@ -973,7 +973,7 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 		{
 			if ( arr[i].bValid )
 			{
-				arr[i].fProb = (float)(*m_iNumControlPoints+1-i);
+				arr[i].fProb = static_cast<float>(*m_iNumControlPoints + 1 - i);
 				arr[i].fProb *= arr[i].fProb; // square it
 			}
 		}

@@ -128,14 +128,12 @@ void CCSSBot::spawnInit()
 
 void CCSSBot::selectTeam() const
 {
-	const char* cmd;
-	cmd = "jointeam 0";
+	const char* cmd = "jointeam 0";
 	helpers->ClientCommand(m_pEdict,cmd);
 }
 
 void CCSSBot::selectModel() const
 {
-	const char* cmd;
-	cmd = "joinclass 0";
+	const char* cmd = "joinclass 0";
 	helpers->ClientCommand(m_pEdict,cmd);
 }

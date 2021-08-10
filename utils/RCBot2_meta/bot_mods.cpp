@@ -53,9 +53,7 @@ std::vector<edict_wpt_pair_t> CHalfLifeDeathmatchMod::m_LiftWaypoints;
 void CBotMods :: parseFile ()
 {
 	char buffer[1024];
-	unsigned int len;
 	char key[64];
-	unsigned int i,j;
 	char val[256];
 
 	eModId modtype;
@@ -86,7 +84,7 @@ void CBotMods :: parseFile ()
 		if ( buffer[0] == '#' )
 			continue;
 
-		len = strlen(buffer);
+		unsigned int len = strlen(buffer);
 
 		if ( len == 0 )
 			continue;
@@ -94,8 +92,8 @@ void CBotMods :: parseFile ()
 		if ( buffer[len-1] == '\n' )
 			buffer[--len] = 0;
 
-		i = 0;
-		j = 0;
+		unsigned int i = 0;
+		unsigned int j = 0;
 
 		while ( (i < len) && (buffer[i] != '=') )
 		{

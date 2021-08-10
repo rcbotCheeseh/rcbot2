@@ -209,7 +209,7 @@ const char *CWaypointYawMenuItem :: getCaption ( CClient *pClient, WptColor &col
 	CWaypoint *pWpt = CWaypoints::getWaypoint(pClient->currentWaypoint());
 
 	if ( pWpt )
-		sprintf(m_szCaption,"Yaw = %d degrees (press to update)",(int)pWpt->getAimYaw());
+		sprintf(m_szCaption,"Yaw = %d degrees (press to update)",static_cast<int>(pWpt->getAimYaw()));
 	else
 		sprintf(m_szCaption,"No Waypoint");
 

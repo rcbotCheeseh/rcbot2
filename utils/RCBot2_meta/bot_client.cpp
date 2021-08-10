@@ -531,9 +531,7 @@ void CClient :: think ()
 			//g_pBotManager->GetBotController(m_pPlayer)->IsEFlagSet();
 
 			if ( /*(pev->waterlevel < 3) &&*/ (m_fCanPlaceJump < engine->Time()) )
-			{	
-				Vector v_floor;
-
+			{
 				if ( (m_fCanPlaceJump != -1) && (m_iLastButtons & IN_JUMP) && !(iPlayerFlags & FL_ONGROUND) )
 				{
 					int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 80.0, -1, true, false, false, NULL);
@@ -566,6 +564,7 @@ void CClient :: think ()
 
 							if ( iNewWpt != -1 )
 							{
+								Vector v_floor;
 								CWaypoint *pWpt = CWaypoints::getWaypoint(iNewWpt);
 								CWaypoint *pJumpWpt = CWaypoints::getWaypoint(m_iLastJumpWaypointIndex);
 
@@ -988,7 +987,7 @@ void CClient :: clientActive ()
 	if ( playerinfo )
 	{
 		// store steam id
-		m_szSteamID = (char*)playerinfo->GetNetworkIDString();
+		m_szSteamID = const_cast<char*>(playerinfo->GetNetworkIDString());
 	
 		// check my access levels
 		CAccessClients::checkClientAccess(this);

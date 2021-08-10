@@ -108,11 +108,11 @@ bool CDODMod :: shouldAttack ( int iTeam )
 	static short int iFlags_1;
 	static short int iNumFlags;
 
-
 	iNumFlags = m_Flags.getNumFlags();
 
-	iFlags_0 = (int) (((float)m_Flags.getNumFlagsOwned(iTeam == TEAM_ALLIES ? TEAM_AXIS : TEAM_ALLIES) / iNumFlags)*MAX_DOD_FLAGS);
-	iFlags_1 = (int) (((float)m_Flags.getNumFlagsOwned(iTeam) / iNumFlags)*MAX_DOD_FLAGS);
+	iFlags_0 = static_cast<int>((static_cast<float>(m_Flags.getNumFlagsOwned(iTeam == TEAM_ALLIES ? TEAM_AXIS : TEAM_ALLIES)) / iNumFlags) *
+		MAX_DOD_FLAGS);
+	iFlags_1 = static_cast<int>((static_cast<float>(m_Flags.getNumFlagsOwned(iTeam)) / iNumFlags) * MAX_DOD_FLAGS);
 
 	return randomFloat(0.0,1.0) < fAttackProbLookUp[iFlags_0][iFlags_1];//gNetAttackOrDefend->getOutput();
 }

@@ -92,10 +92,10 @@ public:
 
 	virtual bool ShouldHitEntity( IHandleEntity *pServerEntity, int contentsMask )
 	{ 
-		if ( m_pPlayer && (pServerEntity == (IHandleEntity*)m_pPlayer->GetIServerEntity()) )
+		if ( m_pPlayer && (pServerEntity == static_cast<IHandleEntity*>(m_pPlayer->GetIServerEntity())) )
 			return false;
 
-		if ( m_pHit && (pServerEntity == (IHandleEntity*)m_pHit->GetIServerEntity()) )
+		if ( m_pHit && (pServerEntity == static_cast<IHandleEntity*>(m_pHit->GetIServerEntity())) )
 			return false;
 
 		return true; 
@@ -147,11 +147,10 @@ int CBotGlobals ::numPlayersOnTeam(int iTeam, bool bAliveOnly)
 {
 	int i = 0;
 	int num = 0;
-	edict_t *pEdict;
 
 	for ( i = 1; i <= CBotGlobals::numClients(); i ++ )
 	{
-		pEdict = INDEXENT(i);
+		edict_t* pEdict = INDEXENT(i);
 
 		if ( CBotGlobals::entityIsValid(pEdict) )
 		{
@@ -242,27 +241,24 @@ float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fPro
 
 		return false;
 	}
-	else
+	// use angle -- work out time
+	// work out angle
+	float vhorz;
+	float vvert;
+
+	SinCos(DEG2RAD(*fAngle),&vvert,&vhorz);
+
+	vhorz *= fProjSpeed;
+	vvert *= fProjSpeed;
+
+	const float t = fDistance/vhorz;
+
+	// within one second of going off
+	if ( std::fabs(t-fGrenadePrimeTime) < 1.0f )
 	{
-		// use angle -- work out time
-				// work out angle
-		float vhorz;
-		float vvert;
+		const float ffinaly =  vOrigin.z + (vvert*t) - ((g*0.5)*(t*t));
 
-		SinCos(DEG2RAD(*fAngle),&vvert,&vhorz);
-
-		vhorz *= fProjSpeed;
-		vvert *= fProjSpeed;
-
-		const float t = fDistance/vhorz;
-
-		// within one second of going off
-		if ( std::fabs(t-fGrenadePrimeTime) < 1.0f )
-		{
-			const float ffinaly =  vOrigin.z + (vvert*t) - ((g*0.5)*(t*t));
-
-			return ( std::fabs(ffinaly - vEnemy.z) < BLAST_RADIUS ); // ok why not
-		}
+		return ( std::fabs(ffinaly - vEnemy.z) < BLAST_RADIUS ); // ok why not
 	}
 
 	return false;
@@ -274,10 +270,8 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 // e.g. name = "Jo" might find a player called "John"
 {
 	edict_t *pent = NULL;
-	IPlayerInfo *pInfo;
-	int i;
 
-	for( i = 1; i <= maxClients(); i ++ )
+	for( int i = 1; i <= maxClients(); i ++ )
 	{
 		pent = INDEXENT(i);
 
@@ -290,7 +284,7 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 
 			strcpy(arg_lwr,name);
 
-			pInfo = playerinfomanager->GetPlayerInfo( pent );
+			IPlayerInfo* pInfo = playerinfomanager->GetPlayerInfo(pent);
 			
 			if ( pInfo == NULL )
 				continue;
@@ -448,17 +442,15 @@ float CBotGlobals :: DotProductFromOrigin ( edict_t *pEnemy, Vector pOrigin )
 {
 	static Vector vecLOS;
 	static float flDot;
-	IPlayerInfo *p;
-	
-	Vector vForward;
-	QAngle eyes;
 
-	p = playerinfomanager->GetPlayerInfo(pEnemy);
+	Vector vForward;
+
+	IPlayerInfo* p = playerinfomanager->GetPlayerInfo(pEnemy);
 
 	if (!p )
 		return 0;
 
-	eyes = p->GetAbsAngles();
+	QAngle eyes = p->GetAbsAngles();
 
 	// in fov? Check angle to edict
 	AngleVectors(eyes,&vForward);
@@ -548,11 +540,8 @@ bool CBotGlobals :: gameStart ()
 
 		return true;
 	}
-	else
-	{
-		logger->Log(LogLevel::ERROR, "Mod not found. Please edit the bot_mods.ini in the bot config folder (gamedir = %s)",m_szModFolder);
-		return false;
-	}
+	logger->Log(LogLevel::ERROR, "Mod not found. Please edit the bot_mods.ini in the bot config folder (gamedir = %s)",m_szModFolder);
+	return false;
 }
 
 void CBotGlobals :: levelInit ()
@@ -697,7 +686,7 @@ void CBotGlobals :: serverSay ( char *fmt, ... )
 	engine->ServerCommand(string);
 }
 
-// TO DO :: put into CClient
+// TODO :: put into CClient
 bool CBotGlobals :: setWaypointDisplayType ( int iType )
 {
 	if ( (iType >= 0) && (iType <= 1) )
@@ -715,7 +704,6 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 	const float fDistance = sqrt((v_dest - v_src).LengthSqr());
 	CClient *pClient = CClients::get(pPlayer);
 	Vector vcross = v_dest - v_src;
-	Vector vleftsrc,vleftdest, vrightsrc,vrightdest;
 	float fWidth = rcbot_wptplace_width.GetFloat();
 
 	if ( v_dest == v_src )
@@ -732,11 +720,11 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 	vcross = vcross.Cross(Vector(0,0,1));
 	vcross = vcross * (fWidth*0.5f);
 
-	vleftsrc = v_src - vcross;
-	vrightsrc = v_src + vcross;
+	const Vector vleftsrc = v_src - vcross;
+	const Vector vrightsrc = v_src + vcross;
 
-	vleftdest = v_dest - vcross;
-	vrightdest = v_dest + vcross;
+	const Vector vleftdest = v_dest - vcross;
+	const Vector vrightdest = v_dest + vcross;
 
 	if ( fDistance > CWaypointLocations::REACHABLE_RANGE )
 		return false;
@@ -1140,21 +1128,20 @@ float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity,Vector vOrigin)
 	float fYaw;
 	const QAngle qBotAngles = playerAngles(pEntity);
 	QAngle qAngles;
-	Vector vAngles;
 	Vector vPlayerOrigin;
 
 	gameclients->ClientEarPosition(pEntity,&vPlayerOrigin);
 
-	vAngles = vOrigin - vPlayerOrigin;
+	const Vector vAngles = vOrigin - vPlayerOrigin;
 
 	VectorAngles(vAngles/vAngles.Length(),qAngles);
 
 	fYaw = qAngles.y;
-	CBotGlobals::fixFloatAngle(&fYaw);
+	fixFloatAngle(&fYaw);
 
 	fAngle = qBotAngles.y - fYaw;
 
-	CBotGlobals::fixFloatAngle(&fAngle);
+	fixFloatAngle(&fAngle);
 
 	return fAngle;
 

@@ -228,7 +228,7 @@ CBaseHandle *CClassInterfaceValue :: getEntityHandle ( edict_t *edict )
 { 
 	getData(edict); 
 
-	return (CBaseHandle *)m_data;
+	return static_cast<CBaseHandle*>(m_data);
 }
 
 edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict ) 
@@ -243,7 +243,7 @@ edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict )
 	if (m_berror)
 		return NULL;
 
-	hndl = (CBaseHandle *)m_data; 
+	hndl = static_cast<CBaseHandle*>(m_data); 
 
 	if ( hndl )
 		return INDEXENT(hndl->GetEntryIndex());
@@ -639,12 +639,12 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 
 		pEntity = pUnknown->GetBaseEntity();
 
-		m_data = (void *)((char *)pEntity + m_offset);
+		m_data = static_cast<void*>((char*)pEntity + m_offset);
 	}
 	else
 	{
 		// raw
-		m_data = (void *)((char *)edict + m_offset);
+		m_data = static_cast<void*>((char*)edict + m_offset);
 	}
 
 }
