@@ -52,7 +52,7 @@ public:
 	// sub classes return their class with own values
 	virtual IIndividual *copy ();
 
-	void setVector ( std::vector<float> values );
+	void setVector ( const std::vector<float>& values );
 
 	float get ( int iIndex );
 

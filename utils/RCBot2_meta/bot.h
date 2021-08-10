@@ -697,7 +697,7 @@ public:
 	void updateStatistics (); // updates number of teammates/enemies nearby/visible
 	virtual void listenForPlayers ();
 	// listens to this player
-	void listenToPlayer (edict_t *pListenTo, bool bIsEnemy = false, bool bIsAttacking = false ); 
+	void listenToPlayer ( edict_t *pListenTo, bool bIsEnemy = false, bool bIsAttacking = false ); 
 	virtual bool wantToListenToPlayerAttack ( edict_t *pPlayer, int iWeaponID = -1 ) { return true; }
 	virtual bool wantToListenToPlayerFootsteps ( edict_t *pPlayer ) { return true; }
 

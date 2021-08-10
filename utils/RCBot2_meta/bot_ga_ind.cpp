@@ -126,7 +126,7 @@ IIndividual *CBotGAValues :: copy ()
 	return individual;
 }
 
-void CBotGAValues :: setVector ( std::vector<float> values )
+void CBotGAValues :: setVector ( const std::vector<float>& values )
 {
 	for (float value : values)
 		m_theValues.push_back(value);

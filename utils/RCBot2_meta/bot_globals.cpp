@@ -552,7 +552,6 @@ void CBotGlobals :: levelInit ()
 int CBotGlobals :: countTeamMatesNearOrigin ( Vector vOrigin, float fRange, int iTeam, edict_t *pIgnore )
 {
 	int iCount = 0;
-	IPlayerInfo *p;
 
 	for ( int i = 1; i <= CBotGlobals::maxClients(); i ++ )
 	{
@@ -564,7 +563,7 @@ int CBotGlobals :: countTeamMatesNearOrigin ( Vector vOrigin, float fRange, int 
 		if ( pEdict == pIgnore )
 			continue;
 
-		p = playerinfomanager->GetPlayerInfo(pEdict);
+		IPlayerInfo* p = playerinfomanager->GetPlayerInfo(pEdict);
 
 		if ( !p || !p->IsConnected() || p->IsDead() || p->IsObserver() || !p->IsPlayer() )
 			continue;

@@ -544,10 +544,9 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 			// move up MG
 			if ( !rcbot_melee_only.GetBool() && pMachineGun && (m_iClass == DOD_CLASS_MACHINEGUNNER) && !pMachineGun->outOfAmmo(this) && pMachineGun->isDeployable() )
 			{
-				CWaypoint *pWaypoint;
-
 				if ( !m_pSchedules->hasSchedule(SCHED_DEPLOY_MACHINE_GUN) )
 				{
+					CWaypoint *pWaypoint;
 					Vector vSearchForMachineGunPointOrigin = m_vListenPosition-getOrigin();
 
 					vSearchForMachineGunPointOrigin = vSearchForMachineGunPointOrigin/vSearchForMachineGunPointOrigin.Length();
@@ -2615,8 +2614,6 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 			if ( CDODMod::m_Flags.getRandomEnemyControlledFlag(this,&vGoal,getTeam(),&iFlagID) )
 			{
-				CWaypoint *pWaypoint;
-
 				int iGoalWaypoint = CDODMod::m_Flags.getWaypointAtFlag(iFlagID);
 
 				// no waypoint...
@@ -2644,6 +2641,8 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 				if ( (pRoute == NULL) && (randomFloat(0.0f,MAX_BELIEF) < m_pNavigator->getBelief(iGoalWaypoint)) )
 				{
+					CWaypoint *pWaypoint;
+					
 					if ( distanceFrom(vGoal) > 1024 ) // outside waypoint bucket of goal
 						pWaypoint = CWaypoints::getPinchPointFromWaypoint(vGoal,vGoal);
 					else
@@ -2817,13 +2816,13 @@ bool CDODBot :: handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy )
 {
 	static bool bAttack;
 	static float fDelay; // delay to reduce recoil
-	static float fDist;
 
 	bAttack = true;
 	fDelay = 0;
 
 	if ( pWeapon )
 	{
+		static float fDist;
 		const Vector vEnemyOrigin = CBotGlobals::entityOrigin(pEnemy);
 
 		fDist = distanceFrom(vEnemyOrigin);
@@ -3477,10 +3476,7 @@ bool CDODBot :: isVisibleThroughSmoke ( edict_t *pSmoke, edict_t *pCheck )
 	//if ( isVisible(pCheck) )
 //{
 	static float fSmokeDist,fDist;
-	static smoke_t *smokeinfo;
 	static float fTime, fProb;
-	static Vector vSmoke;
-	static Vector vCheckComp;
 
 	static short int iSlot;
 
@@ -3489,11 +3485,13 @@ bool CDODBot :: isVisibleThroughSmoke ( edict_t *pSmoke, edict_t *pCheck )
 	// if pCheck is a player
 	if (( iSlot >= 0 ) && ( iSlot < MAX_PLAYERS ))
 	{
+		static smoke_t *smokeinfo;
 		smokeinfo = &(m_CheckSmoke[iSlot]);
 
 		// last time i checked was long enough ago
 		if ( smokeinfo->fLastTime < engine->Time() )
 		{
+			static Vector vSmoke;
 			smokeinfo->bVisible = true;
 			smokeinfo->bInSmoke = false;
 
@@ -3508,6 +3506,7 @@ bool CDODBot :: isVisibleThroughSmoke ( edict_t *pSmoke, edict_t *pCheck )
 					// enemy outside the smoke radius
 					if ( fDist > SMOKE_RADIUS )
 					{
+						static Vector vCheckComp;
 						// check if enemy is behind the smoke from my perspective
 						vCheckComp = CBotGlobals::entityOrigin(pCheck) - getOrigin();
 						vCheckComp = (vCheckComp / vCheckComp.Length())*fSmokeDist;

@@ -5945,12 +5945,12 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 		case BOT_UTIL_DEMO_STICKYTRAP_FLAG_LASTKNOWN:
 		case BOT_UTIL_DEMO_STICKYTRAP_POINT:
 		case BOT_UTIL_DEMO_STICKYTRAP_PL:
-// to do
+		//TODO: Add Demoman Stickybomb Skill?
 			{
 				
 				Vector vStand;
 				Vector vPoint;
-				Vector vDemoStickyPoint;
+				//Vector vDemoStickyPoint;
 				eDemoTrapType iDemoTrapType = TF_TRAP_TYPE_NONE;
 
 				if ( id == BOT_UTIL_DEMO_STICKYTRAP_LASTENEMY )

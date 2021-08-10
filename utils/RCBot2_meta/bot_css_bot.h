@@ -47,7 +47,6 @@ public:
 	bool isAlive();
 	bool isEnemy(edict_t *pEdict,bool bCheckWeapons = true) override;
 	unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
-private:
 	// blah blah
 };
 

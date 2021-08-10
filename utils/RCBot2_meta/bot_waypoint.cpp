@@ -359,9 +359,7 @@ float CWaypointNavigator :: getNextYaw ()
 CWaypoint *CWaypointNavigator :: chooseBestFromBeliefBetweenAreas ( std::vector<AStarNode*> &goals, bool bHighDanger, bool bIgnoreBelief )
 {
 	CWaypoint *pWpt = NULL;
-//	CWaypoint *pCheck;
-
-	float fBelief = 0;
+	//CWaypoint *pCheck;
 
 	// simple checks
 	switch ( goals.size() )
@@ -370,6 +368,7 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBeliefBetweenAreas ( std::vector<
 	case 1:return CWaypoints::getWaypoint(goals[0]->getWaypoint());
 	default:
 		{
+			float fBelief = 0;
 			AStarNode *node;
 
 			for (auto& goal : goals)
@@ -429,9 +428,6 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBelief ( std::vector<CWaypoint*> 
 {
 	CWaypoint *pWpt = NULL;
 
-	float fBelief = 0;
-	float bBeliefFactor = 1.0f;
-
 	// simple checks
 	switch ( goals.size() )
 	{
@@ -439,9 +435,11 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBelief ( std::vector<CWaypoint*> 
 	case 1:return goals[0];
 	default:
 		{
+			float fBelief = 0;
+			float bBeliefFactor = 1.0f;
 			for (size_t i = 0; i < goals.size(); i ++ )
 			{
-				bBeliefFactor = 1.0f;
+				//bBeliefFactor = 1.0f;
 
 				if ( iSearchFlags & WPT_SEARCH_AVOID_SENTRIES )
 				{
@@ -1218,10 +1216,10 @@ bool CWaypointNavigator :: getNextRoutePoint ( Vector *point )
 	if ( !m_currentRoute.empty() )
 	{
 		const int head = m_currentRoute.top();
-		static CWaypoint *pW;
 
 		if (head)
 		{
+			static CWaypoint *pW;
 			pW = CWaypoints::getWaypoint(head);
 			*point = pW->getOrigin();// + pW->applyRadius();
 
@@ -1278,8 +1276,6 @@ void CWaypointNavigator :: updatePosition ()
 	static QAngle aim;
 	static Vector vaim;
 
-	static bool bTouched;
-
 	fPrevBelief = 0;
 	fBelief = 0;
 
@@ -1307,6 +1303,7 @@ void CWaypointNavigator :: updatePosition ()
 
 	if ( !m_bWorkingRoute )
 	{
+		static bool bTouched;
 		const bool movetype_ok = CClassInterface::isMoveType(m_pBot->getEdict(),MOVETYPE_LADDER)||CClassInterface::isMoveType(m_pBot->getEdict(),MOVETYPE_FLYGRAVITY);
 
 		//bTouched = false;
@@ -1729,7 +1726,6 @@ void CWaypoints :: updateWaypointPairs ( std::vector<edict_wpt_pair_t> *pPairs, 
 bool CWaypoints :: save ( bool bVisiblityMade, edict_t *pPlayer, const char *pszAuthor, const char *pszModifier )
 {
 	char filename[1024];
-	char szAuthorName[32];
 
 	CBotGlobals::buildFileName(filename,CBotGlobals::getMapName(),BOT_WAYPOINT_FOLDER,BOT_WAYPOINT_EXTENSION,true);
 
@@ -1776,6 +1772,7 @@ bool CWaypoints :: save ( bool bVisiblityMade, edict_t *pPlayer, const char *psz
 
 	if ( !bVisiblityMade && (pszAuthor==NULL) && (pszModifier==NULL) )
 	{
+		char szAuthorName[32];
 		strcpy(szAuthorName,"(unknown)");
 
 		if ( pPlayer != NULL )
@@ -2737,7 +2734,7 @@ CWaypoint *CWaypoints :: randomWaypointGoalNearestArea ( int iFlags, int iTeam, 
 	{
 		if ( pBot )
 		{
-			auto pNav = (CWaypointNavigator*)pBot->getNavigator();
+			auto pNav = static_cast<CWaypointNavigator*>(pBot->getNavigator());
 
 			pWpt = pNav->chooseBestFromBeliefBetweenAreas(goals,bHighDanger,bIgnoreBelief);
 		}

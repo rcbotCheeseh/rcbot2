@@ -46,6 +46,7 @@ class CBotEvent
 public:
 	CBotEvent()
 	{
+		m_pActivator = NULL;
 		m_iEventId = -1;
 		m_szType = NULL;
 		m_iModId = MOD_ANY;
