@@ -40,7 +40,7 @@ functionality to control the RCBot2 plugin from SourcePawn.
 
 ## Installation
 
-1. [Install MetaMod:Source][].
+1. [Install MetaMod:Source].
 2. Download or build the RCBot2 package.
 3. Extract the package into your game directory, similar to the process of installing MM:S.
 4. Start the server.
@@ -67,14 +67,11 @@ passing in `--depth 1` or a few to avoid retrieving the files that were removed 
 
 1. [Install the prerequisites for building SourceMod for your OS.][Building SourceMod]
 2. Create a `build/` subdirectory, then run `configure.py`.
-	- The project currently assumes GCC 5.4.0 (Ubuntu 16.04 LTS) on Linux, and MSVC version
-	1900 (VC++2014.3 v14.00 last I checked).  Other compiler toolchains are not guaranteed to
-	work at this time.
-	- I use the following options (where `${MOD}` is only TF2):
+	- Use the following options (where `${MOD}` is only TF2):
 	`python ../configure.py -s ${MOD} --mms_path ${MMS_PATH} --hl2sdk-root ${HL2SDK_ROOT}`
 	- Specifying an `--sm-path` argument enables linking to SourceMod.
 	- Note that the automatic versioning system requires an installation of `git` and a
-	relatively modern version of Python 3.
+	relatively modern version of Python 3. Python version 2 is now depreciated.
 3. Run `ambuild`.  MetaMod:Source plugin is built and the base install files will be available
 in `build/package`.
 
@@ -92,7 +89,7 @@ TF2 support and enhancements - Ducky1231/Pongo
 
 SourceMod and AMBuild support - nosoop
 
-Synergy support - Anonymous Player/caxanga334
+Synergy and CSS support - Anonymous Player/caxanga334
 
 
 ## Waypointers:-
@@ -126,4 +123,3 @@ YouLoseAndIWin
 madmax2
 
 Pyri
-
