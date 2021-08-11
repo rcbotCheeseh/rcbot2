@@ -300,6 +300,7 @@
     <ClInclude Include="bot_som.h" />
     <ClInclude Include="bot_squads.h" />
     <ClInclude Include="bot_strings.h" />
+    <ClInclude Include="bot_synergy.h" />
     <ClInclude Include="bot_task.h" />
     <ClInclude Include="bot_tf2_points.h" />
     <ClInclude Include="bot_utility.h" />

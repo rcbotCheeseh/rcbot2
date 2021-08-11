@@ -147,6 +147,9 @@ typedef enum
  BOT_UTIL_MOVEUP_MG,
  BOT_UTIL_SNIPE_CROSSBOW,
  BOT_UTIL_BUY,
+ BOT_UTIL_WAIT_LAST_ENEMY,
+ BOT_UTIL_ENGAGE_ENEMY,
+ BOT_UTIL_SEARCH_FOR_BOMB,
  BOT_UTIL_MAX
 }eBotAction;
 
@@ -157,17 +160,17 @@ class CBotUtility
 public:
 	CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil, CBotWeapon *pWeapon = NULL, int iData = 0, Vector vec = Vector(0,0,0) );
 
-	inline float getUtility () const { return m_fUtility; }
+	inline float getUtility () { return m_fUtility; }
 
-	inline eBotAction getId () const { return m_id; }
+	inline eBotAction getId () { return m_id; }
 
-	inline bool canDo () const { return m_bCanDo; }
+	inline bool canDo () { return m_bCanDo; }
 
-	inline CBotWeapon *getWeaponChoice () const { return m_pWeapon; }
+	inline CBotWeapon *getWeaponChoice () { return m_pWeapon; }
 
-	inline int getIntData () const { return m_iData; }
+	inline int getIntData () { return m_iData; }
 
-	inline Vector getVectorData () const { return m_vVector; }
+	inline Vector getVectorData () { return m_vVector; }
 
 private:
 	int m_iData;

@@ -209,7 +209,7 @@ const char *CWaypointYawMenuItem :: getCaption ( CClient *pClient, WptColor &col
 	CWaypoint *pWpt = CWaypoints::getWaypoint(pClient->currentWaypoint());
 
 	if ( pWpt )
-		sprintf(m_szCaption,"Yaw = %d degrees (press to update)",static_cast<int>(pWpt->getAimYaw()));
+		sprintf(m_szCaption,"Yaw = %d degrees (press to update)",(int)pWpt->getAimYaw());
 	else
 		sprintf(m_szCaption,"No Waypoint");
 
@@ -507,8 +507,10 @@ void CBotMenuItem :: freeMemory ()
 
 void CBotMenu :: freeMemory ()
 {
-	for (auto temp : m_MenuItems)
+	for ( unsigned int i = 0; i < m_MenuItems.size(); i ++ )
 	{
+		CBotMenuItem *temp = m_MenuItems[i];
+
 		temp->freeMemory();
 
 		delete temp;
@@ -517,8 +519,10 @@ void CBotMenu :: freeMemory ()
 
 void CBotMenuList :: freeMemory ()
 {
-	for (auto temp : m_MenuList)
+	for ( unsigned int i = 0; i < BOT_MENU_MAX; i ++ )
 	{
+		CBotMenu *temp = m_MenuList[i];
+
 		temp->freeMemory();
 
 		delete temp;

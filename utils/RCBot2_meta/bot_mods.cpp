@@ -351,17 +351,17 @@ void CBotMod :: setup ( const char *szModFolder, eModId iModId, eBotType iBotTyp
 	return NULL;
 }*/
 
-bool CBotMod :: isModFolder ( char *szModFolder ) const
+bool CBotMod :: isModFolder ( char *szModFolder )
 {
 	return FStrEq(m_szModFolder,szModFolder);
 }
 
-char *CBotMod :: getModFolder () const
+char *CBotMod :: getModFolder ()
 {
 	return m_szModFolder;
 }
 
-eModId CBotMod :: getModId () const
+eModId CBotMod :: getModId ()
 {
 	return m_iModId;
 }
@@ -373,11 +373,11 @@ std::vector<CBotMod*> CBotMods::m_Mods;
 
 void CBotMods :: freeMemory ()
 {
-	for (auto& m_Mod : m_Mods)
+	for ( unsigned int i = 0; i < m_Mods.size(); i ++ )
 	{
-		m_Mod->freeMemory();
-		delete m_Mod;
-		m_Mod = NULL;
+		m_Mods[i]->freeMemory();
+		delete m_Mods[i];
+		m_Mods[i] = NULL;
 	}
 
 	m_Mods.clear();
@@ -385,13 +385,13 @@ void CBotMods :: freeMemory ()
 
 CBotMod *CBotMods :: getMod ( char *szModFolder )
 {
-	for (auto& m_Mod : m_Mods)
+	for ( unsigned int i = 0; i < m_Mods.size(); i ++ )
 	{
-		if (m_Mod->isModFolder(szModFolder) )
+		if ( m_Mods[i]->isModFolder(szModFolder) )
 		{
-			logger->Log(LogLevel::INFO, "HL2 MOD ID %d (Game Folder = %s) FOUND", m_Mod->getModId(), szModFolder);
+			logger->Log(LogLevel::INFO, "HL2 MOD ID %d (Game Folder = %s) FOUND", m_Mods[i]->getModId(), szModFolder);
 
-			return m_Mod;
+			return m_Mods[i];
 		}
 	}
 

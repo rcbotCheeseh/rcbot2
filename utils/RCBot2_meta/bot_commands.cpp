@@ -93,11 +93,11 @@ CBotCommandInline AddBotCommand("addbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED,
 
 	if ( pClient )
 		pEntity = pClient->getPlayer();
-	
-		if (rcbot_bot_quota_interval.GetFloat() > 0) {
+
+	if (rcbot_bot_quota_interval.GetFloat() > 0) {
 		CBotGlobals::botMessage(pEntity, 0, "error: cannot manually add bot while rcbot_bot_quota_interval is active");
 		return COMMAND_ACCESSED;
-	}	
+	}
 
 	//if ( !bot_sv_cheat_warning.GetBool() || bot_sv_cheats_auto.GetBool() || (!sv_cheats || sv_cheats->GetBool()) )
 	//{
@@ -135,14 +135,14 @@ CBotCommandInline KickBotCommand("kickbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATE
 	return COMMAND_ACCESSED;
 }, R"(usage "kickbot" or "kickbot <team>" : kicks random bot or bot on team: <team>)");
 
-bool CBotCommand :: hasAccess ( CClient *pClient ) const
+bool CBotCommand :: hasAccess ( CClient *pClient )
 {
 	// check access level excluding dedicated server flag
 	const int iClientAccessLevel = this->m_iAccessLevel & ~CMD_ACCESS_DEDICATED;
 	return (iClientAccessLevel & pClient->accessLevel()) == iClientAccessLevel;
 }
 
-bool CBotCommand :: isCommand ( const char *szCommand ) const
+bool CBotCommand :: isCommand ( const char *szCommand )
 {
 	return FStrEq(szCommand,m_szCommand);
 }
@@ -199,9 +199,9 @@ void CBotSubcommands::printCommand(edict_t *pPrintTo, int indent)
 	else
 		CBotGlobals::botMessage(pPrintTo,0,"[%s]",m_szCommand);
 
-	for (auto& m_theCommand : m_theCommands)
+	for ( unsigned int i = 0; i < m_theCommands.size(); i ++ )
 	{
-		m_theCommand->printCommand(pPrintTo,indent+1);
+		m_theCommands[i]->printCommand(pPrintTo,indent+1);
 	}
 }
 

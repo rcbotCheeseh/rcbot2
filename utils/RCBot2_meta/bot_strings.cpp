@@ -45,19 +45,19 @@ CStrings :: CStrings ()
 void CStrings :: freeAllMemory()
 {
 	// clear strings 
-	for (auto& m_String : m_Strings)
+	for ( int i = 0; i < MAX_STRINGS_HASH; i ++ )
 	{
-		for (auto& j : m_String)
+		for ( unsigned int j = 0; j < m_Strings[i].size(); j ++ )
 		{
-			char* pszFree = j;
+			char* pszFree = m_Strings[i][j];
 
 			if ( pszFree )
 				delete pszFree;
 
-			j = NULL;
+			m_Strings[i][j] = NULL;
 		}
 
-		m_String.clear();
+		m_Strings[i].clear();
 	}
 }
 
@@ -69,8 +69,10 @@ char *CStrings :: getString ( const char *szString )
 
 	const unsigned short int iHash = szString[0]%MAX_STRINGS_HASH;
 	
-	for (auto szCompString : m_Strings[iHash])
+	for ( unsigned short int i = 0; i < m_Strings[iHash].size(); i ++ )
 	{
+		char *szCompString = m_Strings[iHash][i];
+
 		// check if pointers match first
 		if ( szCompString == szString )
 			return szCompString;
@@ -82,7 +84,7 @@ char *CStrings :: getString ( const char *szString )
 
 	const unsigned int len = strlen(szString);
 
-	const auto szNew = new char[len+1];
+	char *szNew = new char[len+1];
 
 	strcpy(szNew,szString);
 

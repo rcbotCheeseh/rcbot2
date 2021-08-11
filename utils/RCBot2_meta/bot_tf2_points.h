@@ -70,7 +70,7 @@ public:
 
 	bool testProbWptArea ( int iWptArea, int iTeam );
 
-	void debugprint () const;
+	void debugprint ();
 	void updatePoints();
 	bool TeamCanCapPoint( int index, int team )
 	{
@@ -79,12 +79,12 @@ public:
 	}
 
 	// Is the point visible in the objective display
-	bool	IsCPVisible( int index ) const
+	bool	IsCPVisible( int index )
 	{
 		return (m_bCPIsVisible[index] == 1);
 	}
 
-	bool	IsCPBlocked( int index ) const
+	bool	IsCPBlocked( int index )
 	{
 		return m_bBlocked[index];
 	}
@@ -94,7 +94,7 @@ public:
 	int getControlPointArea ( edict_t *pPoint );
 
 	// Get the world location of this control point
-	Vector& GetCPPosition( int index ) const
+	Vector& GetCPPosition( int index )
 	{
 		return m_vCPPositions[index];
 	}
@@ -106,7 +106,7 @@ public:
 
 	int NearestArea ( Vector vOrigin );
 
-	int GetCappingTeam( int index ) const
+	int GetCappingTeam( int index )
 	{
 		if ( index >= *m_iNumControlPoints )
 			return TEAM_UNASSIGNED;
@@ -114,7 +114,7 @@ public:
 		return m_iCappingTeam[index];
 	}
 
-	int GetTeamInZone( int index ) const
+	int GetTeamInZone( int index )
 	{
 		if ( index >= *m_iNumControlPoints )
 			return TEAM_UNASSIGNED;
@@ -123,12 +123,12 @@ public:
 	}
 
 	// Icons
-	int GetCPCurrentOwnerIcon( int index, int iOwner ) const
+	int GetCPCurrentOwnerIcon( int index, int iOwner )
 	{
 		return GetIconForTeam( index, iOwner );
 	}
 
-	int GetCPCappingIcon( int index ) const
+	int GetCPCappingIcon( int index )
 	{
 		const int iCapper = GetCappingTeam(index);
 
@@ -136,42 +136,42 @@ public:
 	}
 
 	// Icon for the specified team
-	int GetIconForTeam( int index, int team ) const
+	int GetIconForTeam( int index, int team )
 	{		
 		return m_iTeamIcons[ TEAM_ARRAY(index,team) ];
 	}
 
 	// Overlay for the specified team
-	int GetOverlayForTeam( int index, int team ) const
+	int GetOverlayForTeam( int index, int team )
 	{
 		return m_iTeamOverlays[ TEAM_ARRAY(index,team) ];
 	}
 
 	// Number of players in the area
-	int GetNumPlayersInArea( int index, int team ) const
+	int GetNumPlayersInArea( int index, int team )
 	{
 		return m_iNumTeamMembers[ TEAM_ARRAY(index,team) ];
 	}
 	
 	// get the required cappers for the passed team
-	int GetRequiredCappers( int index, int team ) const
+	int GetRequiredCappers( int index, int team )
 	{
 		return m_iTeamReqCappers[ TEAM_ARRAY(index,team) ];
 	}
 
 	// Base Icon for the specified team
-	int GetBaseIconForTeam( int team ) const
+	int GetBaseIconForTeam( int team )
 	{
 		return m_iTeamBaseIcons[ team ];
 	}
 
-	int GetBaseControlPointForTeam( int iTeam ) const
+	int GetBaseControlPointForTeam( int iTeam ) 
 	{ 
 		return m_iBaseControlPoints[iTeam]; 
 	}
 
 	// Data functions, called to set up the state at the beginning of a round
-	inline int	 GetNumControlPoints() const
+	inline int	 GetNumControlPoints() 
 	{ 
 		if ( m_iNumControlPoints==NULL )
 			return 0;
@@ -186,7 +186,7 @@ public:
 		return m_iPreviousPoints[ iIntIndex ];
 	}
 
-	int GetOwningTeam( int index ) const
+	int GetOwningTeam( int index )
 	{
 		if ( index >= *m_iNumControlPoints )
 			return TEAM_UNASSIGNED;
@@ -202,15 +202,15 @@ public:
 	float getLastCaptureTime(int index);
 
 	bool isCPValidWptArea ( int iWptArea, int iTeam, ePointAttackDefend_s type);
-	bool isCPValid ( int iCPIndex, int iTeam, ePointAttackDefend_s type) const;
+	bool isCPValid ( int iCPIndex, int iTeam, ePointAttackDefend_s type);
 
 
 	// Mini-rounds data
-	bool PlayingMiniRounds() const { return *m_bPlayingMiniRounds; }
-	bool IsInMiniRound( int index ) const { return m_bInMiniRound[index]; }
+	bool PlayingMiniRounds(){ return *m_bPlayingMiniRounds; }
+	bool IsInMiniRound( int index ) { return m_bInMiniRound[index]; }
 	void updateCaptureTime(int index);
 	void setup ();
-	bool isInitialised() const { return m_bInitialised == true; }
+	bool isInitialised() { return m_bInitialised == true; }
 	MyEHandle m_ObjectiveResource;
 
 	int getRandomValidPointForTeam ( int team, ePointAttackDefend_s type );
@@ -279,14 +279,14 @@ public:
 	{
 		resetValidWaypointAreas();
 
-		for (auto& m_ValidPoint : m_ValidPoints)
+		for ( int i = 0; i < 2; i ++ )
 		{
-			for (auto& j : m_ValidPoint)
+			for ( int j = 0; j < 2; j ++ )
 			{
 				for ( int k = 0; k < MAX_CONTROL_POINTS; k ++ )
 				{
 					// OR
-					m_ValidAreas[k] = (m_ValidAreas[k] || j[k].bValid);
+					m_ValidAreas[k] = (m_ValidAreas[k] || m_ValidPoints[i][j][k].bValid);
 				}
 			}
 		}
@@ -419,9 +419,9 @@ public:
 			iszOverlay = NULL_STRING;
 			iPlayersRequired = 0;
 			iTimedPoints = 0;
-			for (auto& i : iszPreviousPoint)
+			for ( int i = 0; i < MAX_PREVIOUS_POINTS; i++ )
 			{
-				i = NULL_STRING;
+				iszPreviousPoint[i] = NULL_STRING;
 			}
 			iTeamPoseParam = 0;
 		}

@@ -38,8 +38,6 @@
 #include "ndebugoverlay.h"
 
 #include "bot_fortress.h"
-
-#include <cmath>
 #include "bot_buttons.h"
 #include "bot_globals.h"
 #include "bot_profile.h"
@@ -59,6 +57,8 @@
 #include "bot_wpt_dist.h"
 #include "bot_squads.h"
 //#include "bot_hooks.h"
+
+#include <cmath>
 
 //caxanga334: SDK 2013 contains macros for std::min and std::max which causes errors when compiling
 #if SOURCE_ENGINE == SE_SDK2013 || SOURCE_ENGINE == SE_BMS
@@ -303,7 +303,7 @@ bool CBotFortress::someoneCalledMedic()
 			((m_fLastCalledMedicTime+30.0f)>engine->Time());
 }
 
-bool CBotTF2 :: sentryRecentlyHadEnemy () const
+bool CBotTF2 :: sentryRecentlyHadEnemy ()
 {
 	return (m_fLastSentryEnemyTime + 15.0f) > engine->Time();
 }
@@ -379,7 +379,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 	float fLastCalledMedic = 0.0f;
 	bool bHeavyClass = false;
 	edict_t *pMedigun = CTeamFortress2Mod::getMediGun(m_pEdict);
-	auto vVel = Vector(0,0,0);
+	Vector vVel = Vector(0,0,0);
 	int iHighestScore = CTeamFortress2Mod::getHighestScore();
 	// adds extra factor to players who have recently shouted MEDIC!
 	if (!CBotGlobals::isPlayer(pPlayer))
@@ -402,7 +402,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 	CClassInterface::getVelocity(pPlayer,&vVel);
 
 	IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pPlayer);
-	const auto iclass = (TF_Class)CClassInterface::getTF2Class(pPlayer);
+	const TF_Class iclass = (TF_Class)CClassInterface::getTF2Class(pPlayer);
 	
 	if ( !CBotGlobals::entityIsAlive(pPlayer) || !p || p->IsDead() || p->IsObserver() || !p->IsConnected() )
 		return 0.0f;
@@ -824,7 +824,7 @@ void CBotFortress :: died ( edict_t *pKiller, const char *pszWeapon )
 
 void CBotTF2 :: buildingDestroyed ( int iType, edict_t *pAttacker, edict_t *pEdict )
 {
-	const auto type = (eEngiBuild)iType;
+	const eEngiBuild type = (eEngiBuild)iType;
 
 	switch ( type )
 	{
@@ -893,9 +893,9 @@ void CBotFortress :: detectedAsSpy( edict_t *pDetector, bool bDisguiseComprimise
 		else
 			m_fClassDisguiseTime [m_iDisguiseClass] = (m_fClassDisguiseTime [m_iDisguiseClass] * 0.5f) + (fTime * 0.5f);
 
-		for (float i : m_fClassDisguiseTime)
+		for ( unsigned short int i = 0; i < 10; i ++ )
 		{
-			fTotal += i;
+			fTotal += m_fClassDisguiseTime[i];
 		}
 		
 		for ( unsigned short int i = 0; i < 10; i ++ )
@@ -1435,7 +1435,7 @@ void CBotFortress :: modThink ()
 	{
 		if ( !m_pSchedules->hasSchedule(SCHED_GOOD_HIDE_SPOT) && (distanceFrom(m_pNearestPipeGren)<BLAST_RADIUS) )
 		{
-			const auto pSchedule = new CGotoHideSpotSched(this,m_pNearestPipeGren.get(),true);
+			CGotoHideSpotSched *pSchedule = new CGotoHideSpotSched(this,m_pNearestPipeGren.get(),true);
 
 			m_pSchedules->addFront(pSchedule);
 		}
@@ -1642,12 +1642,12 @@ bool CBotTF2 :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 			{
 				if ( wantToNest() )
 				{
-					auto pSchedule = new CBotSchedule();
+					CBotSchedule *pSchedule = new CBotSchedule();
 
 					pSchedule->setID(SCHED_GOOD_HIDE_SPOT);
 
 					// run at flank while shooting	
-					auto pHideGoalPoint = new CFindPathTask();
+					CFindPathTask *pHideGoalPoint = new CFindPathTask();
 					const Vector vOrigin = CBotGlobals::entityOrigin(pAttacker);
 					
 
@@ -1801,7 +1801,7 @@ void CBotTF2 :: setClass ( TF_Class _class )
 	m_iClass = _class;
 }
 
-void CBotTF2 :: highFivePlayer ( edict_t *pPlayer, float fYaw ) const
+void CBotTF2 :: highFivePlayer ( edict_t *pPlayer, float fYaw )
 {
 	if ( !m_pSchedules->isCurrentSchedule(SCHED_TAUNT) )
 		m_pSchedules->addFront(new CBotTauntSchedule(pPlayer,fYaw));
@@ -2894,7 +2894,7 @@ void CBotTF2::modThink()
 
 				if (m_pNavigator->hasNextPoint() && !m_pSchedules->isCurrentSchedule(SCHED_TF_SPYCHECK))
 				{
-					auto newSchedule = new CBotSchedule(new CSpyCheckAir());
+					CBotSchedule *newSchedule = new CBotSchedule(new CSpyCheckAir());
 
 					newSchedule->setID(SCHED_TF_SPYCHECK);
 
@@ -3647,9 +3647,9 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 	
 	float fTotal = 0;
 
-	for (int availableClasse : availableClasses)
+	for ( int i = 0; i < availableClasses.size(); i ++ )
 	{
-		fTotal += m_fClassDisguiseFitness[availableClasse];
+		fTotal += m_fClassDisguiseFitness[ availableClasses[i] ];
 	}
 
 	if ( fTotal > 0 )
@@ -3658,12 +3658,12 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 
 		fTotal = 0;
 
-		for (int availableClasse : availableClasses)
+		for ( int i = 0; i < availableClasses.size(); i ++ )
 		{
-			fTotal += m_fClassDisguiseFitness[availableClasse];
+			fTotal += m_fClassDisguiseFitness[ availableClasses[i] ];
 
 			if ( fRand <= fTotal )
-				return availableClasse;
+				return availableClasses[i];
 		}
 
 	}
@@ -3777,7 +3777,7 @@ bool CBotTF2 :: setVisible ( edict_t *pEntity, bool bVisible )
 	{
 		if ( bVisible )
 		{
-			const auto iPlayerclass = (TF_Class)CClassInterface::getTF2Class(pEntity);
+			const TF_Class iPlayerclass = (TF_Class)CClassInterface::getTF2Class(pEntity);
 
 			if ( iPlayerclass == TF_CLASS_SPY )
 			{
@@ -4256,6 +4256,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	static edict_t *pMedigun;
 	static float fSentryUtil;
 	static int iMetalInDisp;
+
 
 	static int numplayersonteam;
 	static int numplayersonteam_alive;
@@ -5232,7 +5233,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 			if ( pWaypoint && pWaypoint->checkReachable() )
 			{
 				CWaypoint *pRoute = NULL;
-				auto vRoute = Vector(0,0,0);
+				Vector vRoute = Vector(0,0,0);
 				bool bUseRoute = false;
 				int iRouteWpt = -1;
 				bool bNest = false;
@@ -5334,13 +5335,13 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 							if (pWeapon && !pWeapon->outOfAmmo(this))
 							{
-								auto spam = new CBotTF2Spam(this,pWaypoint->getOrigin(),pWaypoint->getAimYaw(),pWeapon);
+								CBotTF2Spam *spam = new CBotTF2Spam(this,pWaypoint->getOrigin(),pWaypoint->getAimYaw(),pWeapon);
 
 								if ( spam->getDistance() > 600 )
 								{
-									auto path = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
-
-									auto newSched = new CBotSchedule();
+									CFindPathTask *path = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
+								
+									CBotSchedule *newSched = new CBotSchedule();
 
 									newSched->passVector(spam->getTarget());
 
@@ -5402,9 +5403,9 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 				if ( pWaypoint )
 				{
-					auto buildtask = new CBotTFEngiBuildTask(ENGI_ENTRANCE,pWaypoint);
+					CBotTFEngiBuildTask *buildtask = new CBotTFEngiBuildTask(ENGI_ENTRANCE,pWaypoint);
 
-					auto newSched = new CBotSchedule();
+					CBotSchedule *newSched = new CBotSchedule();
 
 					newSched->addTask(new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint))); // first
 					newSched->addTask(buildtask);
@@ -5625,12 +5626,12 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 			break;
 		case BOT_UTIL_HIDE_FROM_ENEMY:
 			{
-				auto pSchedule = new CBotSchedule();
+				CBotSchedule *pSchedule = new CBotSchedule();
 
 				pSchedule->setID(SCHED_GOOD_HIDE_SPOT);
 
 				// run at flank while shooting	
-				auto pHideGoalPoint = new CFindPathTask();
+				CFindPathTask *pHideGoalPoint = new CFindPathTask();
 				Vector vOrigin = CBotGlobals::entityOrigin(m_pEnemy);
 
 				
@@ -5914,10 +5915,10 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 				int iWpt = CWaypointLocations::NearestWaypoint(vLoc,400,-1,true,false,true,0,false,getTeam(),true);
 				if ( iWpt != -1 )
 				{
-					auto findpath = new CFindPathTask(iWpt,LOOK_WAYPOINT);
-					auto shoutMedic = new CTaskVoiceCommand(TF_VC_MEDIC);
-					auto wait = new CBotTF2WaitHealthTask(vLoc);
-					auto newSched = new CBotSchedule();
+					CFindPathTask *findpath = new CFindPathTask(iWpt,LOOK_WAYPOINT);
+					CTaskVoiceCommand *shoutMedic = new CTaskVoiceCommand(TF_VC_MEDIC);
+					CBotTF2WaitHealthTask *wait = new CBotTF2WaitHealthTask(vLoc);
+					CBotSchedule *newSched = new CBotSchedule();
 
 					findpath->setCompleteInterrupt(0,CONDITION_NEED_HEALTH);
 					shoutMedic->setCompleteInterrupt(0,CONDITION_NEED_HEALTH);
@@ -6001,12 +6002,12 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					CWaypointLocations::GetAllVisible(iWptFrom,iWptFrom,vPoint,vPoint,2048.0,&m_iVisibles,&m_iInvisibles);
 
-					for (int m_iVisible : m_iVisibles)
+					for ( int i = 0; i < m_iVisibles.size(); i ++ )
 					{
-						if (m_iVisible == CWaypoints::getWaypointIndex(pWaypoint) )
+						if ( m_iVisibles[i] == CWaypoints::getWaypointIndex(pWaypoint) )
 							continue;
 
-						pTemp = CWaypoints::getWaypoint(m_iVisible);
+						pTemp = CWaypoints::getWaypoint(m_iVisibles[i]);
 
 						if ( pTemp->distanceFrom(pWaypoint) < 512 )
 						{
@@ -6108,9 +6109,9 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					if ( pWpt )
 					{
-						auto findpath = new CFindPathTask(pEnemy);
+						CFindPathTask *findpath = new CFindPathTask(pEnemy);
 						CBotTask *pipetask = new CBotTF2Spam(pWpt->getOrigin(),vEnemy,util->getWeaponChoice());
-						auto pipesched = new CBotSchedule();
+						CBotSchedule *pipesched = new CBotSchedule();
 
 						pipesched->addTask(new CBotTF2FindPipeWaypoint(vLoc,vEnemy));
 						pipesched->addTask(findpath);
@@ -6161,9 +6162,11 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					if ( pWpt )
 					{
-						auto findpath = new CFindPathTask(pEnemy);
+				
+
+						CFindPathTask *findpath = new CFindPathTask(pEnemy);
 						CBotTask *pipetask = new CBotTF2DemomanPipeEnemy(getWeapons()->getWeapon(CWeapons::getWeapon(TF2_WEAPON_PIPEBOMBS)),vEnemy,pEnemy);
-						auto pipesched = new CBotSchedule();
+						CBotSchedule *pipesched = new CBotSchedule();
 
 						pipetask->setInterruptFunction(new CBotTF2HurtInterrupt(this));
 						pipesched->addTask(new CBotTF2FindPipeWaypoint(vLoc,vEnemy));
@@ -6353,7 +6356,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 			if ( pWaypoint )
 			{
 				CWaypoint *pRoute = NULL;
-				auto vRoute = Vector(0,0,0);
+				Vector vRoute = Vector(0,0,0);
 				bool bUseRoute = false;
 
 				if ( (m_fUseRouteTime < engine->Time()) )
@@ -6961,7 +6964,7 @@ bool CBotTF2 :: upgradeBuilding ( edict_t *pBuilding, bool removesapper )
 	return true;
 }
 
-void CBotFortress::teamFlagPickup () const
+void CBotFortress::teamFlagPickup ()
 {
 	if ( CTeamFortress2Mod::isMapType(TF_MAP_SD) && m_pSchedules->hasSchedule(SCHED_TF2_GET_FLAG) )
 		m_pSchedules->removeSchedule(SCHED_TF2_GET_FLAG); 
@@ -7615,7 +7618,7 @@ void CBotTF2 :: buildingSapped ( eEngiBuild building, edict_t *pSapper, edict_t 
 
 }
 
-void CBotTF2 :: sapperDestroyed ( edict_t *pSapper ) const
+void CBotTF2 :: sapperDestroyed ( edict_t *pSapper )
 {
 	m_pSchedules->freeMemory();
 }
@@ -7662,8 +7665,8 @@ CBotTF2::CBotTF2()
 		m_iTeleEntranceArea = 0;
 		m_iTeleExitArea = 0;
 
-		for (float& m_fClassDisguiseFitnes : m_fClassDisguiseFitness)
-			m_fClassDisguiseFitnes = 1.0f;
+		for ( unsigned int i = 0; i < 10; i ++ )
+			m_fClassDisguiseFitness[i] = 1.0f;
 
 		memset(m_fClassDisguiseTime,0,sizeof(float)*10);
 }

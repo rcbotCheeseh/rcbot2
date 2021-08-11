@@ -48,23 +48,23 @@ CAccessClient :: CAccessClient( char *szSteamId, int iAccessLevel )
 	m_szSteamId = CStrings::getString(szSteamId);
 }
 
-bool CAccessClient :: forBot () const
+bool CAccessClient :: forBot ()
 {
 	return isForSteamId("BOT");
 }
 
-bool CAccessClient :: isForSteamId ( const char *szSteamId ) const
+bool CAccessClient :: isForSteamId ( const char *szSteamId )
 {
 	logger->Log(LogLevel::DEBUG, "AccessClient: '%s','%s'", m_szSteamId, szSteamId);
 	return FStrEq(m_szSteamId,szSteamId);
 }
 
-void CAccessClient :: save ( FILE *fp ) const
+void CAccessClient :: save ( FILE *fp )
 {
 	fprintf(fp,"\"%s\":%d\n",m_szSteamId,m_iAccessLevel);
 }
 
-void CAccessClient :: giveAccessToClient ( CClient *pClient ) const
+void CAccessClient :: giveAccessToClient ( CClient *pClient )
 {
 	// notify player
 	if ( !forBot() )
@@ -84,9 +84,9 @@ void CAccessClients :: showUsers ( edict_t *pEntity )
 	if ( m_Clients.empty() )
 		logger->Log(LogLevel::DEBUG, "showUsers() : No users to show");
 
-	for (auto& m_Client : m_Clients)
+	for ( unsigned int i = 0; i < m_Clients.size(); i ++ )
 	{
-		CAccessClient* pPlayer = m_Client;
+		CAccessClient* pPlayer = m_Clients[i];
 		
 		CClient* pClient = CClients::findClientBySteamID(pPlayer->getSteamID());
 		
@@ -129,10 +129,10 @@ void CAccessClients :: createFile ()
 
 void CAccessClients :: freeMemory ()
 {
-	for (auto& m_Client : m_Clients)
+	for ( unsigned int i = 0; i < m_Clients.size(); i ++ )
 	{
-		delete m_Client;
-		m_Client = NULL;
+		delete m_Clients[i];
+		m_Clients[i] = NULL;
 	}
 
 	m_Clients.clear();
@@ -215,7 +215,7 @@ void CAccessClients :: load ()
 		fclose(fp);
 	}
 	else
-		createFile();
+		CAccessClients :: createFile();
 }
 
 void CAccessClients :: save ()
@@ -228,9 +228,9 @@ void CAccessClients :: save ()
 
 	if ( fp )
 	{
-		for (auto& m_Client : m_Clients)
+		for ( unsigned int i = 0; i < m_Clients.size(); i ++ )
 		{
-			m_Client->save(fp);
+			m_Clients[i]->save(fp);
 		}
 
 		fclose(fp);
@@ -239,8 +239,10 @@ void CAccessClients :: save ()
 
 void CAccessClients :: checkClientAccess ( CClient *pClient )
 {
-	for (auto pAC : m_Clients)
+	for ( unsigned int i = 0; i < m_Clients.size(); i ++ )
 	{
+		CAccessClient *pAC = m_Clients[i];
+
 		if ( pAC->isForSteamId(pClient->getSteamID()) )
 			pAC->giveAccessToClient(pClient);
 	}

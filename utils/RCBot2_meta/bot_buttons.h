@@ -45,17 +45,17 @@ public:
 
 	inline void tap () { m_bTapped = true; }
 
-	inline bool held ( float fTime ) const
+	inline bool held ( float fTime )
 	{
 		return m_bTapped || ((fTime >= m_fTimeStart) && (fTime <= m_fTimeEnd));// && (!m_fLetGoTime||(fTime > m_fLetGoTime));
 	}
 
-	inline bool canPress (float fTime) const
+	inline bool canPress (float fTime)
 	{
 		return !m_bTapped || (m_fLetGoTime < fTime);
 	}
 
-	inline int getID () const
+	inline int getID ()
 	{
 		return m_iButtonId;
 	}
@@ -87,9 +87,9 @@ public:
 
 	void freeMemory ()
 	{
-		for (auto& m_theButton : m_theButtons)
+		for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
 		{			
-			delete m_theButton;
+			delete m_theButtons[i];
 		}
 		
 		m_theButtons.clear();

@@ -111,26 +111,27 @@ const char* g_szCSWeapons[] =
 	"weapon_p228",
 	"weapon_fiveseven",
 	"weapon_elite", // 5
+	"weapon_deagle",
 	"weapon_m3",
 	"weapon_xm1014",
 	"weapon_tmp",
-	"weapon_mac10",
-	"weapon_mp5navy", // 10
+	"weapon_mac10", // 10
+	"weapon_mp5navy",
 	"weapon_ump45",
 	"weapon_p90",
 	"weapon_famas",
-	"weapon_galil",
-	"weapon_ak47", // 15
+	"weapon_galil", // 15
+	"weapon_ak47",
 	"weapon_m4a1",
 	"weapon_aug",
 	"weapon_sg552",
-	"weapon_scout",
-	"weapon_awp", // 20
+	"weapon_scout", // 20
+	"weapon_awp",
 	"weapon_sg550",
 	"weapon_g3sg1",
 	"weapon_m249",
-	"weapon_hegrenade",
-	"weapon_flashbang", // 25
+	"weapon_hegrenade", // 25
+	"weapon_flashbang",
 	"weapon_smokegrenade",
 	"weapon_c4"
 };
@@ -284,39 +285,39 @@ WeaponsData_t CSSWeaps[] =
 	/*
 		slot, id , weapon name, flags, min dist, max dist, ammo index, preference, projectile speed
 	*/
-		{3,CS_WEAPON_KNIFE,		g_szCSWeapons[0],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SEC_ATTACK | WEAP_FL_UNDERWATER | WEAP_FL_MELEE,0,128,-1,1,0},
-		{2,CS_WEAPON_USP,		g_szCSWeapons[1],	WEAP_FL_PRIM_ATTACK,0,2048,-1,2,0},
-		{2,CS_WEAPON_GLOCK,		g_szCSWeapons[2],	WEAP_FL_PRIM_ATTACK,0,2048,-1,2,0},
-		{2,CS_WEAPON_228C,		g_szCSWeapons[3],	WEAP_FL_PRIM_ATTACK,0,2048,-1,2,0},
-		{2,CS_WEAPON_FIVESEVEN,		g_szCSWeapons[4],	WEAP_FL_PRIM_ATTACK,0,2048,-1,2,0},
-		{2,CS_WEAPON_ELITES,		g_szCSWeapons[5],	WEAP_FL_PRIM_ATTACK,0,2048,-1,2,0},
-		{2,CS_WEAPON_DEAGLE,		g_szCSWeapons[6],	WEAP_FL_PRIM_ATTACK,0,2048,-1,2,0},
-		{1,CS_WEAPON_SUPERSHOTGUN,		g_szCSWeapons[7],	WEAP_FL_PRIM_ATTACK,0,1024,-1,3,0},
-		{1,CS_WEAPON_AUTOSHOTGUN,		g_szCSWeapons[8],	WEAP_FL_PRIM_ATTACK,0,1024,-1,3,0},
-		{1,CS_WEAPON_TMP,		g_szCSWeapons[9],	WEAP_FL_PRIM_ATTACK,0,2048,-1,3,0},
-		{1,CS_WEAPON_MAC10,		g_szCSWeapons[10],	WEAP_FL_PRIM_ATTACK,0,2048,-1,3,0},
-		{1,CS_WEAPON_MP5,		g_szCSWeapons[11],	WEAP_FL_PRIM_ATTACK,0,2048,-1,3,0},
-		{1,CS_WEAPON_UMP45,		g_szCSWeapons[12],	WEAP_FL_PRIM_ATTACK,0,2048,-1,3,0},
-		{1,CS_WEAPON_P90,		g_szCSWeapons[13],	WEAP_FL_PRIM_ATTACK,0,2048,-1,3,0},
-		{1,CS_WEAPON_FAMAS,		g_szCSWeapons[14],	WEAP_FL_PRIM_ATTACK,0,4096,-1,3,0},
-		{1,CS_WEAPON_GALIL,		g_szCSWeapons[15],	WEAP_FL_PRIM_ATTACK,0,4096,-1,3,0},
-		{1,CS_WEAPON_AK47,		g_szCSWeapons[16],	WEAP_FL_PRIM_ATTACK,0,4096,-1,3,0},
-		{1,CS_WEAPON_M4A1,		g_szCSWeapons[17],	WEAP_FL_PRIM_ATTACK,0,4096,-1,3,0},
-		{1,CS_WEAPON_AUG,		g_szCSWeapons[18],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SCOPE | WEAP_FL_ZOOMABLE,0,4096,-1,3,0},
-		{1,CS_WEAPON_SG552,		g_szCSWeapons[19],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SCOPE | WEAP_FL_ZOOMABLE,0,4096,-1,3,0},
-		{1,CS_WEAPON_SCOUT,		g_szCSWeapons[20],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SCOPE | WEAP_FL_ZOOMABLE,512,4096,-1,3,0},
-		{1,CS_WEAPON_AWP,		g_szCSWeapons[21],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SCOPE | WEAP_FL_ZOOMABLE,512,4096,-1,3,0},
-		{1,CS_WEAPON_SG550,		g_szCSWeapons[22],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SCOPE | WEAP_FL_ZOOMABLE,512,4096,-1,3,0},
-		{1,CS_WEAPON_G3SG1,		g_szCSWeapons[23],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SCOPE | WEAP_FL_ZOOMABLE,512,4096,-1,3,0},
-		{1,CS_WEAPON_M249,		g_szCSWeapons[24],	WEAP_FL_PRIM_ATTACK,0,2048,-1,3,0},
-		{1,CS_WEAPON_HE_GRENADE,		g_szCSWeapons[25],	WEAP_FL_PRIM_ATTACK | WEAP_FL_PROJECTILE | WEAP_FL_EXPLOSIVE | WEAP_FL_GRENADE,0,2048,-1,1,0},
-		{1,CS_WEAPON_FLASH_GRENADE,		g_szCSWeapons[26],	WEAP_FL_PRIM_ATTACK | WEAP_FL_PROJECTILE | WEAP_FL_GRENADE,0,2048,-1,1,0},
-		{1,CS_WEAPON_SMOKE_GRENADE,		g_szCSWeapons[27],	WEAP_FL_PRIM_ATTACK | WEAP_FL_PROJECTILE | WEAP_FL_GRENADE,0,2048,-1,1,0},
-		{1,CS_WEAPON_C4,		g_szCSWeapons[28],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SPECIAL | WEAP_FL_HOLDATTACK,0,1024,-1,1,0},
+		{2,CS_WEAPON_KNIFE,				g_szCSWeapons[0],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SEC_ATTACK | WEAP_FL_UNDERWATER | WEAP_FL_MELEE | WEAP_FL_MELEE_SEC_ATT,0,128,-1,1,0},
+		{1,CS_WEAPON_USP,				g_szCSWeapons[1],	WEAP_FL_PRIM_ATTACK,0,3072,-1,2,0},
+		{1,CS_WEAPON_GLOCK,				g_szCSWeapons[2],	WEAP_FL_PRIM_ATTACK,0,3072,-1,2,0},
+		{1,CS_WEAPON_228C,				g_szCSWeapons[3],	WEAP_FL_PRIM_ATTACK,0,3072,-1,2,0},
+		{1,CS_WEAPON_FIVESEVEN,			g_szCSWeapons[4],	WEAP_FL_PRIM_ATTACK,0,3072,-1,2,0},
+		{1,CS_WEAPON_ELITES,			g_szCSWeapons[5],	WEAP_FL_PRIM_ATTACK,0,3072,-1,2,0},
+		{1,CS_WEAPON_DEAGLE,			g_szCSWeapons[6],	WEAP_FL_PRIM_ATTACK,0,3072,-1,2,0},
+		{0,CS_WEAPON_SUPERSHOTGUN,		g_szCSWeapons[7],	WEAP_FL_PRIM_ATTACK,0,1024,-1,3,0},
+		{0,CS_WEAPON_AUTOSHOTGUN,		g_szCSWeapons[8],	WEAP_FL_PRIM_ATTACK,0,1024,-1,3,0},
+		{0,CS_WEAPON_TMP,				g_szCSWeapons[9],	WEAP_FL_PRIM_ATTACK,0,2048,-1,3,0},
+		{0,CS_WEAPON_MAC10,				g_szCSWeapons[10],	WEAP_FL_PRIM_ATTACK,0,2048,-1,3,0},
+		{0,CS_WEAPON_MP5,				g_szCSWeapons[11],	WEAP_FL_PRIM_ATTACK,0,2048,-1,3,0},
+		{0,CS_WEAPON_UMP45,				g_szCSWeapons[12],	WEAP_FL_PRIM_ATTACK,0,2048,-1,3,0},
+		{0,CS_WEAPON_P90,				g_szCSWeapons[13],	WEAP_FL_PRIM_ATTACK,0,2048,-1,3,0},
+		{0,CS_WEAPON_FAMAS,				g_szCSWeapons[14],	WEAP_FL_PRIM_ATTACK,0,4096,-1,3,0},
+		{0,CS_WEAPON_GALIL,				g_szCSWeapons[15],	WEAP_FL_PRIM_ATTACK,0,4096,-1,3,0},
+		{0,CS_WEAPON_AK47,				g_szCSWeapons[16],	WEAP_FL_PRIM_ATTACK,0,4096,-1,3,0},
+		{0,CS_WEAPON_M4A1,				g_szCSWeapons[17],	WEAP_FL_PRIM_ATTACK,0,4096,-1,3,0},
+		{0,CS_WEAPON_AUG,				g_szCSWeapons[18],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SCOPE | WEAP_FL_ZOOMABLE,0,4096,-1,3,0},
+		{0,CS_WEAPON_SG552,				g_szCSWeapons[19],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SCOPE | WEAP_FL_ZOOMABLE,0,4096,-1,3,0},
+		{0,CS_WEAPON_SCOUT,				g_szCSWeapons[20],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SCOPE | WEAP_FL_ZOOMABLE,512,4096,-1,3,0},
+		{0,CS_WEAPON_AWP,				g_szCSWeapons[21],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SCOPE | WEAP_FL_ZOOMABLE,512,4096,-1,3,0},
+		{0,CS_WEAPON_SG550,				g_szCSWeapons[22],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SCOPE | WEAP_FL_ZOOMABLE,512,4096,-1,3,0},
+		{0,CS_WEAPON_G3SG1,				g_szCSWeapons[23],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SCOPE | WEAP_FL_ZOOMABLE,512,4096,-1,3,0},
+		{0,CS_WEAPON_M249,				g_szCSWeapons[24],	WEAP_FL_PRIM_ATTACK,0,2048,-1,3,0},
+		{3,CS_WEAPON_HE_GRENADE,		g_szCSWeapons[25],	WEAP_FL_PRIM_ATTACK | WEAP_FL_PROJECTILE | WEAP_FL_EXPLOSIVE | WEAP_FL_GRENADE,0,2048,-1,1,0},
+		{3,CS_WEAPON_FLASH_GRENADE,		g_szCSWeapons[26],	WEAP_FL_PRIM_ATTACK | WEAP_FL_PROJECTILE | WEAP_FL_GRENADE,0,2048,-1,1,0},
+		{3,CS_WEAPON_SMOKE_GRENADE,		g_szCSWeapons[27],	WEAP_FL_PRIM_ATTACK | WEAP_FL_PROJECTILE | WEAP_FL_GRENADE,0,2048,-1,1,0},
+		{4,CS_WEAPON_C4,				g_szCSWeapons[28],	WEAP_FL_PRIM_ATTACK | WEAP_FL_SPECIAL | WEAP_FL_HOLDATTACK,0,1024,-1,1,0},
 		{ 0, 0, "\0", 0, 0, 0, 0, 0, 0 }//signal last weapon
 };
 
-bool CBotWeapon::needToReload(CBot* pBot) const
+bool CBotWeapon::needToReload(CBot* pBot)
 {
 	if (m_iClip1)
 	{
@@ -329,7 +330,7 @@ bool CBotWeapon::needToReload(CBot* pBot) const
 // static init (all weapons in game)
 std::vector<CWeapon*> CWeapons::m_theWeapons;
 
-int CBotWeapon::getAmmo(CBot* pBot, int type) const
+int CBotWeapon::getAmmo(CBot* pBot, int type)
 {
 	if (type == AMMO_PRIM)
 		return pBot->getAmmo(m_pWeaponInfo->getAmmoIndex1());
@@ -342,9 +343,9 @@ int CBotWeapon::getAmmo(CBot* pBot, int type) const
 
 bool CBotWeapons::hasExplosives()
 {
-	for (auto& m_theWeapon : m_theWeapons)
+	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
-		CBotWeapon* pWeapon = &m_theWeapon;
+		CBotWeapon* pWeapon = &(m_theWeapons[i]);
 		// find weapon info from weapon id
 		if (pWeapon->hasWeapon() && pWeapon->isExplosive())
 		{
@@ -358,13 +359,13 @@ bool CBotWeapons::hasExplosives()
 
 bool CBotWeapons::hasWeapon(int id)
 {
-	for (auto& m_theWeapon : m_theWeapons)
+	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
-		if (m_theWeapon.getWeaponInfo() == NULL)
+		if (m_theWeapons[i].getWeaponInfo() == NULL)
 			continue;
-		if (m_theWeapon.hasWeapon() == false)
+		if (m_theWeapons[i].hasWeapon() == false)
 			continue;
-		if (m_theWeapon.getID() == id)
+		if (m_theWeapons[i].getID() == id)
 			// find weapon info from weapon id
 		{
 			return true;
@@ -394,11 +395,9 @@ edict_t* CWeapons::findWeapon(edict_t* pPlayer, const char* pszWeaponName)
 	CBaseHandle* m_Weapon_iter = m_Weapons;
 	// loop through the weapons array and see if it is in the CBaseCombatCharacter
 
-	edict_t* pWeapon = NULL;
-
 	for (unsigned short int j = 0; j < MAX_WEAPONS; j++)
 	{
-		pWeapon = INDEXENT(m_Weapon_iter->GetEntryIndex());
+		edict_t* pWeapon = INDEXENT(m_Weapon_iter->GetEntryIndex());
 
 		// TODO get familiar with validity of handles / edicts
 		if (pWeapon && !pWeapon->IsFree() && strcmp(pWeapon->GetClassName(), pszWeaponName) == 0)
@@ -438,7 +437,6 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 		for (unsigned short int i = 0; i < MAX_WEAPONS; i++)
 		{
 			m_Weapon_iter = &m_Weapons[i];
-			int iWeaponState = 0;
 			bool bFound = false;
 
 			pWeapon = INDEXENT(m_Weapon_iter->GetEntryIndex());
@@ -448,7 +446,7 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 				continue;
 			}
 
-			iWeaponState = CClassInterface::getWeaponState(pWeapon);
+			const int iWeaponState = CClassInterface::getWeaponState(pWeapon);
 
 			const char* pszClassname = pWeapon->GetClassName();
 
@@ -574,9 +572,9 @@ CBotWeapon* CBotWeapons::getBestWeapon(edict_t* pEnemy, bool bAllowMelee, bool b
 	if (pEnemy)
 		flDist = m_pBot->distanceFrom(vEnemyOrigin);
 
-	for (auto& m_theWeapon : m_theWeapons)
+	for (unsigned int i = 0; i < MAX_WEAPONS; i++)
 	{
-		CBotWeapon* pWeapon = &m_theWeapon;
+		CBotWeapon* pWeapon = &(m_theWeapons[i]);
 
 		if (!pWeapon)
 			continue;
@@ -730,12 +728,13 @@ return;
 }
 }
 }*/
+
 CBotWeapon* CBotWeapons::getWeapon(CWeapon* pWeapon)
 {
-	for (auto& m_theWeapon : m_theWeapons)
+	for (unsigned int i = 0; i < MAX_WEAPONS; i++)
 	{
-		if (m_theWeapon.getWeaponInfo() == pWeapon)
-			return &m_theWeapon;
+		if (m_theWeapons[i].getWeaponInfo() == pWeapon)
+			return &(m_theWeapons[i]);
 	}
 
 	return NULL;
@@ -743,10 +742,10 @@ CBotWeapon* CBotWeapons::getWeapon(CWeapon* pWeapon)
 
 CBotWeapon* CBotWeapons::getCurrentWeaponInSlot(int iSlot)
 {
-	for (auto& m_theWeapon : m_theWeapons)
+	for (register unsigned int i = 0; i < MAX_WEAPONS; i++)
 	{
-		if (m_theWeapon.hasWeapon() && m_theWeapon.getWeaponInfo() && (m_theWeapon.getWeaponInfo()->getSlot() == iSlot))
-			return &m_theWeapon;
+		if (m_theWeapons[i].hasWeapon() && m_theWeapons[i].getWeaponInfo() && (m_theWeapons[i].getWeaponInfo()->getSlot() == iSlot))
+			return &(m_theWeapons[i]);
 	}
 
 	return NULL;
@@ -780,7 +779,7 @@ void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault
 {
 	if ((szWeaponListName != NULL) && (szWeaponListName[0] != 0))
 	{
-		auto kv = new KeyValues("Weapons");
+		KeyValues* kv = new KeyValues("Weapons");
 		char szFilename[1024];
 
 		CBotGlobals::buildFileName(szFilename, "weapons", BOT_CONFIG_FOLDER, "ini", false);
@@ -864,9 +863,9 @@ void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault
 
 void CBotWeapons::clearWeapons()
 {
-	for (auto& m_theWeapon : m_theWeapons)
+	for (register unsigned short i = 0; i < MAX_WEAPONS; i++)
 	{
-		memset(&m_theWeapon, 0, sizeof(CBotWeapon));
+		memset(&m_theWeapons[i], 0, sizeof(CBotWeapon));
 		//m_theWeapons[i].setHasWeapon(false);
 	}
 }
@@ -876,9 +875,9 @@ CBotWeapon* CBotWeapons::getPrimaryWeapon()
 {
 	CBotWeapon* pBest = NULL;
 
-	for (auto& m_theWeapon : m_theWeapons)
+	for (register unsigned short i = 0; i < MAX_WEAPONS; i++)
 	{
-		CBotWeapon* pWeap = &m_theWeapon;
+		CBotWeapon* pWeap = &(m_theWeapons[i]);
 
 		if (!pWeap->hasWeapon())
 			continue;
@@ -902,16 +901,16 @@ CBotWeapon* CBotWeapons::getActiveWeapon(const char* szWeaponName, edict_t* pWea
 
 		if (pWeapon)
 		{
-			for (auto& m_theWeapon : m_theWeapons)
+			for (register unsigned short int i = 0; i < MAX_WEAPONS; i++)
 			{
-				CWeapon* p = m_theWeapon.getWeaponInfo();
+				CWeapon* p = m_theWeapons[i].getWeaponInfo();
 
 				if (!p)
 					continue;
 
 				if (strcmp(p->getWeaponName(), szWeaponName) == 0)
 				{
-					toReturn = &m_theWeapon;
+					toReturn = &m_theWeapons[i];
 					break;
 				}
 			}
@@ -934,7 +933,7 @@ bool CBotWeaponGravGun ::outOfAmmo (CBot *pBot)
 	return true;
 }
 */
-bool CBotWeapon::outOfAmmo(CBot* pBot) const
+bool CBotWeapon::outOfAmmo(CBot* pBot)
 {
 	if (m_pWeaponInfo->isGravGun() && m_pEnt)
 		return (CClassInterface::gravityGunObject(m_pEnt) == NULL);
@@ -975,7 +974,7 @@ public:
 			m_pFound = pWeapon;
 	}
 
-	CWeapon* get() const
+	CWeapon* get()
 	{
 		return m_pFound;
 	}
@@ -1000,7 +999,7 @@ public:
 			m_pFound = pWeapon;
 	}
 
-	CWeapon* get() const
+	CWeapon* get()
 	{
 		return m_pFound;
 	}
@@ -1024,7 +1023,7 @@ public:
 			m_pFound = pWeapon;
 	}
 
-	CWeapon* get() const
+	CWeapon* get()
 	{
 		return m_pFound;
 	}
@@ -1035,39 +1034,39 @@ private:
 
 CWeapon* CWeapons::getWeapon(const int iId)
 {
-	auto pFunc = CGetWeapID(iId);
+	CGetWeapID pFunc = CGetWeapID(iId);
 	eachWeapon(&pFunc);
 	return pFunc.get();
 }
 
 CWeapon* CWeapons::getWeapon(const char* szWeapon)
 {
-	auto pFunc = CGetWeapCName(szWeapon);
+	CGetWeapCName pFunc = CGetWeapCName(szWeapon);
 	eachWeapon(&pFunc);
 	return pFunc.get();
 }
 
 CWeapon* CWeapons::getWeaponByShortName(const char* szWeapon)
 {
-	auto pFunc = CGetWeapShortName(szWeapon);
+	CGetWeapShortName pFunc = CGetWeapShortName(szWeapon);
 	eachWeapon(&pFunc);
 	return pFunc.get();
 }
 
 void CWeapons::eachWeapon(IWeaponFunc* pFunc)
 {
-	for (auto& m_theWeapon : m_theWeapons)
+	for (unsigned int i = 0; i < m_theWeapons.size(); i++)
 	{
-		pFunc->execute(m_theWeapon);
+		pFunc->execute(m_theWeapons[i]);
 	}
 }
 
 void CWeapons::freeMemory()
 {
-	for (auto& m_theWeapon : m_theWeapons)
+	for (unsigned int i = 0; i < m_theWeapons.size(); i++)
 	{
-		delete m_theWeapon;
-		m_theWeapon = NULL;
+		delete m_theWeapons[i];
+		m_theWeapons[i] = NULL;
 	}
 
 	m_theWeapons.clear();

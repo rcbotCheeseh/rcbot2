@@ -160,6 +160,9 @@ typedef enum
 	GETPROP_CSS_ARMOR,
 	GETPROP_CSS_HASDEFUSER,
 	GETPROP_CSS_HASHELMET,
+	GETPROP_CSS_BOMBTICKING,
+	GETPROP_PLAYER_FOV,
+	GETPROP_PLAYER_LIFESTATE,
 	GET_PROPDATA_MAX
 }getpropdata_id;
 
@@ -277,11 +280,12 @@ public:
 
 	inline bool getVector ( edict_t *edict, Vector *v )
 	{
+		static float *x;
+
 		getData(edict);
 
 		if ( m_data )
 		{
-			static float *x;
 			x = (float*)m_data;
 			*v = Vector(*x,*(x+1),*(x+2));
 
@@ -336,7 +340,7 @@ public:
 	static void resetError () { m_berror = false; }
 	static bool isError () { return m_berror; }
 
-	int getOffset() const
+	int getOffset()
 	{
 		return m_offset;
 	}
@@ -685,9 +689,36 @@ public:
 		return g_GetProps[GETPROP_SENTRYGUN_PLACING].getBool(pSentry,false);
 	}
 
+	/**
+	 * Gets the player FOV
+	 * 
+	 * @param pPlayer	The player to retreive FOV from
+	 * @return			The player's FOV
+	 **/
+	inline static int getPlayerFOV(edict_t *pPlayer)
+	{
+		return g_GetProps[GETPROP_PLAYER_FOV].getInt(pPlayer, 0);
+	}
+
+	/**
+	 * Gets the player life state
+	 * 
+	 * @param pPlayer	The player to retreive life state from
+	 * @return			The player's life state
+	 **/
+	inline static int getPlayerLifeState(edict_t *pPlayer)
+	{
+		return g_GetProps[GETPROP_PLAYER_LIFESTATE].getInt(pPlayer, 0);
+	}
+
 	// Synergy
 
-	// Gets the player's current vehicle
+	/**
+	 * Gets the player vehicle entity
+	 * 
+	 * @param pPlayer	The player to retreive the vehicle from
+	 * @return			The player's vehicle
+	 **/
 	inline static edict_t* getSynPlayerVehicle(edict_t* pPlayer)
 	{
 		return g_GetProps[GETPROP_SYN_PLAYER_VEHICLE].getEntity(pPlayer);
@@ -695,17 +726,18 @@ public:
 
 	/**
 	 * Gets the vehicle current driver
-	 *
+	 * 
 	 * @param pVehicle	The vehicle to get the driver from
 	 * @return			The vehicle current driver
 	 **/
 	inline static edict_t* getSynVehicleDriver(edict_t* pVehicle)
 	{
 		return g_GetProps[GETPROP_SYN_VEHICLE_DRIVER].getEntity(pVehicle);
-	}
+	}	
+
 	/**
 	 * Gets the player HEV suit power level
-	 *
+	 * 
 	 * @param pPlayer	The player to retreive the suit power from
 	 * @return			The player's current suit power level
 	 **/
@@ -718,7 +750,7 @@ public:
 
 	/**
 	 * Gets the amount of money the player has
-	 *
+	 * 
 	 * @param pPlayer	The player's pointer
 	 * @return			The player's current money value
 	 **/
@@ -729,7 +761,7 @@ public:
 
 	/**
 	 * Checks if the player is inside a buy zone
-	 *
+	 * 
 	 * @param pPlayer	The player's pointer
 	 * @return			TRUE if the player is inside a buy zone
 	 **/
@@ -740,7 +772,7 @@ public:
 
 	/**
 	 * Checks if the player is inside a bomb zone
-	 *
+	 * 
 	 * @param pPlayer	The player's pointer
 	 * @return			TRUE if the player is inside a bomb zone
 	 **/
@@ -751,7 +783,7 @@ public:
 
 	/**
 	 * Checks if the player is inside a hostage rescue zone
-	 *
+	 * 
 	 * @param pPlayer	The player's pointer
 	 * @return			TRUE if the player is inside a hostage rescue zone
 	 **/
@@ -762,7 +794,7 @@ public:
 
 	/**
 	 * Gets the amount of armor a player has
-	 *
+	 * 
 	 * @param pPlayer	The player's pointer
 	 * @return			The player's current armor value
 	 **/
@@ -773,24 +805,35 @@ public:
 
 	/**
 	 * Checks if the player has a defuse kit
-	 *
+	 * 
 	 * @param pPlayer	The player's pointer
 	 * @return			TRUE if the player has a defuse kit
 	 **/
 	inline static bool CSPlayerHasDefuser(edict_t* pPlayer)
 	{
-		return g_GetProps[GETPROP_CSS_HASHELMET].getBool(pPlayer, false);
+		return g_GetProps[GETPROP_CSS_HASDEFUSER].getBool(pPlayer, false);
 	}
 
 	/**
 	 * Checks if the player has helmet armor
-	 *
+	 * 
 	 * @param pPlayer	The player's pointer
 	 * @return			TRUE if the player has helmet armor
 	 **/
 	inline static bool CSPlayerHasHelmet(edict_t* pPlayer)
 	{
 		return g_GetProps[GETPROP_CSS_HASHELMET].getBool(pPlayer, false);
+	}
+
+	/**
+	 * Checks if the bomb is ticking
+	 * 
+	 * @param pBomb		The planted bomb entity
+	 * @return			TRUE if the bomb is ticking (returns FALSE is the bomb was defused)
+	 **/
+	inline static bool isCSBombTicking(edict_t* pBomb)
+	{
+		return g_GetProps[GETPROP_CSS_BOMBTICKING].getBool(pBomb, false);
 	}
 
 private:
@@ -863,7 +906,7 @@ public:
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, prop);
-		const auto propvalue = (Vector *)((uint8_t *)pEntity + offset);
+		Vector *propvalue = (Vector *)((uint8_t *)pEntity + offset);
 		return propvalue;
 	}
 

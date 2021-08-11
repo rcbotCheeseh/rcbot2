@@ -15,7 +15,7 @@ public:
 	void execute ( CBot *pBot ) override
 	{
 		if ( pBot->getTeam() == iTeam )
-			static_cast<CBotTF2*>(pBot)->updateAttackPoints();
+			((CBotTF2*)pBot)->updateAttackPoints();
 	}
 private:
 	int iTeam;	
@@ -28,7 +28,7 @@ public:
 	void execute ( CBot *pBot ) override
 	{
 		if ( pBot->getTeam() == iTeam )
-			static_cast<CBotTF2*>(pBot)->updateDefendPoints();
+			((CBotTF2*)pBot)->updateDefendPoints();
 	}
 private:
 	int iTeam;	
@@ -40,7 +40,7 @@ class CBotFuncPointsUpdated : public IBotFunction
 public:
 	void execute ( CBot *pBot ) override
 	{
-		static_cast<CBotTF2*>(pBot)->pointsUpdated();
+		((CBotTF2*)pBot)->pointsUpdated();
 	}	
 };
 
@@ -157,7 +157,7 @@ bool CTFObjectiveResource::testProbWptArea ( int iWptArea, int iTeam )
 	return isCPValid(iCpIndex,iTeam,TF2_POINT_ATTACK) ? (randomFloat(0.0f,1.0f) > m_ValidPoints[iTeam-2][TF2_POINT_ATTACK][iCpIndex].fProb) : ( isCPValid(iCpIndex,iTeam,TF2_POINT_DEFEND) ? (randomFloat(0.0f,1.0f) > m_ValidPoints[iTeam-2][TF2_POINT_DEFEND][iCpIndex].fProb) : true );
 }
 
-bool CTFObjectiveResource::isCPValid ( int iCPIndex, int iTeam, ePointAttackDefend_s type ) const
+bool CTFObjectiveResource::isCPValid ( int iCPIndex, int iTeam, ePointAttackDefend_s type )
 {
 	if ( (iCPIndex < 0) || (iCPIndex >= MAX_CONTROL_POINTS) )
 		return false;
@@ -205,7 +205,7 @@ int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDef
 					// IF this is not base point and a lot of players are here, reduce probability of defending
 					if ( (i != GetBaseControlPointForTeam(team)) && (numplayers > 1)  )
 					{
-						arr[i].fProbMultiplier = 1.0f - (static_cast<float>(numplayers)/(gpGlobals->maxClients/4));
+						arr[i].fProbMultiplier = 1.0f - ((float)numplayers/(gpGlobals->maxClients/4));
 
 						if ( arr[i].fProbMultiplier <= 0.0f )
 							arr[i].fProbMultiplier = 0.1f;
@@ -374,7 +374,7 @@ int CTFObjectiveResource :: getControlPointArea ( edict_t *pPoint )
 
 	return 0;
 }
-void CTFObjectiveResource::	debugprint () const
+void CTFObjectiveResource::	debugprint ()
 {
 	edict_t *pEdict = CClients::getListenServerClient();
 
@@ -580,12 +580,12 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 			int iNumPrevPointsAvail = 0;
 
 			// Check this points prevous points
-			for (int j : arr[i].iPrev)
+			for ( int j = 0; j < MAX_PREVIOUS_POINTS; j ++ )
 			{
-				if (j != -1 )
+				if ( arr[i].iPrev[j] != -1 )
 				{
 					// the previous point is not valid
-					if ( arr[j].bValid )
+					if ( arr[arr[i].iPrev[j]].bValid )
 						iNumPrevPointsAvail++;
 				}
 			}
@@ -619,9 +619,9 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 
 				if ( arr[j].bPrev )
 				{
-					for (int k : arr[j].iPrev)
+					for ( int k = 0; k < MAX_PREVIOUS_POINTS; k ++ )
 					{
-						if (k == i )
+						if ( arr[j].iPrev[k] == i )
 						{
 							bfound = true;
 							break;
@@ -714,7 +714,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 	// update signature
 	for ( int i = 0; i < *m_iNumControlPoints; i ++ )
 	{
-		const auto barr = (byte*)&(arr[i]);
+		byte *barr = (byte*)&(arr[i]);
 
 		for ( byte j = 0; j < sizeof(TF2PointProb_t); j ++ )
 			signature = signature + ((barr[j]*(i+1))+j);
@@ -940,9 +940,9 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 
 				if ( arr[j].bPrev )
 				{
-					for (int k : arr[j].iPrev)
+					for ( int k = 0; k < MAX_PREVIOUS_POINTS; k ++ )
 					{
-						if (k == i )
+						if ( arr[j].iPrev[k] == i )
 						{
 							bfound = true;
 							break;
@@ -973,7 +973,7 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 		{
 			if ( arr[i].bValid )
 			{
-				arr[i].fProb = static_cast<float>(*m_iNumControlPoints + 1 - i);
+				arr[i].fProb = (float)(*m_iNumControlPoints+1-i);
 				arr[i].fProb *= arr[i].fProb; // square it
 			}
 		}
@@ -981,7 +981,7 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 
 	for ( int i = 0; i < *m_iNumControlPoints; i ++ )
 	{
-		const auto barr = (byte*)&(arr[i]);
+		byte *barr = (byte*)&(arr[i]);
 
 		for ( byte j = 0; j < sizeof(TF2PointProb_t); j ++ )
 			signature = signature + ((barr[j]*(i+1))+j);

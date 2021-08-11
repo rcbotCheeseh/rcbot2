@@ -316,6 +316,9 @@
     <ClInclude Include="engine_wrappers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="bot_synergy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\alliedmodders\hl2sdk-tf2\lib\public\mathlib.lib" />

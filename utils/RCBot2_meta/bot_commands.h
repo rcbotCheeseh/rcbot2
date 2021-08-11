@@ -75,12 +75,12 @@ public:
 			m_iAccessLevel{iAccessLevel}, m_szCommand{command}, m_szHelp{help} {};
 
 	// check command name
-	bool isCommand ( const char *szCommand ) const;	
+	bool isCommand ( const char *szCommand );	
 
 	// execute command
 	virtual eBotCommandResult execute ( CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5 );
 
-	bool hasAccess ( CClient *pClient ) const;
+	bool hasAccess ( CClient *pClient );
 
 	virtual void printCommand ( edict_t *pPrintTo, int indent = 0);
 
@@ -88,7 +88,7 @@ public:
 
 	virtual bool isContainer () { return false; }
 
-	bool canbeUsedDedicated () const { return (this->m_iAccessLevel & CMD_ACCESS_DEDICATED) != 0; }
+	bool canbeUsedDedicated () { return (this->m_iAccessLevel & CMD_ACCESS_DEDICATED) != 0; }
 protected:
 
 	int m_iAccessLevel;
@@ -99,8 +99,8 @@ protected:
 class CBotCommandInline : public CBotCommand
 {
 public:
-	CBotCommandInline(const char* cmd, int iAccessLevel, BotCommandCallback callback,
-	                  const char* help = nullptr) : CBotCommand(cmd, iAccessLevel, help), m_Callback(std::move(callback))
+	CBotCommandInline(const char* cmd, int iAccessLevel, BotCommandCallback callback, const char* help = NULL) :
+		CBotCommand(cmd, iAccessLevel, help), m_Callback(std::move(callback))
 	{
 	}
 	
@@ -112,10 +112,8 @@ public:
 class CBotSubcommands : public CBotCommand
 {
 public:
-	CBotSubcommands(const char* cmd, int iAccessLevel, std::vector<CBotCommand*> subcommands) :
-		CBotCommand(cmd, iAccessLevel, nullptr), m_theCommands{std::move(subcommands)}
-	{
-	}
+	CBotSubcommands(const char* cmd, int iAccessLevel, std::vector<CBotCommand*> subcommands) : CBotCommand(cmd, iAccessLevel, NULL), m_theCommands{std::move(subcommands)
+	} {}
 	
 	eBotCommandResult execute(CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5) override;
 	

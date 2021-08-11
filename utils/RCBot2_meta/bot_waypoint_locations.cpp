@@ -147,10 +147,8 @@ void CWaypointLocations :: GetAllInArea ( Vector &vOrigin, WaypointList *pWaypoi
 			for (int k = iMinLock; k <= iMaxLock; k++ )
 			{
 				auto loc = m_iLocations[i][j][k];
-				for (int l : loc)
+				for (int iWpt : loc)
 				{
-					int iWpt = l;
-
 					if ( iWpt == iVisibleTo )
 						continue;
 
@@ -293,8 +291,8 @@ int CWaypointLocations :: GetCoverWaypoint ( Vector vPlayerOrigin, Vector vCover
 											WaypointList *iIgnoreWpts, Vector *vGoalOrigin, 
 											int iTeam, float fMinDist, float fMaxDist )
 {
-	const int iWaypoint = CWaypointLocations::NearestWaypoint(vCoverFrom, REACHABLE_RANGE, -1, true, true, false,NULL, false,
-	                                                          0, false, true, vPlayerOrigin);
+	const int iWaypoint = NearestWaypoint(vCoverFrom, REACHABLE_RANGE, -1, true, true, false,NULL, false,
+	                                      0, false, true, vPlayerOrigin);
 
 	if ( iWaypoint == -1 )
 		return -1;

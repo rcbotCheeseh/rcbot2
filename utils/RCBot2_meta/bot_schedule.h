@@ -99,6 +99,9 @@ typedef enum
 	SCHED_SYN_PLANT_MINE,
 	SCHED_SYN_BREAK_ICRATE,
 	SCHED_BUY,
+	SCHED_PLANT_BOMB,
+	SCHED_WAIT,
+	SCHED_WAIT_FOR_ENEMY,
 	SCHED_MAX
 	//SCHED_HIDE_FROM_ENEMY
 }eBotSchedule;
@@ -122,19 +125,19 @@ public:
 
 	void execute ( CBot *pBot );
 
-	const char *getIDString () const;
+	const char *getIDString ();
 
 	CBotTask *currentTask ()
 	{
 		return m_Tasks.empty() ? NULL : m_Tasks.front();
 	}
 
-	bool hasFailed () const
+	bool hasFailed ()
 	{
 		return m_bFailed;
 	}
 
-	bool isComplete () const
+	bool isComplete ()
 	{
 		return m_Tasks.empty();
 	}
@@ -159,18 +162,18 @@ public:
 	void passEdict(edict_t *p);
 	//////////////////////////
 
-	bool hasPassInfo () const { return (m_bitsPass!=0); }
+	bool hasPassInfo () { return (m_bitsPass!=0); }
 
-	inline int passedInt () const { return iPass; }
-	inline float passedFloat() const { return fPass; }
-	inline Vector passedVector() const { return vPass; }
-	inline edict_t *passedEdict() const { return pPass; }
-	inline bool isID ( eBotSchedule iId ) const { return m_iSchedId == iId; }
+	inline int passedInt () { return iPass; }
+	inline float passedFloat() { return fPass; }
+	inline Vector passedVector() { return vPass; }
+	inline edict_t *passedEdict() { return pPass; }
+	inline bool isID ( eBotSchedule iId ) { return m_iSchedId == iId; }
 
-	inline bool hasPassInt () const { return ((m_bitsPass&BITS_SCHED_PASS_INT)>0); }
-	inline bool hasPassFloat () const { return ((m_bitsPass&BITS_SCHED_PASS_FLOAT)>0); }
-	inline bool hasPassVector () const { return ((m_bitsPass&BITS_SCHED_PASS_VECTOR)>0); }
-	inline bool hasPassEdict () const { return ((m_bitsPass&BITS_SCHED_PASS_EDICT)>0); }
+	inline bool hasPassInt () { return ((m_bitsPass&BITS_SCHED_PASS_INT)>0); }
+	inline bool hasPassFloat () { return ((m_bitsPass&BITS_SCHED_PASS_FLOAT)>0); }
+	inline bool hasPassVector () { return ((m_bitsPass&BITS_SCHED_PASS_VECTOR)>0); }
+	inline bool hasPassEdict () { return ((m_bitsPass&BITS_SCHED_PASS_EDICT)>0); }
 
 	inline void setID ( eBotSchedule iId ) { m_iSchedId = iId; }
 
@@ -267,7 +270,7 @@ public:
 		m_Schedules.push_front(pSchedule);
 	}
 
-	inline bool isEmpty () const
+	inline bool isEmpty ()
 	{
 		return m_Schedules.empty();
 	}
@@ -668,12 +671,50 @@ public:
 class CSynDisarmMineSched : public CBotSchedule
 {
 public:
-	// pDoor - The door the bot will try to open
+	// @param pMine The mine the bot will try to disarm
 	CSynDisarmMineSched( edict_t *pMine );
 
 	void init() override
 	{
 		setID(SCHED_SYN_DISARM_MINE);
+	}
+};
+
+class CSynBreakICrateSched : public CBotSchedule
+{
+public:
+	/**
+	 * Schedule to break an item_item_crate entity
+	 * 
+	 * @param pCrate   The crate to break
+	 * @param pWeapon  The weapon to use
+	 **/
+	CSynBreakICrateSched(edict_t* pCrate, CBotWeapon* pWeapon);
+
+	void init() override
+	{
+		setID(SCHED_SYN_BREAK_ICRATE);
+	}
+};
+
+/********************************
+ *    Counter-Strike: Source    *
+ ********************************/
+
+class CCSSPlantBombSched : public CBotSchedule
+{
+public:
+	/**
+	 * Schedule for the bot to plant the C4 in CSS
+	 * 
+	 * @param pWaypoint		The waypoint where the c4 will be planted
+	 * @param pRoute		Route waypoint to use
+	 **/
+	CCSSPlantBombSched(CWaypoint *pWaypoint, CWaypoint *pRoute = NULL);
+
+	void init() override
+	{
+		setID(SCHED_PLANT_BOMB);
 	}
 };
 

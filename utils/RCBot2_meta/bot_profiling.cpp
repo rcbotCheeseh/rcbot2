@@ -57,8 +57,8 @@ inline unsigned __int64 RDTSC()
 #include <windows.h>
 #else
 // #define rdtsc _emit  0x0f _asm _emit  0x31
-// inline unsigned long long rdtsc(void)
-//    __asm__ volatile (".byte 0x0f, 0x31" : "=A" (void));
+// inline unsigned long long rdtsc()
+//    __asm__ volatile (".byte 0x0f, 0x31" : "=A" ());
 //    {
 //    }
    extern __inline__ unsigned long long int rdtsc()
@@ -116,7 +116,7 @@ void CProfileTimer :: Stop()
 
 // print the values, first work out average (use max/min/previous values), 
 // and work out percentage of power
-void CProfileTimer :: print (const double *high)
+void CProfileTimer :: print (double *high)
 {
 	if ((m_iInvoked>0) && m_szFunction )
 	{
@@ -124,7 +124,7 @@ void CProfileTimer :: print (const double *high)
 
 		m_average = m_overall/m_iInvoked;
 
-		const float percent = (static_cast<double>(m_overall) / (*high)) * 100.0f;
+		const float percent = (((double)m_overall) / (*high)) * 100.0f;
 		
 		sprintf(str,"%17s|%13lld|%10lld|%10lld|%10lld|%6.1f",m_szFunction,m_overall,m_min,m_max,m_average,percent);			
 

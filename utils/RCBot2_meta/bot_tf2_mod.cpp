@@ -299,10 +299,10 @@ void CTeamFortress2Mod :: mapInit ()
 
 int CTeamFortress2Mod :: getTeleporterWaypoint ( edict_t *pTele )
 {
-	for (auto& m_Teleporter : m_Teleporters)
+	for ( int i = 0; i < MAX_PLAYERS; i ++ )
 	{
-		if (m_Teleporter.exit.get() == pTele )
-			return m_Teleporter.m_iWaypoint; 
+		if ( m_Teleporters[i].exit.get() == pTele )
+			return m_Teleporters[i].m_iWaypoint; 
 	}
 
 	return -1;
@@ -638,11 +638,11 @@ edict_t *CTeamFortress2Mod :: getTeleporterExit ( edict_t *pTele )
 {
 	edict_t *pExit;
 
-	for (auto& m_Teleporter : m_Teleporters)
+	for ( int i = 0; i < MAX_PLAYERS; i ++ )
 	{
-		if (m_Teleporter.entrance.get() == pTele )
+		if ( m_Teleporters[i].entrance.get() == pTele )
 		{
-			if ( (pExit = m_Teleporter.exit.get()) != NULL )
+			if ( (pExit = m_Teleporters[i].exit.get()) != NULL )
 			{
 				return pExit;
 			}
@@ -853,7 +853,7 @@ void CTeamFortress2Mod:: clientCommand ( edict_t *pEntity, int argc, const char 
 			vcmd.b1.v1 = atoi(arg1);
 			vcmd.b1.v2 = atoi(arg2);
 
-			auto voicecmd = CBroadcastVoiceCommand(pEntity,vcmd.voicecmd); 
+			CBroadcastVoiceCommand voicecmd = CBroadcastVoiceCommand(pEntity,vcmd.voicecmd); 
 
 			CBots::botFunction(&voicecmd);
 		}
@@ -905,7 +905,7 @@ int CTeamFortress2Mod ::getHighestScore ()
 
 		if ( edict && CBotGlobals::entityIsValid(edict) )
 		{
-			const auto score = (short int)CClassInterface::getTF2Score(edict);
+			const short int score = (short int)CClassInterface::getTF2Score(edict);
 		
 			if ( score > highest )
 			{
@@ -1041,10 +1041,10 @@ edict_t *CTeamFortress2Mod :: nearestDispenser ( Vector vOrigin, int team )
 	edict_t *pNearest = NULL;
 	float fNearest = bot_use_disp_dist.GetFloat();
 
-	for (auto& m_Dispenser : m_Dispensers)
+	for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
 	{
 		//m_Dispensers[i]
-		edict_t* pDisp = m_Dispenser.disp.get();
+		edict_t* pDisp = m_Dispensers[i].disp.get();
 
 		if ( pDisp )
 		{
@@ -1172,7 +1172,7 @@ void CTeamFortress2Mod::updatePointMaster()
 					try
 					{
 						CBaseEntity *pent = m_PointMaster->m_ControlPointRounds[r];
-						auto pointRound = (CTeamControlPointRound*)(reinterpret_cast<uintptr_t>(pent) + baseEntityOffset);
+						CTeamControlPointRound* pointRound = (CTeamControlPointRound*)(reinterpret_cast<uintptr_t>(pent) + baseEntityOffset);
 
 						logger->Log(LogLevel::DEBUG, "Control Points for Round %d", r);
 

@@ -209,7 +209,7 @@ void RCBotPluginMeta::HudTextMessage(edict_t *pEntity, const char *szMessage)
 	// if (!bOK)
 	// return;
 
-	const auto filter = new CBotRecipientFilter(pEntity);
+	CBotRecipientFilter *filter = new CBotRecipientFilter(pEntity);
 
 	bf_write *buf = nullptr;
 
@@ -256,7 +256,7 @@ void RCBotPluginMeta::BroadcastTextMessage(const char *szMessage)
 	if (msgid == 0)
 		return;
 
-	const auto filter = new CClientBroadcastRecipientFilter();
+	CClientBroadcastRecipientFilter *filter = new CClientBroadcastRecipientFilter();
 
 	if (say > 0) {
 		char chatline[128];
@@ -274,7 +274,7 @@ void RCBotPluginMeta::Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper)
 {
 	static CBot *pBot;
 
-	const auto pPlayer = META_IFACEPTR(CBaseEntity);
+	CBaseEntity *pPlayer = META_IFACEPTR(CBaseEntity);
 
 	edict_t *pEdict = servergameents->BaseEntityToEdict(pPlayer);
 
@@ -453,7 +453,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 	// Find the RCBOT2 Path from metamod VDF
 	extern IFileSystem *filesystem;
-	auto mainkv = new KeyValues("metamodplugin");
+	KeyValues *mainkv = new KeyValues("metamodplugin");
 
 	logger->Log(LogLevel::INFO, "Reading rcbot2 path from VDF...");
 	
@@ -509,13 +509,12 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 			if (bq_line[0] == '#')
 				continue;
 
-			for (char& i : bq_line)
-			{
-				if (i == '\0')
+			for (int i = 0; i < sizeof(bq_line); ++i) {
+				if (bq_line[i] == '\0')
 					break;
 
-				if (!isdigit(i))
-					i = ' ';
+				if (!isdigit(bq_line[i]))
+					bq_line[i] = ' ';
 			}
 
 			if (sscanf(bq_line, "%d %d", &human_count, &bot_count) == 2) {
@@ -644,7 +643,7 @@ void RCBotPluginMeta::Hook_ClientActive(edict_t *pEntity, bool bLoadGame)
 }
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
-void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity, const CCommand &args) const
+void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity, const CCommand &args)
 #else
 void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 #endif

@@ -91,17 +91,17 @@ public:
 
 	CWaypointType ( int iBit, const char *szName, const char *szDescription, WptColor vColour, int iModBits = BITS_MOD_ALL, int iImportance = 0 );
 
-	inline const char *getName () const { return m_szName; }
-	inline const char *getDescription () const { return m_szDescription; }
+	inline const char *getName () { return m_szName; }
+	inline const char *getDescription () { return m_szDescription; }
 
-	inline bool isBitsInFlags ( int iFlags ) const { return (iFlags & m_iBit)==m_iBit; }
-	inline int getBits () const { return m_iBit; }
+	inline bool isBitsInFlags ( int iFlags ) { return (iFlags & m_iBit)==m_iBit; }
+	inline int getBits () { return m_iBit; }
 	inline void setMods ( int iMods ){ m_iMods = iMods; }// input bitmask of mods (32 max)
-	inline bool forMod ( int iMod ) const { return ((1<<iMod)&m_iMods)==(1<<iMod); }
-	inline WptColor getColour () const { return m_vColour; }
-	inline int getImportance () const { return m_iImportance; }
+	inline bool forMod ( int iMod ) { return ((1<<iMod)&m_iMods)==(1<<iMod); }
+	inline WptColor getColour () { return m_vColour; }
+	inline int getImportance () { return m_iImportance; }
 
-	bool operator < ( CWaypointType *other ) const
+	bool operator < ( CWaypointType *other )
 	{
 		return m_iImportance < other->getImportance();
 	}
@@ -140,17 +140,21 @@ public:
 	static const int W_FL_UNREACHABLE    = (1 << 2);
 	static const int W_FL_LADDER         = (1 << 3);
 	static const int W_FL_FLAG           = (1 << 4);
+	static const int W_FL_RESCUEZONE     = (1 << 4); // Counter-Strike: Source --> Hostage rescue zone
 	static const int W_FL_CAPPOINT       = (1 << 5);
-	static const int W_FL_GOAL           = (1 << 5); // Synergy: Map Goal
+	static const int W_FL_GOAL           = (1 << 5); // Synergy & Counter-Strike: Source --> Map Goal
 	static const int W_FL_NOBLU          = (1 << 6);
 	static const int W_FL_NOAXIS         = (1 << 6);
+	static const int W_FL_NOTERRORIST    = (1 << 6); // Counter-Strike: Source --> Terrorists cannot use this waypoint
 	static const int W_FL_NORED          = (1 << 7);
 	static const int W_FL_NOALLIES       = (1 << 7);
+	static const int W_FL_NOCOUNTERTR    = (1 << 7); // Counter-Strike: Source --> Counter-Terrorists cannot use this waypoint
 	static const int W_FL_HEALTH         = (1 << 8);
 	static const int W_FL_OPENS_LATER    = (1 << 9);
 	static const int W_FL_ROCKET_JUMP    = (1 << 10);
 	static const int W_FL_BOMB_TO_OPEN   = (1 << 10); // DOD:S
 	static const int W_FL_USE            = (1 << 10); // Synergy: Use Button/Door
+	static const int W_FL_DOOR           = (1 << 10); // Counter-Strike: Source --> Check for door
 	static const int W_FL_SNIPER         = (1 << 11);
 	static const int W_FL_AMMO           = (1 << 12);
 	static const int W_FL_RESUPPLY       = (1 << 13);
@@ -167,6 +171,7 @@ public:
 	static const int W_FL_WAIT_GROUND    = (1 << 21);
 	static const int W_FL_NO_FLAG        = (1 << 22);
 	static const int W_FL_COVER_RELOAD   = (1 << 22); // DOD:S only
+	static const int W_FL_NO_HOSTAGES    = (1 << 22); // Counter-Strike: Source --> Bots escorting hostages cannot use this waypoint
 	static const int W_FL_LIFT           = (1 << 23);
 	static const int W_FL_FLAGONLY       = (1 << 24);
 	static const int W_FL_FALL           = (1 << 25);
@@ -207,7 +212,7 @@ private:
 class CWaypointTest
 {
 public:
-	static void go ( edict_t *pPlayer );
+	void go ( edict_t *pPlayer );
 };
 
 typedef struct
@@ -259,12 +264,12 @@ public:
 		m_iAimYaw = iYaw;
 	}
 
-	inline float getAimYaw () const
+	inline float getAimYaw ()
 	{
 		return (float)m_iAimYaw;
 	}
 
-	inline Vector getOrigin () const
+	inline Vector getOrigin ()
 	{
 		return m_vOrigin;
 	}
@@ -287,12 +292,12 @@ public:
 		m_iFlags = 0;
 	}
 
-	inline bool hasFlag ( int iFlag ) const
+	inline bool hasFlag ( int iFlag )
 	{
 		return (m_iFlags & iFlag) == iFlag;
 	}
 
-	inline bool hasSomeFlags ( int iFlag ) const
+	inline bool hasSomeFlags ( int iFlag )
 	{
 		return (m_iFlags & iFlag) > 0;
 	}
@@ -323,7 +328,7 @@ public:
 
 	bool isPathOpened ( Vector vPath );
 
-	inline bool isUsed () const
+	inline bool isUsed ()
 	{
 		return m_bUsed;
 	}
@@ -338,27 +343,27 @@ public:
 		m_thePaths.clear();
 	}
 
-	inline int getArea () const { return m_iArea; }
+	inline int getArea () { return m_iArea; }
 	inline void setArea (int area) { m_iArea = area; }
 
 	void drawPaths ( edict_t *pEdict, unsigned short int iDrawType );
 
-	void drawPathBeam ( CWaypoint *to, unsigned short int iDrawType ) const;
+	void drawPathBeam ( CWaypoint *to, unsigned short int iDrawType );
 
 	inline void setUsed ( bool bUsed ){	m_bUsed = bUsed;}
 
 	inline void clearPaths ();
 
-	inline float distanceFrom ( CWaypoint *other ) const
+	inline float distanceFrom ( CWaypoint *other )
 	{
 		return distanceFrom(other->getOrigin());
 	}
 
-	float distanceFrom ( Vector vOrigin ) const;
+	float distanceFrom ( Vector vOrigin );
 
-	int numPaths () const;
+	int numPaths ();
 
-	int numPathsToThisWaypoint () const;
+	int numPathsToThisWaypoint ();
 	int getPathToThisWaypoint ( int i );
 
 	int getPath ( int i );
@@ -367,17 +372,17 @@ public:
 
 	void save ( FILE *bfp );
 
-	inline int getFlags () const {return m_iFlags;}
+	inline int getFlags (){return m_iFlags;}
 
 	bool forTeam ( int iTeam );
 
-	inline float getRadius () const { return m_fRadius; }
+	inline float getRadius () { return m_fRadius; }
 
 	inline void setRadius ( float fRad ) { m_fRadius = fRad; }
 
-	Vector applyRadius () const;
+	Vector applyRadius ();
 
-	bool isAiming () const;
+	bool isAiming ();
 
 private:
 	Vector m_vOrigin;
@@ -474,7 +479,7 @@ public:
 
 	static void freeMemory ();
 
-	static int getClosestFlagged ( int iFlags, Vector &vOrigin, int iTeam,float *fReturnDist =NULL, const unsigned char *failedwpts = NULL );
+	static int getClosestFlagged ( int iFlags, Vector &vOrigin, int iTeam,float *fReturnDist = NULL, const unsigned char *failedwpts = NULL );
 
 	static int nearestWaypointGoal ( int iFlags, Vector &origin, float fDist, int iTeam = 0 );
 	static CWaypoint *randomRouteWaypoint ( CBot *pBot, Vector vOrigin, Vector vGoal, int iTeam, int iArea );

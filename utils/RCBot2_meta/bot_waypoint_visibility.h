@@ -77,13 +77,13 @@ public:
 		memset(m_VisTable,0,iSize);
 	}
 
-	bool SaveToFile () const;
+	bool SaveToFile ();
 
-	bool ReadFromFile ( int numwaypoints ) const;
+	bool ReadFromFile ( int numwaypoints );
 
 	void workVisibilityForWaypoint ( int i, int iNumWaypoints, bool bTwoway = false );
 
-	bool GetVisibilityFromTo ( int iFrom, int iTo ) const
+	bool GetVisibilityFromTo ( int iFrom, int iTo )
 	{
 		// work out the position 
 		const int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
@@ -132,7 +132,7 @@ public:
 		////////////////////////////
 	}
 
-	void SetVisibilityFromTo ( int iFrom, int iTo, bool bVisible ) const
+	void SetVisibilityFromTo ( int iFrom, int iTo, bool bVisible )
 	{
 		const int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
 
@@ -152,7 +152,7 @@ public:
 
 	void WorkOutVisibilityTable ( );
 
-	inline bool needToWorkVisibility() const { return bWorkVisibility; }
+	inline bool needToWorkVisibility() { return bWorkVisibility; }
 	inline void setWorkVisiblity ( bool bSet ) { bWorkVisibility = bSet; }
 
 private:

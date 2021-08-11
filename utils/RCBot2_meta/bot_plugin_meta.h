@@ -89,7 +89,7 @@ public: //hooks
 	
 	//Called for a game event.  Same definition as server plugins???
 	bool FireGameEvent( IGameEvent *pevent, bool bDontBroadcast );
-	static void Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper);
+	void Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper);
 	
 	bool Hook_ClientConnect(edict_t *pEntity, 
 		const char *pszName,
@@ -101,7 +101,7 @@ public: //hooks
 	static void BroadcastTextMessage(const char *szMessage);
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
-	void Hook_ClientCommand(edict_t *pEntity, const CCommand &args) const;
+	void Hook_ClientCommand(edict_t *pEntity, const CCommand &args);
 #else
 	void Hook_ClientCommand(edict_t *pEntity);
 #endif

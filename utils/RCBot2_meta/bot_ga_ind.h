@@ -52,7 +52,7 @@ public:
 	// sub classes return their class with own values
 	IIndividual *copy () override;
 
-	void setVector ( const std::vector<float>& values );
+	void setVector ( std::vector<float> values );
 
 	float get ( int iIndex );
 
@@ -97,7 +97,7 @@ public:
 
 	IIndividual *copy () override
 	{
-		auto p = new CBotStuckValues();
+		CBotStuckValues *p = new CBotStuckValues();
 		p->setVector(m_theValues);
 		p->setFitness(getFitness());
 		return p;

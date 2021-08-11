@@ -46,7 +46,7 @@ int CWaypointVisibilityTable :: iCurTo = 0;*/
 void CWaypointVisibilityTable :: workVisibility ()
 {
 	int iTicks = 0;
-	const auto iSize = static_cast<unsigned short>(CWaypoints::numWaypoints());
+	const unsigned short int iSize = (unsigned short int) CWaypoints::numWaypoints();
 
 	for ( iCurFrom = iCurFrom; iCurFrom < iSize; iCurFrom ++ )
 	{
@@ -114,7 +114,7 @@ void CWaypointVisibilityTable :: workVisibilityForWaypoint ( int i, int iNumWayp
 	if ( !Waypoint1->isUsed() )
 		return;
 
-	for (short int j = 0; j < iNumWaypoints; j ++ )
+	for ( short int j = 0; j < iNumWaypoints; j ++ )
 	{
 		if ( i == j )
 		{
@@ -143,13 +143,13 @@ void CWaypointVisibilityTable :: WorkOutVisibilityTable ()
 	ClearVisibilityTable();
 
 	// loop through all waypoint possibilities.
-	for ( short int i = 0; i < iNumWaypoints; i ++ )
+	for (short int i = 0; i < iNumWaypoints; i ++ )
 	{
 		workVisibilityForWaypoint(i,iNumWaypoints,false);
 	}
 }
 
-bool CWaypointVisibilityTable :: SaveToFile () const
+bool CWaypointVisibilityTable :: SaveToFile ()
 {
     char filename[1024];
 	wpt_vis_header_t header;
@@ -158,11 +158,11 @@ bool CWaypointVisibilityTable :: SaveToFile () const
 
 	FILE *bfp = CBotGlobals::openFile(filename,"wb");
 
-	if ( bfp == NULL )
-	{
-		logger->Log(LogLevel::ERROR, "Can't open Waypoint Visibility table for writing!");
-		return false;
-	}
+   if ( bfp == NULL )
+   {
+	   logger->Log(LogLevel::ERROR, "Can't open Waypoint Visibility table for writing!");
+	   return false;
+   }
 
 	header.numwaypoints = CWaypoints::numWaypoints();
 	strncpy(header.szMapName,CBotGlobals::getMapName(),63);
@@ -176,7 +176,7 @@ bool CWaypointVisibilityTable :: SaveToFile () const
    return true;
 }
 
-bool CWaypointVisibilityTable :: ReadFromFile ( int numwaypoints ) const
+bool CWaypointVisibilityTable :: ReadFromFile ( int numwaypoints )
 {
     char filename[1024];
 
@@ -186,11 +186,11 @@ bool CWaypointVisibilityTable :: ReadFromFile ( int numwaypoints ) const
 
    FILE *bfp =  CBotGlobals::openFile(filename,"rb");
 
-	if ( bfp == NULL )
-	{
-		logger->Log(LogLevel::ERROR, "Can't open Waypoint Visibility table for reading!");
-		return false;
-	}
+   if ( bfp == NULL )
+   {
+	   logger->Log(LogLevel::ERROR, "Can't open Waypoint Visibility table for reading!");
+	   return false;
+   }
 
    fread(&header,sizeof(wpt_vis_header_t),1,bfp);
 
@@ -198,7 +198,7 @@ bool CWaypointVisibilityTable :: ReadFromFile ( int numwaypoints ) const
 	   return false;
    if ( header.waypoint_version != CWaypoints::WAYPOINT_VERSION )
 	   return false;
-   if ( strncmp(header.szMapName,CBotGlobals::getMapName(),63) != 0)
+   if ( strncmp(header.szMapName,CBotGlobals::getMapName(),63) != 0 )
 	   return false;
 
    fread(m_VisTable,sizeof(byte),g_iMaxVisibilityByte,bfp);

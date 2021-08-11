@@ -55,12 +55,12 @@
 #ifndef __linux__
 #include <direct.h> // for mkdir
 #include <sys/stat.h>
-
-#include <cmath>
 #else
 #include <fcntl.h>
 #include <sys/stat.h>
 #endif
+
+#include <cmath>
 
 extern IServerGameEnts *servergameents;
 
@@ -92,10 +92,10 @@ public:
 
 	bool ShouldHitEntity( IHandleEntity *pServerEntity, int contentsMask ) override
 	{ 
-		if ( m_pPlayer && (pServerEntity == static_cast<IHandleEntity*>(m_pPlayer->GetIServerEntity())) )
+		if ( m_pPlayer && (pServerEntity == (IHandleEntity*)m_pPlayer->GetIServerEntity()) )
 			return false;
 
-		if ( m_pHit && (pServerEntity == static_cast<IHandleEntity*>(m_pHit->GetIServerEntity())) )
+		if ( m_pHit && (pServerEntity == (IHandleEntity*)m_pHit->GetIServerEntity()) )
 			return false;
 
 		return true; 
@@ -145,10 +145,9 @@ bool CBotGlobals :: isCurrentMod ( eModId modid )
 
 int CBotGlobals ::numPlayersOnTeam(int iTeam, bool bAliveOnly)
 {
-	int i = 0;
 	int num = 0;
 
-	for ( i = 1; i <= CBotGlobals::numClients(); i ++ )
+	for ( int i = 1; i <= CBotGlobals::numClients(); i ++ )
 	{
 		edict_t* pEdict = INDEXENT(i);
 
@@ -198,7 +197,7 @@ bool CBotGlobals::dirExists(const char *path)
 
 void CBotGlobals::readRCBotFolder()
 {
-	auto*mainkv = new KeyValues("Metamod Plugin");
+	KeyValues *mainkv = new KeyValues("Metamod Plugin");
 
 	if (mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD")) {
 		char folder[256] = "\0";
@@ -225,8 +224,7 @@ void CBotGlobals::readRCBotFolder()
 	mainkv->deleteThis();
 }
 
-float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fProjSpeed, float fGrenadePrimeTime,
-                                       const float *fAngle )
+float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fProjSpeed, float fGrenadePrimeTime, float *fAngle )
 {
 	static float g;
 	Vector v_comp = vEnemy-vOrigin;
@@ -241,39 +239,40 @@ float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fPro
 
 		return false;
 	}
-	// use angle -- work out time
-	// work out angle
-	float vhorz;
-	float vvert;
-
-	SinCos(DEG2RAD(*fAngle),&vvert,&vhorz);
-
-	vhorz *= fProjSpeed;
-	vvert *= fProjSpeed;
-
-	const float t = fDistance/vhorz;
-
-	// within one second of going off
-	if ( std::fabs(t-fGrenadePrimeTime) < 1.0f )
+	else
 	{
-		const float ffinaly =  vOrigin.z + (vvert*t) - ((g*0.5)*(t*t));
+		// use angle -- work out time
+				// work out angle
+		float vhorz;
+		float vvert;
 
-		return ( std::fabs(ffinaly - vEnemy.z) < BLAST_RADIUS ); // ok why not
+		SinCos(DEG2RAD(*fAngle),&vvert,&vhorz);
+
+		vhorz *= fProjSpeed;
+		vvert *= fProjSpeed;
+
+		const float t = fDistance/vhorz;
+
+		// within one second of going off
+		if ( std::fabs(t-fGrenadePrimeTime) < 1.0f )
+		{
+			const float ffinaly =  vOrigin.z + (vvert*t) - ((g*0.5)*(t*t));
+
+			return ( std::fabs(ffinaly - vEnemy.z) < BLAST_RADIUS ); // ok why not
+		}
 	}
 
 	return false;
 }
 
-// TO DO :: put in CClients ?
+// TODO :: put in CClients ?
 edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 // find a player by a truncated name "name".
 // e.g. name = "Jo" might find a player called "John"
 {
-	edict_t *pent = NULL;
-
 	for( int i = 1; i <= maxClients(); i ++ )
 	{
-		pent = INDEXENT(i);
+		edict_t* pent = INDEXENT(i);
 
 		if( pent && CBotGlobals::isNetworkable(pent) )
 		{
@@ -351,7 +350,7 @@ public:
 	//virtual void SetPassEntity( const IHandleEntity *pPassEntity ) { m_pPassEnt = pPassEntity; }
 	//virtual void SetCollisionGroup( int iCollisionGroup ) { m_collisionGroup = iCollisionGroup; }
 
-	//const IHandleEntity *GetPassEntity( void ){ return m_pPassEnt;}
+	//const IHandleEntity *GetPassEntity(){ return m_pPassEnt;}
 
 private:
 	const IHandleEntity *m_pPassEnt1;
@@ -541,8 +540,12 @@ bool CBotGlobals :: gameStart ()
 
 		return true;
 	}
-	logger->Log(LogLevel::ERROR, "Mod not found. Please edit the bot_mods.ini in the bot config folder (gamedir = %s)",m_szModFolder);
-	return false;
+	else
+	{
+		logger->Log(LogLevel::ERROR, "Mod not found. Please edit the bot_mods.ini in the bot config folder (gamedir = %s)",m_szModFolder);
+
+		return false;
+	}
 }
 
 void CBotGlobals :: levelInit ()
@@ -661,10 +664,12 @@ inline Vector CBotGlobals :: entityOrigin ( edict_t *pEntity )
 	return pEntity->GetIServerEntity()->GetCollideable()->GetCollisionOrigin();
 	
 	Vector vOrigin;
+
 	if ( pEntity && pEntity->GetIServerEntity() && pEntity->GetIServerEntity()->GetCollideable() )//fix?
 		vOrigin = pEntity->GetIServerEntity()->GetCollideable()->GetCollisionOrigin();
 	else
 		vOrigin = Vector(0,0,0);
+
 	return vOrigin;
 }*/
 
@@ -991,6 +996,63 @@ Vector CBotGlobals:: getVelocity ( edict_t *pPlayer )
 	return Vector(0,0,0);
 }
 
+/**
+ * Clone of CCollisionProperty::OBBCenter( ) --- see game/shared/collisionproperty.h
+ * 
+ * @param pEntity		Entity to get OBB center
+ **/
+Vector CBotGlobals::getOBBCenter( edict_t *pEntity )
+{
+	Vector result = Vector(0,0,0);
+	VectorLerp(pEntity->GetCollideable()->OBBMins(), pEntity->GetCollideable()->OBBMaxs(), 0.5f, result);
+	return result;
+}
+
+Vector CBotGlobals::collisionToWorldSpace( const Vector &in, edict_t *pEntity )
+{
+	Vector result = Vector(0,0,0);
+
+	if(!isBoundsDefinedInEntitySpace(pEntity) || pEntity->GetCollideable()->GetCollisionAngles() == vec3_angle)
+	{
+		VectorAdd(in, pEntity->GetCollideable()->GetCollisionOrigin(), result);
+	}
+	else
+	{
+		VectorTransform(in, pEntity->GetCollideable()->CollisionToWorldTransform(), result);
+	}
+
+	return result;
+}
+
+/**
+ * Gets the entity world center. Clone of WorldSpaceCenter()
+ * @param pEntity	The entity to get the center from
+ * @return			Center vector
+ **/
+Vector CBotGlobals::worldCenter( edict_t *pEntity )
+{
+	Vector result = getOBBCenter(pEntity);
+	result = collisionToWorldSpace(result, pEntity);
+	return result;
+}
+
+/**
+ * Checks if a point is within a trigger
+ * 
+ * @param pEntity	The trigger entity
+ * @param vPoint	The point to be tested
+ * @return			True if the given point is within pEntity
+ **/
+bool CBotGlobals::pointIsWithin( edict_t *pEntity, const Vector &vPoint )
+{
+	Ray_t ray;
+	trace_t tr;
+	ICollideable *pCollide = pEntity->GetCollideable();
+	ray.Init(vPoint, vPoint);
+	enginetrace->ClipRayToCollideable(ray, MASK_ALL, pCollide, &tr);
+	return (tr.startsolid);
+}
+
 FILE *CBotGlobals :: openFile ( char *szFile, char *szMode )
 {
 	FILE *fp = fopen(szFile,szMode);
@@ -1118,10 +1180,15 @@ float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity,Vector vOrigin)
 	Vector v2;
 	Vector v1 = (vOrigin - entityOrigin(pEntity));
 	Vector t;
+
 	v1 = v1 / v1.Length();
+
 	AngleVectors(qBotAngles,&v2);
+
 	fAngle = atan2((v1.x*v2.y) - (v1.y*v2.x), (v1.x*v2.x) + (v1.y * v2.y));
+
 	fAngle = RAD2DEG(fAngle);
+
 	return (float)fAngle;*/
 
 	float fAngle;
@@ -1137,11 +1204,11 @@ float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity,Vector vOrigin)
 	VectorAngles(vAngles/vAngles.Length(),qAngles);
 
 	fYaw = qAngles.y;
-	fixFloatAngle(&fYaw);
+	CBotGlobals::fixFloatAngle(&fYaw);
 
 	fAngle = qBotAngles.y - fYaw;
 
-	fixFloatAngle(&fAngle);
+	CBotGlobals::fixFloatAngle(&fAngle);
 
 	return fAngle;
 
@@ -1155,13 +1222,16 @@ void CBotGlobals::teleportPlayer ( edict_t *pPlayer, Vector v_dest )
 		pClient->teleportTo(v_dest);
 }
 /*
+
 static void TeleportEntity( CBaseEntity *pSourceEntity, TeleportListEntry_t &entry, const Vector *newPosition, const QAngle *newAngles, const Vector *newVelocity )
 {
 	CBaseEntity *pTeleport = entry.pEntity;
 	Vector prevOrigin = entry.prevAbsOrigin;
 	QAngle prevAngles = entry.prevAbsAngles;
+
 	int nSolidFlags = pTeleport->GetSolidFlags();
 	pTeleport->AddSolidFlags( FSOLID_NOT_SOLID );
+
 	// I'm teleporting myself
 	if ( pSourceEntity == pTeleport )
 	{
@@ -1174,11 +1244,13 @@ static void TeleportEntity( CBaseEntity *pSourceEntity, TeleportListEntry_t &ent
 				pPlayer->SnapEyeAngles( *newAngles );
 			}
 		}
+
 		if ( newVelocity )
 		{
 			pTeleport->SetAbsVelocity( *newVelocity );
 			pTeleport->SetBaseVelocity( vec3_origin );
 		}
+
 		if ( newPosition )
 		{
 			pTeleport->AddEffects( EF_NOINTERP );
@@ -1192,6 +1264,7 @@ static void TeleportEntity( CBaseEntity *pSourceEntity, TeleportListEntry_t &ent
 	}
 	IPhysicsObject *pPhys = pTeleport->VPhysicsGetObject();
 	bool rotatePhysics = false;
+
 	// handle physics objects / shadows
 	if ( pPhys )
 	{
@@ -1209,9 +1282,12 @@ static void TeleportEntity( CBaseEntity *pSourceEntity, TeleportListEntry_t &ent
 		{
 			rotatePhysics = true;
 		}
+
 		pPhys->SetPosition( pTeleport->GetAbsOrigin(), *rotAngles, true );
 	}
+
 	g_pNotify->ReportTeleportEvent( pTeleport, prevOrigin, prevAngles, rotatePhysics );
+
 	pTeleport->SetSolidFlags( nSolidFlags );
 }
 */

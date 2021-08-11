@@ -66,7 +66,7 @@ void CBotGAValues :: crossOver ( IIndividual *other )
 	const unsigned int iPoint = randomInt(0,m_theValues.size());
 	float fTemp;
 
-	auto vother = (CBotGAValues*)other;
+	CBotGAValues *vother = (CBotGAValues*)other;
 
 	unsigned int i;
 
@@ -126,10 +126,10 @@ IIndividual *CBotGAValues :: copy ()
 	return individual;
 }
 
-void CBotGAValues :: setVector ( const std::vector<float>& values )
+void CBotGAValues :: setVector ( std::vector<float> values )
 {
-	for (float value : values)
-		m_theValues.push_back(value);
+	for ( unsigned int i = 0; i < values.size(); i ++ )
+		m_theValues.push_back(values[i]);
 }
 
 void CBotGAValues :: freeMemory ()

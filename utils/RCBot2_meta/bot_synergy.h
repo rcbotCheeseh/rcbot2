@@ -47,7 +47,13 @@ public:
     bool setVisible ( edict_t *pEntity, bool bVisible ) override;
     void touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1 ) override;
     bool walkingTowardsWaypoint ( CWaypoint *pWaypoint, bool *bOffsetApplied, Vector &vOffset ) override;
+    void reachedCoverSpot (int flags) override;
     void updateConditions () override; // Overridden due to Synergy's quirks
+    void handleWeapons() override;
+    bool handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy) override;
+    virtual bool needHealth();
+    virtual bool needAmmo();
+    virtual bool filterAmmo(edict_t *pAmmo, const char *szclassname);
 protected:
     MyEHandle m_pNearbyWeapon; // weapons
     MyEHandle m_pNearbyHealthKit; // Healthkit
@@ -56,7 +62,15 @@ protected:
     MyEHandle m_pNearbyCrate; // ammo crate
     MyEHandle m_pNearbyGrenade; // grenades
     MyEHandle m_pNearbyMine; // combine mine
-    float m_fGoToGoalTime; // Time control used to check if the bot should roam or not
+    MyEHandle m_pNearbyItemCrate; // breakable item crate
+    MyEHandle m_pNearbyHealthCharger; // Health charger
+    MyEHandle m_pNearbyArmorCharger; // Armor/Suit charger
+    edict_t *m_pCurrentWeapon; // The bot current weapon
+    float m_flSuitPower; // HEV suit power level, range: 100-0
+    float m_flNextSprintTime; // Used to control the bot's sprinting
+    float m_flUseCrateTime; // Use ammo crate time delay
+    float m_flPickUpTime; // Pick ammo delay
+    //float m_fGoToGoalTime; // Time control used to check if the bot should roam or not
 };
 
 #endif

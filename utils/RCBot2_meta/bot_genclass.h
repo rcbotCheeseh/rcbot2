@@ -326,7 +326,7 @@ class dataUnconstArray
 			this->Clear();
 		}
 
-		inline Size (void)
+		inline Size ()
 		{
 			return m_iArrayMax;
 		}
@@ -369,31 +369,31 @@ class dataUnconstArray
 			m_iArrayMax = iNewSize;
 		}
 
-		inline void Destroy (void)
+		inline void Destroy ()
 		{
 			delete m_pArray;			
 		}
 
-		inline void Init ( void )
+		inline void Init ()
 		{
 			m_pArray = NULL;
 			m_iArrayMax = -1;
 		}
 
-		inline bool IsEmpty ( void )
+		inline bool IsEmpty ()
 		{
 			return (m_pArray == NULL);
 		}
 
 		
 
-		inline void Clear ( void )
+		inline void Clear ()
 		{
 			this->Destroy();
 			this->Init();
 		}
 
-		T Random ( void )
+		T Random ()
 		{
 			return m_pArray[RANDOM_INT(0,m_iArrayMax-1)];//RandomInt(0,m_iArrayMax-1)];
 		}
@@ -482,7 +482,7 @@ class dataUnconstArray
 			this->Clear();
 		}
 
-		inline Size (void)
+		inline Size ()
 		{
 			return m_iArrayMax;
 		}
@@ -525,31 +525,31 @@ class dataUnconstArray
 			m_iArrayMax = iNewSize;
 		}
 
-		inline void Destroy (void)
+		inline void Destroy ()
 		{
 			delete m_pArray;
 			m_pArray = NULL;
 			m_iArrayMax = -1;
 		}
 
-		inline void Init ( void )
+		inline void Init ()
 		{
 			m_pArray = NULL;
 			m_iArrayMax = -1;
 		}
 
-		inline bool IsEmpty ( void )
+		inline bool IsEmpty ()
 		{
 			return (m_pArray == NULL);
 		}
 
-		inline void Clear ( void )
+		inline void Clear ()
 		{
 			this->Destroy();
 			this->Init();
 		}
 
-		T Random ( void )
+		T Random ()
 		{
 			return m_pArray[RANDOM_INT(0,m_iArrayMax-1)];
 		}

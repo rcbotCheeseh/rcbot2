@@ -74,9 +74,9 @@ void CBotConfigFile :: load ()
 			line[--len] = '\0';
 		}
 
-		if (!len)
+		if(!len)
 			continue;
-		
+
 		logger->Log(LogLevel::TRACE, "Config entry '%s' read", line);
 		m_Commands.push_back(CStrings::getString(line));
 	}
@@ -118,14 +118,14 @@ void CBotConfigFile :: executeCommands ()
 
 void CRCBotTF2UtilFile :: init()
 {
-	for (auto& m_fUtil : m_fUtils)
+	for ( short unsigned int i = 0; i < UTIL_TYPE_MAX; i ++ )
 	{
-		for (auto& j : m_fUtil)
+		for ( short unsigned int j = 0; j < BOT_UTIL_MAX; j ++ )
 		{
 			for ( short unsigned int k = 0; k < 9; k ++ )
 			{
-				j[k].min = 0;
-				j[k].max = 0;
+				m_fUtils[i][j][k].min = 0;
+				m_fUtils[i][j][k].max = 0;
 			}
 		}
 	}
@@ -144,7 +144,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 {
 	init();
 
-	 for ( eTF2UtilType iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = static_cast<eTF2UtilType>(static_cast<int>(iFile) + 1) )
+	 for ( eTF2UtilType iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = (eTF2UtilType)((int)iFile+1) )
 	 {
 		 char szFilename[64];
 		 char szFullFilename[512];
@@ -163,7 +163,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 		if ( fp )
 		{
 			char line[256];
-			auto iUtil = static_cast<eBotAction>(0);
+			eBotAction iUtil = (eBotAction)0;
 
 			while ( fgets(line,255,fp) != NULL )
 			{
@@ -194,7 +194,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 
 						addUtilPerturbation(iUtil,iFile,iClassList);
 
-						iUtil = static_cast<eBotAction>(static_cast<int>(iUtil) + 1);
+						iUtil = (eBotAction)((int)iUtil+1);
 
 						if ( iUtil >= BOT_UTIL_MAX )
 							break;

@@ -57,7 +57,7 @@ public:
 		m_iModId = iModId;
 	}
 
-	bool forCurrentMod () const;
+	bool forCurrentMod ();
 
 	void setType ( char *szType );
 
@@ -72,17 +72,17 @@ public:
 		m_iEventId = iEventId;
 	}
 
-	inline bool isEventId ( int iEventId ) const
+	inline bool isEventId ( int iEventId )
 	{
 		return forCurrentMod() && (m_iEventId == iEventId);
 	}
 
-	inline bool hasEventId () const
+	inline bool hasEventId ()
 	{
 		return (m_iEventId != -1);
 	}
 
-	const char *getName () const
+	const char *getName ()
 	{
 		return m_szType;
 	}
@@ -105,6 +105,19 @@ public:
 
 	void execute ( IBotEventInterface *pEvent ) override;
 };
+
+class CRoundFreezeEndEvent : public CBotEvent
+{
+public:
+	CRoundFreezeEndEvent()
+	{
+		setType("round_freeze_end");
+		setMod(MOD_CSS);
+	}
+
+	void execute ( IBotEventInterface *pEvent ) override;
+};
+
 class CPostInventoryApplicationTF2 : public CBotEvent
 {
 public:
@@ -157,6 +170,18 @@ public:
 	CBombPickupEvent()
 	{
 		setType("bomb_pickup");
+		setMod(MOD_CSS);
+	}
+
+	void execute ( IBotEventInterface *pEvent ) override;
+};
+
+class CCSSBombPlantedEvent : public CBotEvent
+{
+public:
+	CCSSBombPlantedEvent()
+	{
+		setType("bomb_planted");
 		setMod(MOD_CSS);
 	}
 

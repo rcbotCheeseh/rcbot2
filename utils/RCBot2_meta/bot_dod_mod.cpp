@@ -108,11 +108,11 @@ bool CDODMod :: shouldAttack ( int iTeam )
 	static short int iFlags_1;
 	static short int iNumFlags;
 
+
 	iNumFlags = m_Flags.getNumFlags();
 
-	iFlags_0 = static_cast<int>((static_cast<float>(m_Flags.getNumFlagsOwned(iTeam == TEAM_ALLIES ? TEAM_AXIS : TEAM_ALLIES)) / iNumFlags) *
-		MAX_DOD_FLAGS);
-	iFlags_1 = static_cast<int>((static_cast<float>(m_Flags.getNumFlagsOwned(iTeam)) / iNumFlags) * MAX_DOD_FLAGS);
+	iFlags_0 = (int) (((float)m_Flags.getNumFlagsOwned(iTeam == TEAM_ALLIES ? TEAM_AXIS : TEAM_ALLIES) / iNumFlags)*MAX_DOD_FLAGS);
+	iFlags_1 = (int) (((float)m_Flags.getNumFlagsOwned(iTeam) / iNumFlags)*MAX_DOD_FLAGS);
 
 	return randomFloat(0.0,1.0) < fAttackProbLookUp[iFlags_0][iFlags_1];//gNetAttackOrDefend->getOutput();
 }
@@ -122,9 +122,9 @@ void CDODMod :: initMod ()
 ///-------------------------------------------------
 	CBotGlobals::botMessage(NULL,0,"Training DOD:S capture decision 'NN' ... hold on...");
 
-auto nn = new CBotNeuralNet(2,2,2,1,0.4f);
+	CBotNeuralNet *nn = new CBotNeuralNet(2,2,2,1,0.4f);
 
-auto tset = new CTrainingSet(2,1,4);
+	CTrainingSet *tset = new CTrainingSet(2,1,4);
 
 	tset->setScale(0.0,1.0);
 
@@ -832,14 +832,14 @@ void CDODMod ::roundStart()
 // find it and add it as a waypoint offset
 Vector CDODMod :: getGround ( CWaypoint *pWaypoint )
 {
-	for (auto& m_BombWaypoint : m_BombWaypoints)
+	for ( unsigned int i = 0; i < m_BombWaypoints.size(); i ++ )
 	{
-		if (m_BombWaypoint.pWaypoint == pWaypoint )
+		if ( m_BombWaypoints[i].pWaypoint == pWaypoint )
 		{
-			if (m_BombWaypoint.pEdict )
+			if ( m_BombWaypoints[i].pEdict )
 			{
-				if ( CClassInterface::getDODBombState(m_BombWaypoint.pEdict) == 0 )
-					return m_BombWaypoint.v_ground;
+				if ( CClassInterface::getDODBombState(m_BombWaypoints[i].pEdict) == 0 )
+					return m_BombWaypoints[i].v_ground;
 				
 				break;
 			}
@@ -917,7 +917,7 @@ void CDODMod ::clientCommand( edict_t *pEntity, int argc, const char *pcmd, cons
 				{
 					vcmd.voicecmd = i;
 
-					auto voicecmd = CBroadcastVoiceCommand(pEntity,vcmd.voicecmd); 
+					CBroadcastVoiceCommand voicecmd = CBroadcastVoiceCommand(pEntity,vcmd.voicecmd); 
 
 					CBots::botFunction(&voicecmd);
 
@@ -932,11 +932,11 @@ bool CDODMod :: isBreakableRegistered ( edict_t *pBreakable, int iTeam )
 {
 	static CWaypoint *pWpt;
 
-	for (auto& m_BreakableWaypoint : m_BreakableWaypoints)
+	for ( unsigned int i = 0; i < m_BreakableWaypoints.size(); i ++ )
 	{
-		if (m_BreakableWaypoint.pEdict == pBreakable )
+		if ( m_BreakableWaypoints[i].pEdict == pBreakable )
 		{
-			pWpt = m_BreakableWaypoint.pWaypoint;
+			pWpt = m_BreakableWaypoints[i].pWaypoint;
 
 			if ( pWpt->hasFlag(CWaypointTypes::W_FL_NOALLIES) )
 				return iTeam != TEAM_ALLIES;

@@ -227,7 +227,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 
 			if ( pWeapon && (pWeapon->getAmmo(this) < 1) )
 			{
-				auto pSched = new CBotSchedule();
+				CBotSchedule *pSched = new CBotSchedule();
 				
 				pSched->addTask(new CFindPathTask(m_pAmmoCrate));
 				pSched->addTask(new CBotHL2DMUseButton(m_pAmmoCrate));
@@ -254,7 +254,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 		return true;
 	case BOT_UTIL_HL2DM_USE_HEALTH_CHARGER:
 		{
-			auto pSched = new CBotSchedule();
+			CBotSchedule *pSched = new CBotSchedule();
 			
 			pSched->addTask(new CFindPathTask(m_pHealthCharger));
 			pSched->addTask(new CBotHL2DMUseCharger(m_pHealthCharger,CHARGER_HEALTH));
@@ -266,7 +266,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 		}
 	case BOT_UTIL_HL2DM_USE_CHARGER:
 		{
-			auto pSched = new CBotSchedule();
+			CBotSchedule *pSched = new CBotSchedule();
 			
 			pSched->addTask(new CFindPathTask(m_pCharger));
 			pSched->addTask(new CBotHL2DMUseCharger(m_pCharger,CHARGER_ARMOR));
@@ -278,18 +278,18 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 		}
 	case BOT_UTIL_HL2DM_GRAVIGUN_PICKUP:
 		{
-			auto pSched = new CBotSchedule(new CBotGravGunPickup(m_pCurrentWeapon,m_NearestPhysObj));
+			CBotSchedule *pSched = new CBotSchedule(new CBotGravGunPickup(m_pCurrentWeapon,m_NearestPhysObj));
 			pSched->setID(SCHED_GRAVGUN_PICKUP);
 			m_pSchedules->add(pSched);
 			return true;
 		}
 	case BOT_UTIL_FIND_LAST_ENEMY:
 		{
-			auto vVelocity = Vector(0,0,0);
+			Vector vVelocity = Vector(0,0,0);
 			CClient *pClient = CClients::get(m_pLastEnemy);
-			auto pSchedule = new CBotSchedule();
-
-			auto pFindPath = new CFindPathTask(m_vLastSeeEnemy);	
+			CBotSchedule *pSchedule = new CBotSchedule();
+			
+			CFindPathTask *pFindPath = new CFindPathTask(m_vLastSeeEnemy);	
 
 			pFindPath->setCompleteInterrupt(CONDITION_SEE_CUR_ENEMY);
 			
@@ -318,7 +318,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 
 			if ( pWaypoint )
 			{
-				auto pSched = new CBotSchedule();
+				CBotSchedule *pSched = new CBotSchedule();
 				pSched->addTask(new CThrowGrenadeTask(m_pWeapons->getWeapon(CWeapons::getWeapon(HL2DM_WEAPON_FRAG)),getAmmo(CWeapons::getWeapon(HL2DM_WEAPON_FRAG)->getAmmoIndex1()),m_vLastSeeEnemyBlastWaypoint)); // first - throw
 				pSched->addTask(new CFindPathTask(pWaypoint->getOrigin())); // 2nd -- hide
 				m_pSchedules->add(pSched);
@@ -333,7 +333,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 
 			if ( pWaypoint )
 			{
-				auto snipe = new CBotSchedule();
+				CBotSchedule *snipe = new CBotSchedule();
 				CBotTask *findpath = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
 
 				// use DOD task
@@ -622,7 +622,7 @@ bool CHLDMBot::checkStuck()
 				if ( !m_pSchedules->hasSchedule(SCHED_GRAVGUN_PICKUP) )
 				{
 					m_pSchedules->freeMemory();
-					auto pSched = new CBotSchedule(new CBotGravGunPickup(m_pCurrentWeapon,m_NearestPhysObj));
+					CBotSchedule *pSched = new CBotSchedule(new CBotGravGunPickup(m_pCurrentWeapon,m_NearestPhysObj));
 					pSched->setID(SCHED_GRAVGUN_PICKUP);
 					m_pSchedules->add(pSched);
 				}

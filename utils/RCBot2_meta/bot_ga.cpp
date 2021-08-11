@@ -57,8 +57,8 @@ void CPopulation :: add ( IIndividual *individual )
 
 void CPopulation :: freeMemory ()
 {
-	for (auto& m_theIndividual : m_theIndividuals)
-		delete m_theIndividual;
+	for ( unsigned int i = 0; i < m_theIndividuals.size(); i ++ )
+		delete m_theIndividuals[i];
 
 	m_theIndividuals.clear();
 }

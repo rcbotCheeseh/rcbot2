@@ -148,8 +148,7 @@ public:
 		const Vector &amins, const Vector &amaxs,
 		const Vector &bmins, const Vector &bmaxs );
 
-	static float grenadeWillLand (Vector vOrigin, Vector vEnemy, float fProjSpeed = 400.0f, float fGrenadePrimeTime = 5.0f,
-	                              const float* fAngle = NULL);
+	static float grenadeWillLand (  Vector vOrigin, Vector vEnemy, float fProjSpeed = 400.0f, float fGrenadePrimeTime = 5.0f, float *fAngle = NULL );
 	////////////////////////////////////////////////////////////////////////
 
 	/*static Vector forwardVec ();
@@ -203,6 +202,20 @@ public:
 	static bool isBreakableOpen ( edict_t *pBreakable );
 
 	static Vector getVelocity ( edict_t *pPlayer );
+
+	static inline bool isBoundsDefinedInEntitySpace( edict_t *pEntity )
+	{
+		return ((pEntity->GetCollideable()->GetSolidFlags() & FSOLID_FORCE_WORLD_ALIGNED) == 0 &&
+		pEntity->GetCollideable()->GetSolid() != SOLID_BBOX && pEntity->GetCollideable()->GetSolid() != SOLID_NONE);
+	}
+	
+	static Vector getOBBCenter( edict_t *pEntity );
+
+	static Vector collisionToWorldSpace( const Vector &in, edict_t *pEntity );
+
+	static Vector worldCenter( edict_t *pEntity );
+
+	static bool pointIsWithin( edict_t *pEntity, const Vector &vPoint );
 
 	////////
 	static CBotSubcommands *m_pCommands;

@@ -128,7 +128,7 @@ CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 	}
 	
 	// no squad with leader, make one
-	const auto theSquad = new CBotSquad(pLeader, pMember);
+	CBotSquad *theSquad = new CBotSquad(pLeader, pMember);
 	
 	if ( theSquad != NULL )
 	{
@@ -408,7 +408,7 @@ void CBotSquad::AddMember ( edict_t *pEdict )
 	}
 }
 
-size_t CBotSquad::numMembers () const
+size_t CBotSquad::numMembers ()
 {
 	return m_SquadMembers.size();
 }

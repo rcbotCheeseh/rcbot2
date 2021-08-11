@@ -74,10 +74,10 @@ void CRCBotKeyValueList :: parseFile ( FILE *fp )
 
 CRCBotKeyValueList :: ~CRCBotKeyValueList()
 {
-	for (auto& m_KV : m_KVs)
+	for ( unsigned int i = 0; i < m_KVs.size(); i ++ )
 	{
-		delete m_KV;
-		m_KV = NULL;
+		delete m_KVs[i];
+		m_KVs[i] = NULL;
 	}
 
 	m_KVs.clear();
@@ -85,10 +85,10 @@ CRCBotKeyValueList :: ~CRCBotKeyValueList()
 
 CRCBotKeyValue *CRCBotKeyValueList :: getKV ( const char *key )
 {
-	for (auto& m_KV : m_KVs)
+	for ( unsigned int i = 0; i < m_KVs.size(); i ++ )
 	{
-		if ( FStrEq(m_KV->getKey(),key) )
-			return m_KV;
+		if ( FStrEq(m_KVs[i]->getKey(),key) )
+			return m_KVs[i];
 	}
 
 	return NULL;

@@ -228,7 +228,7 @@ CBaseHandle *CClassInterfaceValue :: getEntityHandle ( edict_t *edict )
 { 
 	getData(edict); 
 
-	return static_cast<CBaseHandle*>(m_data);
+	return (CBaseHandle *)m_data;
 }
 
 edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict ) 
@@ -243,7 +243,7 @@ edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict )
 	if (m_berror)
 		return NULL;
 
-	hndl = static_cast<CBaseHandle*>(m_data); 
+	hndl = (CBaseHandle *)m_data; 
 
 	if ( hndl )
 		return INDEXENT(hndl->GetEntryIndex());
@@ -568,11 +568,16 @@ void CClassInterface:: init ()
 		DEFINE_GETPROP(GETPROP_CSS_ARMOR, "CCSPlayer", "m_ArmorValue", 0);
 		DEFINE_GETPROP(GETPROP_CSS_HASDEFUSER, "CCSPlayer", "m_bHasDefuser", 0);
 		DEFINE_GETPROP(GETPROP_CSS_HASHELMET, "CCSPlayer", "m_bHasHelmet", 0);
+		DEFINE_GETPROP(GETPROP_CSS_BOMBTICKING, "CPlantedC4", "m_bBombTicking", 0);
 
-		for (auto& g_GetProp : g_GetProps)
+		// Generic
+		DEFINE_GETPROP(GETPROP_PLAYER_FOV, "CBasePlayer", "m_iFOV", 0);
+		DEFINE_GETPROP(GETPROP_PLAYER_LIFESTATE, "CBasePlayer", "m_lifeState", 0);
+
+		for ( unsigned int i = 0; i < GET_PROPDATA_MAX; i ++ )
 		{
 			//if ( g_GetProps[i]
-			g_GetProp.findOffset();
+			g_GetProps[i].findOffset();
 		}
 }
 
@@ -625,6 +630,9 @@ bool CClassInterface :: getTF2ObjectiveResource ( CTFObjectiveResource *pResourc
 
 void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 {
+	static IServerUnknown *pUnknown;
+	static CBaseEntity *pEntity;
+
 	if (!m_offset || (edict==NULL))
 	{
 		m_data = NULL;
@@ -634,9 +642,7 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 
 	if (bIsEdict)
 	{
-		static IServerUnknown *pUnknown;
-		static CBaseEntity *pEntity;
-		auto pEdict = static_cast<edict_t*>(edict);
+		edict_t *pEdict = reinterpret_cast<edict_t*>(edict);
 
 		pUnknown = pEdict->GetUnknown();
 
@@ -649,12 +655,12 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 
 		pEntity = pUnknown->GetBaseEntity();
 
-		m_data = static_cast<void*>((char*)pEntity + m_offset);
+		m_data = (void *)((char *)pEntity + m_offset);
 	}
 	else
 	{
 		// raw
-		m_data = static_cast<void*>((char*)edict + m_offset);
+		m_data = (void *)((char *)edict + m_offset);
 	}
 
 }
@@ -663,7 +669,7 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 {
 	edict_t *pfound = NULL;
 	// speed up loop by by using smaller ints in register
-	const auto max = static_cast<short>(gpGlobals->maxEntities);
+	const short int max = (short int)gpGlobals->maxEntities;
 
 	for (short int i = 0; i < max; i++)
 	{

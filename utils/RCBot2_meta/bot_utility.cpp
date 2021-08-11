@@ -147,6 +147,9 @@ const char* g_szUtils[BOT_UTIL_MAX + 1] =
  "BOT_UTIL_MOVEUP_MG",
  "BOT_UTIL_SNIPE_CROSSBOW",
  "BOT_UTIL_BUY",
+ "BOT_UTIL_WAIT_LAST_ENEMY",
+ "BOT_UTIL_ENGAGE_ENEMY",
+ "BOT_UTIL_SEARCH_FOR_BOMB",
 "BOT_UTIL_MAX"
 };
 
@@ -176,9 +179,9 @@ void CBotUtilities::execute()
 {
 	m_pBest.head = NULL;
 
-	for (auto& m_Utilitie : m_Utilities)
+	for (unsigned int i = 0; i < m_Utilities.size(); i++)
 	{
-		CBotUtility* pUtil = &m_Utilitie;
+		CBotUtility* pUtil = &(m_Utilities[i]);
 		const float fUtil = pUtil->getUtility();
 
 		// if bot can do this action
@@ -188,7 +191,7 @@ void CBotUtilities::execute()
 			util_node_t* temp = m_pBest.head;
 
 			// put in correct order by making a linked list
-			const auto pnew = static_cast<util_node_t*>(malloc(sizeof(util_node_t)));
+			util_node_t* pnew = (util_node_t*)malloc(sizeof(util_node_t));
 
 			if (pnew != NULL)
 			{

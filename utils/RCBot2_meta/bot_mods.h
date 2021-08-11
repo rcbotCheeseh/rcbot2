@@ -39,6 +39,7 @@
 #include "bot_dod_bot.h"
 #include "bot_waypoint.h"
 #include "bot_tf2_points.h"
+#include "bot_cvars.h"
 
 #define MAX_CAP_POINTS 32
 
@@ -101,20 +102,20 @@ public:
 // linux fix
 	void setup ( const char *szModFolder, eModId iModId, eBotType iBotType, const char *szWeaponListName );
 
-	bool isModFolder ( char *szModFolder ) const;
+	bool isModFolder ( char *szModFolder );
 
-	char *getModFolder () const;
+	char *getModFolder ();
 
 	virtual const char *getPlayerClass ()
 	{
 		return "CBasePlayer";
 	}
 
-	eModId getModId () const;
+	eModId getModId ();
 
 	virtual bool isAreaOwnedByTeam (int iArea, int iTeam) { return (iArea == 0); }
 
-	eBotType getBotType () const { return m_iBotType; }
+	eBotType getBotType () { return m_iBotType; }
 
 	virtual void addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags, int *iArea, float *fMaxDistance ){ return; }
 
@@ -139,7 +140,7 @@ public:
 		*iOff = 0;
 	}
 
-	inline bool needResetCheatFlag () const
+	inline bool needResetCheatFlag ()
 	{
 		return m_bBotCommand_ResetCheatFlag;
 	}
@@ -210,14 +211,14 @@ public:
 		memset(m_pFlags,0,sizeof(edict_t*)*MAX_DOD_FLAGS);
 		memset(m_pBombs,0,sizeof(edict_t*)*MAX_DOD_FLAGS*2);
 
-		for (int& i : m_iWaypoint)
+		for ( short int i = 0; i < MAX_DOD_FLAGS; i ++ )
 		{
-			i = -1;
+			m_iWaypoint[i] = -1;
 		}
 	}
 
-	int getNumFlags () const { return m_iNumControlPoints; }
-	int getNumFlagsOwned (int iTeam) const
+	int getNumFlags () { return m_iNumControlPoints; }
+	int getNumFlagsOwned (int iTeam)
 	{
 		int count = 0;
 
@@ -314,7 +315,7 @@ public:
 	}
 
 	inline bool ownsFlag ( edict_t *pFlag, int iTeam ) { return ownsFlag(getFlagID(pFlag),iTeam); }
-	inline bool ownsFlag ( int iFlag, int iTeam ) const
+	inline bool ownsFlag ( int iFlag, int iTeam )
 	{
 		if ( iFlag == -1 )
 			return false;
@@ -322,7 +323,7 @@ public:
 		return m_iOwner[iFlag] == iTeam;
 	}
 
-	inline int numFlagsOwned (int iTeam) const
+	inline int numFlagsOwned (int iTeam)
 	{
 		int count = 0;
 
@@ -336,7 +337,7 @@ public:
 	}
 
 	inline int numCappersRequired ( edict_t *pFlag, int iTeam ) { return numCappersRequired(getFlagID(pFlag),iTeam); }
-	inline int numCappersRequired ( int iFlag, int iTeam ) const
+	inline int numCappersRequired ( int iFlag, int iTeam )
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -378,7 +379,7 @@ public:
 	bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin );
 	bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin );
 
-	inline int getNumBombsRequired ( int iId ) const
+	inline int getNumBombsRequired ( int iId )
 	{
 		if ( iId == -1 )
 			return false;
@@ -391,7 +392,7 @@ public:
 		return getNumBombsRequired(getBombID(pBomb));
 	}
 
-	inline int getNumBombsRemaining ( int iId ) const
+	inline int getNumBombsRemaining ( int iId )
 	{
 		if ( iId == -1 )
 			return false;
@@ -404,7 +405,7 @@ public:
 		return getNumBombsRemaining(getBombID(pBomb));
 	}
 
-	inline bool isBombBeingDefused ( int iId ) const
+	inline bool isBombBeingDefused ( int iId )
 	{
 		if ( iId == -1 )
 			return false;
@@ -421,7 +422,7 @@ public:
 
 	inline int numFriendliesAtCap ( edict_t *pFlag, int iTeam ) { return numFriendliesAtCap(getFlagID(pFlag),iTeam); }
 
-	inline int numFriendliesAtCap ( int iFlag, int iTeam ) const
+	inline int numFriendliesAtCap ( int iFlag, int iTeam )
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -429,7 +430,7 @@ public:
 		return (iTeam == TEAM_ALLIES) ? (m_iNumAllies[iFlag]) : (m_iNumAxis[iFlag]);
 	}
 
-	inline int numEnemiesAtCap ( int iFlag, int iTeam ) const
+	inline int numEnemiesAtCap ( int iFlag, int iTeam )
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -480,7 +481,7 @@ public:
 		return getBombID(pent) != -1;
 	}
 
-	inline int getNumBombsOnMap ( int iTeam ) const
+	inline int getNumBombsOnMap ( int iTeam )
 	{
 		if ( iTeam == TEAM_ALLIES )
 			return m_iNumAlliesBombsOnMap;
@@ -562,10 +563,10 @@ public:
 
 	static inline CWaypoint *getBombWaypoint ( edict_t *pBomb )
 	{
-		for (auto& m_BombWaypoint : m_BombWaypoints)
+		for ( unsigned int i = 0; i < m_BombWaypoints.size(); i ++ )
 		{
-			if (m_BombWaypoint.pEdict == pBomb )
-				return m_BombWaypoint.pWaypoint;
+			if ( m_BombWaypoints[i].pEdict == pBomb )
+				return m_BombWaypoints[i].pWaypoint;
 		}
 
 		return NULL;
@@ -573,9 +574,9 @@ public:
 
 	static inline bool isPathBomb ( edict_t *pBomb )
 	{
-		for (auto& m_BombWaypoint : m_BombWaypoints)
+		for ( unsigned int i = 0; i < m_BombWaypoints.size(); i ++ )
 		{
-			if (m_BombWaypoint.pEdict == pBomb )
+			if ( m_BombWaypoints[i].pEdict == pBomb )
 				return true;
 		}
 
@@ -616,14 +617,17 @@ protected:
 	static float fAttackProbLookUp[MAX_DOD_FLAGS+1][MAX_DOD_FLAGS+1];
 };
 
+typedef enum
+{
+	CS_MAP_DEATHMATCH = 0, // Generic Maps
+	CS_MAP_BOMBDEFUSAL, // Bomb Defusal maps
+	CS_MAP_HOSTAGERESCUE, // Hostage Rescue maps
+	CS_MAP_MAX
+}eCSSMapType;
+
 class CCounterStrikeSourceMod : public CBotMod
 {
 public:
-	static const int CS_TEAM_UNASSIGNED = 0;
-	static const int CS_TEAM_SPECTATOR = 1;
-	static const int CS_TEAM_TERRORIST = 2;
-	static const int CS_TEAM_COUNTERTERRORIST = 3;
-
 	CCounterStrikeSourceMod()
 	{
 		setup("cstrike", MOD_CSS, BOTTYPE_CSS, "CSS");
@@ -635,15 +639,49 @@ public:
 	}
 
 	void initMod() override;
-
-	//void mapInit ();
-
+	void mapInit() override;
+	bool checkWaypointForTeam(CWaypoint *pWpt, int iTeam) override;
+	static void onRoundStart();
+	static void onFreezeTimeEnd();
+	static void onBombPlanted();
+	inline static bool isMapType(eCSSMapType MapType) { return MapType == m_MapType; }
+	static bool isBombCarrier(CBot *pBot);
+	inline static float getRemainingRoundTime()
+	{
+		return ((m_fRoundStartTime + (mp_roundtime->GetFloat() * 60.0f)) - engine->Time());
+	}
+	inline static float getRemainingBombTime()
+	{
+		return ((m_fRoundStartTime + mp_c4timer->GetFloat()) - engine->Time());
+	}
+	inline static bool isBombPlanted()
+	{
+		return m_bIsBombPlanted;
+	}
+	inline static edict_t *getBomb()
+	{
+		return engine->PEntityOfEntIndex(m_hBomb.GetEntryIndex());
+	}
+	static bool isBombDropped();
+	static bool isBombDefused();
+	inline static bool wasBombFound()
+	{
+		return m_bBombWasFound;
+	}
+	inline static void setBombFound(bool set)
+	{
+		m_bBombWasFound = set;
+	}
+	static bool canHearPlantedBomb(CBot *pBot);
+	static bool isScoped(CBot *pBot);
 	//void entitySpawn ( edict_t *pEntity );
-protected:
-	// storing mod specific info
-	std::vector<edict_t*> m_pHostages;
-	std::vector<edict_t*> m_pBombPoints;
-	std::vector<edict_t*> m_pRescuePoints;
+private:
+	static eCSSMapType m_MapType; // Map Type
+	static float m_fRoundStartTime; // The time when the round started
+	static float m_fBombPlantedTime; // The time when the bomb was planted
+	static bool m_bIsBombPlanted; // Is the bomb planted?
+	static bool m_bBombWasFound; // Did the CTs locate the bomb?
+	static CBaseHandle m_hBomb; // The bomb. Experimental CBaseHandle instead of MyEHandle
 };
 
 class CTimCoopMod : public CBotMod
@@ -683,6 +721,8 @@ public:
 	{
 		setup("FortressForever", MOD_FF, BOTTYPE_FF, "FF");
 	}
+private:
+
 };
 
 class CHLDMSourceMod : public CBotMod
@@ -1067,10 +1107,10 @@ public:
 
 	static bool isSentrySapped ( edict_t *pSentry )
 	{
-		for (auto& m_SentryGun : m_SentryGuns)
+		for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
 		{
-			if (m_SentryGun.sentry.get() == pSentry )
-				return m_SentryGun.sapper.get()!=NULL;
+			if ( m_SentryGuns[i].sentry.get() == pSentry )
+				return m_SentryGuns[i].sapper.get()!=NULL;
 		}
 
 		return false;
@@ -1078,10 +1118,10 @@ public:
 
 	static bool isTeleporterSapped ( edict_t *pTele )
 	{
-		for (auto& m_Teleporter : m_Teleporters)
+		for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
 		{
-			if ( (m_Teleporter.entrance.get() == pTele) || (m_Teleporter.exit.get() == pTele) )
-				return m_Teleporter.sapper.get()!=NULL;
+			if ( (m_Teleporters[i].entrance.get() == pTele) || (m_Teleporters[i].exit.get() == pTele) )
+				return m_Teleporters[i].sapper.get()!=NULL;
 		}
 
 		return false;
@@ -1089,10 +1129,10 @@ public:
 
 	static bool isDispenserSapped ( edict_t *pDisp )
 	{
-		for (auto& m_Dispenser : m_Dispensers)
+		for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
 		{
-			if (m_Dispenser.disp.get() == pDisp )
-				return m_Dispenser.sapper.get()!=NULL;
+			if ( m_Dispensers[i].disp.get() == pDisp )
+				return m_Dispensers[i].sapper.get()!=NULL;
 		}
 
 		return false;
@@ -1282,10 +1322,10 @@ public:
 
 	static inline edict_t *getButtonAtWaypoint ( CWaypoint *pWaypoint )
 	{
-		for (auto& m_LiftWaypoint : m_LiftWaypoints)
+		for ( unsigned int i = 0; i < m_LiftWaypoints.size(); i ++ )
 		{
-			if (m_LiftWaypoint.pWaypoint == pWaypoint )
-				return m_LiftWaypoint.pEdict;
+			if ( m_LiftWaypoints[i].pWaypoint == pWaypoint )
+				return m_LiftWaypoints[i].pEdict;
 		}
 
 		return NULL;

@@ -47,8 +47,188 @@
 
 #include "logging.h"
 
+// For debug messages
+const char *szMapTypes[CS_MAP_MAX+1] =
+{
+    "DEATHMATCH",
+    "BOMB DEFUSAL",
+    "HOSTAGE RESCUE",
+    "MAP TYPE MAX"
+};
+
+eCSSMapType CCounterStrikeSourceMod::m_MapType = CS_MAP_DEATHMATCH;
+float CCounterStrikeSourceMod::m_fRoundStartTime = 0.0f;
+float CCounterStrikeSourceMod::m_fBombPlantedTime = 0.0f;
+bool CCounterStrikeSourceMod::m_bIsBombPlanted = false;
+bool CCounterStrikeSourceMod::m_bBombWasFound = false;
+CBaseHandle CCounterStrikeSourceMod::m_hBomb = NULL;
+
+
 void CCounterStrikeSourceMod::initMod()
 {
-    CWeapons::loadWeapons((m_szWeaponListName == NULL) ? "CSSWEAPONS" : m_szWeaponListName, CSSWeaps); // Load weapon list
+    CWeapons::loadWeapons((m_szWeaponListName == NULL) ? "CSS" : m_szWeaponListName, CSSWeaps); // Load weapon list
     logger->Log(LogLevel::TRACE, "CCounterStrikeSourceMod::initMod()");
+}
+
+void CCounterStrikeSourceMod::mapInit()
+{
+	const string_t mapname = gpGlobals->mapname;
+	const char *szmapname = mapname.ToCStr();
+
+    if(strncmp(szmapname, "de_", 3) == 0)
+        m_MapType = CS_MAP_BOMBDEFUSAL;
+    else if(strncmp(szmapname, "cs_", 3) == 0)
+        m_MapType = CS_MAP_HOSTAGERESCUE;
+    else
+        m_MapType = CS_MAP_DEATHMATCH;
+
+    logger->Log(LogLevel::TRACE, "CCounterStrikeSourceMod::mapInit()\nMap Type: %s", szMapTypes[m_MapType]);
+}
+
+bool CCounterStrikeSourceMod::checkWaypointForTeam(CWaypoint *pWpt, int iTeam)
+{
+    return (!pWpt->hasFlag(CWaypointTypes::W_FL_NOCOUNTERTR)||(iTeam!=CS_TEAM_COUNTERTERRORIST))&&(!pWpt->hasFlag(CWaypointTypes::W_FL_NOTERRORIST)||(iTeam!=CS_TEAM_TERRORIST));
+}
+
+/**
+ * Checks if the given bot is a bomb carrier (has C4)
+ * 
+ * @param pBot      The bot to check
+ * @return          TRUE if the bot is a bomb carrier
+ **/
+bool CCounterStrikeSourceMod::isBombCarrier(CBot *pBot)
+{
+    return pBot->getWeapons()->hasWeapon(CS_WEAPON_C4);
+}
+
+/**
+ * Checks if the C4 is dropped on the ground
+ * 
+ * @return      TRUE if dropped
+ **/
+bool CCounterStrikeSourceMod::isBombDropped()
+{
+    edict_t *pBomb = getBomb();
+
+    if(m_bIsBombPlanted)
+        return false;
+
+    if(pBomb)
+    {
+        return CClassInterface::getWeaponState(pBomb) == WEAPON_NOT_CARRIED;
+    }
+
+    return false;
+}
+
+/**
+ * Checks if the C4 was defused
+ * 
+ * @return      TRUE if defused
+ **/
+bool CCounterStrikeSourceMod::isBombDefused()
+{
+    return !(CClassInterface::isCSBombTicking(INDEXENT(m_hBomb.GetEntryIndex())));
+}
+
+/**
+ * Checks if the given bot can hear the planted c4 ticking
+ * 
+ * @param pBot      The bot to check
+ * @return          TRUE if the bot can hear
+ **/
+bool CCounterStrikeSourceMod::canHearPlantedBomb(CBot *pBot)
+{
+    if(!isBombPlanted())
+        return false;
+
+    edict_t *pBomb = getBomb();
+
+    if(pBomb)
+    {
+        return (pBot->distanceFrom(pBomb) <= 2048.0f);
+    }
+
+    return false;
+}
+
+/**
+ * Checks if the given bot is scoped
+ * 
+ * @param pBot      The bot to check
+ * @return          TRUE if the bot is scoped
+ **/
+bool CCounterStrikeSourceMod::isScoped(CBot *pBot)
+{
+    const int fov = CClassInterface::getPlayerFOV(pBot->getEdict());
+    return fov != 0 && fov != 90; // For bots, FOVs are 0 or 90 when not scoped.
+}
+
+/**
+ * Called when a new round starts
+ **/
+void CCounterStrikeSourceMod::onRoundStart()
+{
+    // Empty for now, reset round based logic
+    logger->Log(LogLevel::TRACE, "CCounterStrikeSourceMod::OnRoundStart()");
+    m_bIsBombPlanted = false;
+    setBombFound(false);
+    m_hBomb.Term();
+}
+
+/**
+ * Called when the freeze time ends. Note: This is always called even if freeze time is disabled.
+ **/
+void CCounterStrikeSourceMod::onFreezeTimeEnd()
+{
+    logger->Log(LogLevel::TRACE, "CCounterStrikeSourceMod::OnFreezeTimeEnd()");
+    m_fRoundStartTime = engine->Time();
+
+    edict_t *pC4 = CClassInterface::FindEntityByClassnameNearest(Vector(0.0, 0.0, 0.0), "weapon_c4", 32000.0f);
+    if(pC4)
+    {
+        m_hBomb.Init(engine->IndexOfEdict(pC4), pC4->m_NetworkSerialNumber);
+        logger->Log(LogLevel::DEBUG, "CSS C4: %i %i %s", m_hBomb.GetEntryIndex(), m_hBomb.GetSerialNumber(), m_hBomb.IsValid() ? "Valid" : "Invalid");
+    }
+
+	for(short int i = 0; i < MAX_PLAYERS; i++)
+	{
+        CBot *pBot = CBots::get(i);
+
+		if(pBot && pBot->inUse())
+        {
+            pBot->select_CWeapon(CWeapons::getWeapon(CS_WEAPON_KNIFE));
+        }
+	}
+}
+
+/**
+ * Called when the bomb is planted
+ **/
+void CCounterStrikeSourceMod::onBombPlanted()
+{
+    logger->Log(LogLevel::TRACE, "CCounterStrikeSourceMod::OnBombPlanted()");
+    m_bIsBombPlanted = true;
+    m_fBombPlantedTime = engine->Time();
+    m_hBomb.Term();
+
+    edict_t *pPlantedC4 = CClassInterface::FindEntityByNetClass(gpGlobals->maxClients+1, "CPlantedC4");
+    if(pPlantedC4)
+    {
+        m_hBomb.Init(engine->IndexOfEdict(pPlantedC4), pPlantedC4->m_NetworkSerialNumber);
+        logger->Log(LogLevel::DEBUG, "CSS C4: %i %i %s", m_hBomb.GetEntryIndex(), m_hBomb.GetSerialNumber(), m_hBomb.IsValid() ? "Valid" : "Invalid");
+    }
+
+	for(short int i = 0; i < MAX_PLAYERS; i++)
+	{
+        CBot *pBot = CBots::get(i);
+
+		if(pBot && pBot->inUse())
+        {
+            if(pBot->distanceFrom(getBomb()) >= 512.0f)
+            {
+                pBot->updateCondition(CONDITION_CHANGED);
+            }
+        }
+	}
 }

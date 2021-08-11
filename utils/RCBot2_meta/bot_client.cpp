@@ -54,7 +54,7 @@ bool CClients::m_bClientsDebugging = false;
 extern IVDebugOverlay *debugoverlay;
 
 
-void CToolTip::send(edict_t *pPlayer) const
+void CToolTip::send(edict_t *pPlayer)
 {
 	//CRCBotPlugin::HudTextMessage(pPlayer,m_pszMessage);
 
@@ -101,7 +101,7 @@ void CClient :: init ()
 	m_fUpdatePos = 0;
 }
 
-bool CClient :: needToRenderMenu () const
+bool CClient :: needToRenderMenu () 
 { 
 	return m_fNextUpdateMenuTime < engine->Time(); 
 }
@@ -117,7 +117,7 @@ void CClient :: setEdict ( edict_t *pPlayer )
 	m_pPlayerInfo = playerinfomanager->GetPlayerInfo(pPlayer);
 }
 	
-void CClient :: setupMenuCommands () const
+void CClient :: setupMenuCommands ()
 {
 	/*engine->ClientCommand(m_pPlayer,"alias \"rcbot_setup\" \"bind 0 menuselect0\"");
 	engine->ClientCommand(m_pPlayer,"rcbot_setup");bind 2 \"menuselect 2\"");*/
@@ -133,7 +133,7 @@ void CClient :: setupMenuCommands () const
 	engine->ClientCommand(m_pPlayer,"bind 0 \"menuselect 0\"");
 }
 	
-void CClient :: resetMenuCommands () const
+void CClient :: resetMenuCommands ()
 {
 	/*engine->ClientCommand(m_pPlayer,"alias \"rcbot_reset\" \"bind 0 slot10\"");
 	engine->ClientCommand(m_pPlayer,"rcbot_reset");bind 2 \"menuselect 2\"");*/
@@ -230,7 +230,7 @@ public:
 		}
 	}
 
-	CBot *getNearestBot () const
+	CBot *getNearestBot ()
 	{
 		return m_pNearestBot;
 	}
@@ -431,6 +431,7 @@ void CClient :: think ()
 	{
 		if ( !m_NextTooltip.empty() )
 		{
+			m_NextTooltip.front().send(m_pPlayer);
 			m_NextTooltip.pop();
 
 			m_fNextBotServerMessage = engine->Time() + 11.0f;
@@ -647,9 +648,9 @@ void CClient :: think ()
 				m_fCanPlaceLadder = 0;
 
 				// need to unset every check point when going on ladder first time
-				for (auto& m_vLastAutoWaypointCheckPo : m_vLastAutoWaypointCheckPos)
+				for ( int i = 0; i < MAX_STORED_AUTOWAYPOINT; i ++ )
 				{
-					m_vLastAutoWaypointCheckPo.UnSetPoint();					
+						m_vLastAutoWaypointCheckPos[i].UnSetPoint();					
 				}
 			}
 			else if ( !(iMoveType == MOVETYPE_FLY) && (m_iLastMoveType == MOVETYPE_FLY) )
@@ -961,7 +962,7 @@ void CClients::giveMessage(char *msg,float fTime, edict_t *pPlayer )
 	}
 }
 
-const char *CClient :: getName () const
+const char *CClient :: getName ()
 {
 	IPlayerInfo *playerinfo = playerinfomanager->GetPlayerInfo( m_pPlayer );
 
@@ -987,7 +988,7 @@ void CClient :: clientActive ()
 	if ( playerinfo )
 	{
 		// store steam id
-		m_szSteamID = const_cast<char*>(playerinfo->GetNetworkIDString());
+		m_szSteamID = (char*)playerinfo->GetNetworkIDString();
 	
 		// check my access levels
 		CAccessClients::checkClientAccess(this);
@@ -1038,17 +1039,17 @@ void CClient :: clientDisconnected ()
 	init();
 }
 
-int CClient :: accessLevel () const
+int CClient :: accessLevel ()
 {
 	return m_iAccessLevel;
 }
 
-bool CClient :: isUsed () const
+bool CClient :: isUsed ()
 {
 	return (m_pPlayer != NULL);
 }
 
-Vector CClient :: getOrigin () const
+Vector CClient :: getOrigin ()
 {
 	IPlayerInfo *playerinfo = playerinfomanager->GetPlayerInfo( m_pPlayer );
 
@@ -1094,9 +1095,9 @@ void CClients :: clientThink ()
 
 	m_bClientsDebugging = false;
 
-	for (auto& m_Client : m_Clients)
+	for ( int i = 0; i < MAX_PLAYERS; i ++ )
 	{
-		pClient = &m_Client;
+		pClient = &m_Clients[i];
 
 		if ( !pClient->isUsed() )
 			continue;
@@ -1112,9 +1113,9 @@ void CClients :: clientThink ()
 
 CClient *CClients :: findClientBySteamID ( char *szSteamID )
 {
-	for (auto& m_Client : m_Clients)
+	for ( int i = 0; i < MAX_PLAYERS; i ++ )
 	{
-		CClient* pClient = &m_Client;
+		CClient* pClient = &m_Clients[i];
 
 		if ( pClient->isUsed() )
 		{
@@ -1160,9 +1161,9 @@ const char *g_szDebugTags[15] =
 
 void CClients :: clientDebugMsg ( int iLev, const char *szMsg, CBot *pBot )
 {
-	for (auto& m_Client : m_Clients)
+	for ( int i = 0; i < MAX_PLAYERS; i ++ )
 	{
-		CClient* pClient = &m_Client;
+		CClient* pClient = &m_Clients[i];
 
 		if ( !pClient->isUsed() )
 			continue;

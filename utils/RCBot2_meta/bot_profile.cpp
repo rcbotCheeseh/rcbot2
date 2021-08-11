@@ -75,10 +75,10 @@ CBotProfile :: CBotProfile (
 
 void CBotProfiles :: deleteProfiles ()
 {
-	for (auto& m_Profile : m_Profiles)
+	for ( unsigned int i = 0; i < m_Profiles.size(); i ++ )
 	{
-		delete m_Profile;
-		m_Profile = NULL;
+		delete m_Profiles[i];
+		m_Profiles[i] = NULL;
 	}
 
 	m_Profiles.clear();
@@ -183,10 +183,10 @@ CBotProfile *CBotProfiles :: getRandomFreeProfile ()
 {
 	std::vector<CBotProfile*> freeProfiles;
 	
-	for (auto& m_Profile : m_Profiles)
+	for ( unsigned int i = 0; i < m_Profiles.size(); i ++ )
 	{
-		if ( !CBots::findBotByProfile(m_Profile) )
-			freeProfiles.push_back(m_Profile);
+		if ( !CBots::findBotByProfile(m_Profiles[i]) )
+			freeProfiles.push_back(m_Profiles[i]);
 	}
 
 	if ( freeProfiles.empty() )

@@ -109,6 +109,10 @@ extern ConVar *sv_tags;
 extern ConVar *mp_friendlyfire;
 extern ConVar *mp_stalemate_enable;
 
+// For CS:S
+extern ConVar *mp_roundtime;
+extern ConVar *mp_c4timer;
+
 void RCBOT2_Cvar_setup (ICvar *cvar);
 
 #endif

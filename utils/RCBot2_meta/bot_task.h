@@ -95,11 +95,11 @@ public:
 
 	//void setTimeout ();
 
-	bool hasFailed () const;
-	bool isComplete () const;
+	bool hasFailed ();
+	bool isComplete ();
 	//void setVector ( Vector vOrigin );
 	//void setFloat ( float fFloat );
-	bool timedOut () const;
+	bool timedOut ();
 	//void setEdict ( edict_t *pEdict );
 	void setFailInterrupt ( int iInterruptHave, int iInterruptDontHave = 0 );
 	void setCompleteInterrupt ( int iInterruptHave, int iInterruptDontHave = 0 );
@@ -107,7 +107,7 @@ public:
 	virtual eTaskState isInterrupted (CBot *pBot);
 	void fail ();
 	void complete ();
-	inline bool hasFlag ( int iFlag ) const { return (m_iFlags & iFlag) == iFlag; }
+	inline bool hasFlag ( int iFlag ) { return (m_iFlags & iFlag) == iFlag; }
 	inline void setFlag ( int iFlag ) { m_iFlags |= iFlag; }
 	void clearFailInterrupts () { m_iFailInterruptConditionsHave = m_iFailInterruptConditionsDontHave = 0; }	
 	virtual void debugString ( char *string ) { string[0] = 0; return; }
@@ -265,14 +265,14 @@ public:
 
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
-	Vector getTarget () const { return m_vTarget; }
+	Vector getTarget () { return m_vTarget; }
 
 	void debugString ( char *string ) override
 	{
 		sprintf(string,"CBotTF2Spam");
 	}
 
-	float getDistance () const;
+	float getDistance ();
 private:
 	
 	Vector m_vTarget;
@@ -451,6 +451,14 @@ public:
 	{
 		m_pButton = pButton;
 		m_fTime = 0.0f;
+		m_bOverrideLook = false;
+	}
+
+	CBotHL2DMUseButton ( edict_t *pButton, bool bOverrideLook )
+	{
+		m_pButton = pButton;
+		m_fTime = 0.0f;
+		m_bOverrideLook = bOverrideLook;
 	}
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
@@ -462,6 +470,7 @@ public:
 private:
 	MyEHandle m_pButton;
 	float m_fTime;
+	bool m_bOverrideLook;
 };
 
 class CBotTF2MedicHeal : public CBotTask
@@ -1188,14 +1197,100 @@ private:
 class CCSSPerformBuyTask : public CBotTask
 {
 public:
-	void init();
-	void execute(CBot* pBot, CBotSchedule* pSchedule);
-	void debugString(char* string)
+	void init() override;
+	void execute(CBot *pBot,CBotSchedule *pSchedule) override;
+	void debugString(char *string) override
 	{
-		sprintf(string, "CSS Perform Buy");
+		sprintf(string,"CSS Perform Buy");
 	}
 private:
 	float m_fDelay;
+};
+
+class CCSSPlantTheBombTask : public CBotTask
+{
+public:
+	void init() override
+	{
+		setFailInterrupt(CONDITION_SEE_CUR_ENEMY);
+	}
+	void execute(CBot *pBot,CBotSchedule *pSchedule) override;
+	void debugString(char *string) override
+	{
+		sprintf(string,"CSS Plant C4");
+	}
+};
+
+class CCSSEngageEnemyTask : public CBotTask
+{
+public:
+	CCSSEngageEnemyTask( edict_t *pEnemy )
+	{
+		m_hEnemy.Init(engine->IndexOfEdict(pEnemy), pEnemy->m_NetworkSerialNumber);
+	}
+	void init() override
+	{
+		setFailInterrupt(CONDITION_ENEMY_OBSCURED);
+		setCompleteInterrupt(CONDITION_ENEMY_DEAD);
+	}	
+	void execute(CBot *pBot,CBotSchedule *pSchedule) override;
+	void debugString(char *string) override;
+private:
+	CBaseHandle m_hEnemy;
+};
+
+class CCSSDefuseTheBombTask : public CBotTask
+{
+public:
+	CCSSDefuseTheBombTask(Vector &vBomb)
+	{
+		m_vBomb = vBomb;
+	}
+	void init() override
+	{
+		setFailInterrupt(CONDITION_SEE_CUR_ENEMY);
+	}
+	void execute(CBot *pBot,CBotSchedule *pSchedule) override;
+	void debugString(char *string) override
+	{
+		sprintf(string,"CSS Defuse C4\nBomb Vector (%0.4f,%0.4f,%0.4f)", m_vBomb.x, m_vBomb.y, m_vBomb.z);
+	}
+private:
+	Vector m_vBomb;
+};
+
+class CCSSGuardTask : public CBotTask
+{
+public:
+	CCSSGuardTask( CBotWeapon *pWeaponToUse, Vector vOrigin, float fYaw, bool bUseZ, float z, int iWaypointType )
+	{
+		m_fEnemyTime = 0.0f;
+		m_fTime = 0.0f;
+		const QAngle angle = QAngle(0, fYaw, 0);
+		AngleVectors(angle,&m_vAim);
+		m_vAim = vOrigin + (m_vAim*1024);
+		m_vOrigin = vOrigin;
+		m_pWeaponToUse = pWeaponToUse;
+		m_fScopeTime = 0;
+		m_bUseZ = bUseZ;
+		m_z = z; // z = ground level
+		m_iWaypointType = iWaypointType;
+	}
+	void execute(CBot *pBot,CBotSchedule *pSchedule) override;
+	void debugString(char *string) override
+	{
+		sprintf(string,"CSS Guard Task\nm_fEnemyTime = %.1f\nm_fTime = %.1f", m_fEnemyTime, m_fTime);
+	}
+private:
+	float m_fTime;
+	float m_fEnemyTime;
+	float m_fScopeTime;
+	Vector m_vAim;
+	Vector m_vOrigin;
+	CBotWeapon *m_pWeaponToUse;
+	bool m_bUseZ;
+	float m_z; // z = ground level
+	int m_iWaypointType;
 };
 
 //////////////////////
@@ -1401,10 +1496,18 @@ public:
 	{
 		m_ftime = engine->Time() + waittime;
 	}
+	CBotWaitTask(float waittime, Vector vAim)
+	{
+		m_ftime = engine->Time() + waittime;
+		m_vAim = vAim;
+		m_bAimSet = true;
+	}
 	void execute ( CBot *pBot, CBotSchedule *pSchedule ) override;
 	void debugString (char *string) override;
 private:
 	float m_ftime;
+	bool m_bAimSet;
+	Vector m_vAim;
 };
 
 class CBotSynDisarmMineTask : public CBotTask
@@ -1423,6 +1526,48 @@ private:
 	float m_ftime;
 	bool m_bTimeSet;
 	MyEHandle m_pMine;
+};
+
+class CBotSynBreakICrateTask : public CBotTask
+{
+public:
+	CBotSynBreakICrateTask(edict_t *pCrate, CBotWeapon *pWeapon)
+	{
+		m_pCrate = pCrate;
+		m_pWeapon = pWeapon;
+		m_vPos = Vector(0,0,0);
+	}
+	void debugString(char *string) override
+	{
+		sprintf(string, "Break Item Crate");
+	}
+	void execute ( CBot *pBot, CBotSchedule *pSchedule ) override;
+private:
+	CBotWeapon* m_pWeapon;
+	MyEHandle m_pCrate;
+	Vector m_vPos;
+};
+
+class CBotSynUseCharger: public CBotTask
+{
+public:
+	CBotSynUseCharger(edict_t *pCharger, int type)
+	{
+		m_pCharger = pCharger;
+		m_vPos = Vector(0,0,0);
+		m_iType = type;
+		m_flTime = engine->Time() + randomFloat(8.0f, 10.0f);
+	}
+	void debugString(char *string) override
+	{
+		sprintf(string, "Use Charger");
+	}
+	void execute ( CBot *pBot, CBotSchedule *pSchedule ) override;
+private:
+	MyEHandle m_pCharger;
+	Vector m_vPos;
+	int m_iType;
+	float m_flTime;
 };
 
 /*

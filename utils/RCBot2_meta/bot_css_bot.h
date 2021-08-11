@@ -31,32 +31,59 @@
 #ifndef __CSS_RCBOT_H__
 #define __CSS_RCBOT_H__
 
+#define CS_TEAM_UNASSIGNED 0
+#define CS_TEAM_SPECTATOR 1
+#define CS_TEAM_TERRORIST 2
+#define CS_TEAM_COUNTERTERRORIST 3
+
+#define CS_WEAPON_SLOT_PRIMARY 0
+#define CS_WEAPON_SLOT_SECONDARY 1
+#define CS_WEAPON_SLOT_MELEE 2
+#define CS_WEAPON_SLOT_GRENADE 3
+#define CS_WEAPON_SLOT_C4 4
+
 // bot for CS Source
 class CCSSBot : public CBot
 {
 public:
-	bool isCSS() override{ return true; }
+	bool isCSS() override { return true; }
     void init(bool bVarInit=false) override;
     void spawnInit() override;
 	void died(edict_t *pKiller, const char *pszWeapon) override;
 	void setup() override;
-	void selectTeam() const;
-	void selectModel() const;
+	void selectTeam();
+	void selectModel();
 	bool startGame() override;
 	bool isAlive() override;
 	bool isEnemy(edict_t *pEdict,bool bCheckWeapons = true) override;
+    void handleWeapons() override;
+    bool handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy) override;
+	void modAim(edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset, Vector &v_size, float fDist, float fDist2D) override;
+	void updateConditions() override;
+	void modThink() override;
+	void listenForPlayers() override;
+	virtual void modThinkSlow();
 	unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
-	void getTasks(unsigned int iIgnore = 0) override;
+	void getTasks (unsigned int iIgnore=0) override;
 	virtual bool executeAction(eBotAction iAction);
-	void handleWeapons() override;
-	bool handleAttack(CBotWeapon* pWeapon, edict_t* pEnemy) override;
-	virtual void buy(const char* item);
+	virtual void buy(const char *item);
 	virtual void executeBuy();
-	//virtual void processBuyList(int list);
-	virtual void say(const char* message);
-	virtual void sayteam(const char* message);
+	virtual void say(const char *message);
+	virtual void sayteam(const char *message);
+	virtual void primaryattackCS(bool hold = false);
+	inline bool shouldWaitForEnemy()
+	{
+		return m_pLastEnemy.get() != NULL && (m_fCombatTime + 5.0f > engine->Time());
+	}
+	virtual float getNextAttackDelay();
+	virtual CBotWeapon *getPrimaryWeapon();
 private:
+	edict_t *m_pCurrentWeapon; // The bot current weapon
 	bool m_bDidBuy; // Did the bot buy on this round?
+	bool m_bInCombat; // Is the bot doing combat related activities
+	float m_fCombatTime; // When did the bot enter combat mode
+	float m_fNextAttackTime; // Control timer for bot primary attack
+	float m_fNextThinkSlow; // Control timer for slow think
 };
 
 #endif

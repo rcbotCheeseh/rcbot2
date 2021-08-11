@@ -106,8 +106,8 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 	baseAddr = reinterpret_cast<uintptr_t>(info.AllocationBase);
 
 	// All this is for our insane sanity checks :o 
-	const auto dos = reinterpret_cast<IMAGE_DOS_HEADER*>(baseAddr);
-	auto pe = reinterpret_cast<IMAGE_NT_HEADERS*>(baseAddr + dos->e_lfanew);
+	IMAGE_DOS_HEADER* dos = reinterpret_cast<IMAGE_DOS_HEADER*>(baseAddr);
+	IMAGE_NT_HEADERS* pe = reinterpret_cast<IMAGE_NT_HEADERS*>(baseAddr + dos->e_lfanew);
 	IMAGE_FILE_HEADER* file = &pe->FileHeader;
 	IMAGE_OPTIONAL_HEADER* opt = &pe->OptionalHeader;
 
@@ -219,7 +219,7 @@ void *CSignatureFunction::findPattern(const void *libPtr, const char *pattern, s
 		return NULL;
 	}
 
-	auto ptr = static_cast<char*>(lib.baseAddress);
+	char* ptr = reinterpret_cast<char*>(lib.baseAddress);
 	char* end = ptr + lib.memorySize - len;
 
 	while (ptr < end)
@@ -252,7 +252,7 @@ void *CSignatureFunction::findSignature(void *addrInBase, const char *signature)
 
 	if (real_bytes >= 1)
 	{
-		return findPattern(addrInBase, reinterpret_cast<char*>(real_sig), real_bytes);
+		return findPattern(addrInBase, (char*)real_sig, real_bytes);
 	}
 
 	return NULL;
@@ -287,8 +287,8 @@ CCreateGameRulesObject::CCreateGameRulesObject(CRCBotKeyValueList &list, void *p
 #endif
 }
 
-void **CCreateGameRulesObject::getGameRules() const
+void **CCreateGameRulesObject::getGameRules()
 {
-	const auto addr = static_cast<char*>(m_func);
+	char *addr = reinterpret_cast<char*>(m_func);
 	return *reinterpret_cast<void ***>(addr + rcbot_gamerules_offset.GetInt());
 }
