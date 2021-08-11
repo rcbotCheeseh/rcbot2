@@ -1295,7 +1295,7 @@ void CBotEvents :: executeEvent( void *pEvent, eBotEventType iType )
 	if ( iType != TYPE_IGAMEEVENT )
 		iEventId = pInterface->getInt("eventid");
 
-	for ( register unsigned short int i = 0; i < m_theEvents.size(); i ++ )
+	for ( unsigned short int i = 0; i < m_theEvents.size(); i ++ )
 	{
 		CBotEvent* pFound = m_theEvents[i];
 

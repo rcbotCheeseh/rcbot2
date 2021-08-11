@@ -178,7 +178,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>..\..\alliedmodders\hl2sdk-tf2\public\mathlib;..\..\alliedmodders\hl2sdk-tf2\public;..\..\alliedmodders\hl2sdk-tf2\public\engine;..\..\alliedmodders\hl2sdk-tf2\public\tier0;..\..\alliedmodders\hl2sdk-tf2\public\tier1;..\..\alliedmodders\hl2sdk-tf2\game\shared;..\..\alliedmodders\hl2sdk-tf2\game\server;..\..\alliedmodders\hl2sdk-tf2\public\game\server;..\..\alliedmodders\metamod-source\core\;..\..\alliedmodders\metamod-source\core\sourcehook\;..\..\alliedmodders\metamod-source\public\;..\..\sm_ext\;..\..\versioning\;..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>SOURCE_ENGINE=4;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SOURCE_ENGINE=4;SOURCE_ENGINE=TF2;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>

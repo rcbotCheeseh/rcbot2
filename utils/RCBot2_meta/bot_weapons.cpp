@@ -742,7 +742,7 @@ CBotWeapon* CBotWeapons::getWeapon(CWeapon* pWeapon)
 
 CBotWeapon* CBotWeapons::getCurrentWeaponInSlot(int iSlot)
 {
-	for (register unsigned int i = 0; i < MAX_WEAPONS; i++)
+	for (unsigned int i = 0; i < MAX_WEAPONS; i++)
 	{
 		if (m_theWeapons[i].hasWeapon() && m_theWeapons[i].getWeaponInfo() && (m_theWeapons[i].getWeaponInfo()->getSlot() == iSlot))
 			return &(m_theWeapons[i]);
@@ -863,7 +863,7 @@ void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault
 
 void CBotWeapons::clearWeapons()
 {
-	for (register unsigned short i = 0; i < MAX_WEAPONS; i++)
+	for (unsigned short i = 0; i < MAX_WEAPONS; i++)
 	{
 		memset(&m_theWeapons[i], 0, sizeof(CBotWeapon));
 		//m_theWeapons[i].setHasWeapon(false);
@@ -875,7 +875,7 @@ CBotWeapon* CBotWeapons::getPrimaryWeapon()
 {
 	CBotWeapon* pBest = NULL;
 
-	for (register unsigned short i = 0; i < MAX_WEAPONS; i++)
+	for (unsigned short i = 0; i < MAX_WEAPONS; i++)
 	{
 		CBotWeapon* pWeap = &(m_theWeapons[i]);
 
@@ -901,7 +901,7 @@ CBotWeapon* CBotWeapons::getActiveWeapon(const char* szWeaponName, edict_t* pWea
 
 		if (pWeapon)
 		{
-			for (register unsigned short int i = 0; i < MAX_WEAPONS; i++)
+			for (unsigned short int i = 0; i < MAX_WEAPONS; i++)
 			{
 				CWeapon* p = m_theWeapons[i].getWeaponInfo();
 
@@ -956,6 +956,7 @@ bool CBotWeapon :: needToReload(CBot *pBot)
 class IWeaponFunc
 {
 public:
+	virtual ~IWeaponFunc() = default;
 	virtual void execute(CWeapon* pWeapon) = 0;
 };
 

@@ -341,7 +341,7 @@ bool CDODBot :: startGame ()
 		//else
 		//	engine->ClientCommand(m_pEdict,"joinclass %d",m_iDesiredClass);
 
-		/*switch ( m_iDesiredClass )
+		switch ( m_iDesiredClass )
 		{
 		case 1:
 		case 2:
