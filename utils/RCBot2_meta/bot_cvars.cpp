@@ -98,8 +98,11 @@ ConVar rcbot_show_welcome_msg("rcbot_show_welcome_msg", "1", 0, "Show welcome me
 ConVar rcbot_force_class("rcbot_force_class", "0", 0, "Force bots to choose specified class, kills alive bots on change (1 - 9, set to 0 for none)");
 
 // Synergy CVars
-ConVar rcbot_runplayercmd_syn("rcbot_runplayer_cmd_syn","424",0,"offset of the Synergy PlayerRunCommand function");
+ConVar rcbot_runplayercmd_syn("rcbot_runplayer_cmd_syn", "424", 0, "offset of the Synergy PlayerRunCommand function");
 ConVar rcbot_syn_use_search_range("rcbot_syn_use_search_range", "256", 0, "Sets the maximum button search range.", true, 150.0f, true, 1024.0f);
+
+// Counter-Strike:Source Cvars
+ConVar rcbot_css_economy_eco_limit("rcbot_css_economy_eco_limit", "2000", 0, "If the bot money is less than this, it won't purchase anything.");
 
 ConVar *sv_gravity = NULL;
 ConVar *mp_teamplay = NULL;

@@ -216,7 +216,7 @@ public:
 		m_fNearestDist = 0;
 	}
 
-	void execute ( CBot *pBot )
+	void execute ( CBot *pBot ) override
 	{
 		if ( (pBot->getEdict() != m_pPlayer) && (pBot->getTeam() == m_iTeam) && pBot->isVisible(m_pPlayer) )
 		{

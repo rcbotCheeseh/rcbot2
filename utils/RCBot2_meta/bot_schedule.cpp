@@ -92,6 +92,8 @@ const char *szSchedules[SCHED_MAX+1] =
 	"SCHED_SYN_OPEN_DOOR",
 	"SCHED_SYN_DISARM_MINE",
 	"SCHED_SYN_PLANT_MINE",
+	"SCHED_SYN_BREAK_ICRATE",
+	"SCHED_BUY",
 	"SCHED_MAX"
 };
 ////////////////////// unused

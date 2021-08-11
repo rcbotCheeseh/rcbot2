@@ -104,7 +104,7 @@ public:
 	{
 	}
 	
-	eBotCommandResult execute( CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5);
+	eBotCommandResult execute( CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5) override;
 	
 	BotCommandCallback m_Callback;
 };
@@ -117,12 +117,12 @@ public:
 	{
 	}
 	
-	eBotCommandResult execute(CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5);
+	eBotCommandResult execute(CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5) override;
 	
-	void printCommand(edict_t *pPrintTo, int indent = 0);
-	void printHelp(edict_t *pPrintTo);
+	void printCommand(edict_t *pPrintTo, int indent = 0) override;
+	void printHelp(edict_t *pPrintTo) override;
 	
-	bool isContainer() { return true; }
+	bool isContainer() override { return true; }
 private:
 	std::vector<CBotCommand*> m_theCommands;
 };

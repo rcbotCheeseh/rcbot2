@@ -16,9 +16,9 @@ class CSignatureFunction
 public:
 	CSignatureFunction() { m_func = 0x0; }
 private:
-	size_t decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr);
+	static size_t decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr);
 
-	bool getLibraryInfo(const void *libPtr, DynLibInfo &lib);
+	static bool getLibraryInfo(const void *libPtr, DynLibInfo &lib);
 
 	void *findPattern(const void *libPtr, const char *pattern, size_t len);
 

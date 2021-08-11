@@ -137,11 +137,11 @@ public:
 		m_iPlayerSlot = ENTINDEX(pPlayer);
 	}
 
-	bool IsReliable() const { return false; }
-	bool IsInitMessage() const { return false; }
+	bool IsReliable() const override { return false; }
+	bool IsInitMessage() const override { return false; }
 
-	int	GetRecipientCount() const { return 1; }
-	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot; }
+	int	GetRecipientCount() const override { return 1; }
+	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot; }
 
 private:
 	int m_iPlayerSlot;
@@ -168,11 +168,11 @@ public:
 		}
 	}
 
-	bool IsReliable() const { return false; }
-	bool IsInitMessage() const { return false; }
+	bool IsReliable() const override { return false; }
+	bool IsInitMessage() const override { return false; }
 
-	int	GetRecipientCount() const { return m_iMaxCount; }
-	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot[slot] + 1; }
+	int	GetRecipientCount() const override { return m_iMaxCount; }
+	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot[slot] + 1; }
 
 private:
 
@@ -307,7 +307,7 @@ void RCBotPluginMeta::Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper)
 class BaseAccessor : public IConCommandBaseAccessor
 {
 public:
-	bool RegisterConCommandBase(ConCommandBase *pCommandBase)
+	bool RegisterConCommandBase(ConCommandBase *pCommandBase) override
 	{
 		/* Always call META_REGCVAR instead of going through the engine. */
 		return META_REGCVAR(pCommandBase);

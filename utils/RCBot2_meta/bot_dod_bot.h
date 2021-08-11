@@ -47,7 +47,7 @@ public:
 		m_iEvent = iEvent; m_iCP = iCP; m_iTeam = iTeam; 
 	};
 
-	void execute (CBot *pBot);
+	void execute (CBot *pBot) override;
 private:
 	int m_iCP;
 	int m_iTeam;
@@ -131,7 +131,7 @@ public:
 
 	CDODBot();
 
-	bool isDOD () { return true; }
+	bool isDOD () override { return true; }
 
 	bool withinTeammate ( );
 
@@ -139,78 +139,78 @@ public:
 	void removeBomb () { m_bHasBomb = false; }
 	void bombEvent ( int iEvent, int iCP, int iTeam );
 
-	void friendlyFire ( edict_t *pEdict );
+	void friendlyFire ( edict_t *pEdict ) override;
 
-	void modThink ();
+	void modThink () override;
 
-	virtual void init (bool bVarInit=false);
-	void setup ();
+	void init (bool bVarInit=false) override;
+	void setup () override;
 
-	virtual void freeMapMemory ();
+	void freeMapMemory () override;
 
 	//Vector getAimVector ( edict_t *pEntity );
-	virtual void modAim ( edict_t *pEntity, Vector &v_origin, 
-		Vector *v_desired_offset, Vector &v_size,
-		float fDist, float fDist2D);
+	void modAim ( edict_t *pEntity, Vector &v_origin, 
+	              Vector *v_desired_offset, Vector &v_size,
+	              float fDist, float fDist2D) override;
 
-	bool startGame ();
+	bool startGame () override;
 
-	void died ( edict_t *pKiller, const char *pszWeapon );
-	void killed ( edict_t *pVictim, char *weapon );
+	void died ( edict_t *pKiller, const char *pszWeapon ) override;
+	void killed ( edict_t *pVictim, char *weapon ) override;
 
-	void spawnInit ();
+	void spawnInit () override;
 
-	float getEnemyFactor ( edict_t *pEnemy );
+	float getEnemyFactor ( edict_t *pEnemy ) override;
 
-	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true );
+	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true ) override;
 
 	float getArmorPercent () const { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
 
-	void getTasks (unsigned int iIgnore);
+	void getTasks (unsigned int iIgnore) override;
 
 	bool executeAction ( CBotUtility *util );
 
-	void updateConditions ();
+	void updateConditions () override;
 
 	void selectedClass ( int iClass );
 
-	bool setVisible ( edict_t *pEntity, bool bVisible );
+	bool setVisible ( edict_t *pEntity, bool bVisible ) override;
 
-	bool select_CWeapon ( CWeapon *pWeapon );
+	bool select_CWeapon ( CWeapon *pWeapon ) override;
 
-	bool selectBotWeapon ( CBotWeapon *pBotWeapon );
+	bool selectBotWeapon ( CBotWeapon *pBotWeapon ) override;
 
-	bool canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL);
+	bool canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL) override;
 
-	void defending ();
+	void defending () override;
 
-	bool handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy );
+	bool handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy ) override;
 
-	void hearVoiceCommand ( edict_t *pPlayer, byte cmd );
+	void hearVoiceCommand ( edict_t *pPlayer, byte cmd ) override;
 
-	void handleWeapons ();
+	void handleWeapons () override;
 
-	void reachedCoverSpot (int flags);
+	void reachedCoverSpot (int flags) override;
 
-	void touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1 );
+	void touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1 ) override;
 
-	bool checkStuck ();
+	bool checkStuck () override;
 
 	bool hasMG () const;
 	CBotWeapon *getMG() const;
 	CBotWeapon *getSniperRifle () const;
 	bool hasSniperRifle () const;
 
-	void voiceCommand ( int cmd );
+	void voiceCommand ( int cmd ) override;
 
-	virtual unsigned int maxEntityIndex ( ) { return gpGlobals->maxEntities; }
+	unsigned int maxEntityIndex ( ) override { return gpGlobals->maxEntities; }
 
-	void seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pKillerWeapon );
-	void seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *pWeapon );
+	void seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pKillerWeapon ) override;
+	void seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *pWeapon ) override;
 
 	bool isVisibleThroughSmoke ( edict_t *pSmoke, edict_t *pCheck );
 
-	void grenadeThrown () { addVoiceCommand(DOD_VC_FIRE_IN_THE_HOLE); }
+	void grenadeThrown () override { addVoiceCommand(DOD_VC_FIRE_IN_THE_HOLE); }
 
 	void chooseClass( bool bIsChangingClass ); // updates m_iDesiredClass
 	void changeClass(); // uses m_iDesiredClass
@@ -219,19 +219,19 @@ public:
 	void prone ();
 	void unProne();
 
-	bool wantToListenToPlayerAttack ( edict_t *pPlayer, int iWeaponID = -1);
+	bool wantToListenToPlayerAttack ( edict_t *pPlayer, int iWeaponID = -1) override;
 
-	bool walkingTowardsWaypoint ( CWaypoint *pWaypoint, bool *bOffsetApplied, Vector &vOffset );
+	bool walkingTowardsWaypoint ( CWaypoint *pWaypoint, bool *bOffsetApplied, Vector &vOffset ) override;
 
-	void listenForPlayers ();
+	void listenForPlayers () override;
 
 	void signal ( const char *signal ) const;
 
-	void sayInPosition ();
+	void sayInPosition () override;
 
-	void sayMoveOut ();
+	void sayMoveOut () override;
 
-	void areaClear();
+	void areaClear() override;
 
 	void dropAmmo ();
 

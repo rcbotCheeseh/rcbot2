@@ -51,7 +51,7 @@ public:
 		m_pSquad = pSquad;
 	}
 
-	virtual void execute ( CBot *pBot )
+	void execute ( CBot *pBot ) override
 	{
 		if ( pBot->inSquad(m_pSquad) )
 			pBot->clearSquad();

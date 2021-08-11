@@ -90,7 +90,7 @@ public:
 		m_pHit = pHit;
 	}
 
-	virtual bool ShouldHitEntity( IHandleEntity *pServerEntity, int contentsMask )
+	bool ShouldHitEntity( IHandleEntity *pServerEntity, int contentsMask ) override
 	{ 
 		if ( m_pPlayer && (pServerEntity == static_cast<IHandleEntity*>(m_pPlayer->GetIServerEntity())) )
 			return false;
@@ -101,7 +101,7 @@ public:
 		return true; 
 	}
 
-	virtual TraceType_t	GetTraceType() const
+	TraceType_t	GetTraceType() const override
 	{
 		return TRACE_EVERYTHING;
 	}
@@ -307,7 +307,7 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 class CTraceFilterHitAllExceptPlayers : public CTraceFilter
 {
 public:
-	virtual bool ShouldHitEntity( IHandleEntity *pServerEntity, int contentsMask )
+	bool ShouldHitEntity( IHandleEntity *pServerEntity, int contentsMask ) override
 	{ 
 		return pServerEntity->GetRefEHandle().GetEntryIndex() <= gpGlobals->maxClients; 
 	}
@@ -329,7 +329,8 @@ public:
 
 		m_collisionGroup = collisionGroup;
 	}
-	virtual bool ShouldHitEntity( IHandleEntity *pHandleEntity, int contentsMask )
+
+	bool ShouldHitEntity( IHandleEntity *pHandleEntity, int contentsMask ) override
 	{
 		if ( m_pPassEnt1 == pHandleEntity )
 			return false;
@@ -450,7 +451,7 @@ float CBotGlobals :: DotProductFromOrigin ( edict_t *pEnemy, Vector pOrigin )
 	if (!p )
 		return 0;
 
-	QAngle eyes = p->GetAbsAngles();
+	const QAngle eyes = p->GetAbsAngles();
 
 	// in fov? Check angle to edict
 	AngleVectors(eyes,&vForward);

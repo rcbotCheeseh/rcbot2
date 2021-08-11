@@ -12,7 +12,7 @@ class CBotFuncResetAttackPoint : public IBotFunction
 {
 public:
 	CBotFuncResetAttackPoint(int team) { iTeam = team; }
-	void execute ( CBot *pBot )
+	void execute ( CBot *pBot ) override
 	{
 		if ( pBot->getTeam() == iTeam )
 			static_cast<CBotTF2*>(pBot)->updateAttackPoints();
@@ -25,7 +25,7 @@ class CBotFuncResetDefendPoint : public IBotFunction
 {
 public:
 	CBotFuncResetDefendPoint(int team) { iTeam = team; }
-	void execute ( CBot *pBot )
+	void execute ( CBot *pBot ) override
 	{
 		if ( pBot->getTeam() == iTeam )
 			static_cast<CBotTF2*>(pBot)->updateDefendPoints();
@@ -38,7 +38,7 @@ private:
 class CBotFuncPointsUpdated : public IBotFunction
 {
 public:
-	void execute ( CBot *pBot )
+	void execute ( CBot *pBot ) override
 	{
 		static_cast<CBotTF2*>(pBot)->pointsUpdated();
 	}	

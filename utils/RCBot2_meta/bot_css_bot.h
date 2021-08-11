@@ -35,19 +35,28 @@
 class CCSSBot : public CBot
 {
 public:
-
 	bool isCSS() override{ return true; }
     void init(bool bVarInit=false) override;
     void spawnInit() override;
 	void died(edict_t *pKiller, const char *pszWeapon) override;
-	void setup();
+	void setup() override;
 	void selectTeam() const;
 	void selectModel() const;
 	bool startGame() override;
-	bool isAlive();
+	bool isAlive() override;
 	bool isEnemy(edict_t *pEdict,bool bCheckWeapons = true) override;
 	unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
-	// blah blah
+	void getTasks(unsigned int iIgnore = 0) override;
+	virtual bool executeAction(eBotAction iAction);
+	void handleWeapons() override;
+	bool handleAttack(CBotWeapon* pWeapon, edict_t* pEnemy) override;
+	virtual void buy(const char* item);
+	virtual void executeBuy();
+	//virtual void processBuyList(int list);
+	virtual void say(const char* message);
+	virtual void sayteam(const char* message);
+private:
+	bool m_bDidBuy; // Did the bot buy on this round?
 };
 
 #endif

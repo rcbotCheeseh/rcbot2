@@ -57,7 +57,7 @@ public:
 
 	void init ();
 
-	void execute ( edict_t *pEntity );
+	void execute ( edict_t *pEntity ) override;
 private:
 	CBot *m_pBot;
 	edict_t *m_pFlag;
@@ -83,7 +83,7 @@ public:
 	void setOldEnemy ( edict_t *pEntity );
 	void init ();
 
-	void execute ( edict_t *pEntity );
+	void execute ( edict_t *pEntity ) override;
 private:
 	CBot *m_pBot;
 	float m_fBestFactor;

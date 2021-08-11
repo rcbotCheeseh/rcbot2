@@ -122,7 +122,7 @@ class CBroadcastVoiceCommand : public IBotFunction
 {
 public:
 	CBroadcastVoiceCommand (edict_t *pPlayer, byte voicecmd) { m_pPlayer = pPlayer; m_VoiceCmd = voicecmd; };
-	void execute ( CBot *pBot );
+	void execute ( CBot *pBot ) override;
 
 private:
 	edict_t *m_pPlayer;

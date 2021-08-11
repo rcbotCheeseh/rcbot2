@@ -131,7 +131,7 @@ public:
   MTRand() : MTRand_int32() {}
   MTRand(unsigned long seed) : MTRand_int32(seed) {}
   MTRand(const unsigned long* seed, int size) : MTRand_int32(seed, size) {}
-  ~MTRand() {}
+  ~MTRand() override {}
   double operator()() {
     return static_cast<double>(rand_int32()) * (1. / 4294967296.); } // divided by 2^32
 private:
@@ -145,7 +145,7 @@ public:
   MTRand_closed() : MTRand_int32() {}
   MTRand_closed(unsigned long seed) : MTRand_int32(seed) {}
   MTRand_closed(const unsigned long* seed, int size) : MTRand_int32(seed, size) {}
-  ~MTRand_closed() {}
+  ~MTRand_closed() override {}
   double operator()() {
     return static_cast<double>(rand_int32()) * (1. / 4294967295.); } // divided by 2^32 - 1
 private:
@@ -159,7 +159,7 @@ public:
   MTRand_open() : MTRand_int32() {}
   MTRand_open(unsigned long seed) : MTRand_int32(seed) {}
   MTRand_open(const unsigned long* seed, int size) : MTRand_int32(seed, size) {}
-  ~MTRand_open() {}
+  ~MTRand_open() override {}
   double operator()() {
     return (static_cast<double>(rand_int32()) + .5) * (1. / 4294967296.); } // divided by 2^32
 private:
@@ -173,7 +173,7 @@ public:
   MTRand53() : MTRand_int32() {}
   MTRand53(unsigned long seed) : MTRand_int32(seed) {}
   MTRand53(const unsigned long* seed, int size) : MTRand_int32(seed, size) {}
-  ~MTRand53() {}
+  ~MTRand53() override {}
   double operator()() {
     return (static_cast<double>(rand_int32() >> 5) * 67108864. + 
       static_cast<double>(rand_int32() >> 6)) * (1. / 9007199254740992.); }

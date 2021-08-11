@@ -528,7 +528,7 @@ public:
 
 	static void roundStart ();
 
-	bool checkWaypointForTeam(CWaypoint *pWpt, int iTeam);
+	bool checkWaypointForTeam(CWaypoint *pWpt, int iTeam) override;
 	
 	static int numClassOnTeam( int iTeam, int iClass );
 
@@ -536,7 +536,7 @@ public:
 
 	static int getHighestScore ();
 
-	void clientCommand ( edict_t *pEntity, int argc, const char *pcmd, const char *arg1, const char *arg2 );
+	void clientCommand ( edict_t *pEntity, int argc, const char *pcmd, const char *arg1, const char *arg2 ) override;
 
 	static float getMapStartTime ();
 
@@ -547,7 +547,7 @@ public:
 	inline static bool isCommunalBombPoint () { return m_bCommunalBombPoint; }
 	inline static int getBombPointArea (int iTeam) { if ( iTeam == TEAM_ALLIES ) return m_iBombAreaAllies; return m_iBombAreaAxis; } 
 
-	void addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags, int *iArea, float *fMaxDistance );
+	void addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags, int *iArea, float *fMaxDistance ) override;
 
 	static CDODFlags m_Flags;
 
@@ -556,7 +556,7 @@ public:
 	static edict_t *getBombTarget ( CWaypoint *pWpt );
 	static edict_t *getBreakable ( CWaypoint *pWpt );
 
-	void getTeamOnlyWaypointFlags ( int iTeam, int *iOn, int *iOff );
+	void getTeamOnlyWaypointFlags ( int iTeam, int *iOn, int *iOff ) override;
 
 	static bool isBreakableRegistered ( edict_t *pBreakable, int iTeam );
 
@@ -592,13 +592,13 @@ public:
 
 protected:
 
-	void initMod ();
+	void initMod () override;
 
-	void mapInit ();
+	void mapInit () override;
 
-	void modFrame ();
+	void modFrame () override;
 
-	void freeMemory ();
+	void freeMemory () override;
 
 	static edict_t *m_pResourceEntity;
 	static edict_t *m_pPlayerResourceEntity;
@@ -634,7 +634,7 @@ public:
 		return "CCSPlayer";
 	}
 
-	void initMod();
+	void initMod() override;
 
 	//void mapInit ();
 
@@ -702,8 +702,8 @@ public:
 		setup("synergy",MOD_SYNERGY,BOTTYPE_SYN,"SYNERGY");
 	}
 
-	void initMod ();
-	void mapInit ();
+	void initMod () override;
+	void mapInit () override;
 
 	const char *getPlayerClass () override
 	{
@@ -780,22 +780,22 @@ public:
 		m_pResourceEntity = NULL;
 	}
 
-	void mapInit ();
+	void mapInit () override;
 
-	void modFrame ();
+	void modFrame () override;
 
-	bool isAreaOwnedByTeam (int iArea, int iTeam);
+	bool isAreaOwnedByTeam (int iArea, int iTeam) override;
 
 	static void updatePointMaster ();
 
-	void clientCommand ( edict_t *pEntity, int argc, const char *pcmd, const char *arg1, const char *arg2 );
+	void clientCommand ( edict_t *pEntity, int argc, const char *pcmd, const char *arg1, const char *arg2 ) override;
 
-	virtual const char *getPlayerClass ()
+	const char *getPlayerClass () override
 	{
 		return "CTFPlayer";
 	}
 
-	void initMod ();
+	void initMod () override;
 
 	static void roundStart ();
 
@@ -812,7 +812,7 @@ public:
 
 	static int getTeleporterWaypoint ( edict_t *pTele );
 
-	bool isWaypointAreaValid ( int iWptArea, int iWptFlags );
+	bool isWaypointAreaValid ( int iWptArea, int iWptFlags ) override;
 
 	static bool isSuddenDeath();
 
@@ -896,9 +896,9 @@ public:
 	static void setAttackDefendMap ( bool bSet ) { m_bAttackDefendMap = bSet; }
 	static bool isAttackDefendMap () { return m_bAttackDefendMap; }
 
-	void addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags, int *iArea, float *fMaxDistance );
+	void addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags, int *iArea, float *fMaxDistance ) override;
 
-	void getTeamOnlyWaypointFlags ( int iTeam, int *iOn, int *iOff );
+	void getTeamOnlyWaypointFlags ( int iTeam, int *iOn, int *iOff ) override;
 
 	static bool getFlagLocation ( int iTeam, Vector *vec );
 
@@ -1157,7 +1157,7 @@ public:
 	static void findMediGun ( edict_t *pPlayer );
 
 
-	bool checkWaypointForTeam(CWaypoint *pWpt, int iTeam);
+	bool checkWaypointForTeam(CWaypoint *pWpt, int iTeam) override;
 	
 
 	static bool isFlagAtDefaultState () { return bFlagStateDefault; }
@@ -1274,11 +1274,11 @@ public:
 		setup("hl2mp", MOD_HLDM2, BOTTYPE_HL2DM, "HL2DM");
 	}
 
-	void initMod ();
+	void initMod () override;
 
-	void mapInit ();
+	void mapInit () override;
 
-	bool playerSpawned ( edict_t *pPlayer );
+	bool playerSpawned ( edict_t *pPlayer ) override;
 
 	static inline edict_t *getButtonAtWaypoint ( CWaypoint *pWaypoint )
 	{

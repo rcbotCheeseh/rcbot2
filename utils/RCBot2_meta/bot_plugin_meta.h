@@ -65,13 +65,13 @@ class IMoveHelper;
 class RCBotPluginMeta : public ISmmPlugin, public IMetamodListener
 {
 public:
-	bool Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxlen, bool late);
-	bool Unload(char *error, size_t maxlen);
-	bool Pause(char *error, size_t maxlen);
-	bool Unpause(char *error, size_t maxlen);
-	void AllPluginsLoaded();
+	bool Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxlen, bool late) override;
+	bool Unload(char *error, size_t maxlen) override;
+	bool Pause(char *error, size_t maxlen) override;
+	bool Unpause(char *error, size_t maxlen) override;
+	void AllPluginsLoaded() override;
 public: //IMetamodListener stuff
-	void OnVSPListening(IServerPluginCallbacks *iface);
+	void OnVSPListening(IServerPluginCallbacks *iface) override;
 public: //hooks
 
 	void Hook_ServerActivate(edict_t *pEdictList, int edictCount, int clientMax);
@@ -89,7 +89,7 @@ public: //hooks
 	
 	//Called for a game event.  Same definition as server plugins???
 	bool FireGameEvent( IGameEvent *pevent, bool bDontBroadcast );
-	void Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper);
+	static void Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper);
 	
 	bool Hook_ClientConnect(edict_t *pEntity, 
 		const char *pszName,
@@ -113,14 +113,14 @@ public: // SourceMod
 
 public:
 
-	const char *GetAuthor();
-	const char *GetName();
-	const char *GetDescription();
-	const char *GetURL();
-	const char *GetLicense();
-	const char *GetVersion();
-	const char *GetDate();
-	const char *GetLogTag();
+	const char *GetAuthor() override;
+	const char *GetName() override;
+	const char *GetDescription() override;
+	const char *GetURL() override;
+	const char *GetLicense() override;
+	const char *GetVersion() override;
+	const char *GetDate() override;
+	const char *GetLogTag() override;
 
 private:
 #if defined SM_EXT
