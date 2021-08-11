@@ -1242,7 +1242,7 @@ private:
 class CCSSDefuseTheBombTask : public CBotTask
 {
 public:
-	CCSSDefuseTheBombTask(Vector &vBomb)
+	CCSSDefuseTheBombTask(Vector vBomb)
 	{
 		m_vBomb = vBomb;
 	}

@@ -407,9 +407,6 @@ int CWaypointLocations :: NearestBlastWaypoint ( const Vector &vOrigin, const Ve
 												int iTeam, bool bCheckArea, float fBlastRadius )
 {
 	int iNearestIndex = -1;
-	int iLoc;
-	int jLoc;
-	int kLoc;
 
 	Vector vMid = (vSrc - vOrigin);
 
@@ -417,9 +414,9 @@ int CWaypointLocations :: NearestBlastWaypoint ( const Vector &vOrigin, const Ve
 	vMid = (vMid*((vSrc-vOrigin).Length()/2));
 	vMid = vOrigin + vMid;
 
-	iLoc = READ_LOC(vMid.x);
-	jLoc = READ_LOC(vMid.y);
-	kLoc = READ_LOC(vMid.z);
+	const int iLoc = READ_LOC(vMid.x)
+	const int jLoc = READ_LOC(vMid.y)
+	const int kLoc = READ_LOC(vMid.z)
 
 	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
