@@ -89,7 +89,7 @@ ga_nn_value CPopulation :: bestFitness ()
 	{
 		const float fFitness = m_theIndividuals[i]->getFitness();
 
-		if ( !gotBestFitness || (fFitness > fBestFitness) )
+		if ( !gotBestFitness || fFitness > fBestFitness )
 		{
 			fBestFitness = fFitness;
 			gotBestFitness = TRUE;
@@ -189,7 +189,7 @@ void CGA :: freeGlobalMemory ()
 
 bool CGA :: canPick ()
 {
-	return (m_theNewPopulation.size() > 0);
+	return m_theNewPopulation.size() > 0;
 }
 
 IIndividual *CGA :: pick ()

@@ -630,10 +630,7 @@ bool CClassInterface :: getTF2ObjectiveResource ( CTFObjectiveResource *pResourc
 
 void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 {
-	static IServerUnknown *pUnknown;
-	static CBaseEntity *pEntity;
-
-	if (!m_offset || (edict==NULL))
+	if (!m_offset || edict==NULL)
 	{
 		m_data = NULL;
 		m_berror = true;
@@ -642,7 +639,9 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 
 	if (bIsEdict)
 	{
-		edict_t *pEdict = reinterpret_cast<edict_t*>(edict);
+		static CBaseEntity *pEntity;
+		static IServerUnknown *pUnknown;
+		edict_t *pEdict = static_cast<edict_t*>(edict);
 
 		pUnknown = pEdict->GetUnknown();
 
@@ -693,7 +692,7 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 		{
 			const float fDist = (vstart - CBotGlobals::entityOrigin(current)).Length();
 
-			if ( !pfound  || (fDist < fMindist))
+			if ( !pfound  || fDist < fMindist)
 			{
 				fMindist = fDist;
 				pfound = current;
@@ -735,7 +734,7 @@ edict_t *CClassInterface::FindEntityByNetClassNearest(Vector vstart, const char 
 		{
 			const float fDist = (vstart - CBotGlobals::entityOrigin(current)).Length();
 
-			if ( !pfound  || (fDist < fMindist))
+			if ( !pfound  || fDist < fMindist)
 			{
 				fMindist = fDist;
 				pfound = current;
@@ -748,7 +747,7 @@ edict_t *CClassInterface::FindEntityByNetClassNearest(Vector vstart, const char 
 
 const char *CClassInterface::FindEntityNetClass(int start, const char *classname)
 {
-	for (int i = ((start != -1) ? start : 0); i < gpGlobals->maxEntities; i++)
+	for (int i = start != -1 ? start : 0; i < gpGlobals->maxEntities; i++)
 	{
 		edict_t* current = engine->PEntityOfEntIndex(i);
 		if (current == NULL)
@@ -777,7 +776,7 @@ const char *CClassInterface::FindEntityNetClass(int start, const char *classname
 // http://svn.alliedmods.net/viewvc.cgi/trunk/extensions/tf2/extension.cpp?revision=2183&root=sourcemod&pathrev=2183
 edict_t *CClassInterface::FindEntityByNetClass(int start, const char *classname)
 {
-	for (int i = ((start != -1) ? start : 0); i < gpGlobals->maxEntities; i++)
+	for (int i = start != -1 ? start : 0; i < gpGlobals->maxEntities; i++)
 	{
 		edict_t* current = engine->PEntityOfEntIndex(i);
 		if (current == NULL)

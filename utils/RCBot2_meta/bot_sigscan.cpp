@@ -219,7 +219,7 @@ void *CSignatureFunction::findPattern(const void *libPtr, const char *pattern, s
 		return NULL;
 	}
 
-	char* ptr = reinterpret_cast<char*>(lib.baseAddress);
+	char* ptr = static_cast<char*>(lib.baseAddress);
 	char* end = ptr + lib.memorySize - len;
 
 	while (ptr < end)
@@ -248,7 +248,7 @@ void *CSignatureFunction::findSignature(void *addrInBase, const char *signature)
 	// First, preprocess the signature 
 	unsigned char real_sig[511];
 
-	const size_t real_bytes = decodeHexString(real_sig, sizeof(real_sig), signature);
+	const size_t real_bytes = decodeHexString(real_sig, sizeof real_sig, signature);
 
 	if (real_bytes >= 1)
 	{
@@ -289,6 +289,6 @@ CCreateGameRulesObject::CCreateGameRulesObject(CRCBotKeyValueList &list, void *p
 
 void **CCreateGameRulesObject::getGameRules()
 {
-	char *addr = reinterpret_cast<char*>(m_func);
+	char *addr = static_cast<char*>(m_func);
 	return *reinterpret_cast<void ***>(addr + rcbot_gamerules_offset.GetInt());
 }

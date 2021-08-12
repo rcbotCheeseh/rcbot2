@@ -167,7 +167,7 @@ CBotUtility::CBotUtility(CBot* pBot, eBotAction id, bool bCanDo, float fUtil, CB
 	{
 		const int iClass = CClassInterface::getTF2Class(pBot->getEdict());
 
-		if (CTeamFortress2Mod::isAttackDefendMap() && (m_pBot->getTeam() == TF2_TEAM_BLUE))
+		if (CTeamFortress2Mod::isAttackDefendMap() && m_pBot->getTeam() == TF2_TEAM_BLUE)
 			m_fUtility += randomFloat(CRCBotTF2UtilFile::m_fUtils[BOT_ATT_UTIL][id][iClass].min, CRCBotTF2UtilFile::m_fUtils[BOT_ATT_UTIL][id][iClass].max);
 		else
 			m_fUtility += randomFloat(CRCBotTF2UtilFile::m_fUtils[BOT_NORM_UTIL][id][iClass].min, CRCBotTF2UtilFile::m_fUtils[BOT_NORM_UTIL][id][iClass].max);
@@ -181,7 +181,7 @@ void CBotUtilities::execute()
 
 	for (unsigned int i = 0; i < m_Utilities.size(); i++)
 	{
-		CBotUtility* pUtil = &(m_Utilities[i]);
+		CBotUtility* pUtil = &m_Utilities[i];
 		const float fUtil = pUtil->getUtility();
 
 		// if bot can do this action

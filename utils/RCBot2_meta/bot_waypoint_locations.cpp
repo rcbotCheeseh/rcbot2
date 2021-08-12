@@ -152,7 +152,7 @@ void CWaypointLocations :: GetAllInArea ( Vector &vOrigin, WaypointList *pWaypoi
 					if ( iWpt == iVisibleTo )
 						continue;
 
-					if ( (iVisibleTo==-1) || pTable->GetVisibilityFromTo(iWpt,iVisibleTo) )
+					if ( iVisibleTo==-1 || pTable->GetVisibilityFromTo(iWpt,iVisibleTo) )
 						pWaypointList->push_back(iWpt);
 				}
 			}
@@ -174,7 +174,7 @@ void CWaypointLocations :: GetAllVisible ( int iFrom, int iOther, Vector &vOrigi
 
 	CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 	
-	if ( (iFrom == -1) || !pTable)
+	if ( iFrom == -1 || !pTable)
 		return;
 
 	getMinMaxs(iLoc,jLoc,kLoc,&iMinLoci,&iMinLocj,&iMinLock,&iMaxLoci,&iMaxLocj,&iMaxLock);
@@ -194,7 +194,7 @@ void CWaypointLocations :: GetAllVisible ( int iFrom, int iOther, Vector &vOrigi
 					//int iWpt = tempStack.ChooseFromStack();
 					
 					// within range only deal with these waypoints
-					if ( (pWpt->distanceFrom(vOrigin) < fEDist) && (pWpt->distanceFrom(vOther) < fEDist) )
+					if ( pWpt->distanceFrom(vOrigin) < fEDist && pWpt->distanceFrom(vOther) < fEDist )
 					{
 						// iFrom should be the enemy waypoint
 						if ( pTable->GetVisibilityFromTo(iFrom,iWpt) ) //|| pTable->GetVisibilityFromTo(iOther,iWpt) )
@@ -352,7 +352,6 @@ void CWaypointLocations :: FindNearestCoverWaypointInBucket ( int i, int j, int 
 {
 	//dataStack <int> tempStack = m_iLocations[i][j][k];
 
-	float fDist;
 	WaypointList &arr = m_iLocations[i][j][k];
 	const size_t size = arr.size();
 	//CBotMod *curmod = CBotGlobals::getCurrentMod();
@@ -380,15 +379,14 @@ void CWaypointLocations :: FindNearestCoverWaypointInBucket ( int i, int j, int 
 		if ( CWaypoints::getVisiblity()->GetVisibilityFromTo(iCoverFromWpt,iSelectedIndex) )
 			continue;
 
-
-		(fDist = curr_wpt->distanceFrom(vOrigin));
+		float fDist = curr_wpt->distanceFrom(vOrigin);
 
 		if ( vGoalOrigin != NULL )
 		{
 			fDist += curr_wpt->distanceFrom(*vGoalOrigin);
 		}
 
-		if ( (fDist > fMinDist) && (fDist < *pfMinDist) )
+		if ( fDist > fMinDist && fDist < *pfMinDist )
 		{
 			*piIndex = iSelectedIndex;
 			*pfMinDist = fDist;			
@@ -408,10 +406,10 @@ int CWaypointLocations :: NearestBlastWaypoint ( const Vector &vOrigin, const Ve
 {
 	int iNearestIndex = -1;
 
-	Vector vMid = (vSrc - vOrigin);
+	Vector vMid = vSrc - vOrigin;
 
-	vMid = (vMid / vMid.Length());
-	vMid = (vMid*((vSrc-vOrigin).Length()/2));
+	vMid = vMid / vMid.Length();
+	vMid = vMid*((vSrc-vOrigin).Length()/2);
 	vMid = vOrigin + vMid;
 
 	const int iLoc = READ_LOC(vMid.x)
@@ -488,9 +486,9 @@ void CWaypointLocations :: FindNearestBlastInBucket ( int i, int j, int k, const
 				continue;
 		}
 
-		if ( curr_wpt->distanceFrom(vOrigin) < (fBlastRadius*2) )
+		if ( curr_wpt->distanceFrom(vOrigin) < fBlastRadius*2 )
 		{
-			if ( (fDist = (curr_wpt->distanceFrom(vSrc)+curr_wpt->distanceFrom(vOrigin))) < *pfMinDist )
+			if ( (fDist = curr_wpt->distanceFrom(vSrc)+curr_wpt->distanceFrom(vOrigin)) < *pfMinDist )
 			{
 				bool bAdd = false;
 				
@@ -575,7 +573,7 @@ void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vect
 
 		if ( iFlagsOnly != 0 )
 		{
-			if ( !curr_wpt->getFlags() || (!curr_wpt->hasSomeFlags(iFlagsOnly)) )
+			if ( !curr_wpt->getFlags() || !curr_wpt->hasSomeFlags(iFlagsOnly) )
 				continue;
 		}
 
@@ -593,7 +591,7 @@ void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vect
 			
 			if ( curr_wpt->distanceFrom(m_vIgnoreLoc) < m_fIgnoreSize )
 				continue;
-			else if ( ((vOrigin + (vcomp*((vOther-vOrigin).Length()))) - vOther).Length() < m_fIgnoreSize )
+			else if ( (vOrigin + vcomp*(vOther-vOrigin).Length() - vOther).Length() < m_fIgnoreSize )
 				continue;
 		}
 
@@ -762,10 +760,10 @@ void CWaypointLocations :: DrawWaypoints ( CClient *pClient, float fDist )
 							// http://developer.valvesoftware.com/wiki/Transforming_the_Multiplayer_SDK_into_Coop
 
 							clusterIndex = engine->GetClusterForOrigin( vOrigin );
-							engine->GetPVSForCluster( clusterIndex, sizeof(m_bPvs), m_bPvs );							
+							engine->GetPVSForCluster( clusterIndex, sizeof m_bPvs, m_bPvs );							
 
-							if ( engine->CheckOriginInPVS( vWpt, m_bPvs, sizeof( m_bPvs ) ) )
-								pWpt->draw(pEntity,pClient->isPathWaypointOn()&&(pClient->currentWaypoint()==iWpt),iDrawType);
+							if ( engine->CheckOriginInPVS( vWpt, m_bPvs, sizeof m_bPvs ) )
+								pWpt->draw(pEntity,pClient->isPathWaypointOn()&&pClient->currentWaypoint()==iWpt,iDrawType);
 						}
 					}
 				}

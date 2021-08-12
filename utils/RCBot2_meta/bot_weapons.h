@@ -374,17 +374,17 @@ public:
 
 	inline bool primaryInRange ( float fDistance )
 	{
-		return (fDistance>m_fPrimMinWeaponShootDist)&&(fDistance<m_fPrimMaxWeaponShootDist);
+		return fDistance>m_fPrimMinWeaponShootDist&&fDistance<m_fPrimMaxWeaponShootDist;
 	}
 
 	inline bool primaryGreaterThanRange ( float fDistance )
 	{
-		return (fDistance<m_fPrimMaxWeaponShootDist);
+		return fDistance<m_fPrimMaxWeaponShootDist;
 	}
 	
 	inline float primaryMaxRange ( )
 	{
-		return (m_fPrimMaxWeaponShootDist);
+		return m_fPrimMaxWeaponShootDist;
 	}
 
 	inline bool hasHighRecoil ()
@@ -459,7 +459,7 @@ public:
 
 	inline bool secondaryInRange ( float fDistance )
 	{
-		return (fDistance>m_fSecMinWeaponShootDist)&&(fDistance<m_fSecMaxWeaponShootDist);
+		return fDistance>m_fSecMinWeaponShootDist&&fDistance<m_fSecMaxWeaponShootDist;
 	}
 
 	inline int getPreference ()
@@ -472,7 +472,7 @@ public:
 		return m_szWeaponName;
 	}
 
-	inline const int getID () const
+	inline int getID() const
 	{
 		return m_iWeaponId;
 	}
@@ -663,7 +663,7 @@ public:
 
 	inline float primaryMaxRange ( )
 	{
-		return (m_pWeaponInfo->primaryMaxRange());
+		return m_pWeaponInfo->primaryMaxRange();
 	}
 
 	inline bool isDeployable ()
@@ -810,7 +810,7 @@ public:
 				if ( m_theWeapons[i].getWeaponInfo() )
 				{
 					if ( m_theWeapons[i].getWeaponInfo()->isGrenade() )
-						return &(m_theWeapons[i]);
+						return &m_theWeapons[i];
 				}
 			}
 		}

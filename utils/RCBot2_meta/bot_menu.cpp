@@ -92,7 +92,7 @@ const char *CWaypointFlagMenuItem :: getCaption ( CClient *pClient, WptColor &co
 
 	color = type->getColour();
 
-	sprintf(m_szCaption,"[%s] %s",(pWpt!=NULL)?(pWpt->hasFlag(type->getBits())?"x":" "):"No Waypoint",type->getName());
+	sprintf(m_szCaption,"[%s] %s",pWpt!=NULL?(pWpt->hasFlag(type->getBits())?"x":" "):"No Waypoint",type->getName());
 
 	return m_szCaption;
 }
@@ -127,13 +127,13 @@ CWaypointFlagMenu :: CWaypointFlagMenu ( CBotMenu *pPrev )
 		pCurrent->addMenuItem(new CWaypointFlagMenuItem(i));
 		iNumAdded++;
 
-		if ( (iNumAdded > 7) || (i == (iNumTypes-1)) )
+		if ( iNumAdded > 7 || i == iNumTypes-1 )
 		{
 			CBotMenuItem *back = new CBotGotoMenuItem("Back...",pParent);
 
 			pParent = pCurrent;
 
-			if ( (iNumAdded > 7) && (i < (iNumTypes-1)) )
+			if ( iNumAdded > 7 && i < iNumTypes-1 )
 			{
 				pCurrent = new CBotMenu();
 				pCurrent->setCaption("Waypoint Flags (More)");
@@ -351,7 +351,7 @@ void CBotMenu ::render (CClient *pClient)
 
 	const Vector vRight = vForward.Cross(Vector(0, 0, 1));
 
-	vOrigin = vOrigin + (vForward * 100) - (vRight * 100);
+	vOrigin = vOrigin + vForward * 100 - vRight * 100;
 	vOrigin.z += 72.0f;
 
 	const char* pszCaption = getCaption(pClient, color);
@@ -371,7 +371,7 @@ void CBotMenu ::render (CClient *pClient)
 
 		pszCaption = item->getCaption(pClient,color);
 
-		debugoverlay->AddTextOverlayRGB(vOrigin,i+2,fUpdateTime,color.r,color.g,color.b,color.a,"%d. %s",(i==9)?(0):(i+1),pszCaption);
+		debugoverlay->AddTextOverlayRGB(vOrigin,i+2,fUpdateTime,color.r,color.g,color.b,color.a,"%d. %s",i==9?0:i+1,pszCaption);
 	}
 }
 
@@ -439,13 +439,13 @@ CWaypointFlagShowMenu :: CWaypointFlagShowMenu (CBotMenu *pParent)
 		pCurrent->addMenuItem(new CWaypointFlagShowMenuItem(i));
 		iNumAdded++;
 
-		if ( (iNumAdded > 7) || (i == (iNumTypes-1)) )
+		if ( iNumAdded > 7 || i == iNumTypes-1 )
 		{
 			CBotMenuItem *back = new CBotGotoMenuItem("Back...",pParent);
 		//	make a new menu
 			pParent = pCurrent;
 
-			if ( (iNumAdded > 7) && (i < (iNumTypes-1)) )
+			if ( iNumAdded > 7 && i < iNumTypes-1 )
 			{
 				pCurrent = new CBotMenu();
 				pCurrent->setCaption("Show Waypoint Flags (More)");
@@ -484,7 +484,7 @@ const char *CWaypointFlagShowMenuItem :: getCaption ( CClient *pClient, WptColor
 
 	color = type->getColour();
 
-	sprintf(m_szCaption,"[%s] %s",(pClient->isShowingAllWaypoints()||pClient->isShowingWaypoint(type->getBits()))?"showing":"hiding",type->getName());
+	sprintf(m_szCaption,"[%s] %s",pClient->isShowingAllWaypoints()||pClient->isShowingWaypoint(type->getBits())?"showing":"hiding",type->getName());
 
 	return m_szCaption;
 }

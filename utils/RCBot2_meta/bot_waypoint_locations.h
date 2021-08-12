@@ -74,7 +74,7 @@ public:
 	// want bucket spacing of 512 units
 	static const int MAX_WPT_BUCKETS = 64;
 
-	static const int BUCKET_SPACING = (HALF_MAX_MAP_SIZE*2)/MAX_WPT_BUCKETS;
+	static const int BUCKET_SPACING = HALF_MAX_MAP_SIZE*2/MAX_WPT_BUCKETS;
 
 	static unsigned char g_iFailedWaypoints [ CWaypoints::MAX_WAYPOINTS ];
 	

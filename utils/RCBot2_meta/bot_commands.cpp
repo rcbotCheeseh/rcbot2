@@ -188,7 +188,7 @@ void CBotSubcommands::printCommand(edict_t *pPrintTo, int indent)
 
 		int i;
 
-		for ( i = 0; (i < (indent*2)) && (i < maxIndent-1); i ++ )
+		for ( i = 0; i < indent*2 && i < maxIndent-1; i ++ )
 			szIndent[i] = ' ';
 
 		szIndent[maxIndent-1] = 0;
@@ -235,7 +235,7 @@ void CBotCommand :: printCommand ( edict_t *pPrintTo, int indent )
 		char szIndent[maxIndent];
 		int i;
 
-		for ( i = 0; (i < (indent*2)) && (i < maxIndent-1); i ++ )
+		for ( i = 0; i < indent*2 && i < maxIndent-1; i ++ )
 			szIndent[i] = ' ';
 
 		szIndent[maxIndent-1] = 0;

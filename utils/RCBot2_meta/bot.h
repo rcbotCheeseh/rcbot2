@@ -107,7 +107,7 @@ bool BotFunc_BreakableIsEnemy ( edict_t *pBreakable, edict_t *pEdict );
 // Misc useful
 inline bool FStrEq(const char *sz1, const char *sz2)
 {
-	return ( sz1 == sz2 || Q_stricmp(sz1, sz2) == 0 );
+	return sz1 == sz2 || Q_stricmp(sz1, sz2) == 0;
 }
 
 /////////// Voice commands
@@ -212,7 +212,7 @@ public:
 
 	inline bool check ( edict_t *pEdict )
 	{
-		return (pEdict == (m_pLastSee.get()));
+		return pEdict == m_pLastSee.get();
 	}
 
 	bool hasSeen ( float fTime );
@@ -447,7 +447,7 @@ public:
 	 */
 	inline bool inUse ()
 	{
-		return (m_bUsed && (m_pEdict!=NULL));
+		return m_bUsed && m_pEdict!=NULL;
 	}
 
 	edict_t *getEdict ();
@@ -554,7 +554,7 @@ public:
 
 	inline void setLookAtTask ( eLookTask lookTask, float fTime = 0 ) 
 	{ 
-		if ( (m_iMoveLookPriority >= m_iLookPriority) && ((fTime > 0) || ( m_fLookSetTime < engine->Time())) )
+		if ( m_iMoveLookPriority >= m_iLookPriority && (fTime > 0 || m_fLookSetTime < engine->Time()) )
 		{
 			m_iLookPriority = m_iMoveLookPriority;
 			m_iLookTask = lookTask; 
@@ -793,7 +793,7 @@ public:
 
 	inline bool isListeningToPlayer ( edict_t *pPlayer ) 
 	{
-		return (m_PlayerListeningTo.get() == pPlayer);
+		return m_PlayerListeningTo.get() == pPlayer;
 	}
 
 	inline IBotController *getController () const 

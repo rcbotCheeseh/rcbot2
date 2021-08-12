@@ -632,7 +632,6 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 void CDODBot :: seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *pWeapon )
 {
 	static CWaypoint *pWpt;
-	static CBotWeapon *pCurrentWeapon;
 
 	if ( (pDied != m_pEdict) && pTeamMate && !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && (CClassInterface::getTeam(pDied)!=m_iTeam) )
 	{
@@ -640,6 +639,7 @@ void CDODBot :: seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *p
 
 		if ( pWeapon )
 		{
+			static CBotWeapon *pCurrentWeapon;
 			const DOD_Class pclass = (DOD_Class)CClassInterface::getPlayerClassDOD(pTeamMate);
 			//DOD_Class pclassdead = (DOD_Class)CClassInterface::getPlayerClassDOD(pDied);
 
@@ -958,9 +958,6 @@ void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 			const int iThisWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
 			//CWaypoint *pNextWaypoint = CWaypoints::getWaypoint(iNextWaypoint);
 
-
-			extern IVDebugOverlay *debugoverlay;
-
 			for ( int i = 0; i < pWaypoint->numPaths(); i++ )
 			{
 				int iPath = pWaypoint->getPath(i);
@@ -999,6 +996,7 @@ void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 #ifndef __linux__
 					if ( CClients::clientsDebugging(BOT_DEBUG_TASK) )
 					{
+						extern IVDebugOverlay *debugoverlay;
 						debugoverlay->AddLineOverlay(CWaypoints::getWaypoint(iNextWaypoint)->getOrigin(),pPath->getOrigin(),255,120,120,false,7.0f);
 						debugoverlay->AddLineOverlay(pWaypoint->getOrigin(),pPath->getOrigin(),255,255,255,false,7.0f);
 					}
@@ -1552,16 +1550,16 @@ void CDODBot :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
 		IF_WANT_TO_LISTEN
 		{
 			Vector vOrigin = CBotGlobals::entityOrigin(pPlayer);
-			QAngle angles;
-			CBotCmd usercmd;
 			IPlayerInfo *p;
 			Vector vForward,vUp,vRight;
-			Vector vCapSearchOrigin;
 
 			p = playerinfomanager->GetPlayerInfo(pPlayer);
 
 			if ( p )
 			{
+				Vector vCapSearchOrigin;
+				CBotCmd usercmd;
+				QAngle angles;
 				usercmd = p->GetLastUserCommand();
 				angles = usercmd.viewangles;
 				AngleVectors(angles,&vForward,&vRight,&vUp);
@@ -2382,7 +2380,6 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 	case BOT_UTIL_DEFEND_POINT:
 		{
 			int id = -1;
-			bool defend_wpt = true;
 
 			if ( util->getId() == BOT_UTIL_DEFEND_POINT )
 			{
@@ -2395,7 +2392,8 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 			pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_DEFEND,m_iTeam,id,true,this);
 
 			if ( pWaypoint == NULL )
-			{			
+			{
+				bool defend_wpt = true;
 				defend_wpt = false;
 
 				if ( distanceFrom(vGoal) > 1024 ) // outside waypoint bucket of goal

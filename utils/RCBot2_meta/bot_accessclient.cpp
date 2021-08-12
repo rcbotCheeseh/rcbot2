@@ -173,20 +173,20 @@ void CAccessClients :: load ()
 
 			int i = 0;
 
-			while (( i < len ) && ((buffer[i] == '\"') || (buffer[i] == ' ')))
+			while (i < len && (buffer[i] == '\"' || buffer[i] == ' '))
 				i++;
 
 			int n = 0;
 
 			// parse Steam ID
-			while ( (n<31) && (i < len) && (buffer[i] != '\"') )			
+			while ( n<31 && i < len && buffer[i] != '\"' )			
 				szSteamId[n++] = buffer[i++];
 
 			szSteamId[n] = 0;
 
 			i++;
 
-			while (( i < len ) && (buffer[i] == ' '))
+			while (i < len && buffer[i] == ' ')
 				i++;
 
 			if ( i == len )
@@ -198,7 +198,7 @@ void CAccessClients :: load ()
 			const int iAccess = atoi(&buffer[i]);
 
 			// invalid
-			if ( (szSteamId[0] == 0) || (szSteamId[0] == ' ' ) )
+			if ( szSteamId[0] == 0 || szSteamId[0] == ' ' )
 			{
 				logger->Log(LogLevel::WARN, "line %d invalid in access client config, steam id invalid", iLine);
 				continue;

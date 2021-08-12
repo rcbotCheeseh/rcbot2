@@ -98,7 +98,7 @@ bool CCSSBot::isAlive()
 	if(CClassInterface::getPlayerLifeState(getEdict()) == LIFE_DEAD || CClassInterface::getPlayerLifeState(getEdict()) == LIFE_DYING)
 		return false;
 
-	return (getOrigin() != Vector(0,0,0));
+	return getOrigin() != Vector(0,0,0);
 }
 
 bool CCSSBot::isEnemy(edict_t *pEdict,bool bCheckWeapons)
@@ -129,7 +129,7 @@ bool CCSSBot::isEnemy(edict_t *pEdict,bool bCheckWeapons)
 	if(CClassInterface::getPlayerLifeState(pEdict) == LIFE_DEAD || CClassInterface::getPlayerLifeState(pEdict) == LIFE_DYING)
 		return false;
 
-	return (p->GetTeamIndex() != getTeam());
+	return p->GetTeamIndex() != getTeam();
 }
 
 bool CCSSBot::startGame()
@@ -172,7 +172,7 @@ void CCSSBot::listenForPlayers()
 	Vector vVelocity;
 	bool bIsNearestAttacking = false;
 
-	if(m_bListenPositionValid && (m_fListenTime > engine->Time())) // already listening to something ?
+	if(m_bListenPositionValid && m_fListenTime > engine->Time()) // already listening to something ?
 	{
 		setLookAtTask(LOOK_NOISE);
 		return;
@@ -217,14 +217,14 @@ void CCSSBot::listenForPlayers()
 
 		const CBotCmd cmd = p->GetLastUserCommand();
 
-		if((cmd.buttons & IN_ATTACK))
+		if(cmd.buttons & IN_ATTACK)
 		{
 			if(wantToListenToPlayerAttack(pPlayer))
 				fFactor += 1000.0f;
 		}
 		
 		// can't see this player and I'm on my own
-		if(wantToListenToPlayerFootsteps(pPlayer) && !isVisible(pPlayer) && ( m_bStatsCanUse && ((m_StatsCanUse.stats.m_iTeamMatesVisible==0))))
+		if(wantToListenToPlayerFootsteps(pPlayer) && !isVisible(pPlayer) && ( m_bStatsCanUse && m_StatsCanUse.stats.m_iTeamMatesVisible==0))
 		{
 			CClassInterface::getVelocity(pPlayer,&vVelocity);
 
@@ -238,13 +238,13 @@ void CCSSBot::listenForPlayers()
 			continue;
 
 		// add inverted distance to the factor (i.e. closer = better)
-		fFactor += (rcbot_listen_dist.GetFloat() - fDist);
+		fFactor += rcbot_listen_dist.GetFloat() - fDist;
 
 		if(fFactor > fMaxFactor)
 		{
 			fMaxFactor = fFactor;
 			pListenNearest = pPlayer;
-			bIsNearestAttacking = (cmd.buttons & IN_ATTACK);
+			bIsNearestAttacking = cmd.buttons & IN_ATTACK;
 		}
 	}
 
@@ -467,7 +467,7 @@ void CCSSBot::handleWeapons()
 	{
 		CBotWeapon* pWeapon = getBestWeapon(m_pEnemy);
 
-		if(m_bWantToChangeWeapon && (pWeapon != NULL) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex())
+		if(m_bWantToChangeWeapon && pWeapon != NULL && pWeapon != getCurrentWeapon() && pWeapon->getWeaponIndex())
 		{
 			selectWeapon(pWeapon->getWeaponIndex());
 		}
@@ -558,7 +558,7 @@ void CCSSBot::modAim(edict_t *pEntity, Vector &v_origin, Vector *v_desired_offse
 		if ( fDist < 160 )
 			fVelFactor = 0.001f;
 
-		fDistFactor = (1.0f - m_pProfile->m_fAimSkill) + (fDist*0.000125f)*(m_fFov/90.0f);
+		fDistFactor = 1.0f - m_pProfile->m_fAimSkill + fDist*0.000125f*(m_fFov/90.0f);
 	}
 
 	myvel = Vector(0,0,0);
@@ -567,7 +567,7 @@ void CCSSBot::modAim(edict_t *pEntity, Vector &v_origin, Vector *v_desired_offse
 	// change in velocity
 	if ( CClassInterface::getVelocity(pEntity,&enemyvel) && CClassInterface::getVelocity(m_pEdict,&myvel) )
 	{
-		vel = (enemyvel - myvel); // relative velocity
+		vel = enemyvel - myvel; // relative velocity
 
 		vel = vel * fVelFactor;//0.003125f;
 
@@ -636,7 +636,7 @@ void CCSSBot::modThink()
 		m_bInCombat = true;
 		updateCondition(CONDITION_CHANGED); // Re-execute utility to enter into combat mode
 	}
-	else if(hasSomeConditions(CONDITION_ENEMY_DEAD) || (hasSomeConditions(CONDITION_ENEMY_OBSCURED) && m_fCombatTime + 12.0f <= engine->Time()))
+	else if(hasSomeConditions(CONDITION_ENEMY_DEAD) || hasSomeConditions(CONDITION_ENEMY_OBSCURED) && m_fCombatTime + 12.0f <= engine->Time())
 	{
 		m_bInCombat = false;
 		m_pEnemy = NULL; // Bots are tracking enemies through walls
@@ -802,12 +802,12 @@ bool CCSSBot::executeAction(eBotAction iAction)
 		}
 		case BOT_UTIL_PLANT_BOMB:
 		{
-			CWaypoint* pRoute = NULL;
 			CWaypoint* pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_GOAL);
 
 			if(pWaypoint)
 			{
-				if((m_fUseRouteTime <= engine->Time()))
+				CWaypoint * pRoute = NULL;
+				if(m_fUseRouteTime <= engine->Time())
 				{
 					pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), getTeam(), pWaypoint->getArea());
 				}
@@ -900,7 +900,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			{
 				CWaypoint* pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), getTeam(),
 				                                                    pWaypoint->getArea());
-				if((m_fUseRouteTime <= engine->Time()))
+				if(m_fUseRouteTime <= engine->Time())
 				{
 					if(pRoute)
 					{

@@ -171,7 +171,7 @@ public:
 
 	////////////////////////////////////////////////////////
 	inline void setFlag(int iFlag) { m_iFlags |= iFlag; }
-	inline bool hasFlag ( int iFlag ) { return ((m_iFlags & iFlag) == iFlag); }
+	inline bool hasFlag ( int iFlag ) { return (m_iFlags & iFlag) == iFlag; }
 	inline void removeFlag ( int iFlag ) { m_iFlags &= ~iFlag; }
 	/////////////////////////////////////////////////////////
 	inline int getParent () { if ( hasFlag(FL_ASTAR_PARENT) ) return m_iParent; else return -1; }
@@ -191,7 +191,7 @@ public:
 	// for comparison
 	bool precedes ( AStarNode *other ) const
 	{
-		return (m_fCost+m_fHeuristic) < (other->getCost() + other->getHeuristic());
+		return m_fCost+m_fHeuristic < other->getCost() + other->getHeuristic();
 	}
 	void setWaypoint ( int iWpt ) { m_iWaypoint = iWpt; }
 	inline int getWaypoint () { return m_iWaypoint; }
@@ -225,7 +225,7 @@ public:
 
 	bool empty ()
 	{
-		return (m_Head==NULL);
+		return m_Head==NULL;
 	}
 
 	AStarNode *top ()

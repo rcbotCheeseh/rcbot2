@@ -152,7 +152,7 @@ bool CWaypointNavigator :: beliefLoad ( )
    // quick loop
    for ( unsigned short int i = 0; i < num; i ++ )
    {
-	   m_fBelief[i] = (((float)filebelief[i])/32767) * MAX_BELIEF;
+	   m_fBelief[i] = (float)filebelief[i]/32767 * MAX_BELIEF;
    }
 
    fclose(bfp);
@@ -166,7 +166,7 @@ bool CWaypointNavigator :: beliefSave ( bool bOverride )
    char filename[1024];
    char mapname[512];
 
-   if ( (m_pBot->getTeam() == m_iBeliefTeam) && !bOverride )
+   if ( m_pBot->getTeam() == m_iBeliefTeam && !bOverride )
 	   return false;
 
    memset(filebelief,0,sizeof(unsigned short int)*CWaypoints::MAX_WAYPOINTS);
@@ -219,7 +219,7 @@ bool CWaypointNavigator :: beliefSave ( bool bOverride )
    // quick loop
    for ( unsigned short int i = 0; i < num; i ++ )
    {
-	   filebelief[i] = (filebelief[i]/2) + ((unsigned short int)((m_fBelief[i]/MAX_BELIEF) * 16383)); 
+	   filebelief[i] = filebelief[i]/2 + (unsigned short int)(m_fBelief[i]/MAX_BELIEF * 16383); 
    }
 
    fseek (bfp, 0, SEEK_SET); // seek at start
@@ -239,7 +239,7 @@ bool CWaypointNavigator :: beliefSave ( bool bOverride )
 bool CWaypointNavigator :: wantToSaveBelief () 
 { 
 	// playing on this map for more than a normal load time
-	return ( m_bBeliefChanged && (m_iBeliefTeam != m_pBot->getTeam()) ) ;
+	return m_bBeliefChanged && m_iBeliefTeam != m_pBot->getTeam() ;
 }
 
 int CWaypointNavigator :: numPaths ( )
@@ -380,7 +380,7 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBeliefBetweenAreas ( std::vector<
 					if ( bHighDanger )
 						fBelief += node->getHeuristic();
 					else
-						fBelief += (131072.0f - node->getHeuristic());
+						fBelief += 131072.0f - node->getHeuristic();
 				}
 				else if ( bHighDanger )
 					fBelief += m_fBelief[node->getWaypoint()] + node->getHeuristic();
@@ -401,7 +401,7 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBeliefBetweenAreas ( std::vector<
 					if ( bHighDanger )
 						fBelief += node->getHeuristic();
 					else
-						fBelief += (131072.0f - node->getHeuristic());
+						fBelief += 131072.0f - node->getHeuristic();
 				}
 				else if ( bHighDanger )
 					fBelief += m_fBelief[node->getWaypoint()] + node->getHeuristic();
@@ -463,9 +463,9 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBelief ( std::vector<CWaypoint*> 
 					{
 						edict_t *pPlayer = INDEXENT(i);
 
-						if ( (pPlayer != NULL) && !pPlayer->IsFree() && (CClassInterface::getTF2Class(pPlayer)==TF_CLASS_SNIPER) )
+						if ( pPlayer != NULL && !pPlayer->IsFree() && CClassInterface::getTF2Class(pPlayer)==TF_CLASS_SNIPER )
 						{
-							if ( ( iTeam == 0 ) || ( iTeam == CClassInterface::getTeam(pPlayer) ) )
+							if ( iTeam == 0 || iTeam == CClassInterface::getTeam(pPlayer) )
 							{
 								if ( goals[i]->distanceFrom(CBotGlobals::entityOrigin(pPlayer)) < 200.0f )
 								{
@@ -482,9 +482,9 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBelief ( std::vector<CWaypoint*> 
 					{
 						edict_t *pPlayer = INDEXENT(i);
 
-						if ( (pPlayer != NULL) && !pPlayer->IsFree() )
+						if ( pPlayer != NULL && !pPlayer->IsFree() )
 						{
-							if ( ( iTeam == 0 ) || ( iTeam == CClassInterface::getTeam(pPlayer) ) )
+							if ( iTeam == 0 || iTeam == CClassInterface::getTeam(pPlayer) )
 							{
 								if ( goals[i]->distanceFrom(CBotGlobals::entityOrigin(pPlayer)) < 200.0f )
 								{
@@ -497,11 +497,11 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBelief ( std::vector<CWaypoint*> 
 
 				if ( bHighDanger )
 				{
-					fBelief += bBeliefFactor * (1.0f + (m_fBelief[CWaypoints::getWaypointIndex(goals[i])]));	
+					fBelief += bBeliefFactor * (1.0f + m_fBelief[CWaypoints::getWaypointIndex(goals[i])]);	
 				}
 				else
 				{
-					fBelief += bBeliefFactor * (1.0f + (MAX_BELIEF - (m_fBelief[CWaypoints::getWaypointIndex(goals[i])])));
+					fBelief += bBeliefFactor * (1.0f + (MAX_BELIEF - m_fBelief[CWaypoints::getWaypointIndex(goals[i])]));
 				}
 			}
 
@@ -537,7 +537,7 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBelief ( std::vector<CWaypoint*> 
 					{
 						edict_t *pPlayer = INDEXENT(i);
 
-						if ( (pPlayer != NULL) && !pPlayer->IsFree() && (CClassInterface::getTF2Class(pPlayer)==TF_CLASS_SNIPER) )
+						if ( pPlayer != NULL && !pPlayer->IsFree() && CClassInterface::getTF2Class(pPlayer)==TF_CLASS_SNIPER )
 						{
 							if ( goals[i]->distanceFrom(CBotGlobals::entityOrigin(pPlayer)) < 200.0f )
 							{
@@ -553,7 +553,7 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBelief ( std::vector<CWaypoint*> 
 					{
 						edict_t *pPlayer = INDEXENT(i);
 
-						if ( (pPlayer != NULL) && !pPlayer->IsFree() )
+						if ( pPlayer != NULL && !pPlayer->IsFree() )
 						{
 							if ( goals[i]->distanceFrom(CBotGlobals::entityOrigin(pPlayer)) < 200.0f )
 							{
@@ -565,11 +565,11 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBelief ( std::vector<CWaypoint*> 
 
 				if ( bHighDanger )
 				{
-					fBelief += bBeliefFactor * (1.0f + (m_fBelief[CWaypoints::getWaypointIndex(goals[i])]));
+					fBelief += bBeliefFactor * (1.0f + m_fBelief[CWaypoints::getWaypointIndex(goals[i])]);
 				}
 				else
 				{
-					fBelief += bBeliefFactor * (1.0f + (MAX_BELIEF - (m_fBelief[CWaypoints::getWaypointIndex(goals[i])])));
+					fBelief += bBeliefFactor * (1.0f + (MAX_BELIEF - m_fBelief[CWaypoints::getWaypointIndex(goals[i])]));
 				}
 
 				if ( fSelect <= fBelief )
@@ -614,7 +614,7 @@ void CWaypointNavigator :: beliefOne ( int iWptIndex, BotBelief iBeliefType, flo
 	else // danger	
 	{
 		if ( m_fBelief[iWptIndex] < MAX_BELIEF )
-			m_fBelief[iWptIndex] += (2048.0f / fDist);
+			m_fBelief[iWptIndex] += 2048.0f / fDist;
 		if ( m_fBelief[iWptIndex] > MAX_BELIEF )
 				m_fBelief[iWptIndex] = MAX_BELIEF;
 	}
@@ -640,7 +640,7 @@ void CWaypointNavigator :: belief ( Vector vOrigin, Vector vOther, float fBelief
 	iWptTo = CWaypointLocations::NearestWaypoint(vOther,2048.0,-1,true,true,false,NULL,false,0,false,true,vOrigin);
 
 	// no waypoint information
-	if ( (iWptFrom == -1) || (iWptTo == -1) )
+	if ( iWptFrom == -1 || iWptTo == -1 )
 		return;
 
 	fEDist = (vOrigin-vOther).Length(); // range
@@ -668,7 +668,7 @@ void CWaypointNavigator :: belief ( Vector vOrigin, Vector vOther, float fBelief
 		else if ( iType == BELIEF_DANGER )
 		{
 			if ( m_fBelief[iWptIndex] < MAX_BELIEF )
-				m_fBelief[iWptIndex] += (fStrength / (vOrigin-pWpt->getOrigin()).Length())*fBelief;
+				m_fBelief[iWptIndex] += fStrength / (vOrigin-pWpt->getOrigin()).Length()*fBelief;
 			if ( m_fBelief[iWptIndex] > MAX_BELIEF )
 				m_fBelief[iWptIndex] = MAX_BELIEF;
 
@@ -692,7 +692,7 @@ void CWaypointNavigator :: belief ( Vector vOrigin, Vector vOther, float fBelief
 		else if ( iType == BELIEF_SAFETY )
 		{
 			if ( m_fBelief[iWptIndex] < MAX_BELIEF )
-				m_fBelief[iWptIndex] += (fStrength / (vOrigin-pWpt->getOrigin()).Length())*fBelief*0.5f;
+				m_fBelief[iWptIndex] += fStrength / (vOrigin-pWpt->getOrigin()).Length()*fBelief*0.5f;
 			if ( m_fBelief[iWptIndex] > MAX_BELIEF )
 				m_fBelief[iWptIndex] = MAX_BELIEF;
 
@@ -898,7 +898,7 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 		Vector vIgnore;
 		float fIgnoreSize;
 
-		const bool bIgnore = m_pBot->getIgnoreBox(&vIgnore,&fIgnoreSize) && (pGoalWaypoint->distanceFrom(vFrom) > (fIgnoreSize*2));
+		const bool bIgnore = m_pBot->getIgnoreBox(&vIgnore,&fIgnoreSize) && pGoalWaypoint->distanceFrom(vFrom) > fIgnoreSize*2;
 
 		m_iCurrentWaypoint = CWaypointLocations::NearestWaypoint(vFrom,CWaypointLocations::REACHABLE_RANGE,m_iLastFailedWpt,
 			true,false,true,NULL,false,m_pBot->getTeam(),true,false,vIgnore,0,NULL,bIgnore,fIgnoreSize);
@@ -968,7 +968,7 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 	if ( iConditions & CONDITION_COVERT )
 		fBeliefSensitivity = 2.0f;
 
-	while ( !bFoundGoal && !m_theOpenList.empty() && (iLoops < iMaxLoops) )
+	while ( !bFoundGoal && !m_theOpenList.empty() && iLoops < iMaxLoops )
 	{
 		iLoops ++;
 
@@ -979,7 +979,7 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 
 		iCurrentNode = curr->getWaypoint();
 		
-		bFoundGoal = (iCurrentNode == m_iGoalWaypoint);
+		bFoundGoal = iCurrentNode == m_iGoalWaypoint;
 
 		if ( bFoundGoal )
 			break;
@@ -1023,13 +1023,13 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 			{
 				edict_t *pListenEdict;
 
-				if ( !engine->IsDedicatedServer() && ((pListenEdict = CClients::getListenServerClient())!=NULL) )
+				if ( !engine->IsDedicatedServer() && (pListenEdict = CClients::getListenServerClient())!=NULL )
 				{
 					debugoverlay->AddLineOverlayAlpha(succWpt->getOrigin(),currWpt->getOrigin(),255,0,0,255,false,5.0f);
 				}
 			}
 #endif
-			if ( (iSucc != m_iGoalWaypoint) && !m_pBot->canGotoWaypoint(vOrigin,succWpt,currWpt) )
+			if ( iSucc != m_iGoalWaypoint && !m_pBot->canGotoWaypoint(vOrigin,succWpt,currWpt) )
 				continue;
 
 			if ( currWpt->hasFlag(CWaypointTypes::W_FL_TELEPORT_CHEAT) )
@@ -1037,9 +1037,9 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 			else if ( succWpt->hasFlag(CWaypointTypes::W_FL_TELEPORT_CHEAT) )
 				fCost = succWpt->distanceFrom(vOrigin);
 			else 
-				fCost = curr->getCost()+(succWpt->distanceFrom(vOrigin));
+				fCost = curr->getCost()+succWpt->distanceFrom(vOrigin);
 
-			if ( !CWaypointDistances::isSet(m_iCurrentWaypoint,iSucc) || (CWaypointDistances::getDistance(m_iCurrentWaypoint,iSucc) > fCost) )
+			if ( !CWaypointDistances::isSet(m_iCurrentWaypoint,iSucc) || CWaypointDistances::getDistance(m_iCurrentWaypoint,iSucc) > fCost )
 				CWaypointDistances::setDistance(m_iCurrentWaypoint,iSucc,fCost);
 
 			if ( succ->isOpen() || succ->isClosed() )
@@ -1061,7 +1061,7 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 
 			if ( fBeliefSensitivity > 1.6f )
 			{
-				if ( (m_pBot->getEnemy() != NULL) && CBotGlobals::isPlayer(m_pBot->getEnemy()) && (m_pBot->isVisible(m_pBot->getEnemy())) )
+				if ( m_pBot->getEnemy() != NULL && CBotGlobals::isPlayer(m_pBot->getEnemy()) && m_pBot->isVisible(m_pBot->getEnemy()) )
 				{
 					if ( CBotGlobals::DotProductFromOrigin(m_pBot->getEnemy(),succWpt->getOrigin()) > 0.96f )
 						succ->setCost(fCost+CWaypointLocations::REACHABLE_RANGE);
@@ -1071,7 +1071,7 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 					if ( iDangerId != -1 )
 					{
 						if ( pVisTable->GetVisibilityFromTo(iDangerId,iSucc) )
-							succ->setCost(succ->getCost()+(m_fBelief[iSucc]*fBeliefSensitivity*2));
+							succ->setCost(succ->getCost()+m_fBelief[iSucc]*fBeliefSensitivity*2);
 					}
 				}
 				else if ( iDangerId != -1 )
@@ -1079,22 +1079,22 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 					if ( !pVisTable->GetVisibilityFromTo(iDangerId,iSucc) )
 						succ->setCost(fCost);
 					else
-						succ->setCost(fCost+(m_fBelief[iSucc]*fBeliefSensitivity*2));
+						succ->setCost(fCost+m_fBelief[iSucc]*fBeliefSensitivity*2);
 				}
 				else
-					succ->setCost(fCost+(m_fBelief[iSucc]*fBeliefSensitivity));
+					succ->setCost(fCost+m_fBelief[iSucc]*fBeliefSensitivity);
 				//succ->setCost(fCost-(MAX_BELIEF-m_fBelief[iSucc]));
 				//succ->setCost(fCost-((MAX_BELIEF*fBeliefSensitivity)-(m_fBelief[iSucc]*(fBeliefSensitivity-m_pBot->getProfile()->m_fBraveness))));	
 			}
 			else
-				succ->setCost(fCost+(m_fBelief[iSucc]*(fBeliefSensitivity-m_pBot->getProfile()->m_fBraveness)));	
+				succ->setCost(fCost+m_fBelief[iSucc]*(fBeliefSensitivity-m_pBot->getProfile()->m_fBraveness));	
 
 			succ->setWaypoint(iSucc);
 
 			if ( !succ->heuristicSet() )		
 			{
 				if ( fBeliefSensitivity > 1.6f )
-					succ->setHeuristic(m_pBot->distanceFrom(succWpt->getOrigin())+succWpt->distanceFrom(vTo)+(m_fBelief[iSucc]*2));	
+					succ->setHeuristic(m_pBot->distanceFrom(succWpt->getOrigin())+succWpt->distanceFrom(vTo)+m_fBelief[iSucc]*2);	
 				else 
 					succ->setHeuristic(m_pBot->distanceFrom(succWpt->getOrigin())+succWpt->distanceFrom(vTo));		
 			}
@@ -1153,7 +1153,7 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 	const int iNumWaypoints = CWaypoints::numWaypoints();
 	float fDistance = 0.0;
 
-	while ( (iCurrentNode != -1) && (iCurrentNode != m_iCurrentWaypoint ) && (iLoops <= iNumWaypoints) )
+	while ( iCurrentNode != -1 && iCurrentNode != m_iCurrentWaypoint && iLoops <= iNumWaypoints )
 	{
 		iLoops++;
 
@@ -1170,7 +1170,7 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 		{
 			edict_t *pListenEdict;
 
-			if ( !engine->IsDedicatedServer() && ((pListenEdict = CClients::getListenServerClient())!=NULL) )
+			if ( !engine->IsDedicatedServer() && (pListenEdict = CClients::getListenServerClient())!=NULL )
 			{
 				debugoverlay->AddLineOverlayAlpha(CWaypoints::getWaypoint(iCurrentNode)->getOrigin()+Vector(0,0,8.0f),CWaypoints::getWaypoint(iParent)->getOrigin()+Vector(0,0,8.0f),255,255,255,255,false,5.0f);
 			}
@@ -1325,9 +1325,9 @@ void CWaypointNavigator :: updatePosition ()
 
 			if ( stats )
 			{
-				if ( (stats->stats.m_iEnemiesVisible > stats->stats.m_iTeamMatesVisible) && (stats->stats.m_iEnemiesInRange>0) )
+				if ( stats->stats.m_iEnemiesVisible > stats->stats.m_iTeamMatesVisible && stats->stats.m_iEnemiesInRange>0 )
 					beliefOne(iWaypointID,BELIEF_DANGER,100.0f);
-				else if ( (stats->stats.m_iTeamMatesVisible > 0) && (stats->stats.m_iTeamMatesInRange > 0) )
+				else if ( stats->stats.m_iTeamMatesVisible > 0 && stats->stats.m_iTeamMatesInRange > 0 )
 					beliefOne(iWaypointID,BELIEF_SAFETY,100.0f);
 			}
 
@@ -1372,7 +1372,7 @@ void CWaypointNavigator :: updatePosition ()
 					//caxanga334: Original code subtracted an int from Vector, SDK 2013 doesn't like that
 					//The waypoint height is probably the Z axis, so I created a Vector with 0 for xy and waypoint height for z
 					if ( iWaypointFlagsPrev & CWaypointTypes::W_FL_TELEPORT_CHEAT )
-						CBotGlobals::teleportPlayer(m_pBot->getEdict(),pWaypoint->getOrigin()-Vector(0,0,(CWaypoint::WAYPOINT_HEIGHT/2)));
+						CBotGlobals::teleportPlayer(m_pBot->getEdict(),pWaypoint->getOrigin()-Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2));
 				}
 				if ( m_iCurrentWaypoint != -1 )
 				{ // random point, but more chance of choosing the most dangerous point
@@ -1389,7 +1389,7 @@ void CWaypointNavigator :: updatePosition ()
 	m_pBot->walkingTowardsWaypoint(pWaypoint,&m_bOffsetApplied,m_vOffset);
 
 	// fix for bots not finding goals
-	if ( m_fNextClearFailedGoals && ( m_fNextClearFailedGoals < engine->Time() ) )
+	if ( m_fNextClearFailedGoals && m_fNextClearFailedGoals < engine->Time() )
 	{
 		m_iFailedGoals.clear();
 		m_fNextClearFailedGoals = 0;
@@ -1398,7 +1398,7 @@ void CWaypointNavigator :: updatePosition ()
 	m_pBot->setMoveTo(vWptOrigin+m_vOffset);
 
 	if ( pWaypoint && pWaypoint->isAiming() )
-		m_pBot->setAiming(vWptOrigin+(vaim*1024));
+		m_pBot->setAiming(vWptOrigin+vaim*1024);
 	
 	/*if ( !m_pBot->hasEnemy() && (fBelief >= (fPrevBelief+10.0f)) ) 
 		m_pBot->setLookAtTask(LOOK_LAST_ENEMY);
@@ -1495,7 +1495,7 @@ bool CWaypoint :: touched ( Vector vOrigin, Vector vOffset, float fTouchDist, bo
 	v_dynamic = m_vOrigin+vOffset;
 
 	if ( hasFlag(CWaypointTypes::W_FL_TELEPORT_CHEAT) )
-		return ((vOrigin - getOrigin()).Length()) < (MAX(fTouchDist,getRadius()));
+		return (vOrigin - getOrigin()).Length() < (MAX(fTouchDist,getRadius()));
 
 	// on ground or ladder
 	if ( onground )
@@ -1503,7 +1503,7 @@ bool CWaypoint :: touched ( Vector vOrigin, Vector vOffset, float fTouchDist, bo
 		if ( (vOrigin-v_dynamic).Length2D() <= fTouchDist )
 		{
 			if ( hasFlag(CWaypointTypes::W_FL_LADDER) )
-				return ((vOrigin.z+rcbot_ladder_offs.GetFloat()) > v_dynamic.z);
+				return vOrigin.z+rcbot_ladder_offs.GetFloat() > v_dynamic.z;
 
 			return std::fabs(vOrigin.z-v_dynamic.z) <= WAYPOINT_HEIGHT;
 		}
@@ -1583,7 +1583,7 @@ void CWaypoint :: draw ( edict_t *pEdict, bool bDrawPaths, unsigned short int iD
 
 					if ( pBot )
 					{
-						const char belief = (char)((int)pBot->getNavigator()->getBelief(CWaypoints::getWaypointIndex(this)));
+						const char belief = (char)(int)pBot->getNavigator()->getBelief(CWaypoints::getWaypointIndex(this));
 
 						// show danger - red = dangerous / blue = safe
 						r = belief;
@@ -1770,7 +1770,7 @@ bool CWaypoints :: save ( bool bVisiblityMade, edict_t *pPlayer, const char *psz
 	authorinfo.szAuthor[31] = 0;
 	authorinfo.szModifiedBy[31] = 0;
 
-	if ( !bVisiblityMade && (pszAuthor==NULL) && (pszModifier==NULL) )
+	if ( !bVisiblityMade && pszAuthor==NULL && pszModifier==NULL )
 	{
 		char szAuthorName[32];
 		strcpy(szAuthorName,"(unknown)");
@@ -1907,8 +1907,8 @@ bool CWaypoints :: load (const char *szMapName)
 	bool bWorkVisibility = true;
 
 	// if we're loading from another map, just load visibility, save effort!
-	if ( (szMapName == NULL) && (header.iFlags & W_FILE_FL_VISIBILITY) )
-		bWorkVisibility = ( !m_pVisibilityTable->ReadFromFile(iSize) );
+	if ( szMapName == NULL && header.iFlags & W_FILE_FL_VISIBILITY )
+		bWorkVisibility = !m_pVisibilityTable->ReadFromFile(iSize);
 
 	for ( int i = 0; i < iSize; i ++ )
 	{
@@ -2023,7 +2023,7 @@ bool CWaypoint :: checkGround ()
 	if ( m_fNextCheckGroundTime < engine->Time() )
 	{
 		CBotGlobals::quickTraceline(NULL,m_vOrigin,m_vOrigin-Vector(0,0,80.0f));
-		m_bHasGround = ( CBotGlobals::getTraceResult()->fraction < 1.0f );
+		m_bHasGround = CBotGlobals::getTraceResult()->fraction < 1.0f;
 		m_fNextCheckGroundTime = engine->Time() + 1.0f;
 	}
 
@@ -2144,7 +2144,7 @@ void CWaypoints :: shiftVisibleAreas ( edict_t *pPlayer, int from, int to )
 {
 	for ( int i = 0; i < m_iNumWaypoints; i ++ )
 	{
-		CWaypoint *pWpt = &(m_theWaypoints[i]);
+		CWaypoint *pWpt = &m_theWaypoints[i];
 
 		if ( !pWpt->isUsed() )
 			continue;
@@ -2153,7 +2153,7 @@ void CWaypoints :: shiftVisibleAreas ( edict_t *pPlayer, int from, int to )
 		{
 			CBotGlobals::quickTraceline(pPlayer,CBotGlobals::entityOrigin(pPlayer),pWpt->getOrigin());
 
-			if ( (CBotGlobals::getTraceResult()->fraction >= 1.0f)  )
+			if ( CBotGlobals::getTraceResult()->fraction >= 1.0f  )
 				pWpt->setArea(to);	
 		}
 	}
@@ -2201,7 +2201,7 @@ int CWaypoints :: getClosestFlagged ( int iFlags, Vector &vOrigin, int iTeam, fl
 				if (!pCurrentMod->isWaypointAreaValid(pWpt->getArea(), iFlags)) // CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(pWpt->getArea()) )
 					continue;
 
-				if ( (iFrom == -1) )
+				if ( iFrom == -1 )
 					distance = (pWpt->getOrigin()-vOrigin).Length();
 				else
 					distance = CWaypointDistances::getDistance(iFrom,i);
@@ -2331,7 +2331,7 @@ int CWaypoints :: addWaypoint ( CClient *pClient, const char *type1, const char 
 		iFlags |= CWaypoint::W_FL_CROUCH;		*/
 
 
-	if ( rcbot_wpt_autotype.GetInt() && (!bUseTemplate || (rcbot_wpt_autotype.GetInt()==2)) )
+	if ( rcbot_wpt_autotype.GetInt() && (!bUseTemplate || rcbot_wpt_autotype.GetInt()==2) )
 	{
 		IPlayerInfo *pPlayerInfo = playerinfomanager->GetPlayerInfo(pClient->getPlayer());
 
@@ -2373,7 +2373,7 @@ int CWaypoints :: addWaypoint ( CClient *pClient, const char *type1, const char 
 	}
 	else
 	{
-		iIndex = addWaypoint(pClient->getPlayer(),vWptOrigin,iFlags,pClient->isAutoPathOn(),(int)playerAngles.y,iArea,(iFlags!=iPrevFlags) ? (fMaxDistance/2) : 0); // sort flags out	
+		iIndex = addWaypoint(pClient->getPlayer(),vWptOrigin,iFlags,pClient->isAutoPathOn(),(int)playerAngles.y,iArea,iFlags!=iPrevFlags ? fMaxDistance/2 : 0); // sort flags out	
 	}
 
 	pClient->playSound("weapons/crossbow/hit1");
@@ -2391,7 +2391,7 @@ int CWaypoints :: addWaypoint ( edict_t *pPlayer, Vector vOrigin, int iFlags, bo
 		return -1;
 	}
 
-	if ( (fRadius == 0) && (rcbot_wpt_autoradius.GetFloat() > 0) )
+	if ( fRadius == 0 && rcbot_wpt_autoradius.GetFloat() > 0 )
 		fRadius = rcbot_wpt_autoradius.GetFloat();
 
 	///////////////////////////////////////////////////
@@ -2447,7 +2447,7 @@ int CWaypoints :: nearestWaypointGoal ( int iFlags, Vector &origin, float fDist,
 
 		if ( pWpt->isUsed() && pWpt->forTeam(iTeam) )
 		{
-			if ( (iFlags == -1) || pWpt->hasFlag(iFlags) )
+			if ( iFlags == -1 || pWpt->hasFlag(iFlags) )
 			{
 				// FIX DODS bug
 				if (pCurrentMod->isWaypointAreaValid(pWpt->getArea(), iFlags)) // CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(pWpt->getArea()))
@@ -2484,14 +2484,14 @@ CWaypoint *CWaypoints :: randomRouteWaypoint ( CBot *pBot, Vector vOrigin, Vecto
 		{
 			if ( pWpt->hasFlag(CWaypointTypes::W_FL_ROUTE) )
 			{
-			    if ((pWpt->getArea() != iArea) )
+			    if (pWpt->getArea() != iArea )
 					continue;
 
 				// CHECK THAT ROUTE WAYPOINT IS USEFUL...
 
 				Vector vRoute = pWpt->getOrigin();
 
-				if ( (vRoute - vOrigin).Length() < ((vGoal - vOrigin).Length()+128.0f) )
+				if ( (vRoute - vOrigin).Length() < (vGoal - vOrigin).Length()+128.0f )
 				{
 				//if ( CWaypointDistances::getDistance() )
 					/*Vector vecLOS;
@@ -2553,7 +2553,7 @@ CWaypoint *CWaypoints::getNextCoverPoint ( CBot *pBot, CWaypoint *pCurrent, CWay
 		if ( !pBot->canGotoWaypoint(pCurrent->getOrigin(),pNext,pCurrent) )
 			continue;
 
-		if ( (iMaxDist == -1) || ((fDist=pNext->distanceFrom(pBlocking->getOrigin())) > fMaxDist) )
+		if ( iMaxDist == -1 || (fDist=pNext->distanceFrom(pBlocking->getOrigin())) > fMaxDist )
 		{
 			fMaxDist = fDist;
 			iMaxDist = iNext;
@@ -2639,9 +2639,9 @@ void CWaypoints :: autoFix ( bool bAutoFixNonArea )
 
 	for ( int i = 0; i < numWaypoints(); i ++ )
 	{
-		if ( m_theWaypoints[i].isUsed() && (m_theWaypoints[i].getFlags() > 0) )
+		if ( m_theWaypoints[i].isUsed() && m_theWaypoints[i].getFlags() > 0 )
 		{
-			if ( ( m_theWaypoints[i].getArea() > iNumCps ) || ( bAutoFixNonArea && ( m_theWaypoints[i].getArea()==0) && m_theWaypoints[i].hasSomeFlags(CWaypointTypes::W_FL_SENTRY|CWaypointTypes::W_FL_DEFEND|CWaypointTypes::W_FL_SNIPER|CWaypointTypes::W_FL_CAPPOINT|CWaypointTypes::W_FL_TELE_EXIT) ) )
+			if ( m_theWaypoints[i].getArea() > iNumCps || bAutoFixNonArea && m_theWaypoints[i].getArea()==0 && m_theWaypoints[i].hasSomeFlags(CWaypointTypes::W_FL_SENTRY|CWaypointTypes::W_FL_DEFEND|CWaypointTypes::W_FL_SNIPER|CWaypointTypes::W_FL_CAPPOINT|CWaypointTypes::W_FL_TELE_EXIT) )
 			{
 				m_theWaypoints[i].setArea(CTeamFortress2Mod::m_ObjectiveResource.NearestArea(m_theWaypoints[i].getOrigin()));
 				CBotGlobals::botMessage(NULL,0,"Changed Waypoint id %d area to (area = %d)",i,m_theWaypoints[i].getArea());
@@ -2661,7 +2661,7 @@ void CWaypoints :: checkAreas ( edict_t *pActivator )
 
 	for ( int i = 0; i < numWaypoints(); i ++ )
 	{
-		if ( m_theWaypoints[i].isUsed() && (m_theWaypoints[i].getFlags() > 0) )
+		if ( m_theWaypoints[i].isUsed() && m_theWaypoints[i].getFlags() > 0 )
 		{
 			if ( m_theWaypoints[i].getArea() > iNumCps )
 			{
@@ -2698,12 +2698,12 @@ CWaypoint *CWaypoints :: randomWaypointGoalNearestArea ( int iFlags, int iTeam, 
 
 		if ( pWpt->isUsed() && pWpt->forTeam(iTeam) )// && (pWpt->getArea() == iArea) )
 		{
-			if ( (iFlags == -1) || pWpt->hasSomeFlags(iFlags) )
+			if ( iFlags == -1 || pWpt->hasSomeFlags(iFlags) )
 			{
 				//DOD:S Bug
 				if (!bForceArea && !pCurrentMod->isWaypointAreaValid(pWpt->getArea(), iFlags))
 					continue;
-				else if ( bForceArea && (pWpt->getArea() != iArea) )
+				else if ( bForceArea && pWpt->getArea() != iArea )
 					continue;
 
 				node = new AStarNode();
@@ -2739,7 +2739,7 @@ CWaypoint *CWaypoints :: randomWaypointGoalNearestArea ( int iFlags, int iTeam, 
 			pWpt = pNav->chooseBestFromBeliefBetweenAreas(goals,bHighDanger,bIgnoreBelief);
 		}
 		else
-			pWpt = CWaypoints::getWaypoint(goals[ randomInt(0, goals.size() - 1) ]->getWaypoint());
+			pWpt = getWaypoint(goals[ randomInt(0, goals.size() - 1) ]->getWaypoint());
 
 		//pWpt = goals.Random();
 	}
@@ -2775,12 +2775,12 @@ CWaypoint *CWaypoints :: randomWaypointGoalBetweenArea ( int iFlags, int iTeam, 
 
 		if ( pWpt->isUsed() && pWpt->forTeam(iTeam) )// && (pWpt->getArea() == iArea) )
 		{
-			if ( (iFlags == -1) || pWpt->hasSomeFlags(iFlags) )
+			if ( iFlags == -1 || pWpt->hasSomeFlags(iFlags) )
 			{
 
 				if ( !bForceArea && !CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(pWpt->getArea()) )
 					continue;
-				else if ( bForceArea && (pWpt->getArea() != iArea) )
+				else if ( bForceArea && pWpt->getArea() != iArea )
 					continue;
 
 				float fCost = 0;
@@ -2851,11 +2851,11 @@ CWaypoint *CWaypoints :: randomWaypointGoal ( int iFlags, int iTeam, int iArea, 
 
 		if ( pWpt->isUsed() && pWpt->forTeam(iTeam) )// && (pWpt->getArea() == iArea) )
 		{
-			if ( (iFlags == -1) || pWpt->hasSomeFlags(iFlags) )
+			if ( iFlags == -1 || pWpt->hasSomeFlags(iFlags) )
 			{
 				if (!bForceArea && !pCurrentMod->isWaypointAreaValid(pWpt->getArea(), iFlags))
 					continue;
-				else if ( bForceArea && (pWpt->getArea() != iArea) )
+				else if ( bForceArea && pWpt->getArea() != iArea )
 					continue;
 
 				goals.push_back(pWpt);
@@ -2944,10 +2944,8 @@ int CWaypoint :: getPath ( int i )
 
 bool CWaypoint :: isPathOpened ( Vector vPath )
 {
-	for ( int i = 0; i < m_OpensLaterInfo.size(); i ++ )
+	for (auto& info : m_OpensLaterInfo)
 	{
-		wpt_opens_later_t &info = m_OpensLaterInfo[i];
-
 		if ( info.vOrigin == vPath )
 		{
 			if ( info.fNextCheck < engine->Time() )
@@ -3117,59 +3115,59 @@ unsigned int CWaypointTypes :: getNumTypes ()
 
 void CWaypointTypes :: setup ()
 {	
-	addType(new CWaypointType(W_FL_NOBLU,"noblueteam","TF2 blue team can't use this waypoint",WptColor(255,0,0),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_NOALLIES,"noallies","DOD allies team can't use this waypoint",WptColor(255,0,0),(1<<MOD_DOD)));
+	addType(new CWaypointType(W_FL_NOBLU,"noblueteam","TF2 blue team can't use this waypoint",WptColor(255,0,0),1<<MOD_TF2));
+	addType(new CWaypointType(W_FL_NOALLIES,"noallies","DOD allies team can't use this waypoint",WptColor(255,0,0),1<<MOD_DOD));
 
-	addType(new CWaypointType(W_FL_FLAG,"flag","bot will find a flag here",WptColor(255,255,0),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_HEALTH,"health","bot can sometimes get health here",WptColor(255,255,255),(1<<MOD_TF2)|(1<<MOD_HLDM2)|(1<<MOD_SYNERGY)));
-	addType(new CWaypointType(W_FL_ROCKET_JUMP,"rocketjump","TF2 a bot can rocket jump here",WptColor(10,100,0),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_AMMO,"ammo","bot can sometimes get ammo here",WptColor(50,100,10),(1<<MOD_TF2)|(1<<MOD_HLDM2)|(1<<MOD_SYNERGY)));
-	addType(new CWaypointType(W_FL_RESUPPLY,"resupply","TF2 bot can always get ammo and health here",WptColor(255,100,255),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_SENTRY,"sentry","TF2 engineer bot can build here",WptColor(255,0,0),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_DOUBLEJUMP,"doublejump","TF2 scout can double jump here",WptColor(10,10,100),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_TELE_ENTRANCE,"teleentrance","TF2 engineer bot can build tele entrance here",WptColor(50,50,150),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_TELE_EXIT,"teleexit","TF2 engineer bot can build tele exit here",WptColor(100,100,255),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_AREAONLY,"areaonly","bot will only use this waypoint at certain areas of map",WptColor(150,200,150),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_ROUTE,"route","bot will attempt to go through one of these",WptColor(100,100,100),(1<<MOD_TF2)|(1<<MOD_DOD)|(1<<MOD_SYNERGY)));
-	addType(new CWaypointType(W_FL_NO_FLAG,"noflag","TF2 bot will lose flag if he goes thorugh here",WptColor(200,100,50),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_COVER_RELOAD,"cover_reload","DOD:S bots can take cover here while shooting an enemy and reload. They can also stand up and shoot the enemy after reloading",WptColor(200,100,50),(1<<MOD_DOD)));
-	addType(new CWaypointType(W_FL_FLAGONLY,"flagonly","TF2 bot needs the flag to go through here",WptColor(180,50,80),(1<<MOD_TF2)));
+	addType(new CWaypointType(W_FL_FLAG,"flag","bot will find a flag here",WptColor(255,255,0),1<<MOD_TF2));
+	addType(new CWaypointType(W_FL_HEALTH,"health","bot can sometimes get health here",WptColor(255,255,255),1<<MOD_TF2|1<<MOD_HLDM2|1<<MOD_SYNERGY));
+	addType(new CWaypointType(W_FL_ROCKET_JUMP,"rocketjump","TF2 a bot can rocket jump here",WptColor(10,100,0),1<<MOD_TF2));
+	addType(new CWaypointType(W_FL_AMMO,"ammo","bot can sometimes get ammo here",WptColor(50,100,10),1<<MOD_TF2|1<<MOD_HLDM2|1<<MOD_SYNERGY));
+	addType(new CWaypointType(W_FL_RESUPPLY,"resupply","TF2 bot can always get ammo and health here",WptColor(255,100,255),1<<MOD_TF2));
+	addType(new CWaypointType(W_FL_SENTRY,"sentry","TF2 engineer bot can build here",WptColor(255,0,0),1<<MOD_TF2));
+	addType(new CWaypointType(W_FL_DOUBLEJUMP,"doublejump","TF2 scout can double jump here",WptColor(10,10,100),1<<MOD_TF2));
+	addType(new CWaypointType(W_FL_TELE_ENTRANCE,"teleentrance","TF2 engineer bot can build tele entrance here",WptColor(50,50,150),1<<MOD_TF2));
+	addType(new CWaypointType(W_FL_TELE_EXIT,"teleexit","TF2 engineer bot can build tele exit here",WptColor(100,100,255),1<<MOD_TF2));
+	addType(new CWaypointType(W_FL_AREAONLY,"areaonly","bot will only use this waypoint at certain areas of map",WptColor(150,200,150),1<<MOD_TF2));
+	addType(new CWaypointType(W_FL_ROUTE,"route","bot will attempt to go through one of these",WptColor(100,100,100),1<<MOD_TF2|1<<MOD_DOD|1<<MOD_SYNERGY));
+	addType(new CWaypointType(W_FL_NO_FLAG,"noflag","TF2 bot will lose flag if he goes thorugh here",WptColor(200,100,50),1<<MOD_TF2));
+	addType(new CWaypointType(W_FL_COVER_RELOAD,"cover_reload","DOD:S bots can take cover here while shooting an enemy and reload. They can also stand up and shoot the enemy after reloading",WptColor(200,100,50),1<<MOD_DOD));
+	addType(new CWaypointType(W_FL_FLAGONLY,"flagonly","TF2 bot needs the flag to go through here",WptColor(180,50,80),1<<MOD_TF2));
 
-	addType(new CWaypointType(W_FL_NORED,"noredteam","TF2 red team can't use this waypoint",WptColor(0,0,128),(1<<MOD_TF2)));
-	addType(new CWaypointType(W_FL_NOAXIS,"noaxis","DOD axis team can't use this waypoint",WptColor(255,0,0),(1<<MOD_DOD)));
+	addType(new CWaypointType(W_FL_NORED,"noredteam","TF2 red team can't use this waypoint",WptColor(0,0,128),1<<MOD_TF2));
+	addType(new CWaypointType(W_FL_NOAXIS,"noaxis","DOD axis team can't use this waypoint",WptColor(255,0,0),1<<MOD_DOD));
 	addType(new CWaypointType(W_FL_DEFEND,"defend","bot will defend at this position",WptColor(160,50,50)));	
 	addType(new CWaypointType(W_FL_SNIPER,"sniper","a bot can snipe here",WptColor(0,255,0)));
-	addType(new CWaypointType(W_FL_MACHINEGUN,"machinegun","DOD machine gunner will deploy gun here",WptColor(255,0,0),(1<<MOD_DOD)));
+	addType(new CWaypointType(W_FL_MACHINEGUN,"machinegun","DOD machine gunner will deploy gun here",WptColor(255,0,0),1<<MOD_DOD));
 	addType(new CWaypointType(W_FL_CROUCH,"crouch","bot will duck here",WptColor(200,100,0)));
-	addType(new CWaypointType(W_FL_PRONE,"prone","DOD:S bots prone here",WptColor(0,200,0),(1<<MOD_DOD)));
+	addType(new CWaypointType(W_FL_PRONE,"prone","DOD:S bots prone here",WptColor(0,200,0),1<<MOD_DOD));
 	addType(new CWaypointType(W_FL_JUMP,"jump","bot will jump here",WptColor(255,255,255)));
 
 	addType(new CWaypointType(W_FL_UNREACHABLE,"unreachable","bot can't go here (used for visibility purposes only)",WptColor(200,200,200)));
 	addType(new CWaypointType(W_FL_LADDER,"ladder","bot will climb a ladder here",WptColor(255,255,0)));
 	addType(new CWaypointType(W_FL_FALL,"fall","Bots might kill themselves if they fall down here with low health",WptColor(128,128,128)));
-	addType(new CWaypointType(W_FL_CAPPOINT,"capture","TF2/DOD bot will find a capture point here",WptColor(255,255,0),(1<<MOD_TF2)|(1<<MOD_DOD)));
-	addType(new CWaypointType(W_FL_BOMBS_HERE,"bombs","DOD bots can pickup bombs here",WptColor(255,100,255),(1<<MOD_DOD)));
-	addType(new CWaypointType(W_FL_BOMB_TO_OPEN,"bombtoopen","DOD:S bot needs to blow up this point to move on",WptColor(50,200,30),(1<<MOD_DOD)));
-	addType(new CWaypointType(W_FL_BREAKABLE,"breakable","Bots need to break something with a rocket to get through here",WptColor(100,255,50),(1<<MOD_DOD)));
+	addType(new CWaypointType(W_FL_CAPPOINT,"capture","TF2/DOD bot will find a capture point here",WptColor(255,255,0),1<<MOD_TF2|1<<MOD_DOD));
+	addType(new CWaypointType(W_FL_BOMBS_HERE,"bombs","DOD bots can pickup bombs here",WptColor(255,100,255),1<<MOD_DOD));
+	addType(new CWaypointType(W_FL_BOMB_TO_OPEN,"bombtoopen","DOD:S bot needs to blow up this point to move on",WptColor(50,200,30),1<<MOD_DOD));
+	addType(new CWaypointType(W_FL_BREAKABLE,"breakable","Bots need to break something with a rocket to get through here",WptColor(100,255,50),1<<MOD_DOD));
 	addType(new CWaypointType(W_FL_OPENS_LATER,"openslater","this waypoint is available when a door is open only",WptColor(100,100,200)));
 	addType(new CWaypointType(W_FL_WAIT_GROUND,"waitground","bot will wait until there is ground below",WptColor(150,150,100)));
 	addType(new CWaypointType(W_FL_LIFT,"lift","bot needs to wait on a lift here",WptColor(50,80,180)));
 
-	addType(new CWaypointType(W_FL_SPRINT,"sprint","bots will sprint here",WptColor(255,255,190),((1<<MOD_DOD)|(1<<MOD_HLDM2)|(1<<MOD_SYNERGY))));
+	addType(new CWaypointType(W_FL_SPRINT,"sprint","bots will sprint here",WptColor(255,255,190),1<<MOD_DOD|1<<MOD_HLDM2|1<<MOD_SYNERGY));
 	addType(new CWaypointType(W_FL_TELEPORT_CHEAT,"teleport","bots will teleport to the next waypoint (cheat)",WptColor(255,255,255)));
 	addType(new CWaypointType(W_FL_OWNER_ONLY,"owneronly","only bot teams who own the area of the waypoint can use it",WptColor(0,150,150)));
 
 	// Synergy waypoint types
-	addType(new CWaypointType(W_FL_GOAL,"goal","Bots will try to reach this waypoint.",WptColor(100,255,50),(1<<MOD_SYNERGY)));
-	addType(new CWaypointType(W_FL_USE,"use","Bots will try to use a button or door here.",WptColor(255,170,0),(1<<MOD_SYNERGY)));
+	addType(new CWaypointType(W_FL_GOAL,"goal","Bots will try to reach this waypoint.",WptColor(100,255,50),1<<MOD_SYNERGY));
+	addType(new CWaypointType(W_FL_USE,"use","Bots will try to use a button or door here.",WptColor(255,170,0),1<<MOD_SYNERGY));
 
 	// Counter-Strike: Source waypoint types
-	addType(new CWaypointType(W_FL_NOTERRORIST, "noterror", "CSS terrorist team can't use this waypoint", WptColor(0,0,128), (1<<MOD_CSS)));
-	addType(new CWaypointType(W_FL_NOCOUNTERTR, "nocountertr", "CSS counter-terrorist team can't use this waypoint", WptColor(255,0,0), (1<<MOD_CSS)));
-	addType(new CWaypointType(W_FL_RESCUEZONE, "rescue", "CSS bots will take hostages to this waypoint", WptColor(0,255,230), (1<<MOD_CSS)));
-	addType(new CWaypointType(W_FL_GOAL, "goal", "CSS bots will find the map goal here", WptColor(255,255,0), (1<<MOD_CSS)));
-	addType(new CWaypointType(W_FL_DOOR, "door", "CSS bots will check if they need to open a door", WptColor(255,120,0), (1<<MOD_CSS)));
-	addType(new CWaypointType(W_FL_NO_HOSTAGES, "nohostages", "CSS CT bots escorting hostages can't use this waypoint", WptColor(200,230,20), (1<<MOD_CSS)));
+	addType(new CWaypointType(W_FL_NOTERRORIST, "noterror", "CSS terrorist team can't use this waypoint", WptColor(0,0,128), 1<<MOD_CSS));
+	addType(new CWaypointType(W_FL_NOCOUNTERTR, "nocountertr", "CSS counter-terrorist team can't use this waypoint", WptColor(255,0,0), 1<<MOD_CSS));
+	addType(new CWaypointType(W_FL_RESCUEZONE, "rescue", "CSS bots will take hostages to this waypoint", WptColor(0,255,230), 1<<MOD_CSS));
+	addType(new CWaypointType(W_FL_GOAL, "goal", "CSS bots will find the map goal here", WptColor(255,255,0), 1<<MOD_CSS));
+	addType(new CWaypointType(W_FL_DOOR, "door", "CSS bots will check if they need to open a door", WptColor(255,120,0), 1<<MOD_CSS));
+	addType(new CWaypointType(W_FL_NO_HOSTAGES, "nohostages", "CSS CT bots escorting hostages can't use this waypoint", WptColor(200,230,20), 1<<MOD_CSS));
 
 	//addType(new CWaypointType(W_FL_ATTACKPOINT,"squad_attackpoint","Tactical waypoint -- each squad will go to different attack points and signal others to go",WptColor(90,90,90)));
 }
@@ -3346,7 +3344,7 @@ void CWaypointTest :: go ( edict_t *pPlayer )
 					if ( !pBot->canGotoWaypoint(Vector(0,0,0),pWpt2) )
 						continue;
 
-					if ( (pWpt2->getArea() != 0) && (pWpt2->getArea() != pWpt1->getArea()) )
+					if ( pWpt2->getArea() != 0 && pWpt2->getArea() != pWpt1->getArea() )
 						continue;
 
 					if ( pWpt2->hasSomeFlags(iCheck) )

@@ -6,7 +6,7 @@
 
 void CRCBotKeyValueList :: parseFile ( FILE *fp )
 {
-	char buffer[2*(RCBOT_MAX_KV_LEN)];
+	char buffer[2* RCBOT_MAX_KV_LEN];
 	char szKey[RCBOT_MAX_KV_LEN];
 	char szValue[RCBOT_MAX_KV_LEN];
 

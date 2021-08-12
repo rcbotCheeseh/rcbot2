@@ -463,9 +463,9 @@ bool CBotSynergy::isEnemy(edict_t *pEdict, bool bCheckWeapons)
 			strcmp(szclassname, "npc_zombie") == 0 || strcmp(szclassname, "npc_fastzombie") == 0 || strcmp(szclassname, "npc_poisonzombie") == 0 || strcmp(szclassname, "npc_zombine") == 0 ||
 			strcmp(szclassname, "npc_antlionguard") == 0 || strcmp(szclassname, "npc_antlion") == 0 || strcmp(szclassname, "npc_headcrab") == 0 || strcmp(szclassname, "npc_headcrab_fast") == 0 ||
 			strcmp(szclassname, "npc_headcrab_black") == 0 || strcmp(szclassname, "npc_hunter") == 0 || strcmp(szclassname, "npc_fastzombie_torso") == 0 || strcmp(szclassname, "npc_zombie_torso") == 0 ||
-			strcmp(szclassname, "npc_barnacle") == 0 || (strcmp(szclassname, "npc_combinegunship") == 0) || (strcmp(szclassname, "npc_helicopter") == 0) 
-			|| (strcmp(szclassname, "npc_strider") == 0) || (strcmp(szclassname, "npc_combinedropship") == 0) || (strcmp(szclassname, "npc_clawscanner") == 0)
-			|| (strcmp(szclassname, "npc_combine_camera") == 0) || (strcmp(szclassname, "npc_antlion_worker") == 0) || (strcmp(szclassname, "npc_cscanner") == 0))
+			strcmp(szclassname, "npc_barnacle") == 0 || strcmp(szclassname, "npc_combinegunship") == 0 || strcmp(szclassname, "npc_helicopter") == 0 
+			|| strcmp(szclassname, "npc_strider") == 0 || strcmp(szclassname, "npc_combinedropship") == 0 || strcmp(szclassname, "npc_clawscanner") == 0
+			|| strcmp(szclassname, "npc_combine_camera") == 0 || strcmp(szclassname, "npc_antlion_worker") == 0 || strcmp(szclassname, "npc_cscanner") == 0)
 		{
 			return true;
 		}
@@ -740,7 +740,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		if (pWaypoint)
 		{
 			CWaypoint* pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), 0, 0);
-			if ((m_fUseRouteTime <= engine->Time()))
+			if (m_fUseRouteTime <= engine->Time())
 			{
 				if (pRoute)
 				{
@@ -778,7 +778,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		if (pWaypoint)
 		{
 			CWaypoint* pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), 0, 0);
-			if ((m_fUseRouteTime <= engine->Time()))
+			if (m_fUseRouteTime <= engine->Time())
 			{
 				if (pRoute)
 				{
@@ -896,8 +896,8 @@ void CBotSynergy::handleWeapons()
 		const char *szclassname = m_pEnemy.get()->GetClassName();
 		CBotWeapon *pWeapon = NULL;
 
-		if((strncmp(szclassname, "npc_combinegunship", 18) == 0) || (strncmp(szclassname, "npc_combinedropship", 19) == 0) || (strncmp(szclassname, "npc_strider", 11) == 0) ||
-		(strncmp(szclassname, "npc_helicopter", 14) == 0))
+		if(strncmp(szclassname, "npc_combinegunship", 18) == 0 || strncmp(szclassname, "npc_combinedropship", 19) == 0 || strncmp(szclassname, "npc_strider", 11) == 0 ||
+		strncmp(szclassname, "npc_helicopter", 14) == 0)
 		{
 			pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_RPG));
 		}
@@ -906,7 +906,7 @@ void CBotSynergy::handleWeapons()
 			pWeapon = getBestWeapon(m_pEnemy, true, true, false, false);
 		}
 
-		if(m_bWantToChangeWeapon && (pWeapon != NULL) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex())
+		if(m_bWantToChangeWeapon && pWeapon != NULL && pWeapon != getCurrentWeapon() && pWeapon->getWeaponIndex())
 		{
 			selectBotWeapon(pWeapon);
 		}
@@ -926,8 +926,8 @@ bool CBotSynergy::handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy)
 {
 	const char *szclassname = pEnemy->GetClassName();
 
-	if((strncmp(szclassname, "npc_combinegunship", 18) == 0) || (strncmp(szclassname, "npc_combinedropship", 19) == 0) || (strncmp(szclassname, "npc_strider", 11) == 0) ||
-	(strncmp(szclassname, "npc_helicopter", 14) == 0))
+	if(strncmp(szclassname, "npc_combinegunship", 18) == 0 || strncmp(szclassname, "npc_combinedropship", 19) == 0 || strncmp(szclassname, "npc_strider", 11) == 0 ||
+	strncmp(szclassname, "npc_helicopter", 14) == 0)
 	{
 		if(!m_pWeapons->hasWeapon(SYN_WEAPON_RPG))
 		{

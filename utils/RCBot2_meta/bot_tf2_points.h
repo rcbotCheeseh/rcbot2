@@ -81,7 +81,7 @@ public:
 	// Is the point visible in the objective display
 	bool	IsCPVisible( int index )
 	{
-		return (m_bCPIsVisible[index] == 1);
+		return m_bCPIsVisible[index] == 1;
 	}
 
 	bool	IsCPBlocked( int index )
@@ -182,7 +182,7 @@ public:
 	{
 		AssertValidIndex(index);
 		Assert( iPrevIndex >= 0 && iPrevIndex < MAX_PREVIOUS_POINTS );
-		const int iIntIndex = iPrevIndex + (index * MAX_PREVIOUS_POINTS) + (team * MAX_CONTROL_POINTS * MAX_PREVIOUS_POINTS);
+		const int iIntIndex = iPrevIndex + index * MAX_PREVIOUS_POINTS + team * MAX_CONTROL_POINTS * MAX_PREVIOUS_POINTS;
 		return m_iPreviousPoints[ iIntIndex ];
 	}
 
@@ -286,7 +286,7 @@ public:
 				for ( int k = 0; k < MAX_CONTROL_POINTS; k ++ )
 				{
 					// OR
-					m_ValidAreas[k] = (m_ValidAreas[k] || m_ValidPoints[i][j][k].bValid);
+					m_ValidAreas[k] = m_ValidAreas[k] || m_ValidPoints[i][j][k].bValid;
 				}
 			}
 		}
@@ -304,7 +304,7 @@ public:
 
 	float getSetupTime ()
 	{
-		if ((m_Resource.get() != NULL) && m_nSetupTimeLength)
+		if (m_Resource.get() != NULL && m_nSetupTimeLength)
 			return (float)*m_nSetupTimeLength;
 		return 0.0f;
 	}

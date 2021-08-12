@@ -66,7 +66,7 @@ public:
 
 		index = ENTINDEX(pEdict);
 
-		return (index>0)&&(index<=gpGlobals->maxClients);
+		return index>0&&index<=gpGlobals->maxClients;
 	}
 
 	static bool walkableFromTo (edict_t *pPlayer,Vector v_src, Vector v_dest);
@@ -103,7 +103,7 @@ public:
 
 	static inline bool entityIsValid ( edict_t *pEntity )
 	{
-		return pEntity && !pEntity->IsFree() && (pEntity->GetNetworkable() != NULL) && (pEntity->GetIServerEntity() != NULL) && (pEntity->m_NetworkSerialNumber != 0);	
+		return pEntity && !pEntity->IsFree() && pEntity->GetNetworkable() != NULL && pEntity->GetIServerEntity() != NULL && pEntity->m_NetworkSerialNumber != 0;	
 	}
 
 	static void serverSay ( char *fmt, ... );
@@ -179,7 +179,7 @@ public:
 
 	static inline void setEventVersion ( int iVersion ){m_iEventVersion = iVersion;}
 
-	static inline bool isEventVersion ( int iVersion ){return (m_iEventVersion == iVersion);}
+	static inline bool isEventVersion ( int iVersion ){return m_iEventVersion == iVersion;}
 
 	static inline bool getTeamplayOn (){return m_bTeamplay;}
 
@@ -205,8 +205,8 @@ public:
 
 	static inline bool isBoundsDefinedInEntitySpace( edict_t *pEntity )
 	{
-		return ((pEntity->GetCollideable()->GetSolidFlags() & FSOLID_FORCE_WORLD_ALIGNED) == 0 &&
-		pEntity->GetCollideable()->GetSolid() != SOLID_BBOX && pEntity->GetCollideable()->GetSolid() != SOLID_NONE);
+		return (pEntity->GetCollideable()->GetSolidFlags() & FSOLID_FORCE_WORLD_ALIGNED) == 0 &&
+			pEntity->GetCollideable()->GetSolid() != SOLID_BBOX && pEntity->GetCollideable()->GetSolid() != SOLID_NONE;
 	}
 	
 	static Vector getOBBCenter( edict_t *pEntity );

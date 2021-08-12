@@ -66,7 +66,7 @@ CBaseHandle CCounterStrikeSourceMod::m_hBomb = NULL;
 
 void CCounterStrikeSourceMod::initMod()
 {
-    CWeapons::loadWeapons((m_szWeaponListName == NULL) ? "CSS" : m_szWeaponListName, CSSWeaps); // Load weapon list
+    CWeapons::loadWeapons(m_szWeaponListName == NULL ? "CSS" : m_szWeaponListName, CSSWeaps); // Load weapon list
     logger->Log(LogLevel::TRACE, "CCounterStrikeSourceMod::initMod()");
 }
 
@@ -87,7 +87,7 @@ void CCounterStrikeSourceMod::mapInit()
 
 bool CCounterStrikeSourceMod::checkWaypointForTeam(CWaypoint *pWpt, int iTeam)
 {
-    return (!pWpt->hasFlag(CWaypointTypes::W_FL_NOCOUNTERTR)||(iTeam!=CS_TEAM_COUNTERTERRORIST))&&(!pWpt->hasFlag(CWaypointTypes::W_FL_NOTERRORIST)||(iTeam!=CS_TEAM_TERRORIST));
+    return (!pWpt->hasFlag(CWaypointTypes::W_FL_NOCOUNTERTR)||iTeam!=CS_TEAM_COUNTERTERRORIST)&&(!pWpt->hasFlag(CWaypointTypes::W_FL_NOTERRORIST)||iTeam!=CS_TEAM_TERRORIST);
 }
 
 /**
@@ -128,7 +128,7 @@ bool CCounterStrikeSourceMod::isBombDropped()
  **/
 bool CCounterStrikeSourceMod::isBombDefused()
 {
-    return !(CClassInterface::isCSBombTicking(INDEXENT(m_hBomb.GetEntryIndex())));
+    return !CClassInterface::isCSBombTicking(INDEXENT(m_hBomb.GetEntryIndex()));
 }
 
 /**
@@ -146,7 +146,7 @@ bool CCounterStrikeSourceMod::canHearPlantedBomb(CBot *pBot)
 
     if(pBomb)
     {
-        return (pBot->distanceFrom(pBomb) <= 2048.0f);
+        return pBot->distanceFrom(pBomb) <= 2048.0f;
     }
 
     return false;

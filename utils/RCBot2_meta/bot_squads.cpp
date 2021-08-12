@@ -310,7 +310,7 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 	QAngle angle_right = m_vLeaderAngle;
 	angle_right.y += 90.0f;
 
-	CBotGlobals::fixFloatAngle(&(angle_right.y));
+	CBotGlobals::fixFloatAngle(&angle_right.y);
 
 	AngleVectors(angle_right,&v_right); // leader body angles as base
 
@@ -320,9 +320,9 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 	case SQUAD_FORM_VEE:
 		{
 			if ( iMod )			
-				vBase = (v_forward-v_right);			
+				vBase = v_forward-v_right;			
 			else
-				vBase = (v_forward+v_right);
+				vBase = v_forward+v_right;
 		}
 		break;
 	case SQUAD_FORM_WEDGE:
@@ -361,13 +361,13 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 		break;
 	}
 	
-	vBase = (vBase * m_fDesiredSpread) * iPosition;
+	vBase = vBase * m_fDesiredSpread * iPosition;
 
 	CBotGlobals::quickTraceline(pLeader,vLeaderOrigin,vLeaderOrigin+vBase);
 
 	if ( tr->fraction < 1.0 )
 	{
-		return vLeaderOrigin + (vBase*tr->fraction*0.5f);
+		return vLeaderOrigin + vBase*tr->fraction*0.5f;
 	}
 
 	return vLeaderOrigin+vBase;

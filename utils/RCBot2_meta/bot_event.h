@@ -74,12 +74,12 @@ public:
 
 	inline bool isEventId ( int iEventId )
 	{
-		return forCurrentMod() && (m_iEventId == iEventId);
+		return forCurrentMod() && m_iEventId == iEventId;
 	}
 
 	inline bool hasEventId ()
 	{
-		return (m_iEventId != -1);
+		return m_iEventId != -1;
 	}
 
 	const char *getName ()

@@ -220,7 +220,7 @@ class dataStack
 
 		inline bool IsEmpty ()
 		{
-			return ( m_Head == NULL );
+			return m_Head == NULL;
 		}
 
 		void Push ( const T pObj )
@@ -732,7 +732,7 @@ class dataUnconstArray
 
 		T *ReturnPointerFromIndex ( int iIndex )
 		{
-			return &(array[iIndex]);
+			return &array[iIndex];
 		}
 
 		bool IsMember ( T Obj )
@@ -797,7 +797,7 @@ class dataQueue
 
 		inline bool IsEmpty ()
 		{
-			return (( m_Head == NULL )||(m_Tail == NULL));
+			return m_Head == NULL||m_Tail == NULL;
 		}
 
 		void AddFront ( const T &pObj )

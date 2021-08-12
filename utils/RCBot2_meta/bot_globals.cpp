@@ -92,10 +92,10 @@ public:
 
 	bool ShouldHitEntity( IHandleEntity *pServerEntity, int contentsMask ) override
 	{ 
-		if ( m_pPlayer && (pServerEntity == (IHandleEntity*)m_pPlayer->GetIServerEntity()) )
+		if ( m_pPlayer && pServerEntity == (IHandleEntity*)m_pPlayer->GetIServerEntity() )
 			return false;
 
-		if ( m_pHit && (pServerEntity == (IHandleEntity*)m_pHit->GetIServerEntity()) )
+		if ( m_pHit && pServerEntity == (IHandleEntity*)m_pHit->GetIServerEntity() )
 			return false;
 
 		return true; 
@@ -123,7 +123,7 @@ void CBotGlobals :: init ()
 
 bool CBotGlobals ::isAlivePlayer ( edict_t *pEntity )
 {
-	return pEntity && ENTINDEX(pEntity) && (ENTINDEX(pEntity) <= gpGlobals->maxClients) && (entityIsAlive(pEntity));
+	return pEntity && ENTINDEX(pEntity) && ENTINDEX(pEntity) <= gpGlobals->maxClients && entityIsAlive(pEntity);
 }
 
 //new map
@@ -207,7 +207,7 @@ void CBotGlobals::readRCBotFolder()
 			logger->Log(LogLevel::INFO, "RCBot Folder -> trying %s", szRCBotFolder);
 
 			if (!dirExists(szRCBotFolder)) {
-				snprintf(folder, sizeof(folder), "%s/%s", CBotGlobals::modFolder(), szRCBotFolder);
+				snprintf(folder, sizeof folder, "%s/%s", CBotGlobals::modFolder(), szRCBotFolder);
 
 				szRCBotFolder = CStrings::getString(folder);
 				logger->Log(LogLevel::INFO, "RCBot Folder -> trying %s", szRCBotFolder);
@@ -256,9 +256,9 @@ float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fPro
 		// within one second of going off
 		if ( std::fabs(t-fGrenadePrimeTime) < 1.0f )
 		{
-			const float ffinaly =  vOrigin.z + (vvert*t) - ((g*0.5)*(t*t));
+			const float ffinaly =  vOrigin.z + vvert*t - g*0.5*(t*t);
 
-			return ( std::fabs(ffinaly - vEnemy.z) < BLAST_RADIUS ); // ok why not
+			return std::fabs(ffinaly - vEnemy.z) < BLAST_RADIUS; // ok why not
 		}
 	}
 
@@ -364,7 +364,7 @@ bool CBotGlobals :: checkOpensLater ( Vector vSrc, Vector vDest )
 
 	traceLine (vSrc,vDest,MASK_PLAYERSOLID,&traceFilter);
 
-	return (traceVisible(NULL));
+	return traceVisible(NULL);
 }
 
 
@@ -372,11 +372,11 @@ bool CBotGlobals :: isVisibleHitAllExceptPlayer ( edict_t *pPlayer, Vector vSrc,
 {
 	const IHandleEntity *ignore = pPlayer->GetIServerEntity();
 
-	CTraceFilterSimple traceFilter( ignore, ((pDest==NULL)?NULL:pDest->GetIServerEntity()), MASK_ALL );
+	CTraceFilterSimple traceFilter( ignore, (pDest==NULL?NULL:pDest->GetIServerEntity()), MASK_ALL );
 
 	traceLine (vSrc,vDest,MASK_SHOT|MASK_VISIBLE,&traceFilter);
 
-	return (traceVisible(pDest));
+	return traceVisible(pDest);
 }
 
 bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest)
@@ -385,7 +385,7 @@ bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest)
 
 	traceLine (vSrc,vDest,MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
 
-	return (traceVisible(NULL));
+	return traceVisible(NULL);
 }
 
 bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest )
@@ -396,7 +396,7 @@ bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest )
 
 	traceLine (vSrc,entityOrigin(pDest),MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
 
-	return (traceVisible(pDest));
+	return traceVisible(pDest);
 }
 
 bool CBotGlobals :: isShotVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest )
@@ -407,7 +407,7 @@ bool CBotGlobals :: isShotVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest,
 
 	traceLine (vSrc,vDest,MASK_SHOT,&filter);
 
-	return (traceVisible(pDest));
+	return traceVisible(pDest);
 }
 
 bool CBotGlobals :: isVisible (Vector vSrc, Vector vDest)
@@ -484,7 +484,7 @@ float CBotGlobals :: DotProductFromOrigin ( Vector vPlayer, Vector vFacing, QAng
 
 bool CBotGlobals :: traceVisible (edict_t *pEnt)
 {
-	return (m_TraceResult.fraction >= 1.0)||(m_TraceResult.m_pEnt && pEnt && (m_TraceResult.m_pEnt==pEnt->GetUnknown()->GetBaseEntity()));
+	return m_TraceResult.fraction >= 1.0||m_TraceResult.m_pEnt && pEnt && m_TraceResult.m_pEnt==pEnt->GetUnknown()->GetBaseEntity();
 }
 
 bool CBotGlobals::initModFolder() {
@@ -494,7 +494,7 @@ bool CBotGlobals::initModFolder() {
 	const int iLength = strlen(CStrings::getString(szGameFolder));
 	int pos = iLength - 1;
 
-	while ((pos > 0) && (szGameFolder[pos] != '\\') && (szGameFolder[pos] != '/')) {
+	while (pos > 0 && szGameFolder[pos] != '\\' && szGameFolder[pos] != '/') {
 		pos--;
 	}
 	pos++;
@@ -518,7 +518,7 @@ bool CBotGlobals :: gameStart ()
 
 	size_t pos = iLength-1;
 
-	while ( (pos > 0) && (szGameFolder[pos] != '\\') && (szGameFolder[pos] != '/') )
+	while ( pos > 0 && szGameFolder[pos] != '\\' && szGameFolder[pos] != '/' )
 	{
 		pos--;
 	}
@@ -612,17 +612,17 @@ bool CBotGlobals :: entityIsAlive ( edict_t *pEntity )
 
 	index = ENTINDEX(pEntity);
 
-	if ( index && (index <= gpGlobals->maxClients) )
+	if ( index && index <= gpGlobals->maxClients )
 	{
 		IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEntity);
 
 		if ( !p )
 			return false;
 
-		return (!p->IsDead() && (p->GetHealth()>0));
+		return !p->IsDead() && p->GetHealth()>0;
 	}
 
-	return ( pEntity->GetIServerEntity() && pEntity->GetClassName() && *pEntity->GetClassName() );
+	return pEntity->GetIServerEntity() && pEntity->GetClassName() && *pEntity->GetClassName();
 	//CBaseEntity *pBaseEntity = CBaseEntity::Instance(pEntity);
 	//return pBaseEntity->IsAlive();
 }
@@ -655,7 +655,7 @@ bool CBotGlobals :: isNetworkable ( edict_t *pEntity )
 
 	pServerEnt = pEntity->GetIServerEntity();
 
-	return (pServerEnt && (pServerEnt->GetNetworkable() != NULL));
+	return pServerEnt && pServerEnt->GetNetworkable() != NULL;
 }
 
 /*
@@ -694,7 +694,7 @@ void CBotGlobals :: serverSay ( char *fmt, ... )
 // TODO :: put into CClient
 bool CBotGlobals :: setWaypointDisplayType ( int iType )
 {
-	if ( (iType >= 0) && (iType <= 1) )
+	if ( iType >= 0 && iType <= 1 )
 	{
 		m_iWaypointDisplayType = iType;
 		return true;
@@ -738,8 +738,8 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 	//	return false;
 
 	// can swim there?
-	if ((enginetrace->GetPointContents( v_src ) == CONTENTS_WATER) &&
-		(enginetrace->GetPointContents( v_dest ) == CONTENTS_WATER))
+	if (enginetrace->GetPointContents( v_src ) == CONTENTS_WATER &&
+		enginetrace->GetPointContents( v_dest ) == CONTENTS_WATER)
 	{
 		return true;
 	}
@@ -779,7 +779,7 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 			debugoverlay->AddLineOverlay(v_jsrc,v_jsrc-Vector(0,0,45),255,255,255,false,3);	
 #endif
 			// can't jump there
-			if ( ((v_jsrc.z - tr->endpos.z) + (v_dest.z-v_jsrc.z)) > 45.0f )
+			if ( v_jsrc.z - tr->endpos.z + (v_dest.z-v_jsrc.z) > 45.0f )
 			{
 				//if ( (tr->endpos.z > (v_src.z+45)) && (fDistance > 64.0f) )
 				//{
@@ -792,7 +792,7 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 
 					for ( float fDistCheck = 45.0f; fDistCheck < fDistance; fDistCheck += 45.0f )
 					{
-						Vector v_checkpoint = v_src + (v_norm * fDistCheck);
+						Vector v_checkpoint = v_src + v_norm * fDistCheck;
 
 						// check jump height again
 						CBotGlobals::traceLine(v_checkpoint,v_checkpoint-Vector(0,0,45.0f),MASK_NPCSOLID_BRUSHONLY,&filter);
@@ -828,8 +828,8 @@ bool CBotGlobals :: boundingBoxTouch2d (
 	const Vector2D amins = Vector2D(min(a1.x,a2.x),min(a1.y,a2.y));
 	const Vector2D amaxs = Vector2D(max(a1.x,a2.x),max(a1.y,a2.y));
 
-	return (((bmins.x >= amins.x) && (bmins.y >= amins.y)) && ((bmins.x <= amaxs.x) && (bmins.y <= amaxs.y)) ||
-		((bmaxs.x >= amins.x) && (bmaxs.y >= amins.y)) && ((bmaxs.x <= amaxs.x) && (bmaxs.y <= amaxs.y)));
+	return bmins.x >= amins.x && bmins.y >= amins.y && (bmins.x <= amaxs.x && bmins.y <= amaxs.y) ||
+		bmaxs.x >= amins.x && bmaxs.y >= amins.y && (bmaxs.x <= amaxs.x && bmaxs.y <= amaxs.y);
 }
 
 bool CBotGlobals :: boundingBoxTouch3d (
@@ -839,8 +839,8 @@ bool CBotGlobals :: boundingBoxTouch3d (
 	const Vector amins = Vector(min(a1.x,a2.x),min(a1.y,a2.y),min(a1.z,a2.z));
 	const Vector amaxs = Vector(max(a1.x,a2.x),max(a1.y,a2.y),max(a1.z,a2.z));
 
-	return (((bmins.x >= amins.x) && (bmins.y >= amins.y) && (bmins.z >= amins.z)) && ((bmins.x <= amaxs.x) && (bmins.y <= amaxs.y) && (bmins.z <= amaxs.z)) ||
-		    ((bmaxs.x >= amins.x) && (bmaxs.y >= amins.y) && (bmaxs.z >= amins.z)) && ((bmaxs.x <= amaxs.x) && (bmaxs.y <= amaxs.y) && (bmaxs.z <= amaxs.z)));	
+	return bmins.x >= amins.x && bmins.y >= amins.y && bmins.z >= amins.z && (bmins.x <= amaxs.x && bmins.y <= amaxs.y && bmins.z <= amaxs.z) ||
+		bmaxs.x >= amins.x && bmaxs.y >= amins.y && bmaxs.z >= amins.z && (bmaxs.x <= amaxs.x && bmaxs.y <= amaxs.y && bmaxs.z <= amaxs.z);	
 }
 bool CBotGlobals :: onOppositeSides2d (
 		const Vector2D &amins, const Vector2D &amaxs,
@@ -852,7 +852,7 @@ bool CBotGlobals :: onOppositeSides2d (
 	const float h = (amaxs.x - amins.x) * (bmaxs.y - amins.y) - 
 	        (amaxs.y - amins.y) * (bmaxs.x - amins.x);
 
-  return (g * h) <= 0.0f;
+  return g * h <= 0.0f;
 }
 
 bool CBotGlobals :: onOppositeSides3d (
@@ -868,7 +868,7 @@ bool CBotGlobals :: onOppositeSides3d (
 	const float h = (amaxs.x - amins.x) * (bmaxs.y - amins.y) * (bmaxs.z - amins.z) - 
 	        (amaxs.z - amins.z) * (amaxs.y - amins.y) * (bmaxs.x - amins.x);
 
-  return (g * h) <= 0.0f;
+  return g * h <= 0.0f;
 }
 
 bool CBotGlobals :: linesTouching2d (
@@ -941,7 +941,7 @@ bool CBotGlobals :: makeFolders ( char *szFile )
 
 	while ( i < iLen )
 	{
-		while ( (i < iLen) && (szFile[i] != *delimiter) )
+		while ( i < iLen && szFile[i] != *delimiter )
 		{
 			szFolderName[folderNameSize++]=szFile[i];
 			i++;
@@ -983,7 +983,7 @@ void CBotGlobals :: addDirectoryDelimiter ( char *szString )
 
 bool CBotGlobals :: isBreakableOpen ( edict_t *pBreakable )
 {
-	return ((CClassInterface::getEffects(pBreakable) & EF_NODRAW) == EF_NODRAW);
+	return (CClassInterface::getEffects(pBreakable) & EF_NODRAW) == EF_NODRAW;
 }
 
 Vector CBotGlobals:: getVelocity ( edict_t *pPlayer )
@@ -1050,7 +1050,7 @@ bool CBotGlobals::pointIsWithin( edict_t *pEntity, const Vector &vPoint )
 	ICollideable *pCollide = pEntity->GetCollideable();
 	ray.Init(vPoint, vPoint);
 	enginetrace->ClipRayToCollideable(ray, MASK_ALL, pCollide, &tr);
-	return (tr.startsolid);
+	return tr.startsolid;
 }
 
 FILE *CBotGlobals :: openFile ( char *szFile, char *szMode )
@@ -1113,7 +1113,7 @@ void CBotGlobals :: buildFileName ( char *szOutput, const char *szFile, const ch
 	else
 		strcpy(szOutput, m_szRCBotFolder);
 
-	if ( (szOutput[strlen(szOutput)-1] != '\\') && (szOutput[strlen(szOutput)-1] != '/') )
+	if ( szOutput[strlen(szOutput)-1] != '\\' && szOutput[strlen(szOutput)-1] != '/' )
 		addDirectoryDelimiter(szOutput);
 
 	if ( szFolder )

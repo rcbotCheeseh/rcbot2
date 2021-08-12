@@ -104,7 +104,7 @@ void CProfileTimer :: Stop()
 
 	if ( m_last > m_max )
 		m_max = m_last;
-	if ( (m_iInvoked==0) || (m_last < m_min) )
+	if ( m_iInvoked==0 || m_last < m_min )
 		m_min = m_last;
 
 	m_overall = m_overall + m_last;
@@ -118,13 +118,13 @@ void CProfileTimer :: Stop()
 // and work out percentage of power
 void CProfileTimer :: print (double *high)
 {
-	if ((m_iInvoked>0) && m_szFunction )
+	if (m_iInvoked>0 && m_szFunction )
 	{
 		char str[256];
 
 		m_average = m_overall/m_iInvoked;
 
-		const float percent = (((double)m_overall) / (*high)) * 100.0f;
+		const float percent = (double)m_overall / *high * 100.0f;
 		
 		sprintf(str,"%17s|%13lld|%10lld|%10lld|%10lld|%6.1f",m_szFunction,m_overall,m_min,m_max,m_average,percent);			
 

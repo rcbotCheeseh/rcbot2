@@ -60,7 +60,7 @@ public:
 	void getTasks (unsigned int iIgnore=0) override;
 	bool executeAction ( eBotAction iAction );
 
-	float getArmorPercent () { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
+	float getArmorPercent () { return 0.01f * m_pPlayerInfo->GetArmorValue(); }
 
 	bool setVisible ( edict_t *pEntity, bool bVisible ) override;
 

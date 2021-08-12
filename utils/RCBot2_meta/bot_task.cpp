@@ -90,7 +90,7 @@ float getGrenadeZ ( edict_t *pShooter, edict_t *pTarget, Vector vOrigin, Vector 
 
 	Vector vForward;
 
-	const Vector v_comp = (vTarget-vOrigin);
+	const Vector v_comp = vTarget-vOrigin;
 
 	const float fDist2D = v_comp.Length2D();
 	const float fDist3D = v_comp.Length();
@@ -108,7 +108,7 @@ float getGrenadeZ ( edict_t *pShooter, edict_t *pTarget, Vector vOrigin, Vector 
 	AngleVectors(angles,&vForward);
 	
 	// add gravity height
-	return (vOrigin + (vForward*fDist3D)).z;
+	return (vOrigin + vForward*fDist3D).z;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Tasks
@@ -138,7 +138,7 @@ void CBotTF2MedicHeal::execute(CBot *pBot,CBotSchedule *pSchedule)
 	{
 		Vector vVelocity;
 
-		if ( !CClassInterface::getVelocity(pHeal,&vVelocity) || (vVelocity.Length2D() > 1.0f) )
+		if ( !CClassInterface::getVelocity(pHeal,&vVelocity) || vVelocity.Length2D() > 1.0f )
 		{
 			IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pHeal);
 		
@@ -195,7 +195,7 @@ void CBotTF2MedicHeal::execute(CBot *pBot,CBotSchedule *pSchedule)
 
 		pBot->clearFailedWeaponSelect();
 
-		if ( m_bHealerJumped && (pBot->distanceFrom(m_vJump) < 64.0f) && (vVelocity.Length()>1.0f) )
+		if ( m_bHealerJumped && pBot->distanceFrom(m_vJump) < 64.0f && vVelocity.Length()>1.0f )
 		{
 			pBot->jump();
 			m_bHealerJumped = false;
@@ -220,7 +220,7 @@ CBotTF2ShootLastEnemyPosition :: CBotTF2ShootLastEnemyPosition  ( Vector vPositi
 	m_vPosition = vPosition;
 
 	if ( len > 0 )
-		m_vPosition = m_vPosition - ((m_vVelocity/m_vVelocity.Length())*16);
+		m_vPosition = m_vPosition - m_vVelocity/m_vVelocity.Length()*16;
 	
 	m_pEnemy = pEnemy;
 	m_fTime = 0;
@@ -332,7 +332,7 @@ void CBotTF2WaitHealthTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		pBot->setLookAtTask(LOOK_AROUND);
 
 		if ( pBot->distanceFrom(m_vOrigin) > 50 )
-			pBot->setMoveTo((m_vOrigin));
+			pBot->setMoveTo(m_vOrigin);
 		else
 			pBot->stopMoving();
 
@@ -423,7 +423,7 @@ void CBotDODBomb :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		m_fTime = engine->Time() + randomFloat(8.0f,12.0f);
 		((CDODBot*)pBot)->setNearestBomb(m_pBombTarget);
 
-		if ( (m_iType == DOD_BOMB_PLANT) || (m_iType == DOD_BOMB_PATH_PLANT) )
+		if ( m_iType == DOD_BOMB_PLANT || m_iType == DOD_BOMB_PATH_PLANT )
 		{
 			 if ( CDODMod::m_Flags.isTeamMatePlanting(pBot->getEdict(),pBot->getTeam(),m_iBombID) )
 				 fail();
@@ -579,7 +579,7 @@ void CDODWaitForBombTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	{
 		if (m_pRunTo->touched(pBot->getOrigin(),Vector(0,0,0),48.0f) )
 		{
-			if ( pBot->distanceFrom(m_pBombTarget) > (BLAST_RADIUS*2) )
+			if ( pBot->distanceFrom(m_pBombTarget) > BLAST_RADIUS*2 )
 				pBot->stopMoving();
 			else
 				m_pRunTo = CWaypoints::getNextCoverPoint(pBot,m_pRunTo,m_pBlocking) ;
@@ -662,7 +662,7 @@ void CBotDODAttackPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		{
 			m_fTime = engine->Time() + randomFloat(2.0,4.0);
 			m_vMoveTo = m_vOrigin + Vector(randomFloat(-m_fRadius,m_fRadius),randomFloat(-m_fRadius,m_fRadius),0);
-			m_bProne = (randomFloat(0,1) * (1.0f-pBot->getHealthPercent())) > 0.75f;
+			m_bProne = randomFloat(0,1) * (1.0f-pBot->getHealthPercent()) > 0.75f;
 
 			if (  CDODMod::m_Flags.numFriendliesAtCap(m_iFlagID,iTeam) < CDODMod::m_Flags.numCappersRequired(m_iFlagID,iTeam) )
 			{
@@ -727,7 +727,7 @@ void CBotTF2AttackPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	pBot->wantToInvestigateSound(false);
 
-	if ( m_iArea && (CTeamFortress2Mod::m_ObjectiveResource.GetOwningTeam(iCpIndex) == iTeam) )
+	if ( m_iArea && CTeamFortress2Mod::m_ObjectiveResource.GetOwningTeam(iCpIndex) == iTeam )
 	{
 		complete(); // done
 		pTF2Bot->updateAttackDefendPoints();
@@ -789,7 +789,7 @@ void CBotTF2AttackPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 				fail();
 			else
 			{				
-				pBot->setMoveTo((m_vMoveTo));
+				pBot->setMoveTo(m_vMoveTo);
 			}
 
 			pBot->setLookAtTask(LOOK_AROUND);
@@ -870,7 +870,7 @@ void CBotTF2PushPayloadBombTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 		if ( pBot->distanceFrom(m_vMoveTo) < 100 )
 		{	
-			if ( (((CBotTF2*)pBot)->getClass() == TF_CLASS_SPY) && (((CBotTF2*)pBot)->isDisguised()))
+			if ( ((CBotTF2*)pBot)->getClass() == TF_CLASS_SPY && ((CBotTF2*)pBot)->isDisguised())
 				pBot->primaryAttack(); // remove disguise to capture
 
 			((CBotFortress*)pBot)->wantToDisguise(false);
@@ -949,7 +949,7 @@ void CBotTF2DefendPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	const int iCpIndex = CTeamFortress2Mod::m_ObjectiveResource.m_WaypointAreaToIndexTranslation[m_iArea];
 	const int iTeam = pBot->getTeam();
 
-	if ( m_iArea && (CTeamFortress2Mod::m_ObjectiveResource.GetOwningTeam(iCpIndex) != iTeam) )
+	if ( m_iArea && CTeamFortress2Mod::m_ObjectiveResource.GetOwningTeam(iCpIndex) != iTeam )
 	{
 		// doesn't belong to us/can't defend anymore
 		((CBotTF2*)pBot)->updateAttackDefendPoints();
@@ -1024,8 +1024,8 @@ void CBotTF2UpgradeBuilding :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		fail();
 		return;
 	}
-	else if ( ((pOwner = CTeamFortress2Mod::getSentryOwner(pBuilding)) != NULL) && 
-		CClassInterface::isCarryingObj(pOwner) && (CClassInterface::getCarriedObj(pOwner)==pBuilding))
+	else if ( (pOwner = CTeamFortress2Mod::getSentryOwner(pBuilding)) != NULL && 
+		CClassInterface::isCarryingObj(pOwner) && CClassInterface::getCarriedObj(pOwner)==pBuilding)
 	{
 		// Owner is carrying it
 		fail();
@@ -1126,9 +1126,9 @@ void CBotHL2DMUseCharger :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	if ( CClassInterface::getAnimCycle(m_pCharger) == 1.0f )
 		complete();
 
-	if ( ( m_iType == CHARGER_HEALTH ) && ( pBot->getHealthPercent() >= 0.99f ) )
+	if ( m_iType == CHARGER_HEALTH && pBot->getHealthPercent() >= 0.99f )
 		complete();
-	else if ( ( m_iType == CHARGER_ARMOR ) && ( ((CHLDMBot*)pBot)->getArmorPercent() >= 0.99f ) )
+	else if ( m_iType == CHARGER_ARMOR && ((CHLDMBot*)pBot)->getArmorPercent() >= 0.99f )
 		complete();
 
 	pBot->setLookVector(vOrigin);
@@ -1157,9 +1157,9 @@ void CBotGravGunPickup :: execute(CBot *pBot,CBotSchedule *pSchedule)
 
 	if ( m_fTime < engine->Time() )
 	{
-		CHLDMBot *HL2DMBot = ((CHLDMBot*)pBot);
+		CHLDMBot *HL2DMBot = (CHLDMBot*)pBot;
 
-		if (HL2DMBot->getFailedObject() && (HL2DMBot->distanceFrom(HL2DMBot->getFailedObject())<=(pBot->distanceFrom(m_Prop)+48)) )
+		if (HL2DMBot->getFailedObject() && HL2DMBot->distanceFrom(HL2DMBot->getFailedObject())<=pBot->distanceFrom(m_Prop)+48 )
 			pBot->primaryAttack();
 
 		HL2DMBot->setFailedObject(m_Prop);
@@ -1182,7 +1182,7 @@ void CBotGravGunPickup :: execute(CBot *pBot,CBotSchedule *pSchedule)
 
 	CBotWeapon *pWeapon = pBot->getCurrentWeapon();
 
-	if ( !pWeapon || ( pWeapon->getID() != HL2DM_WEAPON_PHYSCANNON)  )
+	if ( !pWeapon || pWeapon->getID() != HL2DM_WEAPON_PHYSCANNON  )
 	{
 		if ( !pBot->select_CWeapon(CWeapons::getWeapon(HL2DM_WEAPON_PHYSCANNON)) )
 		{
@@ -1192,7 +1192,7 @@ void CBotGravGunPickup :: execute(CBot *pBot,CBotSchedule *pSchedule)
 	}
 	else if ( pBot->distanceFrom(vOrigin) > 100 )
 		pBot->setMoveTo(vOrigin);
-	else if ( ((vOrigin-vBotOrigin).Length2D() < 16) && (vOrigin.z < vBotOrigin.z) )
+	else if ( (vOrigin-vBotOrigin).Length2D() < 16 && vOrigin.z < vBotOrigin.z )
 		pBot->setMoveTo(vBotOrigin + (vBotOrigin-vOrigin)*100);
 	else
 		pBot->stopMoving();
@@ -1383,7 +1383,7 @@ void CBotTaskEngiPickupBuilding :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		}
 	}
 	else
-		pBot->setMoveTo((CBotGlobals::entityOrigin(m_pBuilding)));
+		pBot->setMoveTo(CBotGlobals::entityOrigin(m_pBuilding));
 }
 void CBotTaskEngiPickupBuilding :: debugString ( char *string )
 {
@@ -1419,7 +1419,7 @@ void CBotTaskEngiPlaceBuilding :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	((CBotTF2*)pBot)->updateCarrying();
 
-	if ( !(((CBotTF2*)pBot)->isCarrying()) ) 
+	if ( !((CBotTF2*)pBot)->isCarrying() ) 
 		complete();
 	else if ( m_fTime < engine->Time() )
 		fail();
@@ -1473,7 +1473,7 @@ void CBotUseBuffItem::execute(CBot *pBot, CBotSchedule *pSchedule)
 		return;
 	}
 
-	if (!pWeapon || (pWeapon->getID() != TF2_WEAPON_BUFF_ITEM))
+	if (!pWeapon || pWeapon->getID() != TF2_WEAPON_BUFF_ITEM)
 	{
 		if (!pBot->select_CWeapon(CWeapons::getWeapon(TF2_WEAPON_BUFF_ITEM)))
 			fail();
@@ -1507,7 +1507,7 @@ void CBotUseLunchBoxDrink::execute(CBot *pBot, CBotSchedule *pSchedule)
 		return;
 	}
 
-	if ( !pWeapon || (pWeapon->getID() != TF2_WEAPON_LUNCHBOX_DRINK) )
+	if ( !pWeapon || pWeapon->getID() != TF2_WEAPON_LUNCHBOX_DRINK )
 	{
 		if (!pBot->select_CWeapon(CWeapons::getWeapon(TF2_WEAPON_LUNCHBOX_DRINK)))
 			fail();
@@ -1569,7 +1569,7 @@ void CBotBackstab ::execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 	else if ( !pEnemy || !CBotGlobals::entityIsValid(pEnemy) || !CBotGlobals::entityIsAlive(pEnemy) )
 	{
-		if ( pBot->getEnemy() && (pEnemy != pBot->getEnemy()) && pBot->hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && CBotGlobals::isAlivePlayer(pBot->getEnemy()) )
+		if ( pBot->getEnemy() && pEnemy != pBot->getEnemy() && pBot->hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && CBotGlobals::isAlivePlayer(pBot->getEnemy()) )
 		{
 			pEnemy = pBot->getEnemy();
 		}
@@ -1584,7 +1584,7 @@ void CBotBackstab ::execute (CBot *pBot,CBotSchedule *pSchedule)
 	else if ( !pBot->isVisible(pEnemy) )
 	{
 		// this guy will do
-		if ( pBot->getEnemy() && (pEnemy != pBot->getEnemy()) && pBot->hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && CBotGlobals::isAlivePlayer(pBot->getEnemy()) )
+		if ( pBot->getEnemy() && pEnemy != pBot->getEnemy() && pBot->hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && CBotGlobals::isAlivePlayer(pBot->getEnemy()) )
 		{
 			pEnemy = pBot->getEnemy();
 		}
@@ -1607,7 +1607,7 @@ void CBotBackstab ::execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 	
 	AngleVectors(CBotGlobals::entityEyeAngles(pEnemy),&vangles);
-	const Vector vrear = CBotGlobals::entityOrigin(pEnemy) - (vangles * 45) + Vector(0, 0, 32);
+	const Vector vrear = CBotGlobals::entityOrigin(pEnemy) - vangles * 45 + Vector(0, 0, 32);
 
 	pTF2Bot->resetAttackingEnemy();
 
@@ -1662,9 +1662,9 @@ void CBotInvestigateTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		else if ( m_iState == 1 ) // goto origin
 			vPoint = m_vOrigin;
 
-		if ( (pBot->distanceFrom(vPoint) < 80) || ((m_iState==0)&&(pBot->distanceFrom(m_vOrigin)>m_fRadius)) )
+		if ( pBot->distanceFrom(vPoint) < 80 || m_iState==0&&pBot->distanceFrom(m_vOrigin)>m_fRadius )
 		{
-			m_iState = (!m_iState) ? 1 : 0;
+			m_iState = !m_iState ? 1 : 0;
 
 			if ( m_iState == 0 )
 				m_iCurPath = randomInt(0,m_InvPoints.size()-1);
@@ -1715,7 +1715,7 @@ void CBotDefendTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 					{
 						// FOR DEBUGGING
 						const float fDist = (vFlag - m_vOrigin).Length();
-						const float fWaitTime = (90.0f - (fDist/45)); // MAX Dist 4050
+						const float fWaitTime = 90.0f - fDist/45; // MAX Dist 4050
 						//
 						m_fTime = engine->Time() + fWaitTime;
 					}
@@ -1813,10 +1813,10 @@ void CBotTF2EngiLookAfter :: execute (CBot *pBot,CBotSchedule *pSchedule)
 			{
 				pBot->stopMoving();
 					
-				if ( (CClassInterface::getSentryEnemy(pSentry)!=NULL) || 
-					(CClassInterface::getSentryHealth(pSentry) < CClassInterface::getTF2GetBuildingMaxHealth(pSentry) ) || 
-					(CClassInterface::getTF2SentryRockets(pSentry)<20) || 
-					(CClassInterface::getTF2SentryShells(pSentry)<150))
+				if ( CClassInterface::getSentryEnemy(pSentry)!=NULL || 
+					CClassInterface::getSentryHealth(pSentry) < CClassInterface::getTF2GetBuildingMaxHealth(pSentry) || 
+					CClassInterface::getTF2SentryRockets(pSentry)<20 || 
+					CClassInterface::getTF2SentryShells(pSentry)<150)
 				{
 					pBot->primaryAttack();
 				}
@@ -1847,7 +1847,7 @@ CBotTFEngiBuildTask :: CBotTFEngiBuildTask ( eEngiBuild iObject, CWaypoint *pWay
 	const QAngle ang = QAngle(0,pWaypoint->getAimYaw(),0);
 	Vector vForward;
 	AngleVectors(ang,&vForward);
-	m_vAimingVector = m_vOrigin + (vForward*100.0f);
+	m_vAimingVector = m_vOrigin + vForward*100.0f;
 	m_iArea = pWaypoint->getArea();
 	m_vBaseOrigin = m_vOrigin;
 	m_fRadius = pWaypoint->getRadius();
@@ -1935,7 +1935,7 @@ void CBotTFEngiBuildTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		}
 	}
 
-	if ( (m_iTries > 1) && (m_fNextUpdateAngle < engine->Time()) )
+	if ( m_iTries > 1 && m_fNextUpdateAngle < engine->Time() )
 	{
 		QAngle angles;
 		Vector vforward = m_vAimingVector - pBot->getOrigin();
@@ -1967,7 +1967,7 @@ void CBotTFEngiBuildTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		else
 			pBot->setMoveTo(m_vOrigin);
 	}
-	else if ( bAimingOk || (m_iTries > 1) )
+	else if ( bAimingOk || m_iTries > 1 )
 	{
 		const int state = tfBot->engiBuildObject(&m_iState,m_iObject,&m_fTime,&m_iTries);
 
@@ -2089,7 +2089,7 @@ void CFindPathTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 		pSchedule->clearPass();
 	}
 
-	if ( (m_iInt == 0) || (m_iInt == 1) )
+	if ( m_iInt == 0 || m_iInt == 1 )
 	{
 		IBotNavigator *pNav = pBot->getNavigator();
 
@@ -2107,7 +2107,7 @@ void CFindPathTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 		if ( pNav->workRoute( pBot->getOrigin(),
 			                   m_vVector,
 							   &bFail,
-							   (m_iInt==0),
+							   m_iInt==0,
 							   m_flags.bits.m_bNoInterruptions, 
 							   m_iWaypointId,
 							   pBot->getConditions(), m_iDangerPoint ) )
@@ -2168,7 +2168,7 @@ void CFindPathTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 					if ( m_flags.bits.m_bCompleteInRangeOfEdict && m_flags.bits.m_bCompleteSeeTaskEdict )
 					{
 						// complete if inrange AND see edict
-						if ( ( m_flags.bits.m_bCompleteInRangeOfEdict && (pBot->distanceFrom(m_pEdict)<m_fRange)) && pBot->isVisible(m_pEdict) )
+						if ( m_flags.bits.m_bCompleteInRangeOfEdict && pBot->distanceFrom(m_pEdict)<m_fRange && pBot->isVisible(m_pEdict) )
 							complete();
 					}
 					else if ( !m_flags.bits.m_bDontGoToEdict && pBot->isVisible(m_pEdict) )
@@ -2176,9 +2176,9 @@ void CFindPathTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 						if ( pBot->distanceFrom(m_pEdict) < pBot->distanceFrom(pBot->getNavigator()->getNextPoint()) )
 							complete();
 					} 
-					else if ( m_flags.bits.m_bCompleteOutOfRangeEdict && (pBot->distanceFrom(m_pEdict)>m_fRange) )
+					else if ( m_flags.bits.m_bCompleteOutOfRangeEdict && pBot->distanceFrom(m_pEdict)>m_fRange )
 						complete();
-					else if ( m_flags.bits.m_bCompleteInRangeOfEdict && (pBot->distanceFrom(m_pEdict)<m_fRange))
+					else if ( m_flags.bits.m_bCompleteInRangeOfEdict && pBot->distanceFrom(m_pEdict)<m_fRange)
 						complete();
 				}
 				else
@@ -2196,13 +2196,13 @@ void CFindPathTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 	{
 		if ( m_flags.bits.m_bCompleteSeeTaskEdict )
 		{
-			if ( pBot->isVisible(m_pEdict.get()) && (pBot->distanceFrom(CBotGlobals::entityOrigin(m_pEdict)) < CWaypointLocations::REACHABLE_RANGE) )
+			if ( pBot->isVisible(m_pEdict.get()) && pBot->distanceFrom(CBotGlobals::entityOrigin(m_pEdict)) < CWaypointLocations::REACHABLE_RANGE )
 				complete();
 		}
 
 		if ( m_flags.bits.m_bFailTaskEdictDied )
 		{
-			if ( (m_pEdict == NULL) || !CBotGlobals::entityIsAlive(m_pEdict) )
+			if ( m_pEdict == NULL || !CBotGlobals::entityIsAlive(m_pEdict) )
 			{
 				fail();
 			}
@@ -2231,7 +2231,7 @@ CBotTF2FindPipeWaypoint:: CBotTF2FindPipeWaypoint ( Vector vOrigin, Vector vTarg
 	if ( m_iTargetWaypoint != -1 )
 	{
 		// first find the waypoint nearest the target
-		Vector vComp = (vOrigin - vTarget);
+		Vector vComp = vOrigin - vTarget;
 		vComp = vComp/vComp.Length();
 		vComp = vTarget + vComp*256; // get into a better area
 		m_pTarget = CWaypoints::getWaypoint(m_iTargetWaypoint);
@@ -2264,7 +2264,7 @@ void CBotTF2FindPipeWaypoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	m_iters = 0;
 
 	// loop through every visible waypoint to target (can be unreachable)
-	while ((m_i < m_WaypointsI.size())&&(m_iters<maxiters))
+	while (m_i < m_WaypointsI.size()&&m_iters<maxiters)
 	{	
 
 		CWaypoint* pTempi = CWaypoints::getWaypoint(m_WaypointsI[m_i]);
@@ -2282,7 +2282,7 @@ void CBotTF2FindPipeWaypoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		CWaypointLocations::GetAllInArea(vTempi,&m_WaypointsJ,m_WaypointsI[m_i]);
 
 		// loop through every visible waypoint to intermediatery waypoint (cannot be unreachable)
-			while ((m_j < m_WaypointsJ.size())&&(m_iters<maxiters))
+			while (m_j < m_WaypointsJ.size()&&m_iters<maxiters)
 			{
 				if ( m_WaypointsJ[m_j] == m_iTargetWaypoint )
 				{
@@ -2405,7 +2405,7 @@ void CMoveToTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 	const float fDistance = pBot->distanceFrom(m_vVector);
 
 	// sort out looping move to origins by using previous distance check
-	if ( (fDistance < 64) || (fPrevDist&&(fPrevDist < fDistance)) )
+	if ( fDistance < 64 || fPrevDist&&fPrevDist < fDistance )
 	{
 		complete();
 		return;
@@ -2453,7 +2453,7 @@ void CBotTFRocketJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		return;
 	}
 
-	if ( !pBot->isTF() || (((CBotFortress*)pBot)->getClass() != TF_CLASS_SOLDIER) || (pBot->getHealthPercent() < 0.3) )
+	if ( !pBot->isTF() || ((CBotFortress*)pBot)->getClass() != TF_CLASS_SOLDIER || pBot->getHealthPercent() < 0.3 )
 	{
 		fail();
 	}
@@ -2466,7 +2466,7 @@ void CBotTFRocketJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 	else
 	{
-		CBotTF2 *tf2Bot = ((CBotTF2*)pBot);
+		CBotTF2 *tf2Bot = (CBotTF2*)pBot;
 
 		if ( !m_fTime )
 		{
@@ -2562,7 +2562,7 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 			}
 
 			if ( pBot->isVisible(pPlayer) )
-				seenlist |= (1<<(i-1));
+				seenlist |= (1 << (i - 1));
 		}
 		
 		m_fTime = engine->Time() + randomFloat(2.0f,5.0f);
@@ -2575,7 +2575,7 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 	if ( pBot->hasEnemy() )
 		complete();
 
-	if ( (m_pUnseenBefore==NULL) && (m_fNextCheckUnseen < engine->Time()) )
+	if ( m_pUnseenBefore==NULL && m_fNextCheckUnseen < engine->Time() )
 	{
 		seenlist = 0;
 
@@ -2609,10 +2609,10 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 				if ( CTeamFortress2Mod::isFlagCarrier(pPlayer) )
 					continue; // spies can't hold flag unless not disguised
 
-				if ( !(seenlist & (1<<(i-1))) )
+				if (!(seenlist & (1 << (i - 1))))
 				{
 					m_pUnseenBefore = pPlayer;
-					seenlist |= (1<<(i-1)); //add to list
+					seenlist |= (1 << (i - 1)); //add to list
 					break;
 				}
 			}
@@ -2689,7 +2689,7 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 		pBot->setMoveTo(CBotGlobals::entityOrigin(m_pUnseenBefore));
 	}
 
-	if ( pChooseWeapon && (pWeapon != pChooseWeapon) )
+	if ( pChooseWeapon && pWeapon != pChooseWeapon )
 	{
 		if ( !pBot->selectBotWeapon(pChooseWeapon) )
 		{
@@ -2704,7 +2704,7 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 
 			if ( m_pUnseenBefore != NULL )
 			{
-				if ( !m_bHitPlayer && (pBot->distanceFrom(CBotGlobals::entityOrigin(m_pUnseenBefore)) < 80.0f) )
+				if ( !m_bHitPlayer && pBot->distanceFrom(CBotGlobals::entityOrigin(m_pUnseenBefore)) < 80.0f )
 				{
 					m_bHitPlayer = true;
 					m_fTime = engine->Time()+randomFloat(0.5f,1.5f);
@@ -2852,7 +2852,7 @@ CBotTF2SnipeCrossBow::CBotTF2SnipeCrossBow(Vector vOrigin, int iWpt)
 	m_fTime = 0.0f;
 	const QAngle angle = QAngle(0, pWaypoint->getAimYaw(), 0);
 	AngleVectors(angle, &m_vAim);
-	m_vAim = vOrigin + (m_vAim * 4096);
+	m_vAim = vOrigin + m_vAim * 4096;
 	m_vOrigin = vOrigin;
 	m_fEnemyTime = 0.0f;
 	m_vEnemy = m_vAim;
@@ -2877,7 +2877,7 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 			else if (m_iArea != pBotTF2->getCurrentDefendArea())
 				complete();
 		}
-		else if ((m_iArea != pBotTF2->getCurrentAttackArea()) && (m_iArea != pBotTF2->getCurrentDefendArea()))
+		else if (m_iArea != pBotTF2->getCurrentAttackArea() && m_iArea != pBotTF2->getCurrentDefendArea())
 		{
 			complete(); // move up
 		}
@@ -2987,12 +2987,12 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 	pBot->setLookAtTask(LOOK_SNIPE);
 
 	// saw an enemy less than 5 secs ago
-	if ((m_fEnemyTime + 5.0f) > engine->Time())
+	if (m_fEnemyTime + 5.0f > engine->Time())
 		pBot->setAiming(m_vEnemy);
 	else
 		pBot->setAiming(m_vAim);
 
-	if (!pBot->isTF() || (((CBotFortress*)pBot)->getClass() != TF_CLASS_SNIPER) || (pBot->getHealthPercent() < 0.2))
+	if (!pBot->isTF() || ((CBotFortress*)pBot)->getClass() != TF_CLASS_SNIPER || pBot->getHealthPercent() < 0.2)
 	{
 		// out of health -- finish
 		//if (CTeamFortress2Mod::TF2_IsPlayerZoomed(pBot->getEdict()))
@@ -3016,7 +3016,7 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 		// too far away
 		fail();
 	}
-	else if ((m_iHideWaypoint != -1) && (((CBotFortress*)pBot)->incomingRocket(512.0f) || (m_fHideTime > engine->Time())))
+	else if (m_iHideWaypoint != -1 && (((CBotFortress*)pBot)->incomingRocket(512.0f) || m_fHideTime > engine->Time()))
 	{
 		// hide time -- move to hide origin
 		pBot->setMoveTo(m_vHideOrigin);
@@ -3079,7 +3079,7 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 						if (CBotGlobals::isPlayer(pBot->getEnemy()))
 							bhide = CBotGlobals::DotProductFromOrigin(pBot->getEnemy(), pBot->getOrigin()) > 0.96f;
 						else
-							bhide = randomFloat(0.0f, 2.0f) <= (angle + (1.0f - pBot->getHealthPercent()));
+							bhide = randomFloat(0.0f, 2.0f) <= angle + (1.0f - pBot->getHealthPercent());
 
 						if (bhide)
 							m_fHideTime = engine->Time() + randomFloat(1.5f, 2.5f);
@@ -3133,7 +3133,7 @@ CBotTF2Snipe :: CBotTF2Snipe ( Vector vOrigin, int iWpt )
 	m_fTime = 0.0f;
 	const QAngle angle = QAngle(0, pWaypoint->getAimYaw(), 0);
 	AngleVectors(angle,&m_vAim);
-	m_vAim = vOrigin + (m_vAim*4096);
+	m_vAim = vOrigin + m_vAim*4096;
 	m_vOrigin = vOrigin;
 	m_fEnemyTime = 0.0f;
 	m_vEnemy = m_vAim;
@@ -3159,7 +3159,7 @@ void CBotTF2Snipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 			else if ( m_iArea != pBotTF2->getCurrentDefendArea() )
 				complete();
 		}
-		else if (( m_iArea != pBotTF2->getCurrentAttackArea() ) && ( m_iArea != pBotTF2->getCurrentDefendArea() ))
+		else if (m_iArea != pBotTF2->getCurrentAttackArea() && m_iArea != pBotTF2->getCurrentDefendArea())
 		{
 			complete(); // move up
 		}
@@ -3274,12 +3274,12 @@ void CBotTF2Snipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	pBot->setLookAtTask(LOOK_SNIPE);
 
 	// saw an enemy less than 5 secs ago
-	if ( (m_fEnemyTime + 5.0f) > engine->Time() )
+	if ( m_fEnemyTime + 5.0f > engine->Time() )
 		pBot->setAiming(m_vEnemy);
 	else
 		pBot->setAiming(m_vAim);
 
-	if ( !pBot->isTF() || (((CBotFortress*)pBot)->getClass() != TF_CLASS_SNIPER) || (pBot->getHealthPercent() < 0.2) )
+	if ( !pBot->isTF() || ((CBotFortress*)pBot)->getClass() != TF_CLASS_SNIPER || pBot->getHealthPercent() < 0.2 )
 	{
 		// out of health -- finish
 		if ( CTeamFortress2Mod::TF2_IsPlayerZoomed(pBot->getEdict()) )
@@ -3303,7 +3303,7 @@ void CBotTF2Snipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		// too far away
 		fail();
 	}
-	else if ( (m_iHideWaypoint != -1) && (((CBotFortress*)pBot)->incomingRocket(512.0f) || (m_fHideTime > engine->Time())) )
+	else if ( m_iHideWaypoint != -1 && (((CBotFortress*)pBot)->incomingRocket(512.0f) || m_fHideTime > engine->Time()) )
 	{
 		// hide time -- move to hide origin
 		pBot->setMoveTo(m_vHideOrigin);
@@ -3366,7 +3366,7 @@ void CBotTF2Snipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 						if ( CBotGlobals::isPlayer(pBot->getEnemy()) )						
 							bhide = CBotGlobals::DotProductFromOrigin(pBot->getEnemy(),pBot->getOrigin()) > 0.96f;						
 						else
-							bhide = randomFloat(0.0f,2.0f) <= (angle+(1.0f-pBot->getHealthPercent()));
+							bhide = randomFloat(0.0f,2.0f) <= angle+(1.0f-pBot->getHealthPercent());
 						
 						if ( bhide )
 							m_fHideTime = engine->Time() + randomFloat(1.5f,2.5f);
@@ -3476,7 +3476,7 @@ void CBotTF2SpySap :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	// time out
 	if ( m_fTime < engine->Time() )
 		fail();
-	else if ( !weapon || (weapon->getID() != TF2_WEAPON_BUILDER) )
+	else if ( !weapon || weapon->getID() != TF2_WEAPON_BUILDER )
 	{
 		helpers->ClientCommand(pBot->getEdict(),"build 3 0");
 	}
@@ -3484,7 +3484,7 @@ void CBotTF2SpySap :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	{
 		if ( pBot->distanceFrom(pBuilding) > 100 )
 		{
-			pBot->setMoveTo((CBotGlobals::entityOrigin(pBuilding)));
+			pBot->setMoveTo(CBotGlobals::entityOrigin(pBuilding));
 		}
 		else
 		{
@@ -3556,9 +3556,9 @@ void CBotTFUseTeleporter :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		{
 			const Vector vTele = CBotGlobals::entityOrigin(m_pTele);		
 
-			if ( (pBot->distanceFrom(vTele) > 48) || (CClassInterface::getGroundEntity(pBot->getEdict())!=m_pTele.get()) )
+			if ( pBot->distanceFrom(vTele) > 48 || CClassInterface::getGroundEntity(pBot->getEdict())!=m_pTele.get() )
 			{
-				pBot->setMoveTo((vTele));		
+				pBot->setMoveTo(vTele);		
 				
 				if ( (m_vLastOrigin - pBot->getOrigin()).Length() > 50 )
 				{
@@ -3636,7 +3636,7 @@ void CAttackEntityTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	CBotWeapon* pWeapon = pBot->getBestWeapon(m_pEdict);
 
-	if ( (pWeapon != NULL) && (pWeapon != pBot->getCurrentWeapon()) && pWeapon->getWeaponIndex() )
+	if ( pWeapon != NULL && pWeapon != pBot->getCurrentWeapon() && pWeapon->getWeaponIndex() )
 	{
 		pBot->selectWeapon(pWeapon->getWeaponIndex());
 	}
@@ -3681,7 +3681,7 @@ void CThrowGrenadeTask ::execute (CBot *pBot,CBotSchedule *pSchedule)
 		{
 			const float fFraction = pBot->distanceFrom(m_vLoc)/MAX_GREN_THROW_DIST;
 			//m_vLoc.z = m_vLoc.z + getGrenadeZ(pBot->getOrigin(),m_vLoc,m_pWeapon->getProjectileSpeed());
-			m_vLoc.z = m_vLoc.z + (sv_gravity->GetFloat() * randomFloat(1.5f,2.5f) * fFraction);
+			m_vLoc.z = m_vLoc.z + sv_gravity->GetFloat() * randomFloat(1.5f,2.5f) * fFraction;
 		}
 	}
 
@@ -3889,7 +3889,7 @@ void CCSSPerformBuyTask::execute(CBot *pBot,CBotSchedule *pSchedule)
 			fail(); // outside buy zone
 			return;
 		}
-		CCSSBot *pCSSBot = ((CCSSBot*)pBot);
+		CCSSBot *pCSSBot = (CCSSBot*)pBot;
 		pCSSBot->executeBuy();
 		complete();
 	}
@@ -4093,7 +4093,7 @@ void CCSSGuardTask::execute(CBot *pBot, CBotSchedule *pScheddule)
 			pBot->duck();
 
 		// no enemy for a while
-		if ( (m_fEnemyTime + m_fTime) < engine->Time() )
+		if ( m_fEnemyTime + m_fTime < engine->Time() )
 		{
 			complete();
 		}
@@ -4119,7 +4119,7 @@ void CCSSGuardTask::execute(CBot *pBot, CBotSchedule *pScheddule)
 CFindLastEnemy::CFindLastEnemy (Vector vLast,Vector vVelocity)
 {
 	setCompleteInterrupt(CONDITION_SEE_CUR_ENEMY);
-	m_vLast = vLast+(vVelocity*10);
+	m_vLast = vLast+vVelocity*10;
 	m_fTime = 0;
 }
 
@@ -4231,9 +4231,9 @@ void CDODDropAmmoTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		}
 	}
 
-	if ( (pBot->distanceFrom(m_pPlayer) < 200.0f) && pBot->isFacing(vOrigin) )
+	if ( pBot->distanceFrom(m_pPlayer) < 200.0f && pBot->isFacing(vOrigin) )
 	{
-		CDODBot *pDODBot = ((CDODBot*)pBot);
+		CDODBot *pDODBot = (CDODBot*)pBot;
 		pDODBot->dropAmmo();
 		complete();
 		return;
@@ -4404,7 +4404,7 @@ void CBotTF2DemomanPipeJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		{
 			if ( !m_bFired && !m_iStartingAmmo )
 				m_iStartingAmmo = m_pWeapon->getClip1(pBot);
-			else if ( m_bFired && (m_iStartingAmmo > m_pWeapon->getClip1(pBot)) )
+			else if ( m_bFired && m_iStartingAmmo > m_pWeapon->getClip1(pBot) )
 			{
 				// find pipe bomb
 				m_pPipeBomb = CClassInterface::FindEntityByClassnameNearest(pBot->getOrigin(),"tf_projectile_pipe_remote",150.0f,NULL);
@@ -4455,7 +4455,7 @@ void CBotTF2DemomanPipeJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 			v_comp = v_comp / v_comp.Length();
 
 			const Vector v_pipe = CBotGlobals::entityOrigin(m_pPipeBomb);
-			Vector v_startrunup = v_pipe - (v_comp * rcbot_demo_runup_dist.GetFloat());
+			Vector v_startrunup = v_pipe - v_comp * rcbot_demo_runup_dist.GetFloat();
 			v_startrunup.z = v_pipe.z;
 
 			pBot->lookAtEdict(m_pPipeBomb);
@@ -4477,7 +4477,7 @@ void CBotTF2DemomanPipeJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 			v_comp = v_comp / v_comp.Length();
 			const Vector v_pipe = CBotGlobals::entityOrigin(m_pPipeBomb);
 
-			Vector v_endrunup = v_pipe + (v_comp * rcbot_demo_runup_dist.GetFloat());
+			Vector v_endrunup = v_pipe + v_comp * rcbot_demo_runup_dist.GetFloat();
 			v_endrunup.z = v_pipe.z;
 
 			pBot->setLookVector(m_vEnd);
@@ -4565,7 +4565,7 @@ void CBotTF2DemomanPipeEnemy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		((CBotTF2*)pBot)->setStickyTrapType(m_vEnemy,TF_TRAP_TYPE_ENEMY);
 
 		// Need to Lob my pipes
-		if ( vOtherWaypoint.z > (m_vEnemy.z+32.0f) )
+		if ( vOtherWaypoint.z > m_vEnemy.z+32.0f )
 		{
 			m_vAim = m_vEnemy; //(m_vEnemy - pBot->getOrigin())/2;
 			m_vAim.z = m_vEnemy.z + getGrenadeZ(pBot->getEdict(),m_pEnemy,pBot->getOrigin(),m_vEnemy,TF2_GRENADESPEED);//();//(sv_gravity->GetFloat() * randomFloat(0.9f,1.1f) * fFraction);
@@ -4576,7 +4576,7 @@ void CBotTF2DemomanPipeEnemy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 			m_vAim = (vOtherWaypoint+m_vEnemy)/2;
 		}
 
-		m_fHoldAttackTime = (pBot->distanceFrom(m_vEnemy)/512.0f) - 1.0f;
+		m_fHoldAttackTime = pBot->distanceFrom(m_vEnemy)/512.0f - 1.0f;
 
 		if ( m_fHoldAttackTime < 0.0f )
 			m_fHoldAttackTime = 0.0f;
@@ -4599,7 +4599,7 @@ void CBotTF2DemomanPipeEnemy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 
 
-	if ( !CBotGlobals::entityIsValid(m_pEnemy) || !CBotGlobals::entityIsAlive(m_pEnemy) || (m_fTime < engine->Time()) )
+	if ( !CBotGlobals::entityIsValid(m_pEnemy) || !CBotGlobals::entityIsAlive(m_pEnemy) || m_fTime < engine->Time() )
 	{
 		// blow up any grens before we finish
 		//if ( m_pEnemy.get() && pBot->isVisible(m_pEnemy.get()) )
@@ -4612,7 +4612,7 @@ void CBotTF2DemomanPipeEnemy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	
 	pBot->wantToShoot(false);
 
-	if ( (m_pPipeLauncher->getAmmo(pBot) + m_pPipeLauncher->getClip1(pBot)) == 0 )
+	if ( m_pPipeLauncher->getAmmo(pBot) + m_pPipeLauncher->getClip1(pBot) == 0 )
 	{
 		if ( pBot->isVisible(m_pEnemy.get()) )
 			((CBotTF2*)pBot)->detonateStickies(true);
@@ -4655,7 +4655,7 @@ void CBotTF2DemomanPipeEnemy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 				pBot->primaryAttack(true);
 			else
 			{
-				if ( m_fHeldAttackTime < (fTime - 0.1f) )
+				if ( m_fHeldAttackTime < fTime - 0.1f )
 					m_fHeldAttackTime = 0;
 
 				pBot->letGoOfButton(IN_ATTACK);
@@ -4745,7 +4745,7 @@ void CMessAround::execute ( CBot *pBot, CBotSchedule *pSchedule )
 
 		if ( pBot->distanceFrom(m_pFriendly) > 100 )
 		{
-			pBot->setMoveTo((origin));
+			pBot->setMoveTo(origin);
 		}
 		else if ( pBot->FInViewCone(m_pFriendly) )
 		{
@@ -4779,7 +4779,7 @@ void CMessAround::execute ( CBot *pBot, CBotSchedule *pSchedule )
 
 		if ( pBot->distanceFrom(m_pFriendly) > 100 )
 		{
-			pBot->setMoveTo((origin));
+			pBot->setMoveTo(origin);
 			ok = false;
 		}
 
@@ -4902,7 +4902,7 @@ void CBotTF2Spam :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		{
 			const Vector vVisibleWaypoint = pSchedule->passedVector();
 
-			if ( vVisibleWaypoint.z > (m_vTarget.z + 32.0f) ) // need to lob grenade
+			if ( vVisibleWaypoint.z > m_vTarget.z + 32.0f ) // need to lob grenade
 				m_vTarget.z += getGrenadeZ(pBot->getEdict(),NULL,pBot->getOrigin(),m_vTarget,m_pWeapon->getProjectileSpeed());
 			else // mid point between waypoint and target as I won't see target
 				m_vTarget = (m_vTarget + vVisibleWaypoint) / 2;
@@ -5035,7 +5035,7 @@ void CBotTF2AttackSentryGunTask::execute (CBot *pBot,CBotSchedule *pSchedule)
 	pBot->lookAtEdict(m_pSentryGun);
 	pBot->setLookAtTask(LOOK_EDICT);
 
-	if ( m_pWeapon->needToReload(pBot) || (CClassInterface::getSentryEnemy(m_pSentryGun) == pBot->getEdict()) )
+	if ( m_pWeapon->needToReload(pBot) || CClassInterface::getSentryEnemy(m_pSentryGun) == pBot->getEdict() )
 	{
 		if ( pBot->distanceFrom(m_vHide) > 80.0f ) 
 			pBot->setMoveTo(m_vHide);
@@ -5077,7 +5077,7 @@ void CBotNest :: execute (CBot *pBot, CBotSchedule *pSchedule)
 {
 	CBotTF2 *pBotTF2 = (CBotTF2*)pBot;
 
-	if ( ( pBotTF2->getClass() == TF_CLASS_MEDIC ) && pBotTF2->someoneCalledMedic() )
+	if ( pBotTF2->getClass() == TF_CLASS_MEDIC && pBotTF2->someoneCalledMedic() )
 		fail(); // Follow player
 
 	if ( !pBotTF2->wantToNest() )
@@ -5160,10 +5160,10 @@ void CBotFollowSquadLeader :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		return;
 	}
 
-	if ( (m_fVisibleTime > 0.0f) && !pBot->hasEnemy() && !pBot->isVisible(pSquadLeader) )
+	if ( m_fVisibleTime > 0.0f && !pBot->hasEnemy() && !pBot->isVisible(pSquadLeader) )
 	{
 		// haven't seen leader for five seconds
-		if ( (engine->Time() - m_fVisibleTime) > 0.2f )
+		if ( engine->Time() - m_fVisibleTime > 0.2f )
 		{
 			complete();
 			return;
@@ -5187,9 +5187,9 @@ void CBotFollowSquadLeader :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 		CClassInterface::getVelocity(pSquadLeader,&vVelocity);
 
-		m_fLeaderSpeed = (MIN(m_fLeaderSpeed,100.0f)*0.5f) + (vVelocity.Length()*0.5f);
+		m_fLeaderSpeed = MIN(m_fLeaderSpeed,100.0f)*0.5f + vVelocity.Length()*0.5f;
 
-		m_fUpdateMovePosTime = engine->Time() + (fRand * (1.0f-(vVelocity.Length()/320)));
+		m_fUpdateMovePosTime = engine->Time() + fRand * (1.0f-vVelocity.Length()/320);
 		m_vPos = m_pSquad->GetFormationVector(pBot->getEdict());
 		
 		m_vForward = m_vPos+vVelocity;
@@ -5228,7 +5228,7 @@ CBotDODSnipe :: CBotDODSnipe ( CBotWeapon *pWeaponToUse, Vector vOrigin, float f
 	m_fTime = 0.0f;
 	const QAngle angle = QAngle(0, fYaw, 0);
 	AngleVectors(angle,&m_vAim);
-	m_vAim = vOrigin + (m_vAim*1024);
+	m_vAim = vOrigin + m_vAim*1024;
 	m_vOrigin = vOrigin;
 	m_pWeaponToUse = pWeaponToUse;
 	m_fScopeTime = 0;
@@ -5303,7 +5303,7 @@ void CBotDODSnipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 				
 				if ( m_fTimeout == 0.0f )
 					m_fTimeout = engine->Time();
-				else if ( (m_fTimeout + 3.0f) < engine->Time() )
+				else if ( m_fTimeout + 3.0f < engine->Time() )
 					fail();
 			}
 			else
@@ -5328,7 +5328,7 @@ void CBotDODSnipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		fail();
 	}
 
-	if ( (m_fEnemyTime + 5.0f) > engine->Time() )
+	if ( m_fEnemyTime + 5.0f > engine->Time() )
 	{
 		pBot->setLookAtTask(LOOK_VECTOR);
 		pBot->setLookVector(m_vLastEnemy);
@@ -5347,12 +5347,12 @@ void CBotDODSnipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	fDist = (m_vOrigin - pBot->getOrigin()).Length2D();
 
-	if ( (fDist > 16) || !bDeployedOrZoomed )
+	if ( fDist > 16 || !bDeployedOrZoomed )
 	{
 		pBot->setMoveTo(m_vOrigin);
 		pBot->setMoveSpeed(CClassInterface::getMaxSpeed(pBot->getEdict())/8);
 
-		if ( ( fDist < 48 ) && ((CDODBot*)pBot)->withinTeammate() )
+		if ( fDist < 48 && ((CDODBot*)pBot)->withinTeammate() )
 			fail();
 	}
 	else
@@ -5391,7 +5391,7 @@ void CBotDODSnipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		}
 
 		// no enemy for a while
-		if ( (m_fEnemyTime + m_fTime) < engine->Time() )
+		if ( m_fEnemyTime + m_fTime < engine->Time() )
 		{
 			if ( bDeployedOrZoomed )
 				pBot->secondaryAttack();
@@ -5425,7 +5425,7 @@ CBotHL2DMSnipe :: CBotHL2DMSnipe ( CBotWeapon *pWeaponToUse, Vector vOrigin, flo
 	m_fTime = 0.0f;
 	const QAngle angle = QAngle(0, fYaw, 0);
 	AngleVectors(angle,&m_vAim);
-	m_vAim = vOrigin + (m_vAim*1024);
+	m_vAim = vOrigin + m_vAim*1024;
 	m_vOrigin = vOrigin;
 	m_pWeaponToUse = pWeaponToUse;
 	m_fScopeTime = 0;
@@ -5528,7 +5528,7 @@ void CBotHL2DMSnipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 			pBot->duck();
 
 		// no enemy for a while
-		if ( (m_fEnemyTime + m_fTime) < engine->Time() )
+		if ( m_fEnemyTime + m_fTime < engine->Time() )
 		{
 			//if ( bDeployedOrZoomed )
 			//	pBot->secondaryAttack();
@@ -5781,7 +5781,7 @@ bool CBotTF2EngineerInterrupt :: isInterrupted ( CBot *pBot, bool *bFailed, bool
 		{
 			const float m_fCurrentHealth = CClassInterface::getSentryHealth(m_pSentryGun);
 
-			if ( (((CBotFortress*)pBot)->getMetal()>75) && (m_fCurrentHealth < m_fPrevSentryHealth) )
+			if ( ((CBotFortress*)pBot)->getMetal()>75 && m_fCurrentHealth < m_fPrevSentryHealth )
 			{
 				*bFailed = true;
 				return true;
@@ -5803,7 +5803,7 @@ CBotTask :: CBotTask ()
 
 bool CBotTask :: timedOut ()
 {
-	return (this->m_fTimeOut != 0) && (engine->Time() < this->m_fTimeOut);
+	return this->m_fTimeOut != 0 && engine->Time() < this->m_fTimeOut;
 }
 
 eTaskState CBotTask :: isInterrupted (CBot *pBot)

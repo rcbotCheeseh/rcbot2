@@ -738,8 +738,6 @@ bool CBotFortress :: setVisible ( edict_t *pEntity, bool bVisible )
 
 void CBotFortress :: medicCalled(edict_t *pPlayer )
 {
-	bool bGoto = true;
-
 	if ( pPlayer == m_pEdict )
 		return; // can't heal self!
 	if ( m_iClass != TF_CLASS_MEDIC )
@@ -748,7 +746,8 @@ void CBotFortress :: medicCalled(edict_t *pPlayer )
 		return; // ignore
 	if ( (CBotGlobals::getTeam(pPlayer) == getTeam()) || (CClassInterface::getTF2Class(pPlayer) == TF_CLASS_SPY) && thinkSpyIsEnemy(pPlayer,CTeamFortress2Mod::getSpyDisguise(pPlayer)) )
 	{
-		
+		bool bGoto = true;
+
 		m_pLastCalledMedic = pPlayer;
 		m_fLastCalledMedicTime = engine->Time();
 		m_fCallMedicTime[ENTINDEX(pPlayer)-1] = m_fLastCalledMedicTime;
@@ -2350,10 +2349,9 @@ void CBotFortress :: callMedic ()
 
 bool CBotTF2 :: canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev)
 {
-	static edict_t *pSentry;
-
 	if ( CBot::canGotoWaypoint(vPrevWaypoint,pWaypoint,pPrev) )
 	{
+		static edict_t *pSentry;
 		if ( pWaypoint->hasFlag(CWaypointTypes::W_FL_OWNER_ONLY) )
 		{
 			int area = pWaypoint->getArea();
@@ -2372,11 +2370,11 @@ bool CBotTF2 :: canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWa
 		if ( pWaypoint->hasFlag(CWaypointTypes::W_FL_ROCKET_JUMP) )
 		{
 			CBotWeapons *pWeapons = getWeapons();
-			CBotWeapon *pWeapon;
 
-			// only roccket jump if more than 50% health
+			// only rocket jump if more than 50% health
 			if (getHealthPercent() > 0.5)
 			{
+				CBotWeapon *pWeapon;
 				// only soldiers or demomen can use these
 				if ( getClass() == TF_CLASS_SOLDIER )
 				{
@@ -2766,7 +2764,6 @@ void CBotTF2::modThink()
 {
 	static bool bNeedHealth;
 	static bool bNeedAmmo;
-	static bool bIsCloaked;
 
 	// FIX: MUST Update class
 	m_iClass = (TF_Class)CClassInterface::getTF2Class(m_pEdict);
@@ -3080,6 +3077,7 @@ void CBotTF2::modThink()
 	case TF_CLASS_SPY:
 		if (!hasFlag())
 		{
+			static bool bIsCloaked;
 			if (rcbot_tf2_debug_spies_cloakdisguise.GetBool() && (m_fSpyDisguiseTime < engine->Time()))
 			{
 				// if previously detected or isn't disguised
@@ -3647,9 +3645,9 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 	
 	float fTotal = 0;
 
-	for ( int i = 0; i < availableClasses.size(); i ++ )
+	for (int availableClasse : availableClasses)
 	{
-		fTotal += m_fClassDisguiseFitness[ availableClasses[i] ];
+		fTotal += m_fClassDisguiseFitness[availableClasse];
 	}
 
 	if ( fTotal > 0 )
@@ -3658,12 +3656,12 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 
 		fTotal = 0;
 
-		for ( int i = 0; i < availableClasses.size(); i ++ )
+		for (int availableClasse : availableClasses)
 		{
-			fTotal += m_fClassDisguiseFitness[ availableClasses[i] ];
+			fTotal += m_fClassDisguiseFitness[availableClasse];
 
 			if ( fRand <= fTotal )
-				return availableClasses[i];
+				return availableClasse;
 		}
 
 	}
@@ -3699,11 +3697,11 @@ bool CBotFortress :: incomingRocket ( float fRange )
 	{
 		Vector vel;
 		const Vector vorg = CBotGlobals::entityOrigin(pRocket);
-		Vector vcomp;
 		const float fDist = distanceFrom(pRocket);
 
 		if ( fDist < fRange )
 		{
+			Vector vcomp;
 			CClassInterface::getVelocity(pRocket,&vel);
 
 			if ( vel.Length() > 0 )
@@ -3905,9 +3903,6 @@ bool CBotTF2::healPlayer()
 	static edict_t *pWeapon;
 	static Vector vOrigin;
 	static Vector vForward;
-	static QAngle eyes;
-	static float fSpeed;
-	static CClient *pClient;
 
 	if (!m_pHeal.get())
 		return false;
@@ -3937,6 +3932,8 @@ bool CBotTF2::healPlayer()
 
 	if (m_fMedicUpdatePosTime < engine->Time())
 	{
+		static CClient *pClient;
+		static float fSpeed;
 		const float fRand = randomFloat(1.0f, 2.0f);
 
 		pClient = CClients::get(m_pHeal);
@@ -3948,6 +3945,7 @@ bool CBotTF2::healPlayer()
 
 		if (p && (p->GetLastUserCommand().buttons & IN_ATTACK))
 		{
+			static QAngle eyes;
 			// keep out of cross fire
 			eyes = CBotGlobals::playerAngles(m_pHeal);
 			AngleVectors(eyes, &vForward);
@@ -4228,9 +4226,6 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	static Vector vOrigin;
 	static unsigned char *failedlist;
 
-	static bool bMoveObjs;
-
-	static bool bSentryHasEnemy;
 	static int iSentryLevel;
 	static int iDispenserLevel;
 	static int iAllySentryLevel;
@@ -4384,6 +4379,8 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 
 	if ( iClass == TF_CLASS_ENGINEER )
 	{
+		static bool bSentryHasEnemy;
+		static bool bMoveObjs;
 		const bool bCanBuild = m_pWeapons->hasWeapon(TF2_WEAPON_BUILDER);
 
 		bMoveObjs = rcbot_move_obj.GetBool();
@@ -6002,12 +5999,12 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					CWaypointLocations::GetAllVisible(iWptFrom,iWptFrom,vPoint,vPoint,2048.0,&m_iVisibles,&m_iInvisibles);
 
-					for ( int i = 0; i < m_iVisibles.size(); i ++ )
+					for (int m_iVisible : m_iVisibles)
 					{
-						if ( m_iVisibles[i] == CWaypoints::getWaypointIndex(pWaypoint) )
+						if (m_iVisible == CWaypoints::getWaypointIndex(pWaypoint))
 							continue;
 
-						pTemp = CWaypoints::getWaypoint(m_iVisibles[i]);
+						pTemp = CWaypoints::getWaypoint(m_iVisible);
 
 						if ( pTemp->distanceFrom(pWaypoint) < 512 )
 						{

@@ -33,7 +33,7 @@
 
 #include "bot_waypoint.h"
 
-const int g_iMaxVisibilityByte = (CWaypoints::MAX_WAYPOINTS*CWaypoints::MAX_WAYPOINTS)/8; // divide by 8 bits, need byte number
+const int g_iMaxVisibilityByte = CWaypoints::MAX_WAYPOINTS*CWaypoints::MAX_WAYPOINTS/8; // divide by 8 bits, need byte number
 
 typedef struct
 {
@@ -86,16 +86,16 @@ public:
 	bool GetVisibilityFromTo ( int iFrom, int iTo )
 	{
 		// work out the position 
-		const int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
+		const int iPosition = iFrom*CWaypoints::MAX_WAYPOINTS+iTo;
 
 		const int iByte = iPosition/8;
 		const int iBit = iPosition%8;
 
 		if ( iByte < g_iMaxVisibilityByte )
 		{			
-			unsigned char *ToReturn = (m_VisTable+iByte);
+			unsigned char *ToReturn = m_VisTable+iByte;
 			
-			return ( (*ToReturn & (1<<iBit)) > 0 );
+			return (*ToReturn & 1<<iBit) > 0;
 		}
 
 		return false;
@@ -134,17 +134,17 @@ public:
 
 	void SetVisibilityFromTo ( int iFrom, int iTo, bool bVisible )
 	{
-		const int iPosition = (iFrom*CWaypoints::MAX_WAYPOINTS)+iTo;
+		const int iPosition = iFrom*CWaypoints::MAX_WAYPOINTS+iTo;
 
 		const int iByte = iPosition/8;
 		const int iBit = iPosition%8;
 
 		if ( iByte < g_iMaxVisibilityByte )
 		{
-			unsigned char *ToChange = (m_VisTable+iByte);
+			unsigned char *ToChange = m_VisTable+iByte;
 			
 			if ( bVisible )
-				*ToChange |= (1<<iBit);
+				*ToChange |= 1<<iBit;
 			else
 				*ToChange &= ~(1<<iBit);
 		}

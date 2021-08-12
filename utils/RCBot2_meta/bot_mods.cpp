@@ -95,7 +95,7 @@ void CBotMods :: parseFile ()
 		unsigned int i = 0;
 		unsigned int j = 0;
 
-		while ( (i < len) && (buffer[i] != '=') )
+		while ( i < len && buffer[i] != '=' )
 		{
 			if ( buffer[i] != ' ' )
 				key[j++] = buffer[i];
@@ -108,9 +108,9 @@ void CBotMods :: parseFile ()
 
 		j = 0;
 
-		while ( (i < len) && (buffer[i] != '\n') && (buffer[i] != '\r') )
+		while ( i < len && buffer[i] != '\n' && buffer[i] != '\r' )
 		{
-			if ( j || (buffer[i] != ' ') )
+			if ( j || buffer[i] != ' ' )
 				val[j++] = buffer[i];
 			i++;
 		}
@@ -437,7 +437,7 @@ bool CHalfLifeDeathmatchMod :: playerSpawned ( edict_t *pPlayer )
 void CHalfLifeDeathmatchMod :: initMod ()
 {
 
-	CWeapons::loadWeapons((m_szWeaponListName==NULL)?"HL2DM":m_szWeaponListName, HL2DMWeaps);
+	CWeapons::loadWeapons(m_szWeaponListName==NULL?"HL2DM":m_szWeaponListName, HL2DMWeaps);
 	
 //	for ( i = 0; i < HL2DM_WEAPON_MAX; i ++ )
 	//	CWeapons::addWeapon(new CWeapon(HL2DMWeaps[i]));//.iSlot,HL2DMWeaps[i].szWeaponName,HL2DMWeaps[i].iId,HL2DMWeaps[i].m_iFlags,HL2DMWeaps[i].m_iAmmoIndex,HL2DMWeaps[i].minPrimDist,HL2DMWeaps[i].maxPrimDist,HL2DMWeaps[i].m_iPreference,HL2DMWeaps[i].m_fProjSpeed));

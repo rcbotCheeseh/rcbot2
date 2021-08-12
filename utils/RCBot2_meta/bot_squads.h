@@ -108,17 +108,17 @@ public:
 
 	inline bool IsStealthMode ()
 	{
-		return (m_CombatType == COMBAT_STEALTH);
+		return m_CombatType == COMBAT_STEALTH;
 	}
 
 	inline bool IsProneMode ()
 	{
-		return (m_CombatType == COMBAT_PRONE);
+		return m_CombatType == COMBAT_PRONE;
 	}
 
 	inline bool IsCrouchMode ()
 	{
-		return (m_CombatType == COMBAT_CROUCH);
+		return m_CombatType == COMBAT_CROUCH;
 	}
 
 	inline edict_t *GetLeader ()
@@ -165,7 +165,7 @@ public:
 
 	inline bool IsLeader ( edict_t *pLeader )
 	{
-		return (GetLeader() == pLeader);
+		return GetLeader() == pLeader;
 	}
 
 	void AddMember ( edict_t *pEdict );

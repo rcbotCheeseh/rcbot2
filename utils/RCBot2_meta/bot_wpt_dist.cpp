@@ -33,7 +33,7 @@ void CWaypointDistances :: load ()
 
 		fread(&hdr,sizeof(wpt_dist_hdr_t),1,bfp);
 
-		if ( (hdr.maxwaypoints == CWaypoints::MAX_WAYPOINTS) && (hdr.numwaypoints == CWaypoints::numWaypoints()) && (hdr.version == WPT_DIST_VER) )
+		if ( hdr.maxwaypoints == CWaypoints::MAX_WAYPOINTS && hdr.numwaypoints == CWaypoints::numWaypoints() && hdr.version == WPT_DIST_VER )
 		{
 			fread(m_Distances,sizeof(int),CWaypoints::MAX_WAYPOINTS * CWaypoints::MAX_WAYPOINTS,bfp);
 		}

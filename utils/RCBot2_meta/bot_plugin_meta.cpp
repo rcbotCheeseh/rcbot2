@@ -221,7 +221,7 @@ void RCBotPluginMeta::HudTextMessage(edict_t *pEntity, const char *szMessage)
 
 	if (say > 0) {
 		char chatline[128];
-		snprintf(chatline, sizeof(chatline), "\x01\x04[RCBot2]\x01 %s\n", szMessage);
+		snprintf(chatline, sizeof chatline, "\x01\x04[RCBot2]\x01 %s\n", szMessage);
 
 		buf = engine->UserMessageBegin(filter, say);
 		buf->WriteString(chatline);
@@ -260,7 +260,7 @@ void RCBotPluginMeta::BroadcastTextMessage(const char *szMessage)
 
 	if (say > 0) {
 		char chatline[128];
-		snprintf(chatline, sizeof(chatline), "\x01\x04[RCBot2]\x01 %s\n", szMessage);
+		snprintf(chatline, sizeof chatline, "\x01\x04[RCBot2]\x01 %s\n", szMessage);
 
 		bf_write* buf = engine->UserMessageBegin(filter, say);
 		buf->WriteString(chatline);
@@ -502,14 +502,14 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	CBotGlobals::buildFileName(filename, "bot_quota", BOT_CONFIG_FOLDER, "ini");
 	fp = fopen(filename, "r");
 
-	memset(bq_line, 0, sizeof(bq_line));
+	memset(bq_line, 0, sizeof bq_line);
 
 	if (fp != NULL) {
-		while (fgets(bq_line, sizeof(bq_line), fp) != NULL) {
+		while (fgets(bq_line, sizeof bq_line, fp) != NULL) {
 			if (bq_line[0] == '#')
 				continue;
 
-			for (int i = 0; i < sizeof(bq_line); ++i) {
+			for (int i = 0; i < sizeof bq_line; ++i) {
 				if (bq_line[i] == '\0')
 					break;
 
@@ -733,7 +733,7 @@ void RCBotPluginMeta::Hook_ClientPutInServer(edict_t *pEntity, char const *playe
 
 	CClient *pClient = CClients::clientConnected(pEntity);
 
-	if ( !is_Rcbot && pClient )
+	if ( pClient )
 	{
 		if ( !engine->IsDedicatedServer() )
 		{
@@ -882,7 +882,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 
 		if (notify) {
 			char chatmsg[128];
-			snprintf(chatmsg, sizeof(chatmsg), "[Bot Quota] Humans: %d, Bots: %d", human_count, bot_target);
+			snprintf(chatmsg, sizeof chatmsg, "[Bot Quota] Humans: %d, Bots: %d", human_count, bot_target);
 			logger->Log(LogLevel::INFO, chatmsg);
 			// RCBotPluginMeta::BroadcastTextMessage(chatmsg);
 		}

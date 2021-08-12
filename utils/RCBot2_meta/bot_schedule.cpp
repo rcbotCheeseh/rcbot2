@@ -257,7 +257,7 @@ CBotBackstabSched :: CBotBackstabSched ( edict_t *pEnemy )
 	Vector vangles;
 
 	AngleVectors(CBotGlobals::entityEyeAngles(pEnemy),&vangles);
-	const Vector vrear = CBotGlobals::entityOrigin(pEnemy) - (vangles * 45) + Vector(0, 0, 32);
+	const Vector vrear = CBotGlobals::entityOrigin(pEnemy) - vangles * 45 + Vector(0, 0, 32);
 
 	addTask(new CFindPathTask(vrear));
 	addTask(new CBotBackstab(pEnemy));
@@ -438,7 +438,7 @@ CBotTauntSchedule :: CBotTauntSchedule ( edict_t *pPlayer, float fYaw )
 	forward = forward/forward.Length();
 	const Vector vOrigin = CBotGlobals::entityOrigin(pPlayer);
 
-	const Vector vGoto = vOrigin + (forward * fTauntDist);
+	const Vector vGoto = vOrigin + forward * fTauntDist;
 
 	CBotGlobals::fixFloatAngle(&m_fYaw);
 
@@ -696,7 +696,7 @@ CBotFollowLastEnemy ::	CBotFollowLastEnemy ( CBot *pBot, edict_t *pEnemy, Vector
 
 	if ( CClassInterface :: getVelocity(pEnemy,&vVelocity) )
 	{
-		if ( pClient && (vVelocity == Vector(0,0,0)) )
+		if ( pClient && vVelocity == Vector(0,0,0) )
 			vVelocity = pClient->getVelocity();
 	}
 	else if ( pClient )

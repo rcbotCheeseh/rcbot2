@@ -94,7 +94,7 @@ void CBotGAValues :: mutate ()
 		{
 			const float fCurrentVal = get(i);
 
-			set(i,fCurrentVal + ((fCurrentVal * (-1+randomFloat(0,2))) * CGA::g_fMaxPerturbation));
+			set(i,fCurrentVal + fCurrentVal * (-1+randomFloat(0,2)) * CGA::g_fMaxPerturbation);
 		}
 	}
 }

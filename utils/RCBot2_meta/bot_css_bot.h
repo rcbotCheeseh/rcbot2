@@ -73,7 +73,7 @@ public:
 	virtual void primaryattackCS(bool hold = false);
 	inline bool shouldWaitForEnemy()
 	{
-		return m_pLastEnemy.get() != NULL && (m_fCombatTime + 5.0f > engine->Time());
+		return m_pLastEnemy.get() != NULL && m_fCombatTime + 5.0f > engine->Time();
 	}
 	virtual float getNextAttackDelay();
 	virtual CBotWeapon *getPrimaryWeapon();

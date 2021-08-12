@@ -110,8 +110,8 @@ private:
 
 // inline for speed, must therefore reside in header file
 inline unsigned long MTRand_int32::twiddle(unsigned long u, unsigned long v) {
-  return (((u & 0x80000000UL) | (v & 0x7FFFFFFFUL)) >> 1)
-    ^ ((v & 1UL) ? 0x9908B0DFUL : 0x0UL);
+    return ((u & 0x80000000UL) | (v & 0x7FFFFFFFUL)) >> 1
+        ^ (v & 1UL ? 0x9908B0DFUL : 0x0UL);
 }
 
 inline unsigned long MTRand_int32::rand_int32() { // generate 32 bit random int
@@ -119,10 +119,10 @@ inline unsigned long MTRand_int32::rand_int32() { // generate 32 bit random int
 // gen_state() is split off to be non-inline, because it is only called once
 // in every 624 calls and otherwise irand() would become too big to get inlined
   unsigned long x = state[p++];
-  x ^= (x >> 11);
-  x ^= (x << 7) & 0x9D2C5680UL;
-  x ^= (x << 15) & 0xEFC60000UL;
-  return x ^ (x >> 18);
+  x ^= x >> 11;
+  x ^= x << 7 & 0x9D2C5680UL;
+  x ^= x << 15 & 0xEFC60000UL;
+  return x ^ x >> 18;
 }
 
 // generates double floating point numbers in the half-open interval [0, 1)

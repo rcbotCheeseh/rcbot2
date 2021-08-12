@@ -1268,7 +1268,7 @@ public:
 		m_fTime = 0.0f;
 		const QAngle angle = QAngle(0, fYaw, 0);
 		AngleVectors(angle,&m_vAim);
-		m_vAim = vOrigin + (m_vAim*1024);
+		m_vAim = vOrigin + m_vAim*1024;
 		m_vOrigin = vOrigin;
 		m_pWeaponToUse = pWeaponToUse;
 		m_fScopeTime = 0;

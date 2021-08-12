@@ -89,9 +89,9 @@ void CBotConfigFile :: doNextCommand ()
 {
 	char cmd[64] = {0};
 
-	if ( (m_fNextCommandTime < engine->Time()) && (m_iCmd < m_Commands.size()) )
+	if ( m_fNextCommandTime < engine->Time() && m_iCmd < m_Commands.size() )
 	{
-		snprintf(cmd, sizeof(cmd), "%s\n", m_Commands[m_iCmd]);
+		snprintf(cmd, sizeof cmd, "%s\n", m_Commands[m_iCmd]);
 		engine->ServerCommand(cmd);
 
 		logger->Log(LogLevel::TRACE, "Bot Command '%s' executed", m_Commands[m_iCmd]);
@@ -104,9 +104,9 @@ void CBotConfigFile :: executeCommands ()
 {
 	char cmd[64] = {0};
 
-	while ( (m_iCmd < m_Commands.size()) )
+	while ( m_iCmd < m_Commands.size() )
 	{
-		snprintf(cmd, sizeof(cmd), "%s\n", m_Commands[m_iCmd]);
+		snprintf(cmd, sizeof cmd, "%s\n", m_Commands[m_iCmd]);
 		engine->ServerCommand(cmd);
 
 		logger->Log(LogLevel::TRACE, "Bot Command '%s' executed", m_Commands[m_iCmd]);
@@ -181,15 +181,15 @@ void CRCBotTF2UtilFile :: loadConfig()
 					// 
 					
 					if ( sscanf(line,"%[^,],%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\r\n",utiltype,
-						&(iClassList[0][0]),&(iClassList[0][1]),
-						&(iClassList[1][0]),&(iClassList[1][1]),
-						&(iClassList[2][0]),&(iClassList[2][1]),
-						&(iClassList[3][0]),&(iClassList[3][1]),
-						&(iClassList[4][0]),&(iClassList[4][1]),
-						&(iClassList[5][0]),&(iClassList[5][1]),
-						&(iClassList[6][0]),&(iClassList[6][1]),
-						&(iClassList[7][0]),&(iClassList[7][1]),
-						&(iClassList[8][0]),&(iClassList[8][1])) )
+						&iClassList[0][0],&iClassList[0][1],
+						&iClassList[1][0],&iClassList[1][1],
+						&iClassList[2][0],&iClassList[2][1],
+						&iClassList[3][0],&iClassList[3][1],
+						&iClassList[4][0],&iClassList[4][1],
+						&iClassList[5][0],&iClassList[5][1],
+						&iClassList[6][0],&iClassList[6][1],
+						&iClassList[7][0],&iClassList[7][1],
+						&iClassList[8][0],&iClassList[8][1]) )
 					{
 
 						addUtilPerturbation(iUtil,iFile,iClassList);

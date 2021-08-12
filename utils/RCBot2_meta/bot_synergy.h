@@ -41,7 +41,7 @@ public:
     void modThink () override;
     void getTasks (unsigned int iIgnore=0) override;
     virtual bool executeAction(eBotAction iAction);
-    virtual float getArmorPercent() { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
+    virtual float getArmorPercent() { return 0.01f * m_pPlayerInfo->GetArmorValue(); }
     unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
     bool isEnemy ( edict_t *pEdict, bool bCheckWeapons = true ) override;
     bool setVisible ( edict_t *pEntity, bool bVisible ) override;
