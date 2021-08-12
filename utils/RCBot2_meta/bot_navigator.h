@@ -240,7 +240,7 @@ public:
 	{
 		if ( m_Head != NULL )
 		{
-			AStarListNode *t = m_Head;
+			const AStarListNode *t = m_Head;
 
 			m_Head = m_Head->m_Next;
 
@@ -291,7 +291,7 @@ public:
 	{
 		while ( m_Head != NULL )
 		{
-			AStarListNode* t = m_Head;
+			const AStarListNode* t = m_Head;
 			m_Head = m_Head->m_Next;
 			delete t;
 			t = NULL;

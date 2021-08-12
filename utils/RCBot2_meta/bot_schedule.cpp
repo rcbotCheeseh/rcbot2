@@ -861,7 +861,7 @@ void CBotSchedule :: addTask ( CBotTask *pTask )
 
 void CBotSchedule :: removeTop ()
 {
-	CBotTask *pTask = m_Tasks.front();
+	const CBotTask *pTask = m_Tasks.front();
 	m_Tasks.pop_front();
 	delete pTask;
 }

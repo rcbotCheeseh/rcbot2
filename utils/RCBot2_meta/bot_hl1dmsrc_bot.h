@@ -35,8 +35,7 @@
 class CHL1DMSrcBot : public CBot
 {
 public:
-
-	bool isHL1DMSrc () { return true; }
+	static bool isHL1DMSrc () { return true; }
 
 	void modThink () override;
 
@@ -46,7 +45,7 @@ public:
 	bool startGame () override;
 
 	void died ( edict_t *pKiller );
-	void killed ( edict_t *pVictim );
+	static void killed ( edict_t *pVictim );
 
 	void spawnInit () override;
 

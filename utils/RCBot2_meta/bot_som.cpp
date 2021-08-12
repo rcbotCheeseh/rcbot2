@@ -129,7 +129,7 @@ void CSom :: display ()
 	}
 }
 
-void CSomNeuron :: update ( std::vector<float> *inputs, float inf )
+void CSomNeuron :: update (const std::vector<float>* inputs, float inf)
 {
 	for ( unsigned int i = 0; i < inputs->size(); i ++ )
 	{
@@ -162,7 +162,7 @@ CSomNeuron :: CSomNeuron ( unsigned short iId, int iInp, int iX, int iY )
 		fWeights.push_back(randomFloat(0,1));
 }
 
-float CSomNeuron :: distance ( std::vector <float> *inputs )
+float CSomNeuron :: distance (const std::vector<float>* inputs)
 {
 	float dist = 0;
 

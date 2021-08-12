@@ -1019,7 +1019,7 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 		Vector v_right, v_up;
 		const Vector v_src = getEyePosition();
 		// find best place to turn it to
-		trace_t *tr = CBotGlobals::getTraceResult();
+		const trace_t *tr = CBotGlobals::getTraceResult();
 
 		//		CBotWeapon *pWeapon = getCurrentWeapon();
 
@@ -3645,7 +3645,7 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 	
 	float fTotal = 0;
 
-	for (int availableClasse : availableClasses)
+	for (const int availableClasse : availableClasses)
 	{
 		fTotal += m_fClassDisguiseFitness[availableClasse];
 	}
@@ -3656,7 +3656,7 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 
 		fTotal = 0;
 
-		for (int availableClasse : availableClasses)
+		for (const int availableClasse : availableClasses)
 		{
 			fTotal += m_fClassDisguiseFitness[availableClasse];
 
@@ -4209,12 +4209,14 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	static int iMetal;
 	static bool bNeedAmmo;
 	static bool bNeedHealth;
+
 	static CBotUtilities utils;
 	static CBotWeapon *pWeapon;
 	static CWaypoint *pWaypointResupply;
 	static CWaypoint *pWaypointAmmo;
 	static CWaypoint *pWaypointHealth;
 	static CBotUtility *next;
+
 	static float fResupplyDist;
 	static float fHealthDist;
 	static float fAmmoDist;
@@ -4226,32 +4228,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	static Vector vOrigin;
 	static unsigned char *failedlist;
 
-	static int iSentryLevel;
-	static int iDispenserLevel;
-	static int iAllySentryLevel;
-	static int iAllyDispLevel;
-
-	static float fEntranceDist;
-	static float fExitDist;
-	static float fUseDispFactor;
-
-	static float fAllyDispenserHealthPercent;
-	static float fAllySentryHealthPercent;
-
-	static float fSentryHealthPercent;
-	static float fDispenserHealthPercent;
-	static float fTeleporterEntranceHealthPercent;
-	static float fTeleporterExitHealthPercent;
-
-	static float fSentryPlaceTime;
-	static float fDispenserPlaceTime;
-	static float fTeleporterEntPlaceTime;
-	static float fTeleporterExtPlaceTime;
-
 	static edict_t *pMedigun;
-	static float fSentryUtil;
-	static int iMetalInDisp;
-
 
 	static int numplayersonteam;
 	static int numplayersonteam_alive;
@@ -4379,6 +4356,25 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 
 	if ( iClass == TF_CLASS_ENGINEER )
 	{
+		static int iMetalInDisp;
+		static float fSentryUtil;
+		static float fTeleporterExtPlaceTime;
+		static float fTeleporterEntPlaceTime;
+		static float fTeleporterExitHealthPercent;
+		static float fTeleporterEntranceHealthPercent;
+		static float fDispenserPlaceTime;
+		static float fSentryPlaceTime;
+		static float fDispenserHealthPercent;
+		static float fSentryHealthPercent;
+		static float fAllySentryHealthPercent;
+		static float fAllyDispenserHealthPercent;
+		static float fUseDispFactor;
+		static float fExitDist;
+		static float fEntranceDist;
+		static int iAllyDispLevel;
+		static int iAllySentryLevel;
+		static int iDispenserLevel;
+		static int iSentryLevel;
 		static bool bSentryHasEnemy;
 		static bool bMoveObjs;
 		const bool bCanBuild = m_pWeapons->hasWeapon(TF2_WEAPON_BUILDER);
@@ -5229,7 +5225,6 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 			if ( pWaypoint && pWaypoint->checkReachable() )
 			{
-				CWaypoint *pRoute = NULL;
 				Vector vRoute = Vector(0,0,0);
 				bool bUseRoute = false;
 				int iRouteWpt = -1;
@@ -5237,7 +5232,8 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 				if ( (m_fUseRouteTime < engine->Time()) )
 				{
-				// find random route
+					CWaypoint *pRoute = NULL;
+					// find random route
 					pRoute = CWaypoints::randomRouteWaypoint(this,getOrigin(),pWaypoint->getOrigin(),getTeam(),m_iCurrentAttackArea);
 
 					if ( pRoute )
@@ -5945,9 +5941,6 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 		case BOT_UTIL_DEMO_STICKYTRAP_PL:
 		//TODO: Add Demoman Stickybomb Skill?
 			{
-				
-				Vector vStand;
-				Vector vPoint;
 				//Vector vDemoStickyPoint;
 				eDemoTrapType iDemoTrapType = TF_TRAP_TYPE_NONE;
 
@@ -5983,6 +5976,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 				
 				if ( pWaypoint )
 				{
+					Vector vPoint;
 					CWaypoint *pStand = NULL;
 					CWaypoint *pTemp;
 					float fDist = 9999.0f;
@@ -6025,6 +6019,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					if ( pStand )
 					{
+						Vector vStand;
 						vStand = pStand->getOrigin();
 
 						if ( pWaypoint )
@@ -6352,13 +6347,13 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 			if ( pWaypoint )
 			{
-				CWaypoint *pRoute = NULL;
 				Vector vRoute = Vector(0,0,0);
 				bool bUseRoute = false;
 
 				if ( (m_fUseRouteTime < engine->Time()) )
 				{
-				// find random route
+					CWaypoint *pRoute = NULL;
+					// find random route
 					pRoute = CWaypoints::randomRouteWaypoint(this,getOrigin(),pWaypoint->getOrigin(),getTeam(),m_iCurrentAttackArea);
 
 					if ( pRoute )
@@ -6416,8 +6411,6 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 void CBotTF2 :: touchedWpt ( CWaypoint *pWaypoint , int iNextWaypoint, int iPrevWaypoint )
 {
-	static int wptindex;
-
 	CBot::touchedWpt(pWaypoint);
 
 	if ( canGotoWaypoint (getOrigin(), pWaypoint) )
@@ -6491,6 +6484,7 @@ void CBotTF2 :: touchedWpt ( CWaypoint *pWaypoint , int iNextWaypoint, int iPrev
 	// only good for spies so they know when to cloak better
 	if ( getClass() == TF_CLASS_SPY )
 	{
+		static int wptindex;
 		wptindex = CWaypoints::getWaypointIndex(pWaypoint);
 
 		if ( m_pEnemy && hasSomeConditions(CONDITION_SEE_CUR_ENEMY) ) 
@@ -6505,7 +6499,6 @@ void CBotTF2 :: touchedWpt ( CWaypoint *pWaypoint , int iNextWaypoint, int iPrev
 void CBotTF2 :: modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset, Vector &v_size, float fDist, float fDist2D )
 {
 	static CBotWeapon *pWp;
-	static float fTime;
 
 	pWp = getCurrentWeapon();
 
@@ -6513,6 +6506,7 @@ void CBotTF2 :: modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_o
 
 	if ( pWp )
 	{
+		static float fTime;
 		if ( m_iClass == TF_CLASS_SNIPER )
 		{
 			if (pWp->getID() == TF2_WEAPON_BOW)
@@ -7135,7 +7129,6 @@ void CBotTF2::pointCaptured(int iPoint, int iTeam, const char *szPointName)
 
 bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 {
-	static short int iEnemyTeam;
 	static bool bIsPipeBomb;
 	static bool bIsRocket;
 	static int bValid;
@@ -7163,13 +7156,12 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 		{
 			if ( m_iClass == TF_CLASS_SPY )	
 			{
-				edict_t *pSentry = NULL;
-
 				if ( !bCheckWeapons )
 					return true;
 
 				if ( isDisguised() ) 
 				{
+					edict_t *pSentry = NULL;
 					if ( (pSentry = m_pNearestEnemySentry.get()) != NULL )
 					{
 						// If I'm disguised don't attack any player until nearby sentry is disabled
@@ -7193,7 +7185,6 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 				static int dteam, dclass, dhealth, dindex;
 				static bool bfoundspy;
 				static float fSpyAttackTime;
-				static edict_t *pDisguisedAs;
 
 				bfoundspy = true; // shout found spy if true
 
@@ -7201,6 +7192,7 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 
 				if ( CClassInterface::getTF2SpyDisguised(pEdict,&dclass,&dteam,&dindex,&dhealth) )
 				{
+					static edict_t *pDisguisedAs;
 					pDisguisedAs = (dindex>0)?(INDEXENT(dindex)):(NULL);
 
 					if ( CTeamFortress2Mod::TF2_IsPlayerCloaked(pEdict) ) // if he is cloaked -- can't see him
@@ -7289,6 +7281,7 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 	// "FrenzyTime" is the time it takes for the bot to check out where he got hurt
 	else if ( (m_iClass != TF_CLASS_SPY) || (m_fFrenzyTime > engine->Time()) )	
 	{
+		static short int iEnemyTeam;
 		iEnemyTeam = CTeamFortress2Mod::getEnemyTeam(getTeam());
 
 		// don't attack sentries if spy, just sap them
@@ -7590,8 +7583,6 @@ void CBotTF2 :: enemyAtIntel ( Vector vPos, int type, int iArea )
 
 void CBotTF2 :: buildingSapped ( eEngiBuild building, edict_t *pSapper, edict_t *pSpy )
 {
-	static edict_t *pBuilding;
-
 	m_pSchedules->freeMemory();
 
 	if ( isVisible(pSpy) )
@@ -7600,6 +7591,7 @@ void CBotTF2 :: buildingSapped ( eEngiBuild building, edict_t *pSapper, edict_t 
 	}
 	else
 	{
+		static edict_t *pBuilding;
 		pBuilding = CTeamFortress2Mod::getBuilding(building,m_pEdict);
 
 		if ( pBuilding )

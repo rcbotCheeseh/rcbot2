@@ -495,7 +495,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 			{
 				m_pNearbyAmmo = NULL; // Invalidate if this entity is an ammo crate
 			}
-			else if(strncmp(szclassname, "item_ammo_pack", 14)) // Ignore these
+			else if(strncmp(szclassname, "item_ammo_pack", 14) != 0) // Ignore these
 			{
 				m_pNearbyAmmo = NULL;
 			}
@@ -818,7 +818,7 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 			 * but that function causes link errors when compiling, so I had to fall back to manually searching for door entities.
 			**/
 			CTraceFilterHitAll filter;
-			trace_t *tr = CBotGlobals::getTraceResult();
+			const trace_t *tr = CBotGlobals::getTraceResult();
 			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), pNext->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), MASK_PLAYERSOLID, &filter);
 			if(tr->fraction < 1.0f)
 			{

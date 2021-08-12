@@ -685,7 +685,7 @@ public:
 
 	inline void resetLookAroundTime () { m_fLookAroundTime = 0.0f; }
 
-	Vector snipe ( Vector &vAiming );
+	Vector snipe (const Vector& vAiming);
 
 	//inline void dontAvoid () { m_fAvoidTime = engine->Time() + 1.0f; }
 
@@ -833,7 +833,7 @@ protected:
 	void doButtons ();
 	/////////////////////////
 
-	void changeAngles ( float fSpeed, float *fIdeal, float *fCurrent, float *fUpdate );
+	void changeAngles (float fSpeed, const float* fIdeal, float* fCurrent, float* fUpdate);
 
 	// look for new tasks
 	virtual void getTasks (unsigned int iIgnore=0);
@@ -1063,7 +1063,7 @@ public:
 
 	static int numBots ();
 
-	static int slotOfEdict ( edict_t *pEdict );
+	static int slotOfEdict (const edict_t* pEdict);
 
 	static void roundStart ();
 

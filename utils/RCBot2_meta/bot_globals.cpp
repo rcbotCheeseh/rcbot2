@@ -762,7 +762,7 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 #ifndef __linux__
 		debugoverlay->AddLineOverlay(v_ground_src,v_ground_dest,0,255,255,false,3);		
 #endif
-		trace_t *tr = CBotGlobals::getTraceResult();
+		const trace_t *tr = CBotGlobals::getTraceResult();
 
 		// no slope there
 		if ( tr->endpos.z > v_src.z )
@@ -923,7 +923,7 @@ void CBotGlobals :: botMessage ( edict_t *pEntity, int iErr, const char *fmt, ..
 	}
 }
 
-bool CBotGlobals :: makeFolders ( char *szFile )
+bool CBotGlobals :: makeFolders (const char* szFile)
 {
 #ifndef __linux__
 	char *delimiter = "\\";

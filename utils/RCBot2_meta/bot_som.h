@@ -54,9 +54,9 @@ public:
 		return m_iY;
 	}
 
-	void update ( std::vector<float> *inputs, float inf );
+	void update (const std::vector<float>* inputs, float inf);
 
-	float distance ( std::vector <float> *inputs );
+	float distance (const std::vector<float>* inputs);
 	
 	std::vector <float> *weights ();
 

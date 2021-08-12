@@ -1170,7 +1170,7 @@ void CDODFireWeaponEvent :: execute ( IBotEventInterface *pEvent )
 
 ///////////////////////////////////////////////////////
 
-void CBotEvent :: setType ( char *szType )
+void CBotEvent :: setType (const char* szType)
 {
 	m_szType = CStrings::getString(szType);
 }

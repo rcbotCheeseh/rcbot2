@@ -2047,7 +2047,7 @@ void CBot :: listenToPlayer ( edict_t *pPlayer, bool bIsEnemy, bool bIsAttacking
 				// not investigating any noise right now -- depending on my braveness I will check it out
 				if ( !m_pSchedules->isCurrentSchedule(SCHED_INVESTIGATE_NOISE) && randomFloat(0.0f,0.75f) < m_pProfile->m_fBraveness )
 				{
-					trace_t *TraceResult = CBotGlobals::getTraceResult();
+					const trace_t *TraceResult = CBotGlobals::getTraceResult();
 
 					const Vector vAttackerOrigin = CBotGlobals::entityOrigin(pPlayer);
 
@@ -2467,7 +2467,7 @@ void CBot :: checkCanPickup ( edict_t *pPickup )
 
 }
 
-Vector CBot::snipe (Vector &vAiming )
+Vector CBot::snipe (const Vector& vAiming)
 {
 		if ( m_fLookAroundTime < engine->Time() )
 		{
@@ -2737,7 +2737,7 @@ void CBot :: letGoOfButton ( int button )
 	m_pButtons->letGo(button);
 }
 
-void CBot :: changeAngles ( float fSpeed, float *fIdeal, float *fCurrent, float *fUpdate )
+void CBot :: changeAngles (float fSpeed, const float* fIdeal, float* fCurrent, float* fUpdate)
 {
 	float current = *fCurrent;
 	const float ideal = *fIdeal;
@@ -3026,7 +3026,7 @@ bool CBots :: controlBot ( const char *szOldName, const char *szName, const char
 {
 	edict_t *pEdict;
 
-	char *szOVName = "";
+	const char *szOVName = "";
 
 	if ( (pEdict = CBotGlobals::findPlayerByTruncName(szOldName)) == NULL )
 	{
@@ -3072,7 +3072,7 @@ bool CBots :: controlBot ( const char *szOldName, const char *szName, const char
 bool CBots :: createBot (const char *szClass, const char *szTeam, const char *szName)
 {
 	CBotMod *pMod = CBotGlobals::getCurrentMod();
-	char *szOVName = "";
+	const char *szOVName = "";
 
 	if ( m_iMaxBots != -1 && CBotGlobals::numClients() >= m_iMaxBots )
 		logger->Log(LogLevel::ERROR, "Can't create bot, max_bots reached");
@@ -3129,7 +3129,7 @@ void CBots :: botFunction ( IBotFunction *function )
 	}
 }
 
-int CBots :: slotOfEdict ( edict_t *pEdict )
+int CBots :: slotOfEdict (const edict_t* pEdict)
 {
 	return engine->IndexOfEdict(pEdict) - 1;
 }

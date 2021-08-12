@@ -937,7 +937,7 @@ void CClient::giveMessage(const char *msg,float fTime)
 	}
 }
 
-void CClients::giveMessage(char *msg,float fTime, edict_t *pPlayer )
+void CClients::giveMessage(const char* msg, float fTime, edict_t* pPlayer)
 {
 	CClient *pClient;
 

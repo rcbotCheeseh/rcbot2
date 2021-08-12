@@ -22,7 +22,7 @@ private:
 
 	void *findPattern(const void *libPtr, const char *pattern, size_t len);
 
-	void *findSignature ( void *addrInBase, const char *signature );
+	void *findSignature (const void* addrInBase, const char* signature);
 protected:
 	void findFunc ( CRCBotKeyValueList &kv, const char *pKey, void *pAddrBase, const char *defaultsig );
 

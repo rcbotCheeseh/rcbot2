@@ -908,13 +908,11 @@ void CDODMod ::clientCommand( edict_t *pEntity, int argc, const char *pcmd, cons
 	{
 		if ( strncmp(pcmd,"voice_",6) == 0 )
 		{
-			// somebody said a voice command
-			u_VOICECMD vcmd;
-
 			for ( short int i = 0; i < DOD_VC_INVALID; i ++ )
 			{
 				if ( strcmp(&pcmd[6],g_DODVoiceCommands[i].pcmd) == 0 )
 				{
+					u_VOICECMD vcmd;
 					vcmd.voicecmd = i;
 
 					CBroadcastVoiceCommand voicecmd = CBroadcastVoiceCommand(pEntity,vcmd.voicecmd); 

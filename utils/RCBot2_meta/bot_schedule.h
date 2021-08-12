@@ -144,7 +144,7 @@ public:
 
 	void freeMemory ()
 	{
-		for (CBotTask* task : m_Tasks) {
+		for (const CBotTask* task : m_Tasks) {
 			delete task;
 		}
 		m_Tasks.clear();
@@ -250,7 +250,7 @@ public:
 
 	void freeMemory ()
 	{
-		for (CBotSchedule *sched : m_Schedules) {
+		for (const CBotSchedule *sched : m_Schedules) {
 			delete sched;
 		}
 		m_Schedules.clear();

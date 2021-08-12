@@ -1155,7 +1155,7 @@ void CTeamFortress2Mod::updatePointMaster()
 			const size_t baseEntityOffset = servertools->GetEntityFactoryDictionary()->FindFactory("simple_physics_brush")->GetEntitySize();
 
 			const uintptr_t pMasterMembers = reinterpret_cast<uintptr_t>(servergameents->EdictToBaseEntity(pMaster)) + baseEntityOffset;
-			m_PointMaster = (CTeamControlPointMaster*) pMasterMembers;
+			m_PointMaster = reinterpret_cast<CTeamControlPointMaster*>(pMasterMembers);
 			m_PointMasterResource = pMaster;
 			
 			logger->Log(LogLevel::INFO, "Computed point master offset %d", baseEntityOffset);

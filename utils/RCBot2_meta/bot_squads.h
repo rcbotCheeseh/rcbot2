@@ -161,7 +161,7 @@ public:
 
 	void ChangeLeader ();
 
-	void removeMember ( edict_t *pMember );
+	void removeMember (const edict_t* pMember);
 
 	inline bool IsLeader ( edict_t *pLeader )
 	{
@@ -172,7 +172,7 @@ public:
 
 	size_t numMembers ();
 
-	bool IsMember ( edict_t *pEdict );
+	bool IsMember (const edict_t* pEdict);
 
 	inline bool isFormation (eSquadForm theFormation)
 	{
@@ -194,7 +194,7 @@ public:
 		m_fDesiredSpread = fNewSpread;
 	}
 
-	int GetFormationPosition ( edict_t *pEdict );
+	int GetFormationPosition (const edict_t* pEdict);
 
 	Vector GetFormationVector ( edict_t *pEdict );
 

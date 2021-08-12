@@ -60,7 +60,7 @@ public:
 
 	static QAngle playerAngles ( edict_t *pPlayer );
 
-	static inline bool isPlayer ( edict_t *pEdict )
+	static inline bool isPlayer (const edict_t* pEdict)
 	{
 		static int index;
 
@@ -77,7 +77,7 @@ public:
 	//static float getAvoidAngle(edict_t *pEdict,Vector origin);
 
 	// make folders for a file if they don't exist
-	static bool makeFolders ( char *szFile );
+	static bool makeFolders (const char* szFile);
 	// just open file but also make folders if possible
 	static FILE *openFile ( char *szFile, char *szMode );
 	// get the proper location

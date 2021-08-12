@@ -66,7 +66,7 @@ private:
 void CBotSquads::FreeMemory ()
 {
 	// TODO inline squad or use unique pointers or something so they're freed automatically
-	for (CBotSquad *squad : m_theSquads) {
+	for (const CBotSquad *squad : m_theSquads) {
 		delete squad;
 	}
 	m_theSquads.clear();
@@ -204,9 +204,8 @@ void CBotSquads::RemoveSquad ( CBotSquad *pSquad )
 	CBots::botFunction(&func);
 	
 	m_theSquads.erase(std::remove(m_theSquads.begin(), m_theSquads.end(), pSquad), m_theSquads.end());
-	
-	if (pSquad)
-		delete pSquad;
+
+	delete pSquad;
 }
 
 void CBotSquads::UpdateAngles ()
@@ -296,7 +295,7 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 	Vector vBase; 
 	Vector v_forward;
 	Vector v_right;
-	trace_t *tr = CBotGlobals::getTraceResult();
+	const trace_t *tr = CBotGlobals::getTraceResult();
 
 	edict_t *pLeader = GetLeader();
 
@@ -376,13 +375,13 @@ Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
 /**
  * Returns the edict's position in the squad.
  */
-int CBotSquad::GetFormationPosition ( edict_t *pEdict )
+int CBotSquad::GetFormationPosition (const edict_t* pEdict)
 {
 	const auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pEdict);
 	return it != m_SquadMembers.end()? std::distance(m_SquadMembers.begin(), it) : 0;
 }
 
-void CBotSquad::removeMember ( edict_t *pMember )
+void CBotSquad::removeMember (const edict_t* pMember)
 {
 	const auto it = std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pMember);
 	if (it != m_SquadMembers.end()) {
@@ -426,7 +425,7 @@ void CBotSquad :: ReturnAllToFormation ()
 	}
 }
 
-bool CBotSquad::IsMember ( edict_t *pEdict )
+bool CBotSquad::IsMember (const edict_t* pEdict)
 {
 	return std::find(m_SquadMembers.begin(), m_SquadMembers.end(), pEdict)
 			!= m_SquadMembers.end();

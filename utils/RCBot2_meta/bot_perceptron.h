@@ -103,7 +103,7 @@ public:
 
 	CPerceptron (unsigned short int iInputs);
 
-	void setWeights ( ga_nn_value *weights );
+	void setWeights (const ga_nn_value* weights);
 
 	ga_nn_value execute ();
 
@@ -295,7 +295,7 @@ public:
 		m_layerinput = NULL;
 	}
 
-	void execute ( ga_nn_value *inputs, ga_nn_value *outputs, ga_nn_value fMin, ga_nn_value fMax );
+	void execute (const ga_nn_value* inputs, ga_nn_value* outputs, ga_nn_value fMin, ga_nn_value fMax);
 
 	void batch_train ( CTrainingSet *tset, unsigned short int epochs );
 

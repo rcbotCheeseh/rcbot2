@@ -106,10 +106,10 @@ bool CSignatureFunction::getLibraryInfo(const void *libPtr, DynLibInfo &lib)
 	baseAddr = reinterpret_cast<uintptr_t>(info.AllocationBase);
 
 	// All this is for our insane sanity checks :o 
-	IMAGE_DOS_HEADER* dos = reinterpret_cast<IMAGE_DOS_HEADER*>(baseAddr);
+	const IMAGE_DOS_HEADER* dos = reinterpret_cast<IMAGE_DOS_HEADER*>(baseAddr);
 	IMAGE_NT_HEADERS* pe = reinterpret_cast<IMAGE_NT_HEADERS*>(baseAddr + dos->e_lfanew);
 	IMAGE_FILE_HEADER* file = &pe->FileHeader;
-	IMAGE_OPTIONAL_HEADER* opt = &pe->OptionalHeader;
+	const IMAGE_OPTIONAL_HEADER* opt = &pe->OptionalHeader;
 
 	// Check PE magic and signature 
 	if (dos->e_magic != IMAGE_DOS_SIGNATURE || pe->Signature != IMAGE_NT_SIGNATURE || opt->Magic != IMAGE_NT_OPTIONAL_HDR32_MAGIC)
@@ -243,7 +243,7 @@ void *CSignatureFunction::findPattern(const void *libPtr, const char *pattern, s
 	return NULL;
 }
 // Sourcemod - Metamod - Allied Modders.net
-void *CSignatureFunction::findSignature(void *addrInBase, const char *signature)
+void *CSignatureFunction::findSignature(const void* addrInBase, const char* signature)
 {
 	// First, preprocess the signature 
 	unsigned char real_sig[511];

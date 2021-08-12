@@ -120,8 +120,7 @@ void CDODBot :: setup ()
 
 void CDODBot :: freeMapMemory ()
 {
-	if ( m_pWantToProne )
-		delete m_pWantToProne;
+	delete m_pWantToProne;
 
 	m_pWantToProne = NULL;
 
@@ -1007,7 +1006,7 @@ void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 				
 			}
 
-			if ( m_InvisPaths.size() > 0 )
+			if (!m_InvisPaths.empty())
 			{
 				int iCheck = randomInt(0,m_InvisPaths.size()-1);
 
@@ -2990,7 +2989,6 @@ void CDODBot :: getTasks (unsigned int iIgnore)
 	static CBotWeapon *pWeapon;
 	static float fAttackUtil;
 	static float fDefendUtil;
-	static float fDefRate;
 	static int numPlayersOnTeam;
 	static int numClassOnTeam;
 	static bool bCheckCurrent;
@@ -2998,16 +2996,6 @@ void CDODBot :: getTasks (unsigned int iIgnore)
 	static int iFlagsOwned;
 	static int iEnemyFlagsOwned;
 	static int iNumFlags;
-	static int iNumBombsToPlant;
-	static int iNumBombsOnMap;
-	static int iNumEnemyBombsOnMap;
-	static int iNumEnemyBombsStillToPlant;
-	static int iNumBombsToDefuse;
-	static int iNumBombsToDefend;
-	static float fDefendBombUtil;
-	static float fDefuseBombUtil;
-	static float fPlantUtil; 
-	static int iEnemyTeam;
 	static bool bCanMessAround;
 
 	// if condition has changed or no tasks
@@ -3118,6 +3106,17 @@ void CDODBot :: getTasks (unsigned int iIgnore)
 	
 	if ( CDODMod::isBombMap() && (CDODMod::m_Flags.getNumFlags() > 0) && !rcbot_nocapturing.GetBool() )
 	{
+		static int iEnemyTeam;
+		static float fPlantUtil;
+		static float fDefuseBombUtil;
+		static float fDefendBombUtil;
+		static int iNumEnemyBombsStillToPlant;
+		static int iNumBombsToDefend;
+		static int iNumBombsToDefuse;
+		static int iNumEnemyBombsOnMap;
+		static int iNumBombsOnMap;
+		static int iNumBombsToPlant;
+		static float fDefRate;
 		bCanMessAround = false;
 		// same thing as above except with bombs
 		iFlagID = -1;
@@ -3384,9 +3383,8 @@ void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin,
 						float fDist, float fDist2D )
 {
 	//static Vector vAim;
-	static short int iSlot;
-	static smoke_t *smokeinfo;
 	//static bool bProne;
+
 	static float fStamina;
 	static CBotWeapon *pWp;
 	static Vector vel;
@@ -3451,10 +3449,12 @@ void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin,
 	// if I know the enemy is near a smoke grenade i'll fire randomly into the cloud
 	if ( m_pNearestSmokeToEnemy )
 	{
+		static short int iSlot;
 		iSlot = ENTINDEX(pEntity)-1;
 
 		if (( iSlot >= 0 ) && ( iSlot < MAX_PLAYERS ))
 		{
+			static smoke_t *smokeinfo;
 			smokeinfo = &(m_CheckSmoke[iSlot]);
 
 			if ( smokeinfo->bInSmoke ) 

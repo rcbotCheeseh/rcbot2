@@ -59,7 +59,7 @@ unsigned char *CWaypointLocations :: resetFailedWaypoints (WaypointList *iIgnore
 		int iWpt;
 		
 		//while ( !ignoreWptStack.IsEmpty() )
-		for (int iIgnoreWpt : *iIgnoreWpts)
+		for (const int iIgnoreWpt : *iIgnoreWpts)
 		{
 			if ( (iWpt = iIgnoreWpt) != -1 )//(iWpt = ignoreWptStack.ChooseFromStack()) != -1 )
 				g_iFailedWaypoints[iWpt] = 1;
@@ -219,7 +219,7 @@ void CWaypointLocations :: AutoPathInBucket ( edict_t *pPlayer, int i, int j, in
 
 	//CTraceFilterWorldOnly filter;
 
-	auto &arr = m_iLocations[i][j][k];
+	const auto &arr = m_iLocations[i][j][k];
 	const size_t size = arr.size();
 	
 	for (size_t l = 0; l < size; l++)
@@ -317,7 +317,7 @@ int CWaypointLocations :: GetCoverWaypoint ( Vector vPlayerOrigin, Vector vCover
 		int iWpt;
 		
 		//while ( !ignoreWptStack.IsEmpty() )
-		for (int iIgnoreWpt : *iIgnoreWpts)
+		for (const int iIgnoreWpt : *iIgnoreWpts)
 		{
 			if ( (iWpt = iIgnoreWpt) != -1 )
 				g_iFailedWaypoints[iWpt] = 1;
@@ -352,7 +352,7 @@ void CWaypointLocations :: FindNearestCoverWaypointInBucket ( int i, int j, int 
 {
 	//dataStack <int> tempStack = m_iLocations[i][j][k];
 
-	WaypointList &arr = m_iLocations[i][j][k];
+	const WaypointList &arr = m_iLocations[i][j][k];
 	const size_t size = arr.size();
 	//CBotMod *curmod = CBotGlobals::getCurrentMod();
 
@@ -449,11 +449,11 @@ void CWaypointLocations :: FindNearestBlastInBucket ( int i, int j, int k, const
 	//dataStack <int> tempStack = m_iLocations[i][j][k];
 
 	float fDist;
-//	int iWptFlags;
+	//int iWptFlags;
 
 	trace_t tr;
 
-	WaypointList &arr = m_iLocations[i][j][k];
+	const WaypointList &arr = m_iLocations[i][j][k];
 	const size_t size = arr.size();
 	CBotMod *curmod = CBotGlobals::getCurrentMod();
 
@@ -525,13 +525,13 @@ void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vect
 	//dataStack <int> tempStack = m_iLocations[i][j][k];
 
 	float fDist;
-//	int iWptFlags;
+	//int iWptFlags;
 
 	trace_t tr;
 
 	CBotMod *curmod = CBotGlobals::getCurrentMod();
-	
-	WaypointList &arr = m_iLocations[i][j][k];
+
+	const WaypointList &arr = m_iLocations[i][j][k];
 	const size_t size = arr.size();
 	
 	for (size_t l = 0; l < size; l++)
@@ -657,7 +657,7 @@ int CWaypointLocations :: NearestWaypoint ( const Vector &vOrigin, float fNeares
 		{   
 			int iWpt;
 			
-			for (int iFailedWpt : *iFailedWpts)
+			for (const int iFailedWpt : *iFailedWpts)
 			{
 				if ( (iWpt= iFailedWpt) != -1 )
 					g_iFailedWaypoints[iWpt] = 1;
@@ -732,7 +732,7 @@ void CWaypointLocations :: DrawWaypoints ( CClient *pClient, float fDist )
 			{
 				// TODO use a type alias for this
 				WaypointList &arr = m_iLocations[i][j][k];
-				for (int l : arr)
+				for (const int l : arr)
 				{
 					iWpt = l;
 
@@ -775,7 +775,7 @@ void CWaypointLocations :: DrawWaypoints ( CClient *pClient, float fDist )
 void CWaypointLocations ::AddWptLocation (CWaypoint *pWaypoint, int iIndex)
 {
 	const Vector vOrigin = pWaypoint->getOrigin();
-	float flOrigin[3] = { vOrigin.x, vOrigin.y, vOrigin.z };
+	const float flOrigin[3] = { vOrigin.x, vOrigin.y, vOrigin.z };
 
 	AddWptLocation(iIndex,flOrigin);
 }

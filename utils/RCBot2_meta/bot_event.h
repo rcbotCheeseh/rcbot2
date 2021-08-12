@@ -59,7 +59,7 @@ public:
 
 	bool forCurrentMod ();
 
-	void setType ( char *szType );
+	void setType (const char* szType);
 
 	inline bool isType ( const char *szType );
 

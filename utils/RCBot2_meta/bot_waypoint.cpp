@@ -651,7 +651,7 @@ void CWaypointNavigator :: belief ( Vector vOrigin, Vector vOther, float fBelief
 	CWaypointLocations::GetAllVisible(iWptFrom,iWptTo,vOrigin,vOther,fEDist,&m_iVisibles,&m_iInvisibles);
 	CWaypointLocations::GetAllVisible(iWptFrom,iWptTo,vOther,vOrigin,fEDist,&m_iVisibles,&m_iInvisibles);
 
-	for (int m_iVisible : m_iVisibles)
+	for (const int m_iVisible : m_iVisibles)
 	{
 		pWpt = CWaypoints::getWaypoint(m_iVisible);
 		iWptIndex = CWaypoints::getWaypointIndex(pWpt);
@@ -676,7 +676,7 @@ void CWaypointNavigator :: belief ( Vector vOrigin, Vector vOther, float fBelief
 		}
 	}
 
-	for (int m_iInvisible : m_iInvisibles)
+	for (const int m_iInvisible : m_iInvisibles)
 	{
 		pWpt = CWaypoints::getWaypoint(m_iInvisible);
 		iWptIndex = CWaypoints::getWaypointIndex(pWpt);
@@ -1691,16 +1691,16 @@ float CWaypoint :: distanceFrom ( Vector vOrigin )
 void CWaypoints :: updateWaypointPairs ( std::vector<edict_wpt_pair_t> *pPairs, int iWptFlag, const char *szClassname )
 {
 	const short int iSize = numWaypoints();
-	edict_wpt_pair_t pair;
 	CTraceFilterWorldAndPropsOnly filter;
 
 	CWaypoint* pWpt = m_theWaypoints;
-	trace_t* trace_result = CBotGlobals::getTraceResult();
+	const trace_t* trace_result = CBotGlobals::getTraceResult();
 
 	for ( short int i = 0; i < iSize; i ++ )
 	{
 		if ( pWpt->isUsed() && pWpt->hasFlag(iWptFlag) )
 		{
+			edict_wpt_pair_t pair;
 			pair.pWaypoint = pWpt;
 			pair.pEdict = CClassInterface::FindEntityByClassnameNearest(pWpt->getOrigin(),szClassname,300.0f);
 
@@ -1968,7 +1968,7 @@ void CWaypoint :: save ( FILE *bfp )
 	// not deleted
 	fwrite(&m_bUsed,sizeof(bool),1,bfp);
 
-	int iPaths = numPaths();
+	const int iPaths = numPaths();
 	fwrite(&iPaths,sizeof(int),1,bfp);
 
 	for ( int n = 0; n < iPaths; n ++ )
@@ -2133,7 +2133,7 @@ void CWaypoints :: deleteWaypoint ( int iIndex )
 
 	// remove from waypoint locations
 	const Vector vOrigin = m_theWaypoints[iIndex].getOrigin();
-	float fOrigin[3] = { vOrigin.x, vOrigin.y, vOrigin.z };
+	const float fOrigin[3] = { vOrigin.x, vOrigin.y, vOrigin.z };
 	CWaypointLocations::DeleteWptLocation(iIndex,fOrigin);
 
 	// delete any paths pointing to this waypoint
@@ -2404,7 +2404,7 @@ int CWaypoints :: addWaypoint ( edict_t *pPlayer, Vector vOrigin, int iFlags, bo
 		m_iNumWaypoints++;	
 	///////////////////////////////////////////////////
 
-	float fOrigin[3] = {vOrigin.x,vOrigin.y,vOrigin.z};
+	const float fOrigin[3] = {vOrigin.x,vOrigin.y,vOrigin.z};
 
 	CWaypointLocations::AddWptLocation(iIndex,fOrigin);
 	m_pVisibilityTable->workVisibilityForWaypoint(iIndex,true);
