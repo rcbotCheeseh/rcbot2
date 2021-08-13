@@ -236,7 +236,6 @@ float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fPro
 
 	if ( fAngle == NULL )
 	{
-
 		return false;
 	}
 	else

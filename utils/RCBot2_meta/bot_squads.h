@@ -77,8 +77,7 @@ public:
 	}
 
 	~CBotSquad()
-	{
-	}
+	= default;
 
 	void Init ();
 

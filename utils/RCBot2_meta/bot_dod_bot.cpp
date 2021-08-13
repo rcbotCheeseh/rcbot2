@@ -564,7 +564,10 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 						Vector(0,0,0),
 						CWaypointTypes::W_FL_MACHINEGUN))) != NULL)
 						{	
-							ADD_UTILITY_WEAPON_DATA_VECTOR(BOT_UTIL_MOVEUP_MG,pMachineGun && !pMachineGun->outOfAmmo(this),1.0f,pMachineGun,CWaypoints::getWaypointIndex(pWaypoint),m_vListenPosition);
+							ADD_UTILITY_WEAPON_DATA_VECTOR(BOT_UTIL_MOVEUP_MG,
+							                               pMachineGun && !pMachineGun->outOfAmmo(this), 1.0f,
+							                               pMachineGun, CWaypoints::getWaypointIndex(pWaypoint),
+							                               m_vListenPosition);
 
 							//m_pSchedules->add(new CDeployMachineGunSched(pMachineGun,pWaypoint,m_vListenPosition));
 
@@ -1491,7 +1494,8 @@ void CDODBot :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
 						CBotWeapon *pWeapon = getMG();
 						Vector vGoal = pWaypointAtFlag->getOrigin();
 
-						snipetask = new CBotDODSnipe(pWeapon,pWaypoint->getOrigin(),pWaypoint->getAimYaw(),iFlagID!=-1,vGoal.z+48,pWaypoint->getFlags());
+						snipetask = new CBotDODSnipe(pWeapon, pWaypoint->getOrigin(), pWaypoint->getAimYaw(),
+						                             iFlagID != -1, vGoal.z + 48, pWaypoint->getFlags());
 
 						removeCondition(CONDITION_PUSH);
 						findpath->setCompleteInterrupt(CONDITION_PUSH);
@@ -3245,7 +3249,9 @@ void CDODBot :: getTasks (unsigned int iIgnore)
 		const float fGrenUtil =  0.85f + ( (1.0f - getHealthPercent()) * 0.15f);
 
 		CBotWeapon *pBotWeapon = NULL;
-		CBotWeapon *pBotSmokeGren = m_pWeapons->hasWeapon(DOD_WEAPON_SMOKE_US) ? m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_SMOKE_US)) : m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_SMOKE_GER));
+		CBotWeapon* pBotSmokeGren = m_pWeapons->hasWeapon(DOD_WEAPON_SMOKE_US)
+			                            ? m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_SMOKE_US))
+			                            : m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_SMOKE_GER));
 
 		if ( (hasSomeConditions(CONDITION_COVERT)||(m_fCurrentDanger >= 25.0f)) && pBotSmokeGren && pBotSmokeGren->hasWeapon() )
 			pBotWeapon = pBotSmokeGren;
@@ -3257,7 +3263,8 @@ void CDODBot :: getTasks (unsigned int iIgnore)
 		// if within throw distance and outside balst radius, I can throw it
 		if ( pBotWeapon && (!pBotWeapon->isExplosive() || (fDistance > BLAST_RADIUS)) && ( fDistance < (MAX_GREN_THROW_DIST+BLAST_RADIUS) ) )
 		{
-			ADD_UTILITY_WEAPON(BOT_UTIL_THROW_GRENADE, pBotWeapon && (pBotWeapon->getAmmo(this) > 0) ,hasSomeConditions(CONDITION_GREN) ? fGrenUtil*2 : fGrenUtil,pBotWeapon);
+			ADD_UTILITY_WEAPON(BOT_UTIL_THROW_GRENADE, pBotWeapon && (pBotWeapon->getAmmo(this) > 0),
+			                   hasSomeConditions(CONDITION_GREN) ? fGrenUtil*2 : fGrenUtil, pBotWeapon);
 		}
 	}
 

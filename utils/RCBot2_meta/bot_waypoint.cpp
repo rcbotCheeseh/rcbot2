@@ -3287,12 +3287,12 @@ class CTestBot : public CBotTF2
 public:
 	CTestBot(edict_t *pEdict, int iTeam, int iClass)
 	{
-		init();
+		CBotTF2::init();
 		strcpy(m_szBotName,"Test Bot");
 		m_iClass = (TF_Class)iClass; 
 		m_iTeam = iTeam; 
 		m_pEdict = pEdict;
-		setup();
+		CBotTF2::setup();
 	}
 };
 

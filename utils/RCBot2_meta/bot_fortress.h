@@ -284,7 +284,14 @@ typedef enum
 class CBotTF2FunctionEnemyAtIntel : public IBotFunction
 {
 public:
-	CBotTF2FunctionEnemyAtIntel( int iTeam, Vector vPos, int type, edict_t *pPlayer = NULL, int capindex = -1 ){m_iTeam = iTeam;m_vPos = vPos;m_iType = type; m_pPlayer = pPlayer; m_iCapIndex = capindex; }
+	CBotTF2FunctionEnemyAtIntel(int iTeam, Vector vPos, int type, edict_t* pPlayer = NULL, int capindex = -1)
+	{
+		m_iTeam = iTeam;
+		m_vPos = vPos;
+		m_iType = type;
+		m_pPlayer = pPlayer;
+		m_iCapIndex = capindex;
+	}
 
 	void execute (CBot *pBot) override;
 private:
