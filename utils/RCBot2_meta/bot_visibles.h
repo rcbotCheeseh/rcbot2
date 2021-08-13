@@ -99,12 +99,12 @@ public:
 	void reset ();
 	void updateVisibles ();
 
-	bool isVisible ( edict_t *pEdict );
+	bool isVisible (const edict_t* pEdict);
 	void setVisible ( edict_t *pEdict, bool bVisible );
 
 	void eachVisible ( CVisibleFunc *pFunc );
 
-	void checkVisible ( edict_t *pEntity, int *iTicks, bool *bVisible, int &iIndex, bool bCheckHead = false );
+	void checkVisible (edict_t* pEntity, int* iTicks, bool* bVisible, const int& iIndex, bool bCheckHead = false);
 
 	static void debugString ( char *string );
 

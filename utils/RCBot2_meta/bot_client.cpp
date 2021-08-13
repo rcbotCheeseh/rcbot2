@@ -1111,7 +1111,7 @@ void CClients :: clientThink ()
 	}
 }
 
-CClient *CClients :: findClientBySteamID ( char *szSteamID )
+CClient *CClients :: findClientBySteamID (const char* szSteamID)
 {
 	for ( int i = 0; i < MAX_PLAYERS; i ++ )
 	{
@@ -1183,7 +1183,7 @@ void CClients :: clientDebugMsg ( int iLev, const char *szMsg, CBot *pBot )
 }
 
 	// get index in array
-int CClients :: slotOfEdict ( edict_t *pPlayer )
+int CClients :: slotOfEdict (const edict_t* pPlayer)
 {
 	return ENTINDEX(pPlayer)-1;
 }

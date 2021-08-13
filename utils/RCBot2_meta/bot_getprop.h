@@ -191,7 +191,7 @@ public:
 		init(key,value,preoffset);
 	}
 
-	void init ( char *key, char *value, unsigned int preoffset = 0 );
+	void init (const char* key, char* value, unsigned preoffset = 0);
 
 	void findOffset ( );
 
@@ -371,7 +371,7 @@ public:
 	static edict_t *FindEntityByClassnameNearest(Vector vstart, const char *classname, float fMinDist = 8192.0f, edict_t *pOwner = NULL );
 
 	// TF2
-	static int getTF2Score ( edict_t *edict );
+	static int getTF2Score (const edict_t* edict);
 	static void setupCTeamRoundTimer ( CTeamRoundTimer *pTimer );
 	inline static float getRageMeter ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_RAGEMETER].getFloat(edict,0); }
 	inline static int getFlags ( edict_t *edict ) { return g_GetProps[GETPROP_ENTITY_FLAGS].getInt(edict,0); }
@@ -605,21 +605,21 @@ public:
 		return g_GetProps[GETPROP_DOD_GREN_THROWER].getEntity(gren);
 	}
 
-	inline static int getPlayerScoreDOD ( edict_t *resource, edict_t *pPlayer )
+	inline static int getPlayerScoreDOD (edict_t* resource, const edict_t* pPlayer)
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_SCORE].getIntPointer(resource);
 
 		return score_array!=NULL ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
-	inline static int getPlayerObjectiveScoreDOD ( edict_t *resource, edict_t *pPlayer )
+	inline static int getPlayerObjectiveScoreDOD (edict_t* resource, const edict_t* pPlayer)
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_OBJSCORE].getIntPointer(resource);
 
 		return score_array!=NULL ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
-	inline static int getPlayerDeathsDOD ( edict_t *resource, edict_t *pPlayer )
+	inline static int getPlayerDeathsDOD (edict_t* resource, const edict_t* pPlayer)
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_DEATHS].getIntPointer(resource);
 

@@ -2038,16 +2038,16 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 	{
 	case  BOT_UTIL_INVESTIGATE_POINT:
 		m_pSchedules->removeSchedule(SCHED_INVESTIGATE_NOISE);
-		m_pSchedules->addFront(new CBotInvestigateNoiseSched(CBotGlobals::entityOrigin((edict_t*)util->getIntData()),util->getVectorData()));
+		m_pSchedules->addFront(new CBotInvestigateNoiseSched(CBotGlobals::entityOrigin(reinterpret_cast<edict_t*>(util->getIntData())),util->getVectorData()));
 		return true;
 	case BOT_UTIL_COVER_POINT:
 		m_pSchedules->removeSchedule(SCHED_CROUCH_AND_HIDE);
-		m_pSchedules->addFront(new CCrouchHideSched((edict_t*)util->getIntData()));
+		m_pSchedules->addFront(new CCrouchHideSched(reinterpret_cast<edict_t*>(util->getIntData())));
 		return true;
 	case BOT_UTIL_SNIPE_POINT:
 		// find sniper point facing the enemy
 		{
-			edict_t *pEnemy = (edict_t*)util->getIntData();
+			edict_t *pEnemy = reinterpret_cast<edict_t*>(util->getIntData());
 
 			Vector vEnemyOrigin = CBotGlobals::entityOrigin(pEnemy);
 

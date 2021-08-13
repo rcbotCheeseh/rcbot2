@@ -196,7 +196,7 @@ public:
 
 	int GetFormationPosition (const edict_t* pEdict);
 
-	Vector GetFormationVector ( edict_t *pEdict );
+	Vector GetFormationVector (const edict_t* pEdict);
 
 	void UpdateAngles ();
 
@@ -241,7 +241,7 @@ public:
 
 	static void FreeMemory ();
 
-	static void removeSquadMember ( CBotSquad *pSquad, edict_t *pMember );
+	static void removeSquadMember (CBotSquad* pSquad, const edict_t* pMember);
 
 	// AddSquadMember can have many effects
 	// 1. scenario: squad leader exists as squad leader

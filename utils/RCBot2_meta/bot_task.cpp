@@ -4068,7 +4068,7 @@ void CCSSGuardTask::execute(CBot *pBot, CBotSchedule *pScheddule)
 
 	if ( m_bUseZ )
 	{
-		Vector vAim = Vector(m_vAim.x,m_vAim.y,m_z);
+		const Vector vAim = Vector(m_vAim.x,m_vAim.y,m_z);
 		pBot->setLookAtTask(LOOK_VECTOR);
 		pBot->setLookVector(pBot->snipe(vAim));
 	}
@@ -5335,7 +5335,7 @@ void CBotDODSnipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 	else if ( m_bUseZ )
 	{
-		Vector vAim = Vector(m_vAim.x,m_vAim.y,m_z);
+		const Vector vAim = Vector(m_vAim.x,m_vAim.y,m_z);
 		pBot->setLookAtTask(LOOK_VECTOR);
 		pBot->setLookVector(pBot->snipe(vAim));
 	}
@@ -5500,7 +5500,7 @@ void CBotHL2DMSnipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	if ( m_bUseZ )
 	{
-		Vector vAim = Vector(m_vAim.x,m_vAim.y,m_z);
+		const Vector vAim = Vector(m_vAim.x,m_vAim.y,m_z);
 		pBot->setLookAtTask(LOOK_VECTOR);
 		pBot->setLookVector(pBot->snipe(vAim));
 	}

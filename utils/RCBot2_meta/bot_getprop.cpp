@@ -251,7 +251,7 @@ edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict )
 	return NULL;
 }
 
-void CClassInterfaceValue :: init ( char *key, char *value, unsigned int preoffset )
+void CClassInterfaceValue :: init (const char* key, char* value, unsigned preoffset)
 {
 	m_class = CStrings::getString(key);
 	m_value = CStrings::getString(value);
@@ -805,7 +805,7 @@ edict_t *CClassInterface::FindEntityByNetClass(int start, const char *classname)
 }
 
 
- int CClassInterface::getTF2Score ( edict_t *edict ) 
+ int CClassInterface::getTF2Score (const edict_t* edict) 
 	{ 
 		edict_t *res = CTeamFortress2Mod::findResourceEntity();
 

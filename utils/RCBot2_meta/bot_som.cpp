@@ -62,7 +62,7 @@ CSom :: ~CSom ()
 	m_Neurons.clear();
 }
 
-CSomNeuron *CSom :: getBMU ( std::vector <float> *inputs )
+CSomNeuron *CSom :: getBMU (const std::vector<float>* inputs)
 {       
 	CSomNeuron *winner = NULL;
 	float bestdistance = 0;
@@ -83,7 +83,7 @@ CSomNeuron *CSom :: getBMU ( std::vector <float> *inputs )
 
 
 
-void CSom :: updateAround ( std::vector<float> *inputs, CSomNeuron *bmu )
+void CSom :: updateAround (const std::vector<float>* inputs, CSomNeuron* bmu)
 {
 	float dist;
 	const float nsiz = m_fNSize*m_fNSize;

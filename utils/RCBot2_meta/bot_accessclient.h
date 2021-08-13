@@ -39,9 +39,9 @@
 class CAccessClient
 {
 public:
-	CAccessClient( char *szSteamId, int iAccessLevel );
+	CAccessClient( char *szSteamID, int iAccessLevel );
 
-	bool isForSteamId ( const char *szSteamId );
+	bool isForSteamId ( const char *szSteamID );
 
 	void giveAccessToClient ( CClient *pClient );
 
@@ -49,11 +49,11 @@ public:
 
 	bool forBot ();
 
-	inline char *getSteamID () { return m_szSteamId; }
+	inline char *getSteamID () { return m_szSteamID; }
 
 	inline int getAccessLevel () { return m_iAccessLevel; }
 private:
-	char *m_szSteamId;
+	char *m_szSteamID;
 	int m_iAccessLevel;
 };
 

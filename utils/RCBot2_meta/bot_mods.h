@@ -102,7 +102,7 @@ public:
 // linux fix
 	void setup ( const char *szModFolder, eModId iModId, eBotType iBotType, const char *szWeaponListName );
 
-	bool isModFolder ( char *szModFolder );
+	bool isModFolder (const char* szModFolder);
 
 	char *getModFolder ();
 
@@ -376,8 +376,8 @@ public:
 	bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, int id );
 	bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, int id );
 
-	bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin );
-	bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin );
+	static bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin );
+	static bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin );
 
 	inline int getNumBombsRequired ( int iId )
 	{
@@ -854,21 +854,21 @@ public:
 
 	static bool isSuddenDeath();
 
-	static bool isHealthKit ( edict_t *pEntity );
+	static bool isHealthKit (const edict_t* pEntity);
 
-	static bool isAmmo ( edict_t *pEntity );
+	static bool isAmmo (const edict_t* pEntity);
 
 	static int getArea (); // get current area of map
 
 	static void setArea ( int area ) { m_iArea = area; }
 
 	static bool isSentry ( edict_t *pEntity, int iTeam, bool checkcarrying = false );
-	static bool isTankBoss(edict_t *pEntity);
+	static bool isTankBoss(const edict_t* pEntity);
 	static void checkMVMTankBoss(edict_t *pEntity);
 	static bool isTeleporter ( edict_t *pEntity, int iTeam, bool checkcarrying = false );
 
-	static void updateTeleportTime ( edict_t *pOwner );
-	static float getTeleportTime ( edict_t *pOwner );
+	static void updateTeleportTime (const edict_t* pOwner);
+	static float getTeleportTime (const edict_t* pOwner);
 
 	static bool isTeleporterEntrance ( edict_t *pEntity, int iTeam, bool checkcarrying = false );
 
@@ -1026,14 +1026,14 @@ public:
 		return false;
 	}
 
-	static void sapperPlaced(edict_t *pOwner,eEngiBuild type,edict_t *pSapper);
+	static void sapperPlaced(const edict_t* pOwner, eEngiBuild type, edict_t* pSapper);
 	static void sapperDestroyed(edict_t *pOwner,eEngiBuild type,edict_t *pSapper);
-	static void sentryBuilt(edict_t *pOwner, eEngiBuild type, edict_t *pBuilding);
-	static void dispenserBuilt(edict_t *pOwner, eEngiBuild type, edict_t *pBuilding);
+	static void sentryBuilt(const edict_t* pOwner, eEngiBuild type, edict_t* pBuilding);
+	static void dispenserBuilt(const edict_t* pOwner, eEngiBuild type, edict_t* pBuilding);
 
 	static CWaypoint *getBestWaypointMVM ( CBot *pBot, int iFlags );
 
-	static edict_t *getMySentryGun ( edict_t *pOwner )
+	static edict_t *getMySentryGun (const edict_t* pOwner)
 	{
 		const int id = ENTINDEX(pOwner)-1;
 
@@ -1057,7 +1057,7 @@ public:
 		return NULL;
 	}
 
-	static bool isMySentrySapped ( edict_t *pOwner ) 
+	static bool isMySentrySapped (const edict_t* pOwner) 
 	{
 		const int id = ENTINDEX(pOwner)-1;
 
@@ -1079,7 +1079,7 @@ public:
 		return m_Teleporters[id].entrance.get();
 	}
 
-	static bool isMyTeleporterSapped ( edict_t *pOwner )
+	static bool isMyTeleporterSapped (const edict_t* pOwner)
 	{
 		const int id = ENTINDEX(pOwner)-1;
 
@@ -1091,7 +1091,7 @@ public:
 		return false;
 	}
 
-	static bool isMyDispenserSapped ( edict_t *pOwner )
+	static bool isMyDispenserSapped (const edict_t* pOwner)
 	{
 		const int id = ENTINDEX(pOwner)-1;
 
@@ -1138,12 +1138,12 @@ public:
 
 	static edict_t *findResourceEntity ();
 
-	static void addCapDefender ( edict_t *pPlayer, int iCapIndex )
+	static void addCapDefender (const edict_t* pPlayer, int iCapIndex)
 	{
 		m_iCapDefenders[iCapIndex] |= 1 << (ENTINDEX(pPlayer) - 1);
 	}
 
-	static void removeCapDefender ( edict_t *pPlayer, int iCapIndex )
+	static void removeCapDefender (const edict_t* pPlayer, int iCapIndex)
 	{
 		m_iCapDefenders[iCapIndex] &= ~(1 << (ENTINDEX(pPlayer) - 1));
 	}
@@ -1180,7 +1180,7 @@ public:
 	static bool canTeamPickupFlag_SD(int iTeam,bool bGetUnknown);
 
 	static edict_t *getBuildingOwner (eEngiBuild object, short index);
-	static edict_t *getBuilding (eEngiBuild object, edict_t *pOwner);
+	static edict_t *getBuilding (eEngiBuild object, const edict_t* pOwner);
 
 	static bool isBoss ( edict_t *pEntity, float *fFactor = NULL );
 

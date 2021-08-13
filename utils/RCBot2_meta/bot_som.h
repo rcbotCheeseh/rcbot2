@@ -84,9 +84,9 @@ public:
 
 	~CSom ();
 
-	CSomNeuron *getBMU ( std::vector <float> *inputs );
+	CSomNeuron *getBMU (const std::vector<float>* inputs);
 
-	void updateAround ( std::vector<float> *inputs, CSomNeuron *bmu );
+	void updateAround (const std::vector<float>* inputs, CSomNeuron* bmu);
 
 	CSomNeuron *input ( std::vector < std::vector <float> > *inputs );
 

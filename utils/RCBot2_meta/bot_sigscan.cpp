@@ -259,7 +259,7 @@ void *CSignatureFunction::findSignature(const void* addrInBase, const char* sign
 }
 
 
-void CSignatureFunction::findFunc(CRCBotKeyValueList &kv, const char*pKey, void *pAddrBase, const char *defaultsig)
+void CSignatureFunction::findFunc(CRCBotKeyValueList& kv, const char* pKey, const void* pAddrBase, const char* defaultsig)
 {
 	char *sig = NULL;
 

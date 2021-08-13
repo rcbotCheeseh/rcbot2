@@ -4589,7 +4589,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	else if ( m_iClass == TF_CLASS_MEDIC )
 	{
 		if ( CTeamFortress2Mod::hasRoundStarted() )
-			fGetFlagUtility = 0.85f - (((float)numplayersonteam)/(gpGlobals->maxClients/2));
+			fGetFlagUtility = 0.85f - (static_cast<float>(numplayersonteam)/(gpGlobals->maxClients/2));
 		else
 			fGetFlagUtility = 0.1f; // not my priority
 	}

@@ -351,7 +351,7 @@ void CBotMod :: setup ( const char *szModFolder, eModId iModId, eBotType iBotTyp
 	return NULL;
 }*/
 
-bool CBotMod :: isModFolder ( char *szModFolder )
+bool CBotMod :: isModFolder (const char* szModFolder)
 {
 	return FStrEq(m_szModFolder,szModFolder);
 }

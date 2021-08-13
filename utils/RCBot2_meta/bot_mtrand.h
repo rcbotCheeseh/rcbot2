@@ -86,7 +86,7 @@ public:
 // constructor with array of size 32 bit ints as seed
   MTRand_int32(const unsigned long* array, int size) { seed(array, size); init = true; }
 // the two seed functions
-  void seed(unsigned long); // seed with 32 bit integer
+static void seed(unsigned long); // seed with 32 bit integer
   void seed(const unsigned long*, int size); // seed with array
 // overload operator() to make this a generator (functor)
   unsigned long operator()() { return rand_int32(); }
@@ -101,7 +101,7 @@ private:
   static int p; // position in state array
   static bool init; // true if init function is called
 // private functions used to generate the pseudo random numbers
-  unsigned long twiddle(unsigned long, unsigned long); // used by gen_state()
+static unsigned long twiddle(unsigned long, unsigned long); // used by gen_state()
   void gen_state(); // generate new state
 // make copy constructor and assignment operator unavailable, they don't make sense
   MTRand_int32(const MTRand_int32&); // copy constructor not defined

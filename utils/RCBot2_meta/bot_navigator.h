@@ -373,8 +373,8 @@ public:
 
 	void init () override;
 
-	CWaypoint *chooseBestFromBelief ( std::vector<CWaypoint*> &goals, bool bHighDanger = false, int iSearchFlags = 0, int iTeam = 0);
-	CWaypoint *chooseBestFromBeliefBetweenAreas ( std::vector<AStarNode*> &goals, bool bHighDanger = false, bool bIgnoreBelief = false );
+	CWaypoint *chooseBestFromBelief (const std::vector<CWaypoint*>& goals, bool bHighDanger = false, int iSearchFlags = 0, int iTeam = 0);
+	CWaypoint *chooseBestFromBeliefBetweenAreas (const std::vector<AStarNode*>& goals, bool bHighDanger = false, bool bIgnoreBelief = false);
 
 	float getNextYaw () override;
 

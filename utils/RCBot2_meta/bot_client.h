@@ -383,7 +383,7 @@ public:
 	// player starts game
 	static void clientActive ( edict_t *pPlayer );
 	// get index in array
-	static int slotOfEdict ( edict_t *pPlayer );
+	static int slotOfEdict (const edict_t* pPlayer);
 	static void init ( edict_t *pPlayer );
 	static CClient *get ( int iIndex ) { return &m_Clients[iIndex]; }
 	static CClient *get ( edict_t *pPlayer ) { return &m_Clients[slotOfEdict(pPlayer)]; }
@@ -394,7 +394,7 @@ public:
 	static bool clientsDebugging ( int iLev = 0 );
 	static void clientDebugMsg ( int iLev, const char *szMsg, CBot *pBot = NULL );
 	static void clientDebugMsg(CBot *pBot, int iLev, const char *fmt, ... );
-	static CClient *findClientBySteamID ( char *szSteamID );
+	static CClient *findClientBySteamID (const char* szSteamID);
 	static edict_t *getListenServerClient() { if ( m_pListenServerClient ) return m_pListenServerClient->getPlayer(); else return NULL; }
 
 	static void initall () { for ( int i = 0; i < MAX_PLAYERS; i ++ ) { m_Clients[i].init(); } }

@@ -479,13 +479,15 @@ public:
 
 	static void freeMemory ();
 
-	static int getClosestFlagged ( int iFlags, Vector &vOrigin, int iTeam,float *fReturnDist = NULL, const unsigned char *failedwpts = NULL );
+	static int getClosestFlagged (int iFlags, const Vector& vOrigin, int iTeam, float* fReturnDist = NULL, const unsigned char* failedwpts = NULL);
 
-	static int nearestWaypointGoal ( int iFlags, Vector &origin, float fDist, int iTeam = 0 );
+	static int nearestWaypointGoal (int iFlags, const Vector& origin, float fDist, int iTeam = 0);
 	static CWaypoint *randomRouteWaypoint ( CBot *pBot, Vector vOrigin, Vector vGoal, int iTeam, int iArea );
 	static CWaypoint *randomWaypointGoal ( int iFlags, int iTeam = 0, int iArea = 0, bool bForceArea = false, CBot *pBot = NULL, bool bHighDanger = false, int iSearchFlags = 0, int iIgnore = -1 );
-	static CWaypoint *randomWaypointGoalBetweenArea ( int iFlags, int iTeam, int iArea, bool bForceArea, CBot *pBot, bool bHighDanger, Vector *org1, Vector *org2, bool bIgnoreBelief = false, int iWpt1 = -1, int iWpt2 = -1 );
-	static CWaypoint *randomWaypointGoalNearestArea ( int iFlags, int iTeam, int iArea, bool bForceArea, CBot *pBot, bool bHighDanger, Vector *origin, int iIgnore = -1, bool bIgnoreBelief = false, int iWpt1 = -1 );
+	static CWaypoint *randomWaypointGoalBetweenArea (int iFlags, int iTeam, int iArea, bool bForceArea, CBot* pBot, bool bHighDanger, const Vector* org1, const Vector* org2, bool
+	                                                 bIgnoreBelief = false, int iWpt1 = -1, int iWpt2 = -1);
+	static CWaypoint *randomWaypointGoalNearestArea (int iFlags, int iTeam, int iArea, bool bForceArea, CBot* pBot, bool bHighDanger, const Vector* origin, int iIgnore = -1, bool
+	                                                 bIgnoreBelief = false, int iWpt1 = -1);
 	static int randomFlaggedWaypoint (int iTeam = 0);
 
 	static CWaypointVisibilityTable *getVisiblity () { return m_pVisibilityTable; }

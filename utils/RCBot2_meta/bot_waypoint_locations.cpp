@@ -127,7 +127,7 @@ void CWaypointLocations :: AutoPath ( edict_t *pPlayer, int iWpt )
 }
 
 // @param iFrom waypoint number from a and b within distance
-void CWaypointLocations :: GetAllInArea ( Vector &vOrigin, WaypointList *pWaypointList, int iVisibleTo )
+void CWaypointLocations :: GetAllInArea (const Vector& vOrigin, WaypointList* pWaypointList, int iVisibleTo)
 {
 	const int iLoc = READ_LOC(vOrigin.x);
 	const int jLoc = READ_LOC(vOrigin.y);
@@ -162,9 +162,9 @@ void CWaypointLocations :: GetAllInArea ( Vector &vOrigin, WaypointList *pWaypoi
 
 
 // @param iFrom waypoint number from a and b within distance
-void CWaypointLocations :: GetAllVisible ( int iFrom, int iOther, Vector &vOrigin, 
-										  Vector &vOther, float fEDist, WaypointList *iVisible, 
-										  WaypointList *iInvisible )
+void CWaypointLocations :: GetAllVisible (int iFrom, int iOther, const Vector& vOrigin,
+                                          const Vector& vOther, float fEDist, WaypointList* iVisible,
+                                          WaypointList* iInvisible)
 {
 	const int iLoc = READ_LOC(vOrigin.x);
 	const int jLoc = READ_LOC(vOrigin.y);

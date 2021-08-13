@@ -356,7 +356,7 @@ float CWaypointNavigator :: getNextYaw ()
 }
 
 // best waypoints are those with lowest danger
-CWaypoint *CWaypointNavigator :: chooseBestFromBeliefBetweenAreas ( std::vector<AStarNode*> &goals, bool bHighDanger, bool bIgnoreBelief )
+CWaypoint *CWaypointNavigator :: chooseBestFromBeliefBetweenAreas (const std::vector<AStarNode*>& goals, bool bHighDanger, bool bIgnoreBelief)
 {
 	CWaypoint *pWpt = NULL;
 	//CWaypoint *pCheck;
@@ -424,7 +424,7 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBeliefBetweenAreas ( std::vector<
 }
 
 // best waypoints are those with lowest danger
-CWaypoint *CWaypointNavigator :: chooseBestFromBelief ( std::vector<CWaypoint*> &goals, bool bHighDanger, int iSearchFlags, int iTeam )
+CWaypoint *CWaypointNavigator :: chooseBestFromBelief (const std::vector<CWaypoint*>& goals, bool bHighDanger, int iSearchFlags, int iTeam)
 {
 	CWaypoint *pWpt = NULL;
 
@@ -2172,7 +2172,7 @@ void CWaypoints :: shiftAreas (int val)
 	}
 }
 
-int CWaypoints :: getClosestFlagged ( int iFlags, Vector &vOrigin, int iTeam, float *fReturnDist, const unsigned char *failedwpts )
+int CWaypoints :: getClosestFlagged (int iFlags, const Vector& vOrigin, int iTeam, float* fReturnDist, const unsigned char* failedwpts)
 {
 	const int size = numWaypoints();
 
@@ -2430,7 +2430,7 @@ int CWaypoints :: numWaypoints ()
 
 ///////////
 
-int CWaypoints :: nearestWaypointGoal ( int iFlags, Vector &origin, float fDist, int iTeam )
+int CWaypoints :: nearestWaypointGoal (int iFlags, const Vector& origin, float fDist, int iTeam)
 {
 	static int size;
 
@@ -2671,7 +2671,8 @@ void CWaypoints :: checkAreas ( edict_t *pActivator )
 	}
 }
 
-CWaypoint *CWaypoints :: randomWaypointGoalNearestArea ( int iFlags, int iTeam, int iArea, bool bForceArea, CBot *pBot, bool bHighDanger, Vector *origin, int iIgnore, bool bIgnoreBelief, int iWpt1 )
+CWaypoint *CWaypoints :: randomWaypointGoalNearestArea (int iFlags, int iTeam, int iArea, bool bForceArea, CBot* pBot, bool bHighDanger, const Vector* origin, int iIgnore, bool
+                                                        bIgnoreBelief, int iWpt1)
 {
 	short int i;
 	static short int size; 
@@ -2753,7 +2754,8 @@ CWaypoint *CWaypoints :: randomWaypointGoalNearestArea ( int iFlags, int iTeam, 
 	return pWpt;
 }
 
-CWaypoint *CWaypoints :: randomWaypointGoalBetweenArea ( int iFlags, int iTeam, int iArea, bool bForceArea, CBot *pBot, bool bHighDanger, Vector *org1, Vector *org2, bool bIgnoreBelief, int iWpt1, int iWpt2 )
+CWaypoint *CWaypoints :: randomWaypointGoalBetweenArea (int iFlags, int iTeam, int iArea, bool bForceArea, CBot* pBot, bool bHighDanger, const Vector* org1, const Vector* org2, bool
+                                                        bIgnoreBelief, int iWpt1, int iWpt2)
 {
 	static short int size; 
 	CWaypoint *pWpt;

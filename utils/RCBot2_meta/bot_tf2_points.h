@@ -192,7 +192,7 @@ public:
 			return TEAM_UNASSIGNED;
 
 		return m_iOwner[index];
-	}	
+	}
 
 	void AssertValidIndex( int index )
 	{

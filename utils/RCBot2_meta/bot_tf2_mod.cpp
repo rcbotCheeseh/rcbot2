@@ -539,12 +539,12 @@ bool CTeamFortress2Mod ::isBoss ( edict_t *pEntity, float *fFactor )
 }
 
 
-void CTeamFortress2Mod :: updateTeleportTime ( edict_t *pOwner )
+void CTeamFortress2Mod :: updateTeleportTime (const edict_t* pOwner)
 {
 	m_Teleporters[ENTINDEX(pOwner)-1].m_fLastTeleported = engine->Time();
 }
 
-float CTeamFortress2Mod :: getTeleportTime ( edict_t *pOwner )
+float CTeamFortress2Mod :: getTeleportTime (const edict_t* pOwner)
 {
 	return m_Teleporters[ENTINDEX(pOwner)-1].m_fLastTeleported;
 }
@@ -554,7 +554,7 @@ bool CTeamFortress2Mod :: isSentry ( edict_t *pEntity, int iTeam, bool checkcarr
 	return (!iTeam || iTeam == getTeam(pEntity)) && strcmp(pEntity->GetClassName(),"obj_sentrygun")==0 && (checkcarrying||!CClassInterface::isSentryGunBeingPlaced(pEntity));
 }
 
-bool CTeamFortress2Mod::isTankBoss(edict_t *pEntity)
+bool CTeamFortress2Mod::isTankBoss(const edict_t* pEntity)
 {
 	return strcmp(pEntity->GetClassName(), "tank_boss") == 0;
 }
@@ -655,7 +655,7 @@ edict_t *CTeamFortress2Mod :: getTeleporterExit ( edict_t *pTele )
 }
 
 // check if the entity is a health kit
-bool CTeamFortress2Mod :: isHealthKit ( edict_t *pEntity )
+bool CTeamFortress2Mod :: isHealthKit (const edict_t* pEntity)
 {
 	return strncmp(pEntity->GetClassName(),"item_healthkit",14)==0;
 }
@@ -765,7 +765,7 @@ void CTeamFortress2Mod :: setSetupTime ( int time )
   m_fSetupTime = (float)time;
 }
 
-bool CTeamFortress2Mod :: isAmmo ( edict_t *pEntity )
+bool CTeamFortress2Mod :: isAmmo (const edict_t* pEntity)
 {
 	static const char *szClassname;
 
@@ -967,7 +967,7 @@ bool CTeamFortress2Mod::buildingNearby ( int iTeam, Vector vOrigin )
 }
 
 //get the building
-edict_t *CTeamFortress2Mod::getBuilding (eEngiBuild object, edict_t *pOwner)
+edict_t *CTeamFortress2Mod::getBuilding (eEngiBuild object, const edict_t* pOwner)
 {
 	static short int i;
 	static tf_tele_t *tele;
@@ -1064,7 +1064,7 @@ edict_t *CTeamFortress2Mod :: nearestDispenser ( Vector vOrigin, int team )
 	return pNearest;
 }
 
-void CTeamFortress2Mod::sapperPlaced(edict_t *pOwner,eEngiBuild type,edict_t *pSapper)
+void CTeamFortress2Mod::sapperPlaced(const edict_t* pOwner, eEngiBuild type, edict_t* pSapper)
 {
 	static short int index;
 	
@@ -1172,17 +1172,17 @@ void CTeamFortress2Mod::updatePointMaster()
 					try
 					{
 						CBaseEntity *pent = m_PointMaster->m_ControlPointRounds[r];
-						CTeamControlPointRound* pointRound = (CTeamControlPointRound*)(reinterpret_cast<uintptr_t>(pent) + baseEntityOffset);
+						CTeamControlPointRound* pointRound = reinterpret_cast<CTeamControlPointRound*>(reinterpret_cast<uintptr_t>(pent) + baseEntityOffset);
 
 						logger->Log(LogLevel::DEBUG, "Control Points for Round %d", r);
 
 						for (int i = 0; i < pointRound->m_ControlPoints.Count(); ++i)
 						{
-							CBaseHandle* handle = &pointRound->m_ControlPoints.Element(i);
+							const CBaseHandle* handle = &pointRound->m_ControlPoints.Element(i);
 
 							if (handle->IsValid())
 							{
-								edict_t* edict = INDEXENT(handle->GetEntryIndex());
+								const edict_t* edict = INDEXENT(handle->GetEntryIndex());
 
 								if (!edict->IsFree())
 								{
@@ -1313,7 +1313,7 @@ void CTeamFortress2Mod :: roundReset ()
 	}
 }
 
-void CTeamFortress2Mod::sentryBuilt(edict_t *pOwner, eEngiBuild type, edict_t *pBuilding )
+void CTeamFortress2Mod::sentryBuilt(const edict_t* pOwner, eEngiBuild type, edict_t* pBuilding)
 {
 	static short int index;
 
@@ -1350,7 +1350,7 @@ bool CTeamFortress2Mod::isSentryGun (edict_t *pEdict )
 	return false;
 }
 
-void CTeamFortress2Mod::dispenserBuilt(edict_t *pOwner, eEngiBuild type, edict_t *pBuilding )
+void CTeamFortress2Mod::dispenserBuilt(const edict_t* pOwner, eEngiBuild type, edict_t* pBuilding)
 {
 	static short int index;
 

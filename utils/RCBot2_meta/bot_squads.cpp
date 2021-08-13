@@ -72,7 +72,7 @@ void CBotSquads::FreeMemory ()
 	m_theSquads.clear();
 }
 
-void CBotSquads::removeSquadMember ( CBotSquad *pSquad, edict_t *pMember )
+void CBotSquads::removeSquadMember (CBotSquad* pSquad, const edict_t* pMember)
 {
 	pSquad->removeMember(pMember);
 
@@ -290,7 +290,7 @@ void CBotSquad::ChangeLeader ()
 	}
 }
 
-Vector CBotSquad :: GetFormationVector ( edict_t *pEdict )
+Vector CBotSquad :: GetFormationVector (const edict_t* pEdict)
 {
 	Vector vBase; 
 	Vector v_forward;

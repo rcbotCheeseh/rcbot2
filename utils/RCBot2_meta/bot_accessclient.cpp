@@ -42,10 +42,10 @@ std::vector<CAccessClient*> CAccessClients :: m_Clients;
 
 ///////////
 
-CAccessClient :: CAccessClient( char *szSteamId, int iAccessLevel )
+CAccessClient :: CAccessClient( char *szSteamID, int iAccessLevel )
 {
 	m_iAccessLevel = iAccessLevel;
-	m_szSteamId = CStrings::getString(szSteamId);
+	m_szSteamID = CStrings::getString(szSteamID);
 }
 
 bool CAccessClient :: forBot ()
@@ -53,15 +53,15 @@ bool CAccessClient :: forBot ()
 	return isForSteamId("BOT");
 }
 
-bool CAccessClient :: isForSteamId ( const char *szSteamId )
+bool CAccessClient :: isForSteamId ( const char *szSteamID )
 {
-	logger->Log(LogLevel::DEBUG, "AccessClient: '%s','%s'", m_szSteamId, szSteamId);
-	return FStrEq(m_szSteamId,szSteamId);
+	logger->Log(LogLevel::DEBUG, "AccessClient: '%s','%s'", m_szSteamID, szSteamID);
+	return FStrEq(m_szSteamID,szSteamID);
 }
 
 void CAccessClient :: save ( FILE *fp )
 {
-	fprintf(fp,"\"%s\":%d\n",m_szSteamId,m_iAccessLevel);
+	fprintf(fp,"\"%s\":%d\n",m_szSteamID,m_iAccessLevel);
 }
 
 void CAccessClient :: giveAccessToClient ( CClient *pClient )
@@ -150,7 +150,7 @@ void CAccessClients :: load ()
 	{
 		char buffer[256];
 
-		char szSteamId[32];
+		char szSteamID[32];
 
 		int iLine = 0;
 
@@ -180,9 +180,9 @@ void CAccessClients :: load ()
 
 			// parse Steam ID
 			while ( n<31 && i < len && buffer[i] != '\"' )			
-				szSteamId[n++] = buffer[i++];
+				szSteamID[n++] = buffer[i++];
 
-			szSteamId[n] = 0;
+			szSteamID[n] = 0;
 
 			i++;
 
@@ -198,7 +198,7 @@ void CAccessClients :: load ()
 			const int iAccess = atoi(&buffer[i]);
 
 			// invalid
-			if ( szSteamId[0] == 0 || szSteamId[0] == ' ' )
+			if ( szSteamID[0] == 0 || szSteamID[0] == ' ' )
 			{
 				logger->Log(LogLevel::WARN, "line %d invalid in access client config, steam id invalid", iLine);
 				continue;
@@ -209,7 +209,7 @@ void CAccessClients :: load ()
 				continue;
 			}
 
-			m_Clients.push_back(new CAccessClient(szSteamId,iAccess));
+			m_Clients.push_back(new CAccessClient(szSteamID,iAccess));
 		}
 
 		fclose(fp);

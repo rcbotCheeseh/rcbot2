@@ -159,7 +159,7 @@ void CBotVisibles :: debugString ( char *string )
 @param	bVisible	returns if the entity is visible or not
 @param  iIndex      saves recalling INDEXENT
 */
-void CBotVisibles :: checkVisible ( edict_t *pEntity, int *iTicks, bool *bVisible, int &iIndex, bool bCheckHead )
+void CBotVisibles :: checkVisible (edict_t* pEntity, int* iTicks, bool* bVisible, const int& iIndex, bool bCheckHead)
 {
 	// reset
 	*bVisible = false;
@@ -362,7 +362,7 @@ void CBotVisibles :: updateVisibles ()
 #endif
 }
 
-bool CBotVisibles :: isVisible ( edict_t *pEdict ) 
+bool CBotVisibles :: isVisible (const edict_t* pEdict) 
 { 
 	static int iIndex;
 	static int iByte;

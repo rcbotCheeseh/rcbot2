@@ -106,7 +106,7 @@ public:
 		}
 	}
 
-	static void GetAllInArea ( Vector &vOrigin, WaypointList *pWaypointList, int iVisibleTo );
+	static void GetAllInArea (const Vector& vOrigin, WaypointList* pWaypointList, int iVisibleTo);
 		
 	static void getMinMaxs ( int iLoc, int jLoc, int kLoc, 
 									    int *iMinLoc, int *jMinLoc, int *kMinLoc,
@@ -129,7 +129,8 @@ public:
 		bool bGetVisibleFromOther = false, Vector vOther = Vector(0,0,0), int FlagsOnly = 0, 
 		edict_t *pPlayer = NULL, bool bIgnorevOther = false, float fIgnoreSize = 0.0f );
 
-	static void GetAllVisible( int iFrom, int iOther, Vector &vOrigin, Vector &vOther, float fEDist, WaypointList *iVisible, WaypointList *iInvisible );
+	static void GetAllVisible(int iFrom, int iOther, const Vector& vOrigin, const Vector& vOther, float fEDist, WaypointList* iVisible, WaypointList*
+	                          iInvisible);
 
 	///////////
 
