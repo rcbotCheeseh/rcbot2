@@ -2456,14 +2456,23 @@ void CBot::modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset
 
 }
 
+void CBot::hearVoiceCommand(edict_t* pPlayer, byte cmd)
+{
+	
+}
+
 void CBot :: grenadeThrown ()
 {
 
 }
 
+void CBot::voiceCommand(int cmd)
+{
+	
+}
+
 void CBot :: checkCanPickup ( edict_t *pPickup )
 {
-
 
 }
 

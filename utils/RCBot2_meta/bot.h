@@ -115,13 +115,14 @@ inline bool FStrEq(const char *sz1, const char *sz2)
 class IBotFunction
 {
 public:
+	virtual ~IBotFunction() = default;
 	virtual void execute ( CBot *pBot ) = 0;
 };
 
 class CBroadcastVoiceCommand : public IBotFunction
 {
 public:
-	CBroadcastVoiceCommand (edict_t *pPlayer, byte voicecmd) { m_pPlayer = pPlayer; m_VoiceCmd = voicecmd; };
+	CBroadcastVoiceCommand (edict_t *pPlayer, byte voicecmd) { m_pPlayer = pPlayer; m_VoiceCmd = voicecmd; }
 	void execute ( CBot *pBot ) override;
 
 private:
@@ -200,7 +201,7 @@ public:
 		reset();
 	}
 
-	inline void reset ()
+	void reset ()
 	{
 		m_pLastSee = NULL; // edict
 		m_fLastSeeTime = 0.0f; // time
@@ -210,7 +211,7 @@ public:
 
 	void update ();
 
-	inline bool check ( edict_t *pEdict )
+	bool check ( edict_t *pEdict )
 	{
 		return pEdict == m_pLastSee.get();
 	}
@@ -304,16 +305,17 @@ private:
 class CBot 
 {
 public:
+	virtual ~CBot() = default;
 
-    static const float m_fAttackLowestHoldTime;
+	static const float m_fAttackLowestHoldTime;
 	static const float m_fAttackHighestHoldTime;
     static const float m_fAttackLowestLetGoTime;
 	static const float m_fAttackHighestLetGoTime;
 
 	CBot();
 
-	inline void clearFailedWeaponSelect () { m_iPrevWeaponSelectFailed = 0; }
-	inline void failWeaponSelect () { m_iPrevWeaponSelectFailed ++; }
+    void clearFailedWeaponSelect () { m_iPrevWeaponSelectFailed = 0; }
+    void failWeaponSelect () { m_iPrevWeaponSelectFailed ++; }
 
 	void debugMsg ( int iLev, const char *szMsg );
 
@@ -332,22 +334,23 @@ public:
 
 	virtual void handleWeapons ();
 
-	inline Vector getOrigin ()
+    Vector getOrigin ()
 	{
 		return m_pController->GetLocalOrigin();
 	}
 	// linux fix 2
-	inline float distanceFrom(Vector vOrigin)
+    float distanceFrom(Vector vOrigin)
 	{
 		return (vOrigin - m_pController->GetLocalOrigin()).Length();
 	}
-	inline float distanceFrom(edict_t *pEntity)
+
+    float distanceFrom(edict_t *pEntity)
 	{
 		return (pEntity->GetCollideable()->GetCollisionOrigin() - m_pController->GetLocalOrigin()).Length();
 		//return distanceFrom(CBotGlobals::entityOrigin(pEntity));
 	}
 
-	inline float distanceFrom2D(edict_t *pEntity)
+    float distanceFrom2D(edict_t *pEntity)
 	{
 		return (pEntity->GetCollideable()->GetCollisionOrigin() - m_pController->GetLocalOrigin()).Length2D();
 		//return distanceFrom(CBotGlobals::entityOrigin(pEntity));
@@ -387,7 +390,7 @@ public:
 
 	virtual bool isEnemy ( edict_t *pEdict, bool bCheckWeapons = true ) { return false; }
 
-	inline bool hasSomeConditions ( int iConditions )
+    bool hasSomeConditions ( int iConditions )
 	{
 		return (m_iConditions & static_cast<ConditionBitSet>(iConditions)).any();
 	}
@@ -400,28 +403,28 @@ public:
 
 	bool isVisible ( edict_t *pEdict );
 
-	inline void setEnemy ( edict_t *pEnemy )
+    void setEnemy ( edict_t *pEnemy )
 	{
 		m_pEnemy = pEnemy;
 	}
 
-	inline int getConditions ()
+    int getConditions ()
 	{
 		static_assert(NUM_CONDITIONS <= std::numeric_limits<int>::digits, "Condition bitset is larger than int");
 		return static_cast<int>(m_iConditions.to_ulong());
 	}
 
-	inline bool hasAllConditions ( int iConditions )
+    bool hasAllConditions ( int iConditions )
 	{
 		return (m_iConditions & static_cast<ConditionBitSet>(iConditions)) == iConditions;
 	}
 
-	inline void updateCondition ( int iCondition )
+    void updateCondition ( int iCondition )
 	{
 		m_iConditions |= iCondition;
 	}
 
-	inline void removeCondition ( int iCondition )
+    void removeCondition ( int iCondition )
 	{
 		m_iConditions &= ~iCondition;
 	}
@@ -445,7 +448,7 @@ public:
 	/*
 	 * returns true if bot is used in game
 	 */
-	inline bool inUse ()
+    bool inUse ()
 	{
 		return m_bUsed && m_pEdict!=NULL;
 	}
@@ -460,29 +463,29 @@ public:
 
 	void think ();
 
-	virtual void friendlyFire( edict_t *pEdict ) { };
+	virtual void friendlyFire( edict_t *pEdict ) {}
 
 	virtual void freeMapMemory ();
 
 	virtual void freeAllMemory ();
 
 	///////////////////////////////
-	inline bool moveToIsValid ()
+    bool moveToIsValid ()
 	{
 		return m_bMoveToIsValid;
 	}
 
-	inline bool lookAtIsValid ()
+    bool lookAtIsValid ()
 	{
 		return m_bLookAtIsValid;
 	}
 
-	inline Vector getMoveTo ()
+    Vector getMoveTo ()
 	{
 		return m_vMoveTo;
 	}
 
-	inline bool moveFailed ()
+    bool moveFailed ()
 	{
 		const bool ret = m_bFailNextMove;
 
@@ -499,11 +502,11 @@ public:
 
 	virtual bool canAvoid ( edict_t *pEntity );
 
-	inline bool hasEnemy () { return m_pEnemy && hasSomeConditions(CONDITION_SEE_CUR_ENEMY); }
-	inline edict_t *getEnemy () { return m_pEnemy; }
+    bool hasEnemy () { return m_pEnemy && hasSomeConditions(CONDITION_SEE_CUR_ENEMY); }
+    edict_t *getEnemy () { return m_pEnemy; }
 
 
-	inline void setMoveTo ( Vector vNew )
+    void setMoveTo ( Vector vNew )
 	{
 		if ( m_iMoveLookPriority >= m_iMovePriority )
 		{
@@ -514,7 +517,7 @@ public:
 	}
 
 	// this allows move speed to be changed in tasks
-	inline void setMoveSpeed ( float fNewSpeed )
+    void setMoveSpeed ( float fNewSpeed )
 	{
 		if ( m_iMoveLookPriority >= m_iMoveSpeedPriority )
 		{
@@ -528,11 +531,11 @@ public:
 
 	virtual void checkDependantEntities ();
 
-	inline IBotNavigator *getNavigator () { return m_pNavigator; }
+    IBotNavigator *getNavigator () { return m_pNavigator; }
 
-	inline void setMoveLookPriority ( int iPriority ) { m_iMoveLookPriority = iPriority; }
+    void setMoveLookPriority ( int iPriority ) { m_iMoveLookPriority = iPriority; }
 
-	inline void stopMoving () 
+    void stopMoving () 
 	{ 
 		if ( m_iMoveLookPriority >= m_iMovePriority )
 		{
@@ -543,7 +546,7 @@ public:
 		}
 	}
 
-	inline void stopLooking () 
+    void stopLooking () 
 	{ 
 		if ( m_iMoveLookPriority >= m_iLookPriority )
 		{
@@ -552,7 +555,7 @@ public:
 		}
 	}
 
-	inline void setLookAtTask ( eLookTask lookTask, float fTime = 0 ) 
+    void setLookAtTask ( eLookTask lookTask, float fTime = 0 ) 
 	{ 
 		if ( m_iMoveLookPriority >= m_iLookPriority && (fTime > 0 || m_fLookSetTime < engine->Time()) )
 		{
@@ -564,7 +567,7 @@ public:
 		}	
 	}
 
-	virtual void enemyLost (edict_t *pEnemy) {};
+	virtual void enemyLost (edict_t *pEnemy) {}
 
 	void setLastEnemy (edict_t *pEnemy);
 
@@ -591,19 +594,19 @@ public:
 
 	bool onLadder ();
 
-	inline bool currentEnemy ( edict_t *pEntity ) { return m_pEnemy == pEntity; }
+    bool currentEnemy ( edict_t *pEntity ) { return m_pEnemy == pEntity; }
 
 	Vector getAimVector ( edict_t *pEntity );
 	virtual void modAim ( edict_t *pEntity, Vector &v_origin, 
 		Vector *v_desired_offset, Vector &v_size,
 		float fDist, float fDist2D);
 
-	inline Vector *getGoalOrigin ()
+    Vector *getGoalOrigin ()
 	{
 		return &m_vGoal;
 	}
 
-	inline bool hasGoal ()
+    bool hasGoal ()
 	{
 		return m_bHasGoal;
 	}
@@ -629,18 +632,18 @@ public:
 
 	float getHealthPercent ();
 
-	inline CBotSchedules *getSchedule () { return m_pSchedules; }
+    CBotSchedules *getSchedule () { return m_pSchedules; }
 
 	virtual void reachedCoverSpot (int flags);
 
 	virtual bool wantToFollowEnemy ();
 
-	virtual void seeFriendlyHurtEnemy ( edict_t *pTeammate, edict_t *pEnemy, CWeapon *pWeapon ) { };
-	virtual void seeEnemyHurtFriendly ( edict_t *pTeammate, edict_t *pEnemy, CWeapon *pWeapon ) { };
-	virtual void seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWeapon ) { };
-	virtual void seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *pWeapon ) { };
+	virtual void seeFriendlyHurtEnemy ( edict_t *pTeammate, edict_t *pEnemy, CWeapon *pWeapon ) {}
+	virtual void seeEnemyHurtFriendly ( edict_t *pTeammate, edict_t *pEnemy, CWeapon *pWeapon ) {}
+	virtual void seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWeapon ) {}
+	virtual void seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *pWeapon ) {}
 
-	inline void selectWeapon ( int iWeaponId ) { m_iSelectWeapon = iWeaponId; }
+    void selectWeapon ( int iWeaponId ) { m_iSelectWeapon = iWeaponId; }
 
 	void selectWeaponName ( const char *szWeaponName );
 
@@ -650,15 +653,17 @@ public:
 
 	bool isUsingProfile ( CBotProfile *pProfile );
 
-	inline CBotProfile *getProfile () { return m_pProfile; }
+    CBotProfile *getProfile () { return m_pProfile; }
 
 	virtual bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL );
 
 	void tapButton ( int iButton );
 
-	inline int getAmmo ( int iIndex ) { if ( !m_iAmmo ) return 0; else if ( iIndex == -1 ) return 0;  return m_iAmmo[iIndex]; }
+    int getAmmo ( int iIndex ) { if ( !m_iAmmo ) return 0;
+	    if ( iIndex == -1 ) return 0;
+	    return m_iAmmo[iIndex]; }
 
-	inline void lookAtEdict ( edict_t *pEdict ) { m_pLookEdict = pEdict; }
+    void lookAtEdict ( edict_t *pEdict ) { m_pLookEdict = pEdict; }
 
 	virtual bool select_CWeapon ( CWeapon *pWeapon );
 	virtual bool selectBotWeapon ( CBotWeapon *pBotWeapon );
@@ -675,15 +680,15 @@ public:
 
 	virtual void touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1 );
 
-	inline void setAiming ( Vector aiming ) { m_vWaypointAim = aiming; }
+    void setAiming ( Vector aiming ) { m_vWaypointAim = aiming; }
 
-	inline Vector getAiming () { return m_vWaypointAim; }
+    Vector getAiming () { return m_vWaypointAim; }
 
-	inline void setLookVector ( Vector vLook ) { m_vLookVector = vLook; }
+    void setLookVector ( Vector vLook ) { m_vLookVector = vLook; }
 
-	inline Vector getLookVector () { return m_vLookVector; }
+    Vector getLookVector () { return m_vLookVector; }
 
-	inline void resetLookAroundTime () { m_fLookAroundTime = 0.0f; }
+    void resetLookAroundTime () { m_fLookAroundTime = 0.0f; }
 
 	Vector snipe (const Vector& vAiming);
 
@@ -691,7 +696,7 @@ public:
 
 	float m_fWaypointStuckTime;
 
-	inline float getSpeed () { return m_vVelocity.Length2D(); }
+    float getSpeed () { return m_vVelocity.Length2D(); }
 
 	void updateStatistics (); // updates number of teammates/enemies nearby/visible
 	virtual void listenForPlayers ();
@@ -701,12 +706,12 @@ public:
 	virtual bool wantToListenToPlayerFootsteps ( edict_t *pPlayer ) { return true; }
 
 	virtual bool wantToInvestigateSound ();
-	inline void wantToInvestigateSound ( bool bSet ) { m_bWantToInvestigateSound = bSet; }
-	inline bool wantToShoot () { return m_bOpenFire; }
-	inline void wantToShoot ( bool bSet ) { m_bOpenFire = bSet; }
-	inline void wantToListen ( bool bSet ) { m_bWantToListen = bSet; }
+    void wantToInvestigateSound ( bool bSet ) { m_bWantToInvestigateSound = bSet; }
+    bool wantToShoot () { return m_bOpenFire; }
+    void wantToShoot ( bool bSet ) { m_bOpenFire = bSet; }
+    void wantToListen ( bool bSet ) { m_bWantToListen = bSet; }
 	bool wantToListen ();
-	inline void wantToChangeWeapon ( bool bSet ) { m_bWantToChangeWeapon = bSet; }
+    void wantToChangeWeapon ( bool bSet ) { m_bWantToChangeWeapon = bSet; }
 
 	int nearbyFriendlies (float fDistance);
 	
@@ -723,24 +728,27 @@ public:
 
 	void updateDanger ( float fBelief );
 
-	inline void reduceTouchDistance ( ) { if ( m_fWaypointTouchDistance > MIN_WPT_TOUCH_DIST ) { m_fWaypointTouchDistance *= 0.9; } }
+    void reduceTouchDistance()
+    {
+	    if (m_fWaypointTouchDistance > MIN_WPT_TOUCH_DIST) { m_fWaypointTouchDistance *= 0.9; }
+    }
 
-	inline void resetTouchDistance ( float fDist ) { m_fWaypointTouchDistance = fDist; }
+    void resetTouchDistance ( float fDist ) { m_fWaypointTouchDistance = fDist; }
 
-	inline float getTouchDistance () { return m_fWaypointTouchDistance; }
+    float getTouchDistance () { return m_fWaypointTouchDistance; }
 
-	inline CBotCmd *getUserCMD () { return &cmd; }
+    CBotCmd *getUserCMD () { return &cmd; }
 
 	void forceGotoWaypoint ( int wpt );
 
 	// bot is defending -- mod specific stuff
 	virtual void defending () {}
 
-	virtual void hearVoiceCommand ( edict_t *pPlayer, byte cmd ) {};
+	virtual void hearVoiceCommand ( edict_t *pPlayer, byte cmd );
 
 	virtual void grenadeThrown ();
 
-	virtual void voiceCommand ( int cmd ) { };
+	virtual void voiceCommand ( int cmd );
 
 	void addVoiceCommand ( int cmd );
 
@@ -756,29 +764,29 @@ public:
 
 	virtual void areaClear( ) { }
 
-	inline void resetAreaClear () { m_uSquadDetail.b1.said_area_clear = false; }
+    void resetAreaClear () { m_uSquadDetail.b1.said_area_clear = false; }
 
 
-	inline bool inSquad ( CBotSquad *pSquad )
+    bool inSquad ( CBotSquad *pSquad )
 	{
 		return m_pSquad == pSquad;
 	}
 
-	inline bool inSquad ()
+    bool inSquad ()
 	{
 		return m_pSquad != NULL;
 	}
 
 	bool isSquadLeader ();
 
-	inline void setSquadIdleTime ( float fTime )
+    void setSquadIdleTime ( float fTime )
 	{
 		m_fSquadIdleTime = fTime;
 	}
 
 	void clearSquad ();
 
-	inline void setSquad ( CBotSquad *pSquad )
+    void setSquad ( CBotSquad *pSquad )
 	{
 		m_pSquad = pSquad;
 	}
@@ -791,12 +799,12 @@ public:
 
 	virtual void hearPlayerAttack( edict_t *pAttacker, int iWeaponID );
 
-	inline bool isListeningToPlayer ( edict_t *pPlayer ) 
+    bool isListeningToPlayer ( edict_t *pPlayer ) 
 	{
 		return m_PlayerListeningTo.get() == pPlayer;
 	}
 
-	inline IBotController *getController () const 
+    IBotController *getController () const 
 	{
 		return m_pController;
 	}
@@ -815,8 +823,7 @@ public:
 	bool recentlySpawned ( float fTime );
 
 protected:
-
-	inline void setLookAt ( Vector vNew )
+    void setLookAt ( Vector vNew )
 	{
 		m_vLookAt = vNew;
 		m_bLookAtIsValid = true;
@@ -1108,6 +1115,7 @@ private:
 abstract_class IEntityFactory
 {
 public:
+	virtual ~IEntityFactory() = default;
 	virtual IServerNetworkable *Create( const char *pClassName ) = 0;
 	virtual void Destroy( IServerNetworkable *pNetworkable ) = 0;
 	virtual size_t GetEntitySize() = 0;
@@ -1116,6 +1124,7 @@ public:
 abstract_class IEntityFactoryDictionary
 {
 public:
+	virtual ~IEntityFactoryDictionary() = default;
 	virtual void InstallFactory( IEntityFactory *pFactory, const char *pClassName ) = 0;
 	virtual IServerNetworkable *Create( const char *pClassName ) = 0;
 	virtual void Destroy( const char *pClassName, IServerNetworkable *pNetworkable ) = 0;
