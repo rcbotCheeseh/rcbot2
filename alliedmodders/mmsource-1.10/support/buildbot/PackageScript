@@ -1,0 +1,25 @@
+# vim: set ts=2 sw=2 tw=99 noet ft=python: 
+import os
+
+builder.SetBuildFolder('package')
+
+addons_folder = builder.AddFolder('addons')
+metamod_folder = builder.AddFolder(os.path.join('addons', 'metamod'))
+bin_folder = builder.AddFolder(os.path.join('addons', 'metamod', 'bin'))
+
+builder.AddCopy(os.path.join(builder.sourcePath, 'support', 'metamod.vdf'), addons_folder)
+builder.AddCopy(os.path.join(builder.sourcePath, 'support', 'metaplugins.ini'), metamod_folder)
+builder.AddCopy(os.path.join(builder.sourcePath, 'support', 'README.txt'), metamod_folder)
+
+pdb_list = []
+for task in MMS.binaries:
+	builder.AddCopy(task.binary, bin_folder)
+
+	if task.debug:
+		pdb_list.append(task.debug)
+
+# Generate PDB info.
+with open(os.path.join(builder.buildPath, 'pdblog.txt'), 'wt') as fp:
+	for line in pdb_list:
+		fp.write(line.path + '\n')
+
