@@ -956,7 +956,7 @@ bool CBotWeapon :: needToReload(CBot *pBot)
 class IWeaponFunc
 {
 public:
-	virtual ~IWeaponFunc() = default;
+	//virtual ~IWeaponFunc() = default;
 	virtual void execute(CWeapon* pWeapon) = 0;
 };
 
