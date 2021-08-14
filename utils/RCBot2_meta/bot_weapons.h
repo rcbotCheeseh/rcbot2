@@ -740,7 +740,7 @@ public:
 		return m_pWeaponInfo->canAttack();
 	}
 
-	int getAmmo ( CBot *pBot, int type = AMMO_PRIM );
+	int getAmmo ( CBot *pBot, int type = AMMO_PRIM ) const;
 
 	int getClip1 ( CBot *pBot ) 
 	{ 

@@ -1157,7 +1157,7 @@ void CBotGravGunPickup :: execute(CBot *pBot,CBotSchedule *pSchedule)
 
 	if ( m_fTime < engine->Time() )
 	{
-		CHLDMBot *HL2DMBot = (CHLDMBot*)pBot;
+		const auto HL2DMBot = (CHLDMBot*)pBot;
 
 		if (HL2DMBot->getFailedObject() && HL2DMBot->distanceFrom(HL2DMBot->getFailedObject())<=pBot->distanceFrom(m_Prop)+48 )
 			pBot->primaryAttack();
@@ -5434,9 +5434,10 @@ CBotHL2DMSnipe :: CBotHL2DMSnipe ( CBotWeapon *pWeaponToUse, Vector vOrigin, flo
 	m_iWaypointType = iWaypointType;
 }
 
-void CBotHL2DMSnipe :: debugString ( char *string )
+void CBotHL2DMSnipe::debugString(char* string) //Unstable? [APG]RoboCop[CL]
 {
-	sprintf(string,"CBotHL2DMSnipe\nm_fTime = %0.2f\npWeaponToUse = %s\nm_bUseZ = %s\nm_z = %0.2f",m_fTime,m_pWeaponToUse->getWeaponInfo()->getWeaponName(),m_bUseZ ? "true":"false",m_z);
+	sprintf(string, "CBotHL2DMSnipe\nm_fTime = %0.2f\npWeaponToUse = %s\nm_bUseZ = %s\nm_z = %0.2f", m_fTime,
+	        m_pWeaponToUse->getWeaponInfo()->getWeaponName(), m_bUseZ ? "true" : "false", m_z);
 }
 
 void CBotHL2DMSnipe :: execute (CBot *pBot,CBotSchedule *pSchedule)

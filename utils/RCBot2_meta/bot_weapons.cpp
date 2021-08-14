@@ -330,7 +330,7 @@ bool CBotWeapon::needToReload(CBot* pBot)
 // static init (all weapons in game)
 std::vector<CWeapon*> CWeapons::m_theWeapons;
 
-int CBotWeapon::getAmmo(CBot* pBot, int type)
+int CBotWeapon::getAmmo(CBot* pBot, int type) const
 {
 	if (type == AMMO_PRIM)
 		return pBot->getAmmo(m_pWeaponInfo->getAmmoIndex1());

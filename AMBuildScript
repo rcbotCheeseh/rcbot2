@@ -253,7 +253,7 @@ class MMSConfig(object):
     # Debugging
     if builder.options.debug == '1':
       cxx.defines += ['_DEBUG']
-      if cxx.behavior == 'gcc':
+      if cxx.behavior == 'gcc, clang':
         cxx.cflags += proj_c_flags_dbg
       elif cxx.behavior == 'msvc':
         cxx.cflags += ['/MTd']

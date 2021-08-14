@@ -80,8 +80,9 @@ private:
 class CBotTask
 {
 public:	
-	CBotTask();	
-	~CBotTask()
+	CBotTask();
+
+	virtual ~CBotTask()
 	{
 		if ( m_pInterruptFunc!=NULL )
 		{
@@ -110,7 +111,7 @@ public:
 	inline bool hasFlag ( int iFlag ) { return (m_iFlags & iFlag) == iFlag; }
 	inline void setFlag ( int iFlag ) { m_iFlags |= iFlag; }
 	void clearFailInterrupts () { m_iFailInterruptConditionsHave = m_iFailInterruptConditionsDontHave = 0; }	
-	virtual void debugString ( char *string ) { string[0] = 0; return; }
+	virtual void debugString ( char *string ) { string[0] = 0; }
 
 	//bool isID ( eTaskID eTaskId ) { };
 
