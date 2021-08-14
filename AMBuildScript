@@ -272,6 +272,8 @@ class MMSConfig(object):
       cxx.linkflags += ['-shared']
       if cxx.family == 'gcc':
         cxx.linkflags += ['-static-libgcc']
+      if cxx.family == 'clang':
+        cxx.linkflags += ['-lgcc_eh', '-static-libstdc++']
 
       # catch link errors at compile time
       cxx.linkflags += [ '-Wl,-no-undefined' ]
