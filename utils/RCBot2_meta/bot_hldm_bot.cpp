@@ -35,13 +35,13 @@
 #include "bot_client.h"
 #include "bot_buttons.h"
 #include "bot_globals.h"
-#include "bot_profile.h"
+//#include "bot_profile.h"
 #include "bot_navigator.h"
 #include "bot_waypoint.h"
 #include "bot_utility.h"
 #include "bot_task.h"
 #include "bot_schedule.h"
-#include "bot_waypoint.h"
+//#include "bot_waypoint.h"
 #include "bot_weapons.h"
 #include "bot_mtrand.h"
 #include "bot_waypoint_locations.h"
@@ -148,7 +148,7 @@ bool CHLDMBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 	entity_index = ENTINDEX(pEdict);
 
 	// if no target on - listen sever player is a non target
-	if ( rcbot_notarget.GetBool() && (entity_index == 1) )
+	if ( rcbot_notarget.GetBool() && entity_index == 1 )
 		return false;
 
 	// not myself
@@ -156,13 +156,13 @@ bool CHLDMBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 		return false;
 
 	// not a player - false
-	if ( !entity_index || (entity_index > CBotGlobals::maxClients()) )
+	if ( !entity_index || entity_index > CBotGlobals::maxClients() )
 	{
-		if ( !m_pCarryingObject && pEdict->GetUnknown() && (pEdict == m_NearestBreakable) && (CClassInterface::getPlayerHealth(pEdict)>0) )
+		if ( !m_pCarryingObject && pEdict->GetUnknown() && pEdict == m_NearestBreakable && CClassInterface::getPlayerHealth(pEdict)>0 )
 		{
 			if ( distanceFrom(CBotGlobals::entityOrigin(pEdict)) < rcbot_jump_obst_dist.GetFloat() )
 			{
-				if ( BotFunc_BreakableIsEnemy(m_NearestBreakable,m_pEdict) || ((CBotGlobals::entityOrigin(pEdict) - m_vMoveTo).Length()+48) < (getOrigin() - m_vMoveTo).Length() )
+				if ( BotFunc_BreakableIsEnemy(m_NearestBreakable,m_pEdict) || (CBotGlobals::entityOrigin(pEdict) - m_vMoveTo).Length()+48 < (getOrigin() - m_vMoveTo).Length() )
 					return true;				
 			}
 		}
@@ -227,7 +227,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 				pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(HL2DM_WEAPON_SMG1));
 			}
 
-			if ( pWeapon && (pWeapon->getAmmo(this) < 1) )
+			if ( pWeapon && pWeapon->getAmmo(this) < 1 )
 			{
 				CBotSchedule *pSched = new CBotSchedule();
 				
@@ -388,7 +388,7 @@ bool CHLDMBot :: handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy )
 		if ( pWeapon->isMelee() )
 			setMoveTo(CBotGlobals::entityOrigin(pEnemy));
 
-		if ( (pWeapon->getID() == HL2DM_WEAPON_PHYSCANNON) && (DotProductFromOrigin(m_vAimVector) < rcbot_enemyshoot_gravgun_fov.GetFloat()) ) 
+		if ( pWeapon->getID() == HL2DM_WEAPON_PHYSCANNON && DotProductFromOrigin(m_vAimVector) < rcbot_enemyshoot_gravgun_fov.GetFloat() ) 
 			return true; // keep enemy / don't shoot : until angle between enemy is less than 20 degrees
 
 		if ( pWeapon->canUseSecondary() && pWeapon->getAmmo(this,2) && pWeapon->secondaryInRange(fDistance) )
@@ -426,7 +426,6 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 	static CBotUtility *next;
 	static CBotWeapon *gravgun;
 	static CBotWeapon *crossbow;
-	static CWeapon *pWeapon;
 	static bool bCheckCurrent;
 
 	if ( !hasSomeConditions(CONDITION_CHANGED) && !m_pSchedules->isEmpty() )
@@ -445,54 +444,65 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 
 		if ( CBotGlobals::entityIsValid(pent) )
 		{
-			ADD_UTILITY(BOT_UTIL_HL2DM_GRAVIGUN_PICKUP,(!m_pEnemy||(m_pCurrentWeapon&&(strcmp("weapon_physcannon",m_pCurrentWeapon->GetClassName())))) && gravgun && gravgun->hasWeapon() && (m_NearestPhysObj.get()!=NULL) && (gravgun->getWeaponIndex() > 0) && (CClassInterface::gravityGunObject(INDEXENT(gravgun->getWeaponIndex()))==NULL),0.9f);
+			ADD_UTILITY(BOT_UTIL_HL2DM_GRAVIGUN_PICKUP,
+			            (!m_pEnemy||m_pCurrentWeapon&&strcmp("weapon_physcannon",m_pCurrentWeapon->GetClassName())) &&
+			            gravgun && gravgun->hasWeapon() && (m_NearestPhysObj.get()!=NULL) && gravgun->getWeaponIndex() >
+			            0 && (CClassInterface::gravityGunObject(INDEXENT(gravgun->getWeaponIndex()))==NULL), 0.9f)
 		}
 	}
 
 	if ( (crossbow = m_pWeapons->getWeapon(CWeapons::getWeapon(HL2DM_WEAPON_CROSSBOW))) != NULL )
 	{
 		if ( crossbow->hasWeapon() && !crossbow->outOfAmmo(this) )
-			ADD_UTILITY(BOT_UTIL_SNIPE,true,0.91f);
+			ADD_UTILITY(BOT_UTIL_SNIPE,true,0.91f)
 	}
 
 	// low on health? Pick some up if there's any near by
-	ADD_UTILITY(BOT_UTIL_HL2DM_USE_HEALTH_CHARGER,(m_pHealthCharger.get() != NULL) && (CClassInterface::getAnimCycle(m_pHealthCharger)<1.0f) && (getHealthPercent()<1.0f),(1.0f-getHealthPercent()));
-	ADD_UTILITY(BOT_UTIL_FIND_NEAREST_HEALTH,(m_pHealthKit.get()!=NULL) && (getHealthPercent()<1.0f),1.0f-getHealthPercent());
+	ADD_UTILITY(BOT_UTIL_HL2DM_USE_HEALTH_CHARGER,
+	            (m_pHealthCharger.get() != NULL) && CClassInterface::getAnimCycle(m_pHealthCharger)<1.0f &&
+	            getHealthPercent()<1.0f, 1.0f-getHealthPercent())
+	ADD_UTILITY(BOT_UTIL_FIND_NEAREST_HEALTH,(m_pHealthKit.get()!=NULL) && getHealthPercent()<1.0f,1.0f-getHealthPercent())
 
 	// low on armor?
-	ADD_UTILITY(BOT_UTIL_HL2DM_FIND_ARMOR,(m_pBattery.get() !=NULL) && (getArmorPercent()<1.0f),(1.0f-getArmorPercent())*0.75f);
-	ADD_UTILITY(BOT_UTIL_HL2DM_USE_CHARGER,(m_pCharger.get() !=NULL) && (CClassInterface::getAnimCycle(m_pCharger)<1.0f) && (getArmorPercent()<1.0f),(1.0f-getArmorPercent())*0.75f);
-	
-	ADD_UTILITY(BOT_UTIL_HL2DM_USE_CRATE,(m_pAmmoCrate.get()!=NULL) && (m_fUseCrateTime < engine->Time()),1.0f);
+	ADD_UTILITY(BOT_UTIL_HL2DM_FIND_ARMOR,(m_pBattery.get() !=NULL) && getArmorPercent()<1.0f,(1.0f-getArmorPercent())*0.75f)
+	ADD_UTILITY(BOT_UTIL_HL2DM_USE_CHARGER,
+	            (m_pCharger.get() !=NULL) && CClassInterface::getAnimCycle(m_pCharger)<1.0f && getArmorPercent()<1.0f,
+	            (1.0f-getArmorPercent())*0.75f)
+
+	ADD_UTILITY(BOT_UTIL_HL2DM_USE_CRATE,(m_pAmmoCrate.get()!=NULL) && m_fUseCrateTime < engine->Time(),1.0f)
 	// low on ammo? ammo nearby?
-	ADD_UTILITY(BOT_UTIL_FIND_NEAREST_AMMO,(m_pAmmoKit.get() !=NULL) && (getAmmo(0)<5),0.01f*(100-getAmmo(0)));
+	ADD_UTILITY(BOT_UTIL_FIND_NEAREST_AMMO,(m_pAmmoKit.get() !=NULL) && getAmmo(0)<5,0.01f*(100-getAmmo(0)))
 
 	// always able to roam around
-	ADD_UTILITY(BOT_UTIL_ROAM,true,0.01f);
+	ADD_UTILITY(BOT_UTIL_ROAM,true,0.01f)
 
 	// I have an enemy 
-	ADD_UTILITY(BOT_UTIL_FIND_LAST_ENEMY,wantToFollowEnemy() && !m_bLookedForEnemyLast && m_pLastEnemy && CBotGlobals::entityIsValid(m_pLastEnemy) && CBotGlobals::entityIsAlive(m_pLastEnemy),getHealthPercent()*(getArmorPercent()+0.1));
+	ADD_UTILITY(BOT_UTIL_FIND_LAST_ENEMY,
+	            wantToFollowEnemy() && !m_bLookedForEnemyLast && m_pLastEnemy && CBotGlobals::entityIsValid(m_pLastEnemy
+	            ) && CBotGlobals::entityIsAlive(m_pLastEnemy), getHealthPercent()*(getArmorPercent()+0.1))
 
-	if ( !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && hasSomeConditions(CONDITION_SEE_LAST_ENEMY_POS) && m_pLastEnemy && m_fLastSeeEnemy && ((m_fLastSeeEnemy + 10.0) > engine->Time()) && m_pWeapons->hasWeapon(HL2DM_WEAPON_FRAG) )
+	if (!hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && hasSomeConditions(CONDITION_SEE_LAST_ENEMY_POS) && m_pLastEnemy
+		&& m_fLastSeeEnemy && m_fLastSeeEnemy + 10.0 > engine->Time() && m_pWeapons->hasWeapon(HL2DM_WEAPON_FRAG))
 	{
-		float fDistance = distanceFrom(m_vLastSeeEnemyBlastWaypoint);
+		const float fDistance = distanceFrom(m_vLastSeeEnemyBlastWaypoint);
 
-		if ( ( fDistance > BLAST_RADIUS ) && ( fDistance < 1500 ) )
+		if ( fDistance > BLAST_RADIUS && fDistance < 1500 )
 		{
 			CWeapon *pWeapon = CWeapons::getWeapon(HL2DM_WEAPON_FRAG);
 			CBotWeapon *pBotWeapon = m_pWeapons->getWeapon(pWeapon);
 
-			ADD_UTILITY(BOT_UTIL_THROW_GRENADE, pBotWeapon && (pBotWeapon->getAmmo(this) > 0) ,1.0f-(getHealthPercent()*0.2));
+			ADD_UTILITY(BOT_UTIL_THROW_GRENADE, pBotWeapon && pBotWeapon->getAmmo(this) > 0,1.0f- getHealthPercent()*0.2)
 		}
 	}
 
 	if ( m_pNearbyWeapon.get() )
 	{
+		static CWeapon *pWeapon;
 		pWeapon = CWeapons::getWeapon(m_pNearbyWeapon.get()->GetClassName());
 
 		if ( pWeapon && !m_pWeapons->hasWeapon(pWeapon->getID()) )
 		{
-			ADD_UTILITY(BOT_UTIL_PICKUP_WEAPON, true , 0.6f + pWeapon->getPreference()*0.1f);
+			ADD_UTILITY(BOT_UTIL_PICKUP_WEAPON, true , 0.6f + pWeapon->getPreference()*0.1f)
 		}
 	}
 
@@ -556,20 +566,20 @@ void CHLDMBot :: modThink ()
 		setMoveLookPriority(MOVELOOK_MODTHINK);
 	}
 
-	if ( (m_fCurrentDanger >= 20.0f) && (CClassInterface::auxPower(m_pEdict) > 90.f ) && (m_flSprintTime < engine->Time()))
+	if ( m_fCurrentDanger >= 20.0f && CClassInterface::auxPower(m_pEdict) > 90.f && m_flSprintTime < engine->Time())
 	{
 		m_pButtons->holdButton(IN_SPEED,0,1,0);
 	}
-	else if (( m_fCurrentDanger < 1 ) || (CClassInterface::auxPower(m_pEdict) < 5.0f ))
+	else if (m_fCurrentDanger < 1 || CClassInterface::auxPower(m_pEdict) < 5.0f)
 	{
 		m_flSprintTime = engine->Time() + randomFloat(5.0f,20.0f);
 	}
 
-	if ( m_fLastSeeEnemy && ((m_fLastSeeEnemy + 5.0)<engine->Time()) )
+	if ( m_fLastSeeEnemy && m_fLastSeeEnemy + 5.0<engine->Time() )
 	{
 		CBotWeapon *pWeapon = getCurrentWeapon();
 
-		if ( pWeapon && (pWeapon->getClip1(this)==0) && (pWeapon->getAmmo(this) > 0 ) )
+		if ( pWeapon && pWeapon->getClip1(this)==0 && pWeapon->getAmmo(this) > 0 )
 		{
 			m_fLastSeeEnemy = 0;
 			m_pButtons->tap(IN_RELOAD);
@@ -584,17 +594,17 @@ void CHLDMBot :: modThink ()
 		if ( m_pCurrentWeapon && !strcmp("weapon_physcannon",m_pCurrentWeapon->GetClassName()) )
 		{
 			m_pCarryingObject = CClassInterface::gravityGunObject(m_pCurrentWeapon);
-			bCarry = (CClassInterface::gravityGunObject(m_pCurrentWeapon) == m_NearestPhysObj.get());
+			bCarry = CClassInterface::gravityGunObject(m_pCurrentWeapon) == m_NearestPhysObj.get();
 		}
 
-		if ( !bCarry && (distanceFrom(pEntity) < rcbot_jump_obst_dist.GetFloat()) )
+		if ( !bCarry && distanceFrom(pEntity) < rcbot_jump_obst_dist.GetFloat() )
 		{
 			bool bCanJump = false;
 			float fTime = 0;
 
 			if ( willCollide(pEntity,&bCanJump,&fTime) )
 			{
-				if ( bCanJump && (fTime < 1.5f) ) // one second to jump
+				if ( bCanJump && fTime < 1.5f ) // one second to jump
 				{
 					if ( randomInt(0,1) )
 						jump();
@@ -615,11 +625,11 @@ bool CHLDMBot::checkStuck()
 
 			CBotWeapon *currentWeapon = getCurrentWeapon();
 
-			if ( ( currentWeapon->getID() == HL2DM_WEAPON_PHYSCANNON ) && ( m_pCarryingObject ) )
+			if ( currentWeapon->getID() == HL2DM_WEAPON_PHYSCANNON && m_pCarryingObject )
 			{
 				primaryAttack();
 			}
-			else if ( m_NearestPhysObj && (distanceFrom(m_NearestPhysObj)<100) )
+			else if ( m_NearestPhysObj && distanceFrom(m_NearestPhysObj)<100 )
 			{
 				if ( !m_pSchedules->hasSchedule(SCHED_GRAVGUN_PICKUP) )
 				{
@@ -661,12 +671,12 @@ bool CHLDMBot :: willCollide ( edict_t *pEntity, bool *bCanJump, float *fTime )
 			*fTime = fDistance / fSpeed;
 
 			vel = vel / fSpeed; // normalize
-			v_dest = getOrigin() + (vel*fDistance);
+			v_dest = getOrigin() + vel*fDistance;
 
 			if ( v_size.z <= 48 ) // jump height
 				*bCanJump = true;
 
-			return (vOrigin - v_dest).Length() < (v_size.Length()/2);
+			return (vOrigin - v_dest).Length() < v_size.Length()/2;
 		}
 	}
 
@@ -685,14 +695,14 @@ void CHLDMBot :: handleWeapons ()
 	{
 		CBotWeapon *pWeapon;
 
-		pWeapon = getBestWeapon(m_pEnemy,true,true,(m_pEnemy==m_NearestBreakable)&&!rcbot_melee_only.GetBool());
+		pWeapon = getBestWeapon(m_pEnemy,true,true,m_pEnemy==m_NearestBreakable&&!rcbot_melee_only.GetBool());
 
-		if ( m_bWantToChangeWeapon && (pWeapon != NULL) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex() )
+		if ( m_bWantToChangeWeapon && pWeapon != NULL && pWeapon != getCurrentWeapon() && pWeapon->getWeaponIndex() )
 		{
 			selectWeapon(pWeapon->getWeaponIndex());
 		}
 
-		setLookAtTask((LOOK_ENEMY));
+		setLookAtTask(LOOK_ENEMY);
 
 		///battack = true;
 
@@ -719,32 +729,32 @@ bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 	{
 		szClassname = pEntity->GetClassName();
 
-		if ( ( strncmp(szClassname,"item_ammo",9)==0 ) && 
-			( !m_pAmmoKit.get() || (fDist<distanceFrom(m_pAmmoKit.get())) ))
+		if ( strncmp(szClassname,"item_ammo",9)==0 && 
+			( !m_pAmmoKit.get() || fDist<distanceFrom(m_pAmmoKit.get()) ))
 		{
 			m_pAmmoKit = pEntity;
 		}
-		else if ( ( strncmp(szClassname,"item_health",11)==0 ) && 
-			( !m_pHealthKit.get() || (fDist<distanceFrom(m_pHealthKit.get())) ))
+		else if ( strncmp(szClassname,"item_health",11)==0 && 
+			( !m_pHealthKit.get() || fDist<distanceFrom(m_pHealthKit.get()) ))
 		{
 			//if ( getHealthPercent() < 1.0f )
 			//	updateCondition(CONDITION_CHANGED);
 
 			m_pHealthKit = pEntity;
 		}
-		else if ( ( strcmp(szClassname,"item_battery")==0 ) && 
-			( !m_pBattery.get() || (fDist<distanceFrom(m_pBattery.get())) ))
+		else if ( strcmp(szClassname,"item_battery")==0 && 
+			( !m_pBattery.get() || fDist<distanceFrom(m_pBattery.get()) ))
 		{
 			m_pBattery = pEntity;
 		}
-		else if ( ( (strcmp(szClassname,"func_breakable")==0 ) || (strncmp(szClassname,"prop_physics",12)==0) ) && (CClassInterface::getPlayerHealth(pEntity)>0) &&
-			( !m_NearestBreakable.get() || (fDist<distanceFrom(m_NearestBreakable.get())) ))
+		else if ( ( strcmp(szClassname,"func_breakable")==0 || strncmp(szClassname,"prop_physics",12)==0 ) && CClassInterface::getPlayerHealth(pEntity)>0 &&
+			( !m_NearestBreakable.get() || fDist<distanceFrom(m_NearestBreakable.get()) ))
 		{
 			m_NearestBreakable = pEntity;
 		}
-		else if ( (pEntity != m_pNearestButton) && ( strcmp(szClassname,"func_button")==0 ) )
+		else if ( pEntity != m_pNearestButton && strcmp(szClassname,"func_button")==0 )
 		{
-			if ( !m_pNearestButton.get() || (fDist<distanceFrom(m_pNearestButton.get())) )
+			if ( !m_pNearestButton.get() || fDist<distanceFrom(m_pNearestButton.get()) )
 				m_pNearestButton = pEntity;
 		}
 		// covered above
@@ -753,21 +763,21 @@ bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 			if ( !m_pNearestBreakable.get() || (fDist<distanceFrom(m_pNearestBreakable.get())) )
 				m_pNearestBreakable = pEntity;
 		}*/
-		else if ( (pEntity != m_pAmmoCrate ) && ( strcmp(szClassname,"item_ammo_crate") == 0 ) )
+		else if ( pEntity != m_pAmmoCrate && strcmp(szClassname,"item_ammo_crate") == 0 )
 		{
-			if ( !m_pAmmoCrate.get() || (fDist<distanceFrom(m_pAmmoCrate.get())) )
+			if ( !m_pAmmoCrate.get() || fDist<distanceFrom(m_pAmmoCrate.get()) )
 				m_pAmmoCrate = pEntity;
 		}
-		else if ( (pEntity != m_FailedPhysObj) && ( strncmp(szClassname,"prop_physics",12)==0 ) && 
-			( !m_NearestPhysObj.get() || (fDist<distanceFrom(m_NearestPhysObj.get())) ))
+		else if ( pEntity != m_FailedPhysObj && strncmp(szClassname,"prop_physics",12)==0 && 
+			( !m_NearestPhysObj.get() || fDist<distanceFrom(m_NearestPhysObj.get()) ))
 		{
 			//if ( !m_bCarryingObject )
 			//	updateCondition(CONDITION_CHANGED);
 
 			m_NearestPhysObj = pEntity;
 		}
-		else if ( ( strncmp(szClassname,"item_suitcharger",16)==0 ) && 
-			( !m_pCharger.get() || (fDist<distanceFrom(m_pCharger.get())) ))
+		else if ( strncmp(szClassname,"item_suitcharger",16)==0 && 
+			( !m_pCharger.get() || fDist<distanceFrom(m_pCharger.get()) ))
 		{
 			if ( m_pCharger.get() )
 			{
@@ -783,8 +793,8 @@ bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 
 			m_pCharger = pEntity;
 		}
-		else if ( ( strncmp(szClassname,"item_healthcharger",18)==0 ) && 
-			( !m_pHealthCharger.get() || (fDist<distanceFrom(m_pHealthCharger.get())) ))
+		else if ( strncmp(szClassname,"item_healthcharger",18)==0 && 
+			( !m_pHealthCharger.get() || fDist<distanceFrom(m_pHealthCharger.get()) ))
 		{
 			if ( m_pHealthCharger.get() )
 			{
@@ -800,8 +810,8 @@ bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 
 			m_pHealthCharger = pEntity;
 		}
-		else if ( ( strncmp(szClassname,"weapon_",7)==0 ) && 
-			( !m_pNearbyWeapon.get() || (fDist<distanceFrom(m_pNearbyWeapon.get())) ))
+		else if ( strncmp(szClassname,"weapon_",7)==0 && 
+			( !m_pNearbyWeapon.get() || fDist<distanceFrom(m_pNearbyWeapon.get()) ))
 		{
 			/*static CWeapon *pWeapon;
 

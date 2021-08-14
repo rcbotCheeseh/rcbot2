@@ -1,5 +1,3 @@
-This is used as a backup in case your RCBot2 Profile Tools replaces the old config.ini
-
 ######### General Settings ########
 #
 # General difficulty of the bots. 0.5 = stock, < 0.5 easier, > 0.5 = harder
@@ -18,7 +16,7 @@ rcbot_ffa 0
 rcbot_dontmove 0
 #
 # Rate for bots to defend
-rcbot_defrate 0.24
+rcbot_defrate 0.25
 #
 # Smaller number will make bots turn slower (1 = instant turn but may overshoot)
 rcbot_anglespeed 0.25
@@ -32,8 +30,8 @@ rcbot_avoid_strength 100
 # (0 = no smoothing)
 rcbot_aimsmoothing 1
 #
-# Bots change classes at random intervals
-rcbot_change_classes 1
+# Bots change classes at random intervals - Required to prevent DoDS crashes
+rcbot_change_classes 0
 #
 # Enable/disable bots taunting
 rcbot_taunt 0
@@ -55,9 +53,6 @@ rcbot_voice_cmds 1
 #
 # Minimum distance to move objects to
 rcbot_move_dist 800
-#
-# Function will hook only once, if 0 it will unhook and rehook after every map
-rcbot_runplayer_hookonce 1
 #
 # Show welcome message on player connect
 rcbot_show_welcome_msg 1
@@ -115,31 +110,32 @@ rcbot_scoutdj 0.5
 # Time for soldier to fire rocket after jumping
 rcbot_rj 0.01
 #
-# If 1 bots can use custom weapons (broken
-rcbot_customloadouts 0
-#
 # If 1 rcbot engineers will move objects around
 rcbot_move_obj 1
-#
-# Allow bots to equip a random hat (unstable)
-rcbot_equiphats 0
 #
 # To enable "Auto Bot Quota" set the interval to a value above 0 (e.g. 5) (unit is seconds)
 # This interval is used to check the human/bot player count
 # For more information see bot_quota.ini
-rcbot_bot_quota_interval 10
+rcbot_bot_quota_interval -1
 #
 # Or use these settings (but dont use them together with the above setting!)
-rcbotd config min_bots 0
-rcbotd config max_bots 12
+rcbotd config min_bots -1
+rcbotd config max_bots 10
 #
-# ADVANCED!! Those are complicated but are required for the bots to use those offsets
-rcbot_const_mstr_offset 876
-rcbot_const_round_offset 876
-#
-# This plugin blocks the TF2 bots from spawning. Please inform us for any plugins that
+# These plugins conflict and may not work well with RCBot2. Please inform us for any plugins that
 # conflicts or prevents RCBot2 from working in rcbot.bots-united.com
-#
+sm plugins unload bot_ai.smx
+sm plugins unload bot_nologic.smx
+sm plugins unload bot_playerdestruction_ai.smx
+sm plugins unload bot_rocketjump.smx
+sm plugins unload bot_rocketjump_alt.smx
+sm plugins unload bot_trucefix.smx
+sm plugins unload botmanager.smx
+#sm plugins unload ClassRestrictionsForBots.smx
+sm plugins unload ClassWarfare.smx
+#sm plugins unload GiveBotsCosmetics.smx
+#sm plugins unload GiveBotsWeapons.smx
+sm plugins unload tf2items_manager.smx
 sm plugins unload smac_cvars.smx
 #
 # This is a TF2 lag bot prevention fix that prevents causing rcbots to crash
