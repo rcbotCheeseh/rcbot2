@@ -623,7 +623,7 @@ bool CHLDMBot::checkStuck()
 		if ( m_pWeapons->hasWeapon(HL2DM_WEAPON_PHYSCANNON) )
 		{// check stuck on object
 
-			CBotWeapon *currentWeapon = getCurrentWeapon();
+			const CBotWeapon *currentWeapon = getCurrentWeapon();
 
 			if ( currentWeapon->getID() == HL2DM_WEAPON_PHYSCANNON && m_pCarryingObject )
 			{
@@ -634,7 +634,7 @@ bool CHLDMBot::checkStuck()
 				if ( !m_pSchedules->hasSchedule(SCHED_GRAVGUN_PICKUP) )
 				{
 					m_pSchedules->freeMemory();
-					CBotSchedule *pSched = new CBotSchedule(new CBotGravGunPickup(m_pCurrentWeapon,m_NearestPhysObj));
+					const auto pSched = new CBotSchedule(new CBotGravGunPickup(m_pCurrentWeapon,m_NearestPhysObj));
 					pSched->setID(SCHED_GRAVGUN_PICKUP);
 					m_pSchedules->add(pSched);
 				}

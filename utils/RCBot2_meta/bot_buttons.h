@@ -55,7 +55,7 @@ public:
 		return !m_bTapped || m_fLetGoTime < fTime;
 	}
 
-	inline int getID ()
+	inline int getID () const
 	{
 		return m_iButtonId;
 	}

@@ -651,7 +651,7 @@ public:
 		return m_pWeaponInfo->hasHighRecoil();
 	}
 
-	inline int getID ()
+	inline int getID () const
 	{
 		return m_pWeaponInfo->getID();
 	}

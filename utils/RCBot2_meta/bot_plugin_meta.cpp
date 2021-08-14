@@ -364,7 +364,6 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientPutInServer, gameclients, this, &RCBotPluginMeta::Hook_ClientPutInServer, true);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientConnect, gameclients, this, &RCBotPluginMeta::Hook_ClientConnect, false);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientCommand, gameclients, this, &RCBotPluginMeta::Hook_ClientCommand, false);
-	//Hook FireEvent to our function - unstable for TF2? [APG]RoboCop[CL]
 	SH_ADD_HOOK_MEMFUNC(IGameEventManager2, FireEvent, gameevents, this, &RCBotPluginMeta::FireGameEvent, false);
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
@@ -796,7 +795,7 @@ void RCBotPluginMeta::Hook_GameFrame(bool simulating)
 		}
 
 		// Profiling
-#ifdef _DEBUG //This hates HL2DM? [APG]RoboCop[CL]
+#ifdef _DEBUG
 		if ( CClients::clientsDebugging(BOT_DEBUG_PROFILE) )
 		{
 			CProfileTimers::updateAndDisplay();
