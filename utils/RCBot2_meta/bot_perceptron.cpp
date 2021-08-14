@@ -377,7 +377,7 @@ void CBotNeuralNet :: execute (const ga_nn_value* inputs, ga_nn_value* outputs, 
 			output_it ++;
 
 			pNode++; // next
-			//layeroutput.push_back(pNode->getOutput());
+			//layeroutput.emplace_back(pNode->getOutput());
 		}
 
 		memcpy(m_layerinput,m_layeroutput,sizeof(ga_nn_value) * m_numHidden);

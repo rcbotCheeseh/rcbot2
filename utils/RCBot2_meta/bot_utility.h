@@ -206,7 +206,7 @@ public:
 
 	void freeMemory ();
 
-	inline void addUtility ( CBotUtility p ) { if ( p.canDo() ) { m_Utilities.push_back(p); } }
+	inline void addUtility ( CBotUtility p ) { if ( p.canDo() ) { m_Utilities.emplace_back(p); } }
 
 	void execute ();
 

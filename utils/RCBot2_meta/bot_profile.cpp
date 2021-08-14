@@ -155,7 +155,7 @@ void CBotProfiles :: setupProfiles ()
 
 			kvl.getInt("class", &read.m_iClass);
 
-			m_Profiles.push_back(new CBotProfile(read));
+			m_Profiles.emplace_back(new CBotProfile(read));
 
 			fclose(fp);
 		}
@@ -186,7 +186,7 @@ CBotProfile *CBotProfiles :: getRandomFreeProfile ()
 	for ( unsigned int i = 0; i < m_Profiles.size(); i ++ )
 	{
 		if ( !CBots::findBotByProfile(m_Profiles[i]) )
-			freeProfiles.push_back(m_Profiles[i]);
+			freeProfiles.emplace_back(m_Profiles[i]);
 	}
 
 	if ( freeProfiles.empty() )

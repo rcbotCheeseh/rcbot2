@@ -37,36 +37,36 @@
 class CHLDMBot : public CBot
 {
 public:
-	bool handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy ) override;
+	bool handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy );
 
-	void handleWeapons () override;
+	void handleWeapons ();
 
-	bool isHLDM () override { return true; }
+	bool isHLDM () { return true; }
 
-	void modThink () override;
+	void modThink ();
 
 	void init ();
-	void setup () override;
+	void setup ();
 
-	bool startGame () override;
+	bool startGame ();
 
-	void died ( edict_t *pKiller, const char *pszWeapon ) override;
-	void killed ( edict_t *pVictim, char *weapon ) override;
+	void died ( edict_t *pKiller, const char *pszWeapon );
+	void killed ( edict_t *pVictim, char *weapon );
 
-	void spawnInit () override;
+	void spawnInit ();
 
-	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true ) override;
+	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true );
 
-	void getTasks (unsigned int iIgnore=0) override;
+	void getTasks (unsigned int iIgnore=0);
 	bool executeAction ( eBotAction iAction );
 
-	float getArmorPercent () { return 0.01f * m_pPlayerInfo->GetArmorValue(); }
+	float getArmorPercent () { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
 
-	bool setVisible ( edict_t *pEntity, bool bVisible ) override;
+	bool setVisible ( edict_t *pEntity, bool bVisible );
 
-	unsigned int maxEntityIndex ( ) override { return gpGlobals->maxEntities; }
+	virtual unsigned int maxEntityIndex ( ) { return gpGlobals->maxEntities; }
 
-	void enemyLost (edict_t *pEnemy) override;
+	void enemyLost (edict_t *pEnemy);
 
 	inline void setFailedObject ( edict_t *pent ) 
 	{ 
@@ -76,7 +76,7 @@ public:
 			m_NearestPhysObj = NULL;
 	}
 
-	bool checkStuck () override;
+	bool checkStuck ();
 
 	bool willCollide ( edict_t *pEntity, bool *bCanJump, float *fTime );
 

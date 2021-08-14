@@ -645,8 +645,8 @@ void CWaypointNavigator :: belief ( Vector vOrigin, Vector vOther, float fBelief
 
 	fEDist = (vOrigin-vOther).Length(); // range
 
-	m_iVisibles.push_back(iWptFrom);
-	m_iVisibles.push_back(iWptTo);
+	m_iVisibles.emplace_back(iWptFrom);
+	m_iVisibles.emplace_back(iWptTo);
 
 	CWaypointLocations::GetAllVisible(iWptFrom,iWptTo,vOrigin,vOther,fEDist,&m_iVisibles,&m_iInvisibles);
 	CWaypointLocations::GetAllVisible(iWptFrom,iWptTo,vOther,vOrigin,fEDist,&m_iVisibles,&m_iInvisibles);
@@ -786,7 +786,7 @@ void CWaypointNavigator :: open ( AStarNode *pNode )
 	if ( !pNode->isOpen() )
 	{
 		pNode->open();
-		//m_theOpenList.push_back(pNode);
+		//m_theOpenList.emplace_back(pNode);
 		m_theOpenList.add(pNode);
 	}
 }
@@ -822,7 +822,7 @@ void CWaypointNavigator :: failMove ()
 
 	if ( std::find(m_iFailedGoals.begin(), m_iFailedGoals.end(), m_iGoalWaypoint) == m_iFailedGoals.end() )
 	{
-		m_iFailedGoals.push_back(m_iGoalWaypoint);
+		m_iFailedGoals.emplace_back(m_iGoalWaypoint);
 		m_fNextClearFailedGoals = engine->Time() + randomFloat(8.0f,30.0f);
 	}
 }
@@ -1133,7 +1133,7 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 
 		if (std::find(m_iFailedGoals.begin(), m_iFailedGoals.end(), m_iGoalWaypoint) == m_iFailedGoals.end())
 		{
-			m_iFailedGoals.push_back(m_iGoalWaypoint);
+			m_iFailedGoals.emplace_back(m_iGoalWaypoint);
 			m_fNextClearFailedGoals = engine->Time() + randomFloat(8.0f,30.0f);
 		}
 
@@ -1713,7 +1713,7 @@ void CWaypoints :: updateWaypointPairs ( std::vector<edict_wpt_pair_t> *pPairs, 
 
 				pair.v_ground = trace_result->endpos + Vector(0,0,48.0f);
 
-				pPairs->push_back(pair);
+				pPairs->emplace_back(pair);
 			}
 		}
 
@@ -2233,7 +2233,7 @@ void CWaypoints :: deletePathsTo ( int iWpt )
 	// a remove will affect the original array
 	for ( int i = 0; i < iNumPathsTo; i ++ )
 	{
-		pathsTo.push_back(pWaypoint->getPathToThisWaypoint(i));
+		pathsTo.emplace_back(pWaypoint->getPathToThisWaypoint(i));
 	}
 
 	iNumPathsTo = pathsTo.size();
@@ -2507,7 +2507,7 @@ CWaypoint *CWaypoints :: randomRouteWaypoint ( CBot *pBot, Vector vOrigin, Vecto
 					flDot = DotProduct (vecLOS , vForward );
 
 					if ( flDot > 0.17f ) // 80 degrees*/
-					goals.push_back(pWpt);
+					goals.emplace_back(pWpt);
 				}
 			}
 		}
@@ -2724,7 +2724,7 @@ CWaypoint *CWaypoints :: randomWaypointGoalNearestArea (int iFlags, int iTeam, i
 				node->setWaypoint(i);
 				node->setHeuristic(131072.0f/(fDist*fDist));
 			
-				goals.push_back(node);
+				goals.emplace_back(node);
 			}
 		}
 	}
@@ -2803,7 +2803,7 @@ CWaypoint *CWaypoints :: randomWaypointGoalBetweenArea (int iFlags, int iTeam, i
 
 				node->setHeuristic(fCost);
 			
-				goals.push_back(node);
+				goals.emplace_back(node);
 			}
 		}
 	}
@@ -2860,7 +2860,7 @@ CWaypoint *CWaypoints :: randomWaypointGoal ( int iFlags, int iTeam, int iArea, 
 				else if ( bForceArea && pWpt->getArea() != iArea )
 					continue;
 
-				goals.push_back(pWpt);
+				goals.emplace_back(pWpt);
 			}
 		}
 	}
@@ -2967,14 +2967,14 @@ bool CWaypoint :: isPathOpened ( Vector vPath )
 	newinfo.vOrigin = vPath;
 	newinfo.bVisibleLastCheck = CBotGlobals::checkOpensLater(m_vOrigin,vPath);
 
-	m_OpensLaterInfo.push_back(newinfo);
+	m_OpensLaterInfo.emplace_back(newinfo);
 
 	return newinfo.bVisibleLastCheck;
 }
 
 void CWaypoint :: addPathFrom ( int iWaypointIndex )
 {
-	m_PathsTo.push_back(iWaypointIndex);
+	m_PathsTo.emplace_back(iWaypointIndex);
 }
 
 void CWaypoint :: removePathFrom ( int iWaypointIndex )
@@ -3005,7 +3005,7 @@ bool CWaypoint :: addPathTo ( int iWaypointIndex )
 	if ( this == pTo )
 		return false;
 
-	m_thePaths.push_back(iWaypointIndex);
+	m_thePaths.emplace_back(iWaypointIndex);
 	pTo->addPathFrom(CWaypoints::getWaypointIndex(this));
 
 	return true;
@@ -3081,7 +3081,7 @@ void CWaypointTypes :: showTypesOnConsole ( edict_t *pPrintTo )
 
 void CWaypointTypes:: addType ( CWaypointType *type )
 {
-	m_Types.push_back(type);
+	m_Types.emplace_back(type);
 }
 
 CWaypointType *CWaypointTypes :: getTypeByIndex ( unsigned int iIndex )

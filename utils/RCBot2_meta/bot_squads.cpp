@@ -133,7 +133,7 @@ CBotSquad *CBotSquads::AddSquadMember ( edict_t *pLeader, edict_t *pMember )
 	if ( theSquad != NULL )
 	{
 		CBot *pBot;
-		m_theSquads.push_back(theSquad);
+		m_theSquads.emplace_back(theSquad);
 		
 		if ( (pBot = CBots::getBotPointer(pLeader)) != NULL )
 			pBot->setSquad(theSquad);
@@ -397,7 +397,7 @@ void CBotSquad::AddMember ( edict_t *pEdict )
 
 		const MyEHandle newh = pEdict;
 
-		m_SquadMembers.push_back(newh);
+		m_SquadMembers.emplace_back(newh);
 
 		/*if ( (pBot=CBots::getBotPointer(pEdict))!=NULL )
 		{

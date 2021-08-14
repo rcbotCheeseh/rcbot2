@@ -64,9 +64,9 @@ void CRCBotKeyValueList :: parseFile ( FILE *fp )
 		szKey[iKi] = 0;
 		szValue[iVi] = 0;
 
-		logger->Log(LogLevel::TRACE, "m_KVs.push_back(%s,%s)", szKey, szValue);
+		logger->Log(LogLevel::TRACE, "m_KVs.emplace_back(%s,%s)", szKey, szValue);
 
-		m_KVs.push_back(new CRCBotKeyValue(szKey,szValue));
+		m_KVs.emplace_back(new CRCBotKeyValue(szKey,szValue));
 
 	}
 

@@ -1265,7 +1265,7 @@ void CBotEvents :: addEvent ( CBotEvent *pEvent )
 	//if ( gameeventmanager )
 	//	gameeventmanager->AddListener( g_RCBotPluginMeta.getEventListener(), pEvent->getName(), true );
 
-	m_theEvents.push_back(pEvent);
+	m_theEvents.emplace_back(pEvent);
 }
 
 void CBotEvents :: freeMemory ()

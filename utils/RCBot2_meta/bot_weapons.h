@@ -472,7 +472,7 @@ public:
 		return m_szWeaponName;
 	}
 
-	inline int getID() const
+	inline const int getID () const
 	{
 		return m_iWeaponId;
 	}
@@ -561,9 +561,9 @@ public:
 		m_theWeapons.clear();
 	}
 
-	static inline void addWeapon ( CWeapon *pWeapon ) { m_theWeapons.push_back(pWeapon); }
+	static inline void addWeapon ( CWeapon *pWeapon ) { m_theWeapons.emplace_back(pWeapon); }
 
-	static CWeapon *getWeapon ( int iId );
+	static CWeapon *getWeapon ( const int iId );
 
 	static CWeapon *getWeapon ( const char *szWeapon );
 

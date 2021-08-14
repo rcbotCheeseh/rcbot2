@@ -271,7 +271,7 @@ public:
 
 	void addMember ( edict_t *pMember )
 	{
-		m_Members.push_back(MyEHandle(pMember));
+		m_Members.emplace_back(MyEHandle(pMember));
 	}
 
 	void think ()

@@ -153,7 +153,7 @@ void CWaypointLocations :: GetAllInArea (const Vector& vOrigin, WaypointList* pW
 						continue;
 
 					if ( iVisibleTo==-1 || pTable->GetVisibilityFromTo(iWpt,iVisibleTo) )
-						pWaypointList->push_back(iWpt);
+						pWaypointList->emplace_back(iWpt);
 				}
 			}
 		}
@@ -199,10 +199,10 @@ void CWaypointLocations :: GetAllVisible (int iFrom, int iOther, const Vector& v
 						// iFrom should be the enemy waypoint
 						if ( pTable->GetVisibilityFromTo(iFrom,iWpt) ) //|| pTable->GetVisibilityFromTo(iOther,iWpt) )
 						{   //CBotGlobals::isVisible(vVisibleFrom,CWaypoints::getWaypoint(iWpt)->getOrigin()) )
-							iVisible->push_back(iWpt);
+							iVisible->emplace_back(iWpt);
 						}
 						else if (std::find(iVisible->begin(), iVisible->end(), iWpt) == iVisible->end())
-							iInvisible->push_back(iWpt);
+							iInvisible->emplace_back(iWpt);
 					}
 				}
 			}
@@ -270,7 +270,7 @@ const int i = READ_LOC(fOrigin[0]);
 const int j = READ_LOC(fOrigin[1]);
 const int k = READ_LOC(fOrigin[2]);
 
-	m_iLocations[i][j][k].push_back(iIndex);
+	m_iLocations[i][j][k].emplace_back(iIndex);
 }
 
 void CWaypointLocations :: DeleteWptLocation ( int iIndex, const float *fOrigin )

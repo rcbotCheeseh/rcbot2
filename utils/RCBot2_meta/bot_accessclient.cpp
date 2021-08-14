@@ -209,7 +209,7 @@ void CAccessClients :: load ()
 				continue;
 			}
 
-			m_Clients.push_back(new CAccessClient(szSteamID,iAccess));
+			m_Clients.emplace_back(new CAccessClient(szSteamID,iAccess));
 		}
 
 		fclose(fp);

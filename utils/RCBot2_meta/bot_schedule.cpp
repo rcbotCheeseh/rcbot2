@@ -856,7 +856,7 @@ void CBotSchedule :: addTask ( CBotTask *pTask )
 	// initialize
 	pTask->init();
 	// add
-	m_Tasks.push_back(pTask);
+	m_Tasks.emplace_back(pTask);
 }
 
 void CBotSchedule :: removeTop ()

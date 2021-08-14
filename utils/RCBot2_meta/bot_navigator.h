@@ -323,7 +323,7 @@ public:
   }
   AStarNode* top() { return front(); }
   void push(AStarNode* x) {
-    push_back(x);
+    emplace_back(x);
     push_heap(begin(), end(), comp);
   }
   void pop() {

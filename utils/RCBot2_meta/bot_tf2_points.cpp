@@ -187,7 +187,7 @@ int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDef
 	{
 		if ( arr[i].bValid == true )
 		{
-			points.push_back(i);
+			points.emplace_back(i);
 
 			if ( type == TF2_POINT_ATTACK ) 
 			{

@@ -796,7 +796,7 @@ void RCBotPluginMeta::Hook_GameFrame(bool simulating)
 		}
 
 		// Profiling
-#ifdef _DEBUG
+#ifdef _DEBUG //This hates HL2DM? [APG]RoboCop[CL]
 		if ( CClients::clientsDebugging(BOT_DEBUG_PROFILE) )
 		{
 			CProfileTimers::updateAndDisplay();

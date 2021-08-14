@@ -132,7 +132,7 @@ bool CBotButtons :: canPressButton ( int iButtonId )
 
 void CBotButtons :: add ( CBotButton *theButton )
 {
-	m_theButtons.push_back(theButton);
+	m_theButtons.emplace_back(theButton);
 }
 
 bool CBotButtons :: holdingButton ( int iButtonId )

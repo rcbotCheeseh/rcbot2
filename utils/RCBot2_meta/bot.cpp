@@ -3415,7 +3415,7 @@ void CBots :: kickRandomBot (size_t count)
 	for ( size_t i = 0; i < MAX_PLAYERS; i ++ )
 	{
 		if ( m_Bots[i]->inUse() )
-			botList.push_back(m_Bots[i]->getPlayerID());
+			botList.emplace_back(m_Bots[i]->getPlayerID());
 	}
 
 	if ( botList.empty() )
@@ -3448,7 +3448,7 @@ void CBots :: kickRandomBotOnTeam ( int team )
 	{
 		if ( m_Bots[i]->inUse() && m_Bots[i]->getTeam() == team )
 		{
-			botList.push_back(m_Bots[i]->getPlayerID());
+			botList.emplace_back(m_Bots[i]->getPlayerID());
 		}
 	}
 

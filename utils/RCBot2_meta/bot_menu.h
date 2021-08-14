@@ -180,7 +180,7 @@ public:
 
 	virtual void addMenuItem ( CBotMenuItem *item )
 	{
-		m_MenuItems.push_back(item);
+		m_MenuItems.emplace_back(item);
 	}
 
 	void render ( CClient *pClient );

@@ -90,7 +90,7 @@ char *CStrings :: getString ( const char *szString )
 
 	szNew[len] = 0;
 
-	m_Strings[iHash].push_back(szNew);
+	m_Strings[iHash].emplace_back(szNew);
 
     return szNew;
 }

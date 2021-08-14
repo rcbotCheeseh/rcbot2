@@ -60,7 +60,7 @@ public:
 
 	void clear ();
 
-	inline void add ( float val ) { m_theValues.push_back(val); }
+	inline void add ( float val ) { m_theValues.emplace_back(val); }
 
 	void addRnd ();
 
@@ -106,9 +106,9 @@ public:
 	void getStuckWeights ( std::vector<ga_nn_value> *weights )
 	{
 		weights->clear();
-		weights->push_back(m_theValues[2]);
-		weights->push_back(m_theValues[3]);
-		weights->push_back(m_theValues[4]);
+		weights->emplace_back(m_theValues[2]);
+		weights->emplace_back(m_theValues[3]);
+		weights->emplace_back(m_theValues[4]);
 	}
 
 };

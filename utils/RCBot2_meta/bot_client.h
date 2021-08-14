@@ -317,7 +317,7 @@ private:
 	int m_iCopyWptFlags;
 	int m_iCopyWptArea;
 
-	/* TODO m_WaypointCutPaths never gets read from -- only ::clear and ::push_back are used */
+	/* TODO m_WaypointCutPaths never gets read from -- only ::clear and ::emplace_back are used */
 	WaypointList m_WaypointCutPaths;
 	
 	eWptCopyType m_WaypointCopyType;

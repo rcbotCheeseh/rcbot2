@@ -645,7 +645,7 @@ class dataUnconstArray
 			for ( unsigned int i = 0; i < array.size(); i ++ )
 			{
 				if ( array[i] != obj )
-					newVec.push_back(array[i]);
+					newVec.emplace_back(array[i]);
 			}
 
 			array.clear();
@@ -669,7 +669,7 @@ class dataUnconstArray
 			for ( unsigned int i = 0; i < array.size(); i ++ )
 			{
 				if ( array[i] != obj )
-					newVec.push_back(array[i]);
+					newVec.emplace_back(array[i]);
 			}
 
 			array.clear();
@@ -722,7 +722,7 @@ class dataUnconstArray
 
 		void Add ( const T pObj )
 		{
-			array.push_back(pObj);
+			array.emplace_back(pObj);
 		}
 
 		T ReturnValueFromIndex ( int iIndex )

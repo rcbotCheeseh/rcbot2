@@ -993,7 +993,7 @@ void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 					
 				if (  (pTable->GetVisibilityFromTo(iPrevWaypoint,iPath) == false) && (pTable->GetVisibilityFromTo(iThisWaypoint,iPath) == true) && (pTable->GetVisibilityFromTo(iNextWaypoint,iPath) == false) )
 				{
-					m_InvisPaths.push_back(iPath);
+					m_InvisPaths.emplace_back(iPath);
 
 #ifndef __linux__
 					if ( CClients::clientsDebugging(BOT_DEBUG_TASK) )

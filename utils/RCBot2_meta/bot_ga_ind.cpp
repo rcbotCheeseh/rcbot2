@@ -112,7 +112,7 @@ void CBotGAValues :: set ( int iIndex, float fVal )
 
 void CBotGAValues :: addRnd()
 {
-	m_theValues.push_back(randomFloat(0,1));
+	m_theValues.emplace_back(randomFloat(0,1));
 }
 
 // get new copy of this
@@ -129,7 +129,7 @@ IIndividual *CBotGAValues :: copy ()
 void CBotGAValues :: setVector ( std::vector<float> values )
 {
 	for ( unsigned int i = 0; i < values.size(); i ++ )
-		m_theValues.push_back(values[i]);
+		m_theValues.emplace_back(values[i]);
 }
 
 void CBotGAValues :: freeMemory ()

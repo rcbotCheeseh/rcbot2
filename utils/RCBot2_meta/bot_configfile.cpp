@@ -78,7 +78,7 @@ void CBotConfigFile :: load ()
 			continue;
 
 		logger->Log(LogLevel::TRACE, "Config entry '%s' read", line);
-		m_Commands.push_back(CStrings::getString(line));
+		m_Commands.emplace_back(CStrings::getString(line));
 	}
 
 	fclose(fp);

@@ -3635,7 +3635,7 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 			int _class = CClassInterface::getTF2Class(pPlayer);
 
 			if ( _class )
-				availableClasses.push_back(_class);
+				availableClasses.emplace_back(_class);
 		}
 	}
 

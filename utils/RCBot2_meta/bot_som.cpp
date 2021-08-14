@@ -51,7 +51,7 @@ CSom :: CSom ( int iW, int iH, int iIn )
 	for ( int i = 0; i < iH; i ++ )
 	{
 		for ( int j = 0; j < iW; j ++ )
-			m_Neurons.push_back(new CSomNeuron(id++,iIn,j,i));
+			m_Neurons.emplace_back(new CSomNeuron(id++,iIn,j,i));
 	}
 
 	m_iEpochs = 0;
@@ -159,7 +159,7 @@ CSomNeuron :: CSomNeuron ( unsigned short iId, int iInp, int iX, int iY )
 	m_iId = iId;
 	
 	for ( int i = 0; i < iInp; i ++ )
-		fWeights.push_back(randomFloat(0,1));
+		fWeights.emplace_back(randomFloat(0,1));
 }
 
 float CSomNeuron :: distance (const std::vector<float>* inputs)

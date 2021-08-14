@@ -400,7 +400,7 @@ bool CDODFlags::getRandomBombToDefuse  ( Vector *position, int iTeam, edict_t **
 	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iOwner[i] == iTeam && isBombPlanted(i) && !isBombBeingDefused(i) && m_pBombs[i][0] != NULL )
-			for ( short int j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.push_back(i); }
+			for ( short int j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.emplace_back(i); }
 	}
 
 	if (!iPossible.empty())
@@ -438,7 +438,7 @@ bool CDODFlags:: getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam
 	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iOwner[i] != iTeam && isBombPlanted(i) && m_pBombs[i][0] != NULL )
-			for ( short int j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.push_back(i); }
+			for ( short int j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.emplace_back(i); }
 	}
 
 	if (!iPossible.empty())

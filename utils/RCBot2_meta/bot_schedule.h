@@ -261,7 +261,7 @@ public:
 		// initialize
 		pSchedule->init();
 		// add
-		m_Schedules.push_back(pSchedule);
+		m_Schedules.emplace_back(pSchedule);
 	}
 
 	void addFront ( CBotSchedule *pSchedule )

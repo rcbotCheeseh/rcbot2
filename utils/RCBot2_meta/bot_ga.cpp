@@ -52,7 +52,7 @@ IIndividual *CPopulation :: get ( int iIndex )
 
 void CPopulation :: add ( IIndividual *individual )
 {	
-	m_theIndividuals.push_back(individual);
+	m_theIndividuals.emplace_back(individual);
 }
 
 void CPopulation :: freeMemory ()
