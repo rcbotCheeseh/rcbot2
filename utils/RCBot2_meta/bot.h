@@ -115,7 +115,7 @@ inline bool FStrEq(const char *sz1, const char *sz2)
 class IBotFunction
 {
 public:
-	virtual ~IBotFunction() = default;
+	//virtual ~IBotFunction() = default;
 	virtual void execute ( CBot *pBot ) = 0;
 };
 
@@ -305,7 +305,7 @@ private:
 class CBot 
 {
 public:
-	virtual ~CBot() = default;
+	//virtual ~CBot() = default;
 
 	static const float m_fAttackLowestHoldTime;
 	static const float m_fAttackHighestHoldTime;
@@ -1115,7 +1115,7 @@ private:
 abstract_class IEntityFactory
 {
 public:
-	virtual ~IEntityFactory() = default;
+	//virtual ~IEntityFactory() = default;
 	virtual IServerNetworkable *Create( const char *pClassName ) = 0;
 	virtual void Destroy( IServerNetworkable *pNetworkable ) = 0;
 	virtual size_t GetEntitySize() = 0;
@@ -1124,7 +1124,7 @@ public:
 abstract_class IEntityFactoryDictionary
 {
 public:
-	virtual ~IEntityFactoryDictionary() = default;
+	//virtual ~IEntityFactoryDictionary() = default;
 	virtual void InstallFactory( IEntityFactory *pFactory, const char *pClassName ) = 0;
 	virtual IServerNetworkable *Create( const char *pClassName ) = 0;
 	virtual void Destroy( const char *pClassName, IServerNetworkable *pNetworkable ) = 0;
