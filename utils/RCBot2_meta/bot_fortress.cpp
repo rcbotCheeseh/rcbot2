@@ -58,6 +58,8 @@
 #include "bot_squads.h"
 //#include "bot_hooks.h"
 
+#include "logging.h"
+
 #include <cmath>
 
 //caxanga334: SDK 2013 contains macros for std::min and std::max which causes errors when compiling
@@ -974,6 +976,18 @@ void CBotFortress :: spawnInit ()
 	m_bSentryGunVectorValid = false;
 	m_bDispenserVectorValid = false;
 	m_bTeleportExitVectorValid = false;
+	
+	// in case we're respawned as a different class than what we desired, assume we have no choice
+	// this should fix conflicts with class restrictions for bots -nosoop
+	logger->Log(LogLevel::DEBUG, "Bot %s spawned (class = %d, desired = %d, game_desired = %d)",
+			m_szBotName, m_iClass, m_iDesiredClass, CClassInterface::getTF2DesiredClass(m_pEdict));
+
+	if (m_iDesiredClass != CClassInterface::getTF2DesiredClass(m_pEdict)) {
+		logger->Log(LogLevel::INFO,
+				"Bot %s desired class mismatch (desired = %d, game_desired = %d); external change?",
+				m_szBotName, m_iDesiredClass, CClassInterface::getTF2DesiredClass(m_pEdict));
+	}
+	m_iClass = static_cast<TF_Class>(m_iDesiredClass = CClassInterface::getTF2DesiredClass(m_pEdict));
 }
 
 bool CBotFortress :: isBuilding ( edict_t *pBuilding )
