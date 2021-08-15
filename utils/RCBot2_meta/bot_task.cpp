@@ -5479,15 +5479,15 @@ void CBotHL2DMSnipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	// refrain from proning
 	pBot->updateCondition(CONDITION_RUN);
 
-	if ( pCurrentWeapon != m_pWeaponToUse )
+	/*if (pCurrentWeapon != m_pWeaponToUse)
 	{
-		if ( !pBot->select_CWeapon(CWeapons::getWeapon(m_pWeaponToUse->getID())) )
+		if ( !pBot->select_CWeapon(CWeapons::getWeapon(m_pWeaponToUse->getID())) ) //Unstable? [APG]RoboCop[CL]
 		{
 			fail();
 		}
 
 		return;
-	}
+	}*/
 
 	if ( pCurrentWeapon->getAmmo(pBot) < 1 )
 	{
