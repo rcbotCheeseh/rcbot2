@@ -932,7 +932,7 @@ void CClient::giveMessage(const char *msg,float fTime)
 {
 	if ( rcbot_tooltips.GetBool() )
 	{
-		m_NextTooltip.emplace(CToolTip(msg, NULL));
+		m_NextTooltip.emplace(msg, nullptr);
 		m_fNextBotServerMessage = engine->Time() + fTime;
 	}
 }
