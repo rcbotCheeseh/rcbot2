@@ -935,7 +935,7 @@ bool CBotWeaponGravGun ::outOfAmmo (CBot *pBot)
 */
 bool CBotWeapon::outOfAmmo(CBot* pBot)
 {
-	if (m_pWeaponInfo->isGravGun() && m_pEnt)
+	if (m_pWeaponInfo && m_pWeaponInfo->isGravGun() && m_pEnt)
 		return CClassInterface::gravityGunObject(m_pEnt) == NULL;
 
 	// if I have something in my clip now
