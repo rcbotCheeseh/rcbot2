@@ -1052,7 +1052,7 @@ bool CBotGlobals::pointIsWithin( edict_t *pEntity, const Vector &vPoint )
 	return tr.startsolid;
 }
 
-FILE *CBotGlobals :: openFile ( char *szFile, char *szMode )
+FILE *CBotGlobals :: openFile (const char *szFile, char *szMode)
 {
 	FILE *fp = fopen(szFile,szMode);
 
@@ -1082,7 +1082,7 @@ void CBotGlobals :: buildFileName ( char *szOutput, const char *szFile, const ch
 #endif
 		szOutput[0] = 0;
 
-#if defined(HOMEFOLDER) && defined(__linux)
+#if defined(HOMEFOLDER) && defined(__linux__)
 		char *lhome = getenv ("HOME");
 
 		if (lhome != NULL) 
