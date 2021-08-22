@@ -98,35 +98,6 @@ void CAccessClients :: showUsers ( edict_t *pEntity )
 	}	
 }
 
-void CAccessClients :: createFile ()
-{
-	char filename[1024];
-	
-	CBotGlobals::buildFileName(filename,BOT_ACCESS_CLIENT_FILE,BOT_CONFIG_FOLDER,BOT_CONFIG_EXTENSION);
-
-	FILE *fp = CBotGlobals::openFile(filename,"w");
-
-	logger->Log(LogLevel::WARN, "Making an accessclients.ini file for you... Edit it in %s", filename);
-
-	if ( fp )
-	{
-		fprintf(fp,"# format is ");
-		fprintf(fp,"# \"<STEAM ID>\" <access level>\n");
-		fprintf(fp,"# see http://rcbot.bots-united.com/accesslev.htm for access\n");
-		fprintf(fp,"# levels\n");
-		fprintf(fp,"#\n");
-		fprintf(fp,"# example:\n");
-		fprintf(fp,"#\n");
-		fprintf(fp,"# \"STEAM_0:123456789\" 63\n");
-		fprintf(fp,"# don't put one of '#' these before a line you want to be read \n");
-		fprintf(fp,"# by the bot!\n");
-		fprintf(fp,"# \n");
-		fclose(fp);
-	}
-	else
-		logger->Log(LogLevel::ERROR, "Failed to create config file %s", filename);
-}
-
 void CAccessClients :: freeMemory ()
 {
 	for ( unsigned int i = 0; i < m_Clients.size(); i ++ )
@@ -154,7 +125,7 @@ void CAccessClients :: load ()
 
 		int iLine = 0;
 
-		while ( fgets(buffer,255,fp) != NULL )
+		while (fgets(buffer, 255, fp) != nullptr)
 		{
 			iLine++;
 
@@ -173,20 +144,20 @@ void CAccessClients :: load ()
 
 			int i = 0;
 
-			while (i < len && (buffer[i] == '\"' || buffer[i] == ' '))
+			while (( i < len ) && ((buffer[i] == '\"') || (buffer[i] == ' ')))
 				i++;
 
 			int n = 0;
 
 			// parse Steam ID
-			while ( n<31 && i < len && buffer[i] != '\"' )			
+			while ( (n<31) && (i < len) && (buffer[i] != '\"') )			
 				szSteamID[n++] = buffer[i++];
 
 			szSteamID[n] = 0;
 
 			i++;
 
-			while (i < len && buffer[i] == ' ')
+			while (( i < len ) && (buffer[i] == ' '))
 				i++;
 
 			if ( i == len )
@@ -198,7 +169,7 @@ void CAccessClients :: load ()
 			const int iAccess = atoi(&buffer[i]);
 
 			// invalid
-			if ( szSteamID[0] == 0 || szSteamID[0] == ' ' )
+			if ( (szSteamID[0] == 0) || (szSteamID[0] == ' ' ) )
 			{
 				logger->Log(LogLevel::WARN, "line %d invalid in access client config, steam id invalid", iLine);
 				continue;
@@ -211,11 +182,13 @@ void CAccessClients :: load ()
 
 			m_Clients.emplace_back(new CAccessClient(szSteamID,iAccess));
 		}
-
-		fclose(fp);
 	}
 	else
-		CAccessClients :: createFile();
+	{
+		logger->Log(LogLevel::ERROR, "Failed to open file '%s' for reading", filename);
+	}
+
+	fclose(fp);
 }
 
 void CAccessClients :: save ()
@@ -232,9 +205,13 @@ void CAccessClients :: save ()
 		{
 			m_Clients[i]->save(fp);
 		}
-
-		fclose(fp);
 	}
+	else
+	{
+		logger->Log(LogLevel::ERROR, "Failed to open file '%s' for writing", filename);
+	}
+
+	fclose(fp);
 }
 
 void CAccessClients :: checkClientAccess ( CClient *pClient )

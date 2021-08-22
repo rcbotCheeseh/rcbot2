@@ -69,13 +69,7 @@ void CBotMods :: parseFile ()
 
 	if ( !fp )
 	{
-		createFile();
-		fp = CBotGlobals::openFile(buffer,"r");
-	}
-
-	if ( !fp )
-	{
-		// ERROR!
+		logger->Log(LogLevel::ERROR, "Failed to open file '%s' for reading", buffer);
 		return;
 	}
 
@@ -230,46 +224,6 @@ void CBotMods :: parseFile ()
 	}
 
 	fclose(fp);
-}
-
-void CBotMods :: createFile ()
-{
-	char filename[1024];
-
-	CBotGlobals::buildFileName(filename,BOT_MOD_FILE,BOT_CONFIG_FOLDER,BOT_CONFIG_EXTENSION);
-
-	FILE *fp = CBotGlobals::openFile(filename,"w");
-
-	CBotGlobals::botMessage(NULL,0,"Making a %s.%s file for you... Edit it in '%s'",BOT_MOD_FILE,BOT_CONFIG_EXTENSION,filename);
-
-	if ( fp )
-	{
-		fprintf(fp,"# EXAMPLE MOD FILE");
-		fprintf(fp,"# valid mod types\n");
-		fprintf(fp,"# ---------------\n");
-		fprintf(fp,"# HL1DM\n");
-		fprintf(fp,"# FF\n");
-		fprintf(fp,"# SVENCOOP2\n");
-		fprintf(fp,"# TIMCOOP\n");
-		fprintf(fp,"# NS2\n");
-		fprintf(fp,"#\n");
-		fprintf(fp,"# valid bot types\n");
-		fprintf(fp,"# ---------------\n");
-		fprintf(fp,"# HL1DM\n");
-		fprintf(fp,"# FF\n");
-		fprintf(fp,"# COOP\n");
-		fprintf(fp,"# ZOMBIE\n");
-		fprintf(fp,"#\n");
-		fprintf(fp,"# weaponlists are changeable in config / weapons.ini\n");
-		fprintf(fp,"#mod = FF\n");
-		fprintf(fp,"#gamedir = ff\n");
-		fprintf(fp,"#bot = FF\n");
-		fprintf(fp,"#\n");
-
-		fclose(fp);
-	}
-	else
-		logger->Log(LogLevel::ERROR, "Couldn't create config file %s", filename);
 }
 
 void CBotMods :: readMods()

@@ -1382,8 +1382,6 @@ public:
 
 	static void parseFile ();
 
-	static void createFile ();
-
 	static void readMods();
 
 	static void freeMemory ();

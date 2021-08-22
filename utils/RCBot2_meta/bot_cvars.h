@@ -103,16 +103,16 @@ extern ConVar rcbot_css_economy_eco_limit;
 extern ConVar rcbot_show_welcome_msg;
 extern ConVar rcbot_force_class;
 
-extern ConVar *sv_gravity;
-extern ConVar *mp_teamplay;
-extern ConVar *sv_tags;
-extern ConVar *mp_friendlyfire;
-extern ConVar *mp_stalemate_enable;
+extern ConVar* sv_gravity;
+extern ConVar* mp_teamplay;
+extern ConVar* sv_tags;
+extern ConVar* mp_friendlyfire;
+extern ConVar* mp_stalemate_enable;
 
 // For CS:S
-extern ConVar *mp_roundtime;
-extern ConVar *mp_c4timer;
+extern ConVar* mp_roundtime;
+extern ConVar* mp_c4timer;
 
-void RCBOT2_Cvar_setup (ICvar *cvar);
+void RCBOT2_Cvar_setup(ICvar* cvar);
 
 #endif
