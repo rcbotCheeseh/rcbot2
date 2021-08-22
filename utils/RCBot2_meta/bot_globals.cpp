@@ -1052,7 +1052,7 @@ bool CBotGlobals::pointIsWithin( edict_t *pEntity, const Vector &vPoint )
 	return tr.startsolid;
 }
 
-FILE *CBotGlobals :: openFile (const char *szFile, char *szMode)
+FILE *CBotGlobals :: openFile (char *szFile, char *szMode)
 {
 	FILE *fp = fopen(szFile,szMode);
 
