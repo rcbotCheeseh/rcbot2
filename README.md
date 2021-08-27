@@ -77,6 +77,19 @@ in `build/package`.
 
 [Building SourceMod]: https://wiki.alliedmods.net/Building_SourceMod
 
+
+## License
+
+RCBot2 is released under the [GNU Affero General Public License][].  Among other things, this
+means that any modifications you make to RCBot2 must have the sources available under the same
+license to players on your server.
+
+Additionally, `rcbot/logging.{h,cpp}` is released separately under the
+[BSD Zero Clause License][].
+
+[GNU Affero General Public License]: https://spdx.org/licenses/AGPL-3.0-only.html
+[BSD Zero Clause License]: https://spdx.org/licenses/0BSD.html
+
 ## Credits:
 
 Cheeseh - Founder
