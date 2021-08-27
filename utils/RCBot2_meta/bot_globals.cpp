@@ -29,15 +29,6 @@
  *
  */
 
-#ifndef __linux__
-// for file stuff
-#include <windows.h>
-#define WIN32_LEAN_AND_MEAN
-
-#include <conio.h>
-
-#endif
-
 #include "bot.h"
 #include "bot_cvars.h"
 #include "bot_globals.h"
@@ -48,8 +39,6 @@
 
 #include "ndebugoverlay.h"
 
-// some Windows-specific include is redefining ERROR
-#undef ERROR
 #include "logging.h"
 
 #ifndef __linux__
@@ -814,18 +803,12 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 	//return true;
 }
 
-#ifdef _LINUX
-// kludge for linux
-using std::min;
-using std::max;
-#endif
-
 bool CBotGlobals :: boundingBoxTouch2d ( 
 										const Vector2D &a1, const Vector2D &a2,
 										const Vector2D &bmins, const Vector2D &bmaxs )
 {
-	const Vector2D amins = Vector2D(min(a1.x,a2.x),min(a1.y,a2.y));
-	const Vector2D amaxs = Vector2D(max(a1.x,a2.x),max(a1.y,a2.y));
+	const Vector2D amins = Vector2D(std::min(a1.x,a2.x),std::min(a1.y,a2.y));
+	const Vector2D amaxs = Vector2D(std::max(a1.x,a2.x),std::max(a1.y,a2.y));
 
 	return bmins.x >= amins.x && bmins.y >= amins.y && (bmins.x <= amaxs.x && bmins.y <= amaxs.y) ||
 		bmaxs.x >= amins.x && bmaxs.y >= amins.y && (bmaxs.x <= amaxs.x && bmaxs.y <= amaxs.y);
@@ -835,8 +818,8 @@ bool CBotGlobals :: boundingBoxTouch3d (
 										const Vector &a1, const Vector &a2,
 										const Vector &bmins, const Vector &bmaxs )
 {
-	const Vector amins = Vector(min(a1.x,a2.x),min(a1.y,a2.y),min(a1.z,a2.z));
-	const Vector amaxs = Vector(max(a1.x,a2.x),max(a1.y,a2.y),max(a1.z,a2.z));
+	const Vector amins = Vector(std::min(a1.x,a2.x),std::min(a1.y,a2.y),std::min(a1.z,a2.z));
+	const Vector amaxs = Vector(std::max(a1.x,a2.x),std::max(a1.y,a2.y),std::max(a1.z,a2.z));
 
 	return bmins.x >= amins.x && bmins.y >= amins.y && bmins.z >= amins.z && (bmins.x <= amaxs.x && bmins.y <= amaxs.y && bmins.z <= amaxs.z) ||
 		bmaxs.x >= amins.x && bmaxs.y >= amins.y && bmaxs.z >= amins.z && (bmaxs.x <= amaxs.x && bmaxs.y <= amaxs.y && bmaxs.z <= amaxs.z);	
