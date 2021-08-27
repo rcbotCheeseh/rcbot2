@@ -50,18 +50,18 @@ CAccessClient :: CAccessClient( char *szSteamID, int iAccessLevel )
 
 bool CAccessClient :: forBot ()
 {
-	return isForSteamId("BOT");
+	return isForSteamID("BOT");
 }
 
-bool CAccessClient :: isForSteamId ( const char *szSteamID )
+bool CAccessClient :: isForSteamID ( const char *szSteamID )
 {
 	logger->Log(LogLevel::DEBUG, "AccessClient: '%s','%s'", m_szSteamID, szSteamID);
 	return FStrEq(m_szSteamID,szSteamID);
 }
 
-void CAccessClient :: save ( FILE *fp )
+void CAccessClient::save(std::fstream& fp)
 {
-	fprintf(fp,"\"%s\":%d\n",m_szSteamID,m_iAccessLevel);
+	fp << '"' << m_szSteamID << '"' << ":" << m_iAccessLevel << "\n";
 }
 
 void CAccessClient :: giveAccessToClient ( CClient *pClient )
@@ -115,7 +115,7 @@ void CAccessClients :: load ()
 	
 	CBotGlobals::buildFileName(filename,BOT_ACCESS_CLIENT_FILE,BOT_CONFIG_FOLDER,BOT_CONFIG_EXTENSION);
 
-	FILE *fp = CBotGlobals::openFile(filename,"r");
+	std::fstream fp = CBotGlobals::openFile(filename, std::fstream::in);
 
 	if ( fp )
 	{
@@ -125,7 +125,7 @@ void CAccessClients :: load ()
 
 		int iLine = 0;
 
-		while (fgets(buffer, 255, fp) != nullptr)
+		while (fp.getline(buffer, 255))
 		{
 			iLine++;
 
@@ -187,8 +187,6 @@ void CAccessClients :: load ()
 	{
 		logger->Log(LogLevel::ERROR, "Failed to open file '%s' for reading", filename);
 	}
-
-	fclose(fp);
 }
 
 void CAccessClients :: save ()
@@ -197,7 +195,7 @@ void CAccessClients :: save ()
 	
 	CBotGlobals::buildFileName(filename,BOT_ACCESS_CLIENT_FILE,BOT_CONFIG_FOLDER,BOT_CONFIG_EXTENSION);
 
-	FILE *fp = CBotGlobals::openFile(filename,"w");
+	std::fstream fp = CBotGlobals::openFile(filename, std::fstream::out);
 
 	if ( fp )
 	{
@@ -210,8 +208,6 @@ void CAccessClients :: save ()
 	{
 		logger->Log(LogLevel::ERROR, "Failed to open file '%s' for writing", filename);
 	}
-
-	fclose(fp);
 }
 
 void CAccessClients :: checkClientAccess ( CClient *pClient )
@@ -220,7 +216,7 @@ void CAccessClients :: checkClientAccess ( CClient *pClient )
 	{
 		CAccessClient *pAC = m_Clients[i];
 
-		if ( pAC->isForSteamId(pClient->getSteamID()) )
+		if ( pAC->isForSteamID(pClient->getSteamID()) )
 			pAC->giveAccessToClient(pClient);
 	}
 }

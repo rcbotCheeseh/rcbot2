@@ -30,7 +30,7 @@ class CRCBotKeyValueList
 public:
 	~CRCBotKeyValueList();
 
-	void parseFile ( FILE *fp );
+	void parseFile(std::fstream& fp);
 
 	//unsigned int size ();
 

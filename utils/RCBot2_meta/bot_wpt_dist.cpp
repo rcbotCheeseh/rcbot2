@@ -16,48 +16,48 @@ float CWaypointDistances::m_fSaveTime = 0;
 
 void CWaypointDistances :: load ()
 {
+	char filename[1024];	
 	wpt_dist_hdr_t hdr;
 	char *szMapName = CBotGlobals::getMapName();
 
 	if ( szMapName  && *szMapName )
 	{
-		char filename[1024];
 		CBotGlobals::buildFileName(filename,szMapName,BOT_WAYPOINT_FOLDER,BOT_WAYPOINT_DST_EXTENSION,true);
 
-		FILE *bfp = CBotGlobals::openFile(filename,"rb");
+		std::fstream bfp = CBotGlobals::openFile(filename, std::fstream::in | std::fstream::binary);
 
-		if ( bfp == NULL )
+		if ( !bfp )
 		{
 			return; // give up
 		}
 
-		fread(&hdr,sizeof(wpt_dist_hdr_t),1,bfp);
+		bfp.read(reinterpret_cast<char*>(&hdr), sizeof(wpt_dist_hdr_t));
 
-		if ( hdr.maxwaypoints == CWaypoints::MAX_WAYPOINTS && hdr.numwaypoints == CWaypoints::numWaypoints() && hdr.version == WPT_DIST_VER )
+		if ( (hdr.maxwaypoints == CWaypoints::MAX_WAYPOINTS) && (hdr.numwaypoints == CWaypoints::numWaypoints()) && (hdr.version == WPT_DIST_VER) )
 		{
-			fread(m_Distances,sizeof(int),CWaypoints::MAX_WAYPOINTS * CWaypoints::MAX_WAYPOINTS,bfp);
+			bfp.read(reinterpret_cast<char*>(m_Distances), sizeof(int) * CWaypoints::MAX_WAYPOINTS * CWaypoints::MAX_WAYPOINTS);
 		}
 
 		m_fSaveTime = engine->Time() + 100.0f;
-
-		fclose(bfp);
 	}
 }
 
 void CWaypointDistances :: save ()
 {
-	char *szMapName = CBotGlobals::getMapName();
+	//if ( m_fSaveTime < engine->Time() )
+	//{
+		char filename[1024];	
+		char *szMapName = CBotGlobals::getMapName();
 
 		if ( szMapName && *szMapName )
 		{
-			char filename[1024];
 			wpt_dist_hdr_t hdr;
 
 			CBotGlobals::buildFileName(filename,szMapName,BOT_WAYPOINT_FOLDER,BOT_WAYPOINT_DST_EXTENSION,true);
 
-			FILE *bfp = CBotGlobals::openFile(filename,"wb");
+			std::fstream bfp = CBotGlobals::openFile(filename, std::fstream::out | std::fstream::binary);
 
-			if ( bfp == NULL )
+			if ( !bfp )
 			{
 				m_fSaveTime = engine->Time() + 100.0f;
 				return; // give up
@@ -67,13 +67,11 @@ void CWaypointDistances :: save ()
 			hdr.numwaypoints = CWaypoints::numWaypoints();
 			hdr.version = WPT_DIST_VER;
 
-			fwrite(&hdr,sizeof(wpt_dist_hdr_t),1,bfp);
+			bfp.write(reinterpret_cast<char*>(&hdr), sizeof(wpt_dist_hdr_t));
 
-			fwrite(m_Distances,sizeof(int),CWaypoints::MAX_WAYPOINTS * CWaypoints::MAX_WAYPOINTS,bfp);
+			bfp.write(reinterpret_cast<char*>(m_Distances), sizeof(int) * CWaypoints::MAX_WAYPOINTS * CWaypoints::MAX_WAYPOINTS);
 
 			m_fSaveTime = engine->Time() + 100.0f;
-
-			fclose(bfp);
 		}
 	//}
 }

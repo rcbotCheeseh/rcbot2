@@ -368,9 +368,9 @@ public:
 
 	int getPath ( int i );
 
-	void load ( FILE *bfp, int iVersion );
+	void load(std::fstream& bfp, int iVersion);
 
-	void save ( FILE *bfp );
+	void save(std::fstream& bfp);
 
 	inline int getFlags (){return m_iFlags;}
 

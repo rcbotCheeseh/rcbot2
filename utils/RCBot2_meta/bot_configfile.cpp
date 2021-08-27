@@ -51,7 +51,7 @@ void CBotConfigFile :: load ()
 
 	CBotGlobals::buildFileName(filename,"config",BOT_CONFIG_FOLDER,BOT_CONFIG_EXTENSION);
 
-	FILE *fp = CBotGlobals::openFile(filename,"r");
+	std::fstream fp = CBotGlobals::openFile(filename, std::fstream::in);
 
 	if ( !fp )
 	{
@@ -59,7 +59,7 @@ void CBotConfigFile :: load ()
 		return;
 	}
 
-	while ( fgets(line,255,fp) != NULL )
+	while (fp.getline(line, 255))
 	{
 		if ( line[0] == '#' )
 			continue;
@@ -80,9 +80,6 @@ void CBotConfigFile :: load ()
 		logger->Log(LogLevel::TRACE, "Config entry '%s' read", line);
 		m_Commands.emplace_back(CStrings::getString(line));
 	}
-
-	fclose(fp);
-
 }
 
 void CBotConfigFile :: doNextCommand ()
@@ -158,14 +155,14 @@ void CRCBotTF2UtilFile :: loadConfig()
 		}
 
 		CBotGlobals::buildFileName(szFullFilename,szFilename,BOT_CONFIG_FOLDER);
-		FILE* fp = CBotGlobals::openFile(szFullFilename, "r");
+		std::fstream fp = CBotGlobals::openFile(szFullFilename, std::fstream::in);
 
 		if ( fp )
 		{
 			char line[256];
 			eBotAction iUtil = (eBotAction)0;
 
-			while ( fgets(line,255,fp) != NULL )
+			while (fp.getline(line, 255))
 			{
 				if ( line[0] == 'B' && line[1] == 'O' && 
 					 line[2] == 'T' && line[3] == '_') // OK
@@ -203,9 +200,6 @@ void CRCBotTF2UtilFile :: loadConfig()
 
 				}
 			}
-
-			fclose(fp);
 		}
 	 }
-
 }

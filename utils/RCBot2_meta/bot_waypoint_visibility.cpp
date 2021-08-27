@@ -156,9 +156,9 @@ bool CWaypointVisibilityTable :: SaveToFile ()
 
 	CBotGlobals::buildFileName(filename,CBotGlobals::getMapName(),BOT_WAYPOINT_FOLDER,"rcv",true);
 
-	FILE *bfp = CBotGlobals::openFile(filename,"wb");
+	std::fstream bfp = CBotGlobals::openFile(filename, std::fstream::out | std::fstream::binary);
 
-   if ( bfp == NULL )
+   if ( !bfp )
    {
 	   logger->Log(LogLevel::ERROR, "Can't open Waypoint Visibility table for writing!");
 	   return false;
@@ -168,12 +168,10 @@ bool CWaypointVisibilityTable :: SaveToFile ()
 	strncpy(header.szMapName,CBotGlobals::getMapName(),63);
 	header.waypoint_version = CWaypoints::WAYPOINT_VERSION;
 
-	fwrite(&header,sizeof(wpt_vis_header_t),1,bfp);
-	fwrite(m_VisTable,sizeof(byte),g_iMaxVisibilityByte,bfp);
+	bfp.write(reinterpret_cast<char*>(&header), sizeof(wpt_vis_header_t));
+	bfp.write(reinterpret_cast<char*>(m_VisTable), sizeof(byte) * g_iMaxVisibilityByte);
 
-   fclose(bfp);
-
-   return true;
+	return true;
 }
 
 bool CWaypointVisibilityTable :: ReadFromFile ( int numwaypoints )
@@ -184,15 +182,15 @@ bool CWaypointVisibilityTable :: ReadFromFile ( int numwaypoints )
 
 	CBotGlobals::buildFileName(filename,CBotGlobals::getMapName(),BOT_WAYPOINT_FOLDER,"rcv",true);
 
-   FILE *bfp =  CBotGlobals::openFile(filename,"rb");
+	std::fstream bfp = CBotGlobals::openFile(filename, std::fstream::in | std::fstream::binary);
 
-   if ( bfp == NULL )
+   if ( !bfp )
    {
 	   logger->Log(LogLevel::ERROR, "Can't open Waypoint Visibility table for reading!");
 	   return false;
    }
 
-   fread(&header,sizeof(wpt_vis_header_t),1,bfp);
+   bfp.read(reinterpret_cast<char*>(&header), sizeof(wpt_vis_header_t));
 
    if ( header.numwaypoints != numwaypoints )
 	   return false;
@@ -201,9 +199,7 @@ bool CWaypointVisibilityTable :: ReadFromFile ( int numwaypoints )
    if ( strncmp(header.szMapName,CBotGlobals::getMapName(),63) != 0 )
 	   return false;
 
-   fread(m_VisTable,sizeof(byte),g_iMaxVisibilityByte,bfp);
-
-   fclose(bfp);
+   bfp.read(reinterpret_cast<char*>(m_VisTable), sizeof(byte) * g_iMaxVisibilityByte);
 
    return true;
 }

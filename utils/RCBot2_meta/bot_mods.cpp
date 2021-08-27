@@ -63,7 +63,7 @@ void CBotMods :: parseFile ()
 
 	CBotGlobals::buildFileName(buffer,BOT_MOD_FILE,BOT_CONFIG_FOLDER,BOT_CONFIG_EXTENSION);
 
-	FILE *fp = CBotGlobals::openFile(buffer,"r");
+	std::fstream fp = CBotGlobals::openFile(buffer, std::fstream::in);
 
 	CBotMod *curmod = NULL;
 
@@ -73,7 +73,7 @@ void CBotMods :: parseFile ()
 		return;
 	}
 
-	while ( fgets(buffer,1023,fp) != NULL )
+	while (fp.getline(buffer, 1023))
 	{
 		if ( buffer[0] == '#' )
 			continue;
@@ -222,8 +222,6 @@ void CBotMods :: parseFile ()
 		curmod->setup(gamefolder, modtype, bottype, weaponlist);
 		m_Mods.emplace_back(curmod);
 	}
-
-	fclose(fp);
 }
 
 void CBotMods :: readMods()
@@ -354,10 +352,9 @@ bool CHalfLifeDeathmatchMod :: playerSpawned ( edict_t *pPlayer )
 
 void CHalfLifeDeathmatchMod :: initMod ()
 {
-
 	CWeapons::loadWeapons(m_szWeaponListName==NULL?"HL2DM":m_szWeaponListName, HL2DMWeaps);
 	
-//	for ( i = 0; i < HL2DM_WEAPON_MAX; i ++ )
+	//	for ( i = 0; i < HL2DM_WEAPON_MAX; i ++ )
 	//	CWeapons::addWeapon(new CWeapon(HL2DMWeaps[i]));//.iSlot,HL2DMWeaps[i].szWeaponName,HL2DMWeaps[i].iId,HL2DMWeaps[i].m_iFlags,HL2DMWeaps[i].m_iAmmoIndex,HL2DMWeaps[i].minPrimDist,HL2DMWeaps[i].maxPrimDist,HL2DMWeaps[i].m_iPreference,HL2DMWeaps[i].m_fProjSpeed));
 }
 
@@ -367,4 +364,3 @@ void CHalfLifeDeathmatchMod :: mapInit ()
 
 	m_LiftWaypoints.clear();
 }
-

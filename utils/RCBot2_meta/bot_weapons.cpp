@@ -496,7 +496,7 @@ bool CBotWeapons ::update ( bool bOverrideAllFromEngine )
 	if ( iWeaponsSignature != m_iWeaponsSignature ) // m_fUpdateWeaponsTime < engine->Time() )
 	{
 		int iWeaponState;
-		register unsigned short int i,j;
+		unsigned short int i,j;
 		bool bFound;
 
 		CBaseHandle *m_Weapons = CClassInterface::getWeaponList(m_pBot->getEdict());
@@ -685,7 +685,7 @@ CBotWeapon* CBotWeapons::addWeapon(CWeapon* pWeaponInfo, int iId, edict_t* pent,
 /*
 void CBotWeapons :: addWeapon ( int iId, edict_t *pent, bool bOverrideAll )
 {
-register int i = 0;
+int i = 0;
 Vector origin;
 const char *classname;
 CWeapon *pWeapon;

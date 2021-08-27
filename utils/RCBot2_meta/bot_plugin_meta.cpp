@@ -387,7 +387,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	// Load RCBOT2 hook data
 	CBotGlobals::buildFileName(filename, "hookinfo", BOT_CONFIG_FOLDER, "ini");
 
-	FILE *fp = fopen(filename, "r");
+	std::fstream fp(filename, std::fstream::in);
 
 	CRCBotKeyValueList kvl;
 
@@ -421,7 +421,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	g_pGameRules_Create_Obj = new CCreateGameRulesObject(kvl, gameServerFactory);
 
 	if (fp)
-		fclose(fp);
+		fp.close();
 
 	if (!CBotGlobals::gameStart())
 		return false;
@@ -499,12 +499,12 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	}
 
 	CBotGlobals::buildFileName(filename, "bot_quota", BOT_CONFIG_FOLDER, "ini");
-	fp = fopen(filename, "r");
+	fp = std::fstream(filename, std::fstream::in);
 
 	memset(bq_line, 0, sizeof bq_line);
 
-	if (fp != NULL) {
-		while (fgets(bq_line, sizeof bq_line, fp) != NULL) {
+	if (fp) {
+		while (fp.getline(bq_line, sizeof(bq_line))) {
 			if (bq_line[0] == '#')
 				continue;
 
@@ -531,10 +531,6 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 				logger->Log(LogLevel::INFO, "Bot Quota - Humans: %d, Bots: %d", human_count, bot_count);
 			}
 		}
-	}
-
-	if (fp) {
-		fclose(fp);
 	}
 
 	return true;

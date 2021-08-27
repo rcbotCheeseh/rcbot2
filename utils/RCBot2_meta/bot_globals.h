@@ -38,6 +38,8 @@
 #include "bot_const.h" // for Mod id
 #include "bot_commands.h" // for main rcbot command
 
+#include <fstream>
+
 #ifdef _WIN32
 #include <cctype>
 #endif
@@ -79,7 +81,7 @@ public:
 	// make folders for a file if they don't exist
 	static bool makeFolders (const char* szFile);
 	// just open file but also make folders if possible
-	static FILE *openFile ( char *szFile, char *szMode );
+	static std::fstream openFile (const char *szFile, std::ios_base::openmode mode);
 	// get the proper location
 	static void buildFileName ( char *szOutput, const char *szFile, const char *szFolder = NULL, const char *szExtension = NULL, bool bModDependent = false );
 	// add a directory delimiter to the string like '/' (linux) or '\\' (windows) or
