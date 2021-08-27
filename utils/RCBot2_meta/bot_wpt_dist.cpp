@@ -16,12 +16,12 @@ float CWaypointDistances::m_fSaveTime = 0;
 
 void CWaypointDistances :: load ()
 {
-	char filename[1024];	
 	wpt_dist_hdr_t hdr;
 	char *szMapName = CBotGlobals::getMapName();
 
 	if ( szMapName  && *szMapName )
 	{
+		char filename[1024];
 		CBotGlobals::buildFileName(filename,szMapName,BOT_WAYPOINT_FOLDER,BOT_WAYPOINT_DST_EXTENSION,true);
 
 		std::fstream bfp = CBotGlobals::openFile(filename, std::fstream::in | std::fstream::binary);
@@ -44,13 +44,11 @@ void CWaypointDistances :: load ()
 
 void CWaypointDistances :: save ()
 {
-	//if ( m_fSaveTime < engine->Time() )
-	//{
-		char filename[1024];	
-		char *szMapName = CBotGlobals::getMapName();
+	char *szMapName = CBotGlobals::getMapName();
 
 		if ( szMapName && *szMapName )
 		{
+			char filename[1024];
 			wpt_dist_hdr_t hdr;
 
 			CBotGlobals::buildFileName(filename,szMapName,BOT_WAYPOINT_FOLDER,BOT_WAYPOINT_DST_EXTENSION,true);

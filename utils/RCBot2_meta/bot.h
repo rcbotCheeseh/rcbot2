@@ -847,7 +847,7 @@ protected:
 
 
 	// really only need 249 bits (32 bytes) + WEAPON_SUBTYPE_BITS (whatever that is)
-	static const int CMD_BUFFER_SIZE = 64; 
+	static constexpr int CMD_BUFFER_SIZE = 64; 
 	///////////////////////////////////
 	// bots edict
 	edict_t *m_pEdict;
