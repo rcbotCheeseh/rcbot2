@@ -1067,6 +1067,8 @@ FILE *CBotGlobals :: openFile (char *szFile, char *szMode)
 
 		if ( fp == NULL )
 			logger->Log(LogLevel::ERROR, "failed to make folders for %s", szFile);
+		} else {
+		logger->Log(LogLevel::INFO, "Opened file '%s' mode %d", szFile, mode);
 	}
 
 	return fp;
