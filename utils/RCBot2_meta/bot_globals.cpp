@@ -51,6 +51,11 @@
 
 #include <cmath>
 
+//caxanga334: SDK 2013 contains macros for std::min and std::max which causes errors when compiling
+#if SOURCE_ENGINE == SE_SDK2013 || SOURCE_ENGINE == SE_BMS
+#include "valve_minmax_off.h"
+#endif
+
 extern IServerGameEnts *servergameents;
 
 ///////////
@@ -807,8 +812,8 @@ bool CBotGlobals :: boundingBoxTouch2d (
 										const Vector2D &a1, const Vector2D &a2,
 										const Vector2D &bmins, const Vector2D &bmaxs )
 {
-	const Vector2D amins = Vector2D(std::min(a1.x,a2.x),std::min(a1.y,a2.y));
-	const Vector2D amaxs = Vector2D(std::max(a1.x,a2.x),std::max(a1.y,a2.y));
+	Vector2D amins = Vector2D(std::min(a1.x, a2.x), std::min(a1.y, a2.y));
+	Vector2D amaxs = Vector2D(std::max(a1.x, a2.x), std::max(a1.y, a2.y));
 
 	return bmins.x >= amins.x && bmins.y >= amins.y && (bmins.x <= amaxs.x && bmins.y <= amaxs.y) ||
 		bmaxs.x >= amins.x && bmaxs.y >= amins.y && (bmaxs.x <= amaxs.x && bmaxs.y <= amaxs.y);
@@ -818,8 +823,8 @@ bool CBotGlobals :: boundingBoxTouch3d (
 										const Vector &a1, const Vector &a2,
 										const Vector &bmins, const Vector &bmaxs )
 {
-	const Vector amins = Vector(std::min(a1.x,a2.x),std::min(a1.y,a2.y),std::min(a1.z,a2.z));
-	const Vector amaxs = Vector(std::max(a1.x,a2.x),std::max(a1.y,a2.y),std::max(a1.z,a2.z));
+	Vector amins = Vector(std::min(a1.x, a2.x), std::min(a1.y, a2.y), std::min(a1.z, a2.z));
+	Vector amaxs = Vector(std::max(a1.x, a2.x), std::max(a1.y, a2.y), std::max(a1.z, a2.z));
 
 	return bmins.x >= amins.x && bmins.y >= amins.y && bmins.z >= amins.z && (bmins.x <= amaxs.x && bmins.y <= amaxs.y && bmins.z <= amaxs.z) ||
 		bmaxs.x >= amins.x && bmaxs.y >= amins.y && bmaxs.z >= amins.z && (bmaxs.x <= amaxs.x && bmaxs.y <= amaxs.y && bmaxs.z <= amaxs.z);	
