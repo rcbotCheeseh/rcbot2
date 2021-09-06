@@ -10,6 +10,7 @@ ConVar rcbot_tf2_debug_spies_cloakdisguise("rcbot_tf2_debug_spies_cloakdisguise"
 ConVar rcbot_tf2_medic_letgotime("rcbot_tf2_medic_letgotime", "0.4", 0, "Time for medic to let go of medigun to switch players");
 ConVar rcbot_tf2_pyro_airblast("rcbot_tf2_pyro_airblast_ammo", "50", 0, "Ammo must be above this to airblast -- if 200 airblast will be disabled");
 ConVar rcbot_projectile_tweak("rcbot_projtweak", "0.05", 0, "Tweaks the bots knowledge of projectiles and gravity");
+
 ConVar bot_cmd_enable_wpt_sounds("rcbot_enable_wpt_sounds", "1", 0, "Enable/disable sound effects when editing waypoints");
 ConVar bot_general_difficulty("rcbot_skill", "0.6", 0, "General difficulty of the bots. 0.5 = stock, < 0.5 easier, > 0.5 = harder");
 ConVar bot_visrevs_clients("rcbot_visrevs_clients", "4", 0, "how many revs the bot searches for visible players and enemies, lower to reduce cpu usage");
@@ -22,6 +23,7 @@ ConVar bot_scoutdj("rcbot_scoutdj", "0.28", 0, "time scout uses to double jump")
 ConVar bot_anglespeed("rcbot_anglespeed", "0.21", 0, "smaller number will make bots turn slower (1 = instant turn but may overshoot)");
 ConVar bot_stop("rcbot_stop", "0", 0, "Make bots stop thinking!");
 ConVar bot_waypointpathdist("rcbot_wpt_pathdist", "400", 0, "Length for waypoints to automatically add paths at");
+
 ConVar bot_rj("rcbot_rj", "0.01", 0, "time for soldier to fire rocket after jumping");
 ConVar bot_defrate("rcbot_defrate", "0.24", 0, "rate for bots to defend");
 ConVar bot_beliefmulti("rcbot_beliefmulti", "20.0", 0, "multiplier for increasing bot belief");
@@ -37,6 +39,7 @@ ConVar bot_messaround("rcbot_messaround", "1", 0, "bots mess around at start up"
 ConVar bot_heavyaimoffset("rcbot_heavyaimoffset", "0.1", 0, "fraction of how much the heavy aims at a diagonal offset");
 ConVar bot_aimsmoothing("rcbot_aimsmoothing", "1", 0, "(0 = no smoothing)");
 ConVar bot_bossattackfactor("rcbot_bossattackfactor", "1.0", 0, "the higher the more often the bots will shoot the boss");
+
 ConVar rcbot_enemyshootfov("rcbot_enemyshootfov", "0.97", 0, "the fov dot product before the bot shoots an enemy 0.7 = 45 degrees");
 ConVar rcbot_enemyshoot_gravgun_fov("rcbot_enemyshoot_gravgun_fov", "0.98", 0, "the fov dot product before the bot shoots an enemy 0.98 = 11 degrees");
 ConVar rcbot_wptplace_width("rcbot_wpt_width", "48", 0, "width of the player, automatic paths won't connect unless there is enough space for a player");
@@ -54,6 +57,7 @@ ConVar rcbot_move_tele_tpm("rcbot_move_tele_tpm", "1", 0, "if no of players tele
 ConVar rcbot_tf2_protect_cap_time("rcbot_tf2_prot_cap_time", "12.5", 0, "time that the bots will spend more attention to the cap point if attacked");
 ConVar rcbot_tf2_protect_cap_percent("rcbot_tf2_protect_cap_percent", "0.25", 0, "the percentage that bots defend the capture point by standing on the point");
 ConVar rcbot_tf2_spy_kill_on_cap_dist("rcbot_tf2_spy_kill_on_cap_dist", "200.0", 0, "the distance for spy bots to attack players capturing a point");
+
 ConVar rcbot_move_dist("rcbot_move_dist", "800", 0, "minimum distance to move objects to");
 ConVar rcbot_shoot_breakables("rcbot_shoot_breakables", "1", 0, "if 1, bots will shoot breakable objects");
 ConVar rcbot_shoot_breakable_dist("rcbot_shoot_breakable_dist", "128.0", 0, "The distance bots will shoot breakables at");
@@ -67,7 +71,8 @@ ConVar rcbot_jump_obst_speed("rcbot_jump_obst_speed", "100", 0, "the speed of th
 ConVar rcbot_speed_boost("rcbot_speed_boost", "1", 0, "multiplier for bots speed");
 ConVar rcbot_melee_only("rcbot_melee_only", "0", 0, "if 1 bots will only use melee weapons");
 ConVar rcbot_debug_iglev("rcbot_debug_iglev", "0", 0, "bot think ignores functions to test cpu speed");
-ConVar rcbot_dont_move("rcbot_dontmove", "0", 0, "if 1 , bots will all move forward");
+ConVar rcbot_dont_move("rcbot_dont_move", "0", 0, "if 1 , bots will all move forward");
+
 ConVar rcbot_runplayercmd_dods("rcbot_runplayer_cmd_dods", "417", 0, "offset of the DOD:S PlayerRunCommand function");
 ConVar rcbot_ladder_offs("rcbot_ladder_offs", "42", 0, "difference in height for bot to think it has touched the ladder waypoint");
 ConVar rcbot_ffa("rcbot_ffa", "0", 0, "Free for all mode -- bots shoot everyone");
@@ -82,6 +87,7 @@ ConVar rcbot_listen_dist("rcbot_listen_dist", "512", 0, "the distance for bots t
 ConVar rcbot_footstep_speed("rcbot_footstep_speed", "250", 0, "the speed players can go when you first hear them make footsteps");
 ConVar rcbot_bot_squads_percent("rcbot_bot_squads_percent", "50", 0, "the percentage of time bots make squads with other bots");
 ConVar rcbot_tooltips("rcbot_tooltips", "1", 0, "Enables/disables help tooltips");
+
 ConVar rcbot_debug_notasks("rcbot_debug_notasks", "0", 0, "Debug command, stops bots from doing tasks by themselves");
 ConVar rcbot_debug_dont_shoot("rcbot_debug_dont_shoot", "0", 0, "Debug command, stops bots from shooting everyone");
 ConVar rcbot_debug_show_route("rcbot_debug_show_route", "0", 0, "Debug command, shows waypoint route to host");
