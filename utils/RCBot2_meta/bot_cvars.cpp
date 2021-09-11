@@ -13,10 +13,10 @@ ConVar rcbot_projectile_tweak("rcbot_projtweak", "0.05", 0, "Tweaks the bots kno
 
 ConVar bot_cmd_enable_wpt_sounds("rcbot_enable_wpt_sounds", "1", 0, "Enable/disable sound effects when editing waypoints");
 ConVar bot_general_difficulty("rcbot_skill", "0.6", 0, "General difficulty of the bots. 0.5 = stock, < 0.5 easier, > 0.5 = harder");
-ConVar bot_visrevs_clients("rcbot_visrevs_clients", "4", 0, "how many revs the bot searches for visible players and enemies, lower to reduce cpu usage");
+ConVar bot_visrevs_clients("rcbot_visrevs_clients", "3", 0, "how many revs the bot searches for visible players and enemies, lower to reduce cpu usage");
 ConVar bot_spyknifefov("rcbot_spyknifefov", "80", 0, "the FOV from the enemy that spies must backstab from");
-ConVar bot_visrevs("rcbot_visrevs", "9", 0, "how many revs the bot searches for visible monsters, lower to reduce cpu usage min:5");
-ConVar bot_pathrevs("rcbot_pathrevs", "40", 0, "how many revs the bot searches for a path each frame, lower to reduce cpu usage, but causes bots to stand still more");
+ConVar bot_visrevs("rcbot_visrevs", "6", 0, "how many revs the bot searches for visible monsters, lower to reduce cpu usage min:5");
+ConVar bot_pathrevs("rcbot_pathrevs", "30", 0, "how many revs the bot searches for a path each frame, lower to reduce cpu usage, but causes bots to stand still more");
 ConVar bot_command("rcbot_cmd", "", 0, "issues a command to all bots");
 ConVar bot_attack("rcbot_flipout", "0", 0, "Rcbots all attack");
 ConVar bot_scoutdj("rcbot_scoutdj", "0.28", 0, "time scout uses to double jump");
