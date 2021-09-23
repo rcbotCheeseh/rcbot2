@@ -10,7 +10,7 @@ general RCBot2 support. I'm not present in either of those; file an issue on thi
 you need support for this particular project. 
 
 [rcbot2]: http://rcbot.bots-united.com/
-[bots-united.com discord]: https://discord.gg/BbxR5wY
+[bots-united.com discord]: https://discord.gg/5v5YvKG4Hr
 [bots-united forums]: http://rcbot.bots-united.com/forums/index.php?showforum=18
 
 ## Changes from upstream
