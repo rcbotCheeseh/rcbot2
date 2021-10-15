@@ -774,8 +774,8 @@ typedef enum
 	TF_MAP_MVM,
 	TF_MAP_RD,
 	TF_MAP_BUMPERCARS,
-	TF_MAP_MAX
 	TF_MAP_PD, // Player Destruction
+	TF_MAP_MAX
 }eTFMapType;
 
 // These must be MyEHandles because they may be destroyed at any time
