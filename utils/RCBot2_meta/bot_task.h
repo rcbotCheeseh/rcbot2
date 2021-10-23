@@ -77,6 +77,12 @@ private:
 	float m_iHealth;
 };
 
+class CBotCSSRoamInterrupt : public IBotTaskInterrupt
+{
+public:
+	bool isInterrupted(CBot *pBot, bool *bFailed, bool *bCompleted);
+};
+
 class CBotTask
 {
 public:	

@@ -12,6 +12,7 @@ sourceFiles = [
   "utils/RCBot2_meta/bot_configfile.cpp",
   "utils/RCBot2_meta/bot_coop.cpp",
   "utils/RCBot2_meta/bot_css_bot.cpp",
+  "utils/RCBot2_meta/bot_css_buying.cpp",
   "utils/RCBot2_meta/bot_css_mod.cpp",
   "utils/RCBot2_meta/bot_dod_bot.cpp",
   "utils/RCBot2_meta/bot_dod_mod.cpp",

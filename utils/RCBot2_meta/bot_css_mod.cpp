@@ -174,6 +174,16 @@ void CCounterStrikeSourceMod::onRoundStart()
     m_bIsBombPlanted = false;
     setBombFound(false);
     m_hBomb.Term();
+	for(short int i = 0; i < MAX_PLAYERS; i++)
+	{
+        CBot *pBot = CBots::get(i);
+        CCSSBot *pCSBot = (CCSSBot*)pBot;
+
+		if(pCSBot && pCSBot->inUse())
+        {
+            pCSBot->onRoundStart();
+        }
+	}
 }
 
 /**

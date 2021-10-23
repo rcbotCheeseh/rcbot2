@@ -35,6 +35,7 @@
 #include "ndebugoverlay.h"
 #include "bot_squads.h"
 #include "bot_css_bot.h"
+#include "bot_css_buying.h"
 #include "in_buttons.h"
 #include "bot_buttons.h"
 #include "bot_globals.h"
@@ -51,6 +52,7 @@
 #include "bot_perceptron.h"
 #include "bot_plugin_meta.h"
 #include "bot_waypoint_visibility.h"
+#include "bot_visibles.h"
 
 #include "logging.h"
 
@@ -59,6 +61,7 @@ void CCSSBot::init(bool bVarInit)
 	CBot::init();// require this
 
 	// initialize stuff for counter-strike source bot
+	m_pBuyManager = NULL;
 }
 
 void CCSSBot::setup()
@@ -70,6 +73,20 @@ void CCSSBot::setup()
 
 	engine->SetFakeClientConVarValue(m_pEdict,"cl_team","default");
 	engine->SetFakeClientConVarValue(m_pEdict,"cl_autohelp","0");
+
+	m_pBuyManager = new CCSSBotBuying(this);
+}
+
+void CCSSBot::freeMapMemory()
+{
+	CBot::freeMapMemory();
+
+	if(m_pBuyManager != NULL)
+	{
+		m_pBuyManager->reset();
+		delete m_pBuyManager;
+		m_pBuyManager = NULL;
+	}
 }
 
 void CCSSBot::updateConditions()
@@ -78,6 +95,17 @@ void CCSSBot::updateConditions()
 
 	if(m_pEnemy.get() != NULL)
 	{
+		if(m_pVisibles->isVisible(m_pEnemy))
+		{
+			m_fVisibleEnemyTime = engine->Time();
+		}
+		else if(m_fVisibleEnemyTime + 3.0f <= engine->Time())
+		{
+			enemyLost(m_pEnemy);
+			setLastEnemy(m_pEnemy);
+			m_pEnemy = NULL;
+		}
+
 		if(engine->IndexOfEdict(m_pEnemy.get()) <= gpGlobals->maxClients)
 		{
 			// CSS Hack: Dead players are always "Alive" with 1 health.
@@ -148,21 +176,27 @@ bool CCSSBot::startGame()
 void CCSSBot::died(edict_t *pKiller, const char *pszWeapon)
 {
 	spawnInit();
+	if(m_pBuyManager)
+	{
+		m_pBuyManager->onDeath();
+	}
 }
 
 void CCSSBot::spawnInit()
 {
 	CBot::spawnInit();
 
-	m_bDidBuy = false;
-	m_bInCombat = false;
-	m_fCombatTime = 0.0f;
+	if(m_pBuyManager)
+	{
+		m_pBuyManager->update();
+	}
+
+	m_fVisibleEnemyTime = 0.0f;
 	m_pCurrentWeapon = NULL;
 	m_fNextAttackTime = engine->Time();
 	m_fCheckStuckTime = engine->Time() + 6.0f;
 	m_fNextThinkSlow = engine->Time() + 1.0f;
 	updateCondition(CONDITION_CHANGED); // Re-execute the utility system
-	logger->Log(LogLevel::TRACE, "CSSBot::spawnInit() --> %s", m_pPlayerInfo->GetName());
 }
 
 void CCSSBot::listenForPlayers()
@@ -293,120 +327,12 @@ void CCSSBot::sayteam(const char *message)
 }
 
 /**
- * Ammo: primammo, secammo
- * Armor: vest, vesthelm
- * Misc: defuser, nvgs
- * Pistols: usp, glock, p228, fiveseven, elite, deagle
- * Shotguns: m3, xm1014
- * SMGs: tmp, mac10, mp5navy, ump45, p90
- * Rifles: famas, galil, ak47, m4a1, aug, sg552
- * Snipers: scout, awp, sg550, g3sg1
- * Machine Guns: m249
- **/
-
-/**
- * Executes the buy console command.
- *
- * @param item		The item to buy
- * @return			No return
- **/
-void CCSSBot::buy(const char *item)
-{
-	char buffer[32];
-	sprintf(buffer, "buy %s", item);
-	helpers->ClientCommand(m_pEdict, buffer);
-}
-
-/**
  * Executes the buy logic
  **/
-void CCSSBot::executeBuy()
+void CCSSBot::runBuy()
 {
-	static int money;
-	static int team;
-	static int cost; // Computed buy cost
-	static int remaining; // Remaining money (money - cost)
-	static CBotWeapon *primary;
-	static CBotWeapon *secondary;
-
-	money = CClassInterface::getCSPlayerMoney(m_pEdict);
-	team = getTeam();
-	cost = 0;
-	remaining = 0;
-	primary = m_pWeapons->getCurrentWeaponInSlot(CS_WEAPON_SLOT_PRIMARY);
-	secondary = m_pWeapons->getCurrentWeaponInSlot(CS_WEAPON_SLOT_SECONDARY);
-
-	if(money <= rcbot_css_economy_eco_limit.GetInt())
-	{
-		m_bDidBuy = true;
-		updateCondition(CONDITION_CHANGED); // Buy done, update conditions
-		return; // eco
-	}
-
-	/**
-	 * Armor costs:
-	 * 1000 -> vest + helm
-	 * 650 -> vest
-	 * 350 -> helm upgrade (armor = 100)
-	 * 1000 -> helm upgrade (armor <= 99)
-	 * 650 -> repair (any armor % with helm)
-	 **/
-	const bool hashelmet = CClassInterface::CSPlayerHasHelmet(m_pEdict);
-	if(CClassInterface::getCSPlayerArmor(m_pEdict) <= 70 || !hashelmet)
-	{
-		buy("vesthelm");
-		if(!hashelmet)
-		{
-			cost += 1000;
-		}
-		else
-		{
-			cost += 650;
-		}
-	}
-
-	if(team == CS_TEAM_COUNTERTERRORIST && !CClassInterface::CSPlayerHasDefuser(m_pEdict) && CCounterStrikeSourceMod::isMapType(CS_MAP_BOMBDEFUSAL))
-	{
-		cost += 200;
-		buy("defuser");
-	}
-
-	remaining = money - cost;
-	if(primary)
-	{
-		// To-do: Upgrade primary logic
-	}
-	else
-	{ // To-do: Buy selection logic
-		if(remaining >= 7500)
-		{
-			cost += 4750;
-			buy("awp");
-		}
-		else if(remaining >= 5000)
-		{
-			cost += 3200;
-			buy("m4a1");
-			buy("ak47");
-		}
-		else if(remaining >= 1500)
-		{
-			cost += 1500;
-			buy("mp5navy");
-		}
-		else if(remaining >= 750)
-		{
-			cost += 750;
-			buy("deagle");
-		}
-	}
-
-	logger->Log(LogLevel::TRACE, "CSS --- Running buy logic for bot \"%s\"", m_pPlayerInfo->GetName());
-	logger->Log(LogLevel::TRACE, "Team = %i --- Money = %i --- Cost = %i", team, money, cost);
-	logger->Log(LogLevel::TRACE, "Primary Weapon = %s", primary ? primary->getWeaponInfo()->getWeaponName() : "No Primary");
-	logger->Log(LogLevel::TRACE, "Secondary Weapon = %s", secondary ? secondary->getWeaponInfo()->getWeaponName() : "No Secondary");
-	m_bDidBuy = true;
-	updateCondition(CONDITION_CHANGED); // Buy done, update conditions
+	m_pBuyManager->update();
+	m_pBuyManager->execute();
 }
 
 /**
@@ -426,6 +352,32 @@ CBotWeapon *CCSSBot::getPrimaryWeapon()
 		return secondary;
 
 	return NULL;
+}
+
+/**
+ * Checks if the bot is carrying a sniper weapon
+ * 
+ * @return		TRUE if the bot is carrying a sniper, FALSE otherwise
+ **/
+bool CCSSBot::IsSniper()
+{
+	CBotWeapon *weapon = getPrimaryWeapon();
+
+	if(!weapon)
+		return false;
+
+	switch (weapon->getID())
+	{
+		case CS_WEAPON_AWP:
+		case CS_WEAPON_SCOUT:
+		case CS_WEAPON_G3SG1:
+		case CS_WEAPON_SG550:
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 /**
@@ -628,20 +580,6 @@ void CCSSBot::modThink()
 		}
 	}
 
-	// Just saw my enemy?
-	if(hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && !m_bInCombat)
-	{
-		logger->Log(LogLevel::DEBUG, "Bot \"%s\" Entering combat mode at %.4f", m_pPlayerInfo->GetName(), engine->Time());
-		m_fCombatTime = engine->Time();
-		m_bInCombat = true;
-		updateCondition(CONDITION_CHANGED); // Re-execute utility to enter into combat mode
-	}
-	else if(hasSomeConditions(CONDITION_ENEMY_DEAD) || hasSomeConditions(CONDITION_ENEMY_OBSCURED) && m_fCombatTime + 12.0f <= engine->Time())
-	{
-		m_bInCombat = false;
-		m_pEnemy = NULL; // Bots are tracking enemies through walls
-	}
-
 	if(m_fNextThinkSlow <= engine->Time())
 	{
 		modThinkSlow();
@@ -690,7 +628,7 @@ void CCSSBot::getTasks(unsigned int iIgnore)
 			{
 				ADD_UTILITY(BOT_UTIL_DEFEND_BOMB, !CCounterStrikeSourceMod::isBombPlanted() && bot_defrate.GetFloat() <= randomFloat(0.0f, 1.0f), 0.80f);
 				ADD_UTILITY(BOT_UTIL_SEARCH_FOR_BOMB, !CCounterStrikeSourceMod::wasBombFound() && CCounterStrikeSourceMod::isBombPlanted(), 0.81f);
-				ADD_UTILITY(BOT_UTIL_DEFUSE_BOMB, CCounterStrikeSourceMod::wasBombFound(), 0.82f);
+				ADD_UTILITY(BOT_UTIL_DEFUSE_BOMB, CCounterStrikeSourceMod::wasBombFound(), 0.85f);
 			}
 			break;
 		}
@@ -700,19 +638,21 @@ void CCSSBot::getTasks(unsigned int iIgnore)
 			{
 				ADD_UTILITY(BOT_UTIL_PLANT_BOMB, CCounterStrikeSourceMod::isBombCarrier(this), 0.80f);
 				ADD_UTILITY(BOT_UTIL_PICKUP_BOMB, CCounterStrikeSourceMod::isBombDropped(), 0.80f);
-				ADD_UTILITY(BOT_UTIL_DEFEND_NEAREST_BOMB, CCounterStrikeSourceMod::isBombPlanted(), 0.80f);
+				ADD_UTILITY(BOT_UTIL_DEFEND_NEAREST_BOMB, CCounterStrikeSourceMod::isBombPlanted(), 0.85f);
 			}
 			break;
 		}
 	}
 
+	ADD_UTILITY(BOT_UTIL_SNIPE, IsSniper(), randomFloat(0.7900f, 0.8200f));
+
 	// Combat Utilities
 	ADD_UTILITY(BOT_UTIL_ENGAGE_ENEMY, hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && !hasSomeConditions(CONDITION_OUT_OF_AMMO), 0.98f);
-	ADD_UTILITY(BOT_UTIL_WAIT_LAST_ENEMY, shouldWaitForEnemy(), 0.95f);
+	ADD_UTILITY(BOT_UTIL_WAIT_LAST_ENEMY, hasSomeConditions(CONDITION_ENEMY_OBSCURED), 0.95f);
 	ADD_UTILITY(BOT_UTIL_HIDE_FROM_ENEMY, hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && hasSomeConditions(CONDITION_OUT_OF_AMMO), 0.98f);
 
 	// Generic Utilities
-	ADD_UTILITY(BOT_UTIL_BUY, !m_bDidBuy, 1.0f); // Buy weapons
+	ADD_UTILITY(BOT_UTIL_BUY, m_pBuyManager->wantsToBuy(), 1.0f); // Buy weapons
 	ADD_UTILITY(BOT_UTIL_ROAM, true, 0.0001f); // Roam around
 
 	utils.execute();
@@ -767,7 +707,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 		case BOT_UTIL_WAIT_LAST_ENEMY:
 		{
 			CBotSchedule* pSched = new CBotSchedule();
-			CBotTask* pTask = new CBotWaitTask(randomFloat(3.0f, 6.0f), m_vLastSeeEnemy);
+			CBotTask* pTask = new CBotWaitTask(randomFloat(2.0f, 4.0f), m_vLastSeeEnemy);
 			pTask->setCompleteInterrupt(CONDITION_ENEMY_DEAD);
 			pTask->setFailInterrupt(CONDITION_SEE_CUR_ENEMY);
 			pSched->setID(SCHED_WAIT_FOR_ENEMY);
@@ -921,6 +861,25 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			}
 			break;
 		}
+		case BOT_UTIL_SNIPE:
+		{
+			CWaypoint *pWaypoint = NULL;
+			CBotSchedule* pSched = new CBotSchedule();
+			pSched->setID(SCHED_SNIPE);
+
+			pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_SNIPER, getTeam(), 0, false);
+			if(pWaypoint)
+			{
+				CFindPathTask *pFindPath = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
+				pFindPath->setInterruptFunction(new CBotCSSRoamInterrupt());
+				CCSSGuardTask *pGuard = new CCSSGuardTask(getPrimaryWeapon(), pWaypoint->getOrigin(), pWaypoint->getAimYaw(), false, 0.0f, pWaypoint->getFlags());
+				pSched->addTask(pFindPath);
+				pSched->addTask(pGuard);
+				m_pSchedules->add(pSched);
+				return true;
+			}
+			break;
+		}
 		case BOT_UTIL_ROAM:
 		{
 			CBotSchedule* pSched = new CBotSchedule();
@@ -931,8 +890,9 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			if(pWaypoint)
 			{
 				const int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
-				pSched->addTask(new CFindPathTask(iWaypoint, LOOK_WAYPOINT));
-				pSched->addTask(new CMoveToTask(pWaypoint->getOrigin()));
+				CFindPathTask *pFindPath = new CFindPathTask(iWaypoint);
+				pFindPath->setInterruptFunction(new CBotCSSRoamInterrupt());
+				pSched->addTask(pFindPath);
 				m_pSchedules->add(pSched);
 
 				return true;
@@ -942,4 +902,10 @@ bool CCSSBot::executeAction(eBotAction iAction)
     }
 
     return false;
+}
+
+// Called when the round starts
+void CCSSBot::onRoundStart()
+{
+	m_pBuyManager->onRoundStart();
 }

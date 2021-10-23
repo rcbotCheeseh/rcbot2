@@ -3890,7 +3890,7 @@ void CCSSPerformBuyTask::execute(CBot *pBot,CBotSchedule *pSchedule)
 			return;
 		}
 		CCSSBot *pCSSBot = (CCSSBot*)pBot;
-		pCSSBot->executeBuy();
+		pCSSBot->runBuy();
 		complete();
 	}
 	else
@@ -5789,6 +5789,29 @@ bool CBotTF2EngineerInterrupt :: isInterrupted ( CBot *pBot, bool *bFailed, bool
 			}
 
 			m_fPrevSentryHealth = m_fCurrentHealth;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * CSS: Task interruption for when the bot is walking around
+ **/
+bool CBotCSSRoamInterrupt::isInterrupted(CBot *pBot, bool *bFailed, bool *bCompleted)
+{
+	if(pBot->hasEnemy())
+		return true;
+
+	if(CCounterStrikeSourceMod::isMapType(CS_MAP_BOMBDEFUSAL))
+	{
+		if(pBot->getTeam() == CS_TEAM_TERRORIST && CCounterStrikeSourceMod::isBombDropped())
+		{
+			return true;
+		}
+		else if(pBot->getTeam() == CS_TEAM_COUNTERTERRORIST && CCounterStrikeSourceMod::isBombPlanted())
+		{
+			return true;
 		}
 	}
 

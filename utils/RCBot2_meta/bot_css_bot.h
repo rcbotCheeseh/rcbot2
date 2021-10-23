@@ -42,6 +42,8 @@
 #define CS_WEAPON_SLOT_GRENADE 3
 #define CS_WEAPON_SLOT_C4 4
 
+class CCSSBotBuying;
+
 // bot for CS Source
 class CCSSBot : public CBot
 {
@@ -62,28 +64,25 @@ public:
 	void updateConditions() override;
 	void modThink() override;
 	void listenForPlayers() override;
+	void freeMapMemory() override;
 	virtual void modThinkSlow();
 	unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
 	void getTasks (unsigned int iIgnore=0) override;
 	virtual bool executeAction(eBotAction iAction);
-	virtual void buy(const char *item);
-	virtual void executeBuy();
+	virtual void runBuy();
 	virtual void say(const char *message);
 	virtual void sayteam(const char *message);
 	virtual void primaryattackCS(bool hold = false);
-	inline bool shouldWaitForEnemy()
-	{
-		return m_pLastEnemy.get() != NULL && m_fCombatTime + 5.0f > engine->Time();
-	}
 	virtual float getNextAttackDelay();
 	virtual CBotWeapon *getPrimaryWeapon();
+	virtual bool IsSniper();
+	virtual void onRoundStart();
 private:
 	edict_t *m_pCurrentWeapon; // The bot current weapon
-	bool m_bDidBuy; // Did the bot buy on this round?
-	bool m_bInCombat; // Is the bot doing combat related activities
-	float m_fCombatTime; // When did the bot enter combat mode
 	float m_fNextAttackTime; // Control timer for bot primary attack
 	float m_fNextThinkSlow; // Control timer for slow think
+	float m_fVisibleEnemyTime; // The last time my enemy was visible
+	CCSSBotBuying *m_pBuyManager; // CSS Bot buy manager
 };
 
 #endif
