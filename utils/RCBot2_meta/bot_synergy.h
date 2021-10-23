@@ -41,7 +41,7 @@ public:
     void modThink () override;
     void getTasks (unsigned int iIgnore=0) override;
     virtual bool executeAction(eBotAction iAction);
-    virtual float getArmorPercent() { return 0.01f * m_pPlayerInfo->GetArmorValue(); }
+    virtual float getArmorPercent() { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
     unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
     bool isEnemy ( edict_t *pEdict, bool bCheckWeapons = true ) override;
     bool setVisible ( edict_t *pEntity, bool bVisible ) override;
@@ -54,6 +54,8 @@ public:
     virtual bool needHealth();
     virtual bool needAmmo();
     virtual bool filterAmmo(edict_t *pAmmo, const char *szclassname);
+    virtual bool wantsToChangeCourseOfAction();
+    inline float getInterruptionTimer() { return m_flInterruptTime; }
 protected:
     MyEHandle m_pNearbyWeapon; // weapons
     MyEHandle m_pNearbyHealthKit; // Healthkit
@@ -70,7 +72,7 @@ protected:
     float m_flNextSprintTime; // Used to control the bot's sprinting
     float m_flUseCrateTime; // Use ammo crate time delay
     float m_flPickUpTime; // Pick ammo delay
-    //float m_fGoToGoalTime; // Time control used to check if the bot should roam or not
+    float m_flInterruptTime; // Time delay for general interruptions
 };
 
 #endif

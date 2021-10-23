@@ -5818,6 +5818,24 @@ bool CBotCSSRoamInterrupt::isInterrupted(CBot *pBot, bool *bFailed, bool *bCompl
 	return false;
 }
 
+// Task interruption for synergy's roaming tasks
+bool CBotSYNRoamInterrupt::isInterrupted(CBot *pBot, bool *bFailed, bool *bCompleted)
+{
+	CBotSynergy *pBotSyn = ((CBotSynergy*)pBot);
+
+	// Can be interrupted?
+	if(pBotSyn->getInterruptionTimer() <= engine->Time())
+	{
+		if(pBotSyn->needHealth())
+			return true;
+
+		if(pBotSyn->needAmmo())
+			return true;
+	}
+
+	return false;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Base Task
 CBotTask :: CBotTask ()

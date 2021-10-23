@@ -37,7 +37,7 @@
 #include "bot_weapons.h"
 #include "bot_profile.h"
 #include "bot_cvars.h"
-#include "rcbot/logging.h"
+#include "logging.h"
 
 const char *szCSSBuyItem[CS_BUY_MAX+1] =
 {
