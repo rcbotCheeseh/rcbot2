@@ -314,7 +314,7 @@ eCSSBuyType CCSSBotBuying::determineBuyType()
             {
                 return CS_BUY_TYPE_FULL;
             }
-            else if(m_money >= 2700)
+            else if(m_money >= 2600)
             {
                 return CS_BUY_TYPE_FORCE;
             }
@@ -330,7 +330,7 @@ eCSSBuyType CCSSBotBuying::determineBuyType()
             {
                 return CS_BUY_TYPE_FULL;
             }
-            else if(m_money >= 3000)
+            else if(m_money >= 2000)
             {
                 return CS_BUY_TYPE_FORCE;
             }
@@ -482,8 +482,8 @@ void CCSSBotBuying::buildBuyList(std::queue<eCSSBuyItem> &queue, int &cost)
                     }
                     else if(m_pBot->getTeam() == CS_TEAM_COUNTERTERRORIST && canAfford(CS_BUY_SMG_TMP, m_money - cost))
                     {
-                        queue.push(CS_BUY_SMG_MAC10);
-                        cost += getPrice(CS_BUY_SMG_MAC10);
+                        queue.push(CS_BUY_SMG_TMP);
+                        cost += getPrice(CS_BUY_SMG_TMP);
                     }
                 }
                 break;
