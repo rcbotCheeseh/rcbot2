@@ -25,8 +25,8 @@ ConVar bot_stop("rcbot_stop", "0", 0, "Make bots stop thinking!");
 ConVar bot_waypointpathdist("rcbot_wpt_pathdist", "400", 0, "Length for waypoints to automatically add paths at");
 
 ConVar bot_rj("rcbot_rj", "0.01", 0, "time for soldier to fire rocket after jumping");
-ConVar bot_defrate("rcbot_defrate", "0.24", 0, "rate for bots to defend");
-ConVar bot_beliefmulti("rcbot_beliefmulti", "20.0", 0, "multiplier for increasing bot belief");
+ConVar bot_defrate("rcbot_defrate", "0.24", 0, "rate for bots to defend"); //Not referenced properly? [APG]RoboCop[CL]
+ConVar bot_beliefmulti("rcbot_beliefmulti", "20.0", 0, "multiplier for increasing bot belief"); //Not referenced properly? [APG]RoboCop[CL]
 ConVar bot_belief_fade("rcbot_belief_fade", "0.75", 0, "the multiplayer rate bot belief decreases");
 ConVar bot_change_class("rcbot_change_classes", "0", 0, "bots change classes at random intervals");
 ConVar bot_use_vc_commands("rcbot_voice_cmds", "1", 0, "bots use voice commands e.g. medic/spy etc");
@@ -70,7 +70,7 @@ ConVar rcbot_jump_obst_dist("rcbot_jump_obst_dist", "80", 0, "the distance from 
 //ConVar rcbot_jump_obst_speed("rcbot_jump_obst_speed", "100", 0, "the speed of the bot for the bot to jump an obstacle");
 ConVar rcbot_speed_boost("rcbot_speed_boost", "1", 0, "multiplier for bots speed");
 ConVar rcbot_melee_only("rcbot_melee_only", "0", 0, "if 1 bots will only use melee weapons");
-ConVar rcbot_debug_iglev("rcbot_debug_iglev", "0", 0, "bot think ignores functions to test cpu speed");
+ConVar rcbot_debug_iglev("rcbot_debug_iglev", "0", 0, "bot think ignores functions to test cpu speed"); //Not referenced properly? [APG]RoboCop[CL]
 ConVar rcbot_dont_move("rcbot_dont_move", "0", 0, "if 1 , bots will all move forward");
 
 ConVar rcbot_runplayercmd_dods("rcbot_runplayer_cmd_dods", "417", 0, "offset of the DOD:S PlayerRunCommand function");
