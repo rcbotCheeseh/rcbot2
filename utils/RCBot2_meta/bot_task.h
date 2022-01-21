@@ -80,13 +80,13 @@ private:
 class CBotCSSRoamInterrupt : public IBotTaskInterrupt
 {
 public:
-	bool isInterrupted(CBot *pBot, bool *bFailed, bool *bCompleted);
+	bool isInterrupted(CBot *pBot, bool *bFailed, bool *bCompleted) override;
 };
 
 class CBotSYNRoamInterrupt : public IBotTaskInterrupt
 {
 public:
-	bool isInterrupted(CBot *pBot, bool *bFailed, bool *bCompleted);
+	bool isInterrupted(CBot *pBot, bool *bFailed, bool *bCompleted) override;
 };
 
 class CBotTask
