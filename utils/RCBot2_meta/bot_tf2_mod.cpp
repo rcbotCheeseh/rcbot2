@@ -436,9 +436,9 @@ float CTeamFortress2Mod :: TF2_GetPlayerSpeed(edict_t *pPlayer, TF_Class iClass 
 	if ( fSpeed == 0 )
 	{
 		if (TF2_IsPlayerSlowed(pPlayer)) 
-			return 30.0; 
+			return 30.0f; 
 		else 
-			return TF2_GetClassSpeed(iClass) * 1.58; 
+			return TF2_GetClassSpeed(iClass) * 1.58f; 
 	}
 
 	return fSpeed;

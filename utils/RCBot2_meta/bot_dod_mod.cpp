@@ -114,7 +114,7 @@ bool CDODMod :: shouldAttack ( int iTeam )
 	iFlags_0 = (int) ((float)m_Flags.getNumFlagsOwned(iTeam == TEAM_ALLIES ? TEAM_AXIS : TEAM_ALLIES) / iNumFlags*MAX_DOD_FLAGS);
 	iFlags_1 = (int) ((float)m_Flags.getNumFlagsOwned(iTeam) / iNumFlags*MAX_DOD_FLAGS);
 
-	return randomFloat(0.0,1.0) < fAttackProbLookUp[iFlags_0][iFlags_1];//gNetAttackOrDefend->getOutput();
+	return randomFloat(0.0f,1.0f) < fAttackProbLookUp[iFlags_0][iFlags_1];//gNetAttackOrDefend->getOutput();
 }
 ////////////////////////////////////////////////
 void CDODMod :: initMod ()
@@ -126,21 +126,21 @@ void CDODMod :: initMod ()
 
 	CTrainingSet *tset = new CTrainingSet(2,1,4);
 
-	tset->setScale(0.0,1.0);
+	tset->setScale(0.0f,1.0f);
 
 	tset->addSet();
-	tset->in(1.0/5); // E - enemy flag ratio
-	tset->in(1.0/5); // T - team flag ratio
+	tset->in(1.0f/5); // E - enemy flag ratio
+	tset->in(1.0f/5); // T - team flag ratio
 	tset->out(0.9f); // probability of attack
 
 	tset->addSet();
-	tset->in(4.0/5); // E - enemy flag ratio
-	tset->in(1.0/5); // T - team flag ratio
+	tset->in(4.0f/5); // E - enemy flag ratio
+	tset->in(1.0f/5); // T - team flag ratio
 	tset->out(0.2f); // probability of attack (mostly defend)
 	
 	tset->addSet();
-	tset->in(1.0/5); // E - enemy flag ratio
-	tset->in(4.0/5); // T - team flag ratio
+	tset->in(1.0f/5); // E - enemy flag ratio
+	tset->in(4.0f/5); // T - team flag ratio
 	tset->out(0.9f); // probability of attack
 
 	tset->addSet();

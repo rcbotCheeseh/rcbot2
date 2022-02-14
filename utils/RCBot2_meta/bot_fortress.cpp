@@ -1813,8 +1813,8 @@ void CBotTF2 :: taunt ( bool bOverride )
 	if ( bOverride || (!m_bHasFlag && rcbot_taunt.GetBool() && !CTeamFortress2Mod::TF2_IsPlayerOnFire(m_pEdict) && !m_pEnemy && (m_fTauntTime < engine->Time()) && (!CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict))) )
 	{
 		helpers->ClientCommand(m_pEdict,"taunt");
-		m_fTauntTime = engine->Time() + randomFloat(40.0,100.0); // Don't taunt for another minute or two
-		m_fTaunting = engine->Time() + 5.0;
+		m_fTauntTime = engine->Time() + randomFloat(40.0f,100.0f); // Don't taunt for another minute or two
+		m_fTaunting = engine->Time() + 5.0f;
 	}
 }
 
@@ -4478,7 +4478,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 			ADD_UTILITY(BOT_UTIL_UPGTMSENTRY,(fAllySentryHealthPercent > 0.0f) && !m_bIsCarryingObj && (m_fRemoveSapTime<engine->Time()) && !bHasFlag && m_pNearestAllySentry && (m_pNearestAllySentry!=m_pSentryGun) && (iMetal>=(200-CClassInterface::getTF2SentryUpgradeMetal(m_pNearestAllySentry))) && ((iAllySentryLevel<3)||(fAllySentryHealthPercent<1.0f)),0.8+((1.0f-fAllySentryHealthPercent)*0.2));	
 		}
 
-		fSentryUtil = 0.8 + (((float)((int)bNeedAmmo))*0.1) + (((float)(int)bNeedHealth)*0.1);
+		fSentryUtil = 0.8f + (static_cast<float>(static_cast<int>(bNeedAmmo))*0.1f) + (static_cast<float>(static_cast<int>(bNeedHealth))*0.1f);
 
 		ADD_UTILITY(BOT_UTIL_PLACE_BUILDING, m_bIsCarryingObj, 1.0f); // something went wrong moving this- I still have it!!!
 
@@ -5247,7 +5247,9 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 					}
 				}
 
-				m_pSchedules->add(new CBotAttackPointSched(pWaypoint->getOrigin(),pWaypoint->getRadius(),pWaypoint->getArea(),bUseRoute,vRoute, bNest, m_pLastEnemySentry.get()));
+				m_pSchedules->add(new CBotAttackPointSched(pWaypoint->getOrigin(), pWaypoint->getRadius(),
+				                                           pWaypoint->getArea(), bUseRoute, vRoute, bNest,
+				                                           m_pLastEnemySentry.get()));
 				removeCondition(CONDITION_PUSH);
 				return true;
 			}
@@ -5262,7 +5264,10 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 					{
 						static const float fSearchDist = 1500.0f;
 						Vector vPayloadBomb = CBotGlobals::entityOrigin(m_pDefendPayloadBomb);
-						CWaypoint *pCapturePoint = CWaypoints::getWaypoint(CWaypointLocations::NearestWaypoint(vPayloadBomb,fSearchDist,-1,false,false,true,NULL,false,0,true,false,Vector(0,0,0),CWaypointTypes::W_FL_CAPPOINT));
+						CWaypoint* pCapturePoint = CWaypoints::getWaypoint(
+							CWaypointLocations::NearestWaypoint(vPayloadBomb, fSearchDist, -1, false, false, true,NULL,
+							                                    false, 0, true, false, Vector(0, 0, 0),
+							                                    CWaypointTypes::W_FL_CAPPOINT));
 
 						if ( pCapturePoint )
 						{
@@ -6157,7 +6162,8 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 				
 
 						CFindPathTask *findpath = new CFindPathTask(pEnemy);
-						CBotTask *pipetask = new CBotTF2DemomanPipeEnemy(getWeapons()->getWeapon(CWeapons::getWeapon(TF2_WEAPON_PIPEBOMBS)),vEnemy,pEnemy);
+						CBotTask* pipetask = new CBotTF2DemomanPipeEnemy(
+							getWeapons()->getWeapon(CWeapons::getWeapon(TF2_WEAPON_PIPEBOMBS)), vEnemy, pEnemy);
 						CBotSchedule *pipesched = new CBotSchedule();
 
 						pipetask->setInterruptFunction(new CBotTF2HurtInterrupt(this));

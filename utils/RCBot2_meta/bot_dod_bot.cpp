@@ -1255,7 +1255,7 @@ void CDODBot :: modThink ()
 	}
 
 	if ( (pWeapon && pWeapon->needToReload(this)) ||
-		(m_fLastSeeEnemy && ((m_fLastSeeEnemy + 5.0)<engine->Time())) )
+		(m_fLastSeeEnemy && ((m_fLastSeeEnemy + 5.0f)<engine->Time())) )
 	{
 		m_fLastSeeEnemy = 0;
 		m_pButtons->tap(IN_RELOAD);
@@ -2042,7 +2042,8 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 	{
 	case  BOT_UTIL_INVESTIGATE_POINT:
 		m_pSchedules->removeSchedule(SCHED_INVESTIGATE_NOISE);
-		m_pSchedules->addFront(new CBotInvestigateNoiseSched(CBotGlobals::entityOrigin(reinterpret_cast<edict_t*>(util->getIntData())),util->getVectorData()));
+		m_pSchedules->addFront(new CBotInvestigateNoiseSched(
+			CBotGlobals::entityOrigin(reinterpret_cast<edict_t*>(util->getIntData())), util->getVectorData()));
 		return true;
 	case BOT_UTIL_COVER_POINT:
 		m_pSchedules->removeSchedule(SCHED_CROUCH_AND_HIDE);
@@ -2519,7 +2520,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 					if ( !pWaypointPinch )
 					{
-						if ( distanceFrom(pWaypoint->getOrigin()) > 1024.0 )
+						if ( distanceFrom(pWaypoint->getOrigin()) > 1024.0f )
 							pWaypointPinch = CWaypoints::getPinchPointFromWaypoint(pWaypoint->getOrigin(),pWaypoint->getOrigin());
 						else
 							pWaypointPinch = CWaypoints::getPinchPointFromWaypoint(getOrigin(),pWaypoint->getOrigin());
@@ -3139,15 +3140,15 @@ void CDODBot :: getTasks (unsigned int iIgnore)
 		fDefendUtil = 0.4f;
 
 		if ( iNumEnemyBombsOnMap > 0 )
-			fDefendUtil = 0.8f - ((float)iNumEnemyBombsStillToPlant/iNumEnemyBombsOnMap)*0.4f;
+			fDefendUtil = 0.8f - (static_cast<float>(iNumEnemyBombsStillToPlant)/iNumEnemyBombsOnMap)*0.4f;
 
 		if ( CDODMod::isFlagMap() && (iNumBombsToPlant>0) )
-			fPlantUtil = 0.3f + ((((float)iFlagsOwned/iNumBombsToPlant)*0.6f)/iNumFlags);
+			fPlantUtil = 0.3f + (((static_cast<float>(iFlagsOwned)/iNumBombsToPlant)*0.6f)/iNumFlags);
 		else
-			fPlantUtil = 0.4f + (((float)iNumBombsToPlant/iNumBombsOnMap)*0.4f);
+			fPlantUtil = 0.4f + ((static_cast<float>(iNumBombsToPlant)/iNumBombsOnMap)*0.4f);
 		
 		fDefuseBombUtil = fDefendUtil * 2;
-		fDefendBombUtil = 0.8f - (((float)iNumBombsToDefend/iNumBombsOnMap)*0.8f);
+		fDefendBombUtil = 0.8f - ((static_cast<float>(iNumBombsToDefend)/iNumBombsOnMap)*0.8f);
 
 		
 		fPlantUtil += randomFloat(-0.25f,0.25f); // add some fuzz
@@ -3242,7 +3243,7 @@ void CDODBot :: getTasks (unsigned int iIgnore)
 	}
 
 	// grenades
-	if ( !rcbot_melee_only.GetBool() && !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && hasSomeConditions(CONDITION_SEE_LAST_ENEMY_POS) && m_pLastEnemy && m_fLastSeeEnemy && ((m_fLastSeeEnemy + 10.0) > engine->Time()) && 
+	if ( !rcbot_melee_only.GetBool() && !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && hasSomeConditions(CONDITION_SEE_LAST_ENEMY_POS) && m_pLastEnemy && m_fLastSeeEnemy && ((m_fLastSeeEnemy + 10.0f) > engine->Time()) && 
 		(m_pWeapons->hasWeapon(DOD_WEAPON_FRAG_US) || m_pWeapons->hasWeapon(DOD_WEAPON_FRAG_GER) || m_pWeapons->hasWeapon(DOD_WEAPON_SMOKE_US) || m_pWeapons->hasWeapon(DOD_WEAPON_SMOKE_GER)) )
 	{
 		const float fDistance = distanceFrom(m_vLastSeeEnemyBlastWaypoint);

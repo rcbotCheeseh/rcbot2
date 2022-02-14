@@ -54,7 +54,7 @@ inline unsigned __int64 RDTSC()
             _asm    _emit 0x31
     }
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <Windows.h>
 #else
 // #define rdtsc _emit  0x0f _asm _emit  0x31
 // inline unsigned long long rdtsc()
@@ -124,7 +124,7 @@ void CProfileTimer :: print (const double* high)
 
 		m_average = m_overall/m_iInvoked;
 
-		const float percent = (double)m_overall / *high * 100.0f;
+		const float percent = static_cast<double>(m_overall) / *high * 100.0f;
 		
 		sprintf(str,"%17s|%13lld|%10lld|%10lld|%10lld|%6.1f",m_szFunction,m_overall,m_min,m_max,m_average,percent);			
 

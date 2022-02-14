@@ -249,7 +249,7 @@ float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fPro
 		// within one second of going off
 		if ( std::fabs(t-fGrenadePrimeTime) < 1.0f )
 		{
-			const float ffinaly =  vOrigin.z + vvert*t - g*0.5*(t*t);
+			const float ffinaly =  vOrigin.z + vvert*t - g*0.5f*(t*t);
 
 			return std::fabs(ffinaly - vEnemy.z) < BLAST_RADIUS; // ok why not
 		}
@@ -783,7 +783,7 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 					Vector v_norm = v_dest-v_src;
 					v_norm = v_norm/sqrt(v_norm.LengthSqr());
 
-					for ( float fDistCheck = 45.0f; fDistCheck < fDistance; fDistCheck += 45.0f )
+					for ( float fDistCheck = 45.0f; fDistCheck < fDistance; fDistCheck += 45.0f ) //Floating-point not recommended [APG]RoboCop[CL]
 					{
 						Vector v_checkpoint = v_src + v_norm * fDistCheck;
 

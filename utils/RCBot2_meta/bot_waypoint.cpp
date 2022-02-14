@@ -674,7 +674,7 @@ void CWaypointNavigator :: belief ( Vector vOrigin, Vector vOther, float fBelief
 		if ( iType == BELIEF_DANGER )
 		{
 			if ( m_fBelief[iWptIndex] > 0)
-				m_fBelief[iWptIndex] *= 0.9;//(fStrength / (vOrigin-pWpt->getOrigin()).Length())*fBelief;
+				m_fBelief[iWptIndex] *= 0.9f;//(fStrength / (vOrigin-pWpt->getOrigin()).Length())*fBelief;
 
 			//debugoverlay->AddTextOverlayRGB(pWpt->getOrigin(),1,5.0f,0.0,150,0,200,"Safety INV");
 		}
@@ -1614,7 +1614,9 @@ void CWaypoint :: draw ( edict_t *pEdict, bool bDrawPaths, unsigned short int iD
 
 						if ( pBot )
 						{
-							debugoverlay->AddTextOverlayRGB(m_vOrigin + Vector(0,0,fHeight+8.0f),0,1,0,0,255,255,"%0.4f",pBot->getNavigator()->getBelief(CWaypoints::getWaypointIndex(this)));
+							debugoverlay->AddTextOverlayRGB(m_vOrigin + Vector(0, 0, fHeight + 8.0f), 0, 1,
+											0, 0, 255, 255, "%0.4f", pBot->getNavigator()->getBelief(
+											CWaypoints::getWaypointIndex(this)));
 						}
 
 					}
@@ -3178,7 +3180,8 @@ void CWaypointTypes:: printInfo ( CWaypoint *pWpt, edict_t *pPrintTo, float dura
 {
 	CBotMod *pCurrentMod = CBotGlobals::getCurrentMod();
 	char szMessage[1024];
-	Q_snprintf(szMessage,1024,"Waypoint ID %d (Area = %d | Radius = %0.1f)[",CWaypoints::getWaypointIndex(pWpt),pWpt->getArea(),pWpt->getRadius());	
+	Q_snprintf(szMessage, 1024, "Waypoint ID %d (Area = %d | Radius = %0.1f)[", CWaypoints::getWaypointIndex(pWpt),
+	           pWpt->getArea(), pWpt->getRadius());	
 
 	if ( pWpt->getFlags() )
 	{

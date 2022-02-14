@@ -730,7 +730,7 @@ public:
 
     void reduceTouchDistance()
     {
-	    if (m_fWaypointTouchDistance > MIN_WPT_TOUCH_DIST) { m_fWaypointTouchDistance *= 0.9; }
+	    if (m_fWaypointTouchDistance > MIN_WPT_TOUCH_DIST) { m_fWaypointTouchDistance *= 0.9f; }
     }
 
     void resetTouchDistance ( float fDist ) { m_fWaypointTouchDistance = fDist; }

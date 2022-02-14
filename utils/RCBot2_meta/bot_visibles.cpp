@@ -202,12 +202,12 @@ void CBotVisibles :: checkVisible (edict_t* pEntity, int* iTicks, bool* bVisible
 				if ( *bVisible )
 				{
 					if ( CClients::clientsDebugging(BOT_DEBUG_VIS) && CClients::get(0)->isDebuggingBot(m_pBot->getEdict()) && ENTINDEX(pEntity)<=CBotGlobals::maxClients())
-						debugoverlay->AddTextOverlay(CBotGlobals::entityOrigin(pEntity),0,0.1,"VISIBLE");
+						debugoverlay->AddTextOverlay(CBotGlobals::entityOrigin(pEntity),0,0.1f,"VISIBLE");
 				}
 				else
 				{
 					if ( CClients::clientsDebugging(BOT_DEBUG_VIS) && CClients::get(0)->isDebuggingBot(m_pBot->getEdict()) && ENTINDEX(pEntity)<=CBotGlobals::maxClients())
-						debugoverlay->AddTextOverlayRGB(CBotGlobals::entityOrigin(pEntity),0,0.1,255,0,0,200,"INVISIBLE");
+						debugoverlay->AddTextOverlayRGB(CBotGlobals::entityOrigin(pEntity),0,0.1f,255,0,0,200,"INVISIBLE");
 				}
 #endif
 			}

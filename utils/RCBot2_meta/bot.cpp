@@ -493,7 +493,7 @@ bool CBot :: checkStuck ()
 			m_fLastWaypointVisible = 0;
 		else
 		{
-			if ( m_fLastWaypointVisible + 2.0 < fTime )
+			if ( m_fLastWaypointVisible + 2.0f < fTime )
 			{
 				m_fLastWaypointVisible = 0;
 				m_bFailNextMove = true;
@@ -1298,7 +1298,7 @@ int CBot :: getHealth ()
 
 float CBot :: getHealthPercent ()
 {
-	return (float)m_pPlayerInfo->GetHealth()/m_pPlayerInfo->GetMaxHealth();
+	return static_cast<float>(m_pPlayerInfo->GetHealth())/m_pPlayerInfo->GetMaxHealth();
 }
 
 bool CBot ::isOnLift()
@@ -1577,15 +1577,15 @@ bool CBot :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 	{
 		m_fLookSetTime = 0;
 		setLookAtTask(LOOK_HURT_ORIGIN);
-		m_fLookSetTime = engine->Time() + randomFloat(3.0,8.0);
+		m_fLookSetTime = engine->Time() + randomFloat(3.0f,8.0f);
 	}
 
 	const float fTime = engine->Time();
 
 	if ( m_fUpdateDamageTime < fTime )
 	{
-		m_fUpdateDamageTime = fTime + 0.5;
-		m_fCurrentDanger += (float)m_iAccumulatedDamage/m_pPlayerInfo->GetMaxHealth()*MAX_BELIEF;
+		m_fUpdateDamageTime = fTime + 0.5f;
+		m_fCurrentDanger += static_cast<float>(m_iAccumulatedDamage)/m_pPlayerInfo->GetMaxHealth()*MAX_BELIEF;
 		m_iAccumulatedDamage = 0;
 	}
 
@@ -2167,7 +2167,7 @@ void CBot :: doMove ()
 						debugoverlay->AddLineOverlay (getOrigin(), m_vAvoidOrigin, 0,0,255, false, 0.05f);
 						debugoverlay->AddLineOverlay (getOrigin(), m_bAvoidRight ? getOrigin()+vLeft*bot_avoid_strength.GetFloat():getOrigin()-vLeft*bot_avoid_strength.GetFloat(), 0,255,0, false, 0.05f);
 						debugoverlay->AddLineOverlay (getOrigin(), getOrigin() + vMove/vMove.Length()*bot_avoid_strength.GetFloat(), 255,0,0, false, 0.05f);
-						debugoverlay->AddTextOverlayRGB(getOrigin()+Vector(0,0,100),0,0.05,255,255,255,255,"Avoiding: %s",m_pAvoidEntity.get()->GetClassName());
+						debugoverlay->AddTextOverlayRGB(getOrigin()+Vector(0,0,100),0,0.05f,255,255,255,255,"Avoiding: %s",m_pAvoidEntity.get()->GetClassName());
 					}
 #endif
 
@@ -2226,10 +2226,10 @@ void CBot :: doMove ()
 
 		// moving less than 1.0 units/sec? just stop to 
 		// save bot jerking around..
-		if ( fabs(m_fForwardSpeed) < 1.0 )
-			m_fForwardSpeed = 0.0;
-		if ( fabs(m_fSideSpeed) < 1.0 )
-			m_fSideSpeed = 0.0;
+		if ( fabs(m_fForwardSpeed) < 1.0f )
+			m_fForwardSpeed = 0.0f;
+		if ( fabs(m_fSideSpeed) < 1.0f )
+			m_fSideSpeed = 0.0f;
 
 		if ( m_fForwardSpeed < 1.0f && m_fSideSpeed < 1.0f )
 		{
@@ -2248,9 +2248,9 @@ void CBot :: doMove ()
 
 		if ( isUnderWater() || onLadder() )
 		{
-			if ( m_vMoveTo.z > getOrigin().z + 32.0 )
+			if ( m_vMoveTo.z > getOrigin().z + 32.0f )
 				m_fUpSpeed = m_fIdealMoveSpeed;
-			else if ( m_vMoveTo.z < getOrigin().z - 32.0 )
+			else if ( m_vMoveTo.z < getOrigin().z - 32.0f )
 				m_fUpSpeed = -m_fIdealMoveSpeed;
 		}
 	}
@@ -2731,6 +2731,8 @@ void CBot :: getLookAtVector ()
 				CClients::clientDebugMsg(BOT_DEBUG_LOOK,"LOOK_HURT_ORIGIN",this);
 		}
 		break;
+	//case LOOK_MAX:
+	//	break;
 	default:
 		break;
 	}
@@ -2944,16 +2946,16 @@ void CBot :: jump ()
 {
 	if ( m_pButtons->canPressButton(IN_JUMP) )
 	{		
-		m_pButtons->holdButton(IN_JUMP,0/* time to press*/,0.5/* hold time*/,0.5/*let go time*/); 
+		m_pButtons->holdButton(IN_JUMP,0/* time to press*/,0.5f/* hold time*/,0.5f/*let go time*/); 
 		// do the trademark jump & duck
-		m_pButtons->holdButton(IN_DUCK,0.2/* time to press*/,0.3/* hold time*/,0.5/*let go time*/); 
+		m_pButtons->holdButton(IN_DUCK,0.2f/* time to press*/,0.3f/* hold time*/,0.5f/*let go time*/); 
 	}
 }
 
 void CBot :: duck ( bool hold )
 {
 	if ( hold || m_pButtons->canPressButton(IN_DUCK) )
-		m_pButtons->holdButton(IN_DUCK,0.0/* time to press*/,1.0/* hold time*/,0.5/*let go time*/); 
+		m_pButtons->holdButton(IN_DUCK,0.0/* time to press*/,1.0f/* hold time*/,0.5f/*let go time*/); 
 }
 
 // TO DO: perceptron method
@@ -3152,6 +3154,9 @@ void CBots :: init ()
 	{
 		switch ( CBotGlobals::getCurrentMod()->getBotType() )
 		{
+		case BOTTYPE_GENERIC:
+			m_Bots[i] = new CBot();
+			break;
 		case BOTTYPE_DOD:
 			m_Bots[i] = new CDODBot();
 			break;
@@ -3180,6 +3185,10 @@ void CBots :: init ()
 		case BOTTYPE_SYN:
 			m_Bots[i] = new CBotSynergy();
 			break;
+		//case BOTTYPE_NS2:
+		//	break;
+		//case BOTTYPE_MAX:
+		//	break;
 		default:
 			m_Bots[i] = new CBot();
 			break;

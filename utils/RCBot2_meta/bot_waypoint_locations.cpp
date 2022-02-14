@@ -751,7 +751,7 @@ void CWaypointLocations :: DrawWaypoints ( CClient *pClient, float fDist )
 
 					vWpt = pWpt->getOrigin();
 
-					if ( std::fabs(vWpt.z - vOrigin.z) <= 256.0 ) // also in z range
+					if ( std::fabs(vWpt.z - vOrigin.z) <= 256.0f ) // also in z range
 					{
 						//if ( CBotGlobals::FInViewCone(pEntity) )
 						{

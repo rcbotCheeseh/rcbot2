@@ -371,7 +371,7 @@ void CBotTF2WaitFlagTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	if ( ((CBotTF2*)pBot)->hasFlag() )
 		complete();
-	else if ( pBot->getHealthPercent() < 0.2 )
+	else if ( pBot->getHealthPercent() < 0.2f )
 	{
 		fail();
 	}
@@ -702,7 +702,8 @@ void CBotDODAttackPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 void CBotDODAttackPoint :: debugString ( char *string )
 {
-	sprintf(string,"CBotDODAttackPoint\nm_iFlagID = %d\n m_vOrigin = (%0.1f,%0.1f,%0.1f,radius = %0.1f)",m_iFlagID,m_vOrigin.x,m_vOrigin.y,m_vOrigin.z,m_fRadius);
+	sprintf(string, "CBotDODAttackPoint\nm_iFlagID = %d\n m_vOrigin = (%0.1f,%0.1f,%0.1f,radius = %0.1f)", m_iFlagID,
+	        m_vOrigin.x, m_vOrigin.y, m_vOrigin.z, m_fRadius);
 }
 
 ///////////
@@ -994,7 +995,8 @@ void CBotTF2DefendPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 void CBotTF2DefendPoint :: debugString ( char *string )
 {
-	sprintf(string,"CBotTF2DefendPoint\nm_iArea=%d\nm_vOrigin=(%0.1f,%0.1f,%0.1f,%d)",m_iArea,m_vOrigin.x,m_vOrigin.y,m_vOrigin.z,m_iRadius);
+	sprintf(string, "CBotTF2DefendPoint\nm_iArea=%d\nm_vOrigin=(%0.1f,%0.1f,%0.1f,%d)", m_iArea, 
+		m_vOrigin.x, m_vOrigin.y, m_vOrigin.z, m_iRadius);
 }
 
 ///////////
@@ -2366,7 +2368,7 @@ void CTF2_TauntTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 		pBot->setMoveTo(m_vOrigin);
 	else
 	{
-		if ( pBot->DotProductFromOrigin(m_vPlayer) > 0.95 )
+		if ( pBot->DotProductFromOrigin(m_vPlayer) > 0.95f )
 		{
 			((CBotTF2*)pBot)->taunt(true);
 			complete();
@@ -2453,7 +2455,7 @@ void CBotTFRocketJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		return;
 	}
 
-	if ( !pBot->isTF() || ((CBotFortress*)pBot)->getClass() != TF_CLASS_SOLDIER || pBot->getHealthPercent() < 0.3 )
+	if ( !pBot->isTF() || ((CBotFortress*)pBot)->getClass() != TF_CLASS_SOLDIER || pBot->getHealthPercent() < 0.3f )
 	{
 		fail();
 	}
@@ -2503,7 +2505,7 @@ void CBotTFDoubleJump ::execute (CBot *pBot,CBotSchedule *pSchedule)
 	{
 		pBot->tapButton(IN_JUMP);
 
-		m_fTime = engine->Time() + 0.4;
+		m_fTime = engine->Time() + 0.4f;
 	}
 	else if ( m_fTime < engine->Time() )
 	{
@@ -2992,7 +2994,7 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 	else
 		pBot->setAiming(m_vAim);
 
-	if (!pBot->isTF() || ((CBotFortress*)pBot)->getClass() != TF_CLASS_SNIPER || pBot->getHealthPercent() < 0.2)
+	if (!pBot->isTF() || ((CBotFortress*)pBot)->getClass() != TF_CLASS_SNIPER || pBot->getHealthPercent() < 0.2f)
 	{
 		// out of health -- finish
 		//if (CTeamFortress2Mod::TF2_IsPlayerZoomed(pBot->getEdict()))
@@ -3279,7 +3281,7 @@ void CBotTF2Snipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	else
 		pBot->setAiming(m_vAim);
 
-	if ( !pBot->isTF() || ((CBotFortress*)pBot)->getClass() != TF_CLASS_SNIPER || pBot->getHealthPercent() < 0.2 )
+	if ( !pBot->isTF() || ((CBotFortress*)pBot)->getClass() != TF_CLASS_SNIPER || pBot->getHealthPercent() < 0.2f )
 	{
 		// out of health -- finish
 		if ( CTeamFortress2Mod::TF2_IsPlayerZoomed(pBot->getEdict()) )
@@ -4425,7 +4427,7 @@ void CBotTF2DemomanPipeJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 				if ( pBot->distanceFrom(m_vStart) < 150 )
 				{
-					if ( pBot->DotProductFromOrigin(m_vStart) > 0.99 )
+					if ( pBot->DotProductFromOrigin(m_vStart) > 0.99f )
 					{
 						if ( randomInt(0,1) )
 						{
@@ -4447,7 +4449,7 @@ void CBotTF2DemomanPipeJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 			if ( CClassInterface::getVelocity(m_pPipeBomb,&vel) )
 			{
-				if ( vel.Length() > 1.0 )
+				if ( vel.Length() > 1.0f )
 					break; // wait until the pipe bomb has rested
 			}
 
@@ -4644,12 +4646,12 @@ void CBotTF2DemomanPipeEnemy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		pBot->setLookVector(m_vAim);
 		pBot->stopMoving();
 
-		if ( pBot->DotProductFromOrigin(m_vAim) > 0.99 )
+		if ( pBot->DotProductFromOrigin(m_vAim) > 0.99f )
 		{
 			const float fTime = engine->Time();
 
 			if ( m_fHeldAttackTime == 0 )
-				m_fHeldAttackTime = fTime + m_fHoldAttackTime + randomFloat(0.0,0.15);
+				m_fHeldAttackTime = fTime + m_fHoldAttackTime + randomFloat(0.0f,0.15f);
 
 			if ( m_fHeldAttackTime > fTime)
 				pBot->primaryAttack(true);
@@ -5240,7 +5242,8 @@ CBotDODSnipe :: CBotDODSnipe ( CBotWeapon *pWeaponToUse, Vector vOrigin, float f
 
 void CBotDODSnipe :: debugString ( char *string )
 {
-	sprintf(string,"CBotDODSnipe\nm_fTime = %0.2f\npWeaponToUse = %s\nm_bUseZ = %s\nm_z = %0.2f",m_fTime,m_pWeaponToUse->getWeaponInfo()->getWeaponName(),m_bUseZ ? "true":"false",m_z);
+	sprintf(string, "CBotDODSnipe\nm_fTime = %0.2f\npWeaponToUse = %s\nm_bUseZ = %s\nm_z = %0.2f", m_fTime,
+	        m_pWeaponToUse->getWeaponInfo()->getWeaponName(), m_bUseZ ? "true" : "false", m_z);
 }
 	
 void CBotDODSnipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
@@ -5620,7 +5623,8 @@ void CBotSynDisarmMineTask::execute(CBot *pBot,CBotSchedule *pSchedule)
 
 void CBotSynDisarmMineTask::debugString(char *string)
 {
-	sprintf(string, "CBotSynDisarmMineTask\nPos: (%0.4f,%0.4f,%0.4f)\nDistance: %.2f\nTime Set: %s", m_vMinePos.x, m_vMinePos.y, m_vMinePos.z, m_fDist, m_bTimeSet ? "true":"false");
+	sprintf(string, "CBotSynDisarmMineTask\nPos: (%0.4f,%0.4f,%0.4f)\nDistance: %.2f\nTime Set: %s", m_vMinePos.x,
+	        m_vMinePos.y, m_vMinePos.z, m_fDist, m_bTimeSet ? "true" : "false");
 }
 
 void CBotSynBreakICrateTask::execute(CBot *pBot, CBotSchedule *pSchedule)

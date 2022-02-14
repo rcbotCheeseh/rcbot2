@@ -612,7 +612,7 @@ void CClient :: think ()
 					m_iLastJumpWaypointIndex = -1;
 
 					// wait a sec after player lands before checking jump again
-					m_fCanPlaceJump = engine->Time() + 0.5;
+					m_fCanPlaceJump = engine->Time() + 0.5f;
 				}				
 			}
 

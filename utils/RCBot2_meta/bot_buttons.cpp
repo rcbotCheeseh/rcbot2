@@ -34,12 +34,12 @@
 
 void CBotButtons :: attack (float fFor, float fFrom)
 {	
-	holdButton(IN_ATTACK,fFrom,fFor,0.1);
+	holdButton(IN_ATTACK,fFrom,fFor,0.1f);
 }
 
 void CBotButtons :: jump (float fFor, float fFrom)
 {
-	holdButton(IN_JUMP,fFrom,fFor,0.25);
+	holdButton(IN_JUMP,fFrom,fFor,0.25f);
 }
 
 void CBotButtons :: duck (float fFor, float fFrom)

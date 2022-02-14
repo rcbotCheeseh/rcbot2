@@ -364,7 +364,7 @@ Vector CBotSquad :: GetFormationVector (const edict_t* pEdict)
 
 	CBotGlobals::quickTraceline(pLeader,vLeaderOrigin,vLeaderOrigin+vBase);
 
-	if ( tr->fraction < 1.0 )
+	if ( tr->fraction < 1.0f )
 	{
 		return vLeaderOrigin + vBase*tr->fraction*0.5f;
 	}

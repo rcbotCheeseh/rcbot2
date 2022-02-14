@@ -41,7 +41,7 @@ bool CNavMeshNavigator :: workRoute ( Vector vFrom, Vector vTo, bool *bFail, boo
 
 Vector CNavMeshNavigator :: getNextPoint ()
 {
-	return Vector(0,0,0);
+	return {0,0,0};
 }
 
 void CNavMeshNavigator :: updatePosition ()

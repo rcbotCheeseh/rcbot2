@@ -125,7 +125,7 @@ public:
 
 	virtual int numPaths ( ) { return 0; }
 
-	virtual Vector getPath ( int pathid ) { return Vector(0,0,0); }
+	virtual Vector getPath ( int pathid ) { return {0,0,0}; }
 
 	virtual bool randomDangerPath (Vector *vec) { return false; }
 

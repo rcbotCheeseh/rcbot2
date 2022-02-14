@@ -97,7 +97,7 @@ int randomInt ( int imin, int imax )
 	// quicker
 	if (imin == imax)
 		return imin;
-	return imin + (int)(randomOne()*((float)(imax - imin) + 0.99f));
+	return imin + static_cast<int>(randomOne() * (static_cast<float>(imax - imin) + 0.99f));
 	//return (int)(imin + (int)(drand()*((float)(imax-imin)+0.99f)));
 }
 

@@ -477,10 +477,10 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 	// I have an enemy 
 	ADD_UTILITY(BOT_UTIL_FIND_LAST_ENEMY,
 	            wantToFollowEnemy() && !m_bLookedForEnemyLast && m_pLastEnemy && CBotGlobals::entityIsValid(m_pLastEnemy
-	            ) && CBotGlobals::entityIsAlive(m_pLastEnemy), getHealthPercent()*(getArmorPercent()+0.1))
+	            ) && CBotGlobals::entityIsAlive(m_pLastEnemy), getHealthPercent()*(getArmorPercent()+0.1f))
 
 	if (!hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && hasSomeConditions(CONDITION_SEE_LAST_ENEMY_POS) && m_pLastEnemy
-		&& m_fLastSeeEnemy && m_fLastSeeEnemy + 10.0 > engine->Time() && m_pWeapons->hasWeapon(HL2DM_WEAPON_FRAG))
+		&& m_fLastSeeEnemy && m_fLastSeeEnemy + 10.0f > engine->Time() && m_pWeapons->hasWeapon(HL2DM_WEAPON_FRAG))
 	{
 		const float fDistance = distanceFrom(m_vLastSeeEnemyBlastWaypoint);
 
@@ -489,7 +489,7 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 			CWeapon *pWeapon = CWeapons::getWeapon(HL2DM_WEAPON_FRAG);
 			CBotWeapon *pBotWeapon = m_pWeapons->getWeapon(pWeapon);
 
-			ADD_UTILITY(BOT_UTIL_THROW_GRENADE, pBotWeapon && pBotWeapon->getAmmo(this) > 0,1.0f- getHealthPercent()*0.2)
+			ADD_UTILITY(BOT_UTIL_THROW_GRENADE, pBotWeapon && pBotWeapon->getAmmo(this) > 0,1.0f- getHealthPercent()*0.2f)
 		}
 	}
 
@@ -573,7 +573,7 @@ void CHLDMBot :: modThink ()
 		m_flSprintTime = engine->Time() + randomFloat(5.0f,20.0f);
 	}
 
-	if ( m_fLastSeeEnemy && m_fLastSeeEnemy + 5.0<engine->Time() )
+	if ( m_fLastSeeEnemy && m_fLastSeeEnemy + 5.0f<engine->Time() )
 	{
 		CBotWeapon *pWeapon = getCurrentWeapon();
 

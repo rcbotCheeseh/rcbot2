@@ -31,9 +31,9 @@ public:
 
 	void mix ( WptColor other )
 	{
-		float fr = (r-other.r)*0.5;
-		float fg = (g-other.g)*0.5;
-		float fb = (b-other.b)*0.5;
+		float fr = (r-other.r)*0.5f;
+		float fg = (g-other.g)*0.5f;
+		float fb = (b-other.b)*0.5f;
 
 		if ( fr < 0 )
 			fr = 0;
@@ -42,9 +42,9 @@ public:
 		if ( fb < 0 )
 			fb = 0;
 
-		r = (unsigned char)(int)((float)other.r*0.5)+(unsigned char)(int)fr;
-		g = (unsigned char)(int)((float)other.g*0.5)+(unsigned char)(int)fg;
-		b = (unsigned char)(int)((float)other.b*0.5)+(unsigned char)(int)fb;
+		r = (unsigned char)(int)((float)other.r*0.5f)+(unsigned char)(int)fr;
+		g = (unsigned char)(int)((float)other.g*0.5f)+(unsigned char)(int)fg;
+		b = (unsigned char)(int)((float)other.b*0.5f)+(unsigned char)(int)fb;
 		
 		//r = (r+other.r)/2;
 		//g = (g+other.g)/2;

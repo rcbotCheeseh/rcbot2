@@ -105,8 +105,8 @@ CSomNeuron *CSom :: inputOne ( std::vector <float> *inputs )
 
 	updateAround(inputs,winner);
 
-	m_fNSize *= 0.75;
-	m_fLearnRate *= 0.75;
+	m_fNSize *= 0.75f;
+	m_fLearnRate *= 0.75f;
 	m_iEpochs++;
 
 	return winner;
