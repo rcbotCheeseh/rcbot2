@@ -739,7 +739,7 @@ void CBotTF2AttackPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		pTF2Bot->updateAttackDefendPoints();
 	}
 	else if ( m_fAttackTime == 0 )
-		m_fAttackTime = engine->Time() + randomFloat(30.0,60.0);
+		m_fAttackTime = engine->Time() + randomFloat(30.0f,60.0f);
 	else if ( m_fAttackTime < engine->Time() )
 		complete();
 	else
@@ -747,7 +747,7 @@ void CBotTF2AttackPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		if ( m_fTime == 0 )
 		{
 			
-			m_fTime = engine->Time() + randomFloat(5.0,10.0);
+			m_fTime = engine->Time() + randomFloat(5.0f,10.0f);
 			m_vMoveTo = m_vOrigin + Vector(randomFloat(-m_iRadius,m_iRadius),randomFloat(-m_iRadius,m_iRadius),0);
 		}
 		else if ( m_fTime < engine->Time() )
@@ -963,7 +963,7 @@ void CBotTF2DefendPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 	else if ( m_fDefendTime == 0 )
 	{
-		m_fDefendTime = engine->Time() + randomFloat(30.0,60.0);
+		m_fDefendTime = engine->Time() + randomFloat(30.0f,60.0f);
 		pBot->resetLookAroundTime();
 	}
 	else if ( m_fDefendTime < engine->Time() )
@@ -972,7 +972,7 @@ void CBotTF2DefendPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	{
 		if ( m_fTime == 0 )
 		{
-			m_fTime = engine->Time() + randomFloat(5.0,10.0);
+			m_fTime = engine->Time() + randomFloat(5.0f,10.0f);
 			m_vMoveTo = m_vOrigin + Vector(randomFloat(-m_iRadius,m_iRadius),randomFloat(-m_iRadius,m_iRadius),0);
 			const float fdist = pBot->distanceFrom(m_vMoveTo);
 

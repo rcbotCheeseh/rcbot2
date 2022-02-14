@@ -625,8 +625,8 @@ void CWaypointNavigator :: belief ( Vector vOrigin, Vector vOther, float fBelief
 	static int iWptTo;
 
 	// get nearest waypoint visible to others
-	iWptFrom = CWaypointLocations::NearestWaypoint(vOrigin,2048.0,-1,true,true,false,NULL,false,0,false,true,vOther);
-	iWptTo = CWaypointLocations::NearestWaypoint(vOther,2048.0,-1,true,true,false,NULL,false,0,false,true,vOrigin);
+	iWptFrom = CWaypointLocations::NearestWaypoint(vOrigin,2048.0f,-1,true,true,false,NULL,false,0,false,true,vOther);
+	iWptTo = CWaypointLocations::NearestWaypoint(vOther,2048.0f,-1,true,true,false,NULL,false,0,false,true,vOrigin);
 
 	// no waypoint information
 	if ( iWptFrom == -1 || iWptTo == -1 )
