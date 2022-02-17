@@ -63,21 +63,21 @@ public:
 
 	inline bool isType ( const char *szType );
 
-	inline void setActivator ( edict_t *pEdict ) { m_pActivator = pEdict;}
+	void setActivator ( edict_t *pEdict ) { m_pActivator = pEdict;}
 
 	virtual void execute ( IBotEventInterface *pEvent ) { return; }
 
-	inline void setEventId ( int iEventId )
+	void setEventId ( int iEventId )
 	{
 		m_iEventId = iEventId;
 	}
 
-	inline bool isEventId ( int iEventId )
+	bool isEventId ( int iEventId )
 	{
 		return forCurrentMod() && m_iEventId == iEventId;
 	}
 
-	inline bool hasEventId ()
+	bool hasEventId ()
 	{
 		return m_iEventId != -1;
 	}

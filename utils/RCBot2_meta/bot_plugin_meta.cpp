@@ -26,8 +26,11 @@
 #include "ndebugoverlay.h"
 #include "irecipientfilter.h"
 
-
 #include "bot_cvars.h"
+
+#ifdef _WIN32
+	#include <ctime>
+#endif
 
 // for IServerTools
 #include "bot.h"
@@ -45,13 +48,12 @@
 #include "bot_waypoint_visibility.h"
 #include "bot_kv.h"
 #include "bot_sigscan.h"
-#include "bot_mods.h"
+
 #include "tier0/icommandline.h"
 
 #include "logging.h"
 
 #include <build_info.h>
-#include <ctime>
 
 SH_DECL_HOOK6(IServerGameDLL, LevelInit, SH_NOATTRIB, 0, bool, char const *, char const *, char const *, char const *, bool, bool);
 SH_DECL_HOOK3_void(IServerGameDLL, ServerActivate, SH_NOATTRIB, 0, edict_t *, int, int);
@@ -493,22 +495,21 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	int bot_count = 0;
 	int human_count = 0;
 
-	for (int& m_iTargetBot : m_iTargetBots)
-	{
-		m_iTargetBot = 0;
+	for (int i = 0; i < MAX_PLAYERS; ++i) {
+		m_iTargetBots[i] = 0;
 	}
 
 	CBotGlobals::buildFileName(filename, "bot_quota", BOT_CONFIG_FOLDER, "ini");
 	fp = std::fstream(filename, std::fstream::in);
 
-	memset(bq_line, 0, sizeof bq_line);
+	memset(bq_line, 0, sizeof(bq_line));
 
 	if (fp) {
 		while (fp.getline(bq_line, sizeof(bq_line))) {
 			if (bq_line[0] == '#')
 				continue;
 
-			for (int i = 0; i < sizeof bq_line; ++i) {
+			for (int i = 0; i < sizeof(bq_line); ++i) {
 				if (bq_line[i] == '\0')
 					break;
 
@@ -538,7 +539,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 bool RCBotPluginMeta::FireGameEvent(IGameEvent * pevent, bool bDontBroadcast)
 {
-	CBotEvents::executeEvent(pevent,TYPE_IGAMEEVENT);
+	CBotEvents::executeEvent((void*)pevent,TYPE_IGAMEEVENT);
 
 	RETURN_META_VALUE(MRES_IGNORED, true);
 }
@@ -714,7 +715,7 @@ bool RCBotPluginMeta::Hook_ClientConnect(edict_t *pEntity,
 									char *reject,
 									int maxrejectlen)
 {
-	META_LOG(g_PLAPI, R"(Hook_ClientConnect(%d, "%s", "%s"))", IndexOfEdict(pEntity), pszName, pszAddress);
+	META_LOG(g_PLAPI, "Hook_ClientConnect(%d, \"%s\", \"%s\")", IndexOfEdict(pEntity), pszName, pszAddress);
 
 	CClients::init(pEntity);
 
@@ -724,11 +725,11 @@ bool RCBotPluginMeta::Hook_ClientConnect(edict_t *pEntity,
 void RCBotPluginMeta::Hook_ClientPutInServer(edict_t *pEntity, char const *playername)
 {
 	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pEntity);
-	const bool is_Rcbot = false;
+	bool is_Rcbot = false;
 
 	CClient *pClient = CClients::clientConnected(pEntity);
 
-	if ( pClient )
+	if ( !is_Rcbot && pClient )
 	{
 		if ( !engine->IsDedicatedServer() )
 		{
@@ -779,9 +780,11 @@ void RCBotPluginMeta::Hook_GameFrame(bool simulating)
 	 * false | game is not ticking
 	 */
 
+	static CBotMod *currentmod;
+
 	if ( simulating && CBotGlobals::IsMapRunning() )
 	{
-		static CBotMod *currentmod;
+							 
 		CBots::botThink();
 		CClients::clientThink();
 

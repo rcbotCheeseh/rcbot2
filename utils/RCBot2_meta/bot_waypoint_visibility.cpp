@@ -48,9 +48,9 @@ void CWaypointVisibilityTable :: workVisibility ()
 	int iTicks = 0;
 	const unsigned short int iSize = static_cast<unsigned short>(CWaypoints::numWaypoints());
 
-	for ( iCurFrom = iCurFrom; iCurFrom < iSize; iCurFrom ++ )
+	for ( unsigned short int iCurFrom = 0; iCurFrom < iSize; iCurFrom++ )
 	{
-		for ( iCurTo = iCurTo; iCurTo < iSize; iCurTo ++ )
+		for ( unsigned short int iCurTo = 0; iCurTo < iSize; iCurTo++ )
 		{
 			CWaypoint *pWaypoint1 = CWaypoints::getWaypoint(iCurFrom);
 			CWaypoint *pWaypoint2 = CWaypoints::getWaypoint(iCurTo);

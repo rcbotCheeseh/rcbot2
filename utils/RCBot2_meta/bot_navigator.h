@@ -48,7 +48,7 @@ class CWaypointVisibilityTable;
 class INavigatorNode
 {
 public:
-	inline Vector getOrigin () { return m_vOrigin; }
+	Vector getOrigin () { return m_vOrigin; }
 protected:
 	Vector m_vOrigin;
 };
@@ -69,7 +69,7 @@ public:
 
 	virtual bool getNextRoutePoint ( Vector *vPoint ) = 0;
 
-	inline Vector getPreviousPoint () { return m_vPreviousPoint; }
+	Vector getPreviousPoint () { return m_vPreviousPoint; }
 
 	virtual bool hasNextPoint () = 0;
 
@@ -102,7 +102,7 @@ public:
 
 	virtual void getFailedGoals (WaypointList **goals) = 0;
 
-	inline Vector getGoalOrigin () { return m_vGoal; }
+	Vector getGoalOrigin () { return m_vGoal; }
 
 	virtual bool nextPointIsOnLadder () { return false; }
 
@@ -158,24 +158,25 @@ class AStarNode
 public:
 	AStarNode() { memset(this,0,sizeof(AStarNode)); }
 	///////////////////////////////////////////////////////
-	inline void close () { setFlag(FL_ASTAR_CLOSED); }
-	inline void unClose () { removeFlag(FL_ASTAR_CLOSED); }
-	inline bool isOpen () { return hasFlag(FL_ASTAR_OPEN); }
-	inline void unOpen () { removeFlag(FL_ASTAR_OPEN); }
-	inline bool isClosed () { return hasFlag(FL_ASTAR_CLOSED); }
-	inline void open () { setFlag(FL_ASTAR_OPEN); }
+	void close () { setFlag(FL_ASTAR_CLOSED); }
+	void unClose () { removeFlag(FL_ASTAR_CLOSED); }
+	bool isOpen () { return hasFlag(FL_ASTAR_OPEN); }
+	void unOpen () { removeFlag(FL_ASTAR_OPEN); }
+	bool isClosed () { return hasFlag(FL_ASTAR_CLOSED); }
+	void open () { setFlag(FL_ASTAR_OPEN); }
 	//////////////////////////////////////////////////////	
-	inline void setHeuristic ( float fHeuristic ) { m_fHeuristic = fHeuristic; setFlag(FL_HEURISTIC_SET); }
-	inline bool heuristicSet () { return hasFlag(FL_HEURISTIC_SET); }
-	inline float getHeuristic() { return m_fHeuristic; }
+	void setHeuristic ( float fHeuristic ) { m_fHeuristic = fHeuristic; setFlag(FL_HEURISTIC_SET); }
+	bool heuristicSet () { return hasFlag(FL_HEURISTIC_SET); }
+	float getHeuristic() { return m_fHeuristic; }
 
 	////////////////////////////////////////////////////////
-	inline void setFlag(int iFlag) { m_iFlags |= iFlag; }
-	inline bool hasFlag ( int iFlag ) { return (m_iFlags & iFlag) == iFlag; }
-	inline void removeFlag ( int iFlag ) { m_iFlags &= ~iFlag; }
+	void setFlag(int iFlag) { m_iFlags |= iFlag; }
+	bool hasFlag ( int iFlag ) { return (m_iFlags & iFlag) == iFlag; }
+	void removeFlag ( int iFlag ) { m_iFlags &= ~iFlag; }
 	/////////////////////////////////////////////////////////
-	inline int getParent () { if ( hasFlag(FL_ASTAR_PARENT) ) return m_iParent; else return -1; }
-	inline void setParent ( short int iParent ) 
+	int getParent () { if ( hasFlag(FL_ASTAR_PARENT) ) return m_iParent; else return -1; }
+
+	void setParent ( short int iParent ) 
 	{ 
 		m_iParent = iParent; 
 
@@ -185,8 +186,8 @@ public:
 			setFlag(FL_ASTAR_PARENT);
 	}
 	////////////////////////////////////////////////////////
-	inline float getCost () { return m_fCost; }
-	inline void setCost(float fCost) { m_fCost = fCost; }
+	float getCost () { return m_fCost; }
+	void setCost(float fCost) { m_fCost = fCost; }
 	////////////////////////////////////////////////////////
 	// for comparison
 	bool precedes ( AStarNode *other ) const
@@ -194,7 +195,7 @@ public:
 		return m_fCost+m_fHeuristic < other->getCost() + other->getHeuristic();
 	}
 	void setWaypoint ( int iWpt ) { m_iWaypoint = iWpt; }
-	inline int getWaypoint () { return m_iWaypoint; }
+	int getWaypoint () { return m_iWaypoint; }
 private:
 	float m_fCost;
 	float m_fHeuristic;
@@ -446,12 +447,12 @@ public:
 
 	bool wantToSaveBelief () override;
 
-	inline int getCurrentWaypointID () override
+	int getCurrentWaypointID () override
 	{
 		return m_iCurrentWaypoint;
 	}
 
-	inline int getCurrentGoalID () override
+	int getCurrentGoalID () override
 	{
 		return m_iGoalWaypoint;
 	}

@@ -31,10 +31,10 @@
 #ifndef __BOT_RECIPIENTS_H__
 #define __BOT_RECIPIENTS_H__
 
-#include <cstddef>
-#include <edict.h>
+//#include <cstddef>
+//#include <edict.h>
 
-#include "bot_const.h"
+//#include "bot_const.h"
 #include "irecipientfilter.h"
 
 class CEdictRecipient : public IRecipientFilter

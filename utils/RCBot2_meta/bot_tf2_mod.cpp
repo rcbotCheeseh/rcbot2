@@ -424,7 +424,7 @@ case TF_CLASS_ENGINEER: return 100.0f;
 case TF_CLASS_SNIPER: return 100.0f; 
 case TF_CLASS_HWGUY: return 77.0f; 
 } 
-return 0.0; 
+return 0.0f; 
 } 
  
 float CTeamFortress2Mod :: TF2_GetPlayerSpeed(edict_t *pPlayer, TF_Class iClass ) 

@@ -140,7 +140,7 @@ public:
 		*iOff = 0;
 	}
 
-	inline bool needResetCheatFlag ()
+	bool needResetCheatFlag ()
 	{
 		return m_bBotCommand_ResetCheatFlag;
 	}
@@ -242,12 +242,12 @@ public:
 
 	int findNearestObjective ( Vector vOrigin );
 
-	inline int getWaypointAtFlag ( int iFlagId )
+	int getWaypointAtFlag ( int iFlagId )
 	{
 		return m_iWaypoint[iFlagId];
 	}
 
-	inline int getNumBombsToDefend ( int iTeam )
+	int getNumBombsToDefend ( int iTeam )
 	{
 		int count = 0;
 
@@ -260,7 +260,7 @@ public:
 		return count;
 	}
 
-	inline int getNumBombsToDefuse ( int iTeam )
+	int getNumBombsToDefuse ( int iTeam )
 	{
 		int count = 0;
 
@@ -273,7 +273,7 @@ public:
 		return count;
 	}
 
-	inline int getNumPlantableBombs (int iTeam)
+	int getNumPlantableBombs (int iTeam)
 	{
 		int count = 0;
 
@@ -286,12 +286,12 @@ public:
 		return count;
 	}
 
-	inline float isBombExplodeImminent ( int id )
+	float isBombExplodeImminent ( int id )
 	{
 		return engine->Time() - m_fBombPlantedTime[id] > DOD_BOMB_EXPLODE_IMMINENT_TIME;
 	}
 
-	inline void setBombPlanted ( int id, bool val )
+	void setBombPlanted ( int id, bool val )
 	{
 		m_bBombPlanted[id] = val;
 
@@ -301,7 +301,7 @@ public:
 			m_fBombPlantedTime[id] = 0;
 	}
 
-	inline int getNumBombsToPlant ( int iTeam)
+	int getNumBombsToPlant ( int iTeam)
 	{
 		int count = 0;
 
@@ -314,8 +314,9 @@ public:
 		return count;
 	}
 
-	inline bool ownsFlag ( edict_t *pFlag, int iTeam ) { return ownsFlag(getFlagID(pFlag),iTeam); }
-	inline bool ownsFlag ( int iFlag, int iTeam )
+	bool ownsFlag ( edict_t *pFlag, int iTeam ) { return ownsFlag(getFlagID(pFlag),iTeam); }
+
+	bool ownsFlag ( int iFlag, int iTeam )
 	{
 		if ( iFlag == -1 )
 			return false;
@@ -323,7 +324,7 @@ public:
 		return m_iOwner[iFlag] == iTeam;
 	}
 
-	inline int numFlagsOwned (int iTeam)
+	int numFlagsOwned (int iTeam)
 	{
 		int count = 0;
 
@@ -336,8 +337,9 @@ public:
 		return count;
 	}
 
-	inline int numCappersRequired ( edict_t *pFlag, int iTeam ) { return numCappersRequired(getFlagID(pFlag),iTeam); }
-	inline int numCappersRequired ( int iFlag, int iTeam )
+	int numCappersRequired ( edict_t *pFlag, int iTeam ) { return numCappersRequired(getFlagID(pFlag),iTeam); }
+
+	int numCappersRequired ( int iFlag, int iTeam )
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -345,7 +347,7 @@ public:
 		return iTeam == TEAM_ALLIES ? m_iAlliesReqCappers[iFlag] : m_iAxisReqCappers[iFlag];
 	}
 
-	inline bool isBombPlanted ( int iId )
+	bool isBombPlanted ( int iId )
 	{
 		if ( iId == -1 )
 			return false;
@@ -353,22 +355,22 @@ public:
 		return m_bBombPlanted[iId];
 	}
 
-	inline bool isBombPlanted ( edict_t *pBomb )
+	bool isBombPlanted ( edict_t *pBomb )
 	{
 		return isBombPlanted(getBombID(pBomb));
 	}
 
-	inline bool canDefendBomb ( int iTeam, int iId )
+	bool canDefendBomb ( int iTeam, int iId )
 	{
 		return m_pBombs[iId][0]!=NULL&&m_iOwner[iId]!=iTeam && isBombPlanted(iId);
 	}
 
-	inline bool canDefuseBomb ( int iTeam, int iId )
+	bool canDefuseBomb ( int iTeam, int iId )
 	{
 		return m_pBombs[iId][0]!=NULL&&m_iOwner[iId]==iTeam && isBombPlanted(iId);
 	}
 
-	inline bool canPlantBomb ( int iTeam, int iId )
+	bool canPlantBomb ( int iTeam, int iId )
 	{
 		return m_pBombs[iId][0]!=NULL&&m_iOwner[iId]!=iTeam && !isBombPlanted(iId);
 	}
@@ -379,7 +381,7 @@ public:
 	static bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin );
 	static bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin );
 
-	inline int getNumBombsRequired ( int iId )
+	int getNumBombsRequired ( int iId )
 	{
 		if ( iId == -1 )
 			return false;
@@ -387,12 +389,12 @@ public:
 		return m_iBombsRequired[iId];
 	}
 
-	inline int getNumBombsRequired ( edict_t *pBomb )
+	int getNumBombsRequired ( edict_t *pBomb )
 	{
 		return getNumBombsRequired(getBombID(pBomb));
 	}
 
-	inline int getNumBombsRemaining ( int iId )
+	int getNumBombsRemaining ( int iId )
 	{
 		if ( iId == -1 )
 			return false;
@@ -400,12 +402,12 @@ public:
 		return m_iBombsRemaining[iId];
 	}
 
-	inline int getNumBombsRemaining ( edict_t *pBomb )
+	int getNumBombsRemaining ( edict_t *pBomb )
 	{
 		return getNumBombsRemaining(getBombID(pBomb));
 	}
 
-	inline bool isBombBeingDefused ( int iId )
+	bool isBombBeingDefused ( int iId )
 	{
 		if ( iId == -1 )
 			return false;
@@ -413,16 +415,16 @@ public:
 		return m_bBombBeingDefused[iId];
 	}
 
-	inline bool isBombBeingDefused ( edict_t *pBomb )
+	bool isBombBeingDefused ( edict_t *pBomb )
 	{
 		return isBombBeingDefused(getBombID(pBomb));
 	}
 
-	inline int numEnemiesAtCap ( edict_t *pFlag, int iTeam ) { return numEnemiesAtCap(getFlagID(pFlag),iTeam); }
+	int numEnemiesAtCap ( edict_t *pFlag, int iTeam ) { return numEnemiesAtCap(getFlagID(pFlag),iTeam); }
 
-	inline int numFriendliesAtCap ( edict_t *pFlag, int iTeam ) { return numFriendliesAtCap(getFlagID(pFlag),iTeam); }
+	int numFriendliesAtCap ( edict_t *pFlag, int iTeam ) { return numFriendliesAtCap(getFlagID(pFlag),iTeam); }
 
-	inline int numFriendliesAtCap ( int iFlag, int iTeam )
+	int numFriendliesAtCap ( int iFlag, int iTeam )
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -430,7 +432,7 @@ public:
 		return iTeam == TEAM_ALLIES ? m_iNumAllies[iFlag] : m_iNumAxis[iFlag];
 	}
 
-	inline int numEnemiesAtCap ( int iFlag, int iTeam )
+	int numEnemiesAtCap ( int iFlag, int iTeam )
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -438,7 +440,7 @@ public:
 		return iTeam == TEAM_ALLIES ? m_iNumAxis[iFlag] : m_iNumAllies[iFlag];
 	}
 
-	inline edict_t *getFlagByID ( int id )
+	edict_t *getFlagByID ( int id )
 	{
 		if ( id >= 0 && id < m_iNumControlPoints )
 			return m_pFlags[id];
@@ -446,7 +448,7 @@ public:
 		return NULL;
 	}
 
-	inline int getFlagID ( edict_t *pent )
+	int getFlagID ( edict_t *pent )
 	{
 		for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 		{
@@ -457,7 +459,7 @@ public:
 		return -1;
 	}
 
-	inline int getBombID ( edict_t *pent )
+	int getBombID ( edict_t *pent )
 	{
 		if ( pent == NULL )
 			return -1;
@@ -471,24 +473,24 @@ public:
 		return -1;
 	}
 
-	inline bool isFlag ( edict_t *pent )
+	bool isFlag ( edict_t *pent )
 	{
 		return getFlagID(pent) != -1;
 	}
 
-	inline bool isBomb ( edict_t *pent )
+	bool isBomb ( edict_t *pent )
 	{
 		return getBombID(pent) != -1;
 	}
 
-	inline int getNumBombsOnMap ( int iTeam )
+	int getNumBombsOnMap ( int iTeam )
 	{
 		if ( iTeam == TEAM_ALLIES )
 			return m_iNumAlliesBombsOnMap;
 		return m_iNumAxisBombsOnMap;
 	}
 
-	inline void reset ()
+	void reset ()
 	{
 		// time up
 		m_iNumControlPoints = 0;
@@ -541,12 +543,12 @@ public:
 
 	static float getMapStartTime ();
 
-	inline static bool isBombMap () { return (m_iMapType & DOD_MAPTYPE_BOMB) == DOD_MAPTYPE_BOMB; }
-	inline static bool isFlagMap () { return (m_iMapType & DOD_MAPTYPE_FLAG) == DOD_MAPTYPE_FLAG; }
-	inline static bool mapHasBombs () { return (m_iMapType & DOD_MAPTYPE_BOMB) == DOD_MAPTYPE_BOMB; }
+	static bool isBombMap () { return (m_iMapType & DOD_MAPTYPE_BOMB) == DOD_MAPTYPE_BOMB; }
+	static bool isFlagMap () { return (m_iMapType & DOD_MAPTYPE_FLAG) == DOD_MAPTYPE_FLAG; }
+	static bool mapHasBombs () { return (m_iMapType & DOD_MAPTYPE_BOMB) == DOD_MAPTYPE_BOMB; }
 
-	inline static bool isCommunalBombPoint () { return m_bCommunalBombPoint; }
-	inline static int getBombPointArea (int iTeam) { if ( iTeam == TEAM_ALLIES ) return m_iBombAreaAllies; return m_iBombAreaAxis; } 
+	static bool isCommunalBombPoint () { return m_bCommunalBombPoint; }
+	static int getBombPointArea (int iTeam) { if ( iTeam == TEAM_ALLIES ) return m_iBombAreaAllies; return m_iBombAreaAxis; } 
 
 	void addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags, int *iArea, float *fMaxDistance ) override;
 
@@ -561,7 +563,7 @@ public:
 
 	static bool isBreakableRegistered ( edict_t *pBreakable, int iTeam );
 
-	static inline CWaypoint *getBombWaypoint ( edict_t *pBomb )
+	static CWaypoint *getBombWaypoint ( edict_t *pBomb )
 	{
 		for ( unsigned int i = 0; i < m_BombWaypoints.size(); i ++ )
 		{
@@ -572,7 +574,7 @@ public:
 		return NULL;
 	}
 
-	static inline bool isPathBomb ( edict_t *pBomb )
+	static bool isPathBomb ( edict_t *pBomb )
 	{
 		for ( unsigned int i = 0; i < m_BombWaypoints.size(); i ++ )
 		{
@@ -644,31 +646,37 @@ public:
 	static void onRoundStart();
 	static void onFreezeTimeEnd();
 	static void onBombPlanted();
-	inline static bool isMapType(eCSSMapType MapType) { return MapType == m_MapType; }
+	static bool isMapType(eCSSMapType MapType) { return MapType == m_MapType; }
 	static bool isBombCarrier(CBot *pBot);
-	inline static float getRemainingRoundTime()
+
+	static float getRemainingRoundTime()
 	{
 		return m_fRoundStartTime + mp_roundtime->GetFloat() * 60.0f - engine->Time();
 	}
-	inline static float getRemainingBombTime()
+
+	static float getRemainingBombTime()
 	{
 		return m_fRoundStartTime + mp_c4timer->GetFloat() - engine->Time();
 	}
-	inline static bool isBombPlanted()
+
+	static bool isBombPlanted()
 	{
 		return m_bIsBombPlanted;
 	}
-	inline static edict_t *getBomb()
+
+	static edict_t *getBomb()
 	{
 		return engine->PEntityOfEntIndex(m_hBomb.GetEntryIndex());
 	}
 	static bool isBombDropped();
 	static bool isBombDefused();
-	inline static bool wasBombFound()
+
+	static bool wasBombFound()
 	{
 		return m_bBombWasFound;
 	}
-	inline static void setBombFound(bool set)
+
+	static void setBombFound(bool set)
 	{
 		m_bBombWasFound = set;
 	}
@@ -875,7 +883,7 @@ public:
 
 	static bool isTeleporterExit ( edict_t *pEntity, int iTeam, bool checkcarrying = false );
 
-	static inline bool isMapType ( eTFMapType iMapType ) { return iMapType == m_MapType; }
+	static bool isMapType ( eTFMapType iMapType ) { return iMapType == m_MapType; }
 
 	static bool isFlag ( edict_t *pEntity, int iTeam );
 
@@ -990,24 +998,24 @@ public:
 		m_iLastWinningTeam = m_iWinningTeam;
 	}
 
-	static inline bool wonLastRound(int iTeam)
+	static bool wonLastRound(int iTeam)
 	{
 		return m_iLastWinningTeam == iTeam;
 	}
 
-	static inline bool isLosingTeam ( int iTeam )
+	static bool isLosingTeam ( int iTeam )
 	{
 		return !m_bHasRoundStarted && m_bRoundOver && m_iWinningTeam && m_iWinningTeam != iTeam; 
 	}
 
 	static void roundReset ();
 
-	static inline bool isFlagCarrier (edict_t *pPlayer)
+	static bool isFlagCarrier (edict_t *pPlayer)
 	{
 		return m_pFlagCarrierBlue==pPlayer||m_pFlagCarrierRed==pPlayer;
 	}
 
-	static inline edict_t *getFlagCarrier (int iTeam)
+	static edict_t *getFlagCarrier (int iTeam)
 	{
 		if ( iTeam == TF2_TEAM_BLUE )
 			return m_pFlagCarrierBlue;
@@ -1319,7 +1327,7 @@ public:
 
 	bool playerSpawned ( edict_t *pPlayer ) override;
 
-	static inline edict_t *getButtonAtWaypoint ( CWaypoint *pWaypoint )
+	static edict_t *getButtonAtWaypoint ( CWaypoint *pWaypoint )
 	{
 		for ( unsigned int i = 0; i < m_LiftWaypoints.size(); i ++ )
 		{

@@ -164,18 +164,18 @@ public:
 
 	bool hasPassInfo () { return m_bitsPass!=0; }
 
-	inline int passedInt () { return iPass; }
-	inline float passedFloat() { return fPass; }
-	inline Vector passedVector() { return vPass; }
-	inline edict_t *passedEdict() { return pPass; }
-	inline bool isID ( eBotSchedule iId ) { return m_iSchedId == iId; }
+	int passedInt () { return iPass; }
+	float passedFloat() { return fPass; }
+	Vector passedVector() { return vPass; }
+	edict_t *passedEdict() { return pPass; }
+	bool isID ( eBotSchedule iId ) { return m_iSchedId == iId; }
 
-	inline bool hasPassInt () { return (m_bitsPass&BITS_SCHED_PASS_INT)>0; }
-	inline bool hasPassFloat () { return (m_bitsPass&BITS_SCHED_PASS_FLOAT)>0; }
-	inline bool hasPassVector () { return (m_bitsPass&BITS_SCHED_PASS_VECTOR)>0; }
-	inline bool hasPassEdict () { return (m_bitsPass&BITS_SCHED_PASS_EDICT)>0; }
+	bool hasPassInt () { return (m_bitsPass&BITS_SCHED_PASS_INT)>0; }
+	bool hasPassFloat () { return (m_bitsPass&BITS_SCHED_PASS_FLOAT)>0; }
+	bool hasPassVector () { return (m_bitsPass&BITS_SCHED_PASS_VECTOR)>0; }
+	bool hasPassEdict () { return (m_bitsPass&BITS_SCHED_PASS_EDICT)>0; }
 
-	inline void setID ( eBotSchedule iId ) { m_iSchedId = iId; }
+	void setID ( eBotSchedule iId ) { m_iSchedId = iId; }
 
 
 private:
@@ -270,7 +270,7 @@ public:
 		m_Schedules.push_front(pSchedule);
 	}
 
-	inline bool isEmpty ()
+	bool isEmpty ()
 	{
 		return m_Schedules.empty();
 	}

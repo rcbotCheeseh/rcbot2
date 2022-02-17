@@ -160,17 +160,17 @@ class CBotUtility
 public:
 	CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil, CBotWeapon *pWeapon = NULL, int iData = 0, Vector vec = Vector(0,0,0) );
 
-	inline float getUtility () { return m_fUtility; }
+	float getUtility () { return m_fUtility; }
 
-	inline eBotAction getId () { return m_id; }
+	eBotAction getId () { return m_id; }
 
-	inline bool canDo () { return m_bCanDo; }
+	bool canDo () { return m_bCanDo; }
 
-	inline CBotWeapon *getWeaponChoice () { return m_pWeapon; }
+	CBotWeapon *getWeaponChoice () { return m_pWeapon; }
 
-	inline int getIntData () { return m_iData; }
+	int getIntData () { return m_iData; }
 
-	inline Vector getVectorData () { return m_vVector; }
+	Vector getVectorData () { return m_vVector; }
 
 private:
 	int m_iData;
@@ -206,7 +206,7 @@ public:
 
 	void freeMemory ();
 
-	inline void addUtility ( CBotUtility p ) { if ( p.canDo() ) { m_Utilities.emplace_back(p); } }
+	void addUtility ( CBotUtility p ) { if ( p.canDo() ) { m_Utilities.emplace_back(p); } }
 
 	void execute ();
 

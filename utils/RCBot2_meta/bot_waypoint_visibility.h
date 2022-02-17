@@ -152,8 +152,8 @@ public:
 
 	void WorkOutVisibilityTable ( );
 
-	inline bool needToWorkVisibility() { return bWorkVisibility; }
-	inline void setWorkVisiblity ( bool bSet ) { bWorkVisibility = bSet; }
+	bool needToWorkVisibility() { return bWorkVisibility; }
+	void setWorkVisiblity ( bool bSet ) { bWorkVisibility = bSet; }
 
 private:
 

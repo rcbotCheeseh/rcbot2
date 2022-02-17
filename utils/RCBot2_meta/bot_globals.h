@@ -62,7 +62,7 @@ public:
 
 	static QAngle playerAngles ( edict_t *pPlayer );
 
-	static inline bool isPlayer (const edict_t* pEdict)
+	static bool isPlayer (const edict_t* pEdict)
 	{
 		static int index;
 
@@ -103,7 +103,7 @@ public:
 
 	static bool isNetworkable ( edict_t *pEntity );
 
-	static inline bool entityIsValid ( edict_t *pEntity )
+	static bool entityIsValid ( edict_t *pEntity )
 	{
 		return pEntity && !pEntity->IsFree() && pEntity->GetNetworkable() != NULL && pEntity->GetIServerEntity() != NULL && pEntity->m_NetworkSerialNumber != 0;	
 	}
@@ -119,7 +119,7 @@ public:
 	static edict_t *findPlayerByTruncName ( const char *name );
 
 // linux fix
-	inline static CBotMod *getCurrentMod ()
+	static CBotMod *getCurrentMod ()
 	{
 		return m_pCurrentMod;
 	}
@@ -167,7 +167,7 @@ public:
 	static float quickTraceline ( edict_t *pIgnore, Vector vSrc, Vector vDest ); // return fFraction
 	static bool traceVisible (edict_t *pEnt);
 	////////
-	static inline Vector entityOrigin ( edict_t *pEntity ) 
+	static Vector entityOrigin ( edict_t *pEntity ) 
 	{ 
 		return pEntity->GetIServerEntity()->GetCollideable()->GetCollisionOrigin(); 
 	}
@@ -177,21 +177,21 @@ public:
 	static int numClients ();
 	static void levelInit();
 
-	static inline void setClientMax ( int iMaxClients ) { m_iMaxClients = iMaxClients; }
+	static void setClientMax ( int iMaxClients ) { m_iMaxClients = iMaxClients; }
 
-	static inline void setEventVersion ( int iVersion ){m_iEventVersion = iVersion;}
+	static void setEventVersion ( int iVersion ){m_iEventVersion = iVersion;}
 
-	static inline bool isEventVersion ( int iVersion ){return m_iEventVersion == iVersion;}
+	static bool isEventVersion ( int iVersion ){return m_iEventVersion == iVersion;}
 
-	static inline bool getTeamplayOn (){return m_bTeamplay;}
+	static bool getTeamplayOn (){return m_bTeamplay;}
 
-	static inline void setTeamplay ( bool bOn ){m_bTeamplay = bOn;}
+	static void setTeamplay ( bool bOn ){m_bTeamplay = bOn;}
 
-	static inline bool isMod ( eModId iMod ) { 	return m_iCurrentMod == iMod; }
+	static bool isMod ( eModId iMod ) { 	return m_iCurrentMod == iMod; }
 
-	static inline char *modFolder (){return m_szModFolder;}
+	static char *modFolder (){return m_szModFolder;}
 
-	static inline int maxClients () {return m_iMaxClients;}
+	static int maxClients () {return m_iMaxClients;}
 
 	static edict_t *playerByUserId(int iUserId);
 
@@ -199,13 +199,13 @@ public:
 
 	static bool checkOpensLater ( Vector vSrc, Vector vDest );
 
-	inline static bool setupMapTime ( ) { return m_fMapStartTime == 0; }
+	static bool setupMapTime ( ) { return m_fMapStartTime == 0; }
 
 	static bool isBreakableOpen ( edict_t *pBreakable );
 
 	static Vector getVelocity ( edict_t *pPlayer );
 
-	static inline bool isBoundsDefinedInEntitySpace( edict_t *pEntity )
+	static bool isBoundsDefinedInEntitySpace( edict_t *pEntity )
 	{
 		return (pEntity->GetCollideable()->GetSolidFlags() & FSOLID_FORCE_WORLD_ALIGNED) == 0 &&
 			pEntity->GetCollideable()->GetSolid() != SOLID_BBOX && pEntity->GetCollideable()->GetSolid() != SOLID_NONE;

@@ -218,7 +218,7 @@ class dataStack
 			m_Head = NULL;
 		}
 
-		inline bool IsEmpty ()
+		bool IsEmpty ()
 		{
 			return m_Head == NULL;
 		}
@@ -629,7 +629,7 @@ class dataUnconstArray
 			this->Clear();
 		}
 
-		inline int Size ()
+		int Size ()
 		{
 			return array.size();
 		}
@@ -690,22 +690,22 @@ class dataUnconstArray
 #endif
 		}
 
-		inline void Destroy ()
+		void Destroy ()
 		{
 			array.clear();
 		}
 
-		inline void Init ()
+		void Init ()
 		{
 			array.clear();
 		}
 
-		inline bool IsEmpty ()
+		bool IsEmpty ()
 		{
 			return array.empty();
 		}
 
-		inline void Clear ()
+		void Clear ()
 		{
 			this->Destroy();
 			this->Init();
@@ -769,7 +769,7 @@ class dataQueue
 			this->Destroy();
 		}
 
-		inline void Init ()
+		void Init ()
 		{
 			m_Head = NULL;
 			m_Tail = NULL;
@@ -795,7 +795,7 @@ class dataQueue
 			m_Tail = NULL;
 		}
 
-		inline bool IsEmpty ()
+		bool IsEmpty ()
 		{
 			return m_Head == NULL||m_Tail == NULL;
 		}
@@ -837,12 +837,12 @@ class dataQueue
 			}
 		}
 
-		inline T GetFrontInfo ()
+		T GetFrontInfo ()
 		{
 			return m_Head->m_NodeData;
 		}
 
-		inline T *GetFrontPointer ()
+		T *GetFrontPointer ()
 		{
 			return &m_Head->m_NodeData;
 		}

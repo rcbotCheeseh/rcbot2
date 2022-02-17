@@ -7186,8 +7186,8 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 
 			if ( CClassInterface::getTF2Class(pEdict) == (int)TF_CLASS_SPY )
 			{
-				static float fMinReaction;
-				static float fMaxReaction;
+				static float fMinReaction = 0.0f;
+				static float fMaxReaction = 0.0f;
 				static int dteam, dclass, dhealth, dindex;
 				static bool bfoundspy;
 				static float fSpyAttackTime;

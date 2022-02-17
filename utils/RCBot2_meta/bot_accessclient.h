@@ -49,9 +49,9 @@ public:
 
 	bool forBot ();
 
-	inline char *getSteamID () { return m_szSteamID; }
+	char *getSteamID () { return m_szSteamID; }
 
-	inline int getAccessLevel () { return m_iAccessLevel; }
+	int getAccessLevel () { return m_iAccessLevel; }
 private:
 	char *m_szSteamID;
 	int m_iAccessLevel;

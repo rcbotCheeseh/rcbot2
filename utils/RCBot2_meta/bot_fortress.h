@@ -408,9 +408,9 @@ public:
 
 	void touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1 ) override { CBot::touchedWpt(pWaypoint); }
 
-	inline edict_t *getHealingEntity () { return m_pHeal; }
+	edict_t *getHealingEntity () { return m_pHeal; }
 
-	inline void clearHealingEntity () { m_pHeal = NULL; }
+	void clearHealingEntity () { m_pHeal = NULL; }
 
 	unsigned int maxEntityIndex ( ) override { return gpGlobals->maxEntities; }
 
@@ -445,9 +445,9 @@ public:
 
 	virtual bool lookAfterBuildings (float *fTime) { return false; }
 
-	inline void nextLookAfterSentryTime ( float fTime ) { m_fLookAfterSentryTime = fTime; }
+	void nextLookAfterSentryTime ( float fTime ) { m_fLookAfterSentryTime = fTime; }
 
-	inline edict_t *getSentry () { return m_pSentryGun; }
+	edict_t *getSentry () { return m_pSentryGun; }
 
 	virtual bool hasEngineerBuilt ( eEngiBuild iBuilding ) {return false;}
 
@@ -473,7 +473,7 @@ public:
 
 	virtual void setClass ( TF_Class _class );
 
-	inline edict_t *seeFlag ( bool reset = false ) { if ( reset ) { m_pFlag = NULL; } return m_pFlag; }
+	edict_t *seeFlag ( bool reset = false ) { if ( reset ) { m_pFlag = NULL; } return m_pFlag; }
 
 	bool canAvoid ( edict_t *pEntity ) override;
 
@@ -504,9 +504,9 @@ public:
 
 	void pickedUpFlag ();
 
-	inline bool hasFlag () { return m_bHasFlag; }
+	bool hasFlag () { return m_bHasFlag; }
 
-	inline void droppedFlag () { m_bHasFlag = false; }
+	void droppedFlag () { m_bHasFlag = false; }
 
 	void medicCalled ( edict_t *pPlayer );
 
@@ -535,8 +535,8 @@ public:
 	bool wantToListenToPlayerFootsteps ( edict_t *pPlayer ) override { return true; }
 	bool wantToInvestigateSound () override { return true; }
 
-	inline void flagReset () { m_fLastKnownFlagTime = 0.0f; }
-	inline void teamFlagReset () { m_fLastKnownTeamFlagTime = 0.0f; }
+	void flagReset () { m_fLastKnownFlagTime = 0.0f; }
+	void teamFlagReset () { m_fLastKnownTeamFlagTime = 0.0f; }
 
 	bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL ) override
 	{
@@ -578,7 +578,7 @@ public:
 	// return an enemy sentry gun / special visible (e.g.) for quick checking
 	edict_t *getVisibleSpecial () override;
 
-	inline bool isBeingHealed () { return m_bIsBeingHealed; }
+	bool isBeingHealed () { return m_bIsBeingHealed; }
 
 	void handleWeapons () override { CBot::handleWeapons(); }
 
@@ -919,11 +919,11 @@ public:
 
 	void teleportedPlayer ();
 
-	inline bool isCarrying () { return m_bIsCarryingObj; }
+	bool isCarrying () { return m_bIsCarryingObj; }
 
 	void updateCarrying ();
 
-	inline void resetCarryTime () { m_fCarryTime = engine->Time(); }
+	void resetCarryTime () { m_fCarryTime = engine->Time(); }
 
 	void MvM_Upgrade ();
 

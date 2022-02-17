@@ -53,10 +53,10 @@ public:
 			m_iSerialNumber = 0;
 	}
 
-	inline bool notValid () { return get() == NULL; }
-	inline bool isValid () { return get() != NULL; }
+	bool notValid () { return get() == NULL; }
+	bool isValid () { return get() != NULL; }
 
-	inline edict_t *get ()
+	edict_t *get ()
 	{
 		if ( m_iSerialNumber && m_pEnt )
 		{
@@ -69,12 +69,12 @@ public:
 		return NULL;
 	}
 
-	inline edict_t *get_old ()
+	edict_t *get_old ()
 	{
 		return m_pEnt;
 	}
 
-	inline operator edict_t * const ()
+	operator edict_t * const ()
 	{ // same as get function (inlined for speed)
 		if ( m_iSerialNumber && m_pEnt )
 		{
@@ -87,22 +87,22 @@ public:
 		return NULL;
 	}
 
-	inline bool operator == ( int a )
+	bool operator == ( int a )
 	{
 		return (int)get() == a;
 	}
 
-	inline bool operator == ( edict_t *pent )
+	bool operator == ( edict_t *pent )
 	{
 		return get() == pent;
 	}
 
-	inline bool operator == ( MyEHandle &other )
+	bool operator == ( MyEHandle &other )
 	{
 		return get() == other.get();
 	}
 
-	inline edict_t * operator = ( edict_t *pent )
+	edict_t * operator = ( edict_t *pent )
 	{
 		m_pEnt = pent;
 

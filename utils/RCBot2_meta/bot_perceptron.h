@@ -75,13 +75,13 @@ public:
 
 	virtual void input ( ga_nn_value *inputs );
 
-	inline ga_nn_value getWeight ( unsigned short int i ) { return m_weights[i]; }
+	ga_nn_value getWeight ( unsigned short int i ) { return m_weights[i]; }
 
 	ga_nn_value execute ();
 
 	bool fired ();
 
-	inline ga_nn_value getOutput () { return m_output; }
+	ga_nn_value getOutput () { return m_output; }
 
 protected:
 	
@@ -135,12 +135,12 @@ public:
 
 	ga_nn_value execute ();//, bool usebias = true );
 
-	inline void setError ( ga_nn_value err ) { m_error = err; }
-	inline void addError ( ga_nn_value err ) { m_error += err; }
-	inline void divError ( unsigned short int samples ) { m_error /= samples; }
+	void setError ( ga_nn_value err ) { m_error = err; }
+	void addError ( ga_nn_value err ) { m_error += err; }
+	void divError ( unsigned short int samples ) { m_error /= samples; }
 
-	inline ga_nn_value getError ( unsigned short int w ) { return m_error * m_weights[w]; }
-	inline ga_nn_value getMSE () { return m_error; }
+	ga_nn_value getError ( unsigned short int w ) { return m_error * m_weights[w]; }
+	ga_nn_value getMSE () { return m_error; }
 private:
 	ga_nn_value m_error;
 	ga_nn_value m_netinput;
@@ -210,14 +210,14 @@ public:
 		}
 	}
 
-	inline void setScale ( ga_nn_value min, ga_nn_value max )
+	void setScale ( ga_nn_value min, ga_nn_value max )
 	{
 		m_fMin = min;
 		m_fMax = max;
 	}
 
 // input and scale between -1 and 1
-	inline void in ( ga_nn_value input )
+	void in ( ga_nn_value input )
 	{
 		//assert(m_batchNum>=0);
 		if ( m_batchNum >= 0 && m_batchNum < m_numBatches && m_inputNum < m_numInputs ) 
@@ -225,14 +225,14 @@ public:
 	}
 
 	// output and scale between 0 and 1
-	inline void out ( ga_nn_value output )
+	void out ( ga_nn_value output )
 	{
 		//assert(m_batchNum>=0);
 		if ( m_batchNum >= 0 && m_batchNum < m_numBatches && m_outputNum < m_numOutputs ) 
 			batches[m_batchNum].out[m_outputNum++] = zeroscale(output,m_fMin,m_fMax);
 	}
 
-	inline void addSet ()
+	void addSet ()
 	{
 		if ( m_batchNum >= m_numBatches )
 			return; // error -- too many
@@ -242,25 +242,25 @@ public:
 		m_outputNum = 0;
 	}
 
-	inline unsigned short int getNumBatches ()
+	unsigned short int getNumBatches ()
 	{
 		return m_numBatches;
 	}
 
-	inline ga_nn_value scale ( ga_nn_value x ) 
+	ga_nn_value scale ( ga_nn_value x ) 
 	{ 
 		return gscale(x,m_fMin,m_fMax);
 	}
 
-	inline ga_nn_value descale ( ga_nn_value x )
+	ga_nn_value descale ( ga_nn_value x )
 	{
 		return gdescale(x,m_fMin,m_fMax);
 	}
 
-	inline ga_nn_value getMinScale () { return m_fMin; }
-	inline ga_nn_value getMaxScale () { return m_fMax; }
+	ga_nn_value getMinScale () { return m_fMin; }
+	ga_nn_value getMaxScale () { return m_fMax; }
 
-	inline training_batch_t *getBatches () { return batches; }
+	training_batch_t *getBatches () { return batches; }
 private:
 	// simple format (ins / outs)
 	training_batch_t *batches;

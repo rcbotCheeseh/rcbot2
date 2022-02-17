@@ -201,7 +201,7 @@ public:
 
 	CBaseHandle *getEntityHandle ( edict_t *edict );
 
-	inline bool getBool(void *edict, bool defaultvalue, bool bIsEdict = true)
+	bool getBool(void *edict, bool defaultvalue, bool bIsEdict = true)
 	{ 
 		getData(edict, bIsEdict);
 		
@@ -219,7 +219,7 @@ public:
 		}
 	}
 
-	inline bool *getBoolPointer ( edict_t *edict ) 
+	bool *getBoolPointer ( edict_t *edict ) 
 	{ 
 		getData(edict);  
 				
@@ -229,7 +229,7 @@ public:
 		return (bool*)m_data; 
 	}
 
-	inline void *getVoidPointer ( edict_t *edict ) 
+	void *getVoidPointer ( edict_t *edict ) 
 	{ 
 		getData(edict);  
 				
@@ -239,7 +239,7 @@ public:
 		return m_data; 
 	}
 
-	inline float getFloat ( edict_t *edict, float defaultvalue ) 
+	float getFloat ( edict_t *edict, float defaultvalue ) 
 	{ 
 		getData(edict); 
 		
@@ -249,7 +249,7 @@ public:
 		return *(float*)m_data; 
 	}
 
-	inline float *getFloatPointer ( edict_t *edict ) 
+	float *getFloatPointer ( edict_t *edict ) 
 	{ 
 		getData(edict); 
 		
@@ -259,14 +259,14 @@ public:
 		return (float*)m_data; 
 	}
 
-	inline char *getString (edict_t *edict ) 
+	char *getString (edict_t *edict ) 
 	{ 
 		getData(edict); 
 
 		return (char*)m_data; 
 	}
 
-	inline Vector *getVectorPointer ( edict_t *edict )
+	Vector *getVectorPointer ( edict_t *edict )
 	{
 		getData(edict);
 
@@ -278,7 +278,7 @@ public:
 		return NULL;
 	}
 
-	inline bool getVector ( edict_t *edict, Vector *v )
+	bool getVector ( edict_t *edict, Vector *v )
 	{
 		getData(edict);
 
@@ -294,7 +294,7 @@ public:
 		return false;
 	}
 
-	inline int getInt(void *edict, int defaultvalue, bool bIsEdict = true)
+	int getInt(void *edict, int defaultvalue, bool bIsEdict = true)
 	{ 
 		getData(edict, bIsEdict);
 		
@@ -312,21 +312,21 @@ public:
 		}
 	}
 
-	inline int *getIntPointer ( edict_t *edict ) 
+	int *getIntPointer ( edict_t *edict ) 
 	{ 
 		getData(edict); 
 
 		return (int*)m_data; 
 	}
 
-	inline byte *getBytePointer ( edict_t *edict ) 
+	byte *getBytePointer ( edict_t *edict ) 
 	{ 
 		getData(edict); 
 
 		return (byte*)m_data; 
 	}
 
-	inline float getFloatFromInt ( edict_t *edict, float defaultvalue )
+	float getFloatFromInt ( edict_t *edict, float defaultvalue )
 	{
 		getData(edict); 
 
@@ -373,37 +373,40 @@ public:
 	// TF2
 	static int getTF2Score (const edict_t* edict);
 	static void setupCTeamRoundTimer ( CTeamRoundTimer *pTimer );
-	inline static float getRageMeter ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_RAGEMETER].getFloat(edict,0); }
-	inline static int getFlags ( edict_t *edict ) { return g_GetProps[GETPROP_ENTITY_FLAGS].getInt(edict,0); }
-	inline static int getTeam ( edict_t *edict ) { return g_GetProps[GETPROP_TEAM].getInt(edict,0); }
-	inline static float getPlayerHealth ( edict_t *edict ) { return g_GetProps[GETPROP_PLAYERHEALTH].getFloatFromInt(edict,0); }
-	inline static int getEffects ( edict_t *edict ) { return g_GetProps[GETPROP_EFFECTS].getInt(edict,0); }
-	inline static int *getAmmoList ( edict_t *edict ) { return g_GetProps[GETPROP_AMMO].getIntPointer(edict); }
+	static float getRageMeter ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_RAGEMETER].getFloat(edict,0); }
+	static int getFlags ( edict_t *edict ) { return g_GetProps[GETPROP_ENTITY_FLAGS].getInt(edict,0); }
+	static int getTeam ( edict_t *edict ) { return g_GetProps[GETPROP_TEAM].getInt(edict,0); }
+	static float getPlayerHealth ( edict_t *edict ) { return g_GetProps[GETPROP_PLAYERHEALTH].getFloatFromInt(edict,0); }
+	static int getEffects ( edict_t *edict ) { return g_GetProps[GETPROP_EFFECTS].getInt(edict,0); }
+	static int *getAmmoList ( edict_t *edict ) { return g_GetProps[GETPROP_AMMO].getIntPointer(edict); }
 	//static unsigned int findOffset(const char *szType,const char *szClass);
-	inline static int getTF2NumHealers ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_NUMHEALERS].getInt(edict,0); }
-	inline static int getTF2Conditions ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_CONDITIONS].getInt(edict,0); }
-	inline static bool getVelocity ( edict_t *edict, Vector *v ) {return g_GetProps[GETPROP_VELOCITY].getVector(edict,v); }
-	inline static int getTF2Class ( edict_t *edict ) { return g_GetProps[GETPROP_TF2CLASS].getInt(edict,0); }
-	inline static float TF2_getEnergyDrinkMeter(edict_t * edict) { return g_GetProps[GETPROP_TF2_ENERGYDRINKMETER].getFloat(edict, 0); }
-	inline static edict_t *TF2_getActiveWeapon(edict_t *edict) { return g_GetProps[GETPROP_TF2_ACTIVEWEAPON].getEntity(edict); }
+	static int getTF2NumHealers ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_NUMHEALERS].getInt(edict,0); }
+	static int getTF2Conditions ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_CONDITIONS].getInt(edict,0); }
+	static bool getVelocity ( edict_t *edict, Vector *v ) {return g_GetProps[GETPROP_VELOCITY].getVector(edict,v); }
+	static int getTF2Class ( edict_t *edict ) { return g_GetProps[GETPROP_TF2CLASS].getInt(edict,0); }
+	static float TF2_getEnergyDrinkMeter(edict_t * edict) { return g_GetProps[GETPROP_TF2_ENERGYDRINKMETER].getFloat(edict, 0); }
+	static edict_t *TF2_getActiveWeapon(edict_t *edict) { return g_GetProps[GETPROP_TF2_ACTIVEWEAPON].getEntity(edict); }
 	// set weapon
 	static bool TF2_setActiveWeapon(edict_t *edict, edict_t *pWeapon)
 	{
 		CBaseHandle *pHandle = g_GetProps[GETPROP_TF2_ACTIVEWEAPON].getEntityHandle(edict);
 		pHandle->Set(pWeapon->GetNetworkable()->GetEntityHandle());
 	}
-	inline static void TF2_SetBuilderType(edict_t *pBuilder, int itype)
+
+	static void TF2_SetBuilderType(edict_t *pBuilder, int itype)
 	{
 		int *pitype = g_GetProps[GETPROP_TF2_BUILDER_TYPE].getIntPointer(pBuilder);
 
 		*pitype = itype;
 			//, ]
 	}
-	inline static int getChargeResistType(edict_t *pMedigun)
+
+	static int getChargeResistType(edict_t *pMedigun)
 	{
 		return g_GetProps[GETPROP_TF2_CHARGE_RESIST_TYPE].getInt(pMedigun, 0);
 	}
-	inline static void TF2_SetBuilderMode(edict_t *pBuilder, int imode)
+
+	static void TF2_SetBuilderMode(edict_t *pBuilder, int imode)
 	{
 		int *pitype = g_GetProps[GETPROP_TF2_BUILDER_MODE].getIntPointer(pBuilder);
 
@@ -411,18 +414,20 @@ public:
 		//GETPROP_TF2_BUILDER_MODE, ]
 	}
 	//Jrob
-	inline static int getTF2DesiredClass(edict_t *edict) { return g_GetProps[GETPROP_TF2DESIREDCLASS].getInt(edict, 0); }
-	inline static void setTF2Class(edict_t *edict, int _class)
+	static int getTF2DesiredClass(edict_t *edict) { return g_GetProps[GETPROP_TF2DESIREDCLASS].getInt(edict, 0); }
+
+	static void setTF2Class(edict_t *edict, int _class)
 	{
 		int* p = g_GetProps[GETPROP_TF2DESIREDCLASS].getIntPointer(edict);
 		if (p != NULL) *p = _class;
 	}
 	//end Jrob
-	inline static bool TF2_IsMedievalMode(void*gamerules) { return g_GetProps[GETPROP_TF2_MEDIEVALMODE].getBool(gamerules, false, false);}
-	inline static int TF2_getRoundState(void *gamerules) { return g_GetProps[GETPROP_TF2_ROUNDSTATE].getInt(gamerules, 0, false); }
-	inline static float getTF2SpyCloakMeter ( edict_t *edict ) { return g_GetProps[GETPROP_TF2SPYMETER].getFloat(edict,0); }
-	inline static int getWaterLevel ( edict_t *edict ) { return g_GetProps[GETPROP_WATERLEVEL].getInt(edict,0); }
-	inline static void updateSimulationTime ( edict_t *edict )
+	static bool TF2_IsMedievalMode(void*gamerules) { return g_GetProps[GETPROP_TF2_MEDIEVALMODE].getBool(gamerules, false, false);}
+	static int TF2_getRoundState(void *gamerules) { return g_GetProps[GETPROP_TF2_ROUNDSTATE].getInt(gamerules, 0, false); }
+	static float getTF2SpyCloakMeter ( edict_t *edict ) { return g_GetProps[GETPROP_TF2SPYMETER].getFloat(edict,0); }
+	static int getWaterLevel ( edict_t *edict ) { return g_GetProps[GETPROP_WATERLEVEL].getInt(edict,0); }
+
+	static void updateSimulationTime ( edict_t *edict )
 	{
 		float *m_flSimulationTime = g_GetProps[GETPROP_SIMULATIONTIME].getFloatPointer(edict);
 
@@ -430,7 +435,7 @@ public:
 			*m_flSimulationTime = gpGlobals->curtime;
 	}
 
-	inline static bool *getDODCPVisible ( edict_t *pResource ) { return g_GetProps[GETPROP_DOD_CP_VISIBLE].getBoolPointer(pResource); }
+	static bool *getDODCPVisible ( edict_t *pResource ) { return g_GetProps[GETPROP_DOD_CP_VISIBLE].getBoolPointer(pResource); }
 	static bool getTF2SpyDisguised( edict_t *edict, int *_class, int *_team, int *_index, int *_health ) 
 	{ 
 		CClassInterfaceValue::resetError();
@@ -449,106 +454,107 @@ public:
 		return !CClassInterfaceValue::isError();
 	}
 
-	inline static int TF2_getItemDefinitionIndex(edict_t *edict)
+	static int TF2_getItemDefinitionIndex(edict_t *edict)
 	{
 		return g_GetProps[GETPROP_TF2_ITEMDEFINITIONINDEX].getInt(edict, 0);
 	}
-	
-	inline static bool isCarryingObj ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_ISCARRYINGOBJ].getBool(edict,false); }
-	inline static edict_t *getCarriedObj ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_GETCARRIEDOBJ].getEntity(edict); }
-	inline static bool getMedigunHealing ( edict_t *edict ) { return g_GetProps[GETPROP_TF2MEDIGUN_HEALING].getBool(edict,false); }
-	inline static edict_t *getMedigunTarget ( edict_t *edict ) { return g_GetProps[GETPROP_TF2MEDIGUN_TARGETTING].getEntity(edict); }
-	inline static edict_t *getSentryEnemy ( edict_t *edict ) { return g_GetProps[GETPROP_SENTRY_ENEMY].getEntity(edict); }
-	inline static edict_t *getOwner ( edict_t *edict ) { return g_GetProps[GETPROP_ALL_ENTOWNER].getEntity(edict); }
-	inline static bool isMedigunTargetting ( edict_t *pgun, edict_t *ptarget) { return g_GetProps[GETPROP_TF2MEDIGUN_TARGETTING].getEntity(pgun) == ptarget; }
+
+	static bool isCarryingObj ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_ISCARRYINGOBJ].getBool(edict,false); }
+	static edict_t *getCarriedObj ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_GETCARRIEDOBJ].getEntity(edict); }
+	static bool getMedigunHealing ( edict_t *edict ) { return g_GetProps[GETPROP_TF2MEDIGUN_HEALING].getBool(edict,false); }
+	static edict_t *getMedigunTarget ( edict_t *edict ) { return g_GetProps[GETPROP_TF2MEDIGUN_TARGETTING].getEntity(edict); }
+	static edict_t *getSentryEnemy ( edict_t *edict ) { return g_GetProps[GETPROP_SENTRY_ENEMY].getEntity(edict); }
+	static edict_t *getOwner ( edict_t *edict ) { return g_GetProps[GETPROP_ALL_ENTOWNER].getEntity(edict); }
+	static bool isMedigunTargetting ( edict_t *pgun, edict_t *ptarget) { return g_GetProps[GETPROP_TF2MEDIGUN_TARGETTING].getEntity(pgun) == ptarget; }
 	//static void setTickBase ( edict_t *edict, int tickbase ) { return ;
-	inline static int isTeleporterMode (edict_t *edict, eTeleMode mode ) { return g_GetProps[GETPROP_TF2TELEPORTERMODE].getInt(edict,-1) == (int)mode; }
-	inline static edict_t *getCurrentWeapon (edict_t *player) { return g_GetProps[GETPROP_CURRENTWEAPON].getEntity(player); }
-	inline static int getUberChargeLevel (edict_t *pWeapon) { return (int)(g_GetProps[GETPROP_TF2UBERCHARGE_LEVEL].getFloat(pWeapon,0)*100.0); }
+	static int isTeleporterMode (edict_t *edict, eTeleMode mode ) { return g_GetProps[GETPROP_TF2TELEPORTERMODE].getInt(edict,-1) == (int)mode; }
+	static edict_t *getCurrentWeapon (edict_t *player) { return g_GetProps[GETPROP_CURRENTWEAPON].getEntity(player); }
+	static int getUberChargeLevel (edict_t *pWeapon) { return (int)(g_GetProps[GETPROP_TF2UBERCHARGE_LEVEL].getFloat(pWeapon,0)*100.0); }
 	//static void test ();
-	inline static float getSentryHealth ( edict_t *edict ) { return g_GetProps[GETPROP_TF2SENTRYHEALTH].getFloatFromInt(edict,100); }
-	inline static float getDispenserHealth ( edict_t *edict ) { return g_GetProps[GETPROP_TF2DISPENSERHEALTH].getFloatFromInt(edict,100); }
-	inline static float getTeleporterHealth ( edict_t *edict ) { return g_GetProps[GETPROP_TF2TELEPORTERHEALTH].getFloatFromInt(edict,100); }
-	inline static bool isObjectCarried ( edict_t *edict ) { return g_GetProps[GETPROP_TF2OBJECTCARRIED].getBool(edict,false); }
-	inline static int getTF2UpgradeLevel ( edict_t *edict ) { return g_GetProps[GETPROP_TF2OBJECTUPGRADELEVEL].getInt(edict,0); }
-	inline static int getTF2SentryUpgradeMetal ( edict_t *edict ) { return g_GetProps[GETPROP_TF2OBJECTUPGRADEMETAL].getInt(edict,0); }
-	inline static int getTF2SentryShells ( edict_t *edict ) { return g_GetProps[GETPROP_TF2OBJECTSHELLS].getInt(edict,0); }
-	inline static int getTF2SentryRockets ( edict_t *edict ) { return g_GetProps[GETPROP_TF2OBJECTROCKETS].getInt(edict,0); }
+	static float getSentryHealth ( edict_t *edict ) { return g_GetProps[GETPROP_TF2SENTRYHEALTH].getFloatFromInt(edict,100); }
+	static float getDispenserHealth ( edict_t *edict ) { return g_GetProps[GETPROP_TF2DISPENSERHEALTH].getFloatFromInt(edict,100); }
+	static float getTeleporterHealth ( edict_t *edict ) { return g_GetProps[GETPROP_TF2TELEPORTERHEALTH].getFloatFromInt(edict,100); }
+	static bool isObjectCarried ( edict_t *edict ) { return g_GetProps[GETPROP_TF2OBJECTCARRIED].getBool(edict,false); }
+	static int getTF2UpgradeLevel ( edict_t *edict ) { return g_GetProps[GETPROP_TF2OBJECTUPGRADELEVEL].getInt(edict,0); }
+	static int getTF2SentryUpgradeMetal ( edict_t *edict ) { return g_GetProps[GETPROP_TF2OBJECTUPGRADEMETAL].getInt(edict,0); }
+	static int getTF2SentryShells ( edict_t *edict ) { return g_GetProps[GETPROP_TF2OBJECTSHELLS].getInt(edict,0); }
+	static int getTF2SentryRockets ( edict_t *edict ) { return g_GetProps[GETPROP_TF2OBJECTROCKETS].getInt(edict,0); }
 	
 	static bool getTF2ObjectiveResource ( CTFObjectiveResource *pResource );
 
-	inline static float getTF2TeleRechargeTime(edict_t *edict) { return g_GetProps[GETPROP_TF2_TELEPORT_RECHARGETIME].getFloat(edict,0); } 
-	inline static float getTF2TeleRechargeDuration(edict_t *edict) { return g_GetProps[GETPROP_TF2_TELEPORT_RECHARGEDURATION].getFloat(edict,0); } 
+	static float getTF2TeleRechargeTime(edict_t *edict) { return g_GetProps[GETPROP_TF2_TELEPORT_RECHARGETIME].getFloat(edict,0); }
+	static float getTF2TeleRechargeDuration(edict_t *edict) { return g_GetProps[GETPROP_TF2_TELEPORT_RECHARGEDURATION].getFloat(edict,0); }
 
-	inline static int getTF2GetBuildingMaxHealth ( edict_t *edict ) { return g_GetProps[GETPROP_TF2OBJECTMAXHEALTH].getInt(edict,0); }
-	inline static int getTF2DispMetal ( edict_t *edict ) { return g_GetProps[GETPROP_TF2DISPMETAL].getInt(edict,0); }
-	inline static bool getTF2BuildingIsMini ( edict_t *edict ) { return g_GetProps[GETPROP_TF2MINIBUILDING].getBool(edict,false); }
-	inline static float getMaxSpeed(edict_t *edict) { return g_GetProps[GETPROP_MAXSPEED].getFloat(edict,0); }
-	inline static float getSpeedFactor(edict_t *edict) { return g_GetProps[GETPROP_CONSTRAINT_SPEED].getFloat(edict,0); } 
-	inline static bool isObjectBeingBuilt(edict_t *edict) { return g_GetProps[GETPROP_TF2OBJECTBUILDING].getBool(edict,false); }
-	inline static edict_t *getGroundEntity(edict_t *edict) { return g_GetProps[GETPROP_GROUND_ENTITY].getEntity(edict); }
-	inline static edict_t *gravityGunObject(edict_t *pgun) { return g_GetProps[GETPROP_HL2DM_PHYSCANNON_ATTACHED].getEntity(pgun); }
-	inline static bool gravityGunOpen(edict_t *pgun) { return g_GetProps[GETPROP_HL2DM_PHYSCANNON_OPEN].getBool(pgun,false); }
-	inline static float auxPower (edict_t *player) { return g_GetProps[GETPROP_HL2DM_PLAYER_AUXPOWER].getFloat(player,0);} 
-	inline static edict_t *onLadder ( edict_t *player ) { return g_GetProps[GETPROP_HL2DM_LADDER_ENT].getEntity(player);}
-	inline static CBaseHandle *getWeaponList ( edict_t *player ) { return g_GetProps[GETPROP_WEAPONLIST].getEntityHandle(player);}
-	inline static int getWeaponState ( edict_t *pgun ) { return g_GetProps[GETPROP_WEAPONSTATE].getInt(pgun,0); }
+	static int getTF2GetBuildingMaxHealth ( edict_t *edict ) { return g_GetProps[GETPROP_TF2OBJECTMAXHEALTH].getInt(edict,0); }
+	static int getTF2DispMetal ( edict_t *edict ) { return g_GetProps[GETPROP_TF2DISPMETAL].getInt(edict,0); }
+	static bool getTF2BuildingIsMini ( edict_t *edict ) { return g_GetProps[GETPROP_TF2MINIBUILDING].getBool(edict,false); }
+	static float getMaxSpeed(edict_t *edict) { return g_GetProps[GETPROP_MAXSPEED].getFloat(edict,0); }
+	static float getSpeedFactor(edict_t *edict) { return g_GetProps[GETPROP_CONSTRAINT_SPEED].getFloat(edict,0); }
+	static bool isObjectBeingBuilt(edict_t *edict) { return g_GetProps[GETPROP_TF2OBJECTBUILDING].getBool(edict,false); }
+	static edict_t *getGroundEntity(edict_t *edict) { return g_GetProps[GETPROP_GROUND_ENTITY].getEntity(edict); }
+	static edict_t *gravityGunObject(edict_t *pgun) { return g_GetProps[GETPROP_HL2DM_PHYSCANNON_ATTACHED].getEntity(pgun); }
+	static bool gravityGunOpen(edict_t *pgun) { return g_GetProps[GETPROP_HL2DM_PHYSCANNON_OPEN].getBool(pgun,false); }
+	static float auxPower (edict_t *player) { return g_GetProps[GETPROP_HL2DM_PLAYER_AUXPOWER].getFloat(player,0);}
+	static edict_t *onLadder ( edict_t *player ) { return g_GetProps[GETPROP_HL2DM_LADDER_ENT].getEntity(player);}
+	static CBaseHandle *getWeaponList ( edict_t *player ) { return g_GetProps[GETPROP_WEAPONLIST].getEntityHandle(player);}
+	static int getWeaponState ( edict_t *pgun ) { return g_GetProps[GETPROP_WEAPONSTATE].getInt(pgun,0); }
 
-	inline static edict_t *getPipeBombOwner ( edict_t *pPipeBomb ) { return g_GetProps[GETPROP_PIPEBOMB_OWNER].getEntity(pPipeBomb); }
+	static edict_t *getPipeBombOwner ( edict_t *pPipeBomb ) { return g_GetProps[GETPROP_PIPEBOMB_OWNER].getEntity(pPipeBomb); }
 
-	inline static int getDODBombState ( edict_t *pBombTarget ) { return g_GetProps[GETPROP_DOD_BOMB_STATE].getInt(pBombTarget,0); }
-	inline static int getDODBombTeam ( edict_t *pBombTarget ) { return g_GetProps[GETPROP_DOD_BOMB_TEAM].getInt(pBombTarget,0); }
-	inline static int *getWeaponClip1Pointer ( edict_t *pgun ) { return g_GetProps[GETPROP_WEAPONCLIP1].getIntPointer(pgun); }
-	inline static int *getWeaponClip2Pointer ( edict_t *pgun ) { return g_GetProps[GETPROP_WEAPONCLIP2].getIntPointer(pgun); }
-	inline static int getOffset(int id) { return g_GetProps[id].getOffset(); }
-	inline static void getWeaponClip ( edict_t *pgun, int *iClip1, int *iClip2 ) { *iClip1 = g_GetProps[GETPROP_WEAPONCLIP1].getInt(pgun,0); *iClip2 = g_GetProps[GETPROP_WEAPONCLIP2].getInt(pgun,0); }
-	inline static void getAmmoTypes ( edict_t *pgun, int *iAmmoType1, int *iAmmoType2 ) { *iAmmoType1 = g_GetProps[GETPROP_WEAPON_AMMOTYPE1].getInt(pgun,-1); *iAmmoType2 = g_GetProps[GETPROP_WEAPON_AMMOTYPE2].getInt(pgun,-1);} 
+	static int getDODBombState ( edict_t *pBombTarget ) { return g_GetProps[GETPROP_DOD_BOMB_STATE].getInt(pBombTarget,0); }
+	static int getDODBombTeam ( edict_t *pBombTarget ) { return g_GetProps[GETPROP_DOD_BOMB_TEAM].getInt(pBombTarget,0); }
+	static int *getWeaponClip1Pointer ( edict_t *pgun ) { return g_GetProps[GETPROP_WEAPONCLIP1].getIntPointer(pgun); }
+	static int *getWeaponClip2Pointer ( edict_t *pgun ) { return g_GetProps[GETPROP_WEAPONCLIP2].getIntPointer(pgun); }
+	static int getOffset(int id) { return g_GetProps[id].getOffset(); }
+	static void getWeaponClip ( edict_t *pgun, int *iClip1, int *iClip2 ) { *iClip1 = g_GetProps[GETPROP_WEAPONCLIP1].getInt(pgun,0); *iClip2 = g_GetProps[GETPROP_WEAPONCLIP2].getInt(pgun,0); }
+	static void getAmmoTypes ( edict_t *pgun, int *iAmmoType1, int *iAmmoType2 ) { *iAmmoType1 = g_GetProps[GETPROP_WEAPON_AMMOTYPE1].getInt(pgun,-1); *iAmmoType2 = g_GetProps[GETPROP_WEAPON_AMMOTYPE2].getInt(pgun,-1);}
 
-	inline static int getPlayerClassDOD(edict_t *player) { return g_GetProps[GETPROP_DOD_PLAYERCLASS].getInt(player,0); }
-	inline static void getPlayerInfoDOD(edict_t *player, bool *m_bProne, float *m_flStamina)
+	static int getPlayerClassDOD(edict_t *player) { return g_GetProps[GETPROP_DOD_PLAYERCLASS].getInt(player,0); }
+
+	static void getPlayerInfoDOD(edict_t *player, bool *m_bProne, float *m_flStamina)
 	{
 		*m_bProne = g_GetProps[GETPROP_DOD_PRONE].getBool(player,false);
 		if ( m_flStamina )
 			*m_flStamina = g_GetProps[GETPROP_DOD_STAMINA].getFloat(player,0);
 	}
 
-	inline static float getAnimCycle ( edict_t *edict) 
+	static float getAnimCycle ( edict_t *edict) 
 	{	
 		return g_GetProps[GETPROP_CYCLE].getFloat(edict,0);
 	}
 
-	inline static void getAnimatingInfo ( edict_t *edict, float *flCycle, int *iSequence ) 
+	static void getAnimatingInfo ( edict_t *edict, float *flCycle, int *iSequence ) 
 	{	
 		*flCycle = g_GetProps[GETPROP_CYCLE].getFloat(edict,0);
 		*iSequence = g_GetProps[GETPROP_SEQUENCE].getInt(edict,false);
 	}
 
-	inline static int getPlayerFlags (edict_t *player) { return g_GetProps[GETPROP_ENTITYFLAGS].getInt(player,0);}
-	inline static int *getPlayerFlagsPointer (edict_t *player) { return g_GetProps[GETPROP_ENTITYFLAGS].getIntPointer(player);}
+	static int getPlayerFlags (edict_t *player) { return g_GetProps[GETPROP_ENTITYFLAGS].getInt(player,0);}
+	static int *getPlayerFlagsPointer (edict_t *player) { return g_GetProps[GETPROP_ENTITYFLAGS].getIntPointer(player);}
 
-	inline static int getDODNumControlPoints ( edict_t *pResource )
+	static int getDODNumControlPoints ( edict_t *pResource )
 	{
 		return g_GetProps[GETPROP_DOD_CP_NUMCAPS].getInt(pResource,0);
 	}
 
-	inline static Vector *getOrigin ( edict_t *pPlayer )
+	static Vector *getOrigin ( edict_t *pPlayer )
 	{
 		return g_GetProps[GETPROP_ORIGIN].getVectorPointer(pPlayer);
 	}
 
-	inline static void setOrigin ( edict_t *pPlayer, Vector vOrigin )
+	static void setOrigin ( edict_t *pPlayer, Vector vOrigin )
 	{
 		Vector *vEntOrigin = g_GetProps[GETPROP_ORIGIN].getVectorPointer(pPlayer);
 
 		*vEntOrigin = vOrigin;
 	}
 
-	inline static Vector *getDODCP_Positions ( edict_t *pResource )
+	static Vector *getDODCP_Positions ( edict_t *pResource )
 	{
 		return g_GetProps[GETPROP_DOD_CP_POSITIONS].getVectorPointer(pResource);
 	}
 
-	inline static void getDODFlagInfo (edict_t *pResource, int **m_iNumAxis, int **m_iNumAllies, int **m_iOwner, int **m_iNumAlliesReq, int **m_iNumAxisReq )
+	static void getDODFlagInfo (edict_t *pResource, int **m_iNumAxis, int **m_iNumAllies, int **m_iOwner, int **m_iNumAlliesReq, int **m_iNumAxisReq )
 	{
 		*m_iNumAxis = g_GetProps[GETPROP_DOD_CP_NUM_AXIS].getIntPointer(pResource);
 		*m_iNumAllies = g_GetProps[GETPROP_DOD_CP_NUM_ALLIES].getIntPointer(pResource);
@@ -557,7 +563,7 @@ public:
 		*m_iNumAxisReq = g_GetProps[GETPROP_DOD_CP_AXIS_REQ_CAP].getIntPointer(pResource);
 	}
 
-	inline static void 	getDODBombInfo ( edict_t *pResource, bool **m_bBombPlanted, int **m_iBombsRequired, int **m_iBombsRemaining, bool **m_bBombBeingDefused)
+	static void 	getDODBombInfo ( edict_t *pResource, bool **m_bBombPlanted, int **m_iBombsRequired, int **m_iBombsRemaining, bool **m_bBombBeingDefused)
 	{
 		*m_bBombPlanted = g_GetProps[GETPROP_DOD_BOMBSPLANTED].getBoolPointer(pResource);
 		*m_iBombsRequired = g_GetProps[GETPROP_DOD_BOMBSREQ].getIntPointer(pResource);
@@ -565,125 +571,130 @@ public:
 		*m_bBombBeingDefused = g_GetProps[GETPROP_DOD_BOMBSDEFUSED].getBoolPointer(pResource);
 	}
 
-	inline static float getTF2TauntYaw ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_TAUNTYAW].getFloat(edict,0); }
-	inline static bool getTF2HighFiveReady ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_HIGHFIVE].getBool(edict,false); }
-	inline static edict_t *getHighFivePartner ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_HIGHFIVE_PARTNER].getEntity(edict); }
+	static float getTF2TauntYaw ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_TAUNTYAW].getFloat(edict,0); }
+	static bool getTF2HighFiveReady ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_HIGHFIVE].getBool(edict,false); }
+	static edict_t *getHighFivePartner ( edict_t *edict ) { return g_GetProps[GETPROP_TF2_HIGHFIVE_PARTNER].getEntity(edict); }
 
-	inline static int getDesPlayerClassDOD(edict_t *player) { return g_GetProps[GETPROP_DOD_DES_PLAYERCLASS].getInt(player,0); }
+	static int getDesPlayerClassDOD(edict_t *player) { return g_GetProps[GETPROP_DOD_DES_PLAYERCLASS].getInt(player,0); }
 
-	inline static bool isSniperWeaponZoomed (edict_t *weapon) { return g_GetProps[GETPROP_DOD_SNIPER_ZOOMED].getBool(weapon,false); }
-	inline static bool isMachineGunDeployed (edict_t *weapon) { return g_GetProps[GETPROP_DOD_MACHINEGUN_DEPLOYED].getBool(weapon,false); }
-	inline static bool isRocketDeployed ( edict_t *weapon ) { return g_GetProps[GETPROP_DOD_ROCKET_DEPLOYED].getBool(weapon,false); }
+	static bool isSniperWeaponZoomed (edict_t *weapon) { return g_GetProps[GETPROP_DOD_SNIPER_ZOOMED].getBool(weapon,false); }
+	static bool isMachineGunDeployed (edict_t *weapon) { return g_GetProps[GETPROP_DOD_MACHINEGUN_DEPLOYED].getBool(weapon,false); }
+	static bool isRocketDeployed ( edict_t *weapon ) { return g_GetProps[GETPROP_DOD_ROCKET_DEPLOYED].getBool(weapon,false); }
 
-	inline static bool isMoveType ( edict_t *pent, int movetype )
+	static bool isMoveType ( edict_t *pent, int movetype )
 	{
 		return (g_GetProps[GETPROP_MOVETYPE].getInt(pent,0) & 15) == movetype;
 	}
 
-	inline static byte getTakeDamage ( edict_t *pent )
+	static byte getTakeDamage ( edict_t *pent )
 	{
 		return (byte)g_GetProps[GETPROP_TAKEDAMAGE].getInt(pent,0);
 	}
 
-	inline static byte *getTakeDamagePointer ( edict_t *pent )
+	static byte *getTakeDamagePointer ( edict_t *pent )
 	{
 		return g_GetProps[GETPROP_TAKEDAMAGE].getBytePointer(pent);
 	}
 
-	inline static int getMoveType ( edict_t *pent )
+	static int getMoveType ( edict_t *pent )
 	{
 		return g_GetProps[GETPROP_MOVETYPE].getInt(pent,0) & 15;
 	}
 
-	inline static byte *getMoveTypePointer ( edict_t *pent )
+	static byte *getMoveTypePointer ( edict_t *pent )
 	{
 		return g_GetProps[GETPROP_MOVETYPE].getBytePointer(pent);
 	}
 
-	inline static edict_t *getGrenadeThrower ( edict_t *gren )
+	static edict_t *getGrenadeThrower ( edict_t *gren )
 	{
 		return g_GetProps[GETPROP_DOD_GREN_THROWER].getEntity(gren);
 	}
 
-	inline static int getPlayerScoreDOD (edict_t* resource, const edict_t* pPlayer)
+	static int getPlayerScoreDOD (edict_t* resource, const edict_t* pPlayer)
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_SCORE].getIntPointer(resource);
 
 		return score_array!=NULL ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
-	inline static int getPlayerObjectiveScoreDOD (edict_t* resource, const edict_t* pPlayer)
+	static int getPlayerObjectiveScoreDOD (edict_t* resource, const edict_t* pPlayer)
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_OBJSCORE].getIntPointer(resource);
 
 		return score_array!=NULL ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
-	inline static int getPlayerDeathsDOD (edict_t* resource, const edict_t* pPlayer)
+	static int getPlayerDeathsDOD (edict_t* resource, const edict_t* pPlayer)
 	{
 		int *score_array = g_GetProps[GETPROP_DOD_DEATHS].getIntPointer(resource);
 
 		return score_array!=NULL ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
-	inline static float getSmokeSpawnTime ( edict_t *pSmoke )
+	static float getSmokeSpawnTime ( edict_t *pSmoke )
 	{
 		return g_GetProps[GETPROP_DOD_SMOKESPAWN_TIME].getFloat(pSmoke,0);
 	}
-	
-	inline static float getRoundTime ( edict_t *pGamerules )
+
+	static float getRoundTime ( edict_t *pGamerules )
 	{
 		return g_GetProps[GETPROP_DOD_ROUNDTIME].getFloat(pGamerules,0);
 	}
 
-	inline static bool isGarandZoomed ( edict_t *pGarand )
+	static bool isGarandZoomed ( edict_t *pGarand )
 	{
 		return g_GetProps[GETPROP_DOD_GARANDZOOM].getBool(pGarand,false);
 	}
 
-	inline static bool isK98Zoomed( edict_t *pK98 )
+	static bool isK98Zoomed( edict_t *pK98 )
 	{
 		return g_GetProps[GETPROP_DOD_K98ZOOM].getBool(pK98,false);
 	}
 	// HL2DM
 	//static void 
 
-	inline static bool areAlliesBombing (edict_t *pRes) 
+	static bool areAlliesBombing (edict_t *pRes) 
 	{
 		return g_GetProps[GETPROP_DOD_ALLIESBOMBING].getBool(pRes,false);
 	}
-	inline static bool areAxisBombing (edict_t *pRes) 
+
+	static bool areAxisBombing (edict_t *pRes) 
 	{
 		return g_GetProps[GETPROP_DOD_AXISBOMBING].getBool(pRes,false);
 	}
-	inline static int *isBombPlantedList (edict_t *pRes) 
+
+	static int *isBombPlantedList (edict_t *pRes) 
 	{
 		return g_GetProps[GETPROP_DOD_BOMBSPLANTED].getIntPointer(pRes);
 	}
-	inline static int *getNumBombsRequiredList (edict_t *pRes) 
+
+	static int *getNumBombsRequiredList (edict_t *pRes) 
 	{
 		return g_GetProps[GETPROP_DOD_BOMBSREQ].getIntPointer(pRes);
 	}
-	inline static int *isBombDefusingList (edict_t *pRes) 
+
+	static int *isBombDefusingList (edict_t *pRes) 
 	{
 		return g_GetProps[GETPROP_DOD_BOMBSDEFUSED].getIntPointer(pRes);
 	}
-	inline static int *getNumBombsRemaining ( edict_t *pRes )
+
+	static int *getNumBombsRemaining ( edict_t *pRes )
 	{
 		return g_GetProps[GETPROP_DOD_BOMBSREMAINING].getIntPointer(pRes);
 	}
 
-	inline static bool isPlayerDefusingBomb_DOD(edict_t *pPlayer)
+	static bool isPlayerDefusingBomb_DOD(edict_t *pPlayer)
 	{
 		return g_GetProps[GETPROP_DOD_DEFUSINGBOMB].getBool(pPlayer,false);
 	}
 
-	inline static bool isPlayerPlantingBomb_DOD(edict_t *pPlayer)
+	static bool isPlayerPlantingBomb_DOD(edict_t *pPlayer)
 	{
 		return g_GetProps[GETPROP_DOD_PLANTINGBOMB].getBool(pPlayer,false);
 	}
 
-	inline static bool isSentryGunBeingPlaced (edict_t *pSentry )
+	static bool isSentryGunBeingPlaced (edict_t *pSentry )
 	{
 		return g_GetProps[GETPROP_SENTRYGUN_PLACING].getBool(pSentry,false);
 	}
@@ -694,7 +705,7 @@ public:
 	 * @param pPlayer	The player to retreive FOV from
 	 * @return			The player's FOV
 	 **/
-	inline static int getPlayerFOV(edict_t *pPlayer)
+	static int getPlayerFOV(edict_t *pPlayer)
 	{
 		return g_GetProps[GETPROP_PLAYER_FOV].getInt(pPlayer, 0);
 	}
@@ -705,7 +716,7 @@ public:
 	 * @param pPlayer	The player to retreive life state from
 	 * @return			The player's life state
 	 **/
-	inline static int getPlayerLifeState(edict_t *pPlayer)
+	static int getPlayerLifeState(edict_t *pPlayer)
 	{
 		return g_GetProps[GETPROP_PLAYER_LIFESTATE].getInt(pPlayer, 0);
 	}
@@ -718,7 +729,7 @@ public:
 	 * @param pPlayer	The player to retreive the vehicle from
 	 * @return			The player's vehicle
 	 **/
-	inline static edict_t* getSynPlayerVehicle(edict_t* pPlayer)
+	static edict_t* getSynPlayerVehicle(edict_t* pPlayer)
 	{
 		return g_GetProps[GETPROP_SYN_PLAYER_VEHICLE].getEntity(pPlayer);
 	}
@@ -729,7 +740,7 @@ public:
 	 * @param pVehicle	The vehicle to get the driver from
 	 * @return			The vehicle current driver
 	 **/
-	inline static edict_t* getSynVehicleDriver(edict_t* pVehicle)
+	static edict_t* getSynVehicleDriver(edict_t* pVehicle)
 	{
 		return g_GetProps[GETPROP_SYN_VEHICLE_DRIVER].getEntity(pVehicle);
 	}	
@@ -740,7 +751,7 @@ public:
 	 * @param pPlayer	The player to retreive the suit power from
 	 * @return			The player's current suit power level
 	 **/
-	inline static float getSynPlayerSuitPower(edict_t* pPlayer)
+	static float getSynPlayerSuitPower(edict_t* pPlayer)
 	{
 		return g_GetProps[GETPROP_SYN_SUITPOWER].getFloat(pPlayer, 0.0f);
 	}
@@ -753,7 +764,7 @@ public:
 	 * @param pPlayer	The player's pointer
 	 * @return			The player's current money value
 	 **/
-	inline static int getCSPlayerMoney(edict_t* pPlayer)
+	static int getCSPlayerMoney(edict_t* pPlayer)
 	{
 		return g_GetProps[GETPROP_CSS_MONEY].getInt(pPlayer, 0);
 	}
@@ -764,7 +775,7 @@ public:
 	 * @param pPlayer	The player's pointer
 	 * @return			TRUE if the player is inside a buy zone
 	 **/
-	inline static bool isCSPlayerInBuyZone(edict_t* pPlayer)
+	static bool isCSPlayerInBuyZone(edict_t* pPlayer)
 	{
 		return g_GetProps[GETPROP_CSS_INBUYZONE].getBool(pPlayer, false);
 	}
@@ -775,7 +786,7 @@ public:
 	 * @param pPlayer	The player's pointer
 	 * @return			TRUE if the player is inside a bomb zone
 	 **/
-	inline static bool isCSPlayerInBombZone(edict_t* pPlayer)
+	static bool isCSPlayerInBombZone(edict_t* pPlayer)
 	{
 		return g_GetProps[GETPROP_CSS_INBOMBZONE].getBool(pPlayer, false);
 	}
@@ -786,7 +797,7 @@ public:
 	 * @param pPlayer	The player's pointer
 	 * @return			TRUE if the player is inside a hostage rescue zone
 	 **/
-	inline static bool isCSPlayerInHostageRescueZone(edict_t* pPlayer)
+	static bool isCSPlayerInHostageRescueZone(edict_t* pPlayer)
 	{
 		return g_GetProps[GETPROP_CSS_INHOSTAGERESCUEZONE].getBool(pPlayer, false);
 	}
@@ -797,7 +808,7 @@ public:
 	 * @param pPlayer	The player's pointer
 	 * @return			The player's current armor value
 	 **/
-	inline static int getCSPlayerArmor(edict_t* pPlayer)
+	static int getCSPlayerArmor(edict_t* pPlayer)
 	{
 		return g_GetProps[GETPROP_CSS_ARMOR].getInt(pPlayer, 0);
 	}
@@ -808,7 +819,7 @@ public:
 	 * @param pPlayer	The player's pointer
 	 * @return			TRUE if the player has a defuse kit
 	 **/
-	inline static bool CSPlayerHasDefuser(edict_t* pPlayer)
+	static bool CSPlayerHasDefuser(edict_t* pPlayer)
 	{
 		return g_GetProps[GETPROP_CSS_HASDEFUSER].getBool(pPlayer, false);
 	}
@@ -819,7 +830,7 @@ public:
 	 * @param pPlayer	The player's pointer
 	 * @return			TRUE if the player has helmet armor
 	 **/
-	inline static bool CSPlayerHasHelmet(edict_t* pPlayer)
+	static bool CSPlayerHasHelmet(edict_t* pPlayer)
 	{
 		return g_GetProps[GETPROP_CSS_HASHELMET].getBool(pPlayer, false);
 	}
@@ -830,7 +841,7 @@ public:
 	 * @param pBomb		The planted bomb entity
 	 * @return			TRUE if the bomb is ticking (returns FALSE is the bomb was defused)
 	 **/
-	inline static bool isCSBombTicking(edict_t* pBomb)
+	static bool isCSBombTicking(edict_t* pBomb)
 	{
 		return g_GetProps[GETPROP_CSS_BOMBTICKING].getBool(pBomb, false);
 	}
@@ -851,7 +862,7 @@ public:
 	* @param prop		The property to read
 	* @return			The property value
 	**/
-	inline static int GetEntPropInt(CBaseEntity *pEntity, const char *prop)
+	static int GetEntPropInt(CBaseEntity *pEntity, const char *prop)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, prop);
@@ -866,7 +877,7 @@ public:
 	* @param prop		The property to read
 	* @return			The property value
 	**/
-	inline static float GetEntPropFloat(CBaseEntity *pEntity, const char *prop)
+	static float GetEntPropFloat(CBaseEntity *pEntity, const char *prop)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, prop);
@@ -881,7 +892,7 @@ public:
 	* @param prop		The property to read
 	* @return			The property value or NULL if the edict is invalid
 	**/
-	inline static edict_t *GetEntPropEdict(CBaseEntity *pEntity, const char *prop)
+	static edict_t *GetEntPropEdict(CBaseEntity *pEntity, const char *prop)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, prop);
@@ -901,7 +912,7 @@ public:
 	* @param prop		The property to read
 	* @return			The property value
 	**/
-	inline static Vector *GetEntPropVector(CBaseEntity *pEntity, const char *prop)
+	static Vector *GetEntPropVector(CBaseEntity *pEntity, const char *prop)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, prop);
@@ -915,7 +926,7 @@ public:
 	* @param pEntity	The entity to get the health from
 	* @return			The entity current health (m_iHealth) value
 	**/
-	inline static int GetEntityHealth(CBaseEntity* pEntity)
+	static int GetEntityHealth(CBaseEntity* pEntity)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, "m_iHealth");
@@ -928,7 +939,7 @@ public:
 	* @param pEntity	The entity to get the health from
 	* @return			The entity current max health (m_iMaxHealth) value
 	**/
-	inline static int GetEntityMaxHealth(CBaseEntity* pEntity)
+	static int GetEntityMaxHealth(CBaseEntity* pEntity)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, "m_iMaxHealth");
@@ -941,7 +952,7 @@ public:
 	* @param pEntity	The entity to get the health from
 	* @return			The entity health as percentage, range 1 to 0, where 1 is full health
 	**/
-	inline static float GetEntityHealthPercent(CBaseEntity* pEntity)
+	static float GetEntityHealthPercent(CBaseEntity* pEntity)
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, "m_iHealth");

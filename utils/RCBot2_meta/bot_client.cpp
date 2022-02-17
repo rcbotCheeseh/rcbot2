@@ -907,7 +907,7 @@ void CClient :: think ()
 					//clear from i
 
 					int pos = n;
-					int n = 0;
+					//int n = 0;
 
 					for ( n = 0; pos < MAX_STORED_AUTOWAYPOINT; n ++ )
 					{
@@ -916,7 +916,7 @@ void CClient :: think ()
 						pos++;
 					}
 
-					for ( n = n; n < MAX_STORED_AUTOWAYPOINT; n ++ )
+					for ( n = 0; n < MAX_STORED_AUTOWAYPOINT; n ++ )
 					{
 						m_vLastAutoWaypointCheckPos[n].UnSetPoint();					
 					}

@@ -171,7 +171,7 @@ public:
 	}
 
 	// Data functions, called to set up the state at the beginning of a round
-	inline int	 GetNumControlPoints() 
+	int	 GetNumControlPoints() 
 	{ 
 		if ( m_iNumControlPoints==NULL )
 			return 0;
@@ -271,7 +271,7 @@ public:
 	bool updateAttackPoints ( int team );
 	bool updateDefendPoints ( int team );
 
-	inline void resetValidWaypointAreas() 
+	void resetValidWaypointAreas() 
 	{ 
 		memset(m_ValidAreas,0,sizeof(bool)*MAX_CONTROL_POINTS); 
 	}

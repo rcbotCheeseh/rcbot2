@@ -60,7 +60,7 @@ public:
 
 	void clear ();
 
-	inline void add ( float val ) { m_theValues.emplace_back(val); }
+	void add ( float val ) { m_theValues.emplace_back(val); }
 
 	void addRnd ();
 

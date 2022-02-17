@@ -81,13 +81,11 @@
 
 #include "logging.h"
 
-#include <random>
 #include <vector>
 #include <algorithm>
-#include <random>
 
-#define DEG_TO_RAD(x) ((x)*0.0174533)
-#define RAD_TO_DEG(x) ((x)*57.29578)
+#define DEG_TO_RAD(x) (x)*0.0174533
+#define RAD_TO_DEG(x) (x)*57.29578
 
 //extern void HookPlayerRunCommand ( edict_t *edict );
 
@@ -329,13 +327,13 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	engine->SetFakeClientConVarValue(pEdict,"tf_medigun_autoheal","0");	
 
 	// joining name not the same as the profile name, change name
-	if (strcmp(m_szBotName,pProfile->m_szName) != 0)
+	if (strcmp(m_szBotName,pProfile->m_szName) )
 	{
 		engine->SetFakeClientConVarValue(pEdict,"name",pProfile->m_szName);
 		strcpy(m_szBotName,pProfile->m_szName);
 	}
 
-	if ( m_pPlayerInfo && pProfile->m_iTeam != -1 )
+	if ( m_pPlayerInfo && (pProfile->m_iTeam != -1) )
 		m_pPlayerInfo->ChangeTeam(pProfile->m_iTeam);
 
 	/////////////////////////////
@@ -345,7 +343,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 
 	if ( FStrEq(szModel,"default") )	
 	{
-		const int iModel = randomInt(1,7);	
+		int iModel = randomInt(1,7);	
 
 		if ( randomInt(0,1) )
 			sprintf(szModel,"models/humans/Group03/Male_0%d.mdl",iModel);
@@ -369,10 +367,10 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	};
 	
 	char cmd[32];
-	if (m_iDesiredClass >= 0 && m_iDesiredClass < sizeof classNames) {
-		snprintf(cmd, sizeof cmd, "joinclass %s", classNames[m_iDesiredClass]);
+	if (m_iDesiredClass >= 0 && m_iDesiredClass < sizeof(classNames)) {
+		snprintf(cmd, sizeof(cmd), "joinclass %s", classNames[m_iDesiredClass]);
 	} else {
-		snprintf(cmd, sizeof cmd, "joinclass auto");
+		snprintf(cmd, sizeof(cmd), "joinclass auto");
 	}
 	
 	helpers->ClientCommand(pEdict, cmd);
@@ -3030,14 +3028,15 @@ bool CBots :: controlBot ( edict_t *pEdict )
 	return true;
 }
 
-#define SET_PROFILE_DATA_INT(varname,membername) if ( (varname) && *(varname) ) { pBotProfile->membername = atoi(varname); }
-#define SET_PROFILE_STRING(varname,localname,membername) if ( (varname) && *(varname) ) { (localname) = (char*)(varname); } else { (localname) = pBotProfile->membername; }
+#define SET_PROFILE_DATA_INT(varname,membername) if ( varname && *varname ) { pBotProfile->membername = atoi(varname); }
+#define SET_PROFILE_STRING(varname,localname,membername) if ( varname && *varname ) { localname = (char*)varname; } else { localname = pBotProfile->membername; }
 
 bool CBots :: controlBot ( const char *szOldName, const char *szName, const char *szTeam, const char *szClass )
 {
-	edict_t *pEdict;
+	edict_t *pEdict;	
+	CBotProfile *pBotProfile;
 
-	const char *szOVName = "";
+	char *szOVName = "";
 
 	if ( (pEdict = CBotGlobals::findPlayerByTruncName(szOldName)) == NULL )
 	{
@@ -3051,7 +3050,7 @@ bool CBots :: controlBot ( const char *szOldName, const char *szName, const char
 		return false;
 	}
 
-	if ( m_iMaxBots != -1 && CBotGlobals::numClients() >= m_iMaxBots )
+	if ( (m_iMaxBots != -1) && (CBotGlobals::numClients() >= m_iMaxBots) )
 	{
 		logger->Log(LogLevel::ERROR, "Can't create bot, max_bots reached");
 		return false;
@@ -3059,7 +3058,7 @@ bool CBots :: controlBot ( const char *szOldName, const char *szName, const char
 
 	m_flAddKickBotTime = engine->Time() + 2.0f;
 
-	CBotProfile* pBotProfile = CBotProfiles::getRandomFreeProfile();
+	pBotProfile = CBotProfiles::getRandomFreeProfile();
 
 	if ( pBotProfile == NULL )
 	{
@@ -3082,15 +3081,17 @@ bool CBots :: controlBot ( const char *szOldName, const char *szName, const char
 
 bool CBots :: createBot (const char *szClass, const char *szTeam, const char *szName)
 {
+	edict_t *pEdict;
+	CBotProfile *pBotProfile;
 	CBotMod *pMod = CBotGlobals::getCurrentMod();
-	const char *szOVName = "";
+	char *szOVName = "";
 
-	if ( m_iMaxBots != -1 && CBotGlobals::numClients() >= m_iMaxBots )
+	if ( (m_iMaxBots != -1) && (CBotGlobals::numClients() >= m_iMaxBots) )
 		logger->Log(LogLevel::ERROR, "Can't create bot, max_bots reached");
 
 	m_flAddKickBotTime = engine->Time() + rcbot_addbottime.GetFloat();
 
-	CBotProfile* pBotProfile = CBotProfiles::getRandomFreeProfile();
+	pBotProfile = CBotProfiles::getRandomFreeProfile();
 
 	if ( pBotProfile == NULL )
 	{
@@ -3106,12 +3107,12 @@ bool CBots :: createBot (const char *szClass, const char *szTeam, const char *sz
 	SET_PROFILE_DATA_INT(szTeam,m_iTeam);
 	SET_PROFILE_STRING(szName,szOVName,m_szName);
 
-	edict_t* pEdict = g_pBotManager->CreateBot(szOVName);
+	pEdict = g_pBotManager->CreateBot( szOVName );
 
 	if ( pEdict == NULL )
 		return false;
 
-	return m_Bots[slotOfEdict(pEdict)]->createBotFromEdict(pEdict,pBotProfile);
+	return ( m_Bots[slotOfEdict(pEdict)]->createBotFromEdict(pEdict,pBotProfile) );
 }
 
 int CBots::createDefaultBot(const char* name) {
@@ -3125,7 +3126,7 @@ int CBots::createDefaultBot(const char* name) {
 	CBotProfile* pBotProfile = new CBotProfile(*CBotProfiles::getDefaultProfile());
 	pBotProfile->m_szName = CStrings::getString(name);
 
-	const int slot = slotOfEdict(pEdict);
+	int slot = slotOfEdict(pEdict);
 	m_Bots[slot]->createBotFromEdict(pEdict, pBotProfile);
 
 	return slot;
@@ -3213,10 +3214,12 @@ int CBots :: numBots ()
 }
 
 CBot *CBots :: findBotByProfile ( CBotProfile *pProfile )
-{
+{	
+	CBot *pBot = NULL;
+
 	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
 	{
-		CBot* pBot = m_Bots[i];
+		pBot = m_Bots[i];
 
 		if ( pBot->inUse() )
 		{
@@ -3248,7 +3251,7 @@ void CBots :: botThink ()
 {
 	static CBot *pBot;
 
-	const bool bBotStop = bot_stop.GetInt() > 0;
+	bool bBotStop = bot_stop.GetInt() > 0;
 
 #ifdef _DEBUG
 	CProfileTimer *CBotsBotThink;
@@ -3420,6 +3423,7 @@ bool CBots :: needToKickBot ()
 void CBots :: kickRandomBot (size_t count)
 {
 	std::vector<int> botList;
+	char szCommand[512];
 	//gather list of bots
 	for ( size_t i = 0; i < MAX_PLAYERS; i ++ )
 	{
@@ -3433,11 +3437,11 @@ void CBots :: kickRandomBot (size_t count)
 		return;
 	}
 
-	std::shuffle( botList.begin(), botList.end(), std::mt19937(std::random_device()()));
+	std::random_shuffle ( botList.begin(), botList.end() );
 
 	size_t numBotsKicked = 0;
-	while (numBotsKicked < count && !botList.empty()) {
-		char szCommand[512];
+	while (numBotsKicked < count && botList.size()) {
+					  
 		sprintf(szCommand, "kickid %d\n", botList.back());
 		engine->ServerCommand(szCommand);
 		numBotsKicked++;

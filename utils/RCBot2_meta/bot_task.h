@@ -120,8 +120,8 @@ public:
 	virtual eTaskState isInterrupted (CBot *pBot);
 	void fail ();
 	void complete ();
-	inline bool hasFlag ( int iFlag ) { return (m_iFlags & iFlag) == iFlag; }
-	inline void setFlag ( int iFlag ) { m_iFlags |= iFlag; }
+	bool hasFlag ( int iFlag ) { return (m_iFlags & iFlag) == iFlag; }
+	void setFlag ( int iFlag ) { m_iFlags |= iFlag; }
 	void clearFailInterrupts () { m_iFailInterruptConditionsHave = m_iFailInterruptConditionsDontHave = 0; }	
 	virtual void debugString ( char *string ) { string[0] = 0; }
 

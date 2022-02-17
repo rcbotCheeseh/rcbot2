@@ -43,19 +43,19 @@ public:
 		m_bTapped = false;		
 	}
 
-	inline void tap () { m_bTapped = true; }
+	void tap () { m_bTapped = true; }
 
-	inline bool held ( float fTime )
+	bool held ( float fTime )
 	{
 		return m_bTapped || fTime >= m_fTimeStart && fTime <= m_fTimeEnd;// && (!m_fLetGoTime||(fTime > m_fLetGoTime));
 	}
 
-	inline bool canPress (float fTime)
+	bool canPress (float fTime)
 	{
 		return !m_bTapped || m_fLetGoTime < fTime;
 	}
 
-	inline int getID () const
+	int getID () const
 	{
 		return m_iButtonId;
 	}
@@ -68,7 +68,7 @@ public:
 		m_bTapped = false;
 	}
 
-	inline void unTap () { m_bTapped = false; }
+	void unTap () { m_bTapped = false; }
 
 	void hold ( float fFrom = 0.0, float fFor = 1.0f, float m_fLetGoTime = 0.0f );
 private:

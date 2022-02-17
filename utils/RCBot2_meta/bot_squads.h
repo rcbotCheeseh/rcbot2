@@ -83,7 +83,7 @@ public:
 
 	void ReturnAllToFormation ();
 
-	inline void SetLeader ( edict_t *pLeader )
+	void SetLeader ( edict_t *pLeader )
 	{
 		m_pLeader = pLeader;
 	}
@@ -100,27 +100,27 @@ public:
 			BotPrintTalkMessageOne(m_pLeader.Get(),"Squad is now HOLDING FIRE");*/
 	}
 
-	inline bool SquadCanShoot ()
+	bool SquadCanShoot ()
 	{
 		return bCanFire;
 	}
 
-	inline bool IsStealthMode ()
+	bool IsStealthMode ()
 	{
 		return m_CombatType == COMBAT_STEALTH;
 	}
 
-	inline bool IsProneMode ()
+	bool IsProneMode ()
 	{
 		return m_CombatType == COMBAT_PRONE;
 	}
 
-	inline bool IsCrouchMode ()
+	bool IsCrouchMode ()
 	{
 		return m_CombatType == COMBAT_CROUCH;
 	}
 
-	inline edict_t *GetLeader ()
+	edict_t *GetLeader ()
 	{
 		return m_pLeader.get();
 	}
@@ -162,7 +162,7 @@ public:
 
 	void removeMember (const edict_t* pMember);
 
-	inline bool IsLeader ( edict_t *pLeader )
+	bool IsLeader ( edict_t *pLeader )
 	{
 		return GetLeader() == pLeader;
 	}
@@ -173,22 +173,22 @@ public:
 
 	bool IsMember (const edict_t* pEdict);
 
-	inline bool isFormation (eSquadForm theFormation)
+	bool isFormation (eSquadForm theFormation)
 	{
 		return m_theDesiredFormation == theFormation;
 	}
 
-	inline void ChangeFormation ( eSquadForm theNewFormation )
+	void ChangeFormation ( eSquadForm theNewFormation )
 	{
 		m_theDesiredFormation = theNewFormation;
 	}
 
-	inline float GetSpread () const
+	float GetSpread () const
 	{
 		return m_fDesiredSpread;
 	}
 
-	inline void ChangeSpread ( float fNewSpread )
+	void ChangeSpread ( float fNewSpread )
 	{
 		m_fDesiredSpread = fNewSpread;
 	}

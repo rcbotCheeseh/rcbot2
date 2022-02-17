@@ -68,7 +68,7 @@ public:
 
 	void enemyLost (edict_t *pEnemy) override;
 
-	inline void setFailedObject ( edict_t *pent ) 
+	void setFailedObject ( edict_t *pent ) 
 	{ 
 		m_FailedPhysObj = pent; 
 

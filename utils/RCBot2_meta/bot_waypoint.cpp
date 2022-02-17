@@ -1542,10 +1542,10 @@ void CWaypoint :: draw ( edict_t *pEdict, bool bDrawPaths, unsigned short int iD
 
 	//////////////////////////////////////////
 
-	unsigned char r = (unsigned char)colour.r;
-	unsigned char g = (unsigned char)colour.g;
-	unsigned char b = (unsigned char)colour.b;
-	unsigned char a = (unsigned char)colour.a;
+	unsigned char r = colour.r;
+	unsigned char g = colour.g;
+	unsigned char b = colour.b;
+	unsigned char a = colour.a;
 
 	const QAngle qAim = QAngle(0, m_iAimYaw, 0);
 
