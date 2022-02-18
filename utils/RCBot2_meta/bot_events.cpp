@@ -1280,7 +1280,9 @@ void CBotEvents :: freeMemory ()
 
 void CBotEvents :: executeEvent( void *pEvent, eBotEventType iType )
 {
-	int iEventId = -1;
+	CBotEvent *pFound;
+	int iEventId = -1; 
+	bool bFound;
 
 	IBotEventInterface *pInterface = NULL;
 
@@ -1297,21 +1299,21 @@ void CBotEvents :: executeEvent( void *pEvent, eBotEventType iType )
 
 	for ( unsigned short int i = 0; i < m_theEvents.size(); i ++ )
 	{
-		CBotEvent* pFound = m_theEvents[i];
+		pFound = m_theEvents[i];
 
 		// if it has an pEvent id stored just check that
 		//if ( ( iType != TYPE_IGAMEEVENT ) && pFound->hasEventId() )
 		//	bFound = pFound->isEventId(iEventId);
 		//else
-		const bool bFound = pFound->forCurrentMod() && pFound->isType(pInterface->getName());
+		bFound = pFound->forCurrentMod() && pFound->isType(pInterface->getName());
 
 		if ( bFound )	
 		{
-			const int userid = pInterface->getInt("userid",-1);
+			int userid = pInterface->getInt("userid",-1);
 			// set pEvent id for quick checking
 			pFound->setEventId(iEventId);
 
-			pFound->setActivator(userid>=0?CBotGlobals::playerByUserId(userid):NULL);
+			pFound->setActivator((userid>=0)?CBotGlobals::playerByUserId(userid):NULL);
 
 			pFound->execute(pInterface);
 
@@ -1321,3 +1323,4 @@ void CBotEvents :: executeEvent( void *pEvent, eBotEventType iType )
 
 	delete pInterface;
 }
+
