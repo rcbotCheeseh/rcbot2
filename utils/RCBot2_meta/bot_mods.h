@@ -651,12 +651,12 @@ public:
 
 	static float getRemainingRoundTime()
 	{
-		return m_fRoundStartTime + mp_roundtime->GetFloat() * 60.0f - engine->Time();
+		return m_fRoundStartTime + mp_roundtime.GetFloat() * 60.0f - engine->Time();
 	}
 
 	static float getRemainingBombTime()
 	{
-		return m_fRoundStartTime + mp_c4timer->GetFloat() - engine->Time();
+		return m_fRoundStartTime + mp_c4timer.GetFloat() - engine->Time();
 	}
 
 	static bool isBombPlanted()

@@ -103,49 +103,43 @@ ConVar rcbot_show_welcome_msg("rcbot_show_welcome_msg", "1", 0, "Show welcome me
 ConVar rcbot_force_class("rcbot_force_class", "0", 0, "Force bots to choose specified class, kills alive bots on change (1 - 9, set to 0 for none)");
 
 // Synergy CVars
-ConVar rcbot_runplayercmd_syn("rcbot_runplayer_cmd_syn", "424", 0, "offset of the Synergy PlayerRunCommand function");
+ConVar rcbot_runplayercmd_syn("rcbot_runplayer_cmd_syn","424",0,"offset of the Synergy PlayerRunCommand function");
 ConVar rcbot_syn_use_search_range("rcbot_syn_use_search_range", "256", 0, "Sets the maximum button search range.", true, 150.0f, true, 1024.0f);
 
 // Counter-Strike:Source Cvars
 ConVar rcbot_css_economy_eco_limit("rcbot_css_economy_eco_limit", "2000", 0, "If the bot money is less than this, it won't purchase anything.");
 
-ConVar* sv_gravity = nullptr;
-ConVar* mp_teamplay = nullptr;
-ConVar* sv_tags = nullptr;
-ConVar* mp_friendlyfire = nullptr;
-ConVar* mp_stalemate_enable = nullptr;
-ConVar* mp_stalemate_meleeonly = nullptr;
+ConVarRef sv_gravity("sv_gravity");
+ConVarRef mp_teamplay("mp_teamplay");
+ConVarRef sv_tags("sv_tags");
+ConVarRef mp_friendlyfire("mp_friendlyfire");
+ConVarRef mp_stalemate_enable("mp_stalemate_enable");
+ConVarRef mp_stalemate_meleeonly("mp_stalemate_meleeonly");
 
 // For CS:S
-ConVar* mp_roundtime = nullptr;
-ConVar* mp_c4timer = nullptr;
+ConVarRef mp_roundtime("mp_roundtime");
+ConVarRef mp_c4timer("mp_c4timer");
 
-void RCBOT2_Cvar_setup(ICvar* cvar)
+void RCBOT2_Cvar_setup (ICvar *cvar)
 {
-	mp_stalemate_enable = cvar->FindVar("mp_stalemate_enable");
-	mp_stalemate_meleeonly = cvar->FindVar("mp_stalemate_meleeonly");
-	sv_gravity = cvar->FindVar("sv_gravity");
-	mp_friendlyfire = cvar->FindVar("mp_friendlyfire");
-	sv_tags = cvar->FindVar("sv_tags");
-	mp_teamplay = cvar->FindVar("mp_teamplay");
-	mp_roundtime = cvar->FindVar("mp_roundtime");
-	mp_c4timer = cvar->FindVar("mp_c4timer");
-
-	if (sv_tags != nullptr)
+	if ( sv_tags.IsValid() )
 	{
 		char sv_tags_str[512];
-
-		strcpy(sv_tags_str, sv_tags->GetString());
+	
+		strcpy(sv_tags_str,sv_tags.GetString());
 
 		// fix
-		if (strstr(sv_tags_str, "rcbot2") == nullptr)
+		if ( strstr(sv_tags_str,"rcbot2") == NULL )
 		{
-			if (sv_tags_str[0] == 0)
-				strcat(sv_tags_str, "rcbot2");
-			else
-				strcat(sv_tags_str, ",rcbot2");
 
-			sv_tags->SetValue(sv_tags_str);
+			if ( sv_tags_str[0] == 0 )
+				strcat(sv_tags_str,"rcbot2");
+			else
+				strcat(sv_tags_str,",rcbot2");
+
+			sv_tags.SetValue(sv_tags_str);
+
 		}
 	}
+
 }

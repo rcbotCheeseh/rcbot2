@@ -191,7 +191,7 @@ bool CDODBot :: setVisible ( edict_t *pEntity, bool bVisible )
 
 	static bool bFriendlyFire;
 
-	bFriendlyFire = (mp_friendlyfire!=NULL)?mp_friendlyfire->GetBool():false;
+	bFriendlyFire = mp_friendlyfire.IsValid()? mp_friendlyfire.GetBool() : false;
 
 	bValid = CBot::setVisible(pEntity,bVisible);
 
@@ -1455,7 +1455,7 @@ void CDODBot :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
 	case DOD_VC_CEASEFIRE:
 		IF_WANT_TO_LISTEN
 		{
-			if ( mp_friendlyfire && mp_friendlyfire->GetBool() )
+			if ( mp_friendlyfire.IsValid() && mp_friendlyfire.GetBool() )
 			{
 				wantToShoot(false);  // don't shoot this frame
 				m_pButtons->letGo(IN_ATTACK);
@@ -3441,14 +3441,11 @@ void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin,
 				*v_desired_offset = *v_desired_offset - Vector(0,0,randomFloat(16.0f,32.0f));
 			}
 
-			if ( pWp->getProjectileSpeed() > 0 )
+			if ( pWp->getProjectileSpeed() > 0 && sv_gravity.IsValid() )
 			{
-				if ( sv_gravity != NULL )
-				{
-					const float fTime = fDist2D/pWp->getProjectileSpeed();
+				float fTime = fDist2D/pWp->getProjectileSpeed();
 
-					v_desired_offset->z = (pow(2,fTime)*(sv_gravity->GetFloat()*rcbot_projectile_tweak.GetFloat()));// - (getOrigin().z - v_origin.z);
-				}
+				v_desired_offset->z = (pow(2,fTime)*(sv_gravity.GetFloat()*rcbot_projectile_tweak.GetFloat()));// - (getOrigin().z - v_origin.z);
 			}
 			//v_desired_offset->z += (distanceFrom(pEntity) * (randomFloat(0.05,0.15)*m_pProfile->m_fAimSkill));
 		}

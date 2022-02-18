@@ -104,7 +104,7 @@ Vector CTeamFortress2Mod::m_vNearestTankLocation = Vector(0, 0, 0);
 bool CTeamFortress2Mod::isSuddenDeath()
 {
 	// Bot weapon Randomizer -- leonardo
-	if (!mp_stalemate_enable || !mp_stalemate_enable->GetBool() || isMapType(TF_MAP_ARENA))
+	if (!mp_stalemate_enable.IsValid() || !mp_stalemate_enable.GetBool() || isMapType(TF_MAP_ARENA))
 		return false;
 
 	void *pGameRules = GetGameRules();
