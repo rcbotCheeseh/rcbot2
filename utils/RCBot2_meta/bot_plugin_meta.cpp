@@ -12,7 +12,7 @@
  * This sample plugin is public domain.
  */
 
-#include <cstdio>
+#include <stdio.h>
 
 #include "bot_plugin_meta.h"
 
@@ -29,7 +29,7 @@
 #include "bot_cvars.h"
 
 #ifdef _WIN32
-	#include <ctime>
+	#include <time.h>
 #endif
 
 // for IServerTools
@@ -48,6 +48,7 @@
 #include "bot_waypoint_visibility.h"
 #include "bot_kv.h"
 #include "bot_sigscan.h"
+//#include "bot_mods.h"
 
 #include "tier0/icommandline.h"
 
@@ -103,6 +104,8 @@ static ConVar rcbot2_ver_cvar("rcbot_ver", build_info::long_version, FCVAR_REPLI
 
 CON_COMMAND(rcbotd, "access the bot commands on a server")
 {
+	eBotCommandResult iResult;
+
 	if (!engine->IsDedicatedServer() || !CBotGlobals::IsMapRunning())
 	{
 		logger->Log(LogLevel::ERROR, "Error, no map running or not dedicated server");
@@ -110,8 +113,8 @@ CON_COMMAND(rcbotd, "access the bot commands on a server")
 	}
 
 	//iResult = CBotGlobals::m_pCommands->execute(NULL,engine->Cmd_Argv(1),engine->Cmd_Argv(2),engine->Cmd_Argv(3),engine->Cmd_Argv(4),engine->Cmd_Argv(5),engine->Cmd_Argv(6));
-	const eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(NULL, args.Arg(1), args.Arg(2), args.Arg(3),
-	                                                                    args.Arg(4), args.Arg(5), args.Arg(6));
+	iResult = CBotGlobals::m_pCommands->execute(NULL, args.Arg(1), args.Arg(2), args.Arg(3), args.Arg(4), args.Arg(5), args.Arg(6));
+																																																
 
 	if (iResult == COMMAND_ACCESSED)
 	{
@@ -139,11 +142,11 @@ public:
 		m_iPlayerSlot = ENTINDEX(pPlayer);
 	}
 
-	bool IsReliable() const override { return false; }
-	bool IsInitMessage() const override { return false; }
+	bool IsReliable() const { return false; }
+	bool IsInitMessage() const { return false; }
 
-	int	GetRecipientCount() const override { return 1; }
-	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot; }
+	int	GetRecipientCount() const { return 1; }
+	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot; }
 
 private:
 	int m_iPlayerSlot;
@@ -170,11 +173,11 @@ public:
 		}
 	}
 
-	bool IsReliable() const override { return false; }
-	bool IsInitMessage() const override { return false; }
+	bool IsReliable() const { return false; }
+	bool IsInitMessage() const { return false; }
 
-	int	GetRecipientCount() const override { return m_iMaxCount; }
-	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot[slot] + 1; }
+	int	GetRecipientCount() const { return m_iMaxCount; }
+	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot[slot] + 1; }
 
 private:
 
@@ -223,7 +226,7 @@ void RCBotPluginMeta::HudTextMessage(edict_t *pEntity, const char *szMessage)
 
 	if (say > 0) {
 		char chatline[128];
-		snprintf(chatline, sizeof chatline, "\x01\x04[RCBot2]\x01 %s\n", szMessage);
+		snprintf(chatline, sizeof(chatline), "\x01\x04[RCBot2]\x01 %s\n", szMessage);
 
 		buf = engine->UserMessageBegin(filter, say);
 		buf->WriteString(chatline);
@@ -243,12 +246,13 @@ void RCBotPluginMeta::BroadcastTextMessage(const char *szMessage)
 	char msgbuf[64];
 	bool bOK;
 
+	int hint = -1;
 	int say = -1;
 
 	while ((bOK = servergamedll->GetUserMessageInfo(msgid, msgbuf, 63, imsgsize)) == true)
 	{
 		if (strcmp(msgbuf, "HintText") == 0)
-			int hint = msgid;
+			hint = msgid;
 		else if (strcmp(msgbuf, "SayText") == 0)
 			say = msgid;
 
@@ -260,11 +264,12 @@ void RCBotPluginMeta::BroadcastTextMessage(const char *szMessage)
 
 	CClientBroadcastRecipientFilter *filter = new CClientBroadcastRecipientFilter();
 
+	bf_write *buf = NULL;
 	if (say > 0) {
 		char chatline[128];
-		snprintf(chatline, sizeof chatline, "\x01\x04[RCBot2]\x01 %s\n", szMessage);
+		snprintf(chatline, sizeof(chatline), "\x01\x04[RCBot2]\x01 %s\n", szMessage);
 
-		bf_write* buf = engine->UserMessageBegin(filter, say);
+		buf = engine->UserMessageBegin(filter, say);
 		buf->WriteString(chatline);
 		engine->MessageEnd();
 	}
@@ -309,7 +314,7 @@ void RCBotPluginMeta::Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper)
 class BaseAccessor : public IConCommandBaseAccessor
 {
 public:
-	bool RegisterConCommandBase(ConCommandBase *pCommandBase) override
+	bool RegisterConCommandBase(ConCommandBase *pCommandBase)
 	{
 		/* Always call META_REGCVAR instead of going through the engine. */
 		return META_REGCVAR(pCommandBase);
@@ -366,6 +371,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientPutInServer, gameclients, this, &RCBotPluginMeta::Hook_ClientPutInServer, true);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientConnect, gameclients, this, &RCBotPluginMeta::Hook_ClientConnect, false);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientCommand, gameclients, this, &RCBotPluginMeta::Hook_ClientCommand, false);
+	//Hook FireEvent to our function - unstable for TF2? [APG]RoboCop[CL]														  
 	SH_ADD_HOOK_MEMFUNC(IGameEventManager2, FireEvent, gameevents, this, &RCBotPluginMeta::FireGameEvent, false);
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
@@ -397,7 +403,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 		kvl.parseFile(fp);
 
 	// ReSharper disable once CppRedundantCastExpression
-	void* gameServerFactory = reinterpret_cast<void*>(ismm->GetServerFactory(false));
+	void *gameServerFactory = reinterpret_cast<void*>(ismm->GetServerFactory(false));
 
 	int val;
 
@@ -455,7 +461,8 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	// Find the RCBOT2 Path from metamod VDF
 	extern IFileSystem *filesystem;
 	KeyValues *mainkv = new KeyValues("metamodplugin");
-
+	
+	const char *rcbot2path;
 	logger->Log(LogLevel::INFO, "Reading rcbot2 path from VDF...");
 	
 	mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD");
@@ -463,7 +470,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	mainkv = mainkv->FindKey("Metamod Plugin");
 
 	if (mainkv)
-		const char* rcbot2path = mainkv->GetString("rcbot2path", "\0");
+		rcbot2path = mainkv->GetString("rcbot2path", "\0");
 
 	mainkv->deleteThis();
 	//eventListener2 = new CRCBotEventListener();
@@ -827,6 +834,8 @@ void RCBotPluginMeta::BotQuotaCheck() {
 	if (m_fBotQuotaTimer < engine->Time() - rcbot_bot_quota_interval.GetInt()) {
 		m_fBotQuotaTimer = engine->Time();
 
+		// Target Bot Count
+		int bot_target = 0;
 		// Change Notification
 		bool notify = false;
 
@@ -861,14 +870,14 @@ void RCBotPluginMeta::BotQuotaCheck() {
 		}
 
 		// Get Bot Quota
-		const int bot_target = m_iTargetBots[human_count];
+		bot_target = m_iTargetBots[human_count];
 
 		// Change Bot Quota
 		if (bot_count > bot_target) {
 			CBots::kickRandomBot(bot_count - bot_target);
 			notify = true;
 		} else if (bot_target > bot_count) {
-			const int bot_diff = bot_target - bot_count;
+			int bot_diff = bot_target - bot_count;
 
 			for (int i = 0; i < bot_diff; ++i) {
 				CBots::createBot("", "", "");
@@ -880,7 +889,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 
 		if (notify) {
 			char chatmsg[128];
-			snprintf(chatmsg, sizeof chatmsg, "[Bot Quota] Humans: %d, Bots: %d", human_count, bot_target);
+			snprintf(chatmsg, sizeof(chatmsg), "[Bot Quota] Humans: %d, Bots: %d", human_count, bot_target);
 			logger->Log(LogLevel::INFO, chatmsg);
 			// RCBotPluginMeta::BroadcastTextMessage(chatmsg);
 		}
