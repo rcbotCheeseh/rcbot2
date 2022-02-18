@@ -279,13 +279,6 @@ void CCounterStrikeSourceMod::updateHostages()
             m_hHostages.push_back(bh);
         }
     }
-
-    logger->Log(LogLevel::DEBUG, "Hostage Vector Size %i", m_hHostages.size());
-
-    for(CBaseHandle i : m_hHostages)
-    {
-        logger->Log(LogLevel::DEBUG, "Stored Hostage: %i - %i", i.GetEntryIndex(), i.GetSerialNumber());
-    }
 }
 
 /**
@@ -302,8 +295,6 @@ bool CCounterStrikeSourceMod::canRescueHostages()
     {
         pHostage = INDEXENT(i.GetEntryIndex());
 
-        logger->Log(LogLevel::DEBUG, "Hostage Debug: %i, %s, %s, %s", i.GetEntryIndex(), CBotGlobals::entityIsValid(pHostage) ? "Valid" : "Invalid", CClassInterface::isCSHostageRescued(pHostage) ? "Rescued" : "Not Rescued", CClassInterface::getCSHostageLeader(pHostage) ? "Null" : CClassInterface::getCSHostageLeader(pHostage)->GetClassName());
-
         if (CBotGlobals::entityIsValid(pHostage) && !CClassInterface::isCSHostageRescued(pHostage) && CClassInterface::getCSHostageLeader(pHostage))
         {
             return true;
@@ -317,37 +308,24 @@ edict_t *CCounterStrikeSourceMod::getRandomHostage()
 {
     std::vector<CBaseHandle> temp;
     edict_t *pEdict;
-	int hosts = 0;
 
     // Build a new vector with hostages that are valid to be rescued
     for(CBaseHandle i : m_hHostages)
     {
         pEdict = INDEXENT(i.GetEntryIndex());
 
-        logger->Log(LogLevel::DEBUG, "[RANDOM-HOSTAGE] Debug: %i, %s, %s, %s, %i", i.GetEntryIndex(), CBotGlobals::entityIsValid(pEdict) ? "Valid" : "Invalid", CClassInterface::isCSHostageRescued(pEdict) ? "Rescued" : "Not Rescued", CClassInterface::getCSHostageLeader(pEdict) ? "Null" : CClassInterface::getCSHostageLeader(pEdict)->GetClassName(), CClassInterface::getCSHostageHealth(pEdict));
-
         if (CBotGlobals::entityIsValid(pEdict) && !CClassInterface::isCSHostageRescued(pEdict) && CClassInterface::getCSHostageLeader(pEdict) && CClassInterface::getCSHostageHealth(pEdict) > 0)
         {
             temp.push_back(i);
-			hosts++;
-        }
-        else
-        {
-            logger->Log(LogLevel::DEBUG, "[RANDOM-HOSTAGE] Hostage %i is invalid!", i.GetEntryIndex());
         }
     }
 
-	logger->Log(LogLevel::DEBUG, "Pushed %i hostages to temporary vector.", hosts);
-
-
     if(temp.size() > 0)
     {   
-		logger->Log(LogLevel::DEBUG, "Temporary Vector Size: %i", temp.size());
         return INDEXENT(temp.at(randomInt(0, temp.size() - 1)).GetEntryIndex());
     }
     else
     {
-		logger->Log(LogLevel::DEBUG, "Temporary Vector is EMPTY!");
         return NULL;
     }
 }
