@@ -138,11 +138,11 @@ bool CCSSBot::isEnemy(edict_t *pEdict,bool bCheckWeapons)
 
 	if(ENTINDEX(pEdict) > CBotGlobals::maxClients())
 	{
-		if (pEdict->GetUnknown() && pEdict == INDEXENT(m_NearestBreakable.GetEntryIndex()) && CClassInterface::getPlayerHealth(pEdict) > 0)
+		if (pEdict->GetUnknown() && pEdict == INDEXENT(m_hNearestBreakable.GetEntryIndex()) && CClassInterface::getPlayerHealth(pEdict) > 0)
 		{
 			if (distanceFrom(CBotGlobals::worldCenter(pEdict)) < (rcbot_jump_obst_dist.GetFloat() * 2))
 			{
-				if (BotFunc_BreakableIsEnemy(INDEXENT(m_NearestBreakable.GetEntryIndex()), pEdict) ||
+				if (BotFunc_BreakableIsEnemy(INDEXENT(m_hNearestBreakable.GetEntryIndex()), pEdict) ||
 					((CBotGlobals::worldCenter(pEdict) - m_vMoveTo).Length() + 48) < (getOrigin() - m_vMoveTo).Length())
 				{
 					return true;
@@ -211,7 +211,7 @@ void CCSSBot::spawnInit()
 	m_fNextAttackTime = engine->Time();
 	m_fCheckStuckTime = engine->Time() + 6.0f;
 	m_fNextThinkSlow = engine->Time() + 1.0f;
-	m_NearestBreakable.Term();
+	m_hNearestBreakable.Term();
 	updateCondition(CONDITION_CHANGED); // Re-execute the utility system
 }
 
@@ -373,16 +373,16 @@ bool CCSSBot::setVisible(edict_t *pEntity, bool bVisible)
 
 		if ((strncmp(szClassname, "func_breakable", 14) == 0 || strncmp(szClassname, "func_breakable_surf", 19) == 0))
 		{
-			if ((INDEXENT(m_NearestBreakable.GetEntryIndex()) == NULL || fDist < distanceFrom(CBotGlobals::worldCenter(INDEXENT(m_NearestBreakable.GetEntryIndex())))))
+			if ((INDEXENT(m_hNearestBreakable.GetEntryIndex()) == NULL || fDist < distanceFrom(CBotGlobals::worldCenter(INDEXENT(m_hNearestBreakable.GetEntryIndex())))))
 			{
-				m_NearestBreakable.Init(engine->IndexOfEdict(pEntity), pEntity->m_NetworkSerialNumber);
+				m_hNearestBreakable.Init(engine->IndexOfEdict(pEntity), pEntity->m_NetworkSerialNumber);
 			}
 		}
 	}
 	else
 	{
-		if (INDEXENT(m_NearestBreakable.GetEntryIndex()) == pEntity)
-			m_NearestBreakable.Term();
+		if (INDEXENT(m_hNearestBreakable.GetEntryIndex()) == pEntity)
+			m_hNearestBreakable.Term();
 	}
 
 	return bValid;
@@ -540,16 +540,10 @@ void CCSSBot::modAim(edict_t *pEntity, Vector &v_origin, Vector *v_desired_offse
 {
 	static bool aimforhead;
 	static CBotWeapon *pWp;
-	static Vector vel;
-	static Vector myvel;
-	static Vector enemyvel;
-	static float fDistFactor;
-	static float fVelFactor;
 
 	CBot::modAim(pEntity,v_origin,v_desired_offset,v_size,fDist,fDist2D);
 
 	aimforhead = true;
-	fVelFactor = 0.003125f;
 	pWp = getCurrentWeapon();
 
 	switch (pWp->getID())
@@ -565,38 +559,8 @@ void CCSSBot::modAim(edict_t *pEntity, Vector &v_origin, Vector *v_desired_offse
 
 	if ( pWp && pWp->isMelee() )
 	{
-		fDistFactor = 0;
-		fVelFactor = 0;
 		aimforhead = false;
 	}
-	else
-	{
-		if ( fDist < 160 )
-			fVelFactor = 0.001f;
-
-		fDistFactor = 1.0f - m_pProfile->m_fAimSkill + fDist*0.000125f*(m_fFov/90.0f);
-	}
-
-	myvel = Vector(0,0,0);
-	enemyvel = Vector(0,0,0);
-
-	// change in velocity
-	if ( CClassInterface::getVelocity(pEntity,&enemyvel) && CClassInterface::getVelocity(m_pEdict,&myvel) )
-	{
-		vel = enemyvel - myvel; // relative velocity
-
-		vel = vel * fVelFactor;//0.003125f;
-
-		//fVelocityFactor = exp(-1.0f + ((vel.Length() * 0.003125f)*2)); // divide by max speed
-	}
-	else
-	{
-		vel = Vector(0.5f,0.5f,0.5f);
-		//fVelocityFactor = 1.0f;
-	}
-
-	v_desired_offset->x = randomFloat(-vel.x,vel.x)*fDistFactor*v_size.x;
-	v_desired_offset->y = randomFloat(-vel.y,vel.y)*fDistFactor*v_size.y;
 
 	if(hasSomeConditions(CONDITION_SEE_ENEMY_HEAD) && aimforhead)
 	{
@@ -605,6 +569,13 @@ void CCSSBot::modAim(edict_t *pEntity, Vector &v_origin, Vector *v_desired_offse
 	else
 	{
 		v_desired_offset->z = v_desired_offset->z + (v_size.z-16);
+	}
+	
+	if (pEntity == INDEXENT(m_hNearestBreakable.GetEntryIndex()))
+	{
+		v_desired_offset->x = 0;
+		v_desired_offset->y = 0;
+		v_desired_offset->z = 0;
 	}
 }
 
@@ -983,7 +954,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 				pSched->addTask(new CBotHL2DMUseButton(pHostage));
 				pSched->addTask(new CBotWaitTask(1.0f));
 				m_pSchedules->add(pSched);
-				return true
+				return true;
 			}
 
 			break;
@@ -1067,6 +1038,11 @@ void CCSSBot::onRoundStart()
 	m_pBuyManager->onRoundStart();
 }
 
+/**
+ * Checks if this bot is escorting/leading a hostage to a rescue zone
+ * 
+ * @return TRUE if this bot is escorting/leading a hostage to a rescue zone
+ **/
 bool CCSSBot::IsLeadingHostage()
 {
 	std::vector<CBaseHandle> hostages = CCounterStrikeSourceMod::getHostageVector();
@@ -1120,4 +1096,14 @@ void CCSSBot::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWaypo
 	}
 
 	CBot::touchedWpt(pWaypoint, iNextWaypoint, iPrevWaypoint);
+}
+
+bool CCSSBot::canGotoWaypoint(Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev)
+{
+	if (pWaypoint->hasFlag(CWaypointTypes::W_FL_NO_HOSTAGES) || pWaypoint->hasFlag(CWaypointTypes::W_FL_LADDER))
+	{
+		return !IsLeadingHostage();
+	}
+
+	return CBot::canGotoWaypoint(vPrevWaypoint, pWaypoint, pPrev);
 }

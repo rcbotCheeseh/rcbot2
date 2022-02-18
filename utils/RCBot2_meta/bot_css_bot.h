@@ -66,6 +66,7 @@ public:
 	void listenForPlayers() override;
 	void freeMapMemory() override;
 	void touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1) override;
+	bool canGotoWaypoint(Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL) override;
 	bool setVisible(edict_t *pEntity, bool bVisible) override;
 	virtual void modThinkSlow();
 	unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
@@ -85,7 +86,7 @@ private:
 	float m_fNextAttackTime;	  		// Control timer for bot primary attack
 	float m_fNextThinkSlow;		  		// Control timer for slow think
 	float m_fVisibleEnemyTime;	  		// The last time my enemy was visible
-	CBaseHandle m_NearestBreakable; 	// Nearest breakable entity
+	CBaseHandle m_hNearestBreakable; 	// Nearest breakable entity
 	CCSSBotBuying *m_pBuyManager; 		// CSS Bot buy manager
 };
 

@@ -196,15 +196,7 @@ void CCounterStrikeSourceMod::onRoundStart()
  **/
 void CCounterStrikeSourceMod::onFreezeTimeEnd()
 {
-    logger->Log(LogLevel::TRACE, "CanRescueHostages: %s", canRescueHostages() ? "Yes" : "No");
-    m_fRoundStartTime = engine->Time();
-
-	edict_t *pRandHost = getRandomHostage();
-
-    if(pRandHost) {
-        logger->Log(LogLevel::DEBUG, "Random Hostage: %i", engine->IndexOfEdict(pRandHost));
-    }
-    else { logger->Log(LogLevel::DEBUG, "Random Hostage: NULL!"); }
+	logger->Log(LogLevel::TRACE, "CCounterStrikeSourceMod::OnFreezeTimeEnd()");
 
     edict_t *pC4 = CClassInterface::FindEntityByClassnameNearest(Vector(0.0, 0.0, 0.0), "weapon_c4", 32000.0f);
     if(pC4)
