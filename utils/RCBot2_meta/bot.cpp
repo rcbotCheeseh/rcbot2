@@ -2271,7 +2271,10 @@ bool CBot :: FInViewCone ( edict_t *pEntity )
 {	
 	static Vector origin;
 	
-	origin = CBotGlobals::entityOrigin(pEntity);
+	if ( CBotGlobals::isBrushEntity(pEntity) )
+		origin = CBotGlobals::worldCenter(pEntity);
+	else
+		origin = CBotGlobals::entityOrigin(pEntity);
 
 	return (origin - getEyePosition()).Length()>1 && DotProductFromOrigin(origin) > 0; // 90 degree !! 0.422618f ); // 65 degree field of view   
 }
@@ -2315,15 +2318,23 @@ Vector CBot::getAimVector ( edict_t *pEntity )
 		return m_vAimVector;
 	}
 
-	fDist = distanceFrom(pEntity);
-	fDist2D = distanceFrom2D(pEntity);
+	if ( CBotGlobals::isBrushEntity(pEntity) )
+	{
+		v_origin = CBotGlobals::worldCenter(pEntity);
+		fDist = distanceFrom(v_origin);
+		fDist2D = distanceFrom2D(v_origin);
+	}
+	else
+	{
+		fDist = distanceFrom(pEntity);
+		fDist2D = distanceFrom2D(pEntity);
+		v_origin = CBotGlobals::entityOrigin(pEntity);
+	}
 
 	v_size = pEntity->GetCollideable()->OBBMaxs() - pEntity->GetCollideable()->OBBMins();
 	v_size = v_size * 0.5f;
 
 	fSensitivity = (float)m_pProfile->m_iSensitivity/20;
-
-	v_origin = CBotGlobals::entityOrigin(pEntity);
 
 	modAim(pEntity,v_origin,&v_desired_offset,v_size,fDist,fDist2D);
 

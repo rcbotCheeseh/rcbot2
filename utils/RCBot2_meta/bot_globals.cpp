@@ -387,7 +387,10 @@ bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest )
 
 	CTraceFilterWorldAndPropsOnly filter;
 
-	traceLine (vSrc,entityOrigin(pDest),MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
+	if ( isBrushEntity(pDest) )
+		traceLine (vSrc,worldCenter(pDest),MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
+	else
+		traceLine (vSrc,entityOrigin(pDest),MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
 
 	return traceVisible(pDest);
 }
@@ -618,6 +621,13 @@ bool CBotGlobals :: entityIsAlive ( edict_t *pEntity )
 	return pEntity->GetIServerEntity() && pEntity->GetClassName() && *pEntity->GetClassName();
 	//CBaseEntity *pBaseEntity = CBaseEntity::Instance(pEntity);
 	//return pBaseEntity->IsAlive();
+}
+
+bool CBotGlobals :: isBrushEntity ( edict_t *pEntity )
+{
+	const char *szModel;
+	szModel = pEntity->GetIServerEntity()->GetModelName().ToCStr();
+	return szModel[0] == '*';
 }
 
 edict_t *CBotGlobals :: playerByUserId(int iUserId)

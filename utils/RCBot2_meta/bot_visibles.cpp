@@ -185,7 +185,11 @@ void CBotVisibles :: checkVisible (edict_t* pEntity, int* iTicks, bool* bVisible
 			clusterIndex = engine->GetClusterForOrigin( m_pBot->getOrigin() );
 			engine->GetPVSForCluster( clusterIndex, sizeof m_bPvs, m_bPvs );
 			
-			vEntityOrigin = CBotGlobals::entityOrigin(pEntity);
+			// caxanga334: entityOrigin returns v(0,0,0) for brush entities.
+			if ( CBotGlobals::isBrushEntity(pEntity) )
+				vEntityOrigin = CBotGlobals::worldCenter(pEntity);
+			else
+				vEntityOrigin = CBotGlobals::entityOrigin(pEntity);
 
 			// for some reason the origin is their feet. add body height
 			if ( iIndex <= gpGlobals->maxClients )

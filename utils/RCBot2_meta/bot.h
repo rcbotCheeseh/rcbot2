@@ -321,7 +321,7 @@ public:
 
 	virtual unsigned int maxEntityIndex ( ) { return MAX_PLAYERS; }
 
-// linux fix 1
+	// linux fix 1
 	virtual void onInventoryApplication (){}
 
 
@@ -348,6 +348,10 @@ public:
 	{
 		return (pEntity->GetCollideable()->GetCollisionOrigin() - m_pController->GetLocalOrigin()).Length();
 		//return distanceFrom(CBotGlobals::entityOrigin(pEntity));
+	}
+	float distanceFrom2D(Vector vOrigin)
+	{
+		return (vOrigin - m_pController->GetLocalOrigin()).Length2D();
 	}
 
     float distanceFrom2D(edict_t *pEntity)

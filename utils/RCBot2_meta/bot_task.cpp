@@ -3945,10 +3945,18 @@ void CCSSEngageEnemyTask::execute(CBot *pBot, CBotSchedule *pSchedule)
 {
 	edict_t *pEnemy = engine->PEntityOfEntIndex(m_hEnemy.GetEntryIndex());
 	edict_t *pWeapon = CClassInterface::getCurrentWeapon(pBot->getEdict());
+	isBrush = CBotGlobals::isBrushEntity(pEnemy);
 
 	if(pBot->hasSomeConditions(CONDITION_OUT_OF_AMMO))
 	{
 		fail();
+		return;
+	}
+
+	if(pBot->getEnemy() == NULL || pBot->getEnemy() != pEnemy)
+	{
+		fail();
+		return;
 	}
 
 	if(pEnemy)
@@ -3960,7 +3968,10 @@ void CCSSEngageEnemyTask::execute(CBot *pBot, CBotSchedule *pSchedule)
 			{
 				if(weapon->isMelee())
 				{
-					pBot->setMoveTo(CBotGlobals::entityOrigin(pEnemy));
+					if(isBrush)
+						pBot->setMoveTo(CBotGlobals::worldCenter(pEnemy));
+					else
+						pBot->setMoveTo(CBotGlobals::entityOrigin(pEnemy));
 				}
 				else
 				{
