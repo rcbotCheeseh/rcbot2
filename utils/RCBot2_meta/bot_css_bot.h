@@ -65,6 +65,7 @@ public:
 	void modThink() override;
 	void listenForPlayers() override;
 	void freeMapMemory() override;
+	void touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1) override;
 	virtual void modThinkSlow();
 	unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
 	void getTasks (unsigned int iIgnore=0) override;
@@ -77,6 +78,7 @@ public:
 	virtual CBotWeapon *getPrimaryWeapon();
 	virtual bool IsSniper();
 	virtual void onRoundStart();
+	virtual bool IsLeadingHostage();
 private:
 	edict_t *m_pCurrentWeapon; // The bot current weapon
 	float m_fNextAttackTime; // Control timer for bot primary attack

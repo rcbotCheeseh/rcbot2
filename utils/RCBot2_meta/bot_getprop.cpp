@@ -569,6 +569,9 @@ void CClassInterface:: init ()
 		DEFINE_GETPROP(GETPROP_CSS_HASDEFUSER, "CCSPlayer", "m_bHasDefuser", 0);
 		DEFINE_GETPROP(GETPROP_CSS_HASHELMET, "CCSPlayer", "m_bHasHelmet", 0);
 		DEFINE_GETPROP(GETPROP_CSS_BOMBTICKING, "CPlantedC4", "m_bBombTicking", 0);
+		DEFINE_GETPROP(GETPROP_CSS_HOSTAGE_HEALTH, "CHostage", "m_iHealth", 0);
+		DEFINE_GETPROP(GETPROP_CSS_HOSTAGE_RESCUED, "CHostage", "m_isRescued", 0);
+		DEFINE_GETPROP(GETPROP_CSS_HOSTAGE_LEADER, "CHostage", "m_leader", 0);
 
 		// Generic
 		DEFINE_GETPROP(GETPROP_PLAYER_FOV, "CBasePlayer", "m_iFOV", 0);

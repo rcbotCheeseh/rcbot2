@@ -163,6 +163,9 @@ typedef enum
 	GETPROP_CSS_BOMBTICKING,
 	GETPROP_PLAYER_FOV,
 	GETPROP_PLAYER_LIFESTATE,
+	GETPROP_CSS_HOSTAGE_HEALTH,
+	GETPROP_CSS_HOSTAGE_RESCUED,
+	GETPROP_CSS_HOSTAGE_LEADER,
 	GET_PROPDATA_MAX
 }getpropdata_id;
 
@@ -844,6 +847,39 @@ public:
 	static bool isCSBombTicking(edict_t* pBomb)
 	{
 		return g_GetProps[GETPROP_CSS_BOMBTICKING].getBool(pBomb, false);
+	}
+
+	/**
+	 * Checks how much health a specific hostage has
+	 * 
+	 * @param pHostage		The hostage entity edict
+	 * @return				How much health the given hostage has
+	 **/
+	inline static int getCSHostageHealth(edict_t* pHostage)
+	{
+		return g_GetProps[GETPROP_CSS_HOSTAGE_HEALTH].getInt(pHostage, 0);
+	}
+
+	/**
+	 * Checks if the specified hostage has been rescued
+	 * 
+	 * @param pHostage		The hostage entity edict
+	 * @return				TRUE if the given hostage has been rescued
+	 **/
+	inline static bool isCSHostageRescued(edict_t* pHostage)
+	{
+		return g_GetProps[GETPROP_CSS_HOSTAGE_RESCUED].getBool(pHostage, false);
+	}
+
+	/**
+	 * Gets the edict of the player currently leading the hostage
+	 * 
+	 * @param pHostage		The hostage entity edict
+	 * @return				Edict pointer of the player leading the hostage
+	 **/
+	inline static edict_t* getCSHostageLeader(edict_t* pHostage)
+	{
+		return g_GetProps[GETPROP_CSS_HOSTAGE_LEADER].getEntity(pHostage);
 	}
 
 private:

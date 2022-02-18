@@ -62,7 +62,7 @@ float CCounterStrikeSourceMod::m_fBombPlantedTime = 0.0f;
 bool CCounterStrikeSourceMod::m_bIsBombPlanted = false;
 bool CCounterStrikeSourceMod::m_bBombWasFound = false;
 CBaseHandle CCounterStrikeSourceMod::m_hBomb = NULL;
-
+std::vector<CBaseHandle> CCounterStrikeSourceMod::m_hHostages;
 
 void CCounterStrikeSourceMod::initMod()
 {
@@ -184,6 +184,11 @@ void CCounterStrikeSourceMod::onRoundStart()
             pCSBot->onRoundStart();
         }
 	}
+	
+    if(CCounterStrikeSourceMod::isMapType(CS_MAP_HOSTAGERESCUE))
+    {
+        updateHostages();
+    }
 }
 
 /**
@@ -198,7 +203,6 @@ void CCounterStrikeSourceMod::onFreezeTimeEnd()
     if(pC4)
     {
         m_hBomb.Init(engine->IndexOfEdict(pC4), pC4->m_NetworkSerialNumber);
-        logger->Log(LogLevel::DEBUG, "CSS C4: %i %i %s", m_hBomb.GetEntryIndex(), m_hBomb.GetSerialNumber(), m_hBomb.IsValid() ? "Valid" : "Invalid");
     }
 
 	for(short int i = 0; i < MAX_PLAYERS; i++)
@@ -226,7 +230,6 @@ void CCounterStrikeSourceMod::onBombPlanted()
     if(pPlantedC4)
     {
         m_hBomb.Init(engine->IndexOfEdict(pPlantedC4), pPlantedC4->m_NetworkSerialNumber);
-        logger->Log(LogLevel::DEBUG, "CSS C4: %i %i %s", m_hBomb.GetEntryIndex(), m_hBomb.GetSerialNumber(), m_hBomb.IsValid() ? "Valid" : "Invalid");
     }
 
 	for(short int i = 0; i < MAX_PLAYERS; i++)
@@ -241,4 +244,96 @@ void CCounterStrikeSourceMod::onBombPlanted()
             }
         }
 	}
+}
+
+/**
+ * Hostage entities needs to be updated on round start since killed hostages gets their entity deleted.
+ **/
+void CCounterStrikeSourceMod::updateHostages()
+{
+    edict_t *current;
+    CBaseHandle bh;
+    m_hHostages.clear();
+
+    for(int i = gpGlobals->maxClients + 1; i < gpGlobals->maxEntities; i++)
+    {
+        bh.Term();
+		current = engine->PEntityOfEntIndex(i);
+		if (current == NULL)
+		{
+			continue;
+		}
+
+		IServerNetworkable *network = current->GetNetworkable();
+		if (network == NULL)
+		{
+			continue;
+		}
+
+        //const char *classname = current->GetClassName();
+		ServerClass *sClass = network->GetServerClass();
+		const char *sname = sClass->GetName();
+
+        if(strcmp(sname, "CHostage") == 0)
+        {
+            bh.Init(i, current->m_NetworkSerialNumber);
+            m_hHostages.push_back(bh);
+        }
+    }
+
+    logger->Log(LogLevel::DEBUG, "Hostage Vector Size %i", m_hHostages.size());
+
+    for(CBaseHandle i : m_hHostages)
+    {
+        logger->Log(LogLevel::DEBUG, "Stored Hostage: %i - %i", i.GetEntryIndex(), i.GetSerialNumber());
+    }
+}
+
+/**
+ * Checks if there are hostages that can be rescued
+ **/
+bool CCounterStrikeSourceMod::canRescueHostages()
+{
+    if(m_hHostages.size() == 0)
+        return false;
+
+    edict_t *pHostage;
+
+    for(CBaseHandle i : m_hHostages)
+    {
+        pHostage = INDEXENT(i.GetEntryIndex());
+
+        if(CBotGlobals::entityIsValid(pHostage) && !CClassInterface::isCSHostageRescued(pHostage) && CClassInterface::getCSHostageLeader(pHostage) == NULL)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+edict_t *CCounterStrikeSourceMod::getRandomHostage()
+{
+    std::vector<CBaseHandle> temp;
+    edict_t *pEdict;
+
+    // Build a new vector with hostages that are valid to be rescued
+    for(CBaseHandle i : temp)
+    {
+        pEdict = INDEXENT(i.GetEntryIndex());
+
+        if(CBotGlobals::entityIsValid(pEdict) && !CClassInterface::isCSHostageRescued(pEdict) && CClassInterface::getCSHostageLeader(pEdict) == NULL && CClassInterface::getCSHostageHealth(pEdict) > 0)
+        {
+            temp.push_back(i);
+        }
+    }
+
+    if(temp.size() > 0)
+    {   
+        return INDEXENT(temp.at(randomInt(0, temp.size() - 1)).GetEntryIndex());
+    }
+    else
+    {
+        return NULL;
+    }
 }

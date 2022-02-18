@@ -56,6 +56,8 @@
 
 #include "logging.h"
 
+extern IServerGameEnts *servergameents; // for accessing the server game entities
+
 void CCSSBot::init(bool bVarInit)
 {
 	CBot::init();// require this
@@ -565,6 +567,14 @@ void CCSSBot::modThink()
 		}
 	}
 
+	if(onLadder())
+	{
+		setMoveLookPriority(MOVELOOK_OVERRIDE);
+		setLookAtTask(LOOK_WAYPOINT);
+		m_pButtons->holdButton(IN_FORWARD,0,1,0);
+		setMoveLookPriority(MOVELOOK_MODTHINK);
+	}
+
 	// Team Specific thinking
 	switch (team)
 	{
@@ -583,6 +593,19 @@ void CCSSBot::modThink()
 	if(m_fNextThinkSlow <= engine->Time())
 	{
 		modThinkSlow();
+	}
+
+	if(getEnemy() != NULL && isVisible(getEnemy()))
+	{
+		CBotWeapon *currentweapon = getCurrentWeapon();
+
+		if(!hasSomeConditions(CONDITION_OUT_OF_AMMO))
+		{
+			if(currentweapon && !currentweapon->isMelee())
+			{
+				stopMoving();
+			}
+		}
 	}
 }
 
@@ -630,6 +653,11 @@ void CCSSBot::getTasks(unsigned int iIgnore)
 				ADD_UTILITY(BOT_UTIL_SEARCH_FOR_BOMB, !CCounterStrikeSourceMod::wasBombFound() && CCounterStrikeSourceMod::isBombPlanted(), 0.81f);
 				ADD_UTILITY(BOT_UTIL_DEFUSE_BOMB, CCounterStrikeSourceMod::wasBombFound(), 0.85f);
 			}
+			else if(CCounterStrikeSourceMod::isMapType(CS_MAP_HOSTAGERESCUE))
+			{
+				ADD_UTILITY(BOT_UTIL_GET_HOSTAGE, CCounterStrikeSourceMod::canRescueHostages(), 0.85f);
+				ADD_UTILITY(BOT_UTIL_RESCUE, IsLeadingHostage(), 0.84f);
+			}
 			break;
 		}
 		case CS_TEAM_TERRORIST: // TR specific utilities
@@ -647,13 +675,13 @@ void CCSSBot::getTasks(unsigned int iIgnore)
 	ADD_UTILITY(BOT_UTIL_SNIPE, IsSniper(), randomFloat(0.7900f, 0.8200f));
 
 	// Combat Utilities
-	ADD_UTILITY(BOT_UTIL_ENGAGE_ENEMY, hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && !hasSomeConditions(CONDITION_OUT_OF_AMMO), 0.98f);
+	ADD_UTILITY(BOT_UTIL_ENGAGE_ENEMY, hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && !hasSomeConditions(CONDITION_OUT_OF_AMMO), 1.00f);
 	ADD_UTILITY(BOT_UTIL_WAIT_LAST_ENEMY, hasSomeConditions(CONDITION_ENEMY_OBSCURED), 0.95f);
 	ADD_UTILITY(BOT_UTIL_HIDE_FROM_ENEMY, hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && hasSomeConditions(CONDITION_OUT_OF_AMMO), 0.98f);
 
 	// Generic Utilities
 	ADD_UTILITY(BOT_UTIL_BUY, m_pBuyManager->wantsToBuy(), 1.0f); // Buy weapons
-	ADD_UTILITY(BOT_UTIL_ROAM, true, 0.0001f); // Roam around
+	ADD_UTILITY(BOT_UTIL_ROAM, true, 0.001f); // Roam around
 
 	utils.execute();
 
@@ -678,11 +706,15 @@ void CCSSBot::getTasks(unsigned int iIgnore)
 
 			if(CClients::clientsDebugging(BOT_DEBUG_UTIL))
 			{
-				char buffer[128];
-				sprintf(buffer, "(%.4f) %s\nTeam: %i\nBomb Carrier: %s\nBomb Dropped: %s\nBomb Planted: %s", engine->Time(), g_szUtils[next->getId()], team, 
-				CCounterStrikeSourceMod::isBombCarrier(this) ? "Yes" : "No", CCounterStrikeSourceMod::isBombDropped() ? "Yes" : "No", 
-				CCounterStrikeSourceMod::isBombPlanted() ? "Yes" : "No");
-				CClients::clientDebugMsg(BOT_DEBUG_UTIL, buffer, this);
+				int i = 0;
+				CClients::clientDebugMsg(this,BOT_DEBUG_UTIL,"-------- getTasks(%s) --------",m_szBotName);
+
+				do
+				{
+					CClients::clientDebugMsg(this,BOT_DEBUG_UTIL,"%s = %0.3f",g_szUtils[next->getId()],next->getUtility(),this);
+				}while ((++i<20) && ((next = utils.nextBest()) != NULL));
+
+				CClients::clientDebugMsg(this,BOT_DEBUG_UTIL,"----END---- getTasks(%s) ----END----",m_szBotName);
 			}
 			break;
 		}
@@ -861,6 +893,67 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			}
 			break;
 		}
+				case BOT_UTIL_GET_HOSTAGE:
+		{
+			// Select a random hostage to rescue
+			CWaypoint* pWaypoint = NULL;
+			CWaypoint* pRoute = NULL;
+			CBotSchedule* pSched = new CBotSchedule();
+			edict_t* pHostage = CCounterStrikeSourceMod::getRandomHostage();
+			pSched->setID(SCHED_GOTONEST);
+
+			if(CBotGlobals::entityIsAlive(pHostage))
+			{
+				Vector vHostage = CBotGlobals::entityOrigin(pHostage);
+				pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), vHostage, getTeam(), 0);
+				if((m_fUseRouteTime <= engine->Time()))
+				{
+					if(pRoute)
+					{
+						int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
+						pSched->addTask(new CFindPathTask(iRoute, LOOK_WAYPOINT));
+						m_fUseRouteTime = engine->Time() + 30.0f;
+					}
+				}
+
+				pSched->addTask(new CFindPathTask(pHostage));
+				pSched->addTask(new CMoveToTask(pHostage));
+				pSched->addTask(new CBotHL2DMUseButton(pHostage));
+				pSched->addTask(new CBotWaitTask(1.0f));
+				m_pSchedules->add(pSched);
+			}
+
+			break;
+		}
+		case BOT_UTIL_RESCUE:
+		{
+			// Go to a random Rescue Zone waypoint
+			CWaypoint* pWaypoint = NULL;
+			CWaypoint* pRoute = NULL;
+			CBotSchedule* pSched = new CBotSchedule();
+			pSched->setID(SCHED_GOTO_ORIGIN);
+
+			pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_RESCUEZONE, getTeam(), 0, false, this, false);
+
+			if(pWaypoint)
+			{
+				pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), getTeam(), pWaypoint->getArea());
+				if((m_fUseRouteTime <= engine->Time()))
+				{
+					if(pRoute)
+					{
+						int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
+						pSched->addTask(new CFindPathTask(iRoute, LOOK_WAYPOINT));
+						m_fUseRouteTime = engine->Time() + 30.0f;
+					}
+				}
+
+				pSched->addTask(new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint)));
+				pSched->addTask(new CBotWaitTask(3.0f));
+				m_pSchedules->add(pSched);
+			}
+			break;
+		}
 		case BOT_UTIL_SNIPE:
 		{
 			CWaypoint *pWaypoint = NULL;
@@ -871,7 +964,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			if(pWaypoint)
 			{
 				CFindPathTask *pFindPath = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
-				pFindPath->setInterruptFunction(new CBotCSSRoamInterrupt());
+				//pFindPath->setInterruptFunction(new CBotCSSRoamInterrupt());
 				CCSSGuardTask *pGuard = new CCSSGuardTask(getPrimaryWeapon(), pWaypoint->getOrigin(), pWaypoint->getAimYaw(), false, 0.0f, pWaypoint->getFlags());
 				pSched->addTask(pFindPath);
 				pSched->addTask(pGuard);
@@ -891,7 +984,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			{
 				const int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
 				CFindPathTask *pFindPath = new CFindPathTask(iWaypoint);
-				pFindPath->setInterruptFunction(new CBotCSSRoamInterrupt());
+				//pFindPath->setInterruptFunction(new CBotCSSRoamInterrupt());
 				pSched->addTask(pFindPath);
 				m_pSchedules->add(pSched);
 
@@ -908,4 +1001,59 @@ bool CCSSBot::executeAction(eBotAction iAction)
 void CCSSBot::onRoundStart()
 {
 	m_pBuyManager->onRoundStart();
+}
+
+bool CCSSBot::IsLeadingHostage()
+{
+	std::vector<CBaseHandle> hostages = CCounterStrikeSourceMod::getHostageVector();
+	edict_t *pHostage = NULL;
+
+	if(getTeam() != CS_TEAM_COUNTERTERRORIST)
+		return false;
+
+	if(hostages.size() == 0)
+		return false;
+
+	for(CBaseHandle i : hostages)
+	{
+		edict_t *pHostage = INDEXENT(i.GetEntryIndex());
+
+		if(CBotGlobals::entityIsValid(pHostage) && CClassInterface::getCSHostageLeader(pHostage) == m_pEdict)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void CCSSBot::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWaypoint)
+{
+	if(iNextWaypoint != -1 && pWaypoint->hasFlag(CWaypointTypes::W_FL_DOOR)) // Use waypoint: Check for door
+	{
+		CWaypoint *pNext = CWaypoints::getWaypoint(iNextWaypoint);
+		if(pNext)
+		{
+			/**
+			 * Traces a line between the current waypoint and the next waypoint. If a door is blocking the path, try to open it.
+			 **/
+			CTraceFilterHitAll filter;
+			trace_t *tr = CBotGlobals::getTraceResult();
+			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), pNext->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), MASK_PLAYERSOLID, &filter);
+			if(tr->fraction < 1.0f)
+			{
+				if(tr->m_pEnt)
+				{
+					edict_t *pDoor = servergameents->BaseEntityToEdict(tr->m_pEnt);
+					const char *szclassname = pDoor->GetClassName();
+					if(strncmp(szclassname, "prop_door_rotating", 18) == 0 || strncmp(szclassname, "func_door", 9) == 0 || strncmp(szclassname, "func_door_rotating", 18) == 0)
+					{
+						m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
+					}
+				}
+			}
+		}
+	}
+
+	CBot::touchedWpt(pWaypoint, iNextWaypoint, iPrevWaypoint);
 }

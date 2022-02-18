@@ -656,7 +656,7 @@ public:
 
 	static float getRemainingBombTime()
 	{
-		return m_fRoundStartTime + mp_c4timer.GetFloat() - engine->Time();
+		return m_fBombPlantedTime + mp_c4timer.GetFloat() - engine->Time();
 	}
 
 	static bool isBombPlanted()
@@ -682,6 +682,13 @@ public:
 	}
 	static bool canHearPlantedBomb(CBot *pBot);
 	static bool isScoped(CBot *pBot);
+	static void updateHostages();
+	static edict_t *getRandomHostage();
+	static bool canRescueHostages();
+	inline static std::vector<CBaseHandle> getHostageVector()
+	{
+		return m_hHostages;
+	}
 	//void entitySpawn ( edict_t *pEntity );
 private:
 	static eCSSMapType m_MapType; // Map Type
@@ -690,6 +697,7 @@ private:
 	static bool m_bIsBombPlanted; // Is the bomb planted?
 	static bool m_bBombWasFound; // Did the CTs locate the bomb?
 	static CBaseHandle m_hBomb; // The bomb. Experimental CBaseHandle instead of MyEHandle
+	static std::vector<CBaseHandle> m_hHostages; // Vector with hostage handles
 };
 
 class CTimCoopMod : public CBotMod
