@@ -1852,8 +1852,8 @@ void CBot :: freeMapMemory ()
 
 void CBot :: updateStatistics ()
 {
-	bool bVisible = false;
-	bool bIsEnemy = false;
+	bool bVisible;
+	bool bIsEnemy;
 
 	if ( m_iStatsIndex == 0 || m_iStatsIndex > gpGlobals->maxClients )
 	{
@@ -3226,7 +3226,7 @@ int CBots :: numBots ()
 
 CBot *CBots :: findBotByProfile ( CBotProfile *pProfile )
 {	
-	CBot *pBot = NULL;
+	CBot *pBot;
 
 	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
 	{

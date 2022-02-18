@@ -1009,7 +1009,7 @@ CBotTF2UpgradeBuilding :: CBotTF2UpgradeBuilding ( edict_t *pBuilding )
 void CBotTF2UpgradeBuilding :: execute (CBot *pBot,CBotSchedule *pSchedule)
 {
 	edict_t *pBuilding = m_pBuilding.get();
-	edict_t *pOwner = NULL;
+	edict_t *pOwner;
 	pBot->wantToShoot(false);
 	pBot->wantToInvestigateSound(false);
 	pBot->wantToListen(false);

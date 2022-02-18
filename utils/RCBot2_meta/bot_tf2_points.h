@@ -322,7 +322,7 @@ class variant_t
 {
 	union
 	{
-		bool bVal;
+		bool bVal = false;
 		string_t iszVal;
 		int iVal;
 		float flVal;

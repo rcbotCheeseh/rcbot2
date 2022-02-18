@@ -376,7 +376,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 	// 4. player class
 	// 5. etc
 	float fFactor = 0.0f;
-	float fLastCalledMedic = 0.0f;
+	float fLastCalledMedic;
 	bool bHeavyClass = false;
 	edict_t *pMedigun = CTeamFortress2Mod::getMediGun(m_pEdict);
 	Vector vVel = Vector(0,0,0);
@@ -1040,7 +1040,7 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 		}*/
 
 		*iTries = 0;
-			int iNextState = 8;
+			int iNextState;
 			eyes.x = 0; // nullify pitch / we want yaw only
 			AngleVectors(eyes,&forward,&v_right,&v_up);
 		const Vector building = v_src + (forward * 100);
@@ -2640,7 +2640,7 @@ void CBotFortress::chooseClass()
 		float fTotalFitness = 0;
 
 		int iNumMedics = 0;
-		int i = 0;
+		int i;
 		const int iTeam = getTeam();
 
 		for (i = 1; i < 10; i++)
@@ -4142,7 +4142,7 @@ float CBotTF2 :: getEnemyFactor ( edict_t *pEnemy )
 				// I'm a spy and I'm attacking an engineer!
 				if ( m_iClass == TF_CLASS_SPY )
 				{
-					edict_t *pSentry = NULL;
+					edict_t *pSentry;
 
 					fPreFactor = -400.0f;
 
@@ -6425,7 +6425,7 @@ void CBotTF2 :: touchedWpt ( CWaypoint *pWaypoint , int iNextWaypoint, int iPrev
 		{
 			if ( getNavigator()->hasNextPoint() )
 			{
-				CBotWeapon *pWeapon = NULL;
+				CBotWeapon *pWeapon;
 
 				if ( getClass() == TF_CLASS_SOLDIER )
 				{
@@ -7167,7 +7167,7 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 
 				if ( isDisguised() ) 
 				{
-					edict_t *pSentry = NULL;
+					edict_t *pSentry;
 					if ( (pSentry = m_pNearestEnemySentry.get()) != NULL )
 					{
 						// If I'm disguised don't attack any player until nearby sentry is disabled
@@ -7625,15 +7625,17 @@ CBotTF2::CBotTF2()
 		m_pVTable = NULL;
 		m_fDispenserPlaceTime = 0.0f;
 		m_fDispenserHealAmount = 0.0f;
-	 m_fTeleporterEntPlacedTime = 0;
-	 m_fTeleporterExtPlacedTime = 0;
-	 m_iTeleportedPlayers = 0;
-		m_fDoubleJumpTime = 0;
-		m_fSpySapTime = 0;
+		m_fTeleporterEntPlacedTime = 0.0f;
+		m_fTeleporterExtPlacedTime = 0.0f;
+		m_iTeleportedPlayers = 0;
+		m_fDoubleJumpTime = 0.0f;
+		m_fSpySapTime = 0.0f;
 		m_iCurrentDefendArea = 0;
 		m_iCurrentAttackArea = 0;
+
 	    //m_bBlockPushing = false;
 	    //m_fBlockPushTime = 0;
+
 		m_pDefendPayloadBomb = NULL;
 		m_pPushPayloadBomb = NULL;
 		m_pRedPayloadBomb = NULL;
@@ -7645,10 +7647,26 @@ CBotTF2::CBotTF2()
 		m_prevDispHealth = 0;
 		m_prevTeleExtHealth = 0;
 		m_prevTeleEntHealth = 0;
-		m_fHealClickTime = 0;
-		m_fCheckHealTime = 0;
+		m_fHealClickTime = 0.0f;
+		m_fCheckHealTime = 0.0f;
+
+		m_iTrapCPIndex = 0;
+		m_fRemoveSapTime = 0.0f;
+		m_fRevMiniGunTime = 0.0f;
+		m_fNextRevMiniGunTime = 0.0f;
+		m_fRevMiniGunBelief = 0.0f;
+		m_fCloakBelief = 0.0f;
+
+		m_bIsCarryingTeleExit = false;
+		m_bIsCarryingSentry = false;
+		m_bIsCarryingDisp = false;
+		m_bIsCarryingTeleEnt = false;
+		m_bIsCarryingObj = false;
+		m_fCarryTime = 0.0f;
+		m_fCheckNextCarrying = 0.0f;
+		m_fUseBuffItemTime = 0.0f;
 		
-		m_fAttackPointTime  = 0; // used in cart maps
+		m_fAttackPointTime  = 0.0f; // used in cart maps
 
 		m_prevSentryHealth = 0;
 		m_prevDispHealth = 0;

@@ -160,7 +160,7 @@ void CProfileTimers::updateAndDisplay()
 	{
 		if ( m_fNextUpdate < engine->Time() )
 		{
-			int i = 0;
+			int i;
 
 			double highest = 1.0;
 

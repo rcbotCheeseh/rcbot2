@@ -490,7 +490,7 @@ void CWaypointLocations :: FindNearestBlastInBucket ( int i, int j, int k, const
 		{
 			if ( (fDist = curr_wpt->distanceFrom(vSrc)+curr_wpt->distanceFrom(vOrigin)) < *pfMinDist )
 			{
-				bool bAdd = false;
+				bool bAdd;
 				
 				if ( bGetVisible == false )
 					bAdd = true;
@@ -597,7 +597,7 @@ void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vect
 
 		if ( (fDist = curr_wpt->distanceFrom(vOrigin)) < *pfMinDist )
 		{
-			bool bAdd = false;
+			bool bAdd;
 			
 			if ( bGetVisible == false )
 				bAdd = true;

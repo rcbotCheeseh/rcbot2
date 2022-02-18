@@ -930,7 +930,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 		{
 			// Select a random hostage to rescue
 			CWaypoint* pWaypoint = NULL;
-			CWaypoint* pRoute = NULL;
+			CWaypoint* pRoute;
 			CBotSchedule* pSched = new CBotSchedule();
 			edict_t* pHostage = CCounterStrikeSourceMod::getRandomHostage();
 			pSched->setID(SCHED_GOTONEST);
@@ -962,8 +962,8 @@ bool CCSSBot::executeAction(eBotAction iAction)
 		case BOT_UTIL_RESCUE:
 		{
 			// Go to a random Rescue Zone waypoint
-			CWaypoint* pWaypoint = NULL;
-			CWaypoint* pRoute = NULL;
+			CWaypoint* pWaypoint;
+			CWaypoint* pRoute;
 			CBotSchedule* pSched = new CBotSchedule();
 			pSched->setID(SCHED_GOTO_ORIGIN);
 
@@ -991,7 +991,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 		}
 		case BOT_UTIL_SNIPE:
 		{
-			CWaypoint *pWaypoint = NULL;
+			CWaypoint *pWaypoint;
 			CBotSchedule* pSched = new CBotSchedule();
 			pSched->setID(SCHED_SNIPE);
 

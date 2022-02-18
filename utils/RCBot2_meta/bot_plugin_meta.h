@@ -127,10 +127,10 @@ private:
 	void BindToSourcemod();
 #endif
 
-	int m_iClientCommandIndex;
+	int m_iClientCommandIndex = 0;
 
 	// Bot Quota
-	float m_fBotQuotaTimer;
+	float m_fBotQuotaTimer = 0;
 	int m_iTargetBots[MAX_PLAYERS];
 
 	void BotQuotaCheck();

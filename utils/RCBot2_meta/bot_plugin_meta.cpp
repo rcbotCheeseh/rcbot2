@@ -142,11 +142,11 @@ public:
 		m_iPlayerSlot = ENTINDEX(pPlayer);
 	}
 
-	bool IsReliable() const { return false; }
-	bool IsInitMessage() const { return false; }
+	bool IsReliable() const override { return false; }
+	bool IsInitMessage() const override { return false; }
 
-	int	GetRecipientCount() const { return 1; }
-	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot; }
+	int	GetRecipientCount() const override { return 1; }
+	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot; }
 
 private:
 	int m_iPlayerSlot;
@@ -173,11 +173,11 @@ public:
 		}
 	}
 
-	bool IsReliable() const { return false; }
-	bool IsInitMessage() const { return false; }
+	bool IsReliable() const override { return false; }
+	bool IsInitMessage() const override { return false; }
 
-	int	GetRecipientCount() const { return m_iMaxCount; }
-	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot[slot] + 1; }
+	int	GetRecipientCount() const override { return m_iMaxCount; }
+	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot[slot] + 1; }
 
 private:
 
@@ -216,7 +216,7 @@ void RCBotPluginMeta::HudTextMessage(edict_t *pEntity, const char *szMessage)
 
 	CBotRecipientFilter *filter = new CBotRecipientFilter(pEntity);
 
-	bf_write *buf = nullptr;
+	bf_write *buf;
 
 	if (hint > 0) {
 		buf = engine->UserMessageBegin(filter, hint);
@@ -264,7 +264,7 @@ void RCBotPluginMeta::BroadcastTextMessage(const char *szMessage)
 
 	CClientBroadcastRecipientFilter *filter = new CClientBroadcastRecipientFilter();
 
-	bf_write *buf = NULL;
+	bf_write *buf;
 	if (say > 0) {
 		char chatline[128];
 		snprintf(chatline, sizeof(chatline), "\x01\x04[RCBot2]\x01 %s\n", szMessage);
@@ -314,7 +314,7 @@ void RCBotPluginMeta::Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper)
 class BaseAccessor : public IConCommandBaseAccessor
 {
 public:
-	bool RegisterConCommandBase(ConCommandBase *pCommandBase)
+	bool RegisterConCommandBase(ConCommandBase *pCommandBase) override
 	{
 		/* Always call META_REGCVAR instead of going through the engine. */
 		return META_REGCVAR(pCommandBase);
@@ -835,7 +835,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 		m_fBotQuotaTimer = engine->Time();
 
 		// Target Bot Count
-		int bot_target = 0;
+		int bot_target;
 		// Change Notification
 		bool notify = false;
 

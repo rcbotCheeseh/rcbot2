@@ -2250,8 +2250,8 @@ void CWaypoints :: deletePathsFrom ( int iWpt )
 int CWaypoints :: addWaypoint ( CClient *pClient, const char *type1, const char *type2,const char *type3,const char *type4,  bool bUseTemplate )
 {
 	int iFlags = 0;
-	int iIndex = -1; // waypoint index
-	int iArea = 0;
+	int iIndex; // waypoint index
+	int iArea;
 	const Vector vWptOrigin = pClient->getOrigin();
 	const QAngle playerAngles = CBotGlobals::playerAngles (pClient->getPlayer());
 	float fMaxDistance = 0.0; // distance for auto type
@@ -2774,7 +2774,7 @@ CWaypoint* CWaypoints::randomWaypointGoalBetweenArea(int iFlags, int iTeam, int 
 				else if ( bForceArea && pWpt->getArea() != iArea )
 					continue;
 
-				float fCost = 0;
+				float fCost;
 
 				node = new AStarNode();
 

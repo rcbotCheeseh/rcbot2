@@ -1052,7 +1052,7 @@ void CDODBot :: chooseClass ( bool bIsChangingClass )
 	float fClassFitness[6]; // 6 classes
 	float fTotalFitness = 0;
 
-	short int i = 0;
+	short int i;
 
 	const int iTeam = getTeam();
 
@@ -1201,7 +1201,7 @@ void CDODBot :: modThink ()
 		// not sniper rifle or machine gun but can look down the sights
 		if ( hasSomeConditions(CONDITION_COVERT) && m_pCurrentWeapon && pWeapon && (( pWeapon->getID() == DOD_WEAPON_K98 ) || (pWeapon->getID() == DOD_WEAPON_GARAND) ))
 		{
-			bool bZoomed = false;
+			bool bZoomed;
 
 			if ( pWeapon->getID() == DOD_WEAPON_K98 )
 				bZoomed = CClassInterface::isK98Zoomed(m_pCurrentWeapon);

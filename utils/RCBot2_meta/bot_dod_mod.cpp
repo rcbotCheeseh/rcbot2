@@ -470,7 +470,7 @@ bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam,
 	if ( id )
 		*id = -1;
 
-	int selection = -1;
+	int selection;
 
 	IBotNavigator* pNav = pBot->getNavigator();
 
