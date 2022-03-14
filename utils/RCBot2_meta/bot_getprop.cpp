@@ -251,7 +251,7 @@ edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict )
 	return NULL;
 }
 
-void CClassInterfaceValue :: init (const char* key, char* value, unsigned preoffset)
+void CClassInterfaceValue :: init (const char* key, const char* value, unsigned preoffset)
 {
 	m_class = CStrings::getString(key);
 	m_value = CStrings::getString(value);
@@ -657,12 +657,12 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 
 		pEntity = pUnknown->GetBaseEntity();
 
-		m_data = (void *)((char *)pEntity + m_offset);
+		m_data = static_cast<void*>(reinterpret_cast<char*>(pEntity) + m_offset);
 	}
 	else
 	{
 		// raw
-		m_data = (void *)((char *)edict + m_offset);
+		m_data = static_cast<void*>(static_cast<char*>(edict) + m_offset);
 	}
 
 }
@@ -671,7 +671,7 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 {
 	edict_t *pfound = NULL;
 	// speed up loop by by using smaller ints in register
-	const short int max = (short int)gpGlobals->maxEntities;
+	const auto max = static_cast<short>(gpGlobals->maxEntities);
 
 	for (short int i = 0; i < max; i++)
 	{

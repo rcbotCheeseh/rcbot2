@@ -434,10 +434,10 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 			if ( pMedigun )
 			{
 				// overheal HWGUY/SOLDIER/DEMOMAN
-				fFactor += (float)(CClassInterface::getUberChargeLevel(pMedigun))/100;
+				fFactor += static_cast<float>(CClassInterface::getUberChargeLevel(pMedigun))/100;
 
 				if ( CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict) ) // uber deployed
-					fFactor += (1.0f - ((float)(CClassInterface::getUberChargeLevel(pMedigun))/100));
+					fFactor += (1.0f - (static_cast<float>(CClassInterface::getUberChargeLevel(pMedigun))/100));
 			}
 		}
 		// drop down
@@ -459,7 +459,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 
 		if ( !bHeavyClass && pMedigun ) // add more factor bassed on uber charge level - bot can gain more uber charge
 		{
-			fFactor += (0.1f - ((float)(CClassInterface::getUberChargeLevel(pMedigun))/1000));
+			fFactor += (0.1f - (static_cast<float>(CClassInterface::getUberChargeLevel(pMedigun))/1000));
 			
 			if ( (m_StatsCanUse.stats.m_iTeamMatesVisible == 1) && (fHealthPercent >= 1.0f) )
 				return 0.0f; // find another guy
@@ -485,13 +485,13 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 		fFactor += (vVel.Length() / 1000);
 
 		// favour big guys
-		fFactor += ((float)p->GetMaxHealth())/200;
+		fFactor += static_cast<float>(p->GetMaxHealth())/200;
 
 		// favour those with bigger scores
 		if ( iHighestScore == 0 )
 			iHighestScore = 1;
 
-		fFactor += (((float)CClassInterface::getTF2Score(pPlayer))/iHighestScore)/2;
+		fFactor += (static_cast<float>(CClassInterface::getTF2Score(pPlayer))/iHighestScore)/2;
 
 		if ( (fLastCalledMedic = m_fCallMedicTime[ENTINDEX(pPlayer)-1]) > 0 )
 			fFactor += MAX(0.0f,1.0f-((engine->Time() - fLastCalledMedic)/5));
@@ -1409,7 +1409,7 @@ void CBotFortress :: modThink ()
 
 	if ( m_bInitAlive )
 	{
-		Vector vOrigin = getOrigin();
+		const Vector vOrigin = getOrigin();
 		CWaypoint *pWpt = CWaypoints::getWaypoint(CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_TELE_ENTRANCE,vOrigin,4096,m_iTeam));
 
 		if ( pWpt )
@@ -1471,7 +1471,7 @@ bool CBotFortress :: isTeleporterUseful ( edict_t *pTele )
 				const float fMaxSpeed = CClassInterface::getMaxSpeed(m_pEdict);
 				const float fDuration = CClassInterface::getTF2TeleRechargeDuration(pTele);
 
-				edict_t *pOwner = CTeamFortress2Mod::getBuildingOwner(ENGI_TELE,ENTINDEX(pTele));
+				const edict_t *pOwner = CTeamFortress2Mod::getBuildingOwner(ENGI_TELE,ENTINDEX(pTele));
 				const float fTime = engine->Time();
 
 				const float fTeleRechargeTime = CTeamFortress2Mod::getTeleportTime(pOwner);
@@ -1835,7 +1835,7 @@ edict_t *CBotFortress::getVisibleSpecial()
 	// this is a special visible which will return something important 
 	// that should be visible quickly, e.g. an enemy sentry gun
 	// or teleporter entrance for bots to make decisions quickly
-	if ( (signed int)m_iSpecialVisibleId >= gpGlobals->maxClients )
+	if ( static_cast<int>(m_iSpecialVisibleId) >= gpGlobals->maxClients )
 		m_iSpecialVisibleId = 0;
 	
 	pPlayer = INDEXENT(m_iSpecialVisibleId+1);
@@ -4054,7 +4054,7 @@ bool CBotTF2::healPlayer()
 	{
 		// Simple UBER check : healing player not ubered already
 		if (!CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pHeal) && !CTeamFortress2Mod::isFlagCarrier(m_pHeal) &&
-			(m_pEnemy&&isVisible(m_pEnemy)) || (((((float)m_pPlayerInfo->GetHealth()) / m_pPlayerInfo->GetMaxHealth()) < 0.33) || (getHealthPercent() < 0.33)))
+			(m_pEnemy&&isVisible(m_pEnemy)) || (((static_cast<float>(m_pPlayerInfo->GetHealth()) / m_pPlayerInfo->GetMaxHealth()) < 0.33) || (getHealthPercent() < 0.33)))
 		{
 			if (CTeamFortress2Mod::hasRoundStarted())
 			{
@@ -4319,7 +4319,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	if (pWeapon != NULL)
 	{
 		iMetal = pWeapon->getAmmo(this);
-		fMetalPercent = (float)iMetal / 200;
+		fMetalPercent = static_cast<float>(iMetal) / 200;
 	}
 	if ( bNeedAmmo || bNeedHealth )
 	{
@@ -4410,9 +4410,13 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 
 			fTeleporterExitHealthPercent = CClassInterface::getTeleporterHealth(m_pTeleExit)/180;
 
-			ADD_UTILITY(BOT_UTIL_ENGI_MOVE_EXIT,(CTeamFortress2Mod::hasRoundStarted()||CTeamFortress2Mod::isMapType(TF_MAP_MVM)) && (!m_bIsCarryingObj || m_bIsCarryingTeleExit) && bMoveObjs && m_pTeleEntrance && m_pTeleExit && 
+			ADD_UTILITY(BOT_UTIL_ENGI_MOVE_EXIT,
+			            (CTeamFortress2Mod::hasRoundStarted()||CTeamFortress2Mod::isMapType(TF_MAP_MVM)) && (!
+				            m_bIsCarryingObj || m_bIsCarryingTeleExit) && bMoveObjs && m_pTeleEntrance && m_pTeleExit && 
 				m_fTeleporterExtPlacedTime && (fTeleporterExtPlaceTime > rcbot_move_tele_time.GetFloat()) &&
-				(((60.0f * m_iTeleportedPlayers)/fTeleporterExtPlaceTime)<rcbot_move_tele_tpm.GetFloat()),(fTeleporterExitHealthPercent*getHealthPercent()*fMetalPercent) + ((int)m_bIsCarryingTeleExit));
+				(((60.0f * m_iTeleportedPlayers)/fTeleporterExtPlaceTime)<rcbot_move_tele_tpm.GetFloat()),
+				(fTeleporterExitHealthPercent*getHealthPercent()*fMetalPercent) + (static_cast<int>(
+					m_bIsCarryingTeleExit)));
 
 		}
 
@@ -4422,9 +4426,13 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 
 			fTeleporterEntranceHealthPercent = CClassInterface::getTeleporterHealth(m_pTeleEntrance)/180;
 
-			ADD_UTILITY(BOT_UTIL_ENGI_MOVE_ENTRANCE,(!m_bIsCarryingObj || m_bIsCarryingTeleEnt) && bMoveObjs && m_bEntranceVectorValid && m_pTeleEntrance && m_pTeleExit && 
+			ADD_UTILITY(BOT_UTIL_ENGI_MOVE_ENTRANCE,
+			            (!m_bIsCarryingObj || m_bIsCarryingTeleEnt) && bMoveObjs && m_bEntranceVectorValid &&
+			            m_pTeleEntrance && m_pTeleExit && 
 				m_fTeleporterEntPlacedTime && (fTeleporterEntPlaceTime > rcbot_move_tele_time.GetFloat()) &&
-				(((60.0f * m_iTeleportedPlayers)/fTeleporterEntPlaceTime)<rcbot_move_tele_tpm.GetFloat()),(fTeleporterEntranceHealthPercent*getHealthPercent()*fMetalPercent)+((int)m_bIsCarryingTeleEnt));
+				(((60.0f * m_iTeleportedPlayers)/fTeleporterEntPlaceTime)<rcbot_move_tele_tpm.GetFloat()),
+				(fTeleporterEntranceHealthPercent*getHealthPercent()*fMetalPercent)+(static_cast<int>(
+					m_bIsCarryingTeleEnt)));
 
 		}
 
@@ -4435,10 +4443,11 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 			fSentryHealthPercent = CClassInterface::getSentryHealth(m_pSentryGun)/CClassInterface::getTF2GetBuildingMaxHealth(m_pSentryGun);
 			// move sentry
 			ADD_UTILITY(BOT_UTIL_ENGI_MOVE_SENTRY,(CTeamFortress2Mod::hasRoundStarted()||CTeamFortress2Mod::isMapType(TF_MAP_MVM)) && (!m_bIsCarryingObj || m_bIsCarryingSentry) && 
-				bMoveObjs && (m_fSentryPlaceTime>0.0f) && !bHasFlag && m_pSentryGun && (CClassInterface::getSentryEnemy(m_pSentryGun) == NULL) && ((m_fLastSentryEnemyTime + 15.0f) < engine->Time()) &&
+				bMoveObjs && (m_fSentryPlaceTime>0.0f) && !bHasFlag && m_pSentryGun && (CClassInterface::getSentryEnemy(
+					m_pSentryGun) == NULL) && ((m_fLastSentryEnemyTime + 15.0f) < engine->Time()) &&
 				(!CTeamFortress2Mod::isMapType(TF_MAP_CP) || CTeamFortress2Mod::m_ObjectiveResource.testProbWptArea(m_iSentryArea,m_iTeam)) &&
 				(fSentryPlaceTime>rcbot_move_sentry_time.GetFloat())&&(((60.0f*m_iSentryKills)/fSentryPlaceTime)<rcbot_move_sentry_kpm.GetFloat()),
-				(fMetalPercent*getHealthPercent()*fSentryHealthPercent)+((int)m_bIsCarryingSentry));
+				(fMetalPercent*getHealthPercent()*fSentryHealthPercent)+(static_cast<int>(m_bIsCarryingSentry)));
 
 		}
 
@@ -4446,12 +4455,20 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		{
 			iMetalInDisp = CClassInterface::getTF2DispMetal(m_pDispenser);
 			iDispenserLevel = CClassInterface::getTF2UpgradeLevel(m_pDispenser); // CTeamFortress2Mod::getDispenserLevel(m_pDispenser);
-			fDispenserHealthPercent = CClassInterface::getDispenserHealth(m_pDispenser) / CClassInterface::getTF2GetBuildingMaxHealth(m_pDispenser);
+			fDispenserHealthPercent = CClassInterface::getDispenserHealth(m_pDispenser) /
+				CClassInterface::getTF2GetBuildingMaxHealth(m_pDispenser);
 
-			fUseDispFactor = (((float)iMetalInDisp)/400) * (1.0f-fMetalPercent) * ((float)iDispenserLevel/3) * (1000.0f/distanceFrom(m_pDispenser));
+			fUseDispFactor = (static_cast<float>(iMetalInDisp) / 400) * (1.0f - fMetalPercent) * (static_cast<float>(
+				iDispenserLevel) / 3) * (1000.0f / distanceFrom(m_pDispenser));
 
 			// move disp
-			ADD_UTILITY(BOT_UTIL_ENGI_MOVE_DISP,(CTeamFortress2Mod::hasRoundStarted()||CTeamFortress2Mod::isMapType(TF_MAP_MVM)) && (!m_bIsCarryingObj || m_bIsCarryingDisp) && bMoveObjs && (m_fDispenserPlaceTime>0.0f) && !bHasFlag && m_pDispenser && (fDispenserPlaceTime>rcbot_move_disp_time.GetFloat())&&(((60.0f*m_fDispenserHealAmount)/fDispenserPlaceTime)<rcbot_move_disp_healamount.GetFloat()), ((((float)iMetalInDisp)/400)*fMetalPercent*getHealthPercent()*fDispenserHealthPercent) + ((int)m_bIsCarryingDisp));
+			ADD_UTILITY(BOT_UTIL_ENGI_MOVE_DISP,
+			            (CTeamFortress2Mod::hasRoundStarted()||CTeamFortress2Mod::isMapType(TF_MAP_MVM)) && (!
+				            m_bIsCarryingObj || m_bIsCarryingDisp) && bMoveObjs && (m_fDispenserPlaceTime>0.0f) && !
+			            bHasFlag && m_pDispenser && (fDispenserPlaceTime>rcbot_move_disp_time.GetFloat())&&(((60.0f*
+				            m_fDispenserHealAmount)/fDispenserPlaceTime)<rcbot_move_disp_healamount.GetFloat()),
+			            (((static_cast<float>(iMetalInDisp))/400)*fMetalPercent*getHealthPercent()*
+				            fDispenserHealthPercent) + (static_cast<int>(m_bIsCarryingDisp)));
 
 		}
 
@@ -4459,13 +4476,25 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		{
 			iMetalInDisp = CClassInterface::getTF2DispMetal(m_pNearestDisp);
 			iAllyDispLevel = CClassInterface::getTF2UpgradeLevel(m_pNearestDisp); // CTeamFortress2Mod::getDispenserLevel(m_pDispenser);
-			fAllyDispenserHealthPercent = CClassInterface::getDispenserHealth(m_pNearestDisp) / CClassInterface::getTF2GetBuildingMaxHealth(m_pNearestDisp);
+			fAllyDispenserHealthPercent = CClassInterface::getDispenserHealth(m_pNearestDisp) /
+				CClassInterface::getTF2GetBuildingMaxHealth(m_pNearestDisp);
 
-			fUseDispFactor = (((float)iMetalInDisp)/400) * (1.0f-fMetalPercent) * ((float)iAllyDispLevel/3) * (1000.0f/distanceFrom(m_pNearestDisp));
+			fUseDispFactor = (static_cast<float>(iMetalInDisp) / 400) * (1.0f - fMetalPercent) * (static_cast<float>(iAllyDispLevel) / 3) * (
+				1000.0f / distanceFrom(m_pNearestDisp));
 
-			ADD_UTILITY(BOT_UTIL_GOTODISP,m_pNearestDisp && !CClassInterface::isObjectBeingBuilt(m_pNearestDisp) && (bNeedAmmo || bNeedHealth),fUseDispFactor + ((!CTeamFortress2Mod::hasRoundStarted() && CTeamFortress2Mod::isMapType(TF_MAP_MVM))?0.5f:0.0f));
-			ADD_UTILITY(BOT_UTIL_REMOVE_TMDISP_SAPPER,!m_bIsCarryingObj && (m_fRemoveSapTime<engine->Time()) &&m_pNearestDisp && CTeamFortress2Mod::isDispenserSapped(m_pNearestDisp),1.1f);
-			ADD_UTILITY(BOT_UTIL_UPGTMDISP,!m_bIsCarryingObj && (m_fRemoveSapTime<engine->Time()) && (m_pNearestDisp!=NULL)&&(m_pNearestDisp!=m_pDispenser) && (iMetal>=(200-CClassInterface::getTF2SentryUpgradeMetal(m_pNearestDisp))) && ((iAllyDispLevel<3)||(fAllyDispenserHealthPercent<1.0f)),0.7+((1.0f-fAllyDispenserHealthPercent)*0.3));
+			ADD_UTILITY(BOT_UTIL_GOTODISP,
+			            m_pNearestDisp && !CClassInterface::isObjectBeingBuilt(m_pNearestDisp) && (bNeedAmmo ||
+				            bNeedHealth),
+			            fUseDispFactor + ((!CTeamFortress2Mod::hasRoundStarted() && CTeamFortress2Mod::isMapType(
+				            TF_MAP_MVM))?0.5f:0.0f));
+			ADD_UTILITY(BOT_UTIL_REMOVE_TMDISP_SAPPER,
+			            !m_bIsCarryingObj && (m_fRemoveSapTime<engine->Time()) &&m_pNearestDisp && CTeamFortress2Mod::
+			            isDispenserSapped(m_pNearestDisp), 1.1f);
+			ADD_UTILITY(BOT_UTIL_UPGTMDISP,
+			            !m_bIsCarryingObj && (m_fRemoveSapTime<engine->Time()) && (m_pNearestDisp!=NULL)&&(
+				            m_pNearestDisp!=m_pDispenser) && (iMetal>=(200-CClassInterface::getTF2SentryUpgradeMetal(
+				            m_pNearestDisp))) && ((iAllyDispLevel<3)||(fAllyDispenserHealthPercent<1.0f)),
+			            0.7+((1.0f-fAllyDispenserHealthPercent)*0.3));
 		}
 
 		if ( m_pNearestAllySentry && (m_pNearestAllySentry.get() != m_pSentryGun.get()) && !CClassInterface::getTF2BuildingIsMini(m_pNearestAllySentry) )
@@ -6531,7 +6560,7 @@ void CBotTF2 :: modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_o
 						vVelocity = pClient->getVelocity();
 
 					// the arrow will arc
-					fTime = fDist2D / (pWp->getProjectileSpeed()*0.707);
+					fTime = fDist2D / (pWp->getProjectileSpeed()*0.707f);
 
 					if (rcbot_supermode.GetBool())
 						*v_desired_offset = *v_desired_offset + ((vVelocity*fTime));
@@ -6608,7 +6637,7 @@ void CBotTF2 :: modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_o
 						if ( pWp->getProjectileSpeed() > 0 )
 						{
 							if ( (pWp->getID() == TF2_WEAPON_GRENADELAUNCHER) )
-								fTime = fDist2D/(pWp->getProjectileSpeed()*0.707);
+								fTime = fDist2D/(pWp->getProjectileSpeed()*0.707f);
 							else
 								fTime = fDist/(pWp->getProjectileSpeed());
 
@@ -7184,7 +7213,7 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 				}
 			}	
 
-			if ( CClassInterface::getTF2Class(pEdict) == (int)TF_CLASS_SPY )
+			if ( CClassInterface::getTF2Class(pEdict) == static_cast<int>(TF_CLASS_SPY) )
 			{
 				static float fMinReaction = 0.0f;
 				static float fMaxReaction = 0.0f;

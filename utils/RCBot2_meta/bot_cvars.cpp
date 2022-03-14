@@ -12,10 +12,10 @@ ConVar rcbot_tf2_pyro_airblast("rcbot_tf2_pyro_airblast_ammo", "50", 0, "Ammo mu
 ConVar rcbot_projectile_tweak("rcbot_projtweak", "0.05", 0, "Tweaks the bots knowledge of projectiles and gravity");
 
 ConVar bot_cmd_enable_wpt_sounds("rcbot_enable_wpt_sounds", "1", 0, "Enable/disable sound effects when editing waypoints");
-//ConVar bot_general_difficulty("rcbot_skill", "0.6", 0, "General difficulty of the bots. 0.5 = stock, < 0.5 easier, > 0.5 = harder");
-//ConVar bot_visrevs_clients("rcbot_visrevs_clients", "3", 0, "how many revs the bot searches for visible players and enemies, lower to reduce cpu usage");
+ConVar bot_general_difficulty("rcbot_skill", "0.6", 0, "General difficulty of the bots. 0.5 = stock, < 0.5 easier, > 0.5 = harder");
+ConVar bot_visrevs_clients("rcbot_visrevs_clients", "3", 0, "how many revs the bot searches for visible players and enemies, lower to reduce cpu usage");
 ConVar bot_spyknifefov("rcbot_spyknifefov", "80", 0, "the FOV from the enemy that spies must backstab from");
-//ConVar bot_visrevs("rcbot_visrevs", "6", 0, "how many revs the bot searches for visible monsters, lower to reduce cpu usage min:5");
+ConVar bot_visrevs("rcbot_visrevs", "6", 0, "how many revs the bot searches for visible monsters, lower to reduce cpu usage min:5");
 ConVar bot_pathrevs("rcbot_pathrevs", "30", 0, "how many revs the bot searches for a path each frame, lower to reduce cpu usage, but causes bots to stand still more");
 ConVar bot_command("rcbot_cmd", "", 0, "issues a command to all bots");
 ConVar bot_attack("rcbot_flipout", "0", 0, "Rcbots all attack");
@@ -37,7 +37,7 @@ ConVar bot_avoid_radius("rcbot_avoid_radius", "80", 0, "radius in units for bots
 ConVar bot_avoid_strength("rcbot_avoid_strength", "100", 0, "strength of avoidance (0 = disable)");
 ConVar bot_messaround("rcbot_messaround", "1", 0, "bots mess around at start up");
 ConVar bot_heavyaimoffset("rcbot_heavyaimoffset", "0.1", 0, "fraction of how much the heavy aims at a diagonal offset");
-//ConVar bot_aimsmoothing("rcbot_aimsmoothing", "1", 0, "(0 = no smoothing)");
+ConVar bot_aimsmoothing("rcbot_aimsmoothing", "1", 0, "(0 = no smoothing)");
 ConVar bot_bossattackfactor("rcbot_bossattackfactor", "1.0", 0, "the higher the more often the bots will shoot the boss");
 
 ConVar rcbot_enemyshootfov("rcbot_enemyshootfov", "0.97", 0, "the fov dot product before the bot shoots an enemy 0.7 = 45 degrees");

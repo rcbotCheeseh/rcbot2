@@ -115,7 +115,7 @@ public:
 		m_iFlags = 0;
 	}
 private:
-	int m_iFlags;
+	int m_iFlags = 0;
 };
 
 class CToolTip
@@ -383,14 +383,14 @@ class CClients
 public:
 	// called when player joins
 	static CClient *clientConnected ( edict_t *pPlayer );
-	static void clientDisconnected ( edict_t *pPlayer );
+	static void clientDisconnected (const edict_t *pPlayer );
 	// player starts game
-	static void clientActive ( edict_t *pPlayer );
+	static void clientActive (const edict_t *pPlayer );
 	// get index in array
 	static int slotOfEdict (const edict_t* pPlayer);
-	static void init ( edict_t *pPlayer );
+	static void init (const edict_t *pPlayer );
 	static CClient *get ( int iIndex ) { return &m_Clients[iIndex]; }
-	static CClient *get ( edict_t *pPlayer ) { return &m_Clients[slotOfEdict(pPlayer)]; }
+	static CClient *get ( const edict_t *pPlayer ) { return &m_Clients[slotOfEdict(pPlayer)]; }
 	static void setListenServerClient ( CClient *pClient ) { m_pListenServerClient = pClient; }
 	static bool isListenServerClient ( CClient *pClient ) { return m_pListenServerClient == pClient; }
 	static bool noListenServerClient () { return m_pListenServerClient == NULL; }

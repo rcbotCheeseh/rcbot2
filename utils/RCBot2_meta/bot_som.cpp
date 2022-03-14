@@ -46,7 +46,7 @@ CSom :: CSom ( int iW, int iH, int iIn )
 	m_iH = iH;
 
 	// neighbourhood size
-	m_fNSize = (float)(int)((float)iW/2);
+	m_fNSize = static_cast<float>(static_cast<int>(static_cast<float>(iW) / 2));
 
 	for ( int i = 0; i < iH; i ++ )
 	{
@@ -99,7 +99,7 @@ void CSom :: updateAround (const std::vector<float>* inputs, CSomNeuron* bmu)
 	}
 }
 
-CSomNeuron *CSom :: inputOne ( std::vector <float> *inputs )
+CSomNeuron *CSom :: inputOne ( const std::vector <float> *inputs )
 {
 	CSomNeuron *winner = getBMU(inputs);
 
@@ -112,9 +112,9 @@ CSomNeuron *CSom :: inputOne ( std::vector <float> *inputs )
 	return winner;
 }
 
-CSomNeuron *CSom :: input ( std::vector < std::vector <float> > *inputs )
+CSomNeuron *CSom :: input ( const std::vector < std::vector <float> > *inputs )
 {
-	return inputOne(&(*inputs)[randomInt(0,(int)inputs->size()-1)]);
+	return inputOne(&(*inputs)[randomInt(0,static_cast<int>(inputs->size())-1)]);
 }
 
 void CSom :: display ()
@@ -154,8 +154,8 @@ CSomNeuron :: CSomNeuron ()
 
 CSomNeuron :: CSomNeuron ( unsigned short iId, int iInp, int iX, int iY )
 {				
-	m_iX = (float)iX;
-	m_iY = (float)iY;
+	m_iX = static_cast<float>(iX);
+	m_iY = static_cast<float>(iY);
 	m_iId = iId;
 	
 	for ( int i = 0; i < iInp; i ++ )

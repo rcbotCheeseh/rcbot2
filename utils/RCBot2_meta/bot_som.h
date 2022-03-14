@@ -88,9 +88,9 @@ public:
 
 	void updateAround (const std::vector<float>* inputs, CSomNeuron* bmu);
 
-	CSomNeuron *input ( std::vector < std::vector <float> > *inputs );
+	CSomNeuron *input (const std::vector < std::vector <float> > *inputs );
 
-	CSomNeuron *inputOne ( std::vector < float > *inputs );
+	CSomNeuron *inputOne (const std::vector < float > *inputs );
 
 	void input ( std::vector < std::vector <float> > *inputs, int epochs );
 

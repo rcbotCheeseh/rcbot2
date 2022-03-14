@@ -78,6 +78,7 @@ typedef enum
 	BOTTYPE_DOD,
 	BOTTYPE_NS2,
 	BOTTYPE_SYN,
+	BOTTYPE_BMS,
 	BOTTYPE_MAX
 }eBotType;
 

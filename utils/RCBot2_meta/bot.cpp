@@ -81,11 +81,12 @@
 
 #include "logging.h"
 
+#include <random>
 #include <vector>
 #include <algorithm>
 
-#define DEG_TO_RAD(x) (x)*0.0174533
-#define RAD_TO_DEG(x) (x)*57.29578
+#define DEG_TO_RAD(x) ((x)*0.0174533)
+#define RAD_TO_DEG(x) ((x)*57.29578)
 
 //extern void HookPlayerRunCommand ( edict_t *edict );
 
@@ -343,7 +344,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 
 	if ( FStrEq(szModel,"default") )	
 	{
-		int iModel = randomInt(1,7);	
+		const int iModel = randomInt(1,7);	
 
 		if ( randomInt(0,1) )
 			sprintf(szModel,"models/humans/Group03/Male_0%d.mdl",iModel);
@@ -380,7 +381,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	return true;
 }
 
-bool CBot :: FVisible ( Vector &vOrigin, edict_t *pDest )
+bool CBot :: FVisible (const Vector &vOrigin, edict_t *pDest )
 {
 	//return CBotGlobals::isVisible(m_pEdict,getEyePosition(),vOrigin);
 	// fix bots seeing through gates/doors
@@ -607,7 +608,7 @@ bool CBot :: checkStuck ()
 	return m_bThinkStuck;
 }
 
-bool CBot :: isVisible ( edict_t *pEdict )
+bool CBot :: isVisible (const edict_t *pEdict )
 {
 	return m_pVisibles->isVisible(pEdict);
 }
@@ -1775,7 +1776,7 @@ void CBot ::debugBot(char *msg)
 int CBot :: nearbyFriendlies (float fDistance)
 {
 	int num = 0;
-	const short int maxclients = (short int)CBotGlobals::maxClients();
+	const short int maxclients = static_cast<short>(CBotGlobals::maxClients());
 
 	for ( short int i = 0; i <= maxclients; i ++ )
 	{
@@ -3039,15 +3040,15 @@ bool CBots :: controlBot ( edict_t *pEdict )
 	return true;
 }
 
-#define SET_PROFILE_DATA_INT(varname,membername) if ( varname && *varname ) { pBotProfile->membername = atoi(varname); }
-#define SET_PROFILE_STRING(varname,localname,membername) if ( varname && *varname ) { localname = (char*)varname; } else { localname = pBotProfile->membername; }
+#define SET_PROFILE_DATA_INT(varname,membername) if ( (varname) && *varname ) { pBotProfile->membername = atoi(varname); }
+#define SET_PROFILE_STRING(varname,localname,membername) if ( varname && *varname ) { localname = (char*)(varname); } else { localname = pBotProfile->membername; }
 
 bool CBots :: controlBot ( const char *szOldName, const char *szName, const char *szTeam, const char *szClass )
 {
 	edict_t *pEdict;	
 	CBotProfile *pBotProfile;
 
-	char *szOVName = "";
+	const char *szOVName = "";
 
 	if ( (pEdict = CBotGlobals::findPlayerByTruncName(szOldName)) == NULL )
 	{
@@ -3095,7 +3096,7 @@ bool CBots :: createBot (const char *szClass, const char *szTeam, const char *sz
 	edict_t *pEdict;
 	CBotProfile *pBotProfile;
 	CBotMod *pMod = CBotGlobals::getCurrentMod();
-	char *szOVName = "";
+	const char *szOVName = "";
 
 	if ( (m_iMaxBots != -1) && (CBotGlobals::numClients() >= m_iMaxBots) )
 		logger->Log(LogLevel::ERROR, "Can't create bot, max_bots reached");
@@ -3137,7 +3138,7 @@ int CBots::createDefaultBot(const char* name) {
 	CBotProfile* pBotProfile = new CBotProfile(*CBotProfiles::getDefaultProfile());
 	pBotProfile->m_szName = CStrings::getString(name);
 
-	int slot = slotOfEdict(pEdict);
+	const int slot = slotOfEdict(pEdict);
 	m_Bots[slot]->createBotFromEdict(pEdict, pBotProfile);
 
 	return slot;
@@ -3197,6 +3198,9 @@ void CBots :: init ()
 		case BOTTYPE_SYN:
 			m_Bots[i] = new CBotSynergy();
 			break;
+		//case BOTTYPE_BMS:
+		//	m_Bots[i] = new CBotBMS();
+		//	break;
 		//case BOTTYPE_NS2:
 		//	break;
 		//case BOTTYPE_MAX:
@@ -3262,7 +3266,7 @@ void CBots :: botThink ()
 {
 	static CBot *pBot;
 
-	bool bBotStop = bot_stop.GetInt() > 0;
+	const bool bBotStop = bot_stop.GetInt() > 0;
 
 #ifdef _DEBUG
 	CProfileTimer *CBotsBotThink;
@@ -3448,10 +3452,10 @@ void CBots :: kickRandomBot (size_t count)
 		return;
 	}
 
-	std::random_shuffle ( botList.begin(), botList.end() );
+	std::shuffle( botList.begin(), botList.end(), std::mt19937(std::random_device()()));
 
 	size_t numBotsKicked = 0;
-	while (numBotsKicked < count && botList.size()) {
+	while (numBotsKicked < count && !botList.empty()) {
 					  
 		sprintf(szCommand, "kickid %d\n", botList.back());
 		engine->ServerCommand(szCommand);

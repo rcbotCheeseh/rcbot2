@@ -988,7 +988,7 @@ void CClient :: clientActive ()
 	if ( playerinfo )
 	{
 		// store steam id
-		m_szSteamID = (char*)playerinfo->GetNetworkIDString();
+		m_szSteamID = const_cast<char*>(playerinfo->GetNetworkIDString());
 	
 		// check my access levels
 		CAccessClients::checkClientAccess(this);
@@ -1061,7 +1061,7 @@ Vector CClient :: getOrigin ()
 	return CBotGlobals::entityOrigin(m_pPlayer) + Vector(0,0,32);//m_pPlayer->GetCollideable()->GetCollisionOrigin();
 }
 
-void CClients :: clientActive ( edict_t *pPlayer )
+void CClients :: clientActive ( const edict_t *pPlayer )
 {
 	CClient *pClient = &m_Clients[slotOfEdict(pPlayer)];
 
@@ -1077,12 +1077,12 @@ CClient *CClients :: clientConnected ( edict_t *pPlayer )
 	return pClient;
 }
 
-void CClients :: init ( edict_t *pPlayer )
+void CClients :: init ( const edict_t *pPlayer )
 {
 	m_Clients[slotOfEdict(pPlayer)].init();
 }
 
-void CClients :: clientDisconnected ( edict_t *pPlayer )
+void CClients :: clientDisconnected ( const edict_t *pPlayer )
 {
 	CClient *pClient = &m_Clients[slotOfEdict(pPlayer)];
 

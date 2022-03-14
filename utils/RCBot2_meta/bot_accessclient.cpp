@@ -42,7 +42,7 @@ std::vector<CAccessClient*> CAccessClients :: m_Clients;
 
 ///////////
 
-CAccessClient :: CAccessClient( char *szSteamID, int iAccessLevel )
+CAccessClient :: CAccessClient( const char *szSteamID, int iAccessLevel )
 {
 	m_iAccessLevel = iAccessLevel;
 	m_szSteamID = CStrings::getString(szSteamID);

@@ -122,7 +122,7 @@ bool CBotSynergy::needAmmo()
 	CBotWeapon *weapon = m_pWeapons->getWeapon(CWeapons::getWeapon(m_pCurrentWeapon->GetClassName()));
 	if(weapon)
 	{
-		int iAmmo = weapon->getAmmo(this); // Current weapon reserve ammo
+		const int iAmmo = weapon->getAmmo(this); // Current weapon reserve ammo
 		
 		switch (weapon->getID())
 		{
@@ -363,7 +363,7 @@ bool CBotSynergy::isEnemy(edict_t *pEdict, bool bCheckWeapons)
 
 bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 {
-	bool bValid = CBot::setVisible(pEntity, bVisible);
+	const bool bValid = CBot::setVisible(pEntity, bVisible);
 
 	static float fDist = distanceFrom(pEntity);
 	Vector entityorigin = Vector(0,0,0);
@@ -438,7 +438,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 			if(pOwner == NULL || p == NULL) // Only care about grenades that doesn't have an owner or isn't owned by a player
 			{
 				m_pNearbyGrenade = pEntity;
-				int iWaypoint = CWaypointLocations::NearestWaypoint(entityorigin, 512.0f, -1);
+				const int iWaypoint = CWaypointLocations::NearestWaypoint(entityorigin, 512.0f, -1);
 				if(iWaypoint != -1)
 				{
 					m_pNavigator->beliefOne(iWaypoint, BELIEF_DANGER, distanceFrom(pEntity));
@@ -450,7 +450,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 			if(!CSynergyMod::IsCombineMinePlayerPlaced(pEntity)) // Ignore player placed (friendly) mines
 			{
 				m_pNearbyMine = pEntity;
-				int iWaypoint = CWaypointLocations::NearestWaypoint(entityorigin, 512.0f, -1);
+				const int iWaypoint = CWaypointLocations::NearestWaypoint(entityorigin, 512.0f, -1);
 				if(iWaypoint != -1)
 				{
 					m_pNavigator->beliefOne(iWaypoint, BELIEF_DANGER, distanceFrom(pEntity));
@@ -579,7 +579,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 	case BOT_UTIL_FIND_NEAREST_HEALTH:
 	{
 		CWaypoint* pWaypoint = NULL;
-		Vector vOrigin = getOrigin();
+		const Vector vOrigin = getOrigin();
 		CBotSchedule* pSched = new CBotSchedule();
 		pSched->setID(SCHED_GOTO_ORIGIN);
 		updateCondition(CONDITION_COVERT); // Pay more attention to danger
@@ -597,7 +597,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 	case BOT_UTIL_FIND_NEAREST_AMMO:
 	{
 		CWaypoint* pWaypoint = NULL;
-		Vector vOrigin = getOrigin();
+		const Vector vOrigin = getOrigin();
 		CBotSchedule* pSched = new CBotSchedule();
 		pSched->setID(SCHED_GOTO_ORIGIN);
 		pWaypoint = CWaypoints::getWaypoint(CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_AMMO, vOrigin, 2048.0f));
@@ -637,7 +637,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 			{
 				if (pRoute)
 				{
-					int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
+					const int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
 					pFindPath = new CFindPathTask(iRoute, LOOK_WAYPOINT);
 					pFindPath->setInterruptFunction(new CBotSYNRoamInterrupt());
 					pSched->addTask(pFindPath);
@@ -647,7 +647,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 				}
 			}
 
-			int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
+			const int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
 			pFindPath = new CFindPathTask(iWaypoint, LOOK_WAYPOINT);
 			pFindPath->setInterruptFunction(new CBotSYNRoamInterrupt());
 			pSched->addTask(pFindPath);
@@ -684,7 +684,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 			{
 				if (pRoute)
 				{
-					int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
+					const int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
 					pFindPath = new CFindPathTask(iRoute, LOOK_WAYPOINT);
 					pFindPath->setInterruptFunction(new CBotSYNRoamInterrupt());
 					pSched->addTask(pFindPath);
@@ -694,7 +694,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 				}
 			}
 
-			int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
+			const int iWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
 			pFindPath = new CFindPathTask(iWaypoint, LOOK_WAYPOINT);
 			pFindPath->setInterruptFunction(new CBotSYNRoamInterrupt());
 			pSched->addTask(pFindPath);
@@ -724,7 +724,7 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 			 * but that function causes link errors when compiling, so I had to fall back to manually searching for door entities.
 			**/
 			CTraceFilterHitAll filter;
-			trace_t *tr = CBotGlobals::getTraceResult();
+			const trace_t *tr = CBotGlobals::getTraceResult();
 			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), pNext->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), MASK_PLAYERSOLID, &filter);
 			if(tr->fraction < 1.0f)
 			{

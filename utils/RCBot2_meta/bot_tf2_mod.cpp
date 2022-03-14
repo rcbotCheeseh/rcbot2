@@ -758,13 +758,13 @@ bool CTeamFortress2Mod::hasRoundStarted ()
 void CTeamFortress2Mod :: setPointOpenTime ( int time )
 {
 	m_fArenaPointOpenTime = 0.0f;
-	m_fPointTime = (float)time;
+	m_fPointTime = static_cast<float>(time);
 }
 
 void CTeamFortress2Mod :: setSetupTime ( int time )
 {
   m_fRoundTime = 0.0f;
-  m_fSetupTime = (float)time;
+  m_fSetupTime = static_cast<float>(time);
 }
 
 bool CTeamFortress2Mod :: isAmmo (const edict_t* pEntity)
@@ -907,7 +907,7 @@ int CTeamFortress2Mod ::getHighestScore ()
 
 		if ( edict && CBotGlobals::entityIsValid(edict) )
 		{
-			const short int score = (short int)CClassInterface::getTF2Score(edict);
+			const short int score = static_cast<short>(CClassInterface::getTF2Score(edict));
 		
 			if ( score > highest )
 			{

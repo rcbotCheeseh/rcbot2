@@ -141,7 +141,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 {
 	init();
 
-	 for ( eTF2UtilType iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = (eTF2UtilType)((int)iFile+1) )
+	 for ( eTF2UtilType iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = (eTF2UtilType)(static_cast<int>(iFile)+1) )
 	 {
 		 char szFilename[64];
 		 char szFullFilename[512];
@@ -191,7 +191,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 
 						addUtilPerturbation(iUtil,iFile,iClassList);
 
-						iUtil = (eBotAction)((int)iUtil+1);
+						iUtil = (eBotAction)(static_cast<int>(iUtil)+1);
 
 						if ( iUtil >= BOT_UTIL_MAX )
 							break;

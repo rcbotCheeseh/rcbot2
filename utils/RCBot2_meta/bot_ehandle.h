@@ -89,7 +89,7 @@ public:
 
 	bool operator == ( int a )
 	{
-		return (int)get() == a;
+		return reinterpret_cast<int>(get()) == a;
 	}
 
 	bool operator == ( edict_t *pent )

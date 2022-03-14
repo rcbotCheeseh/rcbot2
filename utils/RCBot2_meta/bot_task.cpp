@@ -75,8 +75,8 @@ void getGrenadeAngle ( float v, float g, float desx, float desy, float *fa1, flo
 	const double topminus = vsquared - sqrt(fourabplusa);
 	const double bottom = g*desx;
 
-	*fa1 = (float)atan(topplus / bottom);
-	*fa2 = (float)atan(topminus / bottom);
+	*fa1 = static_cast<float>(atan(topplus / bottom));
+	*fa2 = static_cast<float>(atan(topminus / bottom));
 
 	*fa1 = RAD2DEG(*fa1);
 	*fa2 = RAD2DEG(*fa2);
@@ -2226,7 +2226,7 @@ CBotTF2FindPipeWaypoint:: CBotTF2FindPipeWaypoint ( Vector vOrigin, Vector vTarg
 	m_iNearestj = -1;
 	m_fNearesti = 2048.0f;
 	m_fNearestj = 4096.0f;
-	m_iTargetWaypoint = (short int)CWaypointLocations::NearestWaypoint(m_vTarget,BLAST_RADIUS,-1,true,true);
+	m_iTargetWaypoint = static_cast<short>(CWaypointLocations::NearestWaypoint(m_vTarget,BLAST_RADIUS, -1, true, true));
 		
 	m_pTable = CWaypoints::getVisiblity();	
 
@@ -3584,7 +3584,7 @@ void CBotTFUseTeleporter :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 void CBotTFUseTeleporter :: debugString ( char *string )
 {
-	sprintf(string,"CBotTFUseTeleporter\nm_pTele = %x",(int)m_pTele.get());
+	sprintf(string,"CBotTFUseTeleporter\nm_pTele = %x",reinterpret_cast<int>(m_pTele.get()));
 }
 
 ///////////////////////////////////////////////////

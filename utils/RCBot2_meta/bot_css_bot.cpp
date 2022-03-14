@@ -836,7 +836,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			CBotSchedule* pSched = new CBotSchedule();
 			pSched->setID(SCHED_DEFENDPOINT);
 			edict_t *pBomb = CCounterStrikeSourceMod::getBomb();
-			Vector vBomb = CBotGlobals::entityOrigin(pBomb);
+			const Vector vBomb = CBotGlobals::entityOrigin(pBomb);
 			if(pBomb)
 			{
 				// Find the nearest bomb waypoint to retreive the area from
@@ -937,13 +937,13 @@ bool CCSSBot::executeAction(eBotAction iAction)
 
 			if (pHostage)
 			{
-				Vector vHostage = CBotGlobals::entityOrigin(pHostage);
+				const Vector vHostage = CBotGlobals::entityOrigin(pHostage);
 				pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), vHostage, getTeam(), 0);
 				if((m_fUseRouteTime <= engine->Time()))
 				{
 					if(pRoute)
 					{
-						int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
+						const int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
 						pSched->addTask(new CFindPathTask(iRoute, LOOK_WAYPOINT));
 						m_fUseRouteTime = engine->Time() + 30.0f;
 					}
@@ -976,7 +976,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 				{
 					if(pRoute)
 					{
-						int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
+						const int iRoute = CWaypoints::getWaypointIndex(pRoute); // Route waypoint
 						pSched->addTask(new CFindPathTask(iRoute, LOOK_WAYPOINT));
 						m_fUseRouteTime = engine->Time() + 30.0f;
 					}
@@ -1045,7 +1045,7 @@ void CCSSBot::onRoundStart()
  **/
 bool CCSSBot::IsLeadingHostage()
 {
-	std::vector<CBaseHandle> hostages = CCounterStrikeSourceMod::getHostageVector();
+	const std::vector<CBaseHandle> hostages = CCounterStrikeSourceMod::getHostageVector();
 	edict_t *pHostage = NULL;
 
 	if(getTeam() != CS_TEAM_COUNTERTERRORIST)
@@ -1078,7 +1078,7 @@ void CCSSBot::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWaypo
 			 * Traces a line between the current waypoint and the next waypoint. If a door is blocking the path, try to open it.
 			 **/
 			CTraceFilterHitAll filter;
-			trace_t *tr = CBotGlobals::getTraceResult();
+			const trace_t *tr = CBotGlobals::getTraceResult();
 			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), pNext->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), MASK_PLAYERSOLID, &filter);
 			if(tr->fraction < 1.0f)
 			{

@@ -75,7 +75,7 @@ bool CSynergyMod::IsEntityLocked(edict_t *pEntity)
         logger->Log(LogLevel::ERROR, "Offset 0 for entity \"%s\"", szclassname);
         return false;
     }
-    const int value = *(int*)((char*)pBaseEntity + offset);
+    const int value = *reinterpret_cast<int*>(reinterpret_cast<char*>(pBaseEntity) + offset);
     if(value == 1)
         return true; // Locked
     else
@@ -93,7 +93,7 @@ bool CSynergyMod::IsCombineMinePlayerPlaced(edict_t *pMine)
     CBaseEntity *pBaseEntity = pMine->GetUnknown()->GetBaseEntity();
 	datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pBaseEntity);
     const int offset = UTIL_FindInDataMap(pDataMap, "m_bPlacedByPlayer");
-    const int value = *(int*)((char*)pBaseEntity + offset);
+    const int value = *reinterpret_cast<int*>(reinterpret_cast<char*>(pBaseEntity) + offset);
     if(value == 1)
         return true;
 
@@ -111,7 +111,7 @@ bool CSynergyMod::IsCombineMineDisarmed(edict_t *pMine)
     CBaseEntity *pBaseEntity = pMine->GetUnknown()->GetBaseEntity();
 	datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pBaseEntity);
     const int offset = UTIL_FindInDataMap(pDataMap, "m_bDisarmed");
-    const int value = *(int*)((char*)pBaseEntity + offset);
+    const int value = *reinterpret_cast<int*>(reinterpret_cast<char*>(pBaseEntity) + offset);
     if(value == 1)
         return true;
 
@@ -129,7 +129,7 @@ bool CSynergyMod::IsCombineMineArmed(edict_t *pMine)
     CBaseEntity *pBaseEntity = pMine->GetUnknown()->GetBaseEntity();
 	datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pBaseEntity);
     const int offset = UTIL_FindInDataMap(pDataMap, "m_iMineState");
-    const int value = *(int*)((char*)pBaseEntity + offset);
+    const int value = *reinterpret_cast<int*>(reinterpret_cast<char*>(pBaseEntity) + offset);
     if(value > 0)
         return true;
 
@@ -147,7 +147,7 @@ bool CSynergyMod::IsCombineMineHeldByPhysgun(edict_t *pMine)
     CBaseEntity *pBaseEntity = pMine->GetUnknown()->GetBaseEntity();
 	datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pBaseEntity);
     const int offset = UTIL_FindInDataMap(pDataMap, "m_bHeldByPhysgun");
-    const int value = *(int*)((char*)pBaseEntity + offset);
+    const int value = *reinterpret_cast<int*>(reinterpret_cast<char*>(pBaseEntity) + offset);
     if(value > 0)
         return true;
 

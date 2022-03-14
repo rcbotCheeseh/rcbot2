@@ -286,7 +286,7 @@ void CCounterStrikeSourceMod::updateHostages()
  **/
 bool CCounterStrikeSourceMod::canRescueHostages()
 {
-    if(m_hHostages.size() == 0)
+    if(m_hHostages.empty())
         return false;
 
     edict_t *pHostage;
@@ -320,7 +320,7 @@ edict_t *CCounterStrikeSourceMod::getRandomHostage()
         }
     }
 
-    if(temp.size() > 0)
+    if(!temp.empty())
     {   
         return INDEXENT(temp.at(randomInt(0, temp.size() - 1)).GetEntryIndex());
     }

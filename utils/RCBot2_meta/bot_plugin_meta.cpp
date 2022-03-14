@@ -12,7 +12,7 @@
  * This sample plugin is public domain.
  */
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "bot_plugin_meta.h"
 
@@ -29,7 +29,7 @@
 #include "bot_cvars.h"
 
 #ifdef _WIN32
-	#include <time.h>
+	#include <ctime>
 #endif
 
 // for IServerTools
@@ -137,7 +137,7 @@ CON_COMMAND(rcbotd, "access the bot commands on a server")
 class CBotRecipientFilter : public IRecipientFilter
 {
 public:
-	CBotRecipientFilter(edict_t *pPlayer)
+	CBotRecipientFilter(const edict_t *pPlayer)
 	{
 		m_iPlayerSlot = ENTINDEX(pPlayer);
 	}
@@ -455,8 +455,8 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	//ConVar_Register( 0 );
 	//InitCVars( interfaceFactory ); // register any cvars we have defined
 
-	srand( (unsigned)time(NULL) );  // initialize the random seed
-	irand.seed( (unsigned)time(NULL) );
+	srand( static_cast<unsigned>(time(NULL)) );  // initialize the random seed
+	irand.seed( static_cast<unsigned>(time(NULL)) );
 
 	// Find the RCBOT2 Path from metamod VDF
 	extern IFileSystem *filesystem;
@@ -877,7 +877,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 			CBots::kickRandomBot(bot_count - bot_target);
 			notify = true;
 		} else if (bot_target > bot_count) {
-			int bot_diff = bot_target - bot_count;
+			const int bot_diff = bot_target - bot_count;
 
 			for (int i = 0; i < bot_diff; ++i) {
 				CBots::createBot("", "", "");

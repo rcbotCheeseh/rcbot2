@@ -305,6 +305,7 @@ private:
 class CBot 
 {
 public:
+	virtual ~CBot() = default;
 	//virtual ~CBot() = default;
 
 	static const float m_fAttackLowestHoldTime;
@@ -405,7 +406,7 @@ public:
 
 	bool FVisible ( edict_t *pEdict, bool bCheckHead = false );
 
-	bool isVisible ( edict_t *pEdict );
+	bool isVisible ( const edict_t *pEdict );
 
     void setEnemy ( edict_t *pEnemy )
 	{
@@ -461,7 +462,7 @@ public:
 
 	void setEdict ( edict_t *pEdict);
 
-	bool FVisible ( Vector &vOrigin, edict_t *pDest = NULL );
+	bool FVisible ( const Vector &vOrigin, edict_t *pDest = NULL );
 
 	Vector getEyePosition ();
 
@@ -1101,7 +1102,7 @@ public:
 	static void runPlayerMoveAll ();
 
 	static CBot *get ( int iIndex ) { return m_Bots[iIndex]; }
-	static CBot *get ( edict_t *pPlayer ) { return m_Bots[slotOfEdict(pPlayer)]; }
+	static CBot *get ( const edict_t *pPlayer ) { return m_Bots[slotOfEdict(pPlayer)]; }
 
 private:
 	static CBot **m_Bots;

@@ -42,9 +42,9 @@ public:
 		if ( fb < 0 )
 			fb = 0;
 
-		r = (unsigned char)(int)((float)other.r*0.5f)+(unsigned char)(int)fr;
-		g = (unsigned char)(int)((float)other.g*0.5f)+(unsigned char)(int)fg;
-		b = (unsigned char)(int)((float)other.b*0.5f)+(unsigned char)(int)fb;
+		r = static_cast<unsigned char>(static_cast<int>(static_cast<float>(other.r) * 0.5f))+static_cast<unsigned char>(static_cast<int>(fr));
+		g = static_cast<unsigned char>(static_cast<int>(static_cast<float>(other.g) * 0.5f))+static_cast<unsigned char>(static_cast<int>(fg));
+		b = static_cast<unsigned char>(static_cast<int>(static_cast<float>(other.b) * 0.5f))+static_cast<unsigned char>(static_cast<int>(fb));
 		
 		//r = (r+other.r)/2;
 		//g = (g+other.g)/2;

@@ -266,7 +266,7 @@ public:
 
 	float getAimYaw ()
 	{
-		return (float)m_iAimYaw;
+		return static_cast<float>(m_iAimYaw);
 	}
 
 	Vector getOrigin ()
@@ -421,7 +421,7 @@ public:
 		if ( pWpt == NULL )
 			return -1;
 
-		return ((int)pWpt - (int)m_theWaypoints)/sizeof(CWaypoint);
+		return (reinterpret_cast<int>(pWpt) - reinterpret_cast<int>(m_theWaypoints))/sizeof(CWaypoint);
 	}
 
 	static void autoFix ( bool bAutoFixNonArea );

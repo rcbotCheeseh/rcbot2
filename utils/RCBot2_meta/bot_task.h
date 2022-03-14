@@ -1237,7 +1237,7 @@ public:
 class CCSSEngageEnemyTask : public CBotTask
 {
 public:
-	CCSSEngageEnemyTask( edict_t *pEnemy )
+	CCSSEngageEnemyTask( const edict_t *pEnemy )
 	{
 		m_hEnemy.Init(engine->IndexOfEdict(pEnemy), pEnemy->m_NetworkSerialNumber);
 	}

@@ -111,8 +111,9 @@ bool CDODMod :: shouldAttack ( int iTeam )
 
 	iNumFlags = m_Flags.getNumFlags();
 
-	iFlags_0 = (int) ((float)m_Flags.getNumFlagsOwned(iTeam == TEAM_ALLIES ? TEAM_AXIS : TEAM_ALLIES) / iNumFlags*MAX_DOD_FLAGS);
-	iFlags_1 = (int) ((float)m_Flags.getNumFlagsOwned(iTeam) / iNumFlags*MAX_DOD_FLAGS);
+	iFlags_0 = static_cast<int>(static_cast<float>(m_Flags.getNumFlagsOwned(iTeam == TEAM_ALLIES ? TEAM_AXIS : TEAM_ALLIES)) /
+		iNumFlags * MAX_DOD_FLAGS);
+	iFlags_1 = static_cast<int>(static_cast<float>(m_Flags.getNumFlagsOwned(iTeam)) / iNumFlags * MAX_DOD_FLAGS);
 
 	return randomFloat(0.0f,1.0f) < fAttackProbLookUp[iFlags_0][iFlags_1];//gNetAttackOrDefend->getOutput();
 }
@@ -157,8 +158,8 @@ void CDODMod :: initMod ()
 		{
 			tset->init();
 			tset->addSet();
-			tset->in((float)i / MAX_DOD_FLAGS);
-			tset->in((float)j / MAX_DOD_FLAGS);
+			tset->in(static_cast<float>(i) / MAX_DOD_FLAGS);
+			tset->in(static_cast<float>(j) / MAX_DOD_FLAGS);
 			nn->execute(tset->getBatches()->in,&fAttackProbLookUp[i][j],0.0f,1.0f);
 		}
 	}
@@ -214,7 +215,7 @@ int CDODMod::getHighestScore ()
 
 		if ( edict && CBotGlobals::entityIsValid(edict) )
 		{
-			const int score = (short int)getScore(edict);
+			const int score = static_cast<short>(getScore(edict));
 		
 			if ( score > highest )
 			{

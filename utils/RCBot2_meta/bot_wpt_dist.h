@@ -24,7 +24,7 @@ public:
 
 	static void setDistance ( int iFrom, int iTo, float fDist )
 	{
-		m_Distances[iFrom][iTo] = (int)fDist;
+		m_Distances[iFrom][iTo] = static_cast<int>(fDist);
 	}
 
 	static void load ();

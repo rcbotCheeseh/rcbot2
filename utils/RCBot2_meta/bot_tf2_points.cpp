@@ -973,7 +973,7 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 		{
 			if ( arr[i].bValid )
 			{
-				arr[i].fProb = (float)(*m_iNumControlPoints+1-i);
+				arr[i].fProb = static_cast<float>(*m_iNumControlPoints + 1 - i);
 				arr[i].fProb *= arr[i].fProb; // square it
 			}
 		}

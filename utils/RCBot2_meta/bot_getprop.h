@@ -189,12 +189,12 @@ public:
 		m_offset = 0;
 	}
 
-	CClassInterfaceValue ( char *key, char *value, unsigned int preoffset )
+	CClassInterfaceValue ( const char *key, const char *value, unsigned int preoffset )
 	{
 		init(key,value,preoffset);
 	}
 
-	void init (const char* key, char* value, unsigned preoffset = 0);
+	void init (const char* key, const char* value, unsigned preoffset = 0);
 
 	void findOffset ( );
 
@@ -213,7 +213,7 @@ public:
 		
 		try
 		{
-			return *(bool*)m_data; 
+			return *static_cast<bool*>(m_data); 
 		}
 
 		catch(...)
@@ -229,7 +229,7 @@ public:
 		if ( !m_data ) 
 			return NULL; 
 
-		return (bool*)m_data; 
+		return static_cast<bool*>(m_data); 
 	}
 
 	void *getVoidPointer ( edict_t *edict ) 
@@ -249,7 +249,7 @@ public:
 		if ( !m_data ) 
 			return defaultvalue; 
 		
-		return *(float*)m_data; 
+		return *static_cast<float*>(m_data); 
 	}
 
 	float *getFloatPointer ( edict_t *edict ) 
@@ -259,14 +259,14 @@ public:
 		if ( !m_data ) 
 			return NULL; 
 		
-		return (float*)m_data; 
+		return static_cast<float*>(m_data); 
 	}
 
 	char *getString (edict_t *edict ) 
 	{ 
 		getData(edict); 
 
-		return (char*)m_data; 
+		return static_cast<char*>(m_data); 
 	}
 
 	Vector *getVectorPointer ( edict_t *edict )
@@ -275,7 +275,7 @@ public:
 
 		if ( m_data )
 		{
-			return (Vector*)m_data;
+			return static_cast<Vector*>(m_data);
 		}
 
 		return NULL;
@@ -288,7 +288,7 @@ public:
 		if ( m_data )
 		{
 			static float *x;
-			x = (float*)m_data;
+			x = static_cast<float*>(m_data);
 			*v = Vector(*x,*(x+1),*(x+2));
 
 			return true;
@@ -306,7 +306,7 @@ public:
 
 		try
 		{
-			return *(int*)m_data;
+			return *static_cast<int*>(m_data);
 		}
 
 		catch ( ... )
@@ -319,14 +319,14 @@ public:
 	{ 
 		getData(edict); 
 
-		return (int*)m_data; 
+		return static_cast<int*>(m_data); 
 	}
 
 	byte *getBytePointer ( edict_t *edict ) 
 	{ 
 		getData(edict); 
 
-		return (byte*)m_data; 
+		return static_cast<byte*>(m_data); 
 	}
 
 	float getFloatFromInt ( edict_t *edict, float defaultvalue )
@@ -336,7 +336,7 @@ public:
 		if ( !m_data ) 
 			return defaultvalue; 
 
-		return (float)*(int *)m_data;
+		return static_cast<float>(*static_cast<int*>(m_data));
 	}
 
 	static void resetError () { m_berror = false; }
@@ -470,9 +470,9 @@ public:
 	static edict_t *getOwner ( edict_t *edict ) { return g_GetProps[GETPROP_ALL_ENTOWNER].getEntity(edict); }
 	static bool isMedigunTargetting ( edict_t *pgun, edict_t *ptarget) { return g_GetProps[GETPROP_TF2MEDIGUN_TARGETTING].getEntity(pgun) == ptarget; }
 	//static void setTickBase ( edict_t *edict, int tickbase ) { return ;
-	static int isTeleporterMode (edict_t *edict, eTeleMode mode ) { return g_GetProps[GETPROP_TF2TELEPORTERMODE].getInt(edict,-1) == (int)mode; }
+	static int isTeleporterMode (edict_t *edict, eTeleMode mode ) { return g_GetProps[GETPROP_TF2TELEPORTERMODE].getInt(edict,-1) == static_cast<int>(mode); }
 	static edict_t *getCurrentWeapon (edict_t *player) { return g_GetProps[GETPROP_CURRENTWEAPON].getEntity(player); }
-	static int getUberChargeLevel (edict_t *pWeapon) { return (int)(g_GetProps[GETPROP_TF2UBERCHARGE_LEVEL].getFloat(pWeapon,0)*100.0); }
+	static int getUberChargeLevel (edict_t *pWeapon) { return static_cast<int>(g_GetProps[GETPROP_TF2UBERCHARGE_LEVEL].getFloat(pWeapon, 0) * 100.0); }
 	//static void test ();
 	static float getSentryHealth ( edict_t *edict ) { return g_GetProps[GETPROP_TF2SENTRYHEALTH].getFloatFromInt(edict,100); }
 	static float getDispenserHealth ( edict_t *edict ) { return g_GetProps[GETPROP_TF2DISPENSERHEALTH].getFloatFromInt(edict,100); }
@@ -591,7 +591,7 @@ public:
 
 	static byte getTakeDamage ( edict_t *pent )
 	{
-		return (byte)g_GetProps[GETPROP_TAKEDAMAGE].getInt(pent,0);
+		return byte(g_GetProps[GETPROP_TAKEDAMAGE].getInt(pent, 0));
 	}
 
 	static byte *getTakeDamagePointer ( edict_t *pent )
@@ -966,7 +966,7 @@ public:
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, "m_iHealth");
-		const int iHealth = *(int*)((char*)pEntity + offset);
+		const int iHealth = *reinterpret_cast<int*>(reinterpret_cast<char*>(pEntity) + offset);
 		return iHealth;
 	}
 	/**
@@ -979,7 +979,7 @@ public:
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, "m_iMaxHealth");
-		const int iMaxHealth = *(int*)((char*)pEntity + offset);
+		const int iMaxHealth = *reinterpret_cast<int*>(reinterpret_cast<char*>(pEntity) + offset);
 		return iMaxHealth;
 	}
 	/**
@@ -993,8 +993,8 @@ public:
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, "m_iHealth");
 		int offset2 = UTIL_FindInDataMap(pDataMap, "m_iMaxHealth");
-		const int iHealth = *(int*)((char*)pEntity + offset);
-		const int iMaxHealth = *(int*)((char*)pEntity + offset);
+		const int iHealth = *reinterpret_cast<int*>(reinterpret_cast<char*>(pEntity) + offset);
+		const int iMaxHealth = *reinterpret_cast<int*>(reinterpret_cast<char*>(pEntity) + offset);
 		return static_cast<float>(iHealth / iMaxHealth);
 	}
 };

@@ -447,7 +447,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 				m_fCurrentDanger += 100.0f; // sniper danger
 				//bInvestigate = false;
 				// Find Hide Spot
-				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_SNIPE_POINT,!hasEnemy() && (m_iClass == DOD_CLASS_SNIPER) && getSniperRifle() && !getSniperRifle()->outOfAmmo(this),1.0f,(unsigned int)pKiller,vecEnemy);
+				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_SNIPE_POINT,!hasEnemy() && (m_iClass == DOD_CLASS_SNIPER) && getSniperRifle() && !getSniperRifle()->outOfAmmo(this),1.0f,reinterpret_cast<unsigned>(pKiller),vecEnemy);
 			}
 			else if ( (pclass == DOD_CLASS_MACHINEGUNNER) && pWeapon->isDeployable() )
 			{
@@ -462,7 +462,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 				m_fCurrentDanger = MAX_BELIEF; // machine gun danger
 				//bInvestigate = false;
 
-				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_SNIPE_POINT,!hasEnemy() && (m_iClass == DOD_CLASS_SNIPER) && getSniperRifle() && !getSniperRifle()->outOfAmmo(this),1.0f,(unsigned int)pKiller,vecEnemy);
+				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_SNIPE_POINT,!hasEnemy() && (m_iClass == DOD_CLASS_SNIPER) && getSniperRifle() && !getSniperRifle()->outOfAmmo(this),1.0f,reinterpret_cast<unsigned>(pKiller),vecEnemy);
 				//ADD_UTILITY_DATA_VECTOR(BOT_UTIL_MOVEUP_MG,!hasEnemy() && (m_iClass == DOD_CLASS_MACHINEGUNNER) && getMG() && !getMG()->outOfAmmo(this),1.0f,1,vecEnemy);
 			}
 			else
@@ -481,7 +481,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 				{
 					//bFollow = false;
 
-					ADD_UTILITY_DATA_VECTOR(BOT_UTIL_COVER_POINT,m_pCurrentWeapon != NULL,0.8f,((unsigned int)pKiller),(vecEnemy));
+					ADD_UTILITY_DATA_VECTOR(BOT_UTIL_COVER_POINT,m_pCurrentWeapon != NULL,0.8f,(reinterpret_cast<unsigned>(pKiller)),(vecEnemy));
 				}
 			}
 			/*else if ( CBotGlobals::isPlayer(pDied) )
@@ -2307,7 +2307,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 					{
 						// attack the bomb point -- less chance if owned many bomb points already
 						if ( randomFloat(0.0f,1.0f) < 
-							((float)CDODMod::m_Flags.getNumPlantableBombs(m_iTeam)/
+							(static_cast<float>(CDODMod::m_Flags.getNumPlantableBombs(m_iTeam))/
 							 CDODMod::m_Flags.getNumBombsOnMap(m_iTeam)) ) 
 						{
 								pWaypoint = CWaypoints::randomWaypointGoal(iWaypointType,m_iTeam,CDODMod::getBombPointArea(m_iTeam),true,this);
@@ -3443,7 +3443,7 @@ void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin,
 
 			if ( pWp->getProjectileSpeed() > 0 && sv_gravity.IsValid() )
 			{
-				float fTime = fDist2D/pWp->getProjectileSpeed();
+				const float fTime = fDist2D/pWp->getProjectileSpeed();
 
 				v_desired_offset->z = (pow(2,fTime)*(sv_gravity.GetFloat()*rcbot_projectile_tweak.GetFloat()));// - (getOrigin().z - v_origin.z);
 			}

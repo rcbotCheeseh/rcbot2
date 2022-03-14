@@ -79,5 +79,5 @@ float CWaypointDistances :: getDistance ( int iFrom, int iTo )
 	if ( m_Distances[iFrom][iTo] == -1 )
 		return (CWaypoints::getWaypoint(iFrom)->getOrigin()-CWaypoints::getWaypoint(iTo)->getOrigin()).Length();
 
-	return (float)m_Distances[iFrom][iTo];
+	return static_cast<float>(m_Distances[iFrom][iTo]);
 }

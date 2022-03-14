@@ -421,7 +421,7 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 	{
 		// create a 'hash' of current weapons
 		pWeapon = m_Weapon_iter == NULL ? NULL : INDEXENT(m_Weapon_iter->GetEntryIndex());
-		iWeaponsSignature += (unsigned int)pWeapon + (pWeapon == NULL ? 0 : (unsigned int)CClassInterface::getWeaponState(pWeapon));
+		iWeaponsSignature += reinterpret_cast<unsigned>(pWeapon) + (pWeapon == NULL ? 0 : static_cast<unsigned>(CClassInterface::getWeaponState(pWeapon)));
 		m_Weapon_iter++;
 	}
 
