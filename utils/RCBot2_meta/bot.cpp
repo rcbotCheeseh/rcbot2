@@ -1068,6 +1068,7 @@ void CBot :: handleWeapons ()
 CBot :: CBot()
 {
 	CBot::init(true);
+	m_iMovePriority = 0;
 }
 /*
 * init()

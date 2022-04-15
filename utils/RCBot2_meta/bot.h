@@ -163,26 +163,24 @@ class CRCBotEventListener : public IGameEventListener2
 
 //extern IVDebugOverlay *debugoverlay;
 
+class CBotButtons;
+class CBotGAValues;
+//class CBotMemoryNode;
+//class CBotMemoryPop;
+class CBotNeuralNet;
+class CBotProfile;
+class CBotSchedules;
+class CBotStuckValues;
 class CBotVisibles;
+class CBotWeapon;
+class CBotWeapons;
 class CFindEnemyFunc;
-class IBotNavigator;
-class CBotMemoryNode;
-class CBotMemoryPop;
 class CGA;
 class CPerceptron;
-class CBotSchedules;
-class CBotGAValues;
-class CBotStuckValues;
-class CBotButtons;
-class IBotNavigator;
-class CFindEnemyFunc;
-class CBotWeapons;
-class CBotProfile;
-class CWaypoint;
-class CBotWeapon;
-class CWeapon;
-class CBotNeuralNet;
 class CTrainingSet;
+class CWaypoint;
+class CWeapon;
+class IBotNavigator;
 
 #define MOVELOOK_DEFAULT 0
 #define MOVELOOK_THINK 1

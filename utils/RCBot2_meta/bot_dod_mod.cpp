@@ -307,7 +307,7 @@ int CDODFlags::findNearestObjective ( Vector vOrigin )
 	float fDistance;
 	int iNearest = -1;
 	
-	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
+	for ( short int i = 0; i < m_iNumControlPoints; i ++ ) // Short integer necessary? [APG]RoboCop[CL]
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{

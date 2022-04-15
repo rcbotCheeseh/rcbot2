@@ -613,9 +613,10 @@ void CDODWaitForBombTask :: debugString ( char *string )
 
 CBotDODAttackPoint :: CBotDODAttackPoint ( int iFlagID, Vector vOrigin, float fRadius )
 {
+	m_bProne = false;
 	m_vOrigin = vOrigin;
-	m_fAttackTime = 0;
-	m_fTime = 0;
+	m_fAttackTime = 0.0f;
+	m_fTime = 0.0f;
 	m_iFlagID = iFlagID;
 	m_fRadius = fRadius;
 }
@@ -2396,6 +2397,7 @@ void CMoveToTask :: debugString ( char *string )
 
 CMoveToTask :: CMoveToTask ( edict_t *pEdict )
 {
+	fPrevDist = 0.0f;
 	m_pEdict = pEdict;
 	m_vVector = CBotGlobals::entityOrigin(m_pEdict);
 
@@ -2849,11 +2851,18 @@ void CBotRemoveSapper :: execute (CBot *pBot,CBotSchedule *pSchedule)
 CBotTF2SnipeCrossBow::CBotTF2SnipeCrossBow(Vector vOrigin, int iWpt)
 {
 	CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
+	m_iHideWaypoint = 0;
+	m_fHideTime = 0.0f;
+	m_iPrevClip = 0;
+	m_fCheckTime = 0.0f;
+	m_fOriginDistance = 0.0f;
+	
 	m_iSnipeWaypoint = iWpt;
 	m_fAimTime = 0.0f;
 	m_fTime = 0.0f;
 	const QAngle angle = QAngle(0, pWaypoint->getAimYaw(), 0);
 	AngleVectors(angle, &m_vAim);
+	
 	m_vAim = vOrigin + m_vAim * 4096;
 	m_vOrigin = vOrigin;
 	m_fEnemyTime = 0.0f;
@@ -3129,11 +3138,18 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 ///////////////////////////////////////////
 CBotTF2Snipe :: CBotTF2Snipe ( Vector vOrigin, int iWpt )
 {
+	m_iHideWaypoint = 0;
+	m_fHideTime = 0.0f;
+	m_iPrevClip = 0;
+	m_fCheckTime = 0.0f;
+	m_fOriginDistance = 0.0f;
+	
 	CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
 	m_iSnipeWaypoint = iWpt;
 	m_fAimTime = 0.0f;
-	m_fTime = 0.0f;
+	m_fTime = 0.0f;	
 	const QAngle angle = QAngle(0, pWaypoint->getAimYaw(), 0);
+	
 	AngleVectors(angle,&m_vAim);
 	m_vAim = vOrigin + m_vAim*4096;
 	m_vOrigin = vOrigin;
@@ -4333,6 +4349,7 @@ void CCrouchHideTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 ////////////////////////////////////////////////////////
 CHideTask :: CHideTask( Vector vHideFrom )
 {
+	m_fHideTime = 0.0f;
 	m_vHideFrom = vHideFrom;
 }
 
@@ -4870,7 +4887,7 @@ CBotTF2Spam :: CBotTF2Spam ( CBot *pBot, Vector vStart, int iYaw, CBotWeapon *pW
 	m_vTarget = CBotGlobals::getTraceResult()->endpos-forward;
 	m_pWeapon = pWeapon;
 	m_vStart = vStart;
-	
+	m_fNextAttack = 0.0f;
 	m_fTime = 0.0f;
 }
 
@@ -4879,7 +4896,7 @@ CBotTF2Spam :: CBotTF2Spam ( Vector vStart, Vector vTarget, CBotWeapon *pWeapon 
 	m_vTarget = vTarget;
 	m_pWeapon = pWeapon;
 	m_vStart = vStart;
-	
+	m_fNextAttack = 0.0f;
 	m_fTime = 0.0f;
 }
 
@@ -4972,6 +4989,10 @@ void CBotTF2Spam :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 CBotTF2AttackSentryGunTask::CBotTF2AttackSentryGunTask ( edict_t *pSentryGun, CBotWeapon *pWeapon )
 {
+	m_iStartingWaypoint = 0;
+	m_iSentryWaypoint = 0;
+	m_fDist = 0.0f;
+	m_fTime = 0.0f;
 	m_pSentryGun = pSentryGun;
 	m_pWeapon = pWeapon;
 }
@@ -5751,6 +5772,7 @@ void CBotSynUseCharger::execute(CBot *pBot, CBotSchedule *pSchedule)
 
 CBotTF2EngineerInterrupt :: CBotTF2EngineerInterrupt( CBot *pBot )
 {
+	pWrench = NULL;
 	m_pSentryGun = CTeamFortress2Mod::getMySentryGun(pBot->getEdict());
 
 	if ( m_pSentryGun.get() != NULL )

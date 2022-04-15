@@ -238,8 +238,8 @@ void CBroadcastRoundStart :: execute ( CBot *pBot )
 }
 
 CBotFortress :: CBotFortress()
-{ 
-	CBot(); 
+{
+	CBot();
 
 	m_iLastFailSentryWpt = -1;
 	m_iLastFailTeleExitWpt = -1;
@@ -247,27 +247,65 @@ CBotFortress :: CBotFortress()
 	// remember prev spy disguised in game while playing
 	m_iPrevSpyDisguise = (TF_Class)0;
 
-	m_fSentryPlaceTime = 0;
-	m_iSentryKills = 0;
-	m_fSnipeAttackTime = 0;
+	m_fTaunting = 0.0f;
+	m_fDefendTime = 0.0f;
+	m_fHealFactor = 0.0f;
+	m_fFrenzyTime = 0.0f;
+	
+	m_fSpyCloakTime = 0.0f;
+	m_fSpyUncloakTime = 0.0f;
+	m_fLastSeeSpyTime = 0.0f;
+	m_fSpyDisguiseTime = 0.0f;
+	m_fLastSaySpy = 0.0f;
+	m_fPickupTime = 0.0f;
+	m_fLookAfterSentryTime = 0.0f;
+	
+	m_bSentryGunVectorValid = false;
+	m_bDispenserVectorValid = false;
+	m_bTeleportExitVectorValid = false;
+	m_fLastKnownTeamFlagTime = 0.0f;
+	m_fBackstabTime = 0.0f;
+	m_fUpdateClass = 0.0f;
+	m_fUseTeleporterTime = 0.0f;
+	m_fChangeClassTime = 0.0f;
+	m_bCheckClass = false;
+	
+	m_fMedicUpdatePosTime = 0.0f;
+	m_fCheckHealTime = 0.0f;
+	m_fDisguiseTime = 0.0f;
+	m_iDisguiseClass = 0;
+	m_fTeleporterEntPlacedTime = 0.0f;
+	m_fTeleporterExtPlacedTime = 0.0f;
+	m_iTeleportedPlayers = 0;
+	
+	m_iTeam = 0;
+	m_fWaitTurnSentry = 0.0f;
+	m_fHealingMoveTime = 0.0f;
+	m_fLastSentryEnemyTime = 0.0f;
+	
+	m_fSentryPlaceTime = 0.0f;
+	m_iSentryKills = 0.0f;
+	m_fSnipeAttackTime = 0.0f;
 	m_pAmmo = NULL;
 	m_pHealthkit = NULL;
-	m_pFlag = NULL; 
-	m_pHeal = NULL; 
-	m_fCallMedic = 0; 
-	m_fTauntTime = 0; 
-	m_fLastKnownFlagTime = 0.0f; 
-	m_bHasFlag = false; 
-	m_pSentryGun = NULL; 
-	m_pDispenser = NULL; 
-	m_pTeleExit = NULL; 
-	m_pTeleEntrance = NULL; 
+	m_pFlag = NULL;
+	m_pHeal = NULL;
+	m_fCallMedic = 0.0f;
+	m_fTauntTime = 0.0f;
+	m_fLastKnownFlagTime = 0.0f;
+	m_bHasFlag = false;
+	
+	m_pSentryGun = NULL;
+	m_pDispenser = NULL;
+	m_pTeleExit = NULL;
+	m_pTeleEntrance = NULL;
 	m_pNearestDisp = NULL;
 	m_pNearestEnemySentry = NULL;
 	m_pNearestEnemyTeleporter = NULL;
 	m_pNearestEnemyDisp = NULL;
 	m_pNearestPipeGren = NULL;
 	m_pPrevSpy = NULL;
+	
 	m_fSeeSpyTime = 0.0f;
 	m_bEntranceVectorValid = false;
 	m_pLastCalledMedic = NULL;
@@ -3645,9 +3683,9 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 	
 	float fTotal = 0;
 
-	for (const int availableClasse : availableClasses)
+	for (const int availableClasses : availableClasses) //TODO: Improve for loop, replace it with std::accumulate ? [APG]RoboCop[CL]
 	{
-		fTotal += m_fClassDisguiseFitness[availableClasse];
+		fTotal += m_fClassDisguiseFitness[availableClasses];
 	}
 
 	if ( fTotal > 0 )
@@ -7420,7 +7458,7 @@ void CBotTF2::MannVsMachineWaveComplete()
 			m_fDispenserPlaceTime = 1.0f;
 			m_fLastSentryEnemyTime = 0.0f;
 			m_iSentryKills = 0;
-			m_fDispenserHealAmount = 0;
+			m_fDispenserHealAmount = 0.0f;
 		}
 	}
 }

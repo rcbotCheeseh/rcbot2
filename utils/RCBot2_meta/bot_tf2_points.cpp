@@ -390,7 +390,7 @@ int CTFObjectiveResource::NearestArea ( Vector vOrigin )
 {
 	int iNearest = -1;
 	float fNearest = 2048.0f;
-	float fDist;
+	float fDist; //TODO: fDist could be reduced? [APG]RoboCop[CL]
 
 	for ( int i = 0; i < *m_iNumControlPoints; i ++ )
 	{

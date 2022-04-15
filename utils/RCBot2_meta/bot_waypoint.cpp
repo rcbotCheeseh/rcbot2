@@ -1429,7 +1429,7 @@ void CWaypoint :: drawPaths ( edict_t *pEdict, unsigned short int iDrawType )
 {
 	const int iPaths = numPaths();
 
-	for ( int i = 0; i < iPaths; i ++ )
+	for ( int i = 0; i < iPaths; i ++ ) //TODO: Improve loop [APG]RoboCop[CL]
 	{
 		const int iWpt = getPath(i);
 
@@ -2219,14 +2219,14 @@ void CWaypoints :: deletePathsTo ( int iWpt )
 	// this will go into an evil loop unless we do this first
 	// and use a temporary copy as a side effect of performing
 	// a remove will affect the original array
-	for ( int i = 0; i < iNumPathsTo; i ++ )
+	for ( int i = 0; i < iNumPathsTo; i ++ ) //TODO: Improve loop [APG]RoboCop[CL]
 	{
 		pathsTo.emplace_back(pWaypoint->getPathToThisWaypoint(i));
 	}
 
 	iNumPathsTo = pathsTo.size();
 
-	for ( int i = 0; i < iNumPathsTo; i ++ )
+	for ( int i = 0; i < iNumPathsTo; i ++ ) //TODO: Improve loop [APG]RoboCop[CL]
 	{
 		const int iOther = pathsTo[i];
 

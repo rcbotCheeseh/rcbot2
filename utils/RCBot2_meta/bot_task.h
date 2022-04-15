@@ -414,7 +414,8 @@ public:
 	{
 		m_Weapon = pWeapon;
 		m_Prop = pProp;
-		m_fTime = 0;
+		m_fTime = 0.0f;
+		m_fSecAttTime = 0.0f;
 	}
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
@@ -673,7 +674,8 @@ public:
 		m_vOrigin = vOrigin; 
 		m_fRadius = fRadius;
 		m_fTime = 0; 
-		setCompleteInterrupt(iInterrupt); 
+		setCompleteInterrupt(iInterrupt);
+		m_iCurPath = 0;
 		m_iState = 0;
 		m_vPOV = vPOV;
 		m_bHasPOV = bHasPOV;
@@ -896,6 +898,7 @@ public:
 	{
 		m_pBombTarget = pBombTarget;
 		m_fTime = 0.0f;
+		m_pRunTo = NULL;
 		m_pBlocking = pBlocking;
 	}
 
@@ -1316,13 +1319,13 @@ public:
 		m_vPlayer = vPlayer;
 		m_vOrigin = vOrigin;
 		m_fDist = fDist;
+		m_fTime = 0.0f;
 	}
 
 	void init () override;
-
 	void execute ( CBot *pBot, CBotSchedule *pSchedule ) override;
-
 	void debugString ( char *string ) override;
+	
 private:
 	Vector m_vPlayer;
 	Vector m_vOrigin;
@@ -1338,6 +1341,7 @@ public:
 	{
 		m_vVector = vOrigin;
 		m_pEdict = NULL;
+		fPrevDist = 0.0f;
 
 		setFailInterrupt(CONDITION_SEE_CUR_ENEMY);
 	}
@@ -1345,10 +1349,9 @@ public:
 	CMoveToTask ( edict_t *pEdict );
 
 	void init () override;
-
 	void execute ( CBot *pBot, CBotSchedule *pSchedule ) override;
-
 	void debugString ( char *string ) override;
+	
 private:
 	float fPrevDist;
 	Vector m_vVector;
@@ -1464,7 +1467,14 @@ private:
 class CSpyCheckAir : public CBotTask
 {
 public:
-	CSpyCheckAir () { m_fTime = 0.0f; m_pUnseenBefore = NULL; m_bHitPlayer = false; }
+	CSpyCheckAir ()
+	{
+		seenlist = 0;
+		m_fNextCheckUnseen = 0.0f;
+		m_fTime = 0.0f;
+		m_pUnseenBefore = NULL;
+		m_bHitPlayer = false;
+	}
 
 	void execute ( CBot *pBot, CBotSchedule *pSchedule ) override;
 
@@ -1509,6 +1519,7 @@ public:
 	CBotWaitTask(float waittime)
 	{
 		m_ftime = engine->Time() + waittime;
+		m_bAimSet = false;
 	}
 	CBotWaitTask(float waittime, Vector vAim)
 	{

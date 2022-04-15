@@ -472,7 +472,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	if (mainkv)
 		rcbot2path = mainkv->GetString("rcbot2path", "\0");
 
-	mainkv->deleteThis();
+	mainkv->deleteThis(); //mainkv possible redundant? [APG]RoboCop[CL]
 	//eventListener2 = new CRCBotEventListener();
 
 	// Initialize bot variables
