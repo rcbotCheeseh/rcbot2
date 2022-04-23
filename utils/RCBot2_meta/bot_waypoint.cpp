@@ -1260,7 +1260,8 @@ void CWaypointNavigator :: updatePosition ()
 {
 	static Vector vWptOrigin;
 	static float fRadius;
-	static float fPrevBelief,fBelief;
+	static float fPrevBelief;
+	static float fBelief;
 
 	static QAngle aim;
 	static Vector vaim;

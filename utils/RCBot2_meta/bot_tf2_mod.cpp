@@ -809,9 +809,8 @@ CWaypoint *CTeamFortress2Mod :: getBestWaypointMVM ( CBot *pBot, int iFlags )
 	Vector vFlagLocation;
 
 	const bool bFlagLocationValid = CTeamFortress2Mod::getFlagLocation(TF2_TEAM_BLUE,&vFlagLocation);		
-
-
-	float fTankDistance = 0.0f;
+	
+	float fTankDistance = 0.0f; //tele never used [APG]RoboCop[CL]
 
 	edict_t *pTank;
 	// check tank boss is valid
@@ -972,7 +971,7 @@ bool CTeamFortress2Mod::buildingNearby ( int iTeam, Vector vOrigin )
 edict_t *CTeamFortress2Mod::getBuilding (eEngiBuild object, const edict_t* pOwner)
 {
 	static short int i;
-	static tf_tele_t *tele;
+	static tf_tele_t *tele; //tele not used [APG]RoboCop[CL]
 
 	//index = ENTINDEX(pOwner)-1;
 	// i is 1 to 32 ( 0 == worldspawn)
@@ -993,6 +992,14 @@ edict_t *CTeamFortress2Mod::getBuilding (eEngiBuild object, const edict_t* pOwne
 		if ( m_Teleporters[i].entrance.get() != NULL )
 			return m_Teleporters[i].entrance.get();
 		return m_Teleporters[i].exit.get();
+		//TODO: Added support for Sapper and Teleporter [APG]RoboCop[CL]
+	/*case ENGI_SAPPER:
+		break;
+	case ENGI_EXIT:
+		break;
+	case ENGI_ENTRANCE:
+		break;*/
+	default: ;
 	}
 
 	return NULL;
@@ -1033,6 +1040,14 @@ edict_t *CTeamFortress2Mod ::getBuildingOwner (eEngiBuild object, short index)
 			tele++;
 		}
 		break;
+		//TODO: Added support for Sapper and Teleporter [APG]RoboCop[CL]
+	/*case ENGI_SAPPER:
+		break;
+	case ENGI_EXIT:
+		break;
+	case ENGI_ENTRANCE:
+		break;*/
+	default: ;
 	}
 
 	return NULL;

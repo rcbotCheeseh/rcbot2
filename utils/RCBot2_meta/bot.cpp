@@ -328,7 +328,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	engine->SetFakeClientConVarValue(pEdict,"tf_medigun_autoheal","0");	
 
 	// joining name not the same as the profile name, change name
-	if (strcmp(m_szBotName,pProfile->m_szName) )
+	if (strcmp(m_szBotName,pProfile->m_szName) != 0)
 	{
 		engine->SetFakeClientConVarValue(pEdict,"name",pProfile->m_szName);
 		strcpy(m_szBotName,pProfile->m_szName);
@@ -368,7 +368,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	};
 	
 	char cmd[32];
-	if (m_iDesiredClass >= 0 && m_iDesiredClass < sizeof(classNames)) {
+	if (m_iDesiredClass >= 0 && static_cast<unsigned>(m_iDesiredClass) < sizeof(classNames)) {
 		snprintf(cmd, sizeof(cmd), "joinclass %s", classNames[m_iDesiredClass]);
 	} else {
 		snprintf(cmd, sizeof(cmd), "joinclass auto");
@@ -1069,6 +1069,9 @@ CBot :: CBot()
 {
 	CBot::init(true);
 	m_iMovePriority = 0;
+	m_iLookPriority = 0;
+	m_iMoveSpeedPriority = 0;
+	m_iMoveLookPriority = 0;
 }
 /*
 * init()
@@ -1298,7 +1301,7 @@ int CBot :: getHealth ()
 
 float CBot :: getHealthPercent ()
 {
-	return static_cast<float>(m_pPlayerInfo->GetHealth())/m_pPlayerInfo->GetMaxHealth();
+	return static_cast<float>(m_pPlayerInfo->GetHealth()) / m_pPlayerInfo->GetMaxHealth();
 }
 
 bool CBot ::isOnLift()
@@ -1777,7 +1780,7 @@ void CBot ::debugBot(char *msg)
 int CBot :: nearbyFriendlies (float fDistance)
 {
 	int num = 0;
-	const short int maxclients = static_cast<short>(CBotGlobals::maxClients());
+	const auto maxclients = CBotGlobals::maxClients();
 
 	for ( short int i = 0; i <= maxclients; i ++ )
 	{
@@ -2837,7 +2840,7 @@ void CBot :: doLook ()
 		if ( rcbot_supermode.GetBool() || m_bIncreaseSensitivity || onLadder() )
 			fSensitivity = 15.0f;
 		else
-			fSensitivity = (float)m_pProfile->m_iSensitivity;
+			fSensitivity = static_cast<float>(m_pProfile->m_iSensitivity);
 
 		QAngle requiredAngles;
 
@@ -3041,13 +3044,12 @@ bool CBots :: controlBot ( edict_t *pEdict )
 	return true;
 }
 
-#define SET_PROFILE_DATA_INT(varname,membername) if ( (varname) && *varname ) { pBotProfile->membername = atoi(varname); }
-#define SET_PROFILE_STRING(varname,localname,membername) if ( varname && *varname ) { localname = (char*)(varname); } else { localname = pBotProfile->membername; }
+#define SET_PROFILE_DATA_INT(varname,membername) if ( (varname) && *(varname) ) { pBotProfile->membername = atoi(varname); }
+#define SET_PROFILE_STRING(varname,localname,membername) if ( (varname) && *(varname) ) { (localname) = (char*)(varname); } else { (localname) = pBotProfile->membername; }
 
 bool CBots :: controlBot ( const char *szOldName, const char *szName, const char *szTeam, const char *szClass )
 {
-	edict_t *pEdict;	
-	CBotProfile *pBotProfile;
+	edict_t *pEdict;
 
 	const char *szOVName = "";
 
@@ -3071,7 +3073,7 @@ bool CBots :: controlBot ( const char *szOldName, const char *szName, const char
 
 	m_flAddKickBotTime = engine->Time() + 2.0f;
 
-	pBotProfile = CBotProfiles::getRandomFreeProfile();
+	CBotProfile* pBotProfile = CBotProfiles::getRandomFreeProfile();
 
 	if ( pBotProfile == NULL )
 	{
@@ -3082,20 +3084,18 @@ bool CBots :: controlBot ( const char *szOldName, const char *szName, const char
 		if ( pBotProfile == NULL )
 			return false;
 	}
-	SET_PROFILE_DATA_INT(szClass,m_iClass);
-	SET_PROFILE_DATA_INT(szTeam,m_iTeam);
-	SET_PROFILE_STRING(szName,szOVName,m_szName);
+	
+	SET_PROFILE_DATA_INT(szClass,m_iClass)
+	SET_PROFILE_DATA_INT(szTeam,m_iTeam)
+	SET_PROFILE_STRING(szName,szOVName,m_szName)
 
 	//IBotController *p = g_pBotManager->GetBotController(pEdict);	
 
 	return m_Bots[slotOfEdict(pEdict)]->createBotFromEdict(pEdict,pBotProfile);
-	
 }
 
 bool CBots :: createBot (const char *szClass, const char *szTeam, const char *szName)
 {
-	edict_t *pEdict;
-	CBotProfile *pBotProfile;
 	CBotMod *pMod = CBotGlobals::getCurrentMod();
 	const char *szOVName = "";
 
@@ -3104,7 +3104,7 @@ bool CBots :: createBot (const char *szClass, const char *szTeam, const char *sz
 
 	m_flAddKickBotTime = engine->Time() + rcbot_addbottime.GetFloat();
 
-	pBotProfile = CBotProfiles::getRandomFreeProfile();
+	CBotProfile* pBotProfile = CBotProfiles::getRandomFreeProfile();
 
 	if ( pBotProfile == NULL )
 	{
@@ -3116,11 +3116,11 @@ bool CBots :: createBot (const char *szClass, const char *szTeam, const char *sz
 			return false;
 	}
 
-	SET_PROFILE_DATA_INT(szClass,m_iClass);
-	SET_PROFILE_DATA_INT(szTeam,m_iTeam);
-	SET_PROFILE_STRING(szName,szOVName,m_szName);
-
-	pEdict = g_pBotManager->CreateBot( szOVName );
+	SET_PROFILE_DATA_INT(szClass,m_iClass)
+	SET_PROFILE_DATA_INT(szTeam,m_iTeam)
+	SET_PROFILE_STRING(szName,szOVName,m_szName)
+	
+	edict_t* pEdict = g_pBotManager->CreateBot(szOVName);
 
 	if ( pEdict == NULL )
 		return false;
@@ -3439,7 +3439,6 @@ bool CBots :: needToKickBot ()
 void CBots :: kickRandomBot (size_t count)
 {
 	std::vector<int> botList;
-	char szCommand[512];
 	//gather list of bots
 	for ( size_t i = 0; i < MAX_PLAYERS; i ++ )
 	{
@@ -3457,7 +3456,8 @@ void CBots :: kickRandomBot (size_t count)
 
 	size_t numBotsKicked = 0;
 	while (numBotsKicked < count && !botList.empty()) {
-					  
+		char szCommand[512];
+
 		sprintf(szCommand, "kickid %d\n", botList.back());
 		engine->ServerCommand(szCommand);
 		numBotsKicked++;

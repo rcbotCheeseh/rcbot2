@@ -191,7 +191,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 
 						addUtilPerturbation(iUtil,iFile,iClassList);
 
-						iUtil = (eBotAction)(static_cast<int>(iUtil)+1);
+						iUtil = eBotAction(static_cast<int>(iUtil) + 1);
 
 						if ( iUtil >= BOT_UTIL_MAX )
 							break;

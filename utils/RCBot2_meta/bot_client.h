@@ -199,7 +199,7 @@ public:
 	// this player disconnects
 	void clientDisconnected ();
 
-	void showMenu () { m_bShowMenu = true; };
+	void showMenu () { m_bShowMenu = true; }
 
 	bool isUsed ();
 

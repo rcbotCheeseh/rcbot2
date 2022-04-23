@@ -1038,17 +1038,16 @@ void CDODPointCaptured :: execute ( IBotEventInterface *pEvent )
 {
 	const int cp = pEvent->getInt("cp");
 	const char *szCappers = pEvent->getString("cappers",NULL);
-	edict_t *pPlayer;
 
 	// get a capper
-	const int userid = szCappers[0];
+	const int userid = szCappers[0]; //consider casting to unsigned char? [APG]RoboCop[CL]
 
 	int team = 0;
 
 	// find the team - should be a player index
 	if ( (userid >= 0) && (userid <= gpGlobals->maxClients) )
 	{
-		pPlayer = INDEXENT(userid);
+		edict_t* pPlayer = INDEXENT(userid);
 		team = CClassInterface::getTeam(pPlayer);
 
 		CClient *pClient = CClients::get(pPlayer);
@@ -1265,9 +1264,9 @@ eyeball_boss_escaped */
 
 void CBotEvents :: addEvent ( CBotEvent *pEvent )
 {
-	extern IGameEventManager2 *gameeventmanager;
+	extern IGameEventManager2 *gameeventmanager; //redundant? [APG]RoboCop[CL]
 	//extern CRCBotMetaPlugin g_RCBOTServerPlugin;
-	extern RCBotPluginMeta g_RCBotPluginMeta;
+	extern RCBotPluginMeta g_RCBotPluginMeta; //redundant? [APG]RoboCop[CL]
 
 	//if ( gameeventmanager )
 	//	gameeventmanager->AddListener( g_RCBotPluginMeta.getEventListener(), pEvent->getName(), true );

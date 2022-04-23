@@ -245,7 +245,7 @@ CBotFortress :: CBotFortress()
 	m_iLastFailTeleExitWpt = -1;
 
 	// remember prev spy disguised in game while playing
-	m_iPrevSpyDisguise = (TF_Class)0;
+	m_iPrevSpyDisguise = static_cast<TF_Class>(0);
 
 	m_fTaunting = 0.0f;
 	m_fDefendTime = 0.0f;
@@ -4647,7 +4647,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 			ADD_UTILITY(BOT_UTIL_GOTODISP,m_pNearestDisp && !CClassInterface::isObjectBeingBuilt(m_pNearestDisp) && !CTeamFortress2Mod::isDispenserSapped(m_pNearestDisp) && (bNeedAmmo || bNeedHealth),(1000.0f/distanceFrom(m_pNearestDisp)) + ((!CTeamFortress2Mod::hasRoundStarted() && CTeamFortress2Mod::isMapType(TF_MAP_MVM))?0.5f:0.0f));
 	}
 
-	fGetFlagUtility = 0.2+randomFloat(0.0f,0.2f);
+	fGetFlagUtility = 0.2f + randomFloat(0.0f,0.2f);
 
 	if ( m_iClass == TF_CLASS_SCOUT )
 		fGetFlagUtility = 0.6f;

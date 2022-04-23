@@ -516,10 +516,18 @@ void CClient :: think ()
 						if ( pMainType )
 							CWaypoints::addWaypoint(this,pMainType->getName(),"","","");
 						else
-							CWaypoints::addWaypoint(m_pPlayer,m_vAutoEventWaypointOrigin,m_iAutoEventWaypointTeam==0?m_iAutoEventWaypoint:(m_iAutoEventWaypoint|m_iAutoEventWaypointTeamOn)&~m_iAutoEventWaypointTeamOff,true,cmd.viewangles.y,0,32.0f);
+							CWaypoints::addWaypoint(m_pPlayer, m_vAutoEventWaypointOrigin,
+							                        m_iAutoEventWaypointTeam == 0
+								                        ? m_iAutoEventWaypoint
+								                        : (m_iAutoEventWaypoint | m_iAutoEventWaypointTeamOn) & ~
+								                        m_iAutoEventWaypointTeamOff, true, cmd.viewangles.y, 0, 32.0f);
 					}
 					else
-						CWaypoints::addWaypoint(m_pPlayer,m_vAutoEventWaypointOrigin,m_iAutoEventWaypointTeam==0?m_iAutoEventWaypoint:(m_iAutoEventWaypoint|m_iAutoEventWaypointTeamOn)&~m_iAutoEventWaypointTeamOff,true,cmd.viewangles.y,0,32.0f);
+						CWaypoints::addWaypoint(m_pPlayer, m_vAutoEventWaypointOrigin,
+						                        m_iAutoEventWaypointTeam == 0
+							                        ? m_iAutoEventWaypoint
+							                        : (m_iAutoEventWaypoint | m_iAutoEventWaypointTeamOn) & ~
+							                        m_iAutoEventWaypointTeamOff, true, cmd.viewangles.y, 0, 32.0f);
 					//}
 					/*else
 					{

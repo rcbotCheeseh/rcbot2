@@ -69,10 +69,10 @@ protected:
 public:
 	// initialise
 	CBotCommand(const char *command, int iAccessLevel = 0) :
-			m_iAccessLevel{iAccessLevel}, m_szCommand{command} {};
+			m_iAccessLevel{iAccessLevel}, m_szCommand{command} {}
 	
 	CBotCommand(const char* command, int iAccessLevel = 0, const char* help = nullptr) :
-			m_iAccessLevel{iAccessLevel}, m_szCommand{command}, m_szHelp{help} {};
+			m_iAccessLevel{iAccessLevel}, m_szCommand{command}, m_szHelp{help} {}
 
 	// check command name
 	bool isCommand ( const char *szCommand );	

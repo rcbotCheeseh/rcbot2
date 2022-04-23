@@ -521,7 +521,7 @@ public:
 
 	//Vector getEnemyPositionPinchPoint ( Vector vOrigin );
 private:
-	CNavMesh *m_pNavMesh;
+	CNavMesh * m_pNavMesh = NULL;
 };
 
 #endif

@@ -2045,6 +2045,7 @@ void CFindPathTask :: init ()
 	m_flags.m_data = 0;
 	m_iInt = 0;
 	m_fRange = 0.0f;
+	m_iInt = 0;
 	m_iDangerPoint = -1;
 	m_bGetPassedIntAsWaypointId = false;
 	//setFailInterrupt(CONDITION_SEE_CUR_ENEMY);
@@ -2058,6 +2059,7 @@ CFindPathTask :: CFindPathTask ( edict_t *pEdict )
 	m_LookTask = LOOK_WAYPOINT;
 	m_flags.m_data = 0;
 	m_fRange = 0.0f;
+	m_iInt = 0;
 	m_iDangerPoint = -1;
 	m_bGetPassedIntAsWaypointId = false;
 }

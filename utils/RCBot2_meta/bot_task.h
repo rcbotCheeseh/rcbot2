@@ -160,6 +160,7 @@ public:
 		m_iWaypointId = -1;
 		m_flags.m_data = 0;
 		m_fRange = 0;
+		m_iInt = 0;
 		m_iDangerPoint = -1;
 		m_bGetPassedIntAsWaypointId = false;
 	}
@@ -172,6 +173,7 @@ public:
 		m_iWaypointId = -1;
 		m_flags.m_data = 0;
 		m_fRange = 0;
+		m_iInt = 0;
 		m_iDangerPoint = -1;
 		m_bGetPassedIntAsWaypointId = false;
 	}
@@ -1206,8 +1208,8 @@ public:
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
 private:
-	float m_fTime;
-	bool m_bTimeset;
+	float m_fTime = 0.0f;
+	bool m_bTimeset = false;
 };
 
 class CCSSPerformBuyTask : public CBotTask
@@ -1220,7 +1222,7 @@ public:
 		sprintf(string,"CSS Perform Buy");
 	}
 private:
-	float m_fDelay;
+	float m_fDelay = 0.0f;
 };
 
 class CCSSPlantTheBombTask : public CBotTask
@@ -1242,6 +1244,7 @@ class CCSSEngageEnemyTask : public CBotTask
 public:
 	CCSSEngageEnemyTask( const edict_t *pEnemy )
 	{
+		isBrush = false;
 		m_hEnemy.Init(engine->IndexOfEdict(pEnemy), pEnemy->m_NetworkSerialNumber);
 	}
 	void init() override
@@ -1540,6 +1543,8 @@ class CBotSynDisarmMineTask : public CBotTask
 public:
 	CBotSynDisarmMineTask(edict_t *pMine)
 	{
+		m_fDist = 0.0f;
+		m_ftime = 0.0f;
 		m_pMine = pMine;
 		m_bTimeSet = false;
 	}

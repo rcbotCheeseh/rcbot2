@@ -67,12 +67,12 @@ protected:
     MyEHandle m_pNearbyItemCrate; // breakable item crate
     MyEHandle m_pNearbyHealthCharger; // Health charger
     MyEHandle m_pNearbyArmorCharger; // Armor/Suit charger
-    edict_t *m_pCurrentWeapon; // The bot current weapon
-    float m_flSuitPower; // HEV suit power level, range: 100-0
-    float m_flNextSprintTime; // Used to control the bot's sprinting
-    float m_flUseCrateTime; // Use ammo crate time delay
-    float m_flPickUpTime; // Pick ammo delay
-    float m_flInterruptTime; // Time delay for general interruptions
+    edict_t * m_pCurrentWeapon = NULL; // The bot current weapon
+    float m_flSuitPower = 0.0f; // HEV suit power level, range: 100-0
+    float m_flNextSprintTime = 0.0f; // Used to control the bot's sprinting
+    float m_flUseCrateTime = 0.0f; // Use ammo crate time delay
+    float m_flPickUpTime = 0.0f; // Pick ammo delay
+    float m_flInterruptTime = 0.0f; // Time delay for general interruptions
 };
 
 #endif

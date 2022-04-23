@@ -215,7 +215,7 @@ void CWaypointLocations :: AutoPathInBucket ( edict_t *pPlayer, int i, int j, in
 	CWaypoint *pWpt = CWaypoints::getWaypoint(iWptFrom);
 	const Vector vWptOrigin = pWpt->getOrigin();
 
-	trace_t tr;
+	trace_t tr; //tr not used [APG]RoboCop[CL]
 
 	//CTraceFilterWorldOnly filter;
 
@@ -332,7 +332,8 @@ int CWaypointLocations :: GetCoverWaypoint ( Vector vPlayerOrigin, Vector vCover
 			{
 				// check each area around the current area
 				// for closer waypoints
-				FindNearestCoverWaypointInBucket(i,j,k,vPlayerOrigin,&fNearestDist,&iNearestIndex,iIgnoreWpts,iWaypoint,vGoalOrigin,iTeam,fMinDist);
+				FindNearestCoverWaypointInBucket(i, j, k, vPlayerOrigin, &fNearestDist, &iNearestIndex, iIgnoreWpts,
+				                                 iWaypoint, vGoalOrigin, iTeam, fMinDist);
 			}
 		}
 	}
@@ -451,7 +452,7 @@ void CWaypointLocations :: FindNearestBlastInBucket ( int i, int j, int k, const
 	float fDist;
 	//int iWptFlags;
 
-	trace_t tr;
+	trace_t tr; //tr not used [APG]RoboCop[CL]
 
 	const WaypointList &arr = m_iLocations[i][j][k];
 	const size_t size = arr.size();
@@ -527,7 +528,7 @@ void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vect
 	float fDist;
 	//int iWptFlags;
 
-	trace_t tr;
+	trace_t tr; //tr not used [APG]RoboCop[CL]
 
 	CBotMod *curmod = CBotGlobals::getCurrentMod();
 
@@ -702,7 +703,7 @@ int CWaypointLocations :: NearestWaypoint ( const Vector &vOrigin, float fNeares
 void CWaypointLocations :: DrawWaypoints ( CClient *pClient, float fDist )
 {
 	static int clusterIndex;
-	static short int size;
+	static short int size; //size not used [APG]RoboCop[CL]
 	static int iWpt;
 	static CWaypoint *pWpt;
 	static Vector vWpt;

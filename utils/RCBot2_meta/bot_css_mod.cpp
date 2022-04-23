@@ -291,7 +291,7 @@ bool CCounterStrikeSourceMod::canRescueHostages()
 
     edict_t *pHostage;
 
-    for(CBaseHandle i : m_hHostages)
+    for(const CBaseHandle& i : m_hHostages)
     {
         pHostage = INDEXENT(i.GetEntryIndex());
 
@@ -310,7 +310,7 @@ edict_t *CCounterStrikeSourceMod::getRandomHostage()
     edict_t *pEdict;
 
     // Build a new vector with hostages that are valid to be rescued
-    for(CBaseHandle i : m_hHostages)
+    for(const CBaseHandle& i : m_hHostages)
     {
         pEdict = INDEXENT(i.GetEntryIndex());
 

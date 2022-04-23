@@ -240,7 +240,7 @@ public:
 //		m_iId = -1;
 	}
 
-	CWaypoint ( Vector vOrigin, int iFlags = 0, int iYaw = 0, int m_fRadius = 0 )
+	CWaypoint ( Vector vOrigin, int iFlags = 0, int iYaw = 0 )
 	{
 		m_thePaths.clear();
 		init();

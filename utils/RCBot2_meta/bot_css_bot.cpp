@@ -1079,7 +1079,9 @@ void CCSSBot::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWaypo
 			 **/
 			CTraceFilterHitAll filter;
 			const trace_t *tr = CBotGlobals::getTraceResult();
-			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), pNext->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), MASK_PLAYERSOLID, &filter);
+			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0, 0, CWaypoint::WAYPOINT_HEIGHT / 2),
+			                       pNext->getOrigin() + Vector(0, 0, CWaypoint::WAYPOINT_HEIGHT / 2), MASK_PLAYERSOLID,
+			                       &filter);
 			if(tr->fraction < 1.0f)
 			{
 				if(tr->m_pEnt)

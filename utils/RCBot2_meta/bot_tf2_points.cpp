@@ -278,7 +278,7 @@ CTeamControlPointRound *CTeamControlPointMaster:: getCurrentRound ( )
 
 	//edict_t *p = servergameents->BaseEntityToEdict(pent);
 	
-	extern IServerGameEnts *servergameents;
+	extern IServerGameEnts *servergameents; // servergameents not used? [APG]RoboCop[CL]
 	extern IServerTools *servertools;
 	
 	// HACK: we use one of the known CBaseEntity-sized entities to compute the offset to the first subclass member for CTeamControlPointMaster / CTeamControlPointRound

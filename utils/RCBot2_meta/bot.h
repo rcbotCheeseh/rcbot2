@@ -304,7 +304,6 @@ class CBot
 {
 public:
 	virtual ~CBot() = default;
-	//virtual ~CBot() = default;
 
 	static const float m_fAttackLowestHoldTime;
 	static const float m_fAttackHighestHoldTime;
@@ -322,8 +321,7 @@ public:
 
 	// linux fix 1
 	virtual void onInventoryApplication (){}
-
-
+	
 	// return distance from this origin
 
 	int isDesiredClass ( int iclass )

@@ -347,9 +347,9 @@ bool CDODFlags::getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int
 				continue;
 
 			if ( iTeam == TEAM_ALLIES )
-				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * (m_iNumAllies[i]+1);
+				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * static_cast<float>(m_iNumAllies[i] + 1);
 			else
-				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * (m_iNumAxis[i]+1);
+				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * static_cast<float>(m_iNumAxis[i] + 1);
 		}
 	}
 
@@ -373,9 +373,9 @@ bool CDODFlags::getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int
 				continue;
 
 			if ( iTeam == TEAM_ALLIES )
-				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * (m_iNumAllies[i]+1);
+				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * static_cast<float>(m_iNumAllies[i] + 1);
 			else
-				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * (m_iNumAxis[i]+1);
+				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * static_cast<float>(m_iNumAxis[i] + 1);
 		}
 
 		if ( fRand <= fTotal )
@@ -552,9 +552,9 @@ bool CDODFlags::getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int 
 				continue;
 
 			if ( iTeam == TEAM_AXIS )
-				fTotal += (pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2) * (m_iNumAllies[i]+1);
+				fTotal += (pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2) * static_cast<float>(m_iNumAllies[i] + 1);
 			else
-				fTotal += (pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2) * (m_iNumAxis[i]+1);
+				fTotal += (pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2) * static_cast<float>(m_iNumAxis[i] + 1);
 		}
 	}
 
@@ -572,9 +572,9 @@ bool CDODFlags::getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int 
 				continue;
 
 			if ( iTeam == TEAM_AXIS )
-				fTotal += (pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2) * (m_iNumAllies[i]+1);
+				fTotal += (pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2) * static_cast<float>(m_iNumAllies[i] + 1);
 			else
-				fTotal += (pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2) * (m_iNumAxis[i]+1);
+				fTotal += (pNav->getBelief(m_iWaypoint[i])+MAX_BELIEF)/(MAX_BELIEF*2) * static_cast<float>(m_iNumAxis[i] + 1);
 		}
 
 		if ( fRand <= fTotal )

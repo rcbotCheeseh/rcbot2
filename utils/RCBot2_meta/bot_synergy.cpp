@@ -366,10 +366,8 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 	const bool bValid = CBot::setVisible(pEntity, bVisible);
 
 	static float fDist = distanceFrom(pEntity);
-	Vector entityorigin = Vector(0,0,0);
-	entityorigin = CBotGlobals::entityOrigin(pEntity);
+	Vector entityorigin = CBotGlobals::entityOrigin(pEntity);
 	const char* szclassname = pEntity->GetClassName();
-	CBotWeapon* pWeapon = NULL;
 
 	// Is valid and NOT invisible
 	if (bValid && bVisible && !(CClassInterface::getEffects(pEntity) & EF_NODRAW))
@@ -417,6 +415,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 		}
 		else if(strncmp(szclassname, "weapon_", 7) == 0 && (!m_pNearbyWeapon.get() || fDist < distanceFrom(m_pNearbyWeapon.get())))
 		{
+			CBotWeapon* pWeapon = NULL;
 			pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(szclassname));
 			if(pWeapon && pWeapon->hasWeapon())
 			{
