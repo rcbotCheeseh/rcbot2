@@ -82,12 +82,12 @@ public:
 	virtual void onRoundStart();
 	virtual bool IsLeadingHostage();
 private:
-	edict_t *m_pCurrentWeapon;	  		// The bot current weapon
-	float m_fNextAttackTime;	  		// Control timer for bot primary attack
-	float m_fNextThinkSlow;		  		// Control timer for slow think
-	float m_fVisibleEnemyTime;	  		// The last time my enemy was visible
+	edict_t * m_pCurrentWeapon = NULL;	  		// The bot current weapon
+	float m_fNextAttackTime = 0.0f;	  		// Control timer for bot primary attack
+	float m_fNextThinkSlow = 0.0f;		  		// Control timer for slow think
+	float m_fVisibleEnemyTime = 0.0f;	  		// The last time my enemy was visible
 	CBaseHandle m_hNearestBreakable; 	// Nearest breakable entity
-	CCSSBotBuying *m_pBuyManager; 		// CSS Bot buy manager
+	CCSSBotBuying * m_pBuyManager = NULL; 		// CSS Bot buy manager
 };
 
 #endif

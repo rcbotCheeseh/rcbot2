@@ -138,6 +138,41 @@ class CClient
 public:
 	CClient ()
 	{
+		m_pPlayer = NULL;
+		m_bWaypointOn = false;
+		m_iCurrentWaypoint = 0.0f;
+		m_iPathFrom = 0;
+		m_iPathTo = 0;
+		m_iAccessLevel = 0;
+		m_iWptArea = 0;
+		m_bAutoPaths = false;
+		m_bPathWaypointOn = false;
+		m_iDebugLevels = 0;
+		m_bShowMenu = false;
+		m_fCopyWptRadius = 0.0f;
+		m_iCopyWptFlags = 0;
+		m_iCopyWptArea = 0;
+		
+		m_fNextPrintDebugInfo = 0.0f;
+		m_iPrevMenu = 0;
+		m_bDebugAutoWaypoint = false;
+		m_bAutoWaypoint = false;
+		m_fLastAutoWaypointCheckTime = 0.0f;
+		m_bSetUpAutoWaypoint = false;
+		m_fCanPlaceJump = 0.0f;
+		m_iLastButtons = 0;
+		
+		m_iLastJumpWaypointIndex = 0;
+		m_iLastLadderWaypointIndex = 0;
+		m_iLastMoveType = 0;
+		m_fCanPlaceLadder = 0.0f;
+		m_iJoinLadderWaypointIndex = 0;
+		m_iAutoEventWaypointTeamOn = 0;
+		m_iAutoEventWaypointTeamOff = 0;
+		m_iAutoEventWaypointTeam = 0;
+		m_bIsTeleporting = false;
+		m_fTeleportTime = 0.0f;
+		
 		m_szSteamID = NULL;
 		m_pPlayerInfo = NULL;
 		m_pDebugBot = NULL;
@@ -153,13 +188,13 @@ public:
 		m_vAutoEventWaypointOrigin = Vector(0,0,0);
 		m_bAutoEventWaypointAutoType = false;
 		m_iAutoEventWaypointArea = 0;
-		m_fNextBotServerMessage = 0;
+		m_fNextBotServerMessage = 0.0f;
 		m_bSentWelcomeMessage = false;
-		m_fSpeed = 0;
-		m_fUpdatePos = 0;
+		m_fSpeed = 0.0f;
+		m_fUpdatePos = 0.0f;
 		m_bTeleportVectorValid = false;
 		m_vTeleportVector = Vector(0,0,0);
-		m_fMonitorHighFiveTime = 0;
+		m_fMonitorHighFiveTime = 0.0f;
 	}
 
 	void monitorHighFive ()

@@ -64,15 +64,15 @@ using BotCommandCallback = std::function<eBotCommandResult(CClient*, const char*
 class CBotCommand
 {
 protected:
-	CBotCommand () : m_iAccessLevel{0}, m_szCommand{nullptr}, m_szHelp{nullptr} { }
+	CBotCommand () : m_iAccessLevel{0}, m_szCommand{ NULL }, m_szHelp{ NULL } { }
 	
 public:
 	// initialise
 	CBotCommand(const char *command, int iAccessLevel = 0) :
-			m_iAccessLevel{iAccessLevel}, m_szCommand{command} {}
+			m_iAccessLevel{iAccessLevel}, m_szCommand{command}, m_szHelp{ NULL } {}
 	
-	CBotCommand(const char* command, int iAccessLevel = 0, const char* help = nullptr) :
-			m_iAccessLevel{iAccessLevel}, m_szCommand{command}, m_szHelp{help} {}
+	CBotCommand(const char* command, int iAccessLevel = 0, const char* help = NULL) :
+			m_iAccessLevel{iAccessLevel}, m_szCommand{command}, m_szHelp{help} {};
 
 	// check command name
 	bool isCommand ( const char *szCommand );	

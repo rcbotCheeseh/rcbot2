@@ -3416,7 +3416,7 @@ void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin,
 			// .. so update 
 		if ( bIsEnemyProne )
 		{
-			v_desired_offset->z -= randomFloat(0.0,8.0f);
+			v_desired_offset->z -= randomFloat(0.0f,8.0f);
 		}
 		// aiming for head done in Cbot::getaimVector
 		/*else if ( hasSomeConditions(CONDITION_SEE_ENEMY_HEAD) )
