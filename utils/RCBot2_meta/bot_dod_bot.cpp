@@ -1052,17 +1052,17 @@ void CDODBot :: chooseClass ( bool bIsChangingClass )
 	float fClassFitness[6]; // 6 classes
 	float fTotalFitness = 0;
 
-	short int i;
-
 	const int iTeam = getTeam();
 
-	for ( i = 0; i < 6; i ++ ) 
+	for ( int i = 0; i < 6; i ++ )
+	{
 		fClassFitness[i] = 1.0f;
+	}
 
 	if ( bIsChangingClass && ((m_iClass >= 0) && (m_iClass < 6)) )
 		fClassFitness[m_iClass] = 0.1f;
 
-	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
 		edict_t* pPlayer = INDEXENT(i);
 		
@@ -1917,7 +1917,7 @@ bool CDODBot :: withinTeammate ( )
 {
 	// check if the bot is right next to a team mate (sometimes bots can't deploy if theyr are next to one already)
 
-	for ( short int i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
 		edict_t* pPlayer = INDEXENT(i);
 
@@ -1972,7 +1972,7 @@ void CDODBot :: listenForPlayers ()
 
 	m_bListenPositionValid = false;
 
-	for (short int i = 1; i <= gpGlobals->maxClients; i ++ )
+	for (int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
 		edict_t* pPlayer = INDEXENT(i);
 

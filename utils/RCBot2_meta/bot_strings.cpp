@@ -69,7 +69,7 @@ char *CStrings :: getString ( const char *szString )
 
 	const unsigned short int iHash = szString[0]%MAX_STRINGS_HASH;
 	
-	for ( unsigned short int i = 0; i < m_Strings[iHash].size(); i ++ )
+	for ( unsigned int i = 0; i < m_Strings[iHash].size(); i ++ )
 	{
 		char *szCompString = m_Strings[iHash][i];
 

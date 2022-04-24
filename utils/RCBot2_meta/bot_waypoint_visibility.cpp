@@ -114,7 +114,7 @@ void CWaypointVisibilityTable :: workVisibilityForWaypoint ( int i, int iNumWayp
 	if ( !Waypoint1->isUsed() )
 		return;
 
-	for ( short int j = 0; j < iNumWaypoints; j ++ )
+	for ( int j = 0; j < iNumWaypoints; j ++ )
 	{
 		if ( i == j )
 		{

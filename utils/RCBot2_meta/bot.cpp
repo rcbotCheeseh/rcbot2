@@ -1946,7 +1946,7 @@ void CBot :: listenForPlayers ()
 
 	m_bListenPositionValid = false;
 
-	for (short int i = 1; i <= gpGlobals->maxClients; i ++ )
+	for (int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
 		edict_t* pPlayer = INDEXENT(i);
 

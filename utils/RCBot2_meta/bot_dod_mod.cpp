@@ -307,7 +307,7 @@ int CDODFlags::findNearestObjective ( Vector vOrigin )
 	float fDistance;
 	int iNearest = -1;
 	
-	for ( short int i = 0; i < m_iNumControlPoints; i ++ ) // Short integer necessary? [APG]RoboCop[CL]
+	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
@@ -333,7 +333,7 @@ bool CDODFlags::getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int
 
 	float fTotal = 0.0f;
 
-	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
+	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
@@ -359,7 +359,7 @@ bool CDODFlags::getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int
 	const float fRand = randomFloat(0, fTotal);
 	fTotal = 0.0f;
 
-	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
+	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
@@ -398,10 +398,10 @@ bool CDODFlags::getRandomBombToDefuse  ( Vector *position, int iTeam, edict_t **
 		*id = -1;
 
 	// more possibility to return bomb targets with no bomb already
-	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
+	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iOwner[i] == iTeam && isBombPlanted(i) && !isBombBeingDefused(i) && m_pBombs[i][0] != NULL )
-			for ( short int j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.emplace_back(i); }
+			for ( int j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.emplace_back(i); }
 	}
 
 	if (!iPossible.empty())
@@ -436,10 +436,10 @@ bool CDODFlags:: getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam
 		*id = -1;
 
 	// more possibility to return bomb targets with no bomb already
-	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
+	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iOwner[i] != iTeam && isBombPlanted(i) && m_pBombs[i][0] != NULL )
-			for ( short int j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.emplace_back(i); }
+			for ( int j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.emplace_back(i); }
 	}
 
 	if (!iPossible.empty())
@@ -471,13 +471,11 @@ bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam,
 	if ( id )
 		*id = -1;
 
-	int selection;
-
 	IBotNavigator* pNav = pBot->getNavigator();
 
 	float fTotal = 0.0f;
 
-	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
+	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		// if no waypoint -- can't go there
 		if ( m_iWaypoint[i] != -1 )
@@ -496,7 +494,7 @@ bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam,
 
 	fTotal = 0.0f;
 
-	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
+	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
@@ -510,7 +508,7 @@ bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam,
 
 		if ( fRand <= fTotal )
 		{
-			selection = i;
+			const int selection = i;
 
 			if ( m_pBombs[selection][1] != NULL )
 			{
@@ -544,7 +542,7 @@ bool CDODFlags::getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int 
 
 	float fTotal = 0.0f;
 
-	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
+	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
@@ -564,7 +562,7 @@ bool CDODFlags::getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int 
 	const float fRand = randomFloat(0, fTotal);
 	fTotal = 0.0f;
 
-	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
+	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
@@ -625,7 +623,7 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 
 	// find the edicts of the flags using the origin and classname
 
-	for ( short int j = 0; j < m_iNumControlPoints; j ++ )
+	for ( int j = 0; j < m_iNumControlPoints; j ++ )
 	{
 		edict_t *pent;
 
@@ -702,7 +700,7 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 	}
 
 	// find waypoints
-	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
+	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		// if we don't know any cap waypoint yet here find one
 		if ( m_iWaypoint[i] == -1 )
@@ -723,7 +721,7 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 	m_iNumAlliesBombsOnMap = getNumPlantableBombs(TEAM_ALLIES);
 
 	// sometimes m_iNumControlPoints is larger than it  should be. check the number of flags and bombs we found on the map
-	for ( short int i = 0; i < m_iNumControlPoints; i ++ )
+	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
 		if ( m_pFlags[i] != NULL )
 			iNumFlags++;

@@ -243,7 +243,7 @@ bool CWaypointNavigator :: randomDangerPath (Vector *vec)
 {
 	float fMaxDanger = 0;
 	float fBelief;
-	short int i;
+	int i;
 	CWaypoint *pNext;
 	CWaypoint *pOnRouteTo = NULL;
 
@@ -2432,7 +2432,7 @@ int CWaypoints::nearestWaypointGoal(int iFlags, const Vector& origin, float fDis
 
 	CBotMod *pCurrentMod = CBotGlobals::getCurrentMod();
 
-	for ( short int i = 0; i < size; i ++ )
+	for ( int i = 0; i < size; i ++ )
 	{
 		CWaypoint* pWpt = &m_theWaypoints[i];
 
@@ -2668,7 +2668,7 @@ CWaypoint* CWaypoints::randomWaypointGoalNearestArea(int iFlags, int iTeam, int 
                                                      bool bHighDanger, const Vector* origin, int iIgnore, bool
                                                      bIgnoreBelief, int iWpt1)
 {
-	short int i;
+	int i;
 	static short int size; 
 	CWaypoint *pWpt;
 	AStarNode *node;

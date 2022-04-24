@@ -3882,7 +3882,7 @@ bool CBotTF2 :: setVisible ( edict_t *pEntity, bool bVisible )
 
 void CBotTF2 :: checkBeingHealed ()
 {
-	static short i;
+	static int i;
 	static edict_t *p;
 	static edict_t *pWeapon;
 	static IPlayerInfo *pi;
@@ -3900,7 +3900,7 @@ void CBotTF2 :: checkBeingHealed ()
 	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
 		p = INDEXENT(i);
-
+		
 		if ( p == m_pEdict )
 			continue;
 
@@ -4047,7 +4047,7 @@ bool CBotTF2::healPlayer()
 	edict_t *pPlayer = NULL;
 
 		// Find the player I'm currently healing
-		for ( unsigned short i = 1; i <= gpGlobals->maxClients; i++ )
+		for ( unsigned int i = 1; i <= gpGlobals->maxClients; i++ )
 		{
 			edict_t* pent = INDEXENT(i);
 

@@ -900,7 +900,7 @@ int CTeamFortress2Mod ::getHighestScore ()
 {
 	short int highest = 0;
 
-	for ( short int i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
 		edict_t* edict = INDEXENT(i);
 
@@ -922,7 +922,7 @@ int CTeamFortress2Mod ::getHighestScore ()
 // check quickly by using the storage of sentryguns etc in the mod class
 bool CTeamFortress2Mod::buildingNearby ( int iTeam, Vector vOrigin )
 {
-	for ( short int i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
 		edict_t* pPlayer = INDEXENT(i);
 

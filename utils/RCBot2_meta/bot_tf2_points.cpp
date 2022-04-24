@@ -714,7 +714,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 	// update signature
 	for ( int i = 0; i < *m_iNumControlPoints; i ++ )
 	{
-		const byte *barr = (byte*)&arr[i];
+		const byte *barr = reinterpret_cast<byte*>(&arr[i]);
 
 		for ( byte j = 0; j < sizeof(TF2PointProb_t); j ++ )
 			signature = signature + (barr[j]*(i+1)+j);
@@ -981,7 +981,7 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 
 	for ( int i = 0; i < *m_iNumControlPoints; i ++ )
 	{
-		const byte *barr = (byte*)&arr[i];
+		const byte *barr = reinterpret_cast<byte*>(&arr[i]);
 
 		for ( byte j = 0; j < sizeof(TF2PointProb_t); j ++ )
 			signature = signature + (barr[j]*(i+1)+j);
