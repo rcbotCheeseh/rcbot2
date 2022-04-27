@@ -1301,7 +1301,7 @@ int CBot :: getHealth ()
 
 float CBot :: getHealthPercent ()
 {
-	return static_cast<float>(m_pPlayerInfo->GetHealth()) / m_pPlayerInfo->GetMaxHealth();
+	return static_cast<float>(m_pPlayerInfo->GetHealth()) / static_cast<float>(m_pPlayerInfo->GetMaxHealth());
 }
 
 bool CBot ::isOnLift()
@@ -1597,7 +1597,7 @@ bool CBot :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 	m_iPrevHealth = iHealthNow;	
 
 	// TODO: replace with perceptron method
-	if ( m_iAccumulatedDamage > m_pPlayerInfo->GetMaxHealth()*m_pProfile->m_fBraveness )
+	if ( m_iAccumulatedDamage > m_pPlayerInfo->GetMaxHealth() * m_pProfile->m_fBraveness )
 	{
 		if ( !bDontHide )
 		{
