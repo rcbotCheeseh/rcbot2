@@ -54,17 +54,24 @@
 
 eTFMapType CTeamFortress2Mod :: m_MapType = TF_MAP_CTF;
 tf_tele_t CTeamFortress2Mod :: m_Teleporters[MAX_PLAYERS];
+
 int CTeamFortress2Mod :: m_iArea = 0;
+
 float CTeamFortress2Mod::m_fSetupTime = 0.0f;
 float CTeamFortress2Mod::m_fRoundTime = 0.0f;
+
 MyEHandle CTeamFortress2Mod::m_pFlagCarrierRed = MyEHandle(NULL);
 MyEHandle CTeamFortress2Mod::m_pFlagCarrierBlue = MyEHandle(NULL);
+
 float CTeamFortress2Mod::m_fArenaPointOpenTime = 0.0f;
 float CTeamFortress2Mod::m_fPointTime = 0.0f;
+
 tf_sentry_t CTeamFortress2Mod::m_SentryGuns[MAX_PLAYERS];	// used to let bots know if sentries have been sapped or not
 tf_disp_t  CTeamFortress2Mod::m_Dispensers[MAX_PLAYERS];	// used to let bots know where friendly/enemy dispensers are
+
 MyEHandle CTeamFortress2Mod::m_pResourceEntity = MyEHandle(NULL);
 MyEHandle CTeamFortress2Mod::m_pGameRules = MyEHandle(NULL);
+
 bool CTeamFortress2Mod::m_bAttackDefendMap = false;
 int CTeamFortress2Mod::m_Cappers[MAX_CONTROL_POINTS];
 int CTeamFortress2Mod::m_iCapDefenders[MAX_CONTROL_POINTS];
@@ -79,25 +86,34 @@ CTeamControlPointMaster *CTeamFortress2Mod::m_PointMaster = NULL;
 CTeamRoundTimer CTeamFortress2Mod::m_Timer;
 MyEHandle CTeamFortress2Mod::m_PointMasterResource = MyEHandle(NULL);
 CTeamControlPointRound *CTeamFortress2Mod::m_pCurrentRound = NULL;
+
 bool CTeamFortress2Mod::bFlagStateDefault = true;
+
 MyEHandle CTeamFortress2Mod::m_pPayLoadBombBlue = MyEHandle(NULL);
 MyEHandle CTeamFortress2Mod::m_pPayLoadBombRed = MyEHandle(NULL);
+
 bool CTeamFortress2Mod::m_bRoundOver = false;
 int CTeamFortress2Mod::m_iWinningTeam = 0;
 int CTeamFortress2Mod::m_iLastWinningTeam = 0;
+
 Vector CTeamFortress2Mod::m_vFlagLocationBlue = Vector(0,0,0);
 Vector CTeamFortress2Mod::m_vFlagLocationRed = Vector(0,0,0);
+
 bool CTeamFortress2Mod::m_bFlagLocationValidBlue = false;
 bool CTeamFortress2Mod::m_bFlagLocationValidRed = false;
+
 bool CTeamFortress2Mod::m_bMVMFlagStartValid = false;
 Vector CTeamFortress2Mod::m_vMVMFlagStart = Vector(0,0,0);
 bool CTeamFortress2Mod::m_bMVMCapturePointValid = false;
 Vector CTeamFortress2Mod::m_vMVMCapturePoint = Vector(0,0,0);
 bool CTeamFortress2Mod::m_bMVMAlarmSounded = false;
 float CTeamFortress2Mod::m_fMVMCapturePointRadius = 0.0f;
+
 int CTeamFortress2Mod::m_iCapturePointWptID = -1;
 int CTeamFortress2Mod::m_iFlagPointWptID = -1;
+
 MyEHandle CTeamFortress2Mod::m_pNearestTankBoss = NULL;
+
 float CTeamFortress2Mod::m_fNearestTankDistance = 0.0f;
 Vector CTeamFortress2Mod::m_vNearestTankLocation = Vector(0, 0, 0);
 
@@ -157,7 +173,6 @@ void CTeamFortress2Mod :: getTeamOnlyWaypointFlags ( int iTeam, int *iOn, int *i
 		*iOn = CWaypointTypes::W_FL_NOBLU;
 		*iOff = CWaypointTypes::W_FL_NORED;
 	}
-
 }
 
 void CTeamFortress2Mod ::modFrame ()
@@ -220,18 +235,22 @@ void CTeamFortress2Mod :: mapInit ()
 	m_iLastWinningTeam = 0;
 	m_iWinningTeam = 0;
 	m_pResourceEntity = NULL;
+	
 	m_ObjectiveResource.m_ObjectiveResource = NULL;
 	m_ObjectiveResource.reset();
+	
 	m_PointMaster = NULL;
 	m_PointMasterResource = NULL;
 	m_pCurrentRound = NULL;
 	m_Timer = CTeamRoundTimer();
+	
 	bFlagStateDefault = true;
 	m_bFlagLocationValidBlue = false;
 	m_bFlagLocationValidRed = false;
 	m_bMVMAlarmSounded = false;
 	m_bMVMFlagStartValid = false;
 	m_bMVMCapturePointValid = false;
+	
 	m_fMVMCapturePointRadius = 0.0f;
 	m_iCapturePointWptID = -1;
 	m_iFlagPointWptID = -1;
@@ -248,8 +267,8 @@ void CTeamFortress2Mod :: mapInit ()
 		m_MapType = TF_MAP_CARTRACE; // pipeline racing
 	else if ( strncmp(szmapname,"arena_",6) == 0 || strncmp(szmapname,"vsh_",4) == 0 ) // pongo1321
 		m_MapType = TF_MAP_ARENA; // arena mode (also fallback for VS Saxton Hale gamemode)
-	else if ( strncmp(szmapname,"arena_",6) == 0 )
-		m_MapType = TF_MAP_ARENA; // arena mode
+	//else if ( strncmp(szmapname,"arena_",6) == 0 )
+	//	m_MapType = TF_MAP_ARENA; // arena mode
 	else if ( strncmp(szmapname,"koth_",5) == 0 )
 		m_MapType = TF_MAP_KOTH; // king of the hill
 	else if ( strncmp(szmapname,"sd_",3) == 0 )
@@ -416,13 +435,13 @@ switch (iClass)
 { 
 case TF_CLASS_SCOUT: return 133.0f; 
 case TF_CLASS_SOLDIER: return 80.0f; 
-case TF_CLASS_DEMOMAN: return 93.00; 
+case TF_CLASS_DEMOMAN: return 93.0f; 
 case TF_CLASS_MEDIC: return 109.0f; 
 case TF_CLASS_PYRO: return 100.0f; 
 case TF_CLASS_SPY: return 109.0f; 
-case TF_CLASS_ENGINEER: return 100.0f; 
+case TF_CLASS_ENGINEER: return 100.0f;
+case TF_CLASS_HWGUY: return 77.0f;
 case TF_CLASS_SNIPER: return 100.0f; 
-case TF_CLASS_HWGUY: return 77.0f; 
 } 
 return 0.0f; 
 } 
@@ -810,7 +829,7 @@ CWaypoint *CTeamFortress2Mod :: getBestWaypointMVM ( CBot *pBot, int iFlags )
 
 	const bool bFlagLocationValid = CTeamFortress2Mod::getFlagLocation(TF2_TEAM_BLUE,&vFlagLocation);		
 	
-	float fTankDistance = 0.0f; //tele never used [APG]RoboCop[CL]
+	float fTankDistance = 0.0f; //never used? [APG]RoboCop[CL]
 
 	edict_t *pTank;
 	// check tank boss is valid
@@ -906,7 +925,7 @@ int CTeamFortress2Mod ::getHighestScore ()
 
 		if ( edict && CBotGlobals::entityIsValid(edict) )
 		{
-			const short int score = static_cast<short>(CClassInterface::getTF2Score(edict));
+			const auto score = static_cast<short>(CClassInterface::getTF2Score(edict));
 		
 			if ( score > highest )
 			{
