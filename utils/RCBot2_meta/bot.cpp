@@ -293,7 +293,7 @@ void CBot :: setEdict ( edict_t *pEdict)
 	spawnInit();
 }
 
-bool CBot :: isUnderWater ()
+bool CBot :: isUnderWater () const //Needs to be const to prevent losing mobility? [APG]RoboCop[CL]
 {
 	return CClassInterface::getWaterLevel(m_pEdict) > 1; //m_pController->IsEFlagSet(EFL_TOUCHING_FLUID);
 }
@@ -1411,19 +1411,19 @@ void CBot :: spawnInit ()
 	m_vLastSeeEnemy = Vector(0,0,0);
 	m_pLastEnemy = NULL; // enemy we were fighting before we lost it
 	//m_pAvoidEntity = NULL; // avoid this guy
-	m_fLastWaypointVisible = 0;
+	m_fLastWaypointVisible = 0.0f;
 	m_vGoal = Vector(0,0,0);
 	m_bHasGoal = false;
-	m_fLookAtTimeStart = 0;
-	m_fLookAtTimeEnd = 0;
-	m_fNextThink = 0;
+	m_fLookAtTimeStart = 0.0f;
+	m_fLookAtTimeEnd = 0.0f;
+	m_fNextThink = 0.0f;
 	m_iImpulse = 0;
 	m_iButtons = 0;
-	m_fForwardSpeed = 0;
-	m_fSideSpeed = 0;
-	m_fUpSpeed = 0;
+	m_fForwardSpeed = 0.0f;
+	m_fSideSpeed = 0.0f;
+	m_fUpSpeed = 0.0f;
 	m_iConditions = 0;
-	m_fStrafeTime = 0;
+	m_fStrafeTime = 0.0f;
 
 	m_bInitAlive = true;
 
@@ -1934,7 +1934,7 @@ void CBot :: listenForPlayers ()
 	//m_fNextListenTime = engine->Time() + randomFloat(0.5f,2.0f);
 
 	edict_t *pListenNearest = NULL;
-	float fMaxFactor = 0;
+	float fMaxFactor = 0.0f;
 	Vector vVelocity;
 	bool bIsNearestAttacking = false;
 
@@ -2108,7 +2108,7 @@ void CBot :: listenToPlayer ( edict_t *pPlayer, bool bIsEnemy, bool bIsAttacking
 
 }
 
-bool CBot :: onLadder ()
+bool CBot :: onLadder () const // onLadder needs to be constant? [APG]RoboCop[CL]
 {	
 	return CClassInterface::isMoveType(m_pEdict,MOVETYPE_LADDER);
 }
@@ -2116,7 +2116,6 @@ bool CBot :: onLadder ()
 void CBot :: freeAllMemory ()
 {	
 	freeMapMemory();
-	return;
 }
 
 void CBot :: forceGotoWaypoint ( int wpt )
@@ -2222,8 +2221,8 @@ void CBot :: doMove ()
 		{
 			if ( fabs(m_vVelocity.z) > 16.0f )
 			{
-				m_fForwardSpeed = 0;
-				m_fSideSpeed = 0;
+				m_fForwardSpeed = 0.0f;
+				m_fSideSpeed = 0.0f;
 			}
 		}
 
@@ -2339,7 +2338,7 @@ Vector CBot::getAimVector ( edict_t *pEntity )
 	v_size = pEntity->GetCollideable()->OBBMaxs() - pEntity->GetCollideable()->OBBMins();
 	v_size = v_size * 0.5f;
 
-	fSensitivity = (float)m_pProfile->m_iSensitivity/20;
+	fSensitivity = static_cast<float>(m_pProfile->m_iSensitivity)/20;
 
 	modAim(pEntity,v_origin,&v_desired_offset,v_size,fDist,fDist2D);
 
@@ -2421,8 +2420,8 @@ void CBot::modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset
 
 	if ( pWp && pWp->isMelee() )
 	{
-		fDistFactor = 0;
-		fVelFactor = 0;
+		fDistFactor = 0.0f;
+		fVelFactor = 0.0f;
 	}
 	else
 	{
@@ -2466,18 +2465,18 @@ void CBot::modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset
 	v_desired_offset->z = randomFloat(-vel.z,vel.z)*fDistFactor*v_size.z;
 
 	// target
-	v_desired_offset->z += fHeadOffset * m_pProfile->m_fAimSkill + randomFloat(0.0,1.0f-m_pProfile->m_fAimSkill)*fHeadOffset;
+	v_desired_offset->z += fHeadOffset * m_pProfile->m_fAimSkill + randomFloat(0.0f,1.0f-m_pProfile->m_fAimSkill)*fHeadOffset;
 
 }
 
-void CBot::hearVoiceCommand(edict_t* pPlayer, byte cmd)
+void CBot::hearVoiceCommand(edict_t* pPlayer, byte cmd) //Needs properly implemented? [APG]RoboCop[CL]
 {
 	
 }
 
 void CBot :: grenadeThrown ()
 {
-
+	
 }
 
 void CBot::voiceCommand(int cmd)
@@ -2487,7 +2486,7 @@ void CBot::voiceCommand(int cmd)
 
 void CBot :: checkCanPickup ( edict_t *pPickup )
 {
-
+	
 }
 
 Vector CBot::snipe (const Vector& vAiming)

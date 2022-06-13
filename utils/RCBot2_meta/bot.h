@@ -383,7 +383,7 @@ public:
 
 	virtual int getTeam ();
 
-	bool isUnderWater ( );
+	bool isUnderWater ( ) const;
 
 	CBotWeapon *getBestWeapon ( edict_t *pEnemy, bool bAllowMelee = true, bool bAllowMeleeFallback = true, bool bMeleeOnly = false, bool bExplosivesOnly = false );
 
@@ -593,7 +593,7 @@ public:
 
 	virtual bool isAlive ();
 
-	bool onLadder ();
+	bool onLadder () const;
 
     bool currentEnemy ( edict_t *pEntity ) { return m_pEnemy == pEntity; }
 
@@ -702,7 +702,7 @@ public:
 	void updateStatistics (); // updates number of teammates/enemies nearby/visible
 	virtual void listenForPlayers ();
 	// listens to this player
-	void listenToPlayer (edict_t *pListenTo, bool bIsEnemy = false, bool bIsAttacking = false ); 
+	void listenToPlayer (edict_t *pListenTo, bool bIsEnemy = false, bool bIsAttacking = false ); //parameters vary and needs fixed [APG]RoboCop[CL]
 	virtual bool wantToListenToPlayerAttack ( edict_t *pPlayer, int iWeaponID = -1 ) { return true; }
 	virtual bool wantToListenToPlayerFootsteps ( edict_t *pPlayer ) { return true; }
 
