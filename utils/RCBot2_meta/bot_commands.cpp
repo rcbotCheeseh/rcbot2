@@ -168,6 +168,7 @@ eBotCommandResult CBotSubcommands::execute(CClient *pClient, const char *pcmd, c
 		}
 		
 		// shift arguments and call
+		//const eBotCommandResult result = cmd->execute(pClient, pcmd, arg1, arg2, arg3, arg4, arg5); //pcmd used as arg1? [APG]RoboCop[CL]
 		const eBotCommandResult result = cmd->execute(pClient, arg1, arg2, arg3, arg4, arg5, nullptr);
 		if (result == COMMAND_ERROR) {
 			cmd->printHelp(pClient? pClient->getPlayer() : nullptr);

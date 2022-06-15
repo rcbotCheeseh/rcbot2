@@ -205,7 +205,7 @@ public:
 
 	unsigned int maxEntityIndex ( ) override { return gpGlobals->maxEntities; }
 
-	void seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pKillerWeapon ) override;
+	void seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pKillerWeapon ) override; //TODO: parameters vary and needs fixed [APG]RoboCop[CL]
 	void seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *pWeapon ) override;
 
 	bool isVisibleThroughSmoke ( edict_t *pSmoke, edict_t *pCheck );
