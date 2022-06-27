@@ -2214,7 +2214,7 @@ void CBotTF2 :: updateClass ()
 		else if ( strcmp(model,"demoman") )
 			m_iClass = TF_CLASS_DEMOMAN;
 		else
-			m_iClass = TF_CLASS_CIVILIAN;
+			m_iClass = TF_CLASS_UNDEFINED;
 			*/
 
 		m_fUpdateClass = 0.0f;

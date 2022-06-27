@@ -2654,7 +2654,7 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 		pBot->setMoveTo(CBotGlobals::entityOrigin(m_pUnseenBefore));
 	}
 /*
-	TF_CLASS_CIVILIAN = 0,
+	TF_CLASS_UNDEFINED = 0,
 	TF_CLASS_SCOUT,
 	TF_CLASS_SNIPER,
 	TF_CLASS_SOLDIER,
