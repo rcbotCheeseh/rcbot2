@@ -239,15 +239,13 @@ void CBotMods :: readMods()
 	#elif SOURCE_ENGINE == SE_SDK2013
 		m_Mods.emplace_back(new CSynergyMod());
 	#else
-
 		m_Mods.emplace_back(new CFortressForeverMod());
 
 		m_Mods.emplace_back(new CHLDMSourceMod());
-
-		// Look for extra MODs
-
-		parseFile();
 	#endif
+	// Look for extra MODs
+	
+	parseFile();
 }
 
 //////////////////////////////////////////////////////////////////////////////

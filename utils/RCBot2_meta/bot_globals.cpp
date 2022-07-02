@@ -38,6 +38,7 @@
 #include "bot_weapons.h"
 
 #include "ndebugoverlay.h"
+#include "filesystem.h"
 
 #include "logging.h"
 
@@ -194,22 +195,10 @@ void CBotGlobals::readRCBotFolder()
 	KeyValues *mainkv = new KeyValues("Metamod Plugin");
 
 	if (mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD")) {
-		char folder[256] = "\0";
 		const char *szRCBotFolder = mainkv->GetString("rcbot2path");
 
 		if (szRCBotFolder && *szRCBotFolder) {
 			logger->Log(LogLevel::INFO, "RCBot Folder -> trying %s", szRCBotFolder);
-
-			if (!dirExists(szRCBotFolder)) {
-				snprintf(folder, sizeof folder, "%s/%s", CBotGlobals::modFolder(), szRCBotFolder);
-
-				szRCBotFolder = CStrings::getString(folder);
-				logger->Log(LogLevel::INFO, "RCBot Folder -> trying %s", szRCBotFolder);
-
-				if (!dirExists(szRCBotFolder)) {
-					logger->Log(LogLevel::ERROR, "RCBot Folder -> not found ...");
-				}
-			}
 
 			m_szRCBotFolder = CStrings::getString(szRCBotFolder);
 		}
@@ -1135,6 +1124,9 @@ void CBotGlobals :: buildFileName ( char *szOutput, const char *szFile, const ch
 		strcat(szOutput,".");
 		strcat(szOutput,szExtension);
 	}
+
+	if (m_szRCBotFolder != NULL)
+		filesystem->RelativePathToFullPath(szOutput, NULL, szOutput, 512, FILTER_CULLPACK);
 }
 
 QAngle CBotGlobals::playerAngles ( edict_t *pPlayer )
