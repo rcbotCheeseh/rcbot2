@@ -235,7 +235,7 @@ typedef enum
 
 typedef enum
 {
-	TF_CLASS_CIVILIAN = 0,
+	TF_CLASS_UNDEFINED = 0,
 	TF_CLASS_SCOUT,
 	TF_CLASS_SNIPER,
 	TF_CLASS_SOLDIER,
@@ -494,7 +494,7 @@ public:
 
 	void chooseClass ();
 
-	virtual TF_Class getClass () { return TF_CLASS_CIVILIAN; }
+	virtual TF_Class getClass () { return TF_CLASS_UNDEFINED; }
 
 	virtual void updateClass () { };
 
