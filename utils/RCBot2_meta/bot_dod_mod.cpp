@@ -107,8 +107,7 @@ bool CDODMod :: shouldAttack ( int iTeam )
 	static short int iFlags_0;
 	static short int iFlags_1;
 	static short int iNumFlags;
-
-
+	
 	iNumFlags = m_Flags.getNumFlags();
 
 	iFlags_0 = static_cast<int>(static_cast<float>(m_Flags.getNumFlagsOwned(iTeam == TEAM_ALLIES ? TEAM_AXIS : TEAM_ALLIES)) /
@@ -117,6 +116,7 @@ bool CDODMod :: shouldAttack ( int iTeam )
 
 	return randomFloat(0.0f,1.0f) < fAttackProbLookUp[iFlags_0][iFlags_1];//gNetAttackOrDefend->getOutput();
 }
+
 ////////////////////////////////////////////////
 void CDODMod :: initMod ()
 {
@@ -193,7 +193,6 @@ void CDODMod :: mapInit ()
 	m_bCommunalBombPoint = false;
 }
 
-
 float CDODMod::getMapStartTime () 
 { 
 	//if ( !m_pGameRules ) 
@@ -265,7 +264,6 @@ bool CDODFlags::isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin
 	return false;
 }
 
-
 bool CDODFlags::isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin )
 {
 	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
@@ -320,7 +318,6 @@ int CDODFlags::findNearestObjective ( Vector vOrigin )
 	}
 
 	return iNearest;
-
 }
 
 // return the flag with the least danger (randomly)
@@ -617,8 +614,8 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 	}
 
 	//	string_t model;		
-//	const char *modelname;
-//	bool bVisible;
+	//	const char *modelname;
+	//	bool bVisible;
 				
 
 	// find the edicts of the flags using the origin and classname
@@ -876,7 +873,13 @@ void CDODMod :: addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags
 
 void CDODMod :: modFrame()
 {
-
+	// Experimental and needs tested with maps [APG]RoboCop[CL]
+	/*if (!m_pResourceEntity)
+		m_pResourceEntity = CClassInterface::FindEntityByNetClass(gpGlobals->maxClients+1, "CDODObjectiveResource");
+	if ( !m_pPlayerResourceEntity )
+		m_pPlayerResourceEntity = CClassInterface::FindEntityByNetClass(gpGlobals->maxClients+1, "CDODPlayerResource");
+	if ( !m_pGameRules )
+		m_pGameRules = CClassInterface::FindEntityByNetClass(gpGlobals->maxClients+1, "CDODGameRulesProxy");*/
 }
 
 
@@ -959,6 +962,4 @@ void CDODMod :: getTeamOnlyWaypointFlags ( int iTeam, int *iOn, int *iOff )
 		*iOn = CWaypointTypes::W_FL_NOALLIES;
 		*iOff = CWaypointTypes::W_FL_NOAXIS;
 	}
-
-
 }

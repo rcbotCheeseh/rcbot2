@@ -28,6 +28,7 @@
  *    version.
  *
  */
+
 #include "in_buttons.h"
 #include "bot.h"
 #include "bot_cvars.h"
@@ -114,6 +115,7 @@ void CHLDMBot :: touchedWpt ( CWaypoint *pWaypoint )
 		}
 	}
 }
+
 // new life
 void CHLDMBot :: spawnInit ()
 {
@@ -128,11 +130,13 @@ void CHLDMBot :: spawnInit ()
 	m_FailedPhysObj = NULL;
 	m_flSprintTime = 0;
 	m_NearestPhysObj = NULL;
+	
 	m_pBattery = NULL;
 	m_pHealthKit = NULL;
 	m_pAmmoKit = NULL;
 	m_pCurrentWeapon = NULL;
 	m_pCharger = NULL;
+	
 	m_fFixWeaponTime = 0.0f;
 	m_fUseButtonTime = 0.0f;
 	m_fUseCrateTime = 0.0f;
@@ -369,6 +373,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 
 	return false;
 }
+
 // deal with attacking code here
 // return false if it is impossible to shoot this enemy; i.e. change enemy
 // return true: if it is possible to shoot this enemy
@@ -684,7 +689,6 @@ bool CHLDMBot :: willCollide ( edict_t *pEntity, bool *bCanJump, float *fTime )
 	return false;
 }
 
-
 void CHLDMBot :: handleWeapons ()
 {
 	//
@@ -714,6 +718,7 @@ void CHLDMBot :: handleWeapons ()
 		}
 	}
 }
+
 // update some edicts in my memory if I see them or not
 bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 {

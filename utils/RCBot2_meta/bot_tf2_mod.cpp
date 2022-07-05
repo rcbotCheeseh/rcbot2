@@ -366,7 +366,7 @@ bool CTeamFortress2Mod :: TF2_IsPlayerKrits(edict_t *pPlayer)
 	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
 	return (pcond & TF2_PLAYER_KRITS) == TF2_PLAYER_KRITS;
 
-	return false;
+	//return false; //Unreachable? [APG]RoboCop[CL]
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerInvuln(edict_t *pPlayer)
@@ -428,7 +428,6 @@ TF_Class CTeamFortress2Mod :: getSpyDisguise ( edict_t *pPlayer )
 	return (TF_Class)iClass;
 }
 
-
 float CTeamFortress2Mod :: TF2_GetClassSpeed(int iClass) 
 { 
 switch (iClass) 
@@ -462,9 +461,6 @@ float CTeamFortress2Mod :: TF2_GetPlayerSpeed(edict_t *pPlayer, TF_Class iClass 
 
 	return fSpeed;
 } 
-
-
-
 
 int CTeamFortress2Mod :: getTeam ( edict_t *pEntity )
 {
@@ -822,7 +818,6 @@ void CTeamFortress2Mod::checkMVMTankBoss(edict_t *pEntity)
 	}
 }
 
-
 CWaypoint *CTeamFortress2Mod :: getBestWaypointMVM ( CBot *pBot, int iFlags )
 {
 	Vector vFlagLocation;
@@ -838,7 +833,6 @@ CWaypoint *CTeamFortress2Mod :: getBestWaypointMVM ( CBot *pBot, int iFlags )
 		if (CBotGlobals::entityIsAlive(pTank) == false)
 			m_pNearestTankBoss = NULL;
 	}
-
 
 	if ( hasRoundStarted() && m_bMVMFlagStartValid && m_bMVMCapturePointValid && bFlagLocationValid )
 	{
@@ -914,6 +908,7 @@ void CTeamFortress2Mod :: teleporterBuilt ( edict_t *pOwner, eEngiBuild type, ed
 	m_Teleporters[iIndex].m_fLastTeleported = 0.0f;
 	m_Teleporters[iIndex].m_iWaypoint = CWaypointLocations::NearestWaypoint(CBotGlobals::entityOrigin(pBuilding),400.0f,-1,true);
 }
+
 // used for changing class if I'm doing badly in my team
 int CTeamFortress2Mod ::getHighestScore ()
 {
