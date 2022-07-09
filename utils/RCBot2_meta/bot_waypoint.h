@@ -308,13 +308,13 @@ public:
 		m_vOrigin = origin;
 	}
 
-	void checkAreas ( edict_t *pActivator );
+	void checkAreas ( edict_t *pActivator ); // TODO: Needs implemented properly [APG]RoboCop[CL]
 
 	// show info to player
 	void info ( edict_t *pEdict );
 
 	// methods
-    void touched ();
+    void touched (); // TODO: Needs implemented properly [APG]RoboCop[CL]
 
 	void draw ( edict_t *pEdict, bool bDrawPaths, unsigned short int iDrawType );
 
@@ -336,7 +336,7 @@ public:
 	//bool touched ( edict_t *pEdict );
 	bool touched ( Vector vOrigin, Vector vOffset, float fTouchDist, bool onground = true );
 
-	void botTouch ( CBot *pBot );
+	void botTouch ( CBot *pBot ); // TODO: Needs implemented properly [APG]RoboCop[CL]
 
 	void freeMapMemory ()
 	{
@@ -440,7 +440,7 @@ public:
 
 	static int numWaypoints ();
 
-	static bool checkReachable ( CWaypoint *pWaypoint, int iStart );
+	static bool checkReachable ( CWaypoint *pWaypoint, int iStart ); // TODO: Needs implemented properly [APG]RoboCop[CL]
 
 	static CWaypoint *nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, int *iAiming );
 

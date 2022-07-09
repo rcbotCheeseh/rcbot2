@@ -855,7 +855,7 @@ public:
 	
 	void roundWon ( int iTeam, bool bFullRound );
 
-	void changeClass ();
+	void changeClass (); // TODO: Needs implemented to avoid bots punting when using ClassRestrictionsForBots.smx? [APG]RoboCop[CL]
 
 	bool needAmmo() override;
 
@@ -925,7 +925,7 @@ public:
 
 	void resetCarryTime () { m_fCarryTime = engine->Time(); }
 
-	void MvM_Upgrade ();
+	void MvM_Upgrade (); // TODO: To allow bots to menuselect in order to buy upgrades? [APG]RoboCop[CL]
 
 private:
 	// time for next jump

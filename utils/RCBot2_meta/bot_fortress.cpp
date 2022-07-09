@@ -2010,6 +2010,11 @@ void CBotTF2 :: updateCarrying ()
 	}
 }
 
+// TODO: To allow bots to menuselect in order to buy upgrades? [APG]RoboCop[CL]
+void CBotTF2::MvM_Upgrade()
+{
+}
+
 void CBotTF2 :: checkBuildingsValid (bool bForce) // force check carrying
 {
 	if ( m_pSentryGun )
@@ -7039,6 +7044,11 @@ void CBotTF2::roundWon(int iTeam, bool bFullRound )
 	removeCondition(CONDITION_PARANOID);
 	removeCondition(CONDITION_BUILDING_SAPPED);
 	removeCondition(CONDITION_COVERT);
+}
+
+// TODO: Needs implemented to avoid bots punting when using ClassRestrictionsForBots.smx? [APG]RoboCop[CL]
+void CBotTF2::changeClass()
+{
 }
 
 void CBotTF2::waitRemoveSap ()

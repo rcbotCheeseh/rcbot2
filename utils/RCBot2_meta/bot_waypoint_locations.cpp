@@ -510,6 +510,17 @@ void CWaypointLocations :: FindNearestBlastInBucket ( int i, int j, int k, const
 	}
 }
 
+// TODO: Needs implemented properly [APG]RoboCop[CL]
+/*int CWaypointLocations::NearestGrenadeWaypoint(const Vector& vTarget, int iTeam, bool bCheckArea, float fBlastRadius)
+{
+	return 0;
+}
+
+void CWaypointLocations::FindNearestGrenadeWptInBucket(int i, int j, int k, const Vector& vOrigin, const Vector& vSrc, float* pfMinDist, int* piIndex, int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, bool bIsBot, bool bNearestAimingOnly, int iTeam, bool bCheckArea, float fBlastRadius)
+{
+	
+}*/
+
 ///////////////////////////////////////////////
 //
 

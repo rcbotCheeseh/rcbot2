@@ -91,6 +91,7 @@ void CBotProfiles :: deleteProfiles ()
 void CBotProfiles :: setupProfiles ()
 {
 	// Setup Default profile
+	// TODO: to maybe balance the aim skill and reaction times from being too high [APG]RoboCop[CL]
 	m_pDefaultProfile = new CBotProfile(
 		DEFAULT_BOT_NAME, // name
 		"default", // model (team in HL2DM)

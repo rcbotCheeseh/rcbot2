@@ -853,7 +853,7 @@ public:
 
 	void initMod () override;
 
-	static void roundStart ();
+	static void roundStart (); // TODO: Needs implemented properly [APG]RoboCop[CL]
 
 	static int getTeam ( edict_t *pEntity );
 
@@ -876,7 +876,7 @@ public:
 
 	static bool isAmmo (const edict_t* pEntity);
 
-	static int getArea (); // get current area of map
+	static int getArea (); // get current area of map // TODO: Needs implemented properly [APG]RoboCop[CL]
 
 	static void setArea ( int area ) { m_iArea = area; }
 
@@ -1191,7 +1191,7 @@ public:
 		memset(m_Cappers,0,sizeof(int)*MAX_CONTROL_POINTS);
 	}
 
-	static int numPlayersOnTeam ( int iTeam, bool bAliveOnly = false );
+	static int numPlayersOnTeam ( int iTeam, bool bAliveOnly = false ); // TODO: Needs implemented properly [APG]RoboCop[CL]
 	static int numClassOnTeam ( int iTeam, int iClass );
 
 	static int getFlagCarrierTeam () { return m_iFlagCarrierTeam; }
