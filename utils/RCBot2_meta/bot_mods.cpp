@@ -242,10 +242,11 @@ void CBotMods :: readMods()
 		m_Mods.emplace_back(new CFortressForeverMod());
 
 		m_Mods.emplace_back(new CHLDMSourceMod());
-	#endif
-	// Look for extra MODs
 	
-	parseFile();
+		// Look for extra MODs
+
+		parseFile();
+	#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
