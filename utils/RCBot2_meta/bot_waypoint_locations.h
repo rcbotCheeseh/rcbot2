@@ -142,9 +142,9 @@ public:
 
 	static void FindNearestBlastInBucket ( int i, int j, int k, const Vector &vOrigin, const Vector &vSrc, float *pfMinDist, int *piIndex, int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, bool bIsBot, bool bNearestAimingOnly, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS );
 
-	static int NearestGrenadeWaypoint ( const Vector &vTarget, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS );
+	static int NearestGrenadeWaypoint ( const Vector &vTarget, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS ); // TODO: Needs implemented properly [APG]RoboCop[CL]
 
-	static void FindNearestGrenadeWptInBucket ( int i, int j, int k, const Vector &vOrigin, const Vector &vSrc, float *pfMinDist, int *piIndex, int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, bool bIsBot, bool bNearestAimingOnly, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS );
+	static void FindNearestGrenadeWptInBucket ( int i, int j, int k, const Vector &vOrigin, const Vector &vSrc, float *pfMinDist, int *piIndex, int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, bool bIsBot, bool bNearestAimingOnly, int iTeam, bool bCheckArea, float fBlastRadius = BLAST_RADIUS ); // TODO: Needs implemented properly [APG]RoboCop[CL]
 
 private:
 	

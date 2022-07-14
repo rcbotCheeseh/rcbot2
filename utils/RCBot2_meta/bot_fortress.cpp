@@ -2155,6 +2155,11 @@ void CBotTF2 :: capturedFlag ()
 	taunt();
 }
 
+void CBotTF2 :: pointCaptured()
+{
+	taunt();
+}
+
 void CBotTF2 :: spyDisguise ( int iTeam, int iClass )
 {
 	//char cmd[256];
