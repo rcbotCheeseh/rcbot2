@@ -2255,7 +2255,6 @@ void CBotTF2 :: seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *p
 	}
 }
 
-
 void CBotTF2 :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWeapon )
 {
 	if ( pKiller && !m_pEnemy && !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) )
@@ -2618,7 +2617,6 @@ bool CBotFortress:: wantToUnCloak ()
 	return (m_bStatsCanUse && (m_StatsCanUse.stats.m_iEnemiesVisible == 0));
 }
 
-
 void CBotTF2 :: spyUnCloak ()
 {
 	if ( CTeamFortress2Mod::TF2_IsPlayerCloaked(m_pEdict) && (m_fSpyCloakTime < engine->Time()) )
@@ -2912,7 +2910,6 @@ void CBotTF2::modThink()
 	}
 
 	m_fIdealMoveSpeed = CTeamFortress2Mod::TF2_GetPlayerSpeed(m_pEdict, m_iClass)*rcbot_speed_boost.GetFloat();
-
 
 	/* spy check code */
 	if (((m_iClass != TF_CLASS_SPY) || (!isDisguised())) && ((m_pEnemy.get() == NULL) || !hasSomeConditions(CONDITION_SEE_CUR_ENEMY)) && (m_pPrevSpy.get() != NULL) && (m_fSeeSpyTime > engine->Time()) &&
@@ -3238,7 +3235,6 @@ void CBotTF2::modThink()
 	}
 
 	setMoveLookPriority(MOVELOOK_MODTHINK);
-	
 }
 
 void CBotTF2::handleWeapons()
@@ -3365,8 +3361,7 @@ bool CBotTF2::canAvoid(edict_t *pEntity)
 		return false;
 
 	const float distance = distanceFrom(vAvoidOrigin);
-
-
+	
 	if ((distance > 1) && (distance < bot_avoid_radius.GetFloat()) && (vAvoidOrigin.z >= getOrigin().z) && (fabs(getOrigin().z - vAvoidOrigin.z) < 64))
 	{
 		if ((m_pAttackingEnemy.get() != NULL) && (m_pAttackingEnemy.get() == pEntity))
@@ -3682,7 +3677,6 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam )
 		}
 	}
 
-
 	if ( availableClasses.empty() )
 		return randomInt(1,9);
 	
@@ -3882,7 +3876,6 @@ bool CBotTF2 :: setVisible ( edict_t *pEntity, bool bVisible )
 	}
 
 	return bValid;
-	
 }
 
 void CBotTF2 :: checkBeingHealed ()
@@ -3892,7 +3885,6 @@ void CBotTF2 :: checkBeingHealed ()
 	static edict_t *pWeapon;
 	static IPlayerInfo *pi;
 	static const char *szWeaponName;
-	
 
 	if ( m_fCheckHealTime > engine->Time() )
 		return;
@@ -3933,7 +3925,6 @@ void CBotTF2 :: checkBeingHealed ()
 			}
 		}
 	}
-
 }
 
 // Preconditions :  Current weapon is Medigun
@@ -4234,7 +4225,6 @@ float CBotTF2 :: getEnemyFactor ( edict_t *pEnemy )
 	return fPreFactor;
 }
 
-
 bool CBotFortress :: wantToNest ()
 {
 	return (!hasFlag() && ((getClass()!=TF_CLASS_ENGINEER)&&(m_pSentryGun.get()!=NULL)) && ((getClass() != TF_CLASS_MEDIC) || !m_pHeal) && (getHealthPercent() < 0.95) && (nearbyFriendlies(256.0f)<2));
@@ -4299,8 +4289,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		// keep attacking enemy -- no change to task
 		return;
 	}
-
-
+	
 	bCheckCurrent = true; // important for checking the current schedule if not empty
 	iMetal = 0;
 	pBWMediGun = NULL;
@@ -4319,8 +4308,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 
 	numplayersonteam = CBotGlobals::numPlayersOnTeam(iTeam,false);
 	numplayersonteam_alive = CBotGlobals::numPlayersOnTeam(iTeam,true);
-
-
+	
 	// UNUSED
 	// Shadow/Time must be Floating point
 	/*if(m_fBlockPushTime < engine->Time())
@@ -4376,9 +4364,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		fResupplyDist = 1;
 		fHealthDist = 1;
 		fAmmoDist = 1;
-
-
-
+		
 		// don't go back to resupply if ubered
 		if (!bIsUbered)
 			pWaypointResupply = CWaypoints::getWaypoint(CWaypoints::getClosestFlagged(CWaypointTypes::W_FL_RESUPPLY, vOrigin, iTeam, &fResupplyDist, failedlist));
@@ -5701,12 +5687,10 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 				// run at flank while shooting	
 				CFindPathTask *pHideGoalPoint = new CFindPathTask();
 				Vector vOrigin = CBotGlobals::entityOrigin(m_pEnemy);
-
 				
 				pSchedule->addTask(new CFindGoodHideSpot(vOrigin));
 				pSchedule->addTask(pHideGoalPoint);
 				pSchedule->addTask(new CBotNest());
-
 				
 				// no interrupts, should be a quick waypoint path anyway
 				pHideGoalPoint->setNoInterruptions();
@@ -5901,7 +5885,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 
 				m_pSchedules->add(new CBotSchedule(new CBotTaskEngiPlaceBuilding(iObject,getOrigin()+vForward*32.0f)));
-*/
+				*/
 				return true;
 			}
 			return false;
@@ -7584,8 +7568,7 @@ void CBotTF2 :: enemyAtIntel ( Vector vPos, int type, int iArea )
 		m_fLookSetTime = m_fListenTime;
 		setLookAtTask(LOOK_NOISE);
 	}
-
-
+	
 	// bot is already capturing a point
 	if ( m_pSchedules && m_pSchedules->isCurrentSchedule(SCHED_ATTACKPOINT) )
 	{
@@ -7659,7 +7642,6 @@ void CBotTF2 :: enemyAtIntel ( Vector vPos, int type, int iArea )
 			m_fDefendTime = engine->Time() + randomFloat(10.0f,20.0f);
 		}
 	}
-	
 }
 
 void CBotTF2 :: buildingSapped ( eEngiBuild building, edict_t *pSapper, edict_t *pSpy )
@@ -7684,8 +7666,6 @@ void CBotTF2 :: buildingSapped ( eEngiBuild building, edict_t *pSapper, edict_t 
 		//m_pPrevSpy = pSpy;
 		
 	}
-
-
 }
 
 void CBotTF2 :: sapperDestroyed ( edict_t *pSapper )
