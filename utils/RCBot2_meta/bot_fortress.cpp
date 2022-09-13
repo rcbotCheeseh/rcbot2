@@ -192,7 +192,7 @@ void CBotTF2 :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
 
 		updateCondition(CONDITION_PUSH);
 
-		if ( randomFloat(0,1.0) > 0.75f )
+		if ( randomFloat(0.0f,1.0f) > 0.75f )
 			m_nextVoicecmd = TF_VC_YES;
 
 		// don't break // flow down to uber if medic
@@ -203,7 +203,7 @@ void CBotTF2 :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
 			{
 				if ( !CTeamFortress2Mod::isFlagCarrier(pPlayer) )
 					secondaryAttack();
-				else if ( randomFloat(0,1.0) > 0.5f )
+				else if ( randomFloat(0.0f,1.0f) > 0.5f )
 					m_nextVoicecmd = TF_VC_NO;
 			}
 		}
@@ -215,7 +215,7 @@ void CBotTF2 :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
 
 		updateCondition(CONDITION_PUSH);
 
-		if ( randomFloat(0,1.0) > 0.75f )
+		if ( randomFloat(0.0f,1.0f) > 0.75f )
 			m_nextVoicecmd = TF_VC_YES;
 
 		break;
@@ -1163,7 +1163,6 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 		}
 		break;
 	case 6:
-
 		{
 			// let go 
 			m_pButtons->letGo(IN_ATTACK2);
@@ -1445,7 +1444,7 @@ void CBotFortress :: modThink ()
 	if ( m_bInitAlive )
 	{
 		const Vector vOrigin = getOrigin();
-		CWaypoint *pWpt = CWaypoints::getWaypoint(CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_TELE_ENTRANCE,vOrigin,4096,m_iTeam));
+		CWaypoint *pWpt = CWaypoints::getWaypoint(CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_TELE_ENTRANCE,vOrigin,4096.0f,m_iTeam));
 
 		if ( pWpt )
 		{
@@ -1814,8 +1813,6 @@ void CBotTF2 :: spawnInit()
 	m_iPrevWeaponSelectFailed = 0;
 
 	m_fCheckNextCarrying = 0.0f;
-
-	
 }
 
 // return true if we don't want to hang around on the point
@@ -3257,7 +3254,6 @@ void CBotTF2::handleWeapons()
 					return; // don't shoot -- i probably want to upgrade sentry
 			}
 		}
-		
 	}
 
 	//
@@ -3864,7 +3860,6 @@ bool CBotTF2 :: setVisible ( edict_t *pEntity, bool bVisible )
 						//m_vLastSeeMedic = CBotGlobals::entityOrigin(pEntity);
 						//m_fLastSeeMedicTime = engine->Time();
 					}
-
 				}
 			}
 		}
@@ -4296,9 +4291,9 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	vOrigin = getOrigin();
 	bNeedAmmo = false;
 	bNeedHealth = false;
-	fResupplyDist = 1;
-	fHealthDist = 1;
-	fAmmoDist = 1;
+	fResupplyDist = 1.0f;
+	fHealthDist = 1.0f;
+	fAmmoDist = 1.0f;
 	bHasFlag = false;
 	fGetFlagUtility = 0.5f;
 	fDefendFlagUtility = 0.5f;
@@ -4361,9 +4356,9 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 
 		failedlist = CWaypointLocations :: resetFailedWaypoints ( failed );
 
-		fResupplyDist = 1;
-		fHealthDist = 1;
-		fAmmoDist = 1;
+		fResupplyDist = 1.0f;
+		fHealthDist = 1.0f;
+		fAmmoDist = 1.0f;
 		
 		// don't go back to resupply if ubered
 		if (!bIsUbered)
@@ -4845,7 +4840,6 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		}
 	}
 
-
 	if ((m_iClass == TF_CLASS_DEMOMAN) && (m_iTrapType == TF_TRAP_TYPE_NONE) && canDeployStickies())
 	{
 		ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_LASTENEMY, m_pLastEnemy &&
@@ -5071,7 +5065,6 @@ bool CBotTF2::lookAfterBuildings ( float *fTime )
 			stopMoving();
 			
 			duck(true); // crouch too
-
 		}
 
 		lookAtEdict(m_pSentryGun);
@@ -5366,8 +5359,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 							fprob = rcbot_tf2_protect_cap_percent.GetFloat();
 					}
 				}
-
-
+				
 				if ( CTeamFortress2Mod::isMapType(TF_MAP_MVM) && CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict) && hasEnemy() )
 				{
 					// move towards enemy if invuln
@@ -5653,7 +5645,6 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 			if ( m_bDispenserVectorValid )
 			{
 				pWaypoint = CWaypoints::getWaypoint(CWaypointLocations::NearestWaypoint(m_vDispenser,150.0f,-1,true,false,true,NULL,false,getTeam(),true,false,Vector(0,0,0),CWaypointTypes::W_FL_SENTRY));
-				
 
 				// no use going back to this waypoint
 				if (pWaypoint && (pWaypoint->getArea() > 0) && (pWaypoint->getArea() != m_iCurrentAttackArea) && (pWaypoint->getArea() != m_iCurrentDefendArea))
@@ -5845,7 +5836,6 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 						pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_SENTRY,getTeam(),0,false,this,true,WPT_SEARCH_AVOID_SENTRIES,m_iLastFailSentryWpt);
 					}
 				}
-				
 				
 				if ( pWaypoint && (pWaypoint->distanceFrom(vSentry) > rcbot_move_dist.GetFloat()) )
 				{
@@ -6213,8 +6203,6 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					if ( pWpt )
 					{
-				
-
 						CFindPathTask *findpath = new CFindPathTask(pEnemy);
 						CBotTask* pipetask = new CBotTF2DemomanPipeEnemy(
 							getWeapons()->getWeapon(CWeapons::getWeapon(TF2_WEAPON_PIPEBOMBS)), vEnemy, pEnemy);
@@ -7009,7 +6997,7 @@ bool CBotTF2 :: upgradeBuilding ( edict_t *pBuilding, bool removesapper )
 	lookAtEdict(pBuilding);
 	m_fLookSetTime = 0;
 	setLookAtTask(LOOK_EDICT);
-	m_fLookSetTime = engine->Time() + randomFloat(3.0,8.0);
+	m_fLookSetTime = engine->Time() + randomFloat(3.0f,8.0f);
 
 	return true;
 }
