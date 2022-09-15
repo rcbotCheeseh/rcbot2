@@ -63,7 +63,7 @@
 
 int CWaypoints::m_iNumWaypoints = 0;
 CWaypoint CWaypoints::m_theWaypoints[CWaypoints::MAX_WAYPOINTS];
-float CWaypoints::m_fNextDrawWaypoints = 0;
+float CWaypoints::m_fNextDrawWaypoints = 0.0f;
 int CWaypoints::m_iWaypointTexture = 0;
 CWaypointVisibilityTable * CWaypoints::m_pVisibilityTable = NULL;
 std::vector<CWaypointType*> CWaypointTypes::m_Types;
@@ -241,7 +241,7 @@ int CWaypointNavigator :: numPaths ( )
 
 bool CWaypointNavigator :: randomDangerPath (Vector *vec)
 {
-	float fMaxDanger = 0;
+	float fMaxDanger = 0.0f;
 	float fBelief;
 	int i;
 	CWaypoint *pNext;
@@ -357,7 +357,7 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBeliefBetweenAreas ( const std::v
 	case 1:return CWaypoints::getWaypoint(goals[0]->getWaypoint());
 	default:
 		{
-			float fBelief = 0;
+			float fBelief = 0.0f;
 			AStarNode *node;
 
 			for (size_t i = 0; i < goals.size(); i++)
@@ -379,7 +379,7 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBeliefBetweenAreas ( const std::v
 
 			const float fSelect = randomFloat(0, fBelief);
 
-			fBelief = 0;
+			fBelief = 0.0f;
 			
 			for (size_t i = 0; i < goals.size(); i++)
 			{
@@ -424,7 +424,7 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBelief ( const std::vector<CWaypo
 	case 1:return goals[0];
 	default:
 		{
-			float fBelief = 0;
+			float fBelief = 0.0f;
 			float bBeliefFactor = 1.0f;
 			for (size_t i = 0; i < goals.size(); i ++ )
 			{
@@ -688,8 +688,7 @@ void CWaypointNavigator :: belief ( Vector vOrigin, Vector vOther, float fBelief
 			//debugoverlay->AddTextOverlayRGB(pWpt->getOrigin(),1,5.0f,255,0,0,200,"Danger INV %0.2f",m_fBelief[iWptIndex]);
 		}
 	}
-
-
+	
 /*
 	i = m_oldRoute.size();
 
@@ -792,8 +791,7 @@ AStarNode *CWaypointNavigator :: nextNode ()
 void CWaypointNavigator :: clearOpenList ()
 {
 	m_theOpenList.destroy();
-
-
+	
 	//for ( unsigned int i = 0; i < m_theOpenList.size(); i ++ )
 	//	m_theOpenList[i]->unOpen();
 
@@ -1140,7 +1138,7 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 	iLoops = 0;
 
 	const int iNumWaypoints = CWaypoints::numWaypoints();
-	float fDistance = 0.0;
+	float fDistance = 0.0f;
 
 	while ( iCurrentNode != -1 && iCurrentNode != m_iCurrentWaypoint && iLoops <= iNumWaypoints )
 	{
@@ -1266,8 +1264,8 @@ void CWaypointNavigator :: updatePosition ()
 	static QAngle aim;
 	static Vector vaim;
 
-	fPrevBelief = 0;
-	fBelief = 0;
+	fPrevBelief = 0.0f;
+	fBelief = 0.0f;
 
 	if ( m_iCurrentWaypoint == -1 ) // invalid
 	{
@@ -1322,9 +1320,7 @@ void CWaypointNavigator :: updatePosition ()
 			}
 
 			m_bOffsetApplied = false;
-
 			m_bDangerPoint = false;
-
 
 			if ( m_currentRoute.empty() ) // reached goal!!
 			{
@@ -1938,14 +1934,14 @@ void CWaypoint :: init ()
 	setAim(0);
 	m_thePaths.clear();
 	m_iArea = 0;
-	m_fRadius = 0;	
+	m_fRadius = 0.0f;	
 	m_bUsed = true;
-	m_fNextCheckGroundTime = 0;
+	m_fNextCheckGroundTime = 0.0f;
 	m_bHasGround = false;
-	m_fRadius = 0;
+	m_fRadius = 0.0f;
 	m_OpensLaterInfo.clear();
 	m_bIsReachable = true; 
-	m_fCheckReachableTime = 0;
+	m_fCheckReachableTime = 0.0f;
 }
 
 void CWaypoint :: save (std::fstream &bfp )
@@ -2165,7 +2161,7 @@ int CWaypoints::getClosestFlagged(int iFlags, const Vector& vOrigin, int iTeam, 
 {
 	const int size = numWaypoints();
 
-	float fDist = 8192.0;
+	float fDist = 8192.0f;
 	float distance;
 	int iwpt = -1;
 	const int iFrom = CWaypointLocations::NearestWaypoint(vOrigin,fDist,-1,true,false,true,NULL,false,iTeam);
@@ -2256,7 +2252,7 @@ int CWaypoints :: addWaypoint ( CClient *pClient, const char *type1, const char 
 	int iArea;
 	const Vector vWptOrigin = pClient->getOrigin();
 	const QAngle playerAngles = CBotGlobals::playerAngles (pClient->getPlayer());
-	float fMaxDistance = 0.0; // distance for auto type
+	float fMaxDistance = 0.0f; // distance for auto type
 
 	CBotMod *pCurrentMod = CBotGlobals::getCurrentMod();
 
@@ -2301,9 +2297,7 @@ int CWaypoints :: addWaypoint ( CClient *pClient, const char *type1, const char 
 
 				}
 			}
-
 		}
-
 	}
 
 	const int iPrevFlags = iFlags; // to detect change
@@ -3155,7 +3149,7 @@ void CWaypointTypes :: setup ()
 	addType(new CWaypointType(W_FL_SPRINT,"sprint","bots will sprint here",WptColor(255,255,190),((1<<MOD_DOD)|(1<<MOD_HLDM2)|(1<<MOD_SYNERGY))));
 	addType(new CWaypointType(W_FL_TELEPORT_CHEAT,"teleport","bots will teleport to the next waypoint (cheat)",WptColor(255,255,255)));
 	addType(new CWaypointType(W_FL_OWNER_ONLY,"owneronly","only bot teams who own the area of the waypoint can use it",WptColor(0,150,150)));
-	addType(new CWaypointType(W_FL_USE,"use","Bots will try to use a button or door here.",WptColor(255,170,0))); //TODO: appears to flag RocketJump also
+	addType(new CWaypointType(W_FL_USE,"use","Bots will try to use a button or door here.",WptColor(255,170,0)));
 	
 	// Synergy waypoint types
 	addType(new CWaypointType(W_FL_GOAL,"goal","Bots will try to reach this waypoint.",WptColor(100,255,50),(1<<MOD_SYNERGY)));
