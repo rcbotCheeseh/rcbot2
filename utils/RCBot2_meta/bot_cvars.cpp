@@ -25,7 +25,7 @@ ConVar bot_stop("rcbot_stop", "0", 0, "Make bots stop thinking!");
 ConVar bot_waypointpathdist("rcbot_wpt_pathdist", "400", 0, "Length for waypoints to automatically add paths at");
 
 ConVar bot_rj("rcbot_rj", "0.01", 0, "time for soldier to fire rocket after jumping");
-ConVar bot_defrate("rcbot_defrate", "0.24", 0, "rate for bots to defend"); //Not referenced properly? [APG]RoboCop[CL]
+ConVar bot_defrate("rcbot_defrate", "0.20", 0, "rate for bots to defend"); //Not referenced properly? [APG]RoboCop[CL]
 ConVar bot_beliefmulti("rcbot_beliefmulti", "20.0", 0, "multiplier for increasing bot belief"); //Not referenced properly? [APG]RoboCop[CL]
 ConVar bot_belief_fade("rcbot_belief_fade", "0.75", 0, "the multiplayer rate bot belief decreases");
 ConVar bot_change_class("rcbot_change_classes", "0", 0, "bots change classes at random intervals");
