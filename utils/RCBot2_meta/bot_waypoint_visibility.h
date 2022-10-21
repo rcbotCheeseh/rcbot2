@@ -77,9 +77,9 @@ public:
 		memset(m_VisTable,0,iSize);
 	}
 
-	bool SaveToFile ();
+	bool SaveToFile () const;
 
-	bool ReadFromFile ( int numwaypoints );
+	bool ReadFromFile ( int numwaypoints ) const;
 
 	void workVisibilityForWaypoint ( int i, int iNumWaypoints, bool bTwoway = false );
 
