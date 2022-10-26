@@ -518,10 +518,10 @@ bool CTeamFortress2Mod ::isBoss ( edict_t *pEntity, float *fFactor )
 	{
 		if ( m_pBoss.get() && CBotGlobals::entityIsAlive(m_pBoss.get()) )
 			return m_pBoss.get() == pEntity;
-		else if ( strcmp(pEntity->GetClassName(),"merasmus")==0||
+		if ( strcmp(pEntity->GetClassName(),"merasmus")==0||
 			strcmp(pEntity->GetClassName(),"headless_hatman")==0||
 			strcmp(pEntity->GetClassName(),"eyeball_boss")==0||
-			strcmp(pEntity->GetClassName(),"tf_zombie")==0 )
+			strcmp(pEntity->GetClassName(),"tf_zombie")==0 ) //TODO: Allow bots to target skeletons!
 		{
 			m_pBoss = pEntity;
 			return true;
@@ -532,7 +532,7 @@ bool CTeamFortress2Mod ::isBoss ( edict_t *pEntity, float *fFactor )
 		if ( m_pBoss.get() == pEntity )
 			return true;
 		// for plr_hightower_event summon event is not called! Boo tf2!!!
-		else if (strcmp(pEntity->GetClassName(),"tf_zombie")==0)
+		if (strcmp(pEntity->GetClassName(),"tf_zombie")==0)
 		{
 			m_pBoss = pEntity;
 			return true;
@@ -542,7 +542,7 @@ bool CTeamFortress2Mod ::isBoss ( edict_t *pEntity, float *fFactor )
 	{
 		if ( m_pBoss.get() == pEntity )
 			return true;
-		else if (isTankBoss(pEntity))
+		if (isTankBoss(pEntity))
 		{
 			if (fFactor != NULL)
 				*fFactor = 200.0f;
