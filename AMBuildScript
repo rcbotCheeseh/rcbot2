@@ -6,7 +6,6 @@ proj_c_flags = [
 ]
 proj_c_flags_opt = [
   '-O2',
-  '-funroll-loops',
   '-pipe',
 ]
 proj_c_flags_dbg = [
