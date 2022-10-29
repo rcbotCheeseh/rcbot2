@@ -104,6 +104,7 @@ SourceMod and AMBuild support - nosoop
 
 Synergy and CSS support - Anonymous Player/caxanga334
 
+TF2 Classic support - Technochips
 
 ## Waypointers:-
 
