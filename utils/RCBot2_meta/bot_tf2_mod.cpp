@@ -527,18 +527,19 @@ bool CTeamFortress2Mod ::isBoss ( edict_t *pEntity, float *fFactor )
 			return true;
 		}
 	}
-	else if ( CTeamFortress2Mod::isMapType(TF_MAP_CARTRACE) || CTeamFortress2Mod::isMapType(TF_MAP_CART) )
+	else if (isMapType(TF_MAP_CARTRACE) || isMapType(TF_MAP_CART) || isMapType(TF_MAP_KOTH) || 
+		isMapType(TF_MAP_CP) ||	isMapType(TF_MAP_PD) || isMapType(TF_MAP_ARENA))
 	{
 		if ( m_pBoss.get() == pEntity )
 			return true;
-		// for plr_hightower_event summon event is not called! Boo tf2!!!
+		// for bots to target skeletons [APG]RoboCop[CL]
 		if (strcmp(pEntity->GetClassName(),"tf_zombie")==0)
 		{
 			m_pBoss = pEntity;
 			return true;
 		}
 	}
-	else if ( CTeamFortress2Mod::isMapType(TF_MAP_MVM) )
+	else if (isMapType(TF_MAP_MVM) )
 	{
 		if ( m_pBoss.get() == pEntity )
 			return true;
