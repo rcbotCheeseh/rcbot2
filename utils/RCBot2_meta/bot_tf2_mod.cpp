@@ -521,13 +521,13 @@ bool CTeamFortress2Mod ::isBoss ( edict_t *pEntity, float *fFactor )
 		if ( strcmp(pEntity->GetClassName(),"merasmus")==0||
 			strcmp(pEntity->GetClassName(),"headless_hatman")==0||
 			strcmp(pEntity->GetClassName(),"eyeball_boss")==0||
-			strcmp(pEntity->GetClassName(),"tf_zombie")==0 ) //TODO: Allow bots to target skeletons!
+			strcmp(pEntity->GetClassName(),"tf_zombie")==0 )
 		{
 			m_pBoss = pEntity;
 			return true;
 		}
 	}
-	else if ( CTeamFortress2Mod::isMapType(TF_MAP_CARTRACE) )
+	else if ( CTeamFortress2Mod::isMapType(TF_MAP_CARTRACE) || CTeamFortress2Mod::isMapType(TF_MAP_CART) )
 	{
 		if ( m_pBoss.get() == pEntity )
 			return true;
