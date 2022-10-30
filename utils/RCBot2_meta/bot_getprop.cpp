@@ -18,14 +18,14 @@ void UTIL_FindServerClassnamePrint(const char *name_cmd)
 	for (int i = 0; i < gpGlobals->maxEntities; i++)
 	{
 		edict_t* current = engine->PEntityOfEntIndex(i);
-		if (current == NULL)
+		if (current == nullptr)
 		{
 			continue;
 		}
 
 		IServerNetworkable *network = current->GetNetworkable();
 
-		if (network == NULL)
+		if (network == nullptr)
 		{
 			continue;
 		}
@@ -36,12 +36,12 @@ void UTIL_FindServerClassnamePrint(const char *name_cmd)
 
 		if (strcmp(name, name_cmd) == 0)
 		{
-			CBotGlobals::botMessage(NULL,0,"%s",current->GetClassName());
+			CBotGlobals::botMessage(nullptr,0,"%s",current->GetClassName());
 			return;
 		}
 	}
 
-	CBotGlobals::botMessage(NULL,0,"Not found");
+	CBotGlobals::botMessage(nullptr,0,"Not found");
 }
 
 
@@ -64,9 +64,9 @@ void UTIL_FindServerClassPrint(const char *name_cmd)
 
 		__strlow(temp);
 
-		if (strstr(temp,name) != NULL )
+		if (strstr(temp,name) != nullptr)
 		{
-			CBotGlobals::botMessage(NULL,0,"%s",pClass->m_pNetworkName);
+			CBotGlobals::botMessage(nullptr,0,"%s",pClass->m_pNetworkName);
 			//break;
 		}
 		pClass = pClass->m_pNext;
@@ -91,7 +91,7 @@ ServerClass *UTIL_FindServerClass(const char *name)
 		pClass = pClass->m_pNext;
 	}
 
-	return NULL;
+	return nullptr;
 	
 }
 
@@ -120,14 +120,14 @@ SendProp *UTIL_FindSendProp(SendTable *pTable, const char *name)
 		}
 		if (pProp->GetDataTable())
 		{
-			if ((pProp=UTIL_FindSendProp(pProp->GetDataTable(), name)) != NULL)
+			if ((pProp=UTIL_FindSendProp(pProp->GetDataTable(), name)) != nullptr)
 			{
 				return pProp;
 			}
 		}
 	}
  
-	return NULL;
+	return nullptr;
 }
 /**
  * vim: set ts=4 :
@@ -241,21 +241,21 @@ edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict )
 
 
 	if (m_berror)
-		return NULL;
+		return nullptr;
 
 	hndl = (CBaseHandle *)m_data; 
 
 	if ( hndl )
 		return INDEXENT(hndl->GetEntryIndex());
 
-	return NULL;
+	return nullptr;
 }
 
 void CClassInterfaceValue :: init (const char* key, const char* value, unsigned preoffset)
 {
 	m_class = CStrings::getString(key);
 	m_value = CStrings::getString(value);
-	m_data = NULL;
+	m_data = nullptr;
 	m_preoffset = preoffset;
 	m_offset = 0;
 }
@@ -276,7 +276,7 @@ void UTIL_FindPropPrint(const char *prop_name)
 
 			if ( offset != 0 )
 			{
-				CBotGlobals::botMessage(NULL,0,"found in %s : offset %d",pClass->m_pNetworkName, offset);
+				CBotGlobals::botMessage(nullptr,0,"found in %s : offset %d",pClass->m_pNetworkName, offset);
 				//break;
 			}
 			pClass = pClass->m_pNext;
@@ -329,7 +329,7 @@ unsigned int UTIL_FindInDataMap(datamap_t* pMap, const char* name)
 	{
 		for (int i = 0; i < pMap->dataNumFields; i++)
 		{
-			if (pMap->dataDesc[i].fieldName == NULL)
+			if (pMap->dataDesc[i].fieldName == nullptr)
 			{
 				continue;
 			}
@@ -386,7 +386,7 @@ datamap_t* CBaseEntity_GetDataDescMap(CBaseEntity* pEntity)
 
 	if (offset == -1)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	return VGetDataDescMap(pEntity, offset);
@@ -633,9 +633,9 @@ bool CClassInterface :: getTF2ObjectiveResource ( CTFObjectiveResource *pResourc
 
 void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 {
-	if (!m_offset || edict==NULL)
+	if (!m_offset || edict== nullptr)
 	{
-		m_data = NULL;
+		m_data = nullptr;
 		m_berror = true;
 		return;
 	}
@@ -650,7 +650,7 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 
 		if (!pUnknown)
 		{
-			m_data = NULL;
+			m_data = nullptr;
 			m_berror = true;
 			return;
 		}
@@ -669,7 +669,7 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 
 edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char *classname, float fMindist, edict_t *pOwner)
 {
-	edict_t *pfound = NULL;
+	edict_t *pfound = nullptr;
 	// speed up loop by by using smaller ints in register
 	const auto max = static_cast<short>(gpGlobals->maxEntities);
 
@@ -677,13 +677,13 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 	{
 		edict_t* current = engine->PEntityOfEntIndex(i);
 
-		if (current == NULL)
+		if (current == nullptr)
 			continue;
 
 		if ( current->IsFree() )
 			continue;
 
-		if ( pOwner != NULL )
+		if ( pOwner != nullptr)
 		{
 			if ( getOwner(current) != pOwner )
 				continue;
@@ -708,24 +708,24 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 
 edict_t *CClassInterface::FindEntityByNetClassNearest(Vector vstart, const char *classname)
 {
-	edict_t *pfound = NULL;
+	edict_t *pfound = nullptr;
 	float fMindist = 8192.0f;
 
 	for (int i = 0; i < gpGlobals->maxEntities; i++)
 	{
 		edict_t* current = engine->PEntityOfEntIndex(i);
-		if (current == NULL)
+		if (current == nullptr)
 		{
 			continue;
 		}
 		if ( current->IsFree() )
 			continue;
-		if ( current->GetUnknown() == NULL )
+		if ( current->GetUnknown() == nullptr)
 			continue;
 		
 		IServerNetworkable *network = current->GetNetworkable();
 
-		if (network == NULL)
+		if (network == nullptr)
 		{
 			continue;
 		}
@@ -753,14 +753,14 @@ const char *CClassInterface::FindEntityNetClass(int start, const char *classname
 	for (int i = start != -1 ? start : 0; i < gpGlobals->maxEntities; i++)
 	{
 		edict_t* current = engine->PEntityOfEntIndex(i);
-		if (current == NULL)
+		if (current == nullptr)
 		{
 			continue;
 		}
 
 		IServerNetworkable *network = current->GetNetworkable();
 
-		if (network == NULL)
+		if (network == nullptr)
 		{
 			continue;
 		}
@@ -774,7 +774,7 @@ const char *CClassInterface::FindEntityNetClass(int start, const char *classname
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 // http://svn.alliedmods.net/viewvc.cgi/trunk/extensions/tf2/extension.cpp?revision=2183&root=sourcemod&pathrev=2183
 edict_t *CClassInterface::FindEntityByNetClass(int start, const char *classname)
@@ -782,14 +782,14 @@ edict_t *CClassInterface::FindEntityByNetClass(int start, const char *classname)
 	for (int i = start != -1 ? start : 0; i < gpGlobals->maxEntities; i++)
 	{
 		edict_t* current = engine->PEntityOfEntIndex(i);
-		if (current == NULL)
+		if (current == nullptr)
 		{
 			continue;
 		}
 
 		IServerNetworkable *network = current->GetNetworkable();
 
-		if (network == NULL)
+		if (network == nullptr)
 		{
 			continue;
 		}
@@ -804,7 +804,7 @@ edict_t *CClassInterface::FindEntityByNetClass(int start, const char *classname)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 

@@ -77,7 +77,7 @@ CRCBotKeyValueList :: ~CRCBotKeyValueList()
 	for ( unsigned int i = 0; i < m_KVs.size(); i ++ )
 	{
 		delete m_KVs[i];
-		m_KVs[i] = NULL;
+		m_KVs[i] = nullptr;
 	}
 
 	m_KVs.clear();
@@ -91,7 +91,7 @@ CRCBotKeyValue *CRCBotKeyValueList :: getKV ( const char *key )
 			return m_KVs[i];
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool CRCBotKeyValueList :: getFloat ( const char *key, float *val )

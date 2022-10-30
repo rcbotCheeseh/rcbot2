@@ -48,7 +48,7 @@ public:
 	{
 		//m_pActivator = NULL;
 		m_iEventId = -1;
-		m_szType = NULL;
+		m_szType = nullptr;
 		m_iModId = MOD_ANY;
 	}
 
@@ -706,9 +706,9 @@ typedef enum
 class IBotEventInterface
 {
 public:
-	virtual float getFloat ( const char *keyName = 0, float defaultValue = 0 ) = 0;
-	virtual int getInt ( const char *keyName = 0, int defaultValue = 0 ) = 0;
-	virtual const char *getString ( const char *keyName = 0, const char *defaultValue = 0 ) = 0;
+	virtual float getFloat ( const char *keyName = nullptr, float defaultValue = 0 ) = 0;
+	virtual int getInt ( const char *keyName = nullptr, int defaultValue = 0 ) = 0;
+	virtual const char *getString ( const char *keyName = nullptr, const char *defaultValue = nullptr ) = 0;
 	virtual const char *getName () = 0;
 	virtual void setInt ( const char *keyName, int value ) = 0;
 };
@@ -721,11 +721,11 @@ public:
 		m_pEvent = pEvent;
 	}
 
-	float getFloat ( const char *keyName = 0, float defaultValue = 0 ) override
+	float getFloat ( const char *keyName = nullptr, float defaultValue = 0 ) override
 	{
 		return m_pEvent->GetFloat(keyName,defaultValue);
 	}
-	int getInt ( const char *keyName = 0, int defaultValue = 0 ) override
+	int getInt ( const char *keyName = nullptr, int defaultValue = 0 ) override
 	{
 		return m_pEvent->GetInt(keyName,defaultValue);
 	}
@@ -733,7 +733,7 @@ public:
 	{
 		m_pEvent->SetInt(keyName,value);
 	}
-	const char *getString ( const char *keyName = 0, const char *defaultValue = 0 ) override
+	const char *getString ( const char *keyName = nullptr, const char *defaultValue = nullptr ) override
 	{
 		return m_pEvent->GetString(keyName,defaultValue);
 	}
@@ -754,11 +754,11 @@ public:
 		m_pEvent = pEvent;
 	}
 
-	float getFloat ( const char *keyName = 0, float defaultValue = 0 ) override
+	float getFloat ( const char *keyName = nullptr, float defaultValue = 0 ) override
 	{
 		return m_pEvent->GetFloat(keyName,defaultValue);
 	}
-	int getInt ( const char *keyName = 0, int defaultValue = 0 ) override
+	int getInt ( const char *keyName = nullptr, int defaultValue = 0 ) override
 	{
 		return m_pEvent->GetInt(keyName,defaultValue);
 	}
@@ -766,7 +766,7 @@ public:
 	{
 		m_pEvent->SetInt(keyName,value);
 	}
-	const char *getString ( const char *keyName = 0, const char *defaultValue = 0 ) override
+	const char *getString ( const char *keyName = nullptr, const char *defaultValue = nullptr ) override
 	{
 		return m_pEvent->GetString(keyName,defaultValue);
 	}

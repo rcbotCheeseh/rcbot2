@@ -45,11 +45,11 @@
 #include "bot_waypoint_locations.h"
 #include "bot_perceptron.h"
 
-edict_t *CDODMod::m_pResourceEntity = NULL;
+edict_t *CDODMod::m_pResourceEntity = nullptr;
 CDODFlags CDODMod::m_Flags;
-edict_t * CDODMod::m_pPlayerResourceEntity = NULL;
+edict_t * CDODMod::m_pPlayerResourceEntity = nullptr;
 float CDODMod::m_fMapStartTime = 0.0f;
-edict_t * CDODMod::m_pGameRules = NULL;
+edict_t * CDODMod::m_pGameRules = nullptr;
 int CDODMod::m_iMapType = 0;
 bool CDODMod::m_bCommunalBombPoint = false;
 int CDODMod::m_iBombAreaAllies = 0;
@@ -121,7 +121,7 @@ bool CDODMod :: shouldAttack ( int iTeam )
 void CDODMod :: initMod ()
 {
 ///-------------------------------------------------
-	CBotGlobals::botMessage(NULL,0,"Training DOD:S capture decision 'NN' ... hold on...");
+	CBotGlobals::botMessage(nullptr,0,"Training DOD:S capture decision 'NN' ... hold on...");
 
 	CBotNeuralNet *nn = new CBotNeuralNet(2,2,2,1,0.4f);
 
@@ -168,25 +168,25 @@ void CDODMod :: initMod ()
 	delete tset;
 	delete nn;
 
-	CBotGlobals::botMessage(NULL,0,"... done!");
+	CBotGlobals::botMessage(nullptr,0,"... done!");
 ///-------------------------------------------------
 
-	CWeapons::loadWeapons(m_szWeaponListName == NULL ? "DOD" : m_szWeaponListName, DODWeaps);
+	CWeapons::loadWeapons(m_szWeaponListName == nullptr ? "DOD" : m_szWeaponListName, DODWeaps);
 	//CWeapons::loadWeapons("DOD", DODWeaps);
 	/*
 	for ( i = 0; i < DOD_WEAPON_MAX; i ++ )
 		CWeapons::addWeapon(new CWeapon(DODWeaps[i]));*/
 
-	m_pResourceEntity = NULL;
+	m_pResourceEntity = nullptr;
 }
 
 void CDODMod :: mapInit ()
 {
 	CBotMod::mapInit();
 
-	m_pResourceEntity = NULL;
-	m_pGameRules = NULL;
-	m_pPlayerResourceEntity = NULL;
+	m_pResourceEntity = nullptr;
+	m_pGameRules = nullptr;
+	m_pPlayerResourceEntity = nullptr;
 	m_Flags.init();
 	m_fMapStartTime = engine->Time();
 	m_iMapType = DOD_MAPTYPE_UNKNOWN;
@@ -228,7 +228,7 @@ int CDODMod::getHighestScore ()
 
 bool CDODFlags::isTeamMateDefusing ( edict_t *pIgnore, int iTeam, int id )
 {
-	if ( m_pBombs[id][0] != NULL )
+	if ( m_pBombs[id][0] != nullptr)
 		return isTeamMateDefusing(pIgnore,iTeam,CBotGlobals::entityOrigin(m_pBombs[id][0]));
 
 	return false;
@@ -334,7 +334,7 @@ bool CDODFlags::getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
-			if ( m_pFlags[i] == NULL || m_iOwner[i] == iTeam )
+			if ( m_pFlags[i] == nullptr || m_iOwner[i] == iTeam )
 				continue;
 
 			if ( iTeam == TEAM_ALLIES && m_iAlliesReqCappers[i] == 0 )
@@ -360,7 +360,7 @@ bool CDODFlags::getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
-			if ( m_pFlags[i] == NULL || m_iOwner[i] == iTeam )
+			if ( m_pFlags[i] == nullptr || m_iOwner[i] == iTeam )
 				continue;
 
 			if ( iTeam == TEAM_ALLIES && m_iAlliesReqCappers[i] == 0 )
@@ -397,7 +397,7 @@ bool CDODFlags::getRandomBombToDefuse  ( Vector *position, int iTeam, edict_t **
 	// more possibility to return bomb targets with no bomb already
 	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
-		if ( m_iOwner[i] == iTeam && isBombPlanted(i) && !isBombBeingDefused(i) && m_pBombs[i][0] != NULL )
+		if ( m_iOwner[i] == iTeam && isBombPlanted(i) && !isBombBeingDefused(i) && m_pBombs[i][0] != nullptr)
 			for ( int j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.emplace_back(i); }
 	}
 
@@ -405,7 +405,7 @@ bool CDODFlags::getRandomBombToDefuse  ( Vector *position, int iTeam, edict_t **
 	{
 		const int selection = iPossible[randomInt(0, iPossible.size() - 1)];
 
-		if ( m_pBombs[selection][1] != NULL )
+		if ( m_pBombs[selection][1] != nullptr)
 		{
 			if ( CClassInterface::getDODBombState(m_pBombs[selection][1]) == DOD_BOMB_STATE_ACTIVE )
 				*pBombTarget = m_pBombs[selection][1];
@@ -435,7 +435,7 @@ bool CDODFlags:: getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam
 	// more possibility to return bomb targets with no bomb already
 	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
-		if ( m_iOwner[i] != iTeam && isBombPlanted(i) && m_pBombs[i][0] != NULL )
+		if ( m_iOwner[i] != iTeam && isBombPlanted(i) && m_pBombs[i][0] != nullptr)
 			for ( int j = 0; j < getNumBombsRequired(i); j ++ ) { iPossible.emplace_back(i); }
 	}
 
@@ -443,7 +443,7 @@ bool CDODFlags:: getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam
 	{
 		const int selection = iPossible[randomInt(0, iPossible.size() - 1)];
 
-		if ( m_pBombs[selection][1] != NULL )
+		if ( m_pBombs[selection][1] != nullptr)
 		{
 			if ( CClassInterface::getDODBombState(m_pBombs[selection][1]) != 0 )
 				*pBombTarget = m_pBombs[selection][1];
@@ -477,7 +477,7 @@ bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam,
 		// if no waypoint -- can't go there
 		if ( m_iWaypoint[i] != -1 )
 		{
-			if ( m_pBombs[i][0] == NULL || m_iOwner[i] == iTeam || isBombPlanted(i) || m_iBombsRemaining[i] == 0 )
+			if ( m_pBombs[i][0] == nullptr || m_iOwner[i] == iTeam || isBombPlanted(i) || m_iBombsRemaining[i] == 0 )
 				continue;
 
 			fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * getNumBombsRemaining(i);
@@ -495,7 +495,7 @@ bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam,
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
-			if ( m_pBombs[i][0] == NULL || m_iOwner[i] == iTeam || isBombPlanted(i) )
+			if ( m_pBombs[i][0] == nullptr || m_iOwner[i] == iTeam || isBombPlanted(i) )
 				continue;
 
 				fTotal += (MAX_BELIEF + 1.0f - pNav->getBelief(m_iWaypoint[i])) / MAX_BELIEF * getNumBombsRemaining(i);
@@ -507,7 +507,7 @@ bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam,
 		{
 			const int selection = i;
 
-			if ( m_pBombs[selection][1] != NULL )
+			if ( m_pBombs[selection][1] != nullptr)
 			{
 				if ( CClassInterface::getDODBombState(m_pBombs[selection][1]) == DOD_BOMB_STATE_AVAILABLE )
 					*pBombTarget = m_pBombs[selection][1];
@@ -543,7 +543,7 @@ bool CDODFlags::getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int 
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
-			if ( m_pFlags[i] == NULL || m_iOwner[i] != iTeam )
+			if ( m_pFlags[i] == nullptr || m_iOwner[i] != iTeam )
 				continue;
 
 			if ( iTeam == TEAM_AXIS )
@@ -563,7 +563,7 @@ bool CDODFlags::getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int 
 	{
 		if ( m_iWaypoint[i] != -1 )
 		{
-			if ( m_pFlags[i] == NULL || m_iOwner[i] != iTeam )
+			if ( m_pFlags[i] == nullptr || m_iOwner[i] != iTeam )
 				continue;
 
 			if ( iTeam == TEAM_AXIS )
@@ -629,7 +629,7 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 		short int i = gpGlobals->maxClients;
 
 		// find visible flags -- with a model
-		while ( ++i < gpGlobals->maxEntities &&  m_pFlags[j] == NULL )
+		while ( ++i < gpGlobals->maxEntities &&  m_pFlags[j] == nullptr)
 		{
 			pent = INDEXENT(i);
 
@@ -662,7 +662,7 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 		}
 
 		// no flag for this point
-		if ( m_pFlags[j] == NULL ) 
+		if ( m_pFlags[j] == nullptr) 
 			continue;
 
 		// don't need to check for bombs
@@ -672,7 +672,7 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 		// find bombs near flag
 		i = gpGlobals->maxClients;
 
-		while ( ++i < gpGlobals->maxEntities && (m_pBombs[j][0]==NULL||m_pBombs[j][1]==NULL) )
+		while ( ++i < gpGlobals->maxEntities && (m_pBombs[j][0]== nullptr ||m_pBombs[j][1]== nullptr) )
 		{
 			pent = INDEXENT(i);
 
@@ -685,7 +685,7 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 
 				if ( (vOrigin - m_vCPPositions[j]).Length() < 400.0f )
 				{
-					if ( m_pBombs[j][0] == NULL )
+					if ( m_pBombs[j][0] == nullptr)
 					{
 						m_pBombs[j][0] = pent;						
 					}
@@ -704,7 +704,7 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 		{
 			// get any nearby waypoint so the bot knows which waypoint to get danger from
 			// look for the nearest waypoint which is a cap point
-			m_iWaypoint[i] = CWaypointLocations::NearestWaypoint(m_vCPPositions[i],400.0f,-1,false,false,false,0,false,0,false,false,Vector(0,0,0),CWaypointTypes::W_FL_CAPPOINT );
+			m_iWaypoint[i] = CWaypointLocations::NearestWaypoint(m_vCPPositions[i],400.0f,-1,false,false,false,nullptr,false,0,false,false,Vector(0,0,0),CWaypointTypes::W_FL_CAPPOINT );
 
 			// still no waypoint, search for any capture waypoint with the same area
 			if ( m_iWaypoint[i] == -1 )
@@ -720,11 +720,11 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 	// sometimes m_iNumControlPoints is larger than it  should be. check the number of flags and bombs we found on the map
 	for ( int i = 0; i < m_iNumControlPoints; i ++ )
 	{
-		if ( m_pFlags[i] != NULL )
+		if ( m_pFlags[i] != nullptr)
 			iNumFlags++;
-		if ( m_pBombs[i][0] != NULL )
+		if ( m_pBombs[i][0] != nullptr)
 			iNumBombCaps++;
-		if ( m_pBombs[i][1] != NULL )
+		if ( m_pBombs[i][1] != nullptr)
 			iNumBombCaps++;
 	}
 
@@ -757,7 +757,7 @@ edict_t *CDODMod :: getBreakable ( CWaypoint *pWpt )
 			return m_BreakableWaypoints[i].pEdict;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 edict_t *CDODMod :: getBombTarget ( CWaypoint *pWpt )
@@ -770,7 +770,7 @@ edict_t *CDODMod :: getBombTarget ( CWaypoint *pWpt )
 			return m_BombWaypoints[i].pEdict;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void CDODMod ::roundStart()
@@ -787,7 +787,7 @@ void CDODMod ::roundStart()
 
 	//if ( m_iMapType == DOD_MAPTYPE_UNKNOWN )
 	//{
-		if ( CClassInterface::FindEntityByNetClass(gpGlobals->maxClients+1,"CDODBombDispenserMapIcon") != NULL )
+		if ( CClassInterface::FindEntityByNetClass(gpGlobals->maxClients+1,"CDODBombDispenserMapIcon") != nullptr)
 		{
 			// add bitmask
 			m_iMapType |= DOD_MAPTYPE_BOMB;

@@ -151,7 +151,7 @@ class CBotExitMenuItem : public CBotMenuItem
 
 	void activate ( CClient *pClient ) override
 	{
-		pClient->setCurrentMenu(NULL);
+		pClient->setCurrentMenu(nullptr);
 	}
 };
 
@@ -194,7 +194,7 @@ private:
 class CWaypointFlagMenu : public CBotMenu
 {
 public:
-	CWaypointFlagMenu (CBotMenu *pParent);
+	CWaypointFlagMenu (CBotMenu *pParent); //TODO: should be defined properly? [APG]RoboCop[CL]
 	//CWaypointFlagMenu ( int iShow );
 	const char *getCaption(CClient *pClient,WptColor &color ) override;
 };
@@ -376,7 +376,7 @@ public:
 		CBotMenu::addMenuItem(new CWaypointEditMenu(this));
 		CBotMenu::addMenuItem(new CPathWaypointMenu(this));
 		CBotMenu::addMenuItem(new CWaypointFlagShowMenu(this));
-		CBotMenu::addMenuItem(new CBotGotoMenuItem("Exit",NULL));
+		CBotMenu::addMenuItem(new CBotGotoMenuItem("Exit", nullptr));
 	}
 
 	//CWaypointFlagMenu ( int iShow );

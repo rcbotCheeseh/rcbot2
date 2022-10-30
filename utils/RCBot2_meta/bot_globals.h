@@ -83,7 +83,7 @@ public:
 	// just open file but also make folders if possible
 	static std::fstream openFile (const char *szFile, std::ios_base::openmode mode);
 	// get the proper location
-	static void buildFileName ( char *szOutput, const char *szFile, const char *szFolder = NULL, const char *szExtension = NULL, bool bModDependent = false );
+	static void buildFileName ( char *szOutput, const char *szFile, const char *szFolder = nullptr, const char *szExtension = nullptr, bool bModDependent = false );
 	// add a directory delimiter to the string like '/' (linux) or '\\' (windows) or
 	static void addDirectoryDelimiter ( char *szString );
 	// print a message to client pEntity with bot formatting
@@ -105,7 +105,7 @@ public:
 
 	static bool entityIsValid ( edict_t *pEntity )
 	{
-		return pEntity && !pEntity->IsFree() && pEntity->GetNetworkable() != NULL && pEntity->GetIServerEntity() != NULL && pEntity->m_NetworkSerialNumber != 0;	
+		return pEntity && !pEntity->IsFree() && pEntity->GetNetworkable() != nullptr && pEntity->GetIServerEntity() != nullptr && pEntity->m_NetworkSerialNumber != 0;	
 	}
 
 	static void serverSay ( char *fmt, ... );
@@ -150,7 +150,7 @@ public:
 		const Vector &amins, const Vector &amaxs,
 		const Vector &bmins, const Vector &bmaxs );
 
-	static float grenadeWillLand (  Vector vOrigin, Vector vEnemy, float fProjSpeed = 400.0f, float fGrenadePrimeTime = 5.0f, float *fAngle = NULL );
+	static float grenadeWillLand (  Vector vOrigin, Vector vEnemy, float fProjSpeed = 400.0f, float fGrenadePrimeTime = 5.0f, float *fAngle = nullptr);
 	////////////////////////////////////////////////////////////////////////
 
 	/*static Vector forwardVec ();
@@ -158,7 +158,7 @@ public:
 	static Vector upVec ();*/
 	////////
 	static trace_t *getTraceResult () { return &m_TraceResult; }
-	static bool isVisibleHitAllExceptPlayer ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest = NULL );
+	static bool isVisibleHitAllExceptPlayer ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest = nullptr);
 	static bool isVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest);
 	static bool isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest);
 	static bool isShotVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest );
@@ -174,7 +174,7 @@ public:
 	static int getTeam ( edict_t *pEntity );
 	static bool entityIsAlive ( edict_t *pEntity );
 	static bool isBrushEntity( edict_t *pEntity );
-	static int countTeamMatesNearOrigin ( Vector vOrigin, float fRange, int iTeam, edict_t *pIgnore = NULL );
+	static int countTeamMatesNearOrigin ( Vector vOrigin, float fRange, int iTeam, edict_t *pIgnore = nullptr);
 	static int numClients ();
 	static void levelInit();
 

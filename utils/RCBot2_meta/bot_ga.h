@@ -85,7 +85,7 @@ public:
 
 private:
 	std::vector<IIndividual*> m_theIndividuals;
-	CGA * m_ga = NULL;
+	CGA * m_ga = nullptr;
 };
 
 // selection function interface

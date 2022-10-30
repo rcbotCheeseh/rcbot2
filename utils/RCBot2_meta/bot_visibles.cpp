@@ -91,7 +91,7 @@ void CFindEnemyFunc :: setOldEnemy ( edict_t *pEntity )
 
 void CFindEnemyFunc :: init ()
 {
-	m_pBest = NULL;
+	m_pBest = nullptr;
 	m_fBestFactor = 0;
 }
 
@@ -108,9 +108,9 @@ CBotVisibles :: CBotVisibles ( CBot *pBot )
 
 CBotVisibles :: ~CBotVisibles () 
 {
-	m_pBot = NULL;
+	m_pBot = nullptr;
 	delete[] m_iIndicesVisible;
-	m_iIndicesVisible = NULL;
+	m_iIndicesVisible = nullptr;
 }
 
 void CBotVisibles :: eachVisible ( CVisibleFunc *pFunc )

@@ -190,7 +190,7 @@ public:
 			delete[] batches;
 		}
 
-		batches = NULL;
+		batches = nullptr;
 	}
 
 	void init ()
@@ -283,16 +283,16 @@ public:
 
 	CBotNeuralNet ()
 	{
-		m_pHidden = NULL;
-		m_pOutputs = NULL;
+		m_pHidden = nullptr;
+		m_pOutputs = nullptr;
 		//m_transferFunction = NULL;
 
 		m_numInputs = 0; // number of inputs
 		m_numOutputs = 0; // number of outputs
 		m_numHidden = 0; // neurons per hidden layer
 		m_numHiddenLayers = 0;
-		m_layeroutput = NULL;
-		m_layerinput = NULL;
+		m_layeroutput = nullptr;
+		m_layerinput = nullptr;
 	}
 
 	void execute (const ga_nn_value* inputs, ga_nn_value* outputs, ga_nn_value fMin, ga_nn_value fMax);

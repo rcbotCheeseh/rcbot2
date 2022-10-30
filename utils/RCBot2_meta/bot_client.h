@@ -121,7 +121,7 @@ private:
 class CToolTip
 {
 public:
-	CToolTip ( const char *pszMessage, const char *pszSound = NULL )
+	CToolTip ( const char *pszMessage, const char *pszSound = nullptr)
 	{
 		m_pszMessage = pszMessage;
 		m_pszSound = pszSound;
@@ -138,7 +138,7 @@ class CClient
 public:
 	CClient ()
 	{
-		m_pPlayer = NULL;
+		m_pPlayer = nullptr;
 		m_bWaypointOn = false;
 		m_iCurrentWaypoint = 0.0f;
 		m_iPathFrom = 0;
@@ -173,11 +173,11 @@ public:
 		m_bIsTeleporting = false;
 		m_fTeleportTime = 0.0f;
 		
-		m_szSteamID = NULL;
-		m_pPlayerInfo = NULL;
-		m_pDebugBot = NULL;
+		m_szSteamID = nullptr;
+		m_pPlayerInfo = nullptr;
+		m_pDebugBot = nullptr;
 		m_WaypointCopyType = WPT_COPY_NONE;
-		m_pMenu = NULL;
+		m_pMenu = nullptr;
 		m_iMenuCommand = -1;
 		m_fNextUpdateMenuTime = 0.0f;
 		m_iWaypointShowFlags = 0;
@@ -208,15 +208,15 @@ public:
 	void resetMenuCommands ();
 
 	void setTeleportVector ();
-	Vector *getTeleportVector () { if ( m_bTeleportVectorValid ) return &m_vTeleportVector; return NULL; }
+	Vector *getTeleportVector () { if ( m_bTeleportVectorValid ) return &m_vTeleportVector; return nullptr; }
 
-	bool isUsingMenu () { return m_pMenu != NULL; }
+	bool isUsingMenu () { return m_pMenu != nullptr; }
 
 	void setCurrentMenu ( CBotMenu *pMenu ) 
 	{ 
 		m_pMenu = pMenu; 
 
-		if ( pMenu == NULL )
+		if ( pMenu == nullptr)
 			resetMenuCommands();
 		else
 			setupMenuCommands();
@@ -428,16 +428,16 @@ public:
 	static CClient *get ( const edict_t *pPlayer ) { return &m_Clients[slotOfEdict(pPlayer)]; }
 	static void setListenServerClient ( CClient *pClient ) { m_pListenServerClient = pClient; }
 	static bool isListenServerClient ( CClient *pClient ) { return m_pListenServerClient == pClient; }
-	static bool noListenServerClient () { return m_pListenServerClient == NULL; }
+	static bool noListenServerClient () { return m_pListenServerClient == nullptr; }
 	static void clientThink ();
 	static bool clientsDebugging ( int iLev = 0 );
-	static void clientDebugMsg ( int iLev, const char *szMsg, CBot *pBot = NULL );
+	static void clientDebugMsg ( int iLev, const char *szMsg, CBot *pBot = nullptr);
 	static void clientDebugMsg(CBot *pBot, int iLev, const char *fmt, ... );
 	static CClient *findClientBySteamID (const char* szSteamID);
-	static edict_t *getListenServerClient() { if ( m_pListenServerClient ) return m_pListenServerClient->getPlayer(); else return NULL; }
+	static edict_t *getListenServerClient() { if ( m_pListenServerClient ) return m_pListenServerClient->getPlayer(); else return nullptr; }
 
 	static void initall () { for ( int i = 0; i < MAX_PLAYERS; i ++ ) { m_Clients[i].init(); } }
-	static void giveMessage (const char* msg, float fTime = 0.1f, edict_t* pPlayer = NULL);// NULL to everyone
+	static void giveMessage (const char* msg, float fTime = 0.1f, edict_t* pPlayer = nullptr);// NULL to everyone
 private:
 	static CClient m_Clients[MAX_PLAYERS];
 	static CClient *m_pListenServerClient;

@@ -73,7 +73,7 @@ public:
 		m_FailedPhysObj = pent; 
 
 		if ( m_NearestPhysObj == pent ) 
-			m_NearestPhysObj = NULL;
+			m_NearestPhysObj = nullptr;
 	}
 
 	bool checkStuck () override;
@@ -88,7 +88,7 @@ private:
 	// blah blah
 	MyEHandle m_NearestPhysObj;
 	MyEHandle m_NearestBreakable;
-	edict_t * m_FailedPhysObj = NULL;
+	edict_t * m_FailedPhysObj = nullptr;
 	float m_flSprintTime = 0.0f;
 	MyEHandle m_pHealthCharger;
 	MyEHandle m_pHealthKit;
@@ -99,19 +99,19 @@ private:
 	MyEHandle m_pNearestButton;
 	//MyEHandle m_pNearestBreakable;
 	MyEHandle m_pAmmoCrate;
-	edict_t * m_pCurrentWeapon = NULL;
+	edict_t * m_pCurrentWeapon = nullptr;
 
 	float m_fUseButtonTime = 0.0f;
 	float m_fUseCrateTime = 0.0f;
 
-	CBaseHandle * m_Weapons = NULL;
+	CBaseHandle * m_Weapons = nullptr;
 
 	float m_fFixWeaponTime = 0.0f;
 
 	int m_iClip1 = 0;
 	int m_iClip2 = 0;
 
-	edict_t * m_pCarryingObject = NULL; // using grav gun
+	edict_t * m_pCarryingObject = nullptr; // using grav gun
 };
 
 #endif

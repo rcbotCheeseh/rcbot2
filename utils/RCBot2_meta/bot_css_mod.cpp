@@ -66,7 +66,7 @@ std::vector<CBaseHandle> CCounterStrikeSourceMod::m_hHostages;
 
 void CCounterStrikeSourceMod::initMod()
 {
-    CWeapons::loadWeapons(m_szWeaponListName == NULL ? "CSS" : m_szWeaponListName, CSSWeaps); // Load weapon list
+    CWeapons::loadWeapons(m_szWeaponListName == nullptr ? "CSS" : m_szWeaponListName, CSSWeaps); // Load weapon list
     logger->Log(LogLevel::TRACE, "CCounterStrikeSourceMod::initMod()");
 }
 
@@ -258,13 +258,13 @@ void CCounterStrikeSourceMod::updateHostages()
     {
         bh.Term();
 		current = engine->PEntityOfEntIndex(i);
-		if (current == NULL)
+		if (current == nullptr)
 		{
 			continue;
 		}
 
 		IServerNetworkable *network = current->GetNetworkable();
-		if (network == NULL)
+		if (network == nullptr)
 		{
 			continue;
 		}
@@ -326,6 +326,6 @@ edict_t *CCounterStrikeSourceMod::getRandomHostage()
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }

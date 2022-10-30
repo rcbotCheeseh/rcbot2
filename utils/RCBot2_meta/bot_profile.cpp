@@ -39,7 +39,7 @@
 #include "logging.h"
 
 std::vector <CBotProfile*> CBotProfiles :: m_Profiles;
-CBotProfile *CBotProfiles :: m_pDefaultProfile = NULL;
+CBotProfile *CBotProfiles :: m_pDefaultProfile = nullptr;
 
 CBotProfile :: CBotProfile ( CBotProfile &other )
 {
@@ -78,13 +78,13 @@ void CBotProfiles :: deleteProfiles ()
 	for ( unsigned int i = 0; i < m_Profiles.size(); i ++ )
 	{
 		delete m_Profiles[i];
-		m_Profiles[i] = NULL;
+		m_Profiles[i] = nullptr;
 	}
 
 	m_Profiles.clear();
 
 	delete m_pDefaultProfile;
-	m_pDefaultProfile = NULL;
+	m_pDefaultProfile = nullptr;
 }
 
 // find profiles and setup list
@@ -171,7 +171,7 @@ void CBotProfiles :: setupProfiles ()
 
 CBotProfile *CBotProfiles :: getDefaultProfile ()
 {
-	if ( m_pDefaultProfile == NULL )
+	if ( m_pDefaultProfile == nullptr)
 		logger->Log(LogLevel::FATAL, "Default profile is NULL (Caused by memory problem, bad initialisation or overwrite) Exiting..");
 
 	return m_pDefaultProfile;

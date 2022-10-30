@@ -161,7 +161,7 @@ extern const char *g_szUtils[BOT_UTIL_MAX+1];
 class CBotUtility
 {
 public:
-	CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil, CBotWeapon *pWeapon = NULL, int iData = 0, Vector vec = Vector(0,0,0) );
+	CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil, CBotWeapon *pWeapon = nullptr, int iData = 0, Vector vec = Vector(0,0,0) );
 
 	float getUtility () { return m_fUtility; }
 
@@ -204,7 +204,7 @@ public:
 
 	CBotUtilities ()
 	{
-		m_pBest.head = NULL;
+		m_pBest.head = nullptr;
 	}
 
 	void freeMemory ();

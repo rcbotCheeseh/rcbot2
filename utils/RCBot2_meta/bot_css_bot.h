@@ -66,7 +66,7 @@ public:
 	void listenForPlayers() override;
 	void freeMapMemory() override;
 	void touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1) override;
-	bool canGotoWaypoint(Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL) override;
+	bool canGotoWaypoint(Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = nullptr) override;
 	bool setVisible(edict_t *pEntity, bool bVisible) override;
 	virtual void modThinkSlow();
 	unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
@@ -82,12 +82,12 @@ public:
 	virtual void onRoundStart();
 	virtual bool IsLeadingHostage();
 private:
-	edict_t * m_pCurrentWeapon = NULL;	  		// The bot current weapon
+	edict_t * m_pCurrentWeapon = nullptr;	  		// The bot current weapon
 	float m_fNextAttackTime = 0.0f;	  		// Control timer for bot primary attack
 	float m_fNextThinkSlow = 0.0f;		  		// Control timer for slow think
 	float m_fVisibleEnemyTime = 0.0f;	  		// The last time my enemy was visible
 	CBaseHandle m_hNearestBreakable; 	// Nearest breakable entity
-	CCSSBotBuying * m_pBuyManager = NULL; 		// CSS Bot buy manager
+	CCSSBotBuying * m_pBuyManager = nullptr; 		// CSS Bot buy manager
 };
 
 #endif

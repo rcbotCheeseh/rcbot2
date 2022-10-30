@@ -69,15 +69,15 @@ void CBotSynergy::spawnInit()
 		m_pWeapons->clearWeapons();
 
     m_CurrentUtil = BOT_UTIL_MAX;
-	m_pNearbyAmmo = NULL;
-	m_pNearbyBattery = NULL;
-	m_pNearbyCrate = NULL;
-	m_pNearbyHealthKit = NULL;
-	m_pNearbyWeapon = NULL;
-	m_pNearbyMine = NULL;
-	m_pNearbyGrenade = NULL;
-	m_pNearbyItemCrate = NULL;
-	m_pCurrentWeapon = NULL;
+	m_pNearbyAmmo = nullptr;
+	m_pNearbyBattery = nullptr;
+	m_pNearbyCrate = nullptr;
+	m_pNearbyHealthKit = nullptr;
+	m_pNearbyWeapon = nullptr;
+	m_pNearbyMine = nullptr;
+	m_pNearbyGrenade = nullptr;
+	m_pNearbyItemCrate = nullptr;
+	m_pCurrentWeapon = nullptr;
 	m_flNextSprintTime = engine->Time();
 	m_flSuitPower = 0.0f;
 	m_flUseCrateTime = engine->Time();
@@ -114,7 +114,7 @@ bool CBotSynergy::needHealth()
  **/
 bool CBotSynergy::needAmmo()
 {
-	if(m_pCurrentWeapon == NULL)
+	if(m_pCurrentWeapon == nullptr)
 	{
 		return false;
 	}
@@ -211,7 +211,7 @@ void CBotSynergy::modThink()
 	{
 		if(CSynergyMod::IsCombineMinePlayerPlaced(m_pNearbyMine.get()))
 		{
-			m_pNearbyMine = NULL; // The mine is friendly now.
+			m_pNearbyMine = nullptr; // The mine is friendly now.
 		}
 		else
 		{
@@ -236,9 +236,9 @@ void CBotSynergy::modThink()
 	{
 		edict_t *pOwner = CClassInterface::getOwner(m_pNearbyWeapon);
 
-		if(pOwner != NULL) // Someone already owns this weapon
+		if(pOwner != nullptr) // Someone already owns this weapon
 		{
-			m_pNearbyWeapon = NULL;
+			m_pNearbyWeapon = nullptr;
 		}
 		else
 		{
@@ -257,7 +257,7 @@ void CBotSynergy::modThink()
 	{
 		if(!m_pSchedules->isCurrentSchedule(SCHED_SYN_BREAK_ICRATE))
 		{
-			CBotWeapon *pWeapon = NULL;
+			CBotWeapon *pWeapon = nullptr;
 
 			if(m_pWeapons->hasWeapon(SYN_WEAPON_PHYSCANNON))
 			{
@@ -321,14 +321,14 @@ void CBotSynergy::updateConditions()
 {
 	CBot::updateConditions();
 
-	if (m_pEnemy.get() != NULL)
+	if (m_pEnemy.get() != nullptr)
 	{
 		if(CDataInterface::GetEntityHealth(m_pEnemy.get()->GetNetworkable()->GetBaseEntity()) <= 0)
 		{
 			updateCondition(CONDITION_ENEMY_DEAD);
 			m_pNavigator->belief(getOrigin(), CBotGlobals::entityOrigin(m_pEnemy), bot_belief_fade.GetFloat(), distanceFrom(m_pEnemy), BELIEF_SAFETY);
 			enemyDown(m_pEnemy);
-			m_pEnemy = NULL;
+			m_pEnemy = nullptr;
 		}
 	}
 }
@@ -380,11 +380,11 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 		{
 			if(strncmp(szclassname, "item_ammo_crate", 15))
 			{
-				m_pNearbyAmmo = NULL; // Invalidate if this entity is an ammo crate
+				m_pNearbyAmmo = nullptr; // Invalidate if this entity is an ammo crate
 			}
 			else if(strncmp(szclassname, "item_ammo_pack", 14)) // Ignore these
 			{
-				m_pNearbyAmmo = NULL;
+				m_pNearbyAmmo = nullptr;
 			}
 			else if(filterAmmo(pEntity, szclassname))
 			{
@@ -415,16 +415,16 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 		}
 		else if(strncmp(szclassname, "weapon_", 7) == 0 && (!m_pNearbyWeapon.get() || fDist < distanceFrom(m_pNearbyWeapon.get())))
 		{
-			CBotWeapon* pWeapon = NULL;
+			CBotWeapon* pWeapon = nullptr;
 			pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(szclassname));
 			if(pWeapon && pWeapon->hasWeapon())
 			{
-				m_pNearbyWeapon = NULL; // bot already has this weapon
+				m_pNearbyWeapon = nullptr; // bot already has this weapon
 			}
 			else
 			{
 				edict_t* pOwner = CClassInterface::getOwner(pEntity);
-				if(pOwner == NULL) // Don't pick weapons owned by someone
+				if(pOwner == nullptr) // Don't pick weapons owned by someone
 				{
 					m_pNearbyWeapon = pEntity;
 				}
@@ -434,7 +434,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 		{
 			edict_t *pOwner = CClassInterface::getOwner(pEntity);
 			IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEntity);
-			if(pOwner == NULL || p == NULL) // Only care about grenades that doesn't have an owner or isn't owned by a player
+			if(pOwner == nullptr || p == nullptr) // Only care about grenades that doesn't have an owner or isn't owned by a player
 			{
 				m_pNearbyGrenade = pEntity;
 				const int iWaypoint = CWaypointLocations::NearestWaypoint(entityorigin, 512.0f, -1);
@@ -478,25 +478,25 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 	else
 	{
 		if(pEntity == m_pNearbyAmmo.get_old())
-			m_pNearbyAmmo = NULL;
+			m_pNearbyAmmo = nullptr;
 		else if(pEntity == m_pNearbyCrate.get_old())
-			m_pNearbyCrate = NULL;
+			m_pNearbyCrate = nullptr;
 		else if(pEntity == m_pNearbyHealthKit.get_old())
-			m_pNearbyHealthKit = NULL;
+			m_pNearbyHealthKit = nullptr;
 		else if(pEntity == m_pNearbyBattery.get_old())
-			m_pNearbyBattery = NULL;
+			m_pNearbyBattery = nullptr;
 		else if(pEntity == m_pNearbyWeapon.get_old())
-			m_pNearbyWeapon = NULL;
+			m_pNearbyWeapon = nullptr;
 		else if(pEntity == m_pNearbyMine.get_old())
-			m_pNearbyMine = NULL;
+			m_pNearbyMine = nullptr;
 		else if(pEntity == m_pNearbyGrenade.get_old())
-			m_pNearbyGrenade = NULL;
+			m_pNearbyGrenade = nullptr;
 		else if(pEntity == m_pNearbyItemCrate.get_old())
-			m_pNearbyItemCrate = NULL;
+			m_pNearbyItemCrate = nullptr;
 		else if(pEntity == m_pNearbyHealthCharger.get_old())
-			m_pNearbyHealthCharger = NULL;
+			m_pNearbyHealthCharger = nullptr;
 		else if(pEntity == m_pNearbyArmorCharger.get_old())
-			m_pNearbyArmorCharger = NULL;
+			m_pNearbyArmorCharger = nullptr;
 	}
 
 	return bValid;
@@ -525,7 +525,7 @@ void CBotSynergy::getTasks (unsigned int iIgnore)
 
 	utils.execute();
 
-	while ((next = utils.nextBest()) != NULL)
+	while ((next = utils.nextBest()) != nullptr)
 	{
 		if (!m_pSchedules->isEmpty() && bCheckCurrent)
 		{
@@ -577,7 +577,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 	break;
 	case BOT_UTIL_FIND_NEAREST_HEALTH:
 	{
-		CWaypoint* pWaypoint = NULL;
+		CWaypoint* pWaypoint = nullptr;
 		const Vector vOrigin = getOrigin();
 		CBotSchedule* pSched = new CBotSchedule();
 		pSched->setID(SCHED_GOTO_ORIGIN);
@@ -595,7 +595,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 	}
 	case BOT_UTIL_FIND_NEAREST_AMMO:
 	{
-		CWaypoint* pWaypoint = NULL;
+		CWaypoint* pWaypoint = nullptr;
 		const Vector vOrigin = getOrigin();
 		CBotSchedule* pSched = new CBotSchedule();
 		pSched->setID(SCHED_GOTO_ORIGIN);
@@ -613,8 +613,8 @@ bool CBotSynergy::executeAction(eBotAction iAction)
     case BOT_UTIL_ATTACK_POINT:
     {
 		// roam
-		CWaypoint* pWaypoint = NULL;
-		CWaypoint* pRoute = NULL;
+		CWaypoint* pWaypoint = nullptr;
+		CWaypoint* pRoute = nullptr;
 		CBotSchedule* pSched = new CBotSchedule();
 		CBotTask* pFindPath;
 		m_fUtilTimes[BOT_UTIL_ATTACK_POINT] = engine->Time() + randomFloat(60.0f, 180.0f);
@@ -661,8 +661,8 @@ bool CBotSynergy::executeAction(eBotAction iAction)
     case BOT_UTIL_ROAM:
     {
 		// roam
-		CWaypoint* pWaypoint = NULL;
-		CWaypoint* pRoute = NULL;
+		CWaypoint* pWaypoint = nullptr;
+		CWaypoint* pRoute = nullptr;
 		CBotSchedule* pSched = new CBotSchedule();
 		CBotTask* pFindPath;
 
@@ -768,7 +768,7 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 	{
 		edict_t *pEntity;
 		pEntity = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_button", rcbot_syn_use_search_range.GetFloat());
-		if(pEntity != NULL && !CSynergyMod::IsEntityLocked(pEntity))
+		if(pEntity != nullptr && !CSynergyMod::IsEntityLocked(pEntity))
 		{
 			CBotSchedule *sched = new CBotSchedule();
 			sched->setID(SCHED_GOTO_ORIGIN);
@@ -799,7 +799,7 @@ void CBotSynergy::handleWeapons()
 		isVisible(m_pEnemy) && isEnemy(m_pEnemy))
 	{
 		const char *szclassname = m_pEnemy.get()->GetClassName();
-		CBotWeapon *pWeapon = NULL;
+		CBotWeapon *pWeapon = nullptr;
 
 		if((strncmp(szclassname, "npc_combinegunship", 18) == 0) || (strncmp(szclassname, "npc_combinedropship", 19) == 0) || (strncmp(szclassname, "npc_strider", 11) == 0) ||
 		(strncmp(szclassname, "npc_helicopter", 14) == 0))
@@ -811,7 +811,7 @@ void CBotSynergy::handleWeapons()
 			pWeapon = getBestWeapon(m_pEnemy, true, true, false, false);
 		}
 
-		if(m_bWantToChangeWeapon && (pWeapon != NULL) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex())
+		if(m_bWantToChangeWeapon && (pWeapon != nullptr) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex())
 		{
 			selectBotWeapon(pWeapon);
 		}
@@ -820,8 +820,8 @@ void CBotSynergy::handleWeapons()
 
 		if(!handleAttack(pWeapon, m_pEnemy))
 		{
-			m_pEnemy = NULL;
-			m_pOldEnemy = NULL;
+			m_pEnemy = nullptr;
+			m_pOldEnemy = nullptr;
 			wantToShoot(false);
 		}
 	}

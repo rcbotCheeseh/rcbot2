@@ -64,7 +64,7 @@ CSom :: ~CSom ()
 
 CSomNeuron *CSom :: getBMU (const std::vector<float>* inputs)
 {       
-	CSomNeuron *winner = NULL;
+	CSomNeuron *winner = nullptr;
 	float bestdistance = 0;
 
 	for ( unsigned int i = 0; i < m_Neurons.size(); i ++ )

@@ -44,8 +44,8 @@ CNeuron :: CNeuron ()
 	m_output = 0;
 	m_Bias = 0;
 	
-	m_weights = NULL;
-	m_inputs = NULL;
+	m_weights = nullptr;
+	m_inputs = nullptr;
 }
 
 CPerceptron :: CPerceptron (unsigned short int iInputs)

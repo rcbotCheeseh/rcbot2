@@ -14,7 +14,7 @@ class CRCBotKeyValueList;
 class CSignatureFunction
 {
 public:
-	CSignatureFunction() { m_func = 0x0; }
+	CSignatureFunction() { m_func = nullptr; }
 private:
 	static size_t decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr);
 
@@ -34,7 +34,7 @@ class CGameRulesObject : public CSignatureFunction
 public:
 	CGameRulesObject(CRCBotKeyValueList &list, void *pAddrBase);
 
-	bool found() { return m_func != NULL; }
+	bool found() { return m_func != nullptr; }
 
 	void **getGameRules() { return static_cast<void **>(m_func); }
 };
@@ -44,7 +44,7 @@ class CCreateGameRulesObject : public CSignatureFunction
 public:
 	CCreateGameRulesObject(CRCBotKeyValueList &list, const void *pAddrBase);
 
-	bool found() { return m_func != NULL; }
+	bool found() { return m_func != nullptr; }
 
 	void **getGameRules();
 };

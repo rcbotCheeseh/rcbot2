@@ -425,11 +425,11 @@ public:
 
 	static const int W_FILE_FL_VISIBILITY = 1;
 
-	static void init (const char *pszAuthor = NULL, const char *pszModifiedBy = NULL);
+	static void init (const char *pszAuthor = nullptr, const char *pszModifiedBy = nullptr);
 
 	static int getWaypointIndex ( CWaypoint *pWpt )
 	{
-		if ( pWpt == NULL )
+		if ( pWpt == nullptr)
 			return -1;
 
 		return (reinterpret_cast<int>(pWpt) - reinterpret_cast<int>(m_theWaypoints))/sizeof(CWaypoint);
@@ -465,7 +465,7 @@ public:
 	static CWaypoint *getWaypoint ( int iIndex )
 	{
 		if ( !validWaypointIndex(iIndex) )
-			return NULL;
+			return nullptr;
 
 		return &m_theWaypoints[iIndex];
 	}
@@ -473,9 +473,9 @@ public:
 	static CWaypoint *getNextCoverPoint ( CBot *pBot, CWaypoint *pCurrent, CWaypoint *pBlocking );
 
 	// save waypoints
-	static bool save ( bool bVisiblityMade, edict_t *pPlayer = NULL, const char *pszAuthor = NULL, const char *pszModifier = NULL );
+	static bool save ( bool bVisiblityMade, edict_t *pPlayer = nullptr, const char *pszAuthor = nullptr, const char *pszModifier = nullptr);
 	// load waypoints
-	static bool load (const char *szMapName = NULL);
+	static bool load (const char *szMapName = nullptr);
 
 	static bool validWaypointIndex ( int iIndex )
 	{
@@ -490,11 +490,11 @@ public:
 
 	static void freeMemory ();
 
-	static int getClosestFlagged (int iFlags, const Vector& vOrigin, int iTeam, float* fReturnDist = NULL, const unsigned char* failedwpts = NULL);
+	static int getClosestFlagged (int iFlags, const Vector& vOrigin, int iTeam, float* fReturnDist = nullptr, const unsigned char* failedwpts = nullptr);
 
 	static int nearestWaypointGoal (int iFlags, const Vector& origin, float fDist, int iTeam = 0);
 	static CWaypoint *randomRouteWaypoint ( CBot *pBot, Vector vOrigin, Vector vGoal, int iTeam, int iArea );
-	static CWaypoint *randomWaypointGoal ( int iFlags, int iTeam = 0, int iArea = 0, bool bForceArea = false, CBot *pBot = NULL, bool bHighDanger = false, int iSearchFlags = 0, int iIgnore = -1 );
+	static CWaypoint *randomWaypointGoal ( int iFlags, int iTeam = 0, int iArea = 0, bool bForceArea = false, CBot *pBot = nullptr, bool bHighDanger = false, int iSearchFlags = 0, int iIgnore = -1 );
 	static CWaypoint *randomWaypointGoalBetweenArea (int iFlags, int iTeam, int iArea, bool bForceArea, CBot* pBot, bool bHighDanger, const Vector* org1, const Vector* org2, bool
 	                                                 bIgnoreBelief = false, int iWpt1 = -1, int iWpt2 = -1);
 	static CWaypoint *randomWaypointGoalNearestArea (int iFlags, int iTeam, int iArea, bool bForceArea, CBot* pBot, bool bHighDanger, const Vector* origin, int iIgnore = -1, bool
@@ -504,7 +504,7 @@ public:
 	static CWaypointVisibilityTable *getVisiblity () { return m_pVisibilityTable; }
 	static void setupVisibility ();
 	static CWaypoint *getPinchPointFromWaypoint ( Vector vPlayerOrigin, Vector vPinchOrigin );
-	static CWaypoint *getNestWaypoint ( int iTeam, int iArea, bool bForceArea = false, CBot *pBot = NULL );
+	static CWaypoint *getNestWaypoint ( int iTeam, int iArea, bool bForceArea = false, CBot *pBot = nullptr);
 
 	static void updateWaypointPairs ( std::vector<edict_wpt_pair_t> *pPairs, int iWptFlag, const char *szClassname );
 	static bool hasAuthor () { return m_szAuthor[0]!=0; }

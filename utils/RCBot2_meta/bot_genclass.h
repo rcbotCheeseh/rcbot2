@@ -128,7 +128,7 @@ class dataStack
 		{
 			dataNode<T> *tempNode = m_Head;
 
-			if ( m_Head == NULL )
+			if ( m_Head == nullptr)
 				return false;
 
 			if ( &m_Head->m_NodeData == pObj )
@@ -167,7 +167,7 @@ class dataStack
 		{
 			dataNode<T> *tempNode = m_Head;
 
-			if ( m_Head == NULL )
+			if ( m_Head == nullptr)
 				return false;
 
 			if ( m_Head->m_NodeData == pObj )
@@ -220,7 +220,7 @@ class dataStack
 
 		bool IsEmpty ()
 		{
-			return m_Head == NULL;
+			return m_Head == nullptr;
 		}
 
 		void Push ( const T pObj )
@@ -288,7 +288,7 @@ class dataStack
 
 				m_Head = NULL;
 				// return default
-				return NULL;
+				return nullptr;
 			}
 
 			return l_pTemp;
@@ -303,7 +303,7 @@ class dataStack
 				return &m_Head->m_NodeData;
 			}
 
-			return NULL;
+			return nullptr;
 		}
 
 	private:
@@ -777,7 +777,7 @@ class dataQueue
 
 		void Destroy ()
 		{
-			dataNode<T> *tempNode = NULL;
+			dataNode<T> *tempNode = nullptr;
 
 			while ( m_Head )
 			{
@@ -797,7 +797,7 @@ class dataQueue
 
 		bool IsEmpty ()
 		{
-			return m_Head == NULL||m_Tail == NULL;
+			return m_Head == nullptr ||m_Tail == nullptr;
 		}
 
 		void AddFront ( const T &pObj )
@@ -806,7 +806,7 @@ class dataQueue
 
 			newNode->m_NodeData = pObj;
 
-			if ( m_Head == NULL )
+			if ( m_Head == nullptr)
 			{
 				m_Tail = newNode;
 				m_Head = newNode;
@@ -891,7 +891,7 @@ class dataQueue
 				m_Head = NULL;
 				m_Tail = NULL;
 				// return default
-				return NULL;
+				return nullptr;
 			}
 
 			return l_pTemp;
@@ -899,7 +899,7 @@ class dataQueue
 
 		void RemoveFront ()
 		{
-			if ( m_Head == NULL )
+			if ( m_Head == nullptr)
 			{
 				// just set tail to null incase
 				m_Tail = NULL;
@@ -957,7 +957,7 @@ class dataQueue
 		{
 			dataNode<T> *tempNode = m_Head;
 
-			if ( m_Head == NULL )
+			if ( m_Head == nullptr)
 				return false;
 
 			if ( m_Head->m_NodeData == pObj )
@@ -1012,7 +1012,7 @@ class dataQueue
 		{
 			dataNode<T> *tempNode = m_Head;
 
-			if ( m_Head == NULL )
+			if ( m_Head == nullptr)
 				return false;
 
 			if ( &m_Head->m_NodeData == pObj )

@@ -63,7 +63,7 @@ void CCSSBot::init(bool bVarInit)
 	CBot::init();// require this
 
 	// initialize stuff for counter-strike source bot
-	m_pBuyManager = NULL;
+	m_pBuyManager = nullptr;
 }
 
 void CCSSBot::setup()
@@ -83,11 +83,11 @@ void CCSSBot::freeMapMemory()
 {
 	CBot::freeMapMemory();
 
-	if(m_pBuyManager != NULL)
+	if(m_pBuyManager != nullptr)
 	{
 		m_pBuyManager->reset();
 		delete m_pBuyManager;
-		m_pBuyManager = NULL;
+		m_pBuyManager = nullptr;
 	}
 }
 
@@ -95,7 +95,7 @@ void CCSSBot::updateConditions()
 {
 	CBot::updateConditions();
 
-	if(m_pEnemy.get() != NULL)
+	if(m_pEnemy.get() != nullptr)
 	{
 		if(m_pVisibles->isVisible(m_pEnemy))
 		{
@@ -105,7 +105,7 @@ void CCSSBot::updateConditions()
 		{
 			enemyLost(m_pEnemy);
 			setLastEnemy(m_pEnemy);
-			m_pEnemy = NULL;
+			m_pEnemy = nullptr;
 		}
 
 		if(engine->IndexOfEdict(m_pEnemy.get()) <= gpGlobals->maxClients)
@@ -114,7 +114,7 @@ void CCSSBot::updateConditions()
 			if(CClassInterface::getPlayerLifeState(m_pEnemy.get()) == LIFE_DEAD || CClassInterface::getPlayerLifeState(m_pEnemy.get()) == LIFE_DYING)
 			{
 				updateCondition(CONDITION_ENEMY_DEAD);
-				m_pEnemy = NULL;
+				m_pEnemy = nullptr;
 			}
 		}
 	}
@@ -160,7 +160,7 @@ bool CCSSBot::isEnemy(edict_t *pEdict,bool bCheckWeapons)
  
 	IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEdict);
 
-	if(p == NULL)
+	if(p == nullptr)
 		return false;
 
 	if(m_pEdict == pEdict)
@@ -207,7 +207,7 @@ void CCSSBot::spawnInit()
 	}
 
 	m_fVisibleEnemyTime = 0.0f;
-	m_pCurrentWeapon = NULL;
+	m_pCurrentWeapon = nullptr;
 	m_fNextAttackTime = engine->Time();
 	m_fCheckStuckTime = engine->Time() + 6.0f;
 	m_fNextThinkSlow = engine->Time() + 1.0f;
@@ -217,7 +217,7 @@ void CCSSBot::spawnInit()
 
 void CCSSBot::listenForPlayers()
 {
-	edict_t *pListenNearest = NULL;
+	edict_t *pListenNearest = nullptr;
 	float fMaxFactor = 0;
 	Vector vVelocity;
 	bool bIsNearestAttacking = false;
@@ -298,7 +298,7 @@ void CCSSBot::listenForPlayers()
 		}
 	}
 
-	if(pListenNearest != NULL)
+	if(pListenNearest != nullptr)
 	{
 		listenToPlayer(pListenNearest,false,bIsNearestAttacking);
 	}
@@ -373,7 +373,7 @@ bool CCSSBot::setVisible(edict_t *pEntity, bool bVisible)
 
 		if ((strncmp(szClassname, "func_breakable", 14) == 0 || strncmp(szClassname, "func_breakable_surf", 19) == 0))
 		{
-			if ((INDEXENT(m_hNearestBreakable.GetEntryIndex()) == NULL || fDist < distanceFrom(CBotGlobals::worldCenter(INDEXENT(m_hNearestBreakable.GetEntryIndex())))))
+			if ((INDEXENT(m_hNearestBreakable.GetEntryIndex()) == nullptr || fDist < distanceFrom(CBotGlobals::worldCenter(INDEXENT(m_hNearestBreakable.GetEntryIndex())))))
 			{
 				m_hNearestBreakable.Init(engine->IndexOfEdict(pEntity), pEntity->m_NetworkSerialNumber);
 			}
@@ -404,7 +404,7 @@ CBotWeapon *CCSSBot::getPrimaryWeapon()
 	if(secondary)
 		return secondary;
 
-	return NULL;
+	return nullptr;
 }
 
 /**
@@ -472,7 +472,7 @@ void CCSSBot::handleWeapons()
 	{
 		CBotWeapon* pWeapon = getBestWeapon(m_pEnemy, true, true, rcbot_melee_only.GetBool());
 
-		if(m_bWantToChangeWeapon && pWeapon != NULL && pWeapon != getCurrentWeapon() && pWeapon->getWeaponIndex())
+		if(m_bWantToChangeWeapon && pWeapon != nullptr && pWeapon != getCurrentWeapon() && pWeapon->getWeaponIndex())
 		{
 			selectWeapon(pWeapon->getWeaponIndex());
 		}
@@ -481,8 +481,8 @@ void CCSSBot::handleWeapons()
 
 		if(!handleAttack(pWeapon, m_pEnemy))
 		{
-			m_pEnemy = NULL;
-			m_pOldEnemy = NULL;
+			m_pEnemy = nullptr;
+			m_pOldEnemy = nullptr;
 			wantToShoot(false);
 		}
 	}
@@ -628,7 +628,7 @@ void CCSSBot::modThink()
 		modThinkSlow();
 	}
 
-	if(getEnemy() != NULL && isVisible(getEnemy()))
+	if(getEnemy() != nullptr && isVisible(getEnemy()))
 	{
 		CBotWeapon *currentweapon = getCurrentWeapon();
 
@@ -718,7 +718,7 @@ void CCSSBot::getTasks(unsigned int iIgnore)
 
 	utils.execute();
 
-	while ((next = utils.nextBest()) != NULL)
+	while ((next = utils.nextBest()) != nullptr)
 	{
 		if(!m_pSchedules->isEmpty() && bCheckCurrent)
 		{
@@ -745,7 +745,7 @@ void CCSSBot::getTasks(unsigned int iIgnore)
 				do
 				{
 					CClients::clientDebugMsg(this,BOT_DEBUG_UTIL,"%s = %0.3f",g_szUtils[next->getId()],next->getUtility(),this);
-				}while ((++i<20) && ((next = utils.nextBest()) != NULL));
+				}while ((++i<20) && ((next = utils.nextBest()) != nullptr));
 
 				CClients::clientDebugMsg(this,BOT_DEBUG_UTIL,"----END---- getTasks(%s) ----END----",m_szBotName);
 			}
@@ -785,7 +785,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 		{
 			CBotSchedule *pSched = new CBotSchedule();
 			pSched->setID(SCHED_RUN_FOR_COVER);
-			const int cover = CWaypointLocations::GetCoverWaypoint(getOrigin(), CBotGlobals::entityOrigin(m_pEnemy.get()), NULL, NULL, 0, 8.0f, 1024.0f);
+			const int cover = CWaypointLocations::GetCoverWaypoint(getOrigin(), CBotGlobals::entityOrigin(m_pEnemy.get()), nullptr, nullptr, 0, 8.0f, 1024.0f);
 			if(cover != -1)
 			{
 				CBotTask *pTask = new CFindPathTask(cover);
@@ -811,7 +811,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 
 			if(pWaypoint)
 			{
-				CWaypoint * pRoute = NULL;
+				CWaypoint * pRoute = nullptr;
 				if(m_fUseRouteTime <= engine->Time())
 				{
 					pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), getTeam(), pWaypoint->getArea());
@@ -929,7 +929,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 				case BOT_UTIL_GET_HOSTAGE:
 		{
 			// Select a random hostage to rescue
-			CWaypoint* pWaypoint = NULL;
+			CWaypoint* pWaypoint = nullptr;
 			CWaypoint* pRoute;
 			CBotSchedule* pSched = new CBotSchedule();
 			edict_t* pHostage = CCounterStrikeSourceMod::getRandomHostage();
@@ -1046,7 +1046,7 @@ void CCSSBot::onRoundStart()
 bool CCSSBot::IsLeadingHostage()
 {
 	const std::vector<CBaseHandle> hostages = CCounterStrikeSourceMod::getHostageVector();
-	edict_t *pHostage = NULL;
+	edict_t *pHostage = nullptr;
 
 	if(getTeam() != CS_TEAM_COUNTERTERRORIST)
 		return false;

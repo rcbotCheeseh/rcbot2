@@ -129,7 +129,7 @@ void RCBOT2_Cvar_setup (ICvar *cvar)
 		strcpy(sv_tags_str,sv_tags.GetString());
 
 		// fix
-		if ( strstr(sv_tags_str,"rcbot2") == NULL )
+		if ( strstr(sv_tags_str,"rcbot2") == nullptr)
 		{
 
 			if ( sv_tags_str[0] == 0 )

@@ -64,14 +64,14 @@ using BotCommandCallback = std::function<eBotCommandResult(CClient*, const char*
 class CBotCommand
 {
 protected:
-	CBotCommand () : m_iAccessLevel{0}, m_szCommand{ NULL }, m_szHelp{ NULL } { }
+	CBotCommand () : m_iAccessLevel{0}, m_szCommand{nullptr}, m_szHelp{nullptr} { }
 	
 public:
 	// initialise
 	CBotCommand(const char *command, int iAccessLevel = 0) :
-			m_iAccessLevel{iAccessLevel}, m_szCommand{command}, m_szHelp{ NULL } {}
+			m_iAccessLevel{iAccessLevel}, m_szCommand{command}, m_szHelp{nullptr} {}
 	
-	CBotCommand(const char* command, int iAccessLevel = 0, const char* help = NULL) :
+	CBotCommand(const char* command, int iAccessLevel = 0, const char* help = nullptr) :
 			m_iAccessLevel{iAccessLevel}, m_szCommand{command}, m_szHelp{help} {};
 
 	// check command name
@@ -99,7 +99,7 @@ protected:
 class CBotCommandInline : public CBotCommand
 {
 public:
-	CBotCommandInline(const char* cmd, int iAccessLevel, BotCommandCallback callback, const char* help = NULL) :
+	CBotCommandInline(const char* cmd, int iAccessLevel, BotCommandCallback callback, const char* help = nullptr) :
 		CBotCommand(cmd, iAccessLevel, help), m_Callback(std::move(callback))
 	{
 	}
@@ -112,7 +112,7 @@ public:
 class CBotSubcommands : public CBotCommand
 {
 public:
-	CBotSubcommands(const char* cmd, int iAccessLevel, std::vector<CBotCommand*> subcommands) : CBotCommand(cmd, iAccessLevel, NULL), m_theCommands{std::move(subcommands)
+	CBotSubcommands(const char* cmd, int iAccessLevel, std::vector<CBotCommand*> subcommands) : CBotCommand(cmd, iAccessLevel, nullptr), m_theCommands{std::move(subcommands)
 	} {}
 	
 	eBotCommandResult execute(CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5) override;

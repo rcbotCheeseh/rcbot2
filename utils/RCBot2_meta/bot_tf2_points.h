@@ -173,7 +173,7 @@ public:
 	// Data functions, called to set up the state at the beginning of a round
 	int	 GetNumControlPoints() 
 	{ 
-		if ( m_iNumControlPoints==NULL )
+		if ( m_iNumControlPoints== nullptr)
 			return 0;
 		return *m_iNumControlPoints;
 	}
@@ -304,7 +304,7 @@ public:
 
 	float getSetupTime ()
 	{
-		if (m_Resource.get() != NULL && m_nSetupTimeLength)
+		if (m_Resource.get() != nullptr && m_nSetupTimeLength)
 			return static_cast<float>(*m_nSetupTimeLength);
 		return 0.0f;
 	}

@@ -47,7 +47,7 @@ class CWaypointVisibilityTable
 public:
 	CWaypointVisibilityTable()
 	{
-		m_VisTable = NULL;
+		m_VisTable = nullptr;
 		bWorkVisibility = false;
 		iCurFrom = 0;
 		iCurTo = 0;
@@ -117,10 +117,10 @@ public:
 
 	void FreeVisibilityTable ()
 	{
-		if ( m_VisTable != NULL )
+		if ( m_VisTable != nullptr)
 		{
 			delete m_VisTable;
-			m_VisTable = NULL;
+			m_VisTable = nullptr;
 		}
 
 		/////////////////////////////

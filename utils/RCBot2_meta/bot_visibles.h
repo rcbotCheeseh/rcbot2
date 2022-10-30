@@ -47,8 +47,8 @@ class CTF2FindFlagFunc : public CVisibleFunc
 public:
 	CTF2FindFlagFunc ( CBot *pBot ) 
 	{
-		m_pBot = NULL;
-		m_pFlag = NULL;
+		m_pBot = nullptr;
+		m_pFlag = nullptr;
 	}
 
 	edict_t *getFlag ( Vector &vOrigin )
@@ -72,7 +72,7 @@ public:
 	{ 
 		m_pBot = pBot; 
 		m_fBestFactor = 0;
-		m_pBest = NULL;
+		m_pBest = nullptr;
 	}
 
 	edict_t *getBestEnemy ()

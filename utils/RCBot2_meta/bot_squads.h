@@ -259,7 +259,7 @@ public:
 
 	static void UpdateAngles ();
 
-	static void ChangeLeader ( CBotSquad *theSquad );
+	static void ChangeLeader ( CBotSquad *theSquad ); //TODO: should be defined properly? [APG]RoboCop[CL]
 
 private:
 	static std::deque<CBotSquad*> m_theSquads;

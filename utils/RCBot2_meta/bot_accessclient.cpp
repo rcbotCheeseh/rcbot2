@@ -103,7 +103,7 @@ void CAccessClients :: freeMemory ()
 	for ( unsigned int i = 0; i < m_Clients.size(); i ++ )
 	{
 		delete m_Clients[i];
-		m_Clients[i] = NULL;
+		m_Clients[i] = nullptr;
 	}
 
 	m_Clients.clear();

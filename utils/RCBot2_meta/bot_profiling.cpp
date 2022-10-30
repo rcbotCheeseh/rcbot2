@@ -146,7 +146,7 @@ CProfileTimer *CProfileTimers::getTimer (int id)
 	if ( id >= 0 && id < PROFILING_TIMERS )
 		return &m_Timers[id];
 
-	return NULL;
+	return nullptr;
 }
 // do this every map start
 void CProfileTimers :: reset ()

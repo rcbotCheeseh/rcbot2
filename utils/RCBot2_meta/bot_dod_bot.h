@@ -45,7 +45,7 @@ public:
 	CBroadcastBombEvent ( int iEvent, int iCP, int iTeam ) 
 	{ 
 		m_iEvent = iEvent; m_iCP = iCP; m_iTeam = iTeam; 
-	};
+	}
 
 	void execute (CBot *pBot) override;
 private:
@@ -180,7 +180,7 @@ public:
 
 	bool selectBotWeapon ( CBotWeapon *pBotWeapon ) override;
 
-	bool canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = NULL) override;
+	bool canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = nullptr) override;
 
 	void defending () override;
 

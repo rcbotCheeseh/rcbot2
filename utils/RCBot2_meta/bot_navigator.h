@@ -210,7 +210,7 @@ public:
 	AStarListNode ( AStarNode *data )
 	{
 		m_Data = data;
-		m_Next = NULL;
+		m_Next = nullptr;
 	}
 	AStarNode *m_Data;
 	AStarListNode *m_Next;
@@ -221,25 +221,25 @@ class AStarOpenList
 public:
 	AStarOpenList()
 	{
-		m_Head = NULL;
+		m_Head = nullptr;
 	}
 
 	bool empty ()
 	{
-		return m_Head==NULL;
+		return m_Head== nullptr;
 	}
 
 	AStarNode *top ()
 	{
-		if ( m_Head == NULL )
-			return NULL;
+		if ( m_Head == nullptr)
+			return nullptr;
 		
 		return m_Head->m_Data;
 	}
 
 	void pop ()
 	{
-		if ( m_Head != NULL )
+		if ( m_Head != nullptr)
 		{
 			const AStarListNode *t = m_Head;
 
@@ -254,7 +254,7 @@ public:
 	{
 		AStarListNode *newNode = new AStarListNode(data);
 
-		if ( m_Head == NULL )
+		if ( m_Head == nullptr)
 			m_Head = newNode;
 		else
 		{
@@ -268,7 +268,7 @@ public:
 				AStarListNode* p = m_Head;
 				AStarListNode* t = m_Head->m_Next;
 
-				while ( t != NULL )
+				while ( t != nullptr)
 				{
 					if ( data->precedes(t->m_Data) )
 					{
@@ -281,7 +281,7 @@ public:
 					t = t->m_Next;
 				}
 
-				if ( t == NULL )
+				if ( t == nullptr)
 					p->m_Next = newNode;
 
 			}
@@ -290,15 +290,15 @@ public:
 
 	void destroy ()
 	{
-		while ( m_Head != NULL )
+		while ( m_Head != nullptr)
 		{
 			const AStarListNode* t = m_Head;
 			m_Head = m_Head->m_Next;
 			delete t;
-			t = NULL;
+			t = nullptr;
 		}
 
-		m_Head = NULL;
+		m_Head = nullptr;
 	}
 	
 private:
@@ -521,7 +521,7 @@ public:
 
 	//Vector getEnemyPositionPinchPoint ( Vector vOrigin );
 private:
-	CNavMesh * m_pNavMesh = NULL;
+	CNavMesh * m_pNavMesh = nullptr;
 };
 
 #endif

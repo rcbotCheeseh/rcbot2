@@ -96,10 +96,10 @@ public:
 
 	virtual ~CBotTask()
 	{
-		if ( m_pInterruptFunc!=NULL )
+		if ( m_pInterruptFunc!= nullptr)
 		{
 			delete m_pInterruptFunc;
-			m_pInterruptFunc = NULL;
+			m_pInterruptFunc = nullptr;
 		}
 	}
 	void _init();
@@ -155,7 +155,7 @@ class CFindPathTask : public CBotTask
 public:
 	CFindPathTask ()
 	{
-		m_pEdict = NULL;
+		m_pEdict = nullptr;
 		m_LookTask = LOOK_WAYPOINT;
 		m_iWaypointId = -1;
 		m_flags.m_data = 0;
@@ -168,7 +168,7 @@ public:
 	CFindPathTask ( Vector vOrigin, eLookTask looktask = LOOK_WAYPOINT )
 	{
 		m_vVector = vOrigin;
-		m_pEdict = NULL; // no edict
+		m_pEdict = nullptr; // no edict
 		m_LookTask = looktask;
 		m_iWaypointId = -1;
 		m_flags.m_data = 0;
@@ -900,7 +900,7 @@ public:
 	{
 		m_pBombTarget = pBombTarget;
 		m_fTime = 0.0f;
-		m_pRunTo = NULL;
+		m_pRunTo = nullptr;
 		m_pBlocking = pBlocking;
 	}
 
@@ -917,7 +917,7 @@ private:
 class CBotDODBomb : public CBotTask
 {
 public:
-	CBotDODBomb ( int iBombType, int iBombID, edict_t *m_pBombTarget, Vector vPosition, int iPrevOwner );
+	CBotDODBomb ( int iBombType, int iBombID, edict_t *m_pBombTarget, Vector vPosition, int iPrevOwner ); //TODO: *m_pBombTarget should be defined properly? [APG]RoboCop[CL]
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
 	void debugString ( char *string ) override;
@@ -1296,7 +1296,7 @@ public:
 		m_z = z; // z = ground level
 		m_iWaypointType = iWaypointType;
 	}
-	void execute(CBot *pBot,CBotSchedule *pSchedule) override;
+	void execute(CBot *pBot, CBotSchedule *pSchedule) override;
 	void debugString(char *string) override
 	{
 		sprintf(string,"CSS Guard Task\nm_fEnemyTime = %.1f\nm_fTime = %.1f", m_fEnemyTime, m_fTime);
@@ -1343,7 +1343,7 @@ public:
 	CMoveToTask ( Vector vOrigin )
 	{
 		m_vVector = vOrigin;
-		m_pEdict = NULL;
+		m_pEdict = nullptr;
 		fPrevDist = 0.0f;
 
 		setFailInterrupt(CONDITION_SEE_CUR_ENEMY);
@@ -1475,7 +1475,7 @@ public:
 		seenlist = 0;
 		m_fNextCheckUnseen = 0.0f;
 		m_fTime = 0.0f;
-		m_pUnseenBefore = NULL;
+		m_pUnseenBefore = nullptr;
 		m_bHitPlayer = false;
 	}
 

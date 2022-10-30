@@ -591,12 +591,12 @@ class CBotWeapon
 public:
 	CBotWeapon ()
 	{
-		m_pWeaponInfo = NULL;
+		m_pWeaponInfo = nullptr;
 		m_bHasWeapon = false;		
 		m_iWeaponIndex = 0;
-		m_pEnt = NULL;
-		m_iClip1 = NULL;
-		m_iClip2 = NULL;
+		m_pEnt = nullptr;
+		m_iClip1 = nullptr;
+		m_iClip2 = nullptr;
 	}
 
 	void setWeapon ( CWeapon *pWeapon )
@@ -796,7 +796,7 @@ public:
 
 	CBotWeapon *getWeapon(CWeapon *pWeapon);
 
-	CBotWeapon *getActiveWeapon(const char *szWeaponName, edict_t *pWeaponUpdate = NULL, bool bOverrideAmmoTypes = true);
+	CBotWeapon *getActiveWeapon(const char *szWeaponName, edict_t *pWeaponUpdate = nullptr, bool bOverrideAmmoTypes = true);
 
 	CBotWeapon *getCurrentWeaponInSlot ( int iSlot );
 
@@ -814,7 +814,7 @@ public:
 			}
 		}
 
-		return NULL;
+		return nullptr;
 	}
 
 	void clearWeapons ();
