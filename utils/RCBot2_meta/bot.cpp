@@ -1461,7 +1461,7 @@ void CBot::setLastEnemy(edict_t *pEnemy)
 	m_vLastSeeEnemyBlastWaypoint = m_vLastSeeEnemy;
 
 	CWaypoint* pWpt = CWaypoints::getWaypoint(CWaypointLocations::NearestBlastWaypoint(m_vLastSeeEnemy, getOrigin(),
-		8192.0, -1, true, true, false, false, 0, false));
+		8192.0f, -1, true, true, false, false, 0, false));
 	
 	if ( pWpt )
 		m_vLastSeeEnemyBlastWaypoint = pWpt->getOrigin();
@@ -2958,7 +2958,7 @@ void CBot :: jump ()
 {
 	if ( m_pButtons->canPressButton(IN_JUMP) )
 	{		
-		m_pButtons->holdButton(IN_JUMP,0/* time to press*/,0.5f/* hold time*/,0.5f/*let go time*/); 
+		m_pButtons->holdButton(IN_JUMP,0.0f/* time to press*/,0.5f/* hold time*/,0.5f/*let go time*/); 
 		// do the trademark jump & duck
 		m_pButtons->holdButton(IN_DUCK,0.2f/* time to press*/,0.3f/* hold time*/,0.5f/*let go time*/); 
 	}
@@ -2967,7 +2967,7 @@ void CBot :: jump ()
 void CBot :: duck ( bool hold )
 {
 	if ( hold || m_pButtons->canPressButton(IN_DUCK) )
-		m_pButtons->holdButton(IN_DUCK,0.0/* time to press*/,1.0f/* hold time*/,0.5f/*let go time*/); 
+		m_pButtons->holdButton(IN_DUCK,0.0f/* time to press*/,1.0f/* hold time*/,0.5f/*let go time*/); 
 }
 
 // TO DO: perceptron method

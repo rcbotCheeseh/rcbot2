@@ -750,24 +750,24 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 	}
 
 	// find the ground
-	CBotGlobals::traceLine(v_src,v_src-Vector(0,0,256.0),MASK_NPCSOLID_BRUSHONLY,&filter);
+	traceLine(v_src,v_src-Vector(0,0,256.0),MASK_NPCSOLID_BRUSHONLY,&filter);
 #ifndef __linux__
 	debugoverlay->AddLineOverlay(v_src,v_src-Vector(0,0,256.0),255,0,255,false,3);
 #endif
-	const Vector v_ground_src = CBotGlobals::getTraceResult()->endpos + Vector(0,0,1);
+	const Vector v_ground_src = getTraceResult()->endpos + Vector(0,0,1);
 
-	CBotGlobals::traceLine(v_dest,v_dest-Vector(0,0,256.0),MASK_NPCSOLID_BRUSHONLY,&filter);
+	traceLine(v_dest,v_dest-Vector(0,0,256.0),MASK_NPCSOLID_BRUSHONLY,&filter);
 #ifndef __linux__
 	debugoverlay->AddLineOverlay(v_dest,v_dest-Vector(0,0,256.0),255,255,0,false,3);
 #endif
-	const Vector v_ground_dest = CBotGlobals::getTraceResult()->endpos + Vector(0,0,1);
+	const Vector v_ground_dest = getTraceResult()->endpos + Vector(0,0,1);
 
-	if ( !CBotGlobals::isVisible(pPlayer,v_ground_src,v_ground_dest) )
+	if ( !isVisible(pPlayer,v_ground_src,v_ground_dest) )
 	{
 #ifndef __linux__
 		debugoverlay->AddLineOverlay(v_ground_src,v_ground_dest,0,255,255,false,3);		
 #endif
-		const trace_t *tr = CBotGlobals::getTraceResult();
+		const trace_t *tr = getTraceResult();
 
 		// no slope there
 		if ( tr->endpos.z > v_src.z )
@@ -776,7 +776,7 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 			debugoverlay->AddTextOverlay((v_ground_src+v_ground_dest)/2,0,3,"ground fail");
 #endif
 
-			CBotGlobals::traceLine(tr->endpos,tr->endpos-Vector(0,0,45),MASK_NPCSOLID_BRUSHONLY,&filter);
+			traceLine(tr->endpos,tr->endpos-Vector(0,0,45),MASK_NPCSOLID_BRUSHONLY,&filter);
 
 			const Vector v_jsrc = tr->endpos;
 
@@ -800,9 +800,9 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 						Vector v_checkpoint = v_src + v_norm * fDistCheck;
 
 						// check jump height again
-						CBotGlobals::traceLine(v_checkpoint,v_checkpoint-Vector(0,0,45.0f),MASK_NPCSOLID_BRUSHONLY,&filter);
+						traceLine(v_checkpoint,v_checkpoint-Vector(0,0,45.0f),MASK_NPCSOLID_BRUSHONLY,&filter);
 
-						if ( CBotGlobals::traceVisible(nullptr) )
+						if (traceVisible(nullptr) )
 						{
 #ifndef __linux__
 							debugoverlay->AddTextOverlay(tr->endpos,0,3,"step/jump fail");
@@ -815,7 +815,7 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 		}
 	}
 
-	return CBotGlobals::isVisible(pPlayer,vleftsrc,vleftdest) && CBotGlobals::isVisible(pPlayer,vrightsrc,vrightdest);
+	return isVisible(pPlayer,vleftsrc,vleftdest) && isVisible(pPlayer,vrightsrc,vrightdest);
 
 	//return true;
 }

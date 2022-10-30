@@ -666,7 +666,7 @@ void CDODBot :: seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *p
 
 		if ( pDied == m_pEnemy )
 		{
-			if ( ( getHealthPercent() < 0.2f ) && ( randomFloat(0.0,1.0) > 0.75f ) )
+			if ( ( getHealthPercent() < 0.2f ) && ( randomFloat(0.0f,1.0f) > 0.75f ) )
 				addVoiceCommand(DOD_VC_NICE_SHOT);
 
 			ga_nn_value inputs[3] = {distanceFrom(m_pEnemy)/1000.0f,getHealthPercent(),m_fCurrentDanger/MAX_BELIEF};
@@ -1679,7 +1679,7 @@ void CDODBot :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
 		}
 		break;
 	case DOD_VC_NEED_AMMO:
-		// Todo: go to team mate and drop ammo
+		// TODO: go to team mate and drop ammo
 		// should drop ammo to this person?
 
 		if ( !m_bDroppedAmmoThisRound )
@@ -1854,7 +1854,7 @@ void CDODBot :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
 
 				if ( CDODMod::isBombMap() )
 				{
-					CWaypoint *pWpt = CWaypoints::getWaypoint(CWaypointLocations::NearestBlastWaypoint(vPoint,vPlayer,1000.0,-1,true,false,true,false,m_iTeam,true));
+					CWaypoint *pWpt = CWaypoints::getWaypoint(CWaypointLocations::NearestBlastWaypoint(vPoint,vPlayer,1000.0f,-1,true,false,true,false,m_iTeam,true));
 
 					attack->setID(SCHED_DEFENDPOINT);
 					attack->addTask(new CFindPathTask(pWpt->getOrigin()));
@@ -2513,7 +2513,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 			CWaypoint *pWaypoint;
 			Vector vOrigin = getOrigin();
 
-			pWaypoint = CWaypoints::getWaypoint(CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_BOMBS_HERE,vOrigin,8192.0,m_iTeam));
+			pWaypoint = CWaypoints::getWaypoint(CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_BOMBS_HERE,vOrigin,8192.0f,m_iTeam));
 
 			if ( pWaypoint )
 			{

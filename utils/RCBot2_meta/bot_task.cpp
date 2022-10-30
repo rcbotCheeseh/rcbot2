@@ -650,7 +650,7 @@ void CBotDODAttackPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 	else if ( m_fAttackTime == 0 )
 	{
-		m_fAttackTime = engine->Time() + randomFloat(30.0,60.0);
+		m_fAttackTime = engine->Time() + randomFloat(30.0f,60.0f);
 	}
 	else if ( m_fAttackTime < engine->Time() )
 	{
@@ -661,7 +661,7 @@ void CBotDODAttackPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	{
 		if ( m_fTime == 0 )
 		{
-			m_fTime = engine->Time() + randomFloat(2.0,4.0);
+			m_fTime = engine->Time() + randomFloat(2.0f,4.0f);
 			m_vMoveTo = m_vOrigin + Vector(randomFloat(-m_fRadius,m_fRadius),randomFloat(-m_fRadius,m_fRadius),0);
 			m_bProne = randomFloat(0,1) * (1.0f-pBot->getHealthPercent()) > 0.75f;
 
@@ -851,7 +851,7 @@ void CBotTF2PushPayloadBombTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	if ( m_fPushTime == 0 )
 	{
-		m_fPushTime = engine->Time() + randomFloat(10.0,30.0);
+		m_fPushTime = engine->Time() + randomFloat(10.0f,30.0f);
 		m_vRandomOffset = Vector(randomFloat(-50,50),randomFloat(-50,50),0);
 	}
 	else if ( m_fPushTime < engine->Time() )
@@ -3531,7 +3531,7 @@ CBotTFUseTeleporter :: CBotTFUseTeleporter ( edict_t *pTele )
 {// going to use this 
 	
 	m_pTele = pTele;
-	m_fTime = 0.0;
+	m_fTime = 0.0f;
 }
 
 void CBotTFUseTeleporter :: execute (CBot *pBot,CBotSchedule *pSchedule)
@@ -3883,7 +3883,7 @@ void CAutoBuy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	if ( !m_bTimeset )
 	{
 		m_bTimeset = true;
-		m_fTime = engine->Time() + randomFloat(2.0,4.0);
+		m_fTime = engine->Time() + randomFloat(2.0f,4.0f);
 	}
 	else if ( m_fTime < engine->Time() )
 	{
@@ -3896,7 +3896,7 @@ void CAutoBuy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 void CCSSPerformBuyTask::init()
 {
-	m_fDelay = engine->Time() + randomFloat(2.0, 5.0);
+	m_fDelay = engine->Time() + randomFloat(2.0f, 5.0f);
 }
 
 void CCSSPerformBuyTask::execute(CBot *pBot,CBotSchedule *pSchedule)
@@ -4156,7 +4156,7 @@ CFindLastEnemy::CFindLastEnemy (Vector vLast,Vector vVelocity)
 void CFindLastEnemy::execute ( CBot *pBot, CBotSchedule *pSchedule )
 {
 	if ( m_fTime == 0 )
-		m_fTime = engine->Time() + randomFloat(2.0,4.0);
+		m_fTime = engine->Time() + randomFloat(2.0f,4.0f);
 
 	if ( !pBot->moveToIsValid() || pBot->moveFailed() )
 		fail();
@@ -4181,7 +4181,7 @@ CFollowTask :: CFollowTask ( edict_t *pFollow )
 
 void CFollowTask :: init ()
 {
-
+	
 }
 
 void CFollowTask::execute ( CBot *pBot, CBotSchedule *pSchedule )
@@ -4384,10 +4384,10 @@ CBotTF2DemomanPipeJump :: CBotTF2DemomanPipeJump ( CBot *pBot, Vector vWaypointG
 						CBotWeapon *pWeapon )
 {
 	m_iStartingAmmo = pWeapon->getClip1(pBot);
-	m_vStart = vWaypointGround - Vector(0,0,48.0);
+	m_vStart = vWaypointGround - Vector(0,0,48.0f);
 	m_vEnd = vWaypointNext;
 	m_pPipeBomb = nullptr;
-	m_fTime = 0;
+	m_fTime = 0.0f;
 	m_iState = 0;
 	m_pWeapon = pWeapon;
 	m_bFired = false;

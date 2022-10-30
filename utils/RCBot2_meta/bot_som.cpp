@@ -36,7 +36,7 @@
 #include "bot_som.h"
 #include "bot_mtrand.h"
 
-float CSom :: m_fLearnRate = 1.0;
+float CSom :: m_fLearnRate = 1.0f;
 
 CSom :: CSom ( int iW, int iH, int iIn )
 {       

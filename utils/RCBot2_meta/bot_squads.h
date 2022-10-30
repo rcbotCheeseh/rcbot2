@@ -34,7 +34,7 @@
 #include "vector.h"
 #include "bot_ehandle.h"
 
-#define SQUAD_DEFAULT_SPREAD 80.0// say 50 units between each member...?
+#define SQUAD_DEFAULT_SPREAD 80.0f// say 50 units between each member...?
 
 enum eSquadForm
 {

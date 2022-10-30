@@ -543,7 +543,7 @@ void CClient :: think ()
 			{
 				if ( m_fCanPlaceJump != -1 && m_iLastButtons & IN_JUMP && !(iPlayerFlags & FL_ONGROUND) )
 				{
-					int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 80.0, -1, true, false, false, nullptr);
+					int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 80.0f, -1, true, false, false, nullptr);
 
 					m_iLastJumpWaypointIndex = -1;
 					
@@ -565,7 +565,7 @@ void CClient :: think ()
 				{
 					if ( m_iLastJumpWaypointIndex != -1 )
 					{
-						int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 80.0, -1, true, false, false, nullptr);
+						int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 80.0f, -1, true, false, false, nullptr);
 						
 						if ( iNearestWpt == -1 )
 						{
@@ -634,7 +634,7 @@ void CClient :: think ()
 			{
 				// went ON to a ladder
 
-				int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 80.0, -1, true, false, false, nullptr);
+				int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 80.0f, -1, true, false, false, nullptr);
 
 				m_iLastLadderWaypointIndex = -1;
 					
@@ -676,7 +676,7 @@ void CClient :: think ()
 				if ( m_iLastLadderWaypointIndex != -1 )
 					// place a ladder waypoint before jumping off
 				{
-					int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 80.0, -1, true, false, false, nullptr);
+					int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 80.0f, -1, true, false, false, nullptr);
 					
 					if ( iNearestWpt == -1 )
 					{
@@ -713,7 +713,7 @@ void CClient :: think ()
 			// ****************************************************
 			if ( m_iJoinLadderWaypointIndex != -1 && iPlayerFlags & FL_ONGROUND && iMoveType == MOVETYPE_WALK )
 			{
-				int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 40.0, m_iJoinLadderWaypointIndex, true, false, false, nullptr);
+				int iNearestWpt = CWaypointLocations::NearestWaypoint(vPlayerOrigin, 40.0f, m_iJoinLadderWaypointIndex, true, false, false, nullptr);
 				
 				if ( iNearestWpt == -1 )
 				{
@@ -863,7 +863,7 @@ void CClient :: think ()
 #endif							
 							if ( tr->fraction >= 1.0 )
 							{
-								int iNearestWpt = CWaypointLocations::NearestWaypoint(vCheckOrigin, 100.0, -1, true, false, false, nullptr);
+								int iNearestWpt = CWaypointLocations::NearestWaypoint(vCheckOrigin, 100.0f, -1, true, false, false, nullptr);
 								
 								if ( iNearestWpt == -1 )
 								{

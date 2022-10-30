@@ -148,7 +148,6 @@ CWaypointFlagMenu :: CWaypointFlagMenu ( CBotMenu *pPrev )
 
 		}
 	}
-
 }
 
 void CBotMenuList :: setupMenus ()

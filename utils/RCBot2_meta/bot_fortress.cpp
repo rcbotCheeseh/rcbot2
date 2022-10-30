@@ -4309,7 +4309,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	// Shadow/Time must be Floating point
 	/*if(m_fBlockPushTime < engine->Time())
 	{
-		m_bBlockPushing = (randomFloat(0.0,100)>50); // 50 % block pushing
+		m_bBlockPushing = (randomFloat(0.0f,100)>50); // 50 % block pushing
 		m_fBlockPushTime = engine->Time() + randomFloat(10.0f,30.0f); // must be floating point
 	}*/
 
@@ -4691,7 +4691,8 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		(CTeamFortress2Mod::isMapType(TF_MAP_SD) && 
 		(CTeamFortress2Mod::getFlagCarrierTeam()==CTeamFortress2Mod::getEnemyTeam(iTeam)))) &&
 		(m_fLastKnownTeamFlagTime && (m_fLastKnownTeamFlagTime > engine->Time())), 
-		fDefendFlagUtility+(randomFloat(0.0,0.2)-0.1));
+		fDefendFlagUtility + (randomFloat (0.0f, 0.2f) - 0.1));
+	
 	ADD_UTILITY(BOT_UTIL_SNIPE, (iClass == TF_CLASS_SNIPER) && m_pWeapons->hasWeapon(TF2_WEAPON_SNIPERRIFLE) && !m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_SNIPERRIFLE))->outOfAmmo(this) && !hasSomeConditions(CONDITION_PARANOID) && !bHasFlag && (getHealthPercent()>0.2f), 0.95);
 	ADD_UTILITY(BOT_UTIL_SNIPE_CROSSBOW, (iClass == TF_CLASS_SNIPER) && m_pWeapons->hasWeapon(TF2_WEAPON_BOW) && !m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_BOW))->outOfAmmo(this) && !hasSomeConditions(CONDITION_PARANOID) && !bHasFlag && (getHealthPercent()>0.2f), 0.95);
 
@@ -5370,7 +5371,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 				else			
 					pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_CAPPOINT,0,m_iCurrentDefendArea,true,this);
 
-				if ( !pWaypoint->checkReachable() || (randomFloat(0.0,1.0f) > fprob) )
+				if ( !pWaypoint->checkReachable() || (randomFloat(0.0f,1.0f) > fprob) )
 				{
 					pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_DEFEND,getTeam(),m_iCurrentDefendArea,true,this,false);
 
@@ -6039,7 +6040,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					int iWptFrom = CWaypointLocations::NearestWaypoint(vPoint,2048.0f,-1,true,true,true, nullptr,false,0,false);
 
-		//int m_iVisiblePoints[CWaypoints::MAX_WAYPOINTS]; // make searching quicker
+					//int m_iVisiblePoints[CWaypoints::MAX_WAYPOINTS]; // make searching quicker
 
 					CWaypointLocations::GetAllVisible(iWptFrom,iWptFrom,vPoint,vPoint,2048.0f,&m_iVisibles,&m_iInvisibles);
 
@@ -7027,6 +7028,21 @@ void CBotTF2::roundWon(int iTeam, bool bFullRound )
 // TODO: Needs implemented to avoid bots punting when using ClassRestrictionsForBots.smx? [APG]RoboCop[CL]
 void CBotTF2::changeClass()
 {
+	if (m_fChangeClassTime < engine->Time())
+	{
+		m_fChangeClassTime = engine->Time() + randomFloat(0.5f, 2.5f); // wait a bit before changing class again
+
+		if (m_iClass == TF_CLASS_ENGINEER)
+		{
+			if (m_pSchedules->hasSchedule(SCHED_TF_BUILD))
+				m_pSchedules->freeMemory();
+		}
+		else if (m_iClass == TF_CLASS_MEDIC)
+		{
+			if (m_pSchedules->hasSchedule(SCHED_HEAL))
+				m_pSchedules->freeMemory();
+		}
+	}
 }
 
 void CBotTF2::waitRemoveSap ()
@@ -7108,11 +7124,11 @@ void CBotTF2 :: pointsUpdated()
 {
 	if ( m_iClass == TF_CLASS_ENGINEER )
 	{
-//m_pPayloadBomb = NULL;
-const bool bMoveSentry = (m_iSentryArea!=m_iCurrentAttackArea)&&(m_iSentryArea!=m_iCurrentDefendArea)&&((m_iTeam==TF2_TEAM_BLUE)||!CTeamFortress2Mod::isAttackDefendMap());
-const bool bMoveTeleEntrance = (m_iTeam==TF2_TEAM_BLUE)||!CTeamFortress2Mod::isAttackDefendMap();
-const bool bMoveTeleExit = (m_iTeleExitArea!=m_iCurrentAttackArea)&&(m_iTeleExitArea!=m_iCurrentDefendArea)&&((m_iTeam==TF2_TEAM_BLUE)||!CTeamFortress2Mod::isAttackDefendMap());
-const bool bMoveDisp = bMoveSentry;
+		//m_pPayloadBomb = NULL;
+		const bool bMoveSentry = (m_iSentryArea!=m_iCurrentAttackArea)&&(m_iSentryArea!=m_iCurrentDefendArea)&&((m_iTeam==TF2_TEAM_BLUE)||!CTeamFortress2Mod::isAttackDefendMap());
+		const bool bMoveTeleEntrance = (m_iTeam==TF2_TEAM_BLUE)||!CTeamFortress2Mod::isAttackDefendMap();
+		const bool bMoveTeleExit = (m_iTeleExitArea!=m_iCurrentAttackArea)&&(m_iTeleExitArea!=m_iCurrentDefendArea)&&((m_iTeam==TF2_TEAM_BLUE)||!CTeamFortress2Mod::isAttackDefendMap());
+		const bool bMoveDisp = bMoveSentry;
 
 		// think about moving stuff now
 		if ( bMoveSentry && m_pSentryGun.get() && ((m_fSentryPlaceTime + rcbot_move_sentry_time.GetFloat())>engine->Time()) )

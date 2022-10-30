@@ -70,7 +70,7 @@ public:
 
 	void unTap () { m_bTapped = false; }
 
-	void hold ( float fFrom = 0.0, float fFor = 1.0f, float m_fLetGoTime = 0.0f );
+	void hold ( float fFrom = 0.0f, float fFor = 1.0f, float m_fLetGoTime = 0.0f );
 private:
 	int m_iButtonId;
 	float m_fTimeStart;
@@ -96,7 +96,7 @@ public:
 	}
 
 	void letGo (int iButtonId);
-	void holdButton ( int iButtonId, float fFrom = 0.0, float fFor = 1.0f, float m_fLetGoTime = 0.0f );
+	void holdButton ( int iButtonId, float fFrom = 0.0f, float fFor = 1.0f, float m_fLetGoTime = 0.0f );
 
 	inline void add ( CBotButton *theButton );
 
@@ -111,9 +111,9 @@ public:
 
 	////////////////////////////
 
-	void attack (float fFor = 1.0, float fFrom = 0);
-	void jump (float fFor = 1.0, float fFrom = 0);
-	void duck (float fFor = 1.0, float fFrom = 0);
+	void attack (float fFor = 1.0f, float fFrom = 0);
+	void jump (float fFor = 1.0f, float fFrom = 0);
+	void duck (float fFor = 1.0f, float fFrom = 0);
 
 private:
 	std::vector<CBotButton*> m_theButtons;

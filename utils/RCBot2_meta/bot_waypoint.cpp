@@ -1590,7 +1590,7 @@ void CWaypoint :: draw ( edict_t *pEdict, bool bDrawPaths, unsigned short int iD
 		{
 			if ( distanceFrom(CBotGlobals::entityOrigin(pEdict)) < fDistance )
 			{
-				CWaypointTypes::printInfo(this,pEdict,1.0);
+				CWaypointTypes::printInfo(this,pEdict,1.0f);
 
 #ifndef __linux__
 				if ( m_iFlags )
