@@ -1,6 +1,6 @@
 # RCBot2 for Windows and Linux (TF2, HL2:DM, DOD:S)
 
-## Information
+## Information:-
 
 This is a fork of [the official RCBot2 plugin][rcbot2] written by Cheeseh.
 Special thanks to pongo1231 for adding more TF2 support and NoSoop for adding AMBuild support and many more!
@@ -13,7 +13,7 @@ you need support for this particular project.
 [bots-united.com discord]: https://discord.gg/5v5YvKG4Hr
 [bots-united forums]: http://rcbot.bots-united.com/forums/index.php?showforum=18
 
-## Changes from upstream
+## Changes from upstream:-
 
 - Build process uses [AMBuild][] instead of `make` or Visual Studio.  This removes the need for
 Valve's cross platform make conversion tool and keeping copies of modified Source SDK files.
@@ -38,7 +38,7 @@ functionality to control the RCBot2 plugin from SourcePawn.
 [tf2attributes]: https://github.com/FlaminSarge/tf2attributes
 [TF2Items]: https://github.com/asherkin/TF2Items
 
-## Installation
+## Installation:-
 
 1. [Install MetaMod:Source].
 2. Download or build the RCBot2 package.
@@ -55,7 +55,7 @@ also available at [this page][waypoints].
 [official release thread]: http://rcbot.bots-united.com/forums/index.php?showtopic=1994
 [waypoints]: http://rcbot.bots-united.com/waypoints.php
 
-## Building
+## Building:-
 
 ### Cloning from source
 
@@ -78,7 +78,7 @@ in `build/package`.
 [Building SourceMod]: https://wiki.alliedmods.net/Building_SourceMod
 
 
-## License
+## License:-
 
 RCBot2 is released under the [GNU Affero General Public License][].  Among other things, this
 means that any modifications you make to RCBot2 must have the sources available under the same
@@ -90,7 +90,15 @@ Additionally, `rcbot/logging.{h,cpp}` is released separately under the
 [GNU Affero General Public License]: https://spdx.org/licenses/AGPL-3.0-only.html
 [BSD Zero Clause License]: https://spdx.org/licenses/0BSD.html
 
-## Credits:
+### To-do:-
+
+To allow bots to menuselect in order to buy upgrades for MVM
+
+CBotTF2::changeClass needs implemented to avoid bots punting when using ClassRestrictionsForBots.smx
+
+And to add TF2C support along with Synergy, Black Mesa Source, Counter-Strike: Source and SDK2013
+
+## Credits:-
 
 Cheeseh - Founder
 
