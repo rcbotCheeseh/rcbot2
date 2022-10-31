@@ -320,7 +320,7 @@ void CBotTF2WaitHealthTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		 fail();
 	else
 	{
-		// TO DO
+		// TODO:
 		/*edict_t *pOtherPlayer = CBotGlobals::findNearestPlayer(m_vOrigin,50.0,pBot->getEdict());
 
 		if ( pOtherPlayer )

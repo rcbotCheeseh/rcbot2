@@ -1,3 +1,4 @@
+
 #include "engine_wrappers.h"
 #include "bot.h"
 #include "bot_cvars.h"
@@ -165,7 +166,7 @@ bool CTFObjectiveResource::isCPValid ( int iCPIndex, int iTeam, ePointAttackDefe
 	return m_ValidPoints[iTeam-2][type][iCPIndex].bValid;
 }
 
-// TO DO  - Base on waypoint danger
+// TODO:  - Base on waypoint danger
 // base on base point -- if already have attack point and base point -- less focus on base point
 int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDefend_s type)
 {
@@ -663,7 +664,7 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 				{
 					if ( bFirst )
 					{
-						// TO DO update probability depending on distance to payload bomb
+						// TODO: update probability depending on distance to payload bomb
 						const float fDist = (CBotGlobals::entityOrigin(pPayloadBomb) - m_vCPPositions[i]).Length();
 
 						bFirst = false;
@@ -704,7 +705,6 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 					arr[i].fProb = fMaxProb;
 					fMaxProb = fMaxProb/4;
 				}
-
 				
 				//arr[i].fProb *= arr[i].fProb; // square it
 			}

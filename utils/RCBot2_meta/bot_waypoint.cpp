@@ -1237,7 +1237,7 @@ void CWaypointNavigator :: rollBackPosition ()
 	m_vPreviousPoint = m_pBot->getOrigin();
 	m_iCurrentWaypoint = CWaypointLocations::NearestWaypoint(m_vPreviousPoint,CWaypointLocations::REACHABLE_RANGE,m_iLastFailedWpt,true,false,true, nullptr,false,m_pBot->getTeam());
 
-	// TODO figure out what this is actually intended to do
+	// TODO: figure out what this is actually intended to do
 	while ( !m_currentRoute.empty() ) // reached goal!!
 	{
 		const int iRouteWaypoint = m_currentRoute.top();

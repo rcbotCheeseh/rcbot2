@@ -2970,7 +2970,7 @@ void CBot :: duck ( bool hold )
 		m_pButtons->holdButton(IN_DUCK,0.0f/* time to press*/,1.0f/* hold time*/,0.5f/*let go time*/); 
 }
 
-// TO DO: perceptron method
+// TODO: perceptron method
 bool CBot::wantToFollowEnemy ()
 {
 	return getHealthPercent() > 1.0f - m_pProfile->m_fBraveness;

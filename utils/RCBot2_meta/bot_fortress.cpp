@@ -1730,7 +1730,7 @@ bool CBotTF2 :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 		if ( (m_iClass == TF_CLASS_SPY) && !isCloaked() && !CTeamFortress2Mod::isSentry(pAttacker,CTeamFortress2Mod::getEnemyTeam(m_iTeam)) )
 		{
 			
-			// TO DO : make sure I'm not just caught in crossfire
+			// TODO: make sure I'm not just caught in crossfire
 			// search for other team members
 			if ( !m_StatsCanUse.stats.m_iTeamMatesVisible || !m_StatsCanUse.stats.m_iTeamMatesInRange )
 				m_fFrenzyTime = engine->Time() + randomFloat(2.0f,6.0f);
@@ -4581,7 +4581,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 				}
 			}
 		}
-		// to do -- split into two
+		// TODO: -- split into two
 		ADD_UTILITY(BOT_UTIL_UPGSENTRY,!m_bIsCarryingObj && (m_fRemoveSapTime<engine->Time()) &&!bHasFlag &&( m_pSentryGun.get()!=NULL) && !CClassInterface::getTF2BuildingIsMini(m_pSentryGun) && (((iSentryLevel<3)&&(iMetal>=(200-CClassInterface::getTF2SentryUpgradeMetal(m_pSentryGun)))) || ((fSentryHealthPercent<1.0f)&&(iMetal>75)) || (CClassInterface::getSentryEnemy(m_pSentryGun)!=NULL) ),0.8+((1.0f-fSentryHealthPercent)*0.2));
 
 		ADD_UTILITY(BOT_UTIL_GETAMMODISP,!m_bIsCarryingObj && m_pDispenser && !CClassInterface::isObjectBeingBuilt(m_pDispenser) && isVisible(m_pDispenser) && (iMetal<200),fUseDispFactor);
@@ -7049,7 +7049,7 @@ void CBotTF2::waitRemoveSap ()
 {
 	// this gives engi bot some time to attack spy that has been sapping a sentry
 	m_fRemoveSapTime = engine->Time()+randomFloat(2.5f,4.0f);
-	// TO DO :: add spy check task 
+	// TODO :: add spy check task 
 }
 
 void CBotTF2::roundReset(bool bFullReset)
