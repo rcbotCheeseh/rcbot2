@@ -31,7 +31,6 @@
 
 #include "bot_plugin_meta.h"
 
-
 #include "igameevents.h"
 #include "bot.h"
 #include "bot_cvars.h"
@@ -133,7 +132,6 @@ private:
 	float m_fRadius;
 	bool m_bValid;
 };
-
 
 class CBotSeeEnemyHurtFriendly : public IBotFunction
 {
@@ -297,7 +295,6 @@ void CPlayerHurtEvent :: execute ( IBotEventInterface *pEvent )
 				CBots::botFunction(&func2);
 			}
 		}
-
 	}
 	//CBots::botFunction()
 }
@@ -366,7 +363,6 @@ void CPlayerDeathEvent :: execute ( IBotEventInterface *pEvent )
 					}
 				}
 			}
-
 		}
 
 	if ( pBot )
@@ -402,6 +398,7 @@ void CBombPickupEvent :: execute ( IBotEventInterface *pEvent )
 
 void CPlayerFootstepEvent :: execute ( IBotEventInterface *pEvent )
 {
+	
 }
 
 void CBombDroppedEvent :: execute ( IBotEventInterface *pEvent )
@@ -606,12 +603,8 @@ void CTF2ObjectDestroyed :: execute ( IBotEventInterface *pEvent )
 			}
 			//}
 		}
-
 	}
-
-
 }
-
 
 void CPostInventoryApplicationTF2 :: execute ( IBotEventInterface *pEvent )
 {
@@ -666,7 +659,6 @@ void CTF2RoundWinEvent :: execute (IBotEventInterface *pEvent )
 	
 	CTeamFortress2Mod::roundWon(iWinningTeam);
 }
-
 
 void CTF2SetupFinished ::execute(IBotEventInterface *pEvent )
 {

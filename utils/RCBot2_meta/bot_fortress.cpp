@@ -1778,10 +1778,10 @@ void CBotTF2 :: spawnInit()
 	m_fCarryTime = 0.0f;
 
 	m_bIsCarryingTeleExit = false;
-	 m_bIsCarryingSentry = false;;
-	 m_bIsCarryingDisp = false;;
-	 m_bIsCarryingTeleEnt = false;;
-	 m_bIsCarryingObj = false;;
+	m_bIsCarryingSentry = false;
+	m_bIsCarryingDisp = false;
+	m_bIsCarryingTeleEnt = false;
+	m_bIsCarryingObj = false;
 
 	m_nextVoicecmd = TF_VC_INVALID;
 	m_fAttackPointTime = 0.0f;
