@@ -94,6 +94,10 @@ Additionally, `rcbot/logging.{h,cpp}` is released separately under the
 
 To allow bots to menuselect in order to buy upgrades for MVM
 
+To prevent bots to shoot at ghost players - like in plr_hightower_event Hell Zone
+
+Bots needs to understand how to play Kart games from sd_doomsday_event as they only wonder around those minigames
+
 CBotTF2::changeClass needs implemented to avoid bots punting when using ClassRestrictionsForBots.smx
 
 And to add TF2C support along with Synergy, Black Mesa Source, Counter-Strike: Source and SDK2013
