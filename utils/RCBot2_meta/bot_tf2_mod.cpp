@@ -528,7 +528,7 @@ bool CTeamFortress2Mod ::isBoss ( edict_t *pEntity, float *fFactor )
 		}
 	}
 	else if (isMapType(TF_MAP_CARTRACE) || isMapType(TF_MAP_CART) || isMapType(TF_MAP_KOTH) || 
-		isMapType(TF_MAP_CP) ||	isMapType(TF_MAP_PD) || isMapType(TF_MAP_ARENA))
+		isMapType(TF_MAP_CP) ||	isMapType(TF_MAP_PD) || isMapType(TF_MAP_ARENA) || isMapType(TF_MAP_SD))
 	{
 		if ( m_pBoss.get() == pEntity )
 			return true;
@@ -538,6 +538,13 @@ bool CTeamFortress2Mod ::isBoss ( edict_t *pEntity, float *fFactor )
 			m_pBoss = pEntity;
 			return true;
 		}
+		// to prevent shooting at ghosts? [APG]RoboCop[CL]
+		//if (strcmp(pEntity->GetClassName(),"ghost")==0)
+		//{
+		//	m_pBoss = pEntity;
+		//	return false;
+		//}
+		
 	}
 	else if (isMapType(TF_MAP_MVM) )
 	{
