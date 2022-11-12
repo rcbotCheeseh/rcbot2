@@ -3417,14 +3417,14 @@ bool CBots :: needToAddBot ()
 {
 	const int iClients = CBotGlobals::numClients();
 
-	return m_iMinBots!=-1&&CBots::numBots() < m_iMinBots || iClients < m_iMaxBots&&m_iMaxBots!=-1;
+	return m_iMinBots!=-1&& numBots() < m_iMinBots || iClients < m_iMaxBots&&m_iMaxBots!=-1;
 }
 
 bool CBots :: needToKickBot ()
 {
 	if ( m_flAddKickBotTime < engine->Time() )
 	{
-		if ( m_iMinBots != -1 && CBots::numBots() <= m_iMinBots )
+		if ( m_iMinBots != -1 && numBots() <= m_iMinBots )
 			return false;
 
 		if ( m_iMaxBots > 0 && CBotGlobals::numClients() > m_iMaxBots )

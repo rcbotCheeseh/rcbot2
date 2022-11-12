@@ -581,7 +581,7 @@ void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vect
 		}
 		// DOD:S compatibility
 		if (bCheckArea && !curmod->isWaypointAreaValid(curr_wpt->getArea(), curr_wpt->getFlags()))
-			continue;;
+			continue;
 
 		if ( iFlagsOnly != 0 )
 		{

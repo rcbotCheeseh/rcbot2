@@ -142,17 +142,17 @@ int CBotGlobals ::numPlayersOnTeam(int iTeam, bool bAliveOnly)
 {
 	int num = 0;
 
-	for ( int i = 1; i <= CBotGlobals::numClients(); i ++ )
+	for ( int i = 1; i <= numClients(); i ++ )
 	{
 		edict_t* pEdict = INDEXENT(i);
 
-		if ( CBotGlobals::entityIsValid(pEdict) )
+		if (entityIsValid(pEdict) )
 		{
 			if ( CClassInterface::getTeam(pEdict) == iTeam )
 			{
 				if ( bAliveOnly )
 				{
-					if ( CBotGlobals::entityIsAlive(pEdict) )
+					if (entityIsAlive(pEdict) )
 						num++;
 				}
 				else 
@@ -202,7 +202,7 @@ void CBotGlobals::readRCBotFolder()
 			logger->Log(LogLevel::INFO, "RCBot Folder -> trying %s", szRCBotFolder);
 
 			if (!dirExists(szRCBotFolder)) {
-				snprintf(folder, sizeof folder, "%s/%s", CBotGlobals::modFolder(), szRCBotFolder);
+				snprintf(folder, sizeof folder, "%s/%s", modFolder(), szRCBotFolder);
 
 				szRCBotFolder = CStrings::getString(folder);
 				logger->Log(LogLevel::INFO, "RCBot Folder -> trying %s", szRCBotFolder);
@@ -269,7 +269,7 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 	{
 		edict_t* pent = INDEXENT(i);
 
-		if( pent && CBotGlobals::isNetworkable(pent) )
+		if( pent && isNetworkable(pent) )
 		{
 			const int length = strlen(name);						 
 
@@ -453,7 +453,7 @@ float CBotGlobals :: DotProductFromOrigin ( edict_t *pEnemy, Vector pOrigin )
 	// in fov? Check angle to edict
 	AngleVectors(eyes,&vForward);
 	
-	vecLOS = pOrigin - CBotGlobals::entityOrigin(pEnemy);
+	vecLOS = pOrigin - entityOrigin(pEnemy);
 	vecLOS = vecLOS/vecLOS.Length();
 	
 	flDot = DotProduct (vecLOS , vForward );
@@ -555,7 +555,7 @@ int CBotGlobals :: countTeamMatesNearOrigin ( Vector vOrigin, float fRange, int 
 {
 	int iCount = 0;
 
-	for ( int i = 1; i <= CBotGlobals::maxClients(); i ++ )
+	for ( int i = 1; i <= maxClients(); i ++ )
 	{
 		edict_t *pEdict = INDEXENT(i);
 
@@ -586,7 +586,7 @@ int CBotGlobals :: numClients ()
 {
 	int iCount = 0;
 
-	for ( int i = 1; i <= CBotGlobals::maxClients(); i ++ )
+	for ( int i = 1; i <= maxClients(); i ++ )
 	{
 		edict_t *pEdict = INDEXENT(i);
 
@@ -1126,7 +1126,7 @@ void CBotGlobals :: buildFileName ( char *szOutput, const char *szFile, const ch
 
 	if ( bModDependent )
 	{
-		strcat(szOutput,CBotGlobals::modFolder());
+		strcat(szOutput, modFolder());
 		addDirectoryDelimiter(szOutput);
 	}
 
@@ -1209,11 +1209,11 @@ float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity,Vector vOrigin)
 	VectorAngles(vAngles/vAngles.Length(),qAngles);
 
 	fYaw = qAngles.y;
-	CBotGlobals::fixFloatAngle(&fYaw);
+	fixFloatAngle(&fYaw);
 
 	fAngle = qBotAngles.y - fYaw;
 
-	CBotGlobals::fixFloatAngle(&fAngle);
+	fixFloatAngle(&fAngle);
 
 	return fAngle;
 

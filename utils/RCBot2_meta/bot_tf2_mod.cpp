@@ -149,7 +149,7 @@ bool CTeamFortress2Mod :: checkWaypointForTeam(CWaypoint *pWpt, int iTeam)
 
 bool CTeamFortress2Mod :: isWaypointAreaValid ( int iWptArea, int iWptFlags )
 {
-	return CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(iWptArea,iWptFlags);
+	return m_ObjectiveResource.isWaypointAreaValid(iWptArea,iWptFlags);
 }
 ///////////////////////////
 bool CTeamFortress2Mod :: withinEndOfRound ( float fTime )	
@@ -187,7 +187,7 @@ void CTeamFortress2Mod ::modFrame ()
 				m_ObjectiveResource.setup();			
 		}
 		else
-			CTeamFortress2Mod::m_ObjectiveResource.think();
+			m_ObjectiveResource.think();
 		/*
 		if (m_pGameRules.get() == NULL)
 		{
@@ -687,9 +687,9 @@ bool CTeamFortress2Mod :: isHealthKit (const edict_t* pEntity)
 
 bool CTeamFortress2Mod :: isAreaOwnedByTeam (int iArea, int iTeam)
 {
-	if ( CTeamFortress2Mod::m_ObjectiveResource.isInitialised() )
+	if (m_ObjectiveResource.isInitialised() )
 	{
-		return iArea==0 || CTeamFortress2Mod::m_ObjectiveResource.GetOwningTeam(CTeamFortress2Mod::m_ObjectiveResource.m_WaypointAreaToIndexTranslation[iArea])==iTeam;
+		return iArea==0 || m_ObjectiveResource.GetOwningTeam(m_ObjectiveResource.m_WaypointAreaToIndexTranslation[iArea])==iTeam;
 	}
 
 	return false;
@@ -830,7 +830,7 @@ CWaypoint *CTeamFortress2Mod :: getBestWaypointMVM ( CBot *pBot, int iFlags )
 {
 	Vector vFlagLocation;
 
-	const bool bFlagLocationValid = CTeamFortress2Mod::getFlagLocation(TF2_TEAM_BLUE,&vFlagLocation);		
+	const bool bFlagLocationValid = getFlagLocation(TF2_TEAM_BLUE,&vFlagLocation);		
 	
 	float fTankDistance = 0.0f; //never used? [APG]RoboCop[CL]
 
@@ -907,9 +907,9 @@ void CTeamFortress2Mod :: teleporterBuilt ( edict_t *pOwner, eEngiBuild type, ed
 
 	const int team = getTeam(pOwner);
 
-	if ( CTeamFortress2Mod::isTeleporterEntrance(pBuilding,team) )
+	if (isTeleporterEntrance(pBuilding,team) )
 		m_Teleporters[iIndex].entrance = MyEHandle(pBuilding);
-	else if ( CTeamFortress2Mod::isTeleporterExit(pBuilding,team) )
+	else if (isTeleporterExit(pBuilding,team) )
 		m_Teleporters[iIndex].exit = MyEHandle(pBuilding);
 
 	m_Teleporters[iIndex].sapper = MyEHandle();
@@ -1087,7 +1087,7 @@ edict_t *CTeamFortress2Mod :: nearestDispenser ( Vector vOrigin, int team )
 
 		if ( pDisp )
 		{
-			if ( CTeamFortress2Mod::getTeam(pDisp) == team )
+			if (getTeam(pDisp) == team )
 			{
 				const float fDist = (CBotGlobals::entityOrigin(pDisp) - vOrigin).Length();
 
@@ -1134,9 +1134,9 @@ void CTeamFortress2Mod:: addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, in
 		{
 			*iFlags |= CWaypointTypes::W_FL_RESUPPLY;
 
-			if ( CTeamFortress2Mod::getTeam(pPlayer) == TF2_TEAM_BLUE )
+			if (getTeam(pPlayer) == TF2_TEAM_BLUE )
 				*iFlags |= CWaypointTypes::W_FL_NORED;
-			else if ( CTeamFortress2Mod::getTeam(pPlayer) == TF2_TEAM_RED )
+			else if (getTeam(pPlayer) == TF2_TEAM_RED )
 				*iFlags |= CWaypointTypes::W_FL_NOBLU;
 		}
 	}
@@ -1211,7 +1211,7 @@ void CTeamFortress2Mod::updatePointMaster()
 					try
 					{
 						CBaseEntity *pent = m_PointMaster->m_ControlPointRounds[r];
-						CTeamControlPointRound* pointRound = (CTeamControlPointRound*)(reinterpret_cast<uintptr_t>(pent) + baseEntityOffset);
+						CTeamControlPointRound* pointRound = reinterpret_cast<CTeamControlPointRound*>(reinterpret_cast<uintptr_t>(pent) + baseEntityOffset);
 
 						logger->Log(LogLevel::DEBUG, "Control Points for Round %d", r);
 

@@ -1204,7 +1204,7 @@ bool CClients :: clientsDebugging (int iLev)
 	{
 		for ( int i = 0; i < MAX_PLAYERS; i ++ )
 		{
-			CClient* pClient = CClients::get(i);
+			CClient* pClient = get(i);
 
 			if ( pClient->isUsed() )
 			{

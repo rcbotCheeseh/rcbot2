@@ -185,7 +185,7 @@ void CCounterStrikeSourceMod::onRoundStart()
         }
 	}
 	
-    if(CCounterStrikeSourceMod::isMapType(CS_MAP_HOSTAGERESCUE))
+    if(isMapType(CS_MAP_HOSTAGERESCUE))
     {
         updateHostages();
     }
