@@ -282,7 +282,7 @@ void CClient :: think ()
 
 				if ( pBot != nullptr)
 				{
-					((CBotTF2*)pBot)->highFivePlayer(m_pPlayer,CClassInterface::getTF2TauntYaw(m_pPlayer));
+					static_cast<CBotTF2*>(pBot)->highFivePlayer(m_pPlayer,CClassInterface::getTF2TauntYaw(m_pPlayer));
 					m_fMonitorHighFiveTime = engine->Time() + 3.0f;
 				}
 			}

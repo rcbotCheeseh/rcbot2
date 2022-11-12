@@ -220,7 +220,7 @@ void *CSignatureFunction::findPattern(const void *libPtr, const char *pattern, s
 	}
 
 	char* ptr = static_cast<char*>(lib.baseAddress);
-	char* end = ptr + lib.memorySize - len;
+	const char* end = ptr + lib.memorySize - len;
 
 	while (ptr < end)
 	{

@@ -85,7 +85,7 @@ public:
 		Init();
 	}
 
-	static unsigned char *resetFailedWaypoints (WaypointList *iIgnoreWpts);
+	static unsigned char *resetFailedWaypoints (const WaypointList *iIgnoreWpts);
 
 	static void Init()
 	{
@@ -114,7 +114,7 @@ public:
 
 	static int GetCoverWaypoint ( Vector vPlayerOrigin, Vector vCoverFrom, WaypointList *iIgnoreWpts, Vector *vGoalOrigin = nullptr, int iTeam = 0, float fMinDist = MIN_COVER_MOVE_DIST, float fMaxDist = HALF_MAX_MAP_SIZE );
 
-	static void FindNearestCoverWaypointInBucket ( int i, int j, int k, const Vector &vOrigin, float *pfMinDist, int *piIndex, WaypointList *iIgnoreWpts, int iCoverFromWpt, Vector *vGoalOrigin = nullptr, int iTeam = 0, float fMinDist = MIN_COVER_MOVE_DIST );
+	static void FindNearestCoverWaypointInBucket ( int i, int j, int k, const Vector &vOrigin, float *pfMinDist, int *piIndex, WaypointList *iIgnoreWpts, int iCoverFromWpt, const Vector *vGoalOrigin = nullptr, int iTeam = 0, float fMinDist = MIN_COVER_MOVE_DIST );
 
 	static void AddWptLocation ( int iIndex, const float *fOrigin );
 

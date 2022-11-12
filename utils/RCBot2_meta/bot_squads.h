@@ -127,7 +127,7 @@ public:
 
 	void SetCombatType ( eCombatType iCombatType )
 	{
-		edict_t *pLeader = GetLeader();
+		const edict_t *pLeader = GetLeader();
 
 		m_CombatType = iCombatType;
 

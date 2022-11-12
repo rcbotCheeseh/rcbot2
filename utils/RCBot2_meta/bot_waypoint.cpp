@@ -245,7 +245,7 @@ bool CWaypointNavigator :: randomDangerPath (Vector *vec)
 	float fBelief;
 	int i;
 	CWaypoint *pNext;
-	CWaypoint *pOnRouteTo = nullptr;
+	const CWaypoint *pOnRouteTo = nullptr;
 
 	if ( m_iCurrentWaypoint == -1 )
 		return false;
@@ -1309,7 +1309,7 @@ void CWaypointNavigator :: updatePosition ()
 
 			// Bot passed into this waypoint safely, update belief
 
-			bot_statistics_t *stats = m_pBot->getStats();
+			const bot_statistics_t *stats = m_pBot->getStats();
 
 			if ( stats )
 			{
@@ -1338,7 +1338,7 @@ void CWaypointNavigator :: updatePosition ()
 			}
 			else
 			{
-				int iWaypointFlagsPrev = CWaypoints::getWaypoint(m_iCurrentWaypoint)->getFlags();
+				const int iWaypointFlagsPrev = CWaypoints::getWaypoint(m_iCurrentWaypoint)->getFlags();
 				const int iPrevWpt = m_iPrevWaypoint;
 				m_vPreviousPoint = m_pBot->getOrigin();
 				m_iPrevWaypoint = m_iCurrentWaypoint;
@@ -2455,7 +2455,7 @@ CWaypoint *CWaypoints :: randomRouteWaypoint ( CBot *pBot, Vector vOrigin, Vecto
 	static short int size;
 	static CWaypointNavigator *pNav;
 	
-	pNav = (CWaypointNavigator*)pBot->getNavigator();
+	pNav = static_cast<CWaypointNavigator*>(pBot->getNavigator());
 
 	size = numWaypoints();
 
@@ -2617,7 +2617,7 @@ CWaypoint *CWaypoints :: nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, i
 
 void CWaypoints :: autoFix ( bool bAutoFixNonArea )
 {
-	int *iNumAreas = CTeamFortress2Mod::m_ObjectiveResource.m_iNumControlPoints;
+	const int *iNumAreas = CTeamFortress2Mod::m_ObjectiveResource.m_iNumControlPoints;
 
 	if ( iNumAreas == nullptr)
 		return;
@@ -2639,7 +2639,7 @@ void CWaypoints :: autoFix ( bool bAutoFixNonArea )
 
 void CWaypoints :: checkAreas ( edict_t *pActivator )
 {
-	int *iNumAreas = CTeamFortress2Mod::m_ObjectiveResource.m_iNumControlPoints;
+	const int *iNumAreas = CTeamFortress2Mod::m_ObjectiveResource.m_iNumControlPoints;
 
 	if ( iNumAreas == nullptr)
 		return;
@@ -2723,7 +2723,7 @@ CWaypoint* CWaypoints::randomWaypointGoalNearestArea(int iFlags, int iTeam, int 
 	{
 		if ( pBot )
 		{
-			CWaypointNavigator* pNav = (CWaypointNavigator*)pBot->getNavigator();
+			CWaypointNavigator* pNav = static_cast<CWaypointNavigator*>(pBot->getNavigator());
 
 			pWpt = pNav->chooseBestFromBeliefBetweenAreas(goals,bHighDanger,bIgnoreBelief);
 		}
@@ -2803,7 +2803,7 @@ CWaypoint* CWaypoints::randomWaypointGoalBetweenArea(int iFlags, int iTeam, int 
 	{
 		if ( pBot )
 		{
-			CWaypointNavigator* pNav = (CWaypointNavigator*)pBot->getNavigator();
+			CWaypointNavigator* pNav = static_cast<CWaypointNavigator*>(pBot->getNavigator());
 
 			pWpt = pNav->chooseBestFromBeliefBetweenAreas(goals, bHighDanger, bIgnoreBelief);
 		}
@@ -2860,7 +2860,7 @@ CWaypoint *CWaypoints :: randomWaypointGoal ( int iFlags, int iTeam, int iArea, 
 	{
 		if ( pBot )
 		{
-			CWaypointNavigator* pNav = (CWaypointNavigator*)pBot->getNavigator();
+			CWaypointNavigator* pNav = static_cast<CWaypointNavigator*>(pBot->getNavigator());
 
 			pWpt = pNav->chooseBestFromBelief(goals, bHighDanger, iSearchFlags);
 		}
@@ -3282,7 +3282,7 @@ public:
 	{
 		CBotTF2::init();
 		strcpy(m_szBotName,"Test Bot");
-		m_iClass = (TF_Class)iClass; 
+		m_iClass = static_cast<TF_Class>(iClass); 
 		m_iTeam = iTeam; 
 		m_pEdict = pEdict;
 		CBotTF2::setup();

@@ -425,7 +425,7 @@ TF_Class CTeamFortress2Mod :: getSpyDisguise ( edict_t *pPlayer )
 
 	CClassInterface::getTF2SpyDisguised(pPlayer,&iClass,&iTeam,&iIndex,&iHealth);
 
-	return (TF_Class)iClass;
+	return static_cast<TF_Class>(iClass);
 }
 
 float CTeamFortress2Mod :: TF2_GetClassSpeed(int iClass) 
@@ -1410,7 +1410,7 @@ void CTeamFortress2Mod::dispenserBuilt(const edict_t* pOwner, eEngiBuild type, e
 
 void CTeamFortress2Mod::updateRedPayloadBomb ( edict_t *pent )
 {
-	edict_t *cur = m_pPayLoadBombRed.get();
+	const edict_t *cur = m_pPayLoadBombRed.get();
 
 	if ( cur != pent )
 		m_pPayLoadBombRed = pent;
@@ -1418,7 +1418,7 @@ void CTeamFortress2Mod::updateRedPayloadBomb ( edict_t *pent )
 
 void CTeamFortress2Mod::updateBluePayloadBomb ( edict_t *pent )
 {
-	edict_t *cur = m_pPayLoadBombBlue.get();
+	const edict_t *cur = m_pPayLoadBombBlue.get();
 
 	if ( cur != pent )
 		m_pPayLoadBombBlue = pent;

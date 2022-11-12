@@ -49,7 +49,7 @@ void CStrings :: freeAllMemory()
 	{
 		for ( unsigned int j = 0; j < m_Strings[i].size(); j ++ )
 		{
-			char* pszFree = m_Strings[i][j];
+			const char* pszFree = m_Strings[i][j];
 
 			if ( pszFree )
 				delete pszFree;

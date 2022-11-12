@@ -17,7 +17,7 @@ float CWaypointDistances::m_fSaveTime = 0;
 void CWaypointDistances :: load ()
 {
 	wpt_dist_hdr_t hdr;
-	char *szMapName = CBotGlobals::getMapName();
+	const char *szMapName = CBotGlobals::getMapName();
 
 	if ( szMapName  && *szMapName )
 	{
@@ -44,7 +44,7 @@ void CWaypointDistances :: load ()
 
 void CWaypointDistances :: save ()
 {
-	char *szMapName = CBotGlobals::getMapName();
+	const char *szMapName = CBotGlobals::getMapName();
 
 		if ( szMapName && *szMapName )
 		{

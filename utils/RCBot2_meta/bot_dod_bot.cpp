@@ -57,7 +57,7 @@ const char *g_DODClassCmd[2][6] =
 // could be a bomb 
 void CBroadcastBombEvent :: execute (CBot *pBot) 
 {
-	CDODBot *pDODBot = (CDODBot*)pBot;
+	CDODBot *pDODBot = static_cast<CDODBot*>(pBot);
 
 	pDODBot->bombEvent(DOD_BOMB_PLANT,m_iCP,m_iTeam);
 }
@@ -433,7 +433,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 		
 		if ( pWeapon )
 		{
-			const DOD_Class pclass = (DOD_Class)CClassInterface::getPlayerClassDOD(pKiller);
+			const DOD_Class pclass = static_cast<DOD_Class>(CClassInterface::getPlayerClassDOD(pKiller));
 
 			if ( (pclass == DOD_CLASS_SNIPER) && pWeapon->isZoomable() )
 			{
@@ -578,7 +578,9 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 
 			if ( !m_pSchedules->isCurrentSchedule(SCHED_INVESTIGATE_NOISE) )
 			{
-				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_INVESTIGATE_POINT,!m_pSchedules->hasSchedule(SCHED_DEPLOY_MACHINE_GUN)&&!m_pSchedules->hasSchedule(SCHED_SNIPE),0.5f,(unsigned int)pDied,m_vListenPosition)
+				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_INVESTIGATE_POINT,
+				                        !m_pSchedules->hasSchedule(SCHED_DEPLOY_MACHINE_GUN)&&!m_pSchedules->hasSchedule
+				                        (SCHED_SNIPE), 0.5f, reinterpret_cast<unsigned int>(pDied), m_vListenPosition)
 
 				//m_pSchedules->removeSchedule(SCHED_INVESTIGATE_NOISE);
 				//m_pSchedules->addFront(new CBotInvestigateNoiseSched(CBotGlobals::entityOrigin(pDied),m_vListenPosition));
@@ -642,7 +644,7 @@ void CDODBot :: seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *p
 		if ( pWeapon )
 		{
 			static CBotWeapon *pCurrentWeapon;
-			const DOD_Class pclass = (DOD_Class)CClassInterface::getPlayerClassDOD(pTeamMate);
+			const DOD_Class pclass = static_cast<DOD_Class>(CClassInterface::getPlayerClassDOD(pTeamMate));
 			//DOD_Class pclassdead = (DOD_Class)CClassInterface::getPlayerClassDOD(pDied);
 
 			pCurrentWeapon = getCurrentWeapon();
@@ -703,7 +705,7 @@ void CDODBot :: dropAmmo ()
 // use weapon ID later, use getCurrentWeapon for now
 bool CDODBot :: wantToListenToPlayerAttack ( edict_t *pPlayer, int iWeaponID )
 {
-	edict_t *pentWeapon = CClassInterface::getCurrentWeapon(pPlayer);
+	const edict_t *pentWeapon = CClassInterface::getCurrentWeapon(pPlayer);
 
 	if ( pentWeapon != nullptr)
 	{
@@ -1143,7 +1145,7 @@ void CDODBot :: modThink ()
 
 	setMoveSpeed(fMaxSpeed);
 	
-	m_iClass = (DOD_Class)CClassInterface::getPlayerClassDOD(m_pEdict);	
+	m_iClass = static_cast<DOD_Class>(CClassInterface::getPlayerClassDOD(m_pEdict));	
 	m_iTeam = getTeam();
 
 	m_bHasBomb = m_pWeapons->hasWeapon(DOD_WEAPON_BOMB);
@@ -1891,7 +1893,7 @@ void CDODBot :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
 		break;
 	}
 
-	m_LastHearVoiceCommand = (eDODVoiceCMD)cmd;
+	m_LastHearVoiceCommand = static_cast<eDODVoiceCMD>(cmd);
 
 	// don't say the same command for a second or two
 	if ( cmd < MAX_VOICE_CMDS )
@@ -2800,7 +2802,7 @@ bool CDODBot:: checkStuck ()
 			}
 		}
 
-		edict_t *pGroundEnt = CClassInterface::getGroundEntity(m_pEdict);
+		const edict_t *pGroundEnt = CClassInterface::getGroundEntity(m_pEdict);
 
 		if ( pGroundEnt ) // stuck on furniture? 
 		{
@@ -3332,7 +3334,7 @@ bool CDODBot :: select_CWeapon ( CWeapon *pWeapon )
 
 bool CDODBot :: selectBotWeapon ( CBotWeapon *pBotWeapon )
 {
-	CWeapon *pSelect = pBotWeapon->getWeaponInfo();
+	const CWeapon *pSelect = pBotWeapon->getWeaponInfo();
 
 	if ( pSelect )
 	{

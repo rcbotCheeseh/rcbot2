@@ -92,8 +92,8 @@ public:
 		const int iBit = iPosition%8;
 
 		if ( iByte < g_iMaxVisibilityByte )
-		{			
-			unsigned char *ToReturn = m_VisTable+iByte;
+		{
+			const unsigned char *ToReturn = m_VisTable+iByte;
 			
 			return (*ToReturn & 1<<iBit) > 0;
 		}

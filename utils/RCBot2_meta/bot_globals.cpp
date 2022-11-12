@@ -87,10 +87,10 @@ public:
 
 	bool ShouldHitEntity( IHandleEntity *pServerEntity, int contentsMask ) override
 	{ 
-		if ( m_pPlayer && pServerEntity == (IHandleEntity*)m_pPlayer->GetIServerEntity() )
+		if ( m_pPlayer && pServerEntity == static_cast<IHandleEntity*>(m_pPlayer->GetIServerEntity()) )
 			return false;
 
-		if ( m_pHit && pServerEntity == (IHandleEntity*)m_pHit->GetIServerEntity() )
+		if ( m_pHit && pServerEntity == static_cast<IHandleEntity*>(m_pHit->GetIServerEntity()) )
 			return false;
 
 		return true; 

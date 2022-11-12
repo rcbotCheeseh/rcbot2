@@ -197,7 +197,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 	case BOT_UTIL_HL2DM_USE_CRATE:
 		// check if it is worth it first
 		{
-			CBotWeapon *pWeapon = nullptr;
+			const CBotWeapon *pWeapon = nullptr;
 
 			/*
 			possible models
@@ -492,7 +492,7 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 		if ( fDistance > BLAST_RADIUS && fDistance < 1500 )
 		{
 			CWeapon *pWeapon = CWeapons::getWeapon(HL2DM_WEAPON_FRAG);
-			CBotWeapon *pBotWeapon = m_pWeapons->getWeapon(pWeapon);
+			const CBotWeapon *pBotWeapon = m_pWeapons->getWeapon(pWeapon);
 
 			ADD_UTILITY(BOT_UTIL_THROW_GRENADE, pBotWeapon && pBotWeapon->getAmmo(this) > 0,1.0f- getHealthPercent()*0.2f)
 		}

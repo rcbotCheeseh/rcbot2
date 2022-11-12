@@ -591,7 +591,7 @@ public:
 
 	static byte getTakeDamage ( edict_t *pent )
 	{
-		return byte(g_GetProps[GETPROP_TAKEDAMAGE].getInt(pent, 0));
+		return static_cast<byte>(g_GetProps[GETPROP_TAKEDAMAGE].getInt(pent, 0));
 	}
 
 	static byte *getTakeDamagePointer ( edict_t *pent )
@@ -616,21 +616,21 @@ public:
 
 	static int getPlayerScoreDOD (edict_t* resource, const edict_t* pPlayer)
 	{
-		int *score_array = g_GetProps[GETPROP_DOD_SCORE].getIntPointer(resource);
+		const int *score_array = g_GetProps[GETPROP_DOD_SCORE].getIntPointer(resource);
 
 		return score_array!= nullptr ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
 	static int getPlayerObjectiveScoreDOD (edict_t* resource, const edict_t* pPlayer)
 	{
-		int *score_array = g_GetProps[GETPROP_DOD_OBJSCORE].getIntPointer(resource);
+		const int *score_array = g_GetProps[GETPROP_DOD_OBJSCORE].getIntPointer(resource);
 
 		return score_array!= nullptr ? score_array[ENTINDEX(pPlayer)] : 0;
 	}
 
 	static int getPlayerDeathsDOD (edict_t* resource, const edict_t* pPlayer)
 	{
-		int *score_array = g_GetProps[GETPROP_DOD_DEATHS].getIntPointer(resource);
+		const int *score_array = g_GetProps[GETPROP_DOD_DEATHS].getIntPointer(resource);
 
 		return score_array!= nullptr ? score_array[ENTINDEX(pPlayer)] : 0;
 	}

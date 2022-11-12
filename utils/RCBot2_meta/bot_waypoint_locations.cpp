@@ -49,7 +49,7 @@ bool CWaypointLocations :: m_bIgnoreBox = false;
 
 #define READ_LOC(loc) abs((int)((int)((loc) + HALF_MAX_MAP_SIZE) / BUCKET_SPACING));
 
-unsigned char *CWaypointLocations :: resetFailedWaypoints (WaypointList *iIgnoreWpts)
+unsigned char *CWaypointLocations :: resetFailedWaypoints (const WaypointList *iIgnoreWpts)
 {
 	Q_memset(g_iFailedWaypoints,0,sizeof(unsigned char)*CWaypoints::MAX_WAYPOINTS);
 	
@@ -345,7 +345,7 @@ void CWaypointLocations :: FindNearestCoverWaypointInBucket ( int i, int j, int 
 															 const Vector &vOrigin, float *pfMinDist, 
 															 int *piIndex, 
 															 WaypointList *iIgnoreWpts, 
-															 int iCoverFromWpt, Vector *vGoalOrigin, 
+															 int iCoverFromWpt, const Vector *vGoalOrigin, 
 															 int iTeam, float fMinDist )
 // Search for the nearest waypoint : I.e.
 // Find the waypoint that is closest to vOrigin from the distance pfMinDist

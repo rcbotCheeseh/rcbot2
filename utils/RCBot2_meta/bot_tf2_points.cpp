@@ -16,7 +16,7 @@ public:
 	void execute ( CBot *pBot ) override
 	{
 		if ( pBot->getTeam() == iTeam )
-			((CBotTF2*)pBot)->updateAttackPoints();
+			static_cast<CBotTF2*>(pBot)->updateAttackPoints();
 	}
 private:
 	int iTeam;	
@@ -29,7 +29,7 @@ public:
 	void execute ( CBot *pBot ) override
 	{
 		if ( pBot->getTeam() == iTeam )
-			((CBotTF2*)pBot)->updateDefendPoints();
+			static_cast<CBotTF2*>(pBot)->updateDefendPoints();
 	}
 private:
 	int iTeam;	
@@ -41,7 +41,7 @@ class CBotFuncPointsUpdated : public IBotFunction
 public:
 	void execute ( CBot *pBot ) override
 	{
-		((CBotTF2*)pBot)->pointsUpdated();
+		static_cast<CBotTF2*>(pBot)->pointsUpdated();
 	}	
 };
 
@@ -254,12 +254,12 @@ bool CTeamControlPointRound :: isPointInRound ( edict_t *point_pent )
 {
 	for ( int i = 0; i < m_ControlPoints.Size(); i ++ )
 	{
-		CBaseHandle* hndl = &m_ControlPoints[i]; 
+		const CBaseHandle* hndl = &m_ControlPoints[i]; 
 
 		if ( hndl )
 		{ 
 			edict_t* pPoint = INDEXENT(hndl->GetEntryIndex());
-			CBaseEntity *pent = pPoint->GetUnknown()->GetBaseEntity();
+			const CBaseEntity *pent = pPoint->GetUnknown()->GetBaseEntity();
 			if ( point_pent->GetUnknown()->GetBaseEntity() == pent )
 				return true;
 		}
@@ -285,7 +285,7 @@ CTeamControlPointRound *CTeamControlPointMaster:: getCurrentRound ( )
 	// HACK: we use one of the known CBaseEntity-sized entities to compute the offset to the first subclass member for CTeamControlPointMaster / CTeamControlPointRound
 	const size_t baseEntityOffset = servertools->GetEntityFactoryDictionary()->FindFactory("simple_physics_brush")->GetEntitySize();
 
-	return reinterpret_cast<CTeamControlPointRound*>((uintptr_t) pent + baseEntityOffset);
+	return reinterpret_cast<CTeamControlPointRound*>(reinterpret_cast<uintptr_t>(pent) + baseEntityOffset);
 }
 
 //////////////////

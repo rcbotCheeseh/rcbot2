@@ -55,7 +55,7 @@ void UTIL_FindServerClassPrint(const char *name_cmd)
 	name[127] = 0;
 	__strlow(name);
 
-	ServerClass *pClass = servergamedll->GetAllServerClasses();
+	const ServerClass *pClass = servergamedll->GetAllServerClasses();
 
 	while (pClass)
 	{
@@ -228,7 +228,7 @@ CBaseHandle *CClassInterfaceValue :: getEntityHandle ( edict_t *edict )
 { 
 	getData(edict); 
 
-	return (CBaseHandle *)m_data;
+	return static_cast<CBaseHandle*>(m_data);
 }
 
 edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict ) 
@@ -243,7 +243,7 @@ edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict )
 	if (m_berror)
 		return nullptr;
 
-	hndl = (CBaseHandle *)m_data; 
+	hndl = static_cast<CBaseHandle*>(m_data); 
 
 	if ( hndl )
 		return INDEXENT(hndl->GetEntryIndex());
@@ -814,7 +814,7 @@ edict_t *CClassInterface::FindEntityByNetClass(int start, const char *classname)
 
 		if ( res )
 		{
-			int* score_array = g_GetProps[GETPROP_TF2SCORE].getIntPointer(res);
+			const int* score_array = g_GetProps[GETPROP_TF2SCORE].getIntPointer(res);
 
 			if ( score_array )
 				return score_array[ENTINDEX(edict)-1];
