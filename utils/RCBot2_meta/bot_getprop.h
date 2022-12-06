@@ -1,6 +1,8 @@
 #ifndef __RCBOT_GETPROP_H__
 #define __RCBOT_GETPROP_H__
 
+#include <engine_wrappers.h>
+
 typedef enum
 {
 	TELE_ENTRANCE = 0,
@@ -23,7 +25,7 @@ typedef enum
 	GETPROP_TF2SPYMETER,// CTFPlayer::
 	GETPROP_TF2SPYDISGUISED_TEAM,//CTFPlayer::m_nDisguiseTeam
 	GETPROP_TF2SPYDISGUISED_CLASS,//CTFPlayer::m_nDisguiseClass
-	GETPROP_TF2SPYDISGUISED_TARGET_INDEX,//CTFPlayer::m_iDisguiseTargetIndex
+	GETPROP_TF2SPYDISGUISED_TARGET,//CTFPlayer::m_iDisguiseTargetIndex - nosoop fix for VScript update
 	GETPROP_TF2SPYDISGUISED_DIS_HEALTH,//CTFPlayer::m_iDisguiseHealth
  	GETPROP_TF2MEDIGUN_HEALING,
 	GETPROP_TF2MEDIGUN_TARGETTING,
@@ -448,8 +450,11 @@ public:
 		if ( _class )
 		*_class = g_GetProps[GETPROP_TF2SPYDISGUISED_CLASS].getInt(edict,0); 
 
-		if  ( _index )
-		*_index = g_GetProps[GETPROP_TF2SPYDISGUISED_TARGET_INDEX].getInt(edict,0); 
+		if  ( _index )//nosoop fix for VScript update
+		{
+			edict_t* hTarget = g_GetProps[GETPROP_TF2SPYDISGUISED_TARGET].getEntity(edict);
+			*_index = IndexOfEdict(hTarget);
+		}
 
 		if ( _health )
 		*_health = g_GetProps[GETPROP_TF2SPYDISGUISED_DIS_HEALTH].getInt(edict,0);

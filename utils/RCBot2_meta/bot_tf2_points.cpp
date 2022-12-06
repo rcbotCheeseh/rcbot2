@@ -252,7 +252,7 @@ void CTeamRoundTimer::reset()
 }
 bool CTeamControlPointRound :: isPointInRound ( edict_t *point_pent )
 {
-	for ( int i = 0; i < m_ControlPoints.Size(); i ++ )
+	for ( int i = 0; i < m_ControlPoints.Count(); i ++ )
 	{
 		const CBaseHandle* hndl = &m_ControlPoints[i]; 
 
