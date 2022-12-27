@@ -374,8 +374,8 @@ public:
 
 	int numPaths ();
 
-	int numPathsToThisWaypoint ();
-	int getPathToThisWaypoint ( int i );
+	int numPathsToThisWaypoint () const;
+	int getPathToThisWaypoint ( int i ) const;
 
 	int getPath ( int i );
 
@@ -391,9 +391,9 @@ public:
 
 	void setRadius ( float fRad ) { m_fRadius = fRad; }
 
-	Vector applyRadius ();
+	Vector applyRadius () const;
 
-	bool isAiming ();
+	bool isAiming () const;
 
 private:
 	Vector m_vOrigin;

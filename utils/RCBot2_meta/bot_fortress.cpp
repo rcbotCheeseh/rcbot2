@@ -4039,7 +4039,7 @@ bool CBotTF2::healPlayer()
 	const edict_t *pPlayer = nullptr;
 
 		// Find the player I'm currently healing
-		for ( unsigned int i = 1; i <= gpGlobals->maxClients; i++ )
+		for ( int i = 1; i <= gpGlobals->maxClients; i++ )
 		{
 			edict_t* pent = INDEXENT(i);
 
@@ -4084,7 +4084,8 @@ bool CBotTF2::healPlayer()
 	{
 		// Simple UBER check : healing player not ubered already
 		if (!CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pHeal) && !CTeamFortress2Mod::isFlagCarrier(m_pHeal) &&
-			(m_pEnemy&&isVisible(m_pEnemy)) || (((static_cast<float>(m_pPlayerInfo->GetHealth()) / m_pPlayerInfo->GetMaxHealth()) < 0.33) || (getHealthPercent() < 0.33)))
+			(m_pEnemy&&isVisible(m_pEnemy)) || (static_cast<float>(m_pPlayerInfo->GetHealth()) / 
+				static_cast<float>(m_pPlayerInfo->GetMaxHealth()) < 0.33f || getHealthPercent() < 0.33f))
 		{
 			if (CTeamFortress2Mod::hasRoundStarted())
 			{
