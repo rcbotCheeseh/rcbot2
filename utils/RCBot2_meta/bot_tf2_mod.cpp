@@ -1238,15 +1238,15 @@ void CTeamFortress2Mod::updatePointMaster()
 					}
 				}
 
-				if (infoCount == 0) 
-				{
-					logger->Log(LogLevel::WARN, "If you are playing cp_* maps, and you get this message, something might be wrong with your mstr_offset!");
-				}
+				//if (infoCount == 0) 
+				//{
+				//	logger->Log(LogLevel::WARN, "If you are playing cp_* maps, and you get this message, something might be wrong with your mstr_offset!");
+				//}
 			} 
-			else 
-			{
-				logger->Log(LogLevel::WARN, "If you are playing cp_* maps, and you get this message, something might be wrong with your mstr_offset!");
-			}
+			//else 
+			//{
+			//	logger->Log(LogLevel::WARN, "If you are playing cp_* maps, and you get this message, something might be wrong with your mstr_offset!");
+			//}
 		}
 	}
 
