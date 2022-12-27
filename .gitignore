@@ -2,6 +2,7 @@
 build/
 utils/RCBot2_meta/Debug
 utils/RCBot2_meta/.vs
+alliedmodders/hl2sdk-proxy-repo
 
 # SourceMod compiled plugins
 *.smx
