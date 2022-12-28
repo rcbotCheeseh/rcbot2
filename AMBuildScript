@@ -6,7 +6,7 @@ proj_c_flags = [
 ]
 proj_c_flags_opt = [
   '-O2',
-  '-pipe',
+  '-s',
 ]
 proj_c_flags_dbg = [
   '-g',
@@ -310,8 +310,6 @@ class MMSConfig(object):
               ['public', 'tier0'],
               ['public', 'tier1'],
               ['game_shared'],
-			  #['dlls'],#ep1
-			  #['game'],#ep1
               ['game', 'shared'],
               ['game', 'server'],
               ['public', 'game', 'server'],

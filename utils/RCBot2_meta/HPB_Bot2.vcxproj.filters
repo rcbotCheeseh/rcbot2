@@ -9,6 +9,12 @@
       <UniqueIdentifier>{16586188-ff32-4199-a515-f5a8fb020e68}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
+    <Filter Include="Source Files\sm_ext">
+      <UniqueIdentifier>{5df9d7b3-aea9-4a2c-8469-bb75515290ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rcbot_subcmds">
+      <UniqueIdentifier>{e6487d5d-1015-4df5-8b5f-038779fe57e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bot.cpp">
@@ -153,6 +159,36 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="logging.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sm_ext\bot_sm_ext.cpp">
+      <Filter>Source Files\sm_ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sm_ext\bot_sm_natives.cpp">
+      <Filter>Source Files\sm_ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sm_ext\smsdk_config.cpp">
+      <Filter>Source Files\sm_ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\rcbot_subcmds\config.cpp">
+      <Filter>Source Files\rcbot_subcmds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\rcbot_subcmds\debug.cpp">
+      <Filter>Source Files\rcbot_subcmds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\rcbot_subcmds\pathwaypoint.cpp">
+      <Filter>Source Files\rcbot_subcmds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\rcbot_subcmds\users.cpp">
+      <Filter>Source Files\rcbot_subcmds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\rcbot_subcmds\util.cpp">
+      <Filter>Source Files\rcbot_subcmds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\rcbot_subcmds\waypoint.cpp">
+      <Filter>Source Files\rcbot_subcmds</Filter>
+    </ClCompile>
+    <ClCompile Include="math_fix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -318,6 +354,15 @@
     </ClInclude>
     <ClInclude Include="bot_synergy.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sm_ext\bot_sm_ext.h">
+      <Filter>Source Files\sm_ext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sm_ext\bot_sm_natives.h">
+      <Filter>Source Files\sm_ext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sm_ext\smsdk_config.h">
+      <Filter>Source Files\sm_ext</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
