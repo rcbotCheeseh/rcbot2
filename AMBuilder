@@ -52,22 +52,25 @@ sourceFiles = [
   "utils/RCBot2_meta/bot_sigscan.cpp",
   "utils/RCBot2_meta/bot_cvars.cpp",
   "utils/RCBot2_meta/bot_plugin_meta.cpp",
-  "utils/RCBot2_meta/logging.cpp"
+  "utils/RCBot2_meta/logging.cpp",
+  "utils/RCBot2_meta/math_fix.cpp"
 ]
 
-include_paths = []
+include_paths = [
+  os.path.join(builder.currentSourcePath, 'utils', 'RCBot2_meta'),
+]
 
 compiler_defines = []
 
 # Build with SourceMod extension support if --sm-path was specified
 if builder.options.sm_path:
-  include_paths = [
+  include_paths += [
     os.path.join(builder.options.sm_path, 'sourcepawn', 'include'),
     os.path.join(builder.options.sm_path, 'public', 'amtl'),
     os.path.join(builder.options.sm_path, 'public', 'amtl', 'amtl'),
+    os.path.join(builder.options.sm_path, 'public', 'extensions'),
     os.path.join(builder.options.sm_path, 'public'),
     os.path.join(builder.currentSourcePath, 'sm_ext'),
-    os.path.join(builder.currentSourcePath, 'utils', 'RCBot2_meta'),
   ]
 
   sourceFiles += [
@@ -83,7 +86,13 @@ mods_requiring_runcmd_overrides = [
   # hack: DOD:S uses `Bot_Think`, which forces all `bot`-spawned entities to use Valve's
   # default bot AI.  we'll hook into their RunPlayerMove for now, but for consistency across
   # games it'd be better to supercede `Bot_Think` (or `Bot_RunAll` higher up the call stack)
-  'dods','sdk2013',
+  'dods',
+]
+
+# List of SDK Names that has undefined reference to some math functions
+sdks_requring_extern_math_functions = [
+  'sdk2013',
+  'bms',
 ]
 
 ###############
@@ -129,6 +138,9 @@ for sdk_name in MMS.sdks:
     if sdk_name in mods_requiring_runcmd_overrides:
       cxx.defines += [ 'OVERRIDE_RUNCMD' ]
 
+    if sdk_name in sdks_requring_extern_math_functions and builder.target.platform == 'linux':
+      cxx.defines += [ 'MATH_LIB_FIX' ]
+
     # RCBot:  Library requires exceptions
     if '-fno-exceptions' in cxx.cflags: cxx.cflags.remove('-fno-exceptions')
 
@@ -156,21 +168,19 @@ for sdk_name in MMS.sdks:
           cxx.Dep(os.path.join(lib_folder, 'mathlib.a')),
           cxx.Dep(os.path.join(lib_folder, 'tier2.a')),
           cxx.Dep(os.path.join(lib_folder, 'tier3.a')),
-          'libvstdlib_srv.so',
-          '-lm',
-          '-ldl',
-          '-lpthread'
         ]
       else:
         cxx.postlink += [
           cxx.Dep(os.path.join(lib_folder, 'mathlib_i486.a')),
           cxx.Dep(os.path.join(lib_folder, 'tier2_i486.a')),
           cxx.Dep(os.path.join(lib_folder, 'tier3_i486.a')),
-          'libvstdlib_srv.so',
-          '-lm',
-          '-ldl',
-          '-lpthread'
         ]
+      cxx.postlink += [
+        'libvstdlib_srv.so',
+        '-lm',
+        '-ldl',
+        '-lpthread'
+      ]
 
     nodes = builder.Add(binary)
     MMS.binaries += [nodes]

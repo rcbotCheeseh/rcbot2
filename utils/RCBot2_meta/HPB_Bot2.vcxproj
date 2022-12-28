@@ -211,6 +211,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\rcbot_subcmds\config.cpp" />
+    <ClCompile Include="..\..\rcbot_subcmds\debug.cpp" />
+    <ClCompile Include="..\..\rcbot_subcmds\pathwaypoint.cpp" />
+    <ClCompile Include="..\..\rcbot_subcmds\users.cpp" />
+    <ClCompile Include="..\..\rcbot_subcmds\util.cpp" />
+    <ClCompile Include="..\..\rcbot_subcmds\waypoint.cpp" />
+    <ClCompile Include="..\..\sm_ext\bot_sm_ext.cpp" />
+    <ClCompile Include="..\..\sm_ext\bot_sm_natives.cpp" />
+    <ClCompile Include="..\..\sm_ext\smsdk_config.cpp" />
     <ClCompile Include="bot.cpp" />
     <ClCompile Include="bot_accessclient.cpp" />
     <ClCompile Include="bot_buttons.cpp" />
@@ -259,8 +268,12 @@
     <ClCompile Include="bot_cvars.cpp" />
     <ClCompile Include="bot_plugin_meta.cpp" />
     <ClCompile Include="logging.cpp" />
+    <ClCompile Include="math_fix.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\sm_ext\bot_sm_ext.h" />
+    <ClInclude Include="..\..\sm_ext\bot_sm_natives.h" />
+    <ClInclude Include="..\..\sm_ext\smsdk_config.h" />
     <ClInclude Include="bot.h" />
     <ClInclude Include="bot_accessclient.h" />
     <ClInclude Include="bot_belief.h" />
