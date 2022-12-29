@@ -226,7 +226,7 @@ int CDODMod::getHighestScore ()
 	return highest;
 }
 
-bool CDODFlags::isTeamMateDefusing ( edict_t *pIgnore, int iTeam, int id )
+bool CDODFlags::isTeamMateDefusing ( edict_t *pIgnore, int iTeam, int id ) const
 {
 	if ( m_pBombs[id][0] != nullptr)
 		return isTeamMateDefusing(pIgnore,iTeam,CBotGlobals::entityOrigin(m_pBombs[id][0]));
@@ -291,7 +291,7 @@ bool CDODFlags::isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin
 	return false;
 }
 
-bool CDODFlags::isTeamMatePlanting ( edict_t *pIgnore, int iTeam, int id )
+bool CDODFlags::isTeamMatePlanting ( edict_t *pIgnore, int iTeam, int id ) const
 {
 	if ( m_pBombs[id][0] )
 		return isTeamMatePlanting(pIgnore,iTeam,CBotGlobals::entityOrigin(m_pBombs[id][0]));
@@ -299,7 +299,7 @@ bool CDODFlags::isTeamMatePlanting ( edict_t *pIgnore, int iTeam, int id )
 	return false;
 }
 
-int CDODFlags::findNearestObjective ( Vector vOrigin )
+int CDODFlags::findNearestObjective ( Vector vOrigin ) const
 {
 	float fNearest = 1024.0f;
 	float fDistance;
@@ -321,7 +321,7 @@ int CDODFlags::findNearestObjective ( Vector vOrigin )
 }
 
 // return the flag with the least danger (randomly)
-bool CDODFlags::getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id )
+bool CDODFlags::getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id ) const
 {
 	if ( id )
 		*id = -1;
@@ -387,7 +387,7 @@ bool CDODFlags::getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int
 	return false;
 }
 
-bool CDODFlags::getRandomBombToDefuse  ( Vector *position, int iTeam, edict_t **pBombTarget, int *id )
+bool CDODFlags::getRandomBombToDefuse  ( Vector *position, int iTeam, edict_t **pBombTarget, int *id ) const
 {
 	std::vector<int> iPossible; // int is control point entry
 
@@ -425,7 +425,7 @@ bool CDODFlags::getRandomBombToDefuse  ( Vector *position, int iTeam, edict_t **
 }
 
 //return random bomb with highest danger
-bool CDODFlags:: getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id )
+bool CDODFlags:: getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id ) const
 {
 	std::vector<int> iPossible; // int is control point entry
 
@@ -463,7 +463,7 @@ bool CDODFlags:: getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam
 }
 
 // return rnaomd flag with lowest danger
-bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id )
+bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id ) const
 {
 	if ( id )
 		*id = -1;
@@ -530,7 +530,7 @@ bool CDODFlags:: getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam,
 }
 
 
-bool CDODFlags::getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id )
+bool CDODFlags::getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id ) const
 {
 	if ( id )
 		*id = -1;
@@ -800,8 +800,8 @@ void CDODMod ::roundStart()
 				CRCBotPlugin::HudTextMessage(CClients::get(0)->getPlayer(),"RCBot detected flag map with bombs ","RCBot2","RCbot2 detected a flag capture map with bombs");
 
 */
-			CWaypoint* pWaypointAllies = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_BOMBS_HERE,TEAM_ALLIES);
-			CWaypoint* pWaypointAxis = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_BOMBS_HERE,TEAM_AXIS);
+			const CWaypoint* pWaypointAllies = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_BOMBS_HERE,TEAM_ALLIES);
+			const CWaypoint* pWaypointAxis = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_BOMBS_HERE,TEAM_AXIS);
 
 			if ( pWaypointAllies && pWaypointAxis )
 			{

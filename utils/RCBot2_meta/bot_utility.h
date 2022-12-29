@@ -163,15 +163,15 @@ class CBotUtility
 public:
 	CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil, CBotWeapon *pWeapon = nullptr, int iData = 0, Vector vec = Vector(0,0,0) );
 
-	float getUtility () { return m_fUtility; }
+	float getUtility () const { return m_fUtility; }
 
-	eBotAction getId () { return m_id; }
+	eBotAction getId () const { return m_id; }
 
-	bool canDo () { return m_bCanDo; }
+	bool canDo () const { return m_bCanDo; }
 
-	CBotWeapon *getWeaponChoice () { return m_pWeapon; }
+	CBotWeapon *getWeaponChoice () const { return m_pWeapon; }
 
-	int getIntData () { return m_iData; }
+	int getIntData () const { return m_iData; }
 
 	Vector getVectorData () { return m_vVector; }
 

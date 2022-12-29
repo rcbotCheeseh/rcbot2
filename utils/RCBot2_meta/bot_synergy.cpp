@@ -119,7 +119,7 @@ bool CBotSynergy::needAmmo()
 		return false;
 	}
 
-	CBotWeapon *weapon = m_pWeapons->getWeapon(CWeapons::getWeapon(m_pCurrentWeapon->GetClassName()));
+	const CBotWeapon *weapon = m_pWeapons->getWeapon(CWeapons::getWeapon(m_pCurrentWeapon->GetClassName()));
 	if(weapon)
 	{
 		const int iAmmo = weapon->getAmmo(this); // Current weapon reserve ammo
@@ -234,7 +234,7 @@ void CBotSynergy::modThink()
 	// Pick nearby weapons that the bot doesn't already have
 	if(m_pNearbyWeapon && distanceFrom(m_pNearbyWeapon.get()) <= 400.0f && m_flPickUpTime <= engine->Time())
 	{
-		edict_t *pOwner = CClassInterface::getOwner(m_pNearbyWeapon);
+		const edict_t *pOwner = CClassInterface::getOwner(m_pNearbyWeapon);
 
 		if(pOwner != nullptr) // Someone already owns this weapon
 		{
@@ -366,7 +366,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 	const bool bValid = CBot::setVisible(pEntity, bVisible);
 
 	static float fDist = distanceFrom(pEntity);
-	Vector entityorigin = CBotGlobals::entityOrigin(pEntity);
+	const Vector entityorigin = CBotGlobals::entityOrigin(pEntity);
 	const char* szclassname = pEntity->GetClassName();
 
 	// Is valid and NOT invisible
@@ -415,7 +415,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 		}
 		else if(strncmp(szclassname, "weapon_", 7) == 0 && (!m_pNearbyWeapon.get() || fDist < distanceFrom(m_pNearbyWeapon.get())))
 		{
-			CBotWeapon* pWeapon = nullptr;
+			const CBotWeapon* pWeapon = nullptr;
 			pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(szclassname));
 			if(pWeapon && pWeapon->hasWeapon())
 			{
@@ -423,7 +423,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 			}
 			else
 			{
-				edict_t* pOwner = CClassInterface::getOwner(pEntity);
+				const edict_t* pOwner = CClassInterface::getOwner(pEntity);
 				if(pOwner == nullptr) // Don't pick weapons owned by someone
 				{
 					m_pNearbyWeapon = pEntity;
@@ -432,8 +432,8 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 		}
 		else if(strncmp(szclassname, "npc_grenade_frag", 16) == 0 && (!m_pNearbyGrenade.get() || fDist < distanceFrom(m_pNearbyGrenade.get())))
 		{
-			edict_t *pOwner = CClassInterface::getOwner(pEntity);
-			IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEntity);
+			const edict_t *pOwner = CClassInterface::getOwner(pEntity);
+			const IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEntity);
 			if(pOwner == nullptr || p == nullptr) // Only care about grenades that doesn't have an owner or isn't owned by a player
 			{
 				m_pNearbyGrenade = pEntity;

@@ -108,11 +108,11 @@ public:
 
 	//void setTimeout ();
 
-	bool hasFailed ();
-	bool isComplete ();
+	bool hasFailed () const;
+	bool isComplete () const;
 	//void setVector ( Vector vOrigin );
 	//void setFloat ( float fFloat );
-	bool timedOut ();
+	bool timedOut () const;
 	//void setEdict ( edict_t *pEdict );
 	void setFailInterrupt ( int iInterruptHave, int iInterruptDontHave = 0 );
 	void setCompleteInterrupt ( int iInterruptHave, int iInterruptDontHave = 0 );
@@ -120,7 +120,7 @@ public:
 	virtual eTaskState isInterrupted (CBot *pBot);
 	void fail ();
 	void complete ();
-	bool hasFlag ( int iFlag ) { return (m_iFlags & iFlag) == iFlag; }
+	bool hasFlag ( int iFlag ) const { return (m_iFlags & iFlag) == iFlag; }
 	void setFlag ( int iFlag ) { m_iFlags |= iFlag; }
 	void clearFailInterrupts () { m_iFailInterruptConditionsHave = m_iFailInterruptConditionsDontHave = 0; }	
 	virtual void debugString ( char *string ) { string[0] = 0; }
@@ -287,7 +287,7 @@ public:
 		sprintf(string,"CBotTF2Spam");
 	}
 
-	float getDistance ();
+	float getDistance () const;
 private:
 	
 	Vector m_vTarget;

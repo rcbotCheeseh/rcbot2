@@ -129,11 +129,12 @@ public:
 
 	virtual bool randomDangerPath (Vector *vec) { return false; }
 
-	bool getDangerPoint ( Vector *vec ) { *vec = m_bDangerPoint ? m_vDangerPoint : Vector(0,0,0); return m_bDangerPoint; }
+	bool getDangerPoint ( Vector *vec ) const
+	{ *vec = m_bDangerPoint ? m_vDangerPoint : Vector(0,0,0); return m_bDangerPoint; }
 
-	bool wantToLoadBelief () { return m_bLoadBelief; }
+	bool wantToLoadBelief () const { return m_bLoadBelief; }
 	virtual bool wantToSaveBelief () { return false; }
-	float getGoalDistance () { return m_fGoalDistance; }
+	float getGoalDistance () const { return m_fGoalDistance; }
 
 	static const int MAX_PATH_TICKS = 200;
 
@@ -160,21 +161,21 @@ public:
 	///////////////////////////////////////////////////////
 	void close () { setFlag(FL_ASTAR_CLOSED); }
 	void unClose () { removeFlag(FL_ASTAR_CLOSED); }
-	bool isOpen () { return hasFlag(FL_ASTAR_OPEN); }
+	bool isOpen () const { return hasFlag(FL_ASTAR_OPEN); }
 	void unOpen () { removeFlag(FL_ASTAR_OPEN); }
-	bool isClosed () { return hasFlag(FL_ASTAR_CLOSED); }
+	bool isClosed () const { return hasFlag(FL_ASTAR_CLOSED); }
 	void open () { setFlag(FL_ASTAR_OPEN); }
 	//////////////////////////////////////////////////////	
 	void setHeuristic ( float fHeuristic ) { m_fHeuristic = fHeuristic; setFlag(FL_HEURISTIC_SET); }
-	bool heuristicSet () { return hasFlag(FL_HEURISTIC_SET); }
-	float getHeuristic() { return m_fHeuristic; }
+	bool heuristicSet () const { return hasFlag(FL_HEURISTIC_SET); }
+	float getHeuristic() const { return m_fHeuristic; }
 
 	////////////////////////////////////////////////////////
 	void setFlag(int iFlag) { m_iFlags |= iFlag; }
-	bool hasFlag ( int iFlag ) { return (m_iFlags & iFlag) == iFlag; }
+	bool hasFlag ( int iFlag ) const { return (m_iFlags & iFlag) == iFlag; }
 	void removeFlag ( int iFlag ) { m_iFlags &= ~iFlag; }
 	/////////////////////////////////////////////////////////
-	int getParent () { if ( hasFlag(FL_ASTAR_PARENT) ) return m_iParent; else return -1; }
+	int getParent () const { if ( hasFlag(FL_ASTAR_PARENT) ) return m_iParent; else return -1; }
 
 	void setParent ( short int iParent ) 
 	{ 
@@ -186,7 +187,7 @@ public:
 			setFlag(FL_ASTAR_PARENT);
 	}
 	////////////////////////////////////////////////////////
-	float getCost () { return m_fCost; }
+	float getCost () const { return m_fCost; }
 	void setCost(float fCost) { m_fCost = fCost; }
 	////////////////////////////////////////////////////////
 	// for comparison
@@ -195,7 +196,7 @@ public:
 		return m_fCost+m_fHeuristic < other->getCost() + other->getHeuristic();
 	}
 	void setWaypoint ( int iWpt ) { m_iWaypoint = iWpt; }
-	int getWaypoint () { return m_iWaypoint; }
+	int getWaypoint () const { return m_iWaypoint; }
 private:
 	float m_fCost;
 	float m_fHeuristic;
@@ -224,12 +225,12 @@ public:
 		m_Head = nullptr;
 	}
 
-	bool empty ()
+	bool empty () const
 	{
 		return m_Head== nullptr;
 	}
 
-	AStarNode *top ()
+	AStarNode *top () const
 	{
 		if ( m_Head == nullptr)
 			return nullptr;
@@ -374,8 +375,8 @@ public:
 
 	void init () override;
 
-	CWaypoint *chooseBestFromBelief (const std::vector<CWaypoint*>& goals, bool bHighDanger = false, int iSearchFlags = 0, int iTeam = 0);
-	CWaypoint *chooseBestFromBeliefBetweenAreas (const std::vector<AStarNode*>& goals, bool bHighDanger = false, bool bIgnoreBelief = false);
+	CWaypoint *chooseBestFromBelief (const std::vector<CWaypoint*>& goals, bool bHighDanger = false, int iSearchFlags = 0, int iTeam = 0) const;
+	CWaypoint *chooseBestFromBeliefBetweenAreas (const std::vector<AStarNode*>& goals, bool bHighDanger = false, bool bIgnoreBelief = false) const;
 
 	float getNextYaw () override;
 

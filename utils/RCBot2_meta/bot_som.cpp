@@ -62,7 +62,7 @@ CSom :: ~CSom ()
 	m_Neurons.clear();
 }
 
-CSomNeuron *CSom :: getBMU (const std::vector<float>* inputs)
+CSomNeuron *CSom :: getBMU (const std::vector<float>* inputs) const
 {       
 	CSomNeuron *winner = nullptr;
 	float bestdistance = 0;
@@ -83,7 +83,7 @@ CSomNeuron *CSom :: getBMU (const std::vector<float>* inputs)
 
 
 
-void CSom :: updateAround (const std::vector<float>* inputs, CSomNeuron* bmu)
+void CSom :: updateAround (const std::vector<float>* inputs, CSomNeuron* bmu) const
 {
 	float dist;
 	const float nsiz = m_fNSize*m_fNSize;
@@ -112,12 +112,23 @@ CSomNeuron *CSom :: inputOne ( const std::vector <float> *inputs )
 	return winner;
 }
 
+void CSom::input(std::vector<std::vector<float>>* inputs, int epochs)// Experimental [APG]RoboCop[CL]
+{
+	for (int i = 0; i < epochs; i++)
+	{
+		for (unsigned int j = 0; j < inputs->size(); j++)
+		{
+			inputOne(&(*inputs)[j]);
+		}
+	}
+}
+
 CSomNeuron *CSom :: input ( const std::vector < std::vector <float> > *inputs )
 {
 	return inputOne(&(*inputs)[randomInt(0,static_cast<int>(inputs->size())-1)]);
 }
 
-void CSom :: display ()
+void CSom :: display () const
 {
 	//printf("\nDisplaying...\n");
 
@@ -162,7 +173,7 @@ CSomNeuron :: CSomNeuron ( unsigned short iId, int iInp, int iX, int iY )
 		fWeights.emplace_back(randomFloat(0,1));
 }
 
-float CSomNeuron :: distance (const std::vector<float>* inputs)
+float CSomNeuron :: distance (const std::vector<float>* inputs) const
 {
 	float dist = 0;
 
@@ -181,7 +192,7 @@ std::vector <float> *CSomNeuron :: weights ()
 	return &fWeights;
 }
 
-void CSomNeuron :: displayWeights ()
+void CSomNeuron :: displayWeights () const
 {
 	for ( unsigned int i = 0; i < fWeights.size(); i ++ )
 	{
@@ -189,7 +200,7 @@ void CSomNeuron :: displayWeights ()
 	}
 }
 
-float CSomNeuron :: neighbourDistance ( CSomNeuron *other )
+float CSomNeuron :: neighbourDistance ( CSomNeuron *other ) const
 {
 	const float distx = getX()-other->getX();
 	const float disty = getY()-other->getY();

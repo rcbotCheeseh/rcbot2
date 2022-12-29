@@ -473,7 +473,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 
 			if ( isVisible(pKiller) )
 			{
-				CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
+				const CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 				const int iCurrentWaypoint = m_pNavigator->getCurrentWaypointID();
 				const int iEnemyWaypoint = CWaypointLocations::NearestWaypoint(CBotGlobals::entityOrigin(pKiller),100.0f,-1,true,true);
 
@@ -709,7 +709,7 @@ bool CDODBot :: wantToListenToPlayerAttack ( edict_t *pPlayer, int iWeaponID )
 
 	if ( pentWeapon != nullptr)
 	{
-		CWeapon *pWeapon = CWeapons::getWeapon(pentWeapon->GetClassName());
+		const CWeapon *pWeapon = CWeapons::getWeapon(pentWeapon->GetClassName());
 
 		if ( pWeapon )
 		{
@@ -957,7 +957,7 @@ void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 		// Check if current waypoint has a path which is invisible to my next waypoint
 		if ( (iPrevWaypoint != -1) && (iNextWaypoint != -1) && (randomFloat(0,MAX_BELIEF) < m_pNavigator->getBelief(CWaypoints::getWaypointIndex(pWaypoint))) )
 		{
-			CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
+			const CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 			WaypointList m_InvisPaths;
 			const int iThisWaypoint = CWaypoints::getWaypointIndex(pWaypoint);
 			//CWaypoint *pNextWaypoint = CWaypoints::getWaypoint(iNextWaypoint);
@@ -1431,7 +1431,7 @@ void CDODBot ::voiceCommand ( int cmd )
 	helpers->ClientCommand(m_pEdict,scmd);
 }
 
-void CDODBot ::signal ( const char *signal )
+void CDODBot ::signal ( const char *signal ) const
 {
 	char scmd[64];
 
@@ -1915,7 +1915,7 @@ void CDODBot :: sayMoveOut ()
 	updateCondition(CONDITION_CHANGED);
 }
 
-bool CDODBot :: withinTeammate ( )
+bool CDODBot :: withinTeammate ( ) const
 {
 	// check if the bot is right next to a team mate (sometimes bots can't deploy if theyr are next to one already)
 
@@ -1985,7 +1985,7 @@ void CDODBot :: listenForPlayers ()
 			continue;
 
 		// get client network info
-		CClient* pClient = CClients::get(pPlayer);
+		const CClient* pClient = CClients::get(pPlayer);
 
 		if ( !pClient->isUsed() )
 			continue;
@@ -2752,7 +2752,7 @@ void CDODBot :: reachedCoverSpot (int flags)
 		{
 			if ( flags & CWaypointTypes::W_FL_MACHINEGUN )
 			{
-				CWaypoint *pWpt = CWaypoints::getWaypoint(m_pNavigator->getCurrentGoalID());
+				const CWaypoint *pWpt = CWaypoints::getWaypoint(m_pNavigator->getCurrentGoalID());
 
 				if ( pWpt && (pWpt->getFlags() == flags) )
 				{
@@ -2787,7 +2787,7 @@ bool CDODBot:: checkStuck ()
 {
 	if ( CBot::checkStuck() )
 	{
-		CBotWeapon *pWeapon = getCurrentWeapon();
+		const CBotWeapon *pWeapon = getCurrentWeapon();
 
 		if ( pWeapon && (pWeapon->getWeaponEntity()!= nullptr) )
 		{
@@ -2968,22 +2968,22 @@ bool CDODBot :: handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy )
 	return true;
 }
 
-CBotWeapon *CDODBot::getMG ()
+CBotWeapon *CDODBot::getMG () const
 {
 	return m_pWeapons->hasWeapon(DOD_WEAPON_20CAL) ? m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_20CAL)) : m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_MG42));
 }
 
-bool CDODBot :: hasMG ()
+bool CDODBot :: hasMG () const
 {
 	return m_pWeapons->hasWeapon(DOD_WEAPON_20CAL) || m_pWeapons->hasWeapon(DOD_WEAPON_MG42);
 }
 
-CBotWeapon *CDODBot::getSniperRifle ()
+CBotWeapon *CDODBot::getSniperRifle () const
 {
 	return m_pWeapons->hasWeapon(DOD_WEAPON_K98_SCOPED) ? m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_K98_SCOPED)) : m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_SPRING));
 }
 
-bool CDODBot :: hasSniperRifle ()
+bool CDODBot :: hasSniperRifle () const
 {
 	return m_pWeapons->hasWeapon(DOD_WEAPON_K98_SCOPED) || m_pWeapons->hasWeapon(DOD_WEAPON_SPRING);
 }
@@ -3221,7 +3221,7 @@ void CDODBot :: getTasks (unsigned int iIgnore)
 	if ( !rcbot_melee_only.GetBool() && (m_pNearestWeapon.get() != nullptr) && hasSomeConditions(CONDITION_NEED_AMMO) )
 	{
 		CWeapon *pNearestWeapon = CWeapons::getWeapon(m_pNearestWeapon.get()->GetClassName());
-		CBotWeapon *pHaveWeapon = (pNearestWeapon== nullptr)? nullptr :(m_pWeapons->getWeapon(pNearestWeapon));
+		const CBotWeapon *pHaveWeapon = (pNearestWeapon== nullptr)? nullptr :(m_pWeapons->getWeapon(pNearestWeapon));
 
 		if ( pNearestWeapon && (!pHaveWeapon || !pHaveWeapon->hasWeapon() || pHaveWeapon->outOfAmmo(this) ) )
 		{

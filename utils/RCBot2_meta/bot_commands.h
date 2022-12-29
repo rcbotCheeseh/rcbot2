@@ -75,12 +75,12 @@ public:
 			m_iAccessLevel{iAccessLevel}, m_szCommand{command}, m_szHelp{help} {};
 
 	// check command name
-	bool isCommand ( const char *szCommand );	
+	bool isCommand ( const char *szCommand ) const;	
 
 	// execute command
 	virtual eBotCommandResult execute ( CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5 );
 
-	bool hasAccess ( CClient *pClient );
+	bool hasAccess ( CClient *pClient ) const;
 
 	virtual void printCommand ( edict_t *pPrintTo, int indent = 0);
 
@@ -88,7 +88,7 @@ public:
 
 	virtual bool isContainer () { return false; }
 
-	bool canbeUsedDedicated () { return (this->m_iAccessLevel & CMD_ACCESS_DEDICATED) != 0; }
+	bool canbeUsedDedicated () const { return (this->m_iAccessLevel & CMD_ACCESS_DEDICATED) != 0; }
 protected:
 
 	int m_iAccessLevel;

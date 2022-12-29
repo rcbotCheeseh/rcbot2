@@ -315,7 +315,7 @@ void CPlayerDeathEvent :: execute ( IBotEventInterface *pEvent )
 
 			if ( pClient && pClient->autoWaypointOn() )
 			{
-				CWeapon *pWeapon = CWeapons::getWeaponByShortName(weapon);
+				const CWeapon *pWeapon = CWeapons::getWeaponByShortName(weapon);
 
 				if ( pWeapon != nullptr)
 				{
@@ -353,7 +353,7 @@ void CPlayerDeathEvent :: execute ( IBotEventInterface *pEvent )
 
 			if ( CBotGlobals::isPlayer(pAttacker) && pClient && pClient->autoWaypointOn() )
 			{
-				CWeapon *pWeapon = CWeapons::getWeaponByShortName(weapon);
+				const CWeapon *pWeapon = CWeapons::getWeaponByShortName(weapon);
 
 				if ( pWeapon != nullptr)
 				{
@@ -583,7 +583,7 @@ void CTF2ObjectDestroyed :: execute ( IBotEventInterface *pEvent )
 			{
 				edict_t *pOwner = pAttacker;
 				edict_t *pSapper = INDEXENT(index);
-				CBotTF2 *pBot = static_cast<CBotTF2*>(CBots::getBotPointer(pOwner));
+				const CBotTF2 *pBot = static_cast<CBotTF2*>(CBots::getBotPointer(pOwner));
 
 				if ( pBot )
 					pBot->sapperDestroyed(pSapper);
@@ -1171,7 +1171,7 @@ void CBotEvent :: setType ( const char *szType )
 	m_szType = CStrings::getString(szType);
 }
 
-bool CBotEvent :: forCurrentMod ()
+bool CBotEvent :: forCurrentMod () const
 {
 	return ((m_iModId == MOD_ANY) || (CBotGlobals::isMod(m_iModId)));
 }

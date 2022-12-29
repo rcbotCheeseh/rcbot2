@@ -54,7 +54,7 @@ public:
 
 	void setVector ( std::vector<float> values );
 
-	float get ( int iIndex );
+	float get ( int iIndex ) const;
 
 	void set ( int iIndex, float fVal );
 
@@ -85,12 +85,12 @@ public:
 		setup(5);
 	}
 
-	float getJumpTime ()
+	float getJumpTime () const
 	{
 		return m_theValues[0];
 	}
 
-	float getFailTime ()
+	float getFailTime () const
 	{
 		return m_theValues[1];
 	}

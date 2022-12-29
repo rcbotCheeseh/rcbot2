@@ -103,7 +103,7 @@ void CWaypointVisibilityTable :: workVisibility ()
 	}
 }
 
-void CWaypointVisibilityTable :: workVisibilityForWaypoint ( int i, int iNumWaypoints, bool bTwoway )
+void CWaypointVisibilityTable :: workVisibilityForWaypoint ( int i, int iNumWaypoints, bool bTwoway ) const
 {
 	static CWaypoint *Waypoint1;
 	static CWaypoint *Waypoint2;

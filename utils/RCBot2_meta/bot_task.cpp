@@ -232,7 +232,7 @@ void CBotTF2ShootLastEnemyPosition ::  execute (CBot *pBot,CBotSchedule *pSchedu
 	CBotTF2 *pTF2Bot = static_cast<CBotTF2*>(pBot);
 	CWeapon *pChange = nullptr;
 
-	if ( m_fTime == 0 )
+	if ( m_fTime == 0.0f )
 		m_fTime = engine->Time() + randomFloat(2.0f,4.5f);
 
 	if ( m_fTime < engine->Time() )
@@ -418,7 +418,7 @@ void CBotDODBomb :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	pBot->wantToShoot(false);
 
-	if ( m_fTime == 0 )
+	if ( m_fTime == 0.0f )
 	{
 		m_fTime = engine->Time() + randomFloat(8.0f,12.0f);
 		static_cast<CDODBot*>(pBot)->setNearestBomb(m_pBombTarget);
@@ -522,7 +522,7 @@ void CDODWaitForGrenadeTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 	else if ( !CBotGlobals::entityIsAlive(m_pGrenade) )
 		complete();
-	else if ( m_fTime == 0 )
+	else if ( m_fTime == 0.0f )
 	{
 		CDODBot *pDODBot = static_cast<CDODBot*>(pBot);
 
@@ -648,7 +648,7 @@ void CBotDODAttackPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 		return;
 	}
-	else if ( m_fAttackTime == 0 )
+	else if ( m_fAttackTime == 0.0f )
 	{
 		m_fAttackTime = engine->Time() + randomFloat(30.0f,60.0f);
 	}
@@ -1183,7 +1183,7 @@ void CBotGravGunPickup :: execute(CBot *pBot,CBotSchedule *pSchedule)
 	vBotOrigin = pBot->getOrigin();
 	vOrigin = CBotGlobals::entityOrigin(m_Prop);
 
-	CBotWeapon *pWeapon = pBot->getCurrentWeapon();
+	const CBotWeapon *pWeapon = pBot->getCurrentWeapon();
 
 	if ( !pWeapon || pWeapon->getID() != HL2DM_WEAPON_PHYSCANNON  )
 	{
@@ -1350,7 +1350,7 @@ void CBotTaskEngiPickupBuilding :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	}
 
 	// don't pick up sentry now because my sentry is in good use!!!
-	if ( ((CBotTF2*)pBot)->sentryRecentlyHadEnemy() )
+	if ( static_cast<CBotTF2*>(pBot)->sentryRecentlyHadEnemy() )
 	{
 		fail();
 		return;
@@ -1463,7 +1463,7 @@ void CBotUseBuffItem::execute(CBot *pBot, CBotSchedule *pSchedule)
 	pBot->wantToShoot(false);
 	pBot->wantToChangeWeapon(false);
 
-	if (m_fTime == 0)
+	if (m_fTime == 0.0f)
 		m_fTime = engine->Time() + 5.0f;
 	else if (m_fTime < engine->Time())
 		fail();
@@ -1497,7 +1497,7 @@ void CBotUseLunchBoxDrink::execute(CBot *pBot, CBotSchedule *pSchedule)
 	pBot->wantToShoot(false);
 	pBot->wantToChangeWeapon(false);
 
-	if ( m_fTime == 0 )
+	if ( m_fTime == 0.0f )
 		m_fTime = engine->Time() + 5.0f;
 	else if ( m_fTime < engine->Time() )
 		fail();
@@ -1630,9 +1630,9 @@ void CBotBackstab ::execute (CBot *pBot,CBotSchedule *pSchedule)
 
 void CBotInvestigateTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 {
-	if ( m_fTime == 0 )
+	if ( m_fTime == 0.0f )
 	{
-		CWaypoint *pWaypoint = CWaypoints::getWaypoint(CWaypointLocations::NearestWaypoint(m_vOrigin,m_fRadius,-1));
+		const CWaypoint *pWaypoint = CWaypoints::getWaypoint(CWaypointLocations::NearestWaypoint(m_vOrigin,m_fRadius,-1));
 
 		if ( pWaypoint == nullptr)
 		{
@@ -1696,7 +1696,7 @@ void CBotDefendTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 {
 	static float fDist;
 
-	if ( m_fTime == 0 )
+	if ( m_fTime == 0.0f )
 	{
 		if ( pBot->inSquad() && pBot->isSquadLeader() )
 		{
@@ -2031,6 +2031,7 @@ void CFindGoodHideSpot :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 
 CFindPathTask :: CFindPathTask ( int iWaypointId, eLookTask looktask )
 {
+	m_iInt = 0;
 	m_iWaypointId = iWaypointId;
 	m_LookTask = looktask;
 	m_vVector = CWaypoints::getWaypoint(iWaypointId)->getOrigin();
@@ -2045,7 +2046,6 @@ void CFindPathTask :: init ()
 	m_flags.m_data = 0;
 	m_iInt = 0;
 	m_fRange = 0.0f;
-	m_iInt = 0;
 	m_iDangerPoint = -1;
 	m_bGetPassedIntAsWaypointId = false;
 	//setFailInterrupt(CONDITION_SEE_CUR_ENEMY);
@@ -2141,7 +2141,7 @@ void CFindPathTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 	}
 	else if ( m_iInt == 2 )
 	{
-		if ( pBot->m_fWaypointStuckTime == 0 )
+		if ( pBot->m_fWaypointStuckTime == 0.0f )
 			pBot->m_fWaypointStuckTime = engine->Time() + randomFloat(5.0f,10.0f);
 
 		//if ( m_bNoInterruptions )
@@ -2356,7 +2356,7 @@ void CTF2_TauntTask :: init ()
 
 void CTF2_TauntTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 {
-	if ( m_fTime == 0 )
+	if ( m_fTime == 0.0f )
 		m_fTime = engine->Time() + randomFloat(2.5f,5.0f);
 	else if ( m_fTime < engine->Time() )
 	{
@@ -2443,7 +2443,7 @@ void CBotTFRocketJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 {
 	pBot->wantToListen(false);
 
-	CBotWeapon* pBotWeapon = pBot->getCurrentWeapon();
+	const CBotWeapon* pBotWeapon = pBot->getCurrentWeapon();
 
 	if ( !pBotWeapon )
 	{
@@ -2852,7 +2852,7 @@ void CBotRemoveSapper :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 CBotTF2SnipeCrossBow::CBotTF2SnipeCrossBow(Vector vOrigin, int iWpt)
 {
-	CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
+	const CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
 	m_iHideWaypoint = 0;
 	m_fHideTime = 0.0f;
 	m_iPrevClip = 0;
@@ -2949,8 +2949,8 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 
 		if (iAimWpt != -1)
 		{
-			CWaypoint *pWaypoint = CWaypoints::getWaypoint(m_iSnipeWaypoint);
-			CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
+			const CWaypoint *pWaypoint = CWaypoints::getWaypoint(m_iSnipeWaypoint);
+			const CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 
 			for (int i = 0; i < pWaypoint->numPaths(); i++)
 			{
@@ -3145,8 +3145,8 @@ CBotTF2Snipe :: CBotTF2Snipe ( Vector vOrigin, int iWpt )
 	m_iPrevClip = 0;
 	m_fCheckTime = 0.0f;
 	m_fOriginDistance = 0.0f;
-	
-	CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
+
+	const CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
 	m_iSnipeWaypoint = iWpt;
 	m_fAimTime = 0.0f;
 	m_fTime = 0.0f;	
@@ -3238,8 +3238,8 @@ void CBotTF2Snipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 		if ( iAimWpt != -1 )
 		{
-			CWaypoint *pWaypoint = CWaypoints::getWaypoint(m_iSnipeWaypoint);
-			CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
+			const CWaypoint *pWaypoint = CWaypoints::getWaypoint(m_iSnipeWaypoint);
+			const CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 
 			for ( int i = 0; i < pWaypoint->numPaths(); i ++ )
 			{
@@ -3692,7 +3692,7 @@ void CThrowGrenadeTask::debugString(char *string)
 
 void CThrowGrenadeTask ::execute (CBot *pBot,CBotSchedule *pSchedule)
 {
-	if ( m_fTime == 0 )
+	if ( m_fTime == 0.0f )
 	{
 		m_fTime = engine->Time() + 2.5f;
 
@@ -3730,7 +3730,7 @@ void CThrowGrenadeTask ::execute (CBot *pBot,CBotSchedule *pSchedule)
 		return;
 	}
 
-	CBotWeapon* pWeapon = pBot->getCurrentWeapon();
+	const CBotWeapon* pWeapon = pBot->getCurrentWeapon();
 	pBot->wantToChangeWeapon(false);
 
 	if ( pWeapon && pWeapon->isGravGun() && CClassInterface::gravityGunObject(INDEXENT(pWeapon->getWeaponIndex())) )
@@ -3790,7 +3790,7 @@ CBotInvestigateHidePoint :: CBotInvestigateHidePoint ( int iWaypointIndexToInves
 
 void CBotInvestigateHidePoint:: execute (CBot *pBot,CBotSchedule *pSchedule)
 {
-	if ( m_fTime == 0 )
+	if ( m_fTime == 0.0f )
 	{
 		m_fTime = engine->Time() + randomFloat(6.0f, 8.0f);
 		m_fInvestigateTime = randomFloat(0.3f,1.0f);
@@ -3980,7 +3980,7 @@ void CCSSEngageEnemyTask::execute(CBot *pBot, CBotSchedule *pSchedule)
 	{
 		if(pWeapon)
 		{
-			CBotWeapon *weapon = pBot->getWeapons()->getWeapon(CWeapons::getWeaponByShortName(pWeapon->GetClassName()));
+			const CBotWeapon *weapon = pBot->getWeapons()->getWeapon(CWeapons::getWeaponByShortName(pWeapon->GetClassName()));
 			if(weapon)
 			{
 				if(weapon->isMelee())
@@ -4155,7 +4155,7 @@ CFindLastEnemy::CFindLastEnemy (Vector vLast,Vector vVelocity)
 
 void CFindLastEnemy::execute ( CBot *pBot, CBotSchedule *pSchedule )
 {
-	if ( m_fTime == 0 )
+	if ( m_fTime == 0.0f )
 		m_fTime = engine->Time() + randomFloat(2.0f,4.0f);
 
 	if ( !pBot->moveToIsValid() || pBot->moveFailed() )
@@ -4308,7 +4308,7 @@ void CCrouchHideTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 		return;
 	}
 
-	if ( m_fHideTime == 0 )
+	if ( m_fHideTime == 0.0f )
 		m_fHideTime = engine->Time() + randomFloat(7.0f,14.0f);
 
 	if ( m_fChangeTime == 0.0f )
@@ -4372,7 +4372,7 @@ void CHideTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 	pBot->setLookAtTask(LOOK_VECTOR);
 	pBot->duck(true);
 
-	if ( m_fHideTime == 0 )
+	if ( m_fHideTime == 0.0f )
 		m_fHideTime = engine->Time() + randomFloat(5.0f,10.0f);
 
 	if ( m_fHideTime < engine->Time() )
@@ -4397,7 +4397,7 @@ void CBotTF2DemomanPipeJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 {
 	pBot->wantToListen(false);
 
-	if ( m_fTime == 0 )
+	if ( m_fTime == 0.0f )
 	{
 		// init
 		m_fTime = engine->Time() + randomFloat(5.0f,10.0f);
@@ -4679,7 +4679,7 @@ void CBotTF2DemomanPipeEnemy :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		{
 			const float fTime = engine->Time();
 
-			if ( m_fHeldAttackTime == 0 )
+			if ( m_fHeldAttackTime == 0.0f )
 				m_fHeldAttackTime = fTime + m_fHoldAttackTime + randomFloat(0.0f,0.15f);
 
 			if ( m_fHeldAttackTime > fTime)
@@ -4901,7 +4901,7 @@ CBotTF2Spam :: CBotTF2Spam ( Vector vStart, Vector vTarget, CBotWeapon *pWeapon 
 	m_fTime = 0.0f;
 }
 
-float CBotTF2Spam :: getDistance ()
+float CBotTF2Spam :: getDistance () const
 {
 	return (m_vStart - m_vTarget).Length();
 }
@@ -5014,7 +5014,7 @@ void CBotTF2AttackSentryGunTask::execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	if ( m_fTime == 0.0f )
 	{
-		CWaypointVisibilityTable *table = CWaypoints::getVisiblity();
+		const CWaypointVisibilityTable *table = CWaypoints::getVisiblity();
 
 		m_fTime = engine->Time() + randomFloat(8.0f,14.0f);
 
@@ -5025,7 +5025,7 @@ void CBotTF2AttackSentryGunTask::execute (CBot *pBot,CBotSchedule *pSchedule)
 		m_vStart = pBot->getOrigin();
 		m_vHide = m_vStart;
 
-		CWaypoint *pWpt = CWaypoints::getWaypoint(m_iStartingWaypoint);
+		const CWaypoint *pWpt = CWaypoints::getWaypoint(m_iStartingWaypoint);
 
 		if ( pWpt != nullptr)
 		{
@@ -5129,7 +5129,7 @@ void CBotNest :: execute (CBot *pBot, CBotSchedule *pSchedule)
 		return;
 	}
 
-	if ( m_fTime == 0 )
+	if ( m_fTime == 0.0f )
 	{
 		m_fTime = engine->Time() + randomFloat(6.0f,12.0f);
 
@@ -5881,9 +5881,9 @@ CBotTask :: CBotTask ()
 	_init();
 }
 
-bool CBotTask :: timedOut ()
+bool CBotTask :: timedOut () const
 {
-	return this->m_fTimeOut != 0 && engine->Time() < this->m_fTimeOut;
+	return this->m_fTimeOut != 0.0f && engine->Time() < this->m_fTimeOut;
 }
 
 eTaskState CBotTask :: isInterrupted (CBot *pBot)
@@ -5956,12 +5956,12 @@ void CBotTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 	return;
 }
 
-bool CBotTask :: hasFailed ()
+bool CBotTask :: hasFailed () const
 {
 	return m_iState == STATE_FAIL;
 }
 
-bool CBotTask :: isComplete ()
+bool CBotTask :: isComplete () const
 {
 	return m_iState == STATE_COMPLETE;
 }

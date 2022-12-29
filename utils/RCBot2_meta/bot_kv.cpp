@@ -83,7 +83,7 @@ CRCBotKeyValueList :: ~CRCBotKeyValueList()
 	m_KVs.clear();
 }
 
-CRCBotKeyValue *CRCBotKeyValueList :: getKV ( const char *key )
+CRCBotKeyValue *CRCBotKeyValueList :: getKV ( const char *key ) const
 {
 	for ( unsigned int i = 0; i < m_KVs.size(); i ++ )
 	{
@@ -94,7 +94,7 @@ CRCBotKeyValue *CRCBotKeyValueList :: getKV ( const char *key )
 	return nullptr;
 }
 
-bool CRCBotKeyValueList :: getFloat ( const char *key, float *val )
+bool CRCBotKeyValueList :: getFloat ( const char *key, float *val ) const
 {
 	CRCBotKeyValue* pKV = getKV(key);
 
@@ -107,7 +107,7 @@ bool CRCBotKeyValueList :: getFloat ( const char *key, float *val )
 }
 
 	
-bool CRCBotKeyValueList :: getInt ( const char *key, int *val )
+bool CRCBotKeyValueList :: getInt ( const char *key, int *val ) const
 {
 	CRCBotKeyValue* pKV = getKV(key);
 
@@ -120,7 +120,7 @@ bool CRCBotKeyValueList :: getInt ( const char *key, int *val )
 }
 
 
-bool CRCBotKeyValueList :: getString ( const char *key, char **val )
+bool CRCBotKeyValueList :: getString ( const char *key, char **val ) const
 {
 	CRCBotKeyValue* pKV = getKV(key);
 

@@ -125,19 +125,19 @@ public:
 
 	void execute ( CBot *pBot );
 
-	const char *getIDString ();
+	const char *getIDString () const;
 
-	CBotTask *currentTask ()
+	CBotTask *currentTask () const
 	{
 		return m_Tasks.empty() ? nullptr : m_Tasks.front();
 	}
 
-	bool hasFailed ()
+	bool hasFailed () const
 	{
 		return m_bFailed;
 	}
 
-	bool isComplete ()
+	bool isComplete () const
 	{
 		return m_Tasks.empty();
 	}
@@ -162,18 +162,18 @@ public:
 	void passEdict(edict_t *p);
 	//////////////////////////
 
-	bool hasPassInfo () { return m_bitsPass!=0; }
+	bool hasPassInfo () const { return m_bitsPass!=0; }
 
-	int passedInt () { return iPass; }
-	float passedFloat() { return fPass; }
+	int passedInt () const { return iPass; }
+	float passedFloat() const { return fPass; }
 	Vector passedVector() { return vPass; }
-	edict_t *passedEdict() { return pPass; }
-	bool isID ( eBotSchedule iId ) { return m_iSchedId == iId; }
+	edict_t *passedEdict() const { return pPass; }
+	bool isID ( eBotSchedule iId ) const { return m_iSchedId == iId; }
 
-	bool hasPassInt () { return (m_bitsPass&BITS_SCHED_PASS_INT)>0; }
-	bool hasPassFloat () { return (m_bitsPass&BITS_SCHED_PASS_FLOAT)>0; }
-	bool hasPassVector () { return (m_bitsPass&BITS_SCHED_PASS_VECTOR)>0; }
-	bool hasPassEdict () { return (m_bitsPass&BITS_SCHED_PASS_EDICT)>0; }
+	bool hasPassInt () const { return (m_bitsPass&BITS_SCHED_PASS_INT)>0; }
+	bool hasPassFloat () const { return (m_bitsPass&BITS_SCHED_PASS_FLOAT)>0; }
+	bool hasPassVector () const { return (m_bitsPass&BITS_SCHED_PASS_VECTOR)>0; }
+	bool hasPassEdict () const { return (m_bitsPass&BITS_SCHED_PASS_EDICT)>0; }
 
 	void setID ( eBotSchedule iId ) { m_iSchedId = iId; }
 
@@ -195,9 +195,9 @@ private:
 class CBotSchedules
 {
 public:
-	bool hasSchedule ( eBotSchedule iSchedule )
+	bool hasSchedule ( eBotSchedule iSchedule ) const
 	{
-		for (CBotSchedule *sched : m_Schedules) {
+		for (const CBotSchedule *sched : m_Schedules) {
 			if (sched->isID(iSchedule)) {
 				return true;
 			}
@@ -205,7 +205,7 @@ public:
 		return false;
 	}
 
-	bool isCurrentSchedule ( eBotSchedule iSchedule )
+	bool isCurrentSchedule ( eBotSchedule iSchedule ) const
 	{
 		if ( m_Schedules.empty() )
 			return false;
@@ -270,16 +270,16 @@ public:
 		m_Schedules.push_front(pSchedule);
 	}
 
-	bool isEmpty ()
+	bool isEmpty () const
 	{
 		return m_Schedules.empty();
 	}
 
-	CBotTask *getCurrentTask ()
+	CBotTask *getCurrentTask () const
 	{
 		if ( !m_Schedules.empty() )
 		{
-			CBotSchedule *sched = m_Schedules.front();
+			const CBotSchedule *sched = m_Schedules.front();
 
 			if ( sched != nullptr)
 			{
@@ -290,7 +290,7 @@ public:
 		return nullptr;
 	}
 
-	CBotSchedule *getCurrentSchedule ()
+	CBotSchedule *getCurrentSchedule () const
 	{
 		if ( isEmpty() )
 			return nullptr;

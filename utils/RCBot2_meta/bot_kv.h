@@ -36,15 +36,15 @@ public:
 
 	//CRCBotKeyValue *getKV ( unsigned int iIndex );
 
-	bool getInt ( const char *key, int *val );
+	bool getInt ( const char *key, int *val ) const;
 
-	bool getString ( const char *key, char **val );
+	bool getString ( const char *key, char **val ) const;
 
-	bool getFloat ( const char *key, float *val );
+	bool getFloat ( const char *key, float *val ) const;
 
 private:
 
-	CRCBotKeyValue *getKV ( const char *key );
+	CRCBotKeyValue *getKV ( const char *key ) const;
 
 	std::vector <CRCBotKeyValue*> m_KVs;
 };

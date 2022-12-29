@@ -188,7 +188,7 @@ public:
 
 	static void setTeamplay ( bool bOn ){m_bTeamplay = bOn;}
 
-	static bool isMod ( eModId iMod ) { 	return m_iCurrentMod == iMod; }
+	static bool isMod ( eModId iMod ) { return m_iCurrentMod == iMod; }
 
 	static char *modFolder (){return m_szModFolder;}
 
@@ -200,7 +200,7 @@ public:
 
 	static bool checkOpensLater ( Vector vSrc, Vector vDest );
 
-	static bool setupMapTime ( ) { return m_fMapStartTime == 0; }
+	static bool setupMapTime ( ) { return m_fMapStartTime == 0.0f; }
 
 	static bool isBreakableOpen ( edict_t *pBreakable );
 

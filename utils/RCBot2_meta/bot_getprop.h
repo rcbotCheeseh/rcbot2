@@ -344,7 +344,7 @@ public:
 	static void resetError () { m_berror = false; }
 	static bool isError () { return m_berror; }
 
-	int getOffset()
+	int getOffset() const
 	{
 		return m_offset;
 	}
@@ -452,7 +452,7 @@ public:
 
 		if  ( _index )//nosoop fix for VScript update
 		{
-			edict_t* hTarget = g_GetProps[GETPROP_TF2SPYDISGUISED_TARGET].getEntity(edict);
+			const edict_t* hTarget = g_GetProps[GETPROP_TF2SPYDISGUISED_TARGET].getEntity(edict);
 			*_index = IndexOfEdict(hTarget);
 		}
 
@@ -907,7 +907,7 @@ public:
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, prop);
-		const int propvalue = *(int *)((uint8_t *)pEntity + offset); // to-do: bit count?
+		const int propvalue = *reinterpret_cast<int*>(reinterpret_cast<uint8_t*>(pEntity) + offset); // to-do: bit count?
 		return propvalue;
 	}
 
@@ -922,7 +922,7 @@ public:
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, prop);
-		const float propvalue = *(float *)((uint8_t *)pEntity + offset);
+		const float propvalue = *reinterpret_cast<float*>(reinterpret_cast<uint8_t*>(pEntity) + offset);
 		return propvalue;
 	}
 
@@ -937,7 +937,7 @@ public:
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, prop);
-		edict_t *pEdict = *(edict_t **) ((uint8_t *) pEntity + offset);
+		edict_t *pEdict = *reinterpret_cast<edict_t**>(reinterpret_cast<uint8_t*>(pEntity) + offset);
 		if(!pEdict || pEdict->IsFree())
 		{
 			return nullptr;
@@ -957,7 +957,7 @@ public:
 	{
 		datamap_t* pDataMap = CBaseEntity_GetDataDescMap(pEntity);
 		const int offset = UTIL_FindInDataMap(pDataMap, prop);
-		Vector *propvalue = (Vector *)((uint8_t *)pEntity + offset);
+		Vector *propvalue = reinterpret_cast<Vector*>(reinterpret_cast<uint8_t*>(pEntity) + offset);
 		return propvalue;
 	}
 

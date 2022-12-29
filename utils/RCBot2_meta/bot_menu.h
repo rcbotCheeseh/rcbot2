@@ -185,7 +185,7 @@ public:
 
 	void render ( CClient *pClient );
 
-	void selectedMenu ( CClient *pClient, unsigned int iMenu );
+	void selectedMenu ( CClient *pClient, unsigned int iMenu ) const;
 
 private:
 	std::vector<CBotMenuItem*> m_MenuItems;

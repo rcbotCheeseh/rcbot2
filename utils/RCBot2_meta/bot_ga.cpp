@@ -45,7 +45,7 @@ const float CGA :: g_fMaxPerturbation = 0.3f;
 // POPULATION
 ////////////////////
 
-IIndividual *CPopulation :: get ( int iIndex )
+IIndividual *CPopulation :: get ( int iIndex ) const
 {
 	return m_theIndividuals[iIndex];
 }
@@ -68,7 +68,7 @@ void CPopulation :: clear ()
 	m_theIndividuals.clear();
 }
 
-ga_nn_value CPopulation :: totalFitness ()
+ga_nn_value CPopulation :: totalFitness () const
 {
 	float fTotalFitness = 0.0f;
 
@@ -80,7 +80,7 @@ ga_nn_value CPopulation :: totalFitness ()
 	return fTotalFitness;
 }
 
-ga_nn_value CPopulation :: bestFitness ()
+ga_nn_value CPopulation :: bestFitness () const
 {
 	BOOL gotBestFitness = FALSE;
 	float fBestFitness = 0.0f;
@@ -99,7 +99,7 @@ ga_nn_value CPopulation :: bestFitness ()
 	return fBestFitness;
 }
 
-ga_nn_value CPopulation :: averageFitness ()
+ga_nn_value CPopulation :: averageFitness () const
 {
 	return totalFitness()/m_theIndividuals.size();
 }
@@ -187,7 +187,7 @@ void CGA :: freeGlobalMemory ()
 	m_theSelectFunction = nullptr;
 }
 
-bool CGA :: canPick ()
+bool CGA :: canPick () const
 {
 	return m_theNewPopulation.size() > 0;
 }

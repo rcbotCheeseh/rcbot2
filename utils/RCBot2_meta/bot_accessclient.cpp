@@ -48,23 +48,23 @@ CAccessClient :: CAccessClient( const char *szSteamID, int iAccessLevel )
 	m_szSteamID = CStrings::getString(szSteamID);
 }
 
-bool CAccessClient :: forBot ()
+bool CAccessClient :: forBot () const
 {
 	return isForSteamID("BOT");
 }
 
-bool CAccessClient :: isForSteamID ( const char *szSteamID )
+bool CAccessClient :: isForSteamID ( const char *szSteamID ) const
 {
 	logger->Log(LogLevel::DEBUG, "AccessClient: '%s','%s'", m_szSteamID, szSteamID);
 	return FStrEq(m_szSteamID,szSteamID);
 }
 
-void CAccessClient::save(std::fstream& fp)
+void CAccessClient::save(std::fstream& fp) const
 {
 	fp << '"' << m_szSteamID << '"' << ":" << m_iAccessLevel << "\n";
 }
 
-void CAccessClient :: giveAccessToClient ( CClient *pClient )
+void CAccessClient :: giveAccessToClient ( CClient *pClient ) const
 {
 	// notify player
 	if ( !forBot() )
@@ -86,9 +86,9 @@ void CAccessClients :: showUsers ( edict_t *pEntity )
 
 	for ( unsigned int i = 0; i < m_Clients.size(); i ++ )
 	{
-		CAccessClient* pPlayer = m_Clients[i];
-		
-		CClient* pClient = CClients::findClientBySteamID(pPlayer->getSteamID());
+		const CAccessClient* pPlayer = m_Clients[i];
+
+		const CClient* pClient = CClients::findClientBySteamID(pPlayer->getSteamID());
 		
 		if ( pClient )
 			CBotGlobals::botMessage(pEntity,0,"[ID: %s]/[AL: %d] (currently playing as : %s)\n",pPlayer->getSteamID(),pPlayer->getAccessLevel(),pClient->getName());
@@ -214,7 +214,7 @@ void CAccessClients :: checkClientAccess ( CClient *pClient )
 {
 	for ( unsigned int i = 0; i < m_Clients.size(); i ++ )
 	{
-		CAccessClient *pAC = m_Clients[i];
+		const CAccessClient *pAC = m_Clients[i];
 
 		if ( pAC->isForSteamID(pClient->getSteamID()) )
 			pAC->giveAccessToClient(pClient);

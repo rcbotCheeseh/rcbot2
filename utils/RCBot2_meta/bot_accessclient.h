@@ -41,17 +41,17 @@ class CAccessClient
 public:
 	CAccessClient(const char *szSteamID, int iAccessLevel );
 
-	bool isForSteamID ( const char *szSteamID );
+	bool isForSteamID ( const char *szSteamID ) const;
 
-	void giveAccessToClient ( CClient *pClient );
+	void giveAccessToClient ( CClient *pClient ) const;
 
-	void save (std::fstream &fp);
+	void save (std::fstream &fp) const;
 
-	bool forBot ();
+	bool forBot () const;
 
-	char *getSteamID () { return m_szSteamID; }
+	char *getSteamID () const { return m_szSteamID; }
 
-	int getAccessLevel () { return m_iAccessLevel; }
+	int getAccessLevel () const { return m_iAccessLevel; }
 private:
 	char *m_szSteamID;
 	int m_iAccessLevel;

@@ -1,5 +1,8 @@
 #ifndef __RCBOT_RB_H__
 #define __RCBOT_RB_H__
+#include <vector>
+
+class CBotOperator;
 
 class CBotRule
 {
@@ -8,13 +11,13 @@ public:
 	{
 	}
 private:
-	vector<CBotOperator> m_Rules;
+	std::vector<CBotOperator> m_Rules;
 };
 
 class CBotOperator
 {
 public:
-	CBotOperator ( CBotFactOpertor op ) : m_op(op)
+	CBotOperator ( const CBotFactOpertor& op ) : m_op(op)
 	{		
 	}
 

@@ -81,9 +81,9 @@ public:
 
 	bool ReadFromFile ( int numwaypoints ) const;
 
-	void workVisibilityForWaypoint ( int i, int iNumWaypoints, bool bTwoway = false );
+	void workVisibilityForWaypoint ( int i, int iNumWaypoints, bool bTwoway = false ) const;
 
-	bool GetVisibilityFromTo ( int iFrom, int iTo )
+	bool GetVisibilityFromTo ( int iFrom, int iTo ) const
 	{
 		// work out the position 
 		const int iPosition = iFrom*CWaypoints::MAX_WAYPOINTS+iTo;
@@ -132,7 +132,7 @@ public:
 		////////////////////////////
 	}
 
-	void SetVisibilityFromTo ( int iFrom, int iTo, bool bVisible )
+	void SetVisibilityFromTo ( int iFrom, int iTo, bool bVisible ) const
 	{
 		const int iPosition = iFrom*CWaypoints::MAX_WAYPOINTS+iTo;
 
@@ -152,7 +152,7 @@ public:
 
 	void WorkOutVisibilityTable ( );
 
-	bool needToWorkVisibility() { return bWorkVisibility; }
+	bool needToWorkVisibility() const { return bWorkVisibility; }
 	void setWorkVisiblity ( bool bSet ) { bWorkVisibility = bSet; }
 
 private:

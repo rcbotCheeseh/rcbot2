@@ -330,12 +330,12 @@ public:
 		m_szWeaponName = szWeaponName;
 	}
 
-	bool isWeaponName ( const char *szWeaponName )
+	bool isWeaponName ( const char *szWeaponName ) const
 	{
 		return !strcmp(szWeaponName,getWeaponName());
 	}
 
-	bool isShortWeaponName ( const char *szWeaponName )
+	bool isShortWeaponName ( const char *szWeaponName ) const
 	{
 		static int start;
 		
@@ -347,17 +347,17 @@ public:
 		return !strcmp(&m_szWeaponName[start],szWeaponName);
 	}
 
-	bool canDestroyPipeBombs()
+	bool canDestroyPipeBombs() const
 	{
 		return hasAllFlags(WEAP_FL_KILLPIPEBOMBS);
 	}
 
-	bool isScoped ()
+	bool isScoped () const
 	{
 		return hasAllFlags(WEAP_FL_SCOPE);
 	}
 
-	bool canDeflectRockets()
+	bool canDeflectRockets() const
 	{
 		return hasAllFlags(WEAP_FL_DEFLECTROCKETS);
 	}
@@ -372,97 +372,97 @@ public:
 		m_iFlags = iFlags;
 	}
 
-	bool primaryInRange ( float fDistance )
+	bool primaryInRange ( float fDistance ) const
 	{
 		return fDistance>m_fPrimMinWeaponShootDist&&fDistance<m_fPrimMaxWeaponShootDist;
 	}
 
-	bool primaryGreaterThanRange ( float fDistance )
+	bool primaryGreaterThanRange ( float fDistance ) const
 	{
 		return fDistance<m_fPrimMaxWeaponShootDist;
 	}
 
-	float primaryMaxRange ( )
+	float primaryMaxRange ( ) const
 	{
 		return m_fPrimMaxWeaponShootDist;
 	}
 
-	bool hasHighRecoil ()
+	bool hasHighRecoil () const
 	{
 		return hasAllFlags(WEAP_FL_HIGH_RECOIL);
 	}
 
-	bool isZoomable ()
+	bool isZoomable () const
 	{
 		return hasAllFlags(WEAP_FL_ZOOMABLE);
 	}
 
-	bool isProjectile ()
+	bool isProjectile () const
 	{
 		return hasAllFlags(WEAP_FL_PROJECTILE);
 	}
 
-	bool isExplosive ()
+	bool isExplosive () const
 	{
 		return hasAllFlags(WEAP_FL_EXPLOSIVE);
 	}
 
-	bool isDeployable ()
+	bool isDeployable () const
 	{
 		return hasAllFlags(WEAP_FL_DEPLOYABLE);
 	}
 
-	bool canUseUnderWater ()
+	bool canUseUnderWater () const
 	{
 		return hasAllFlags(WEAP_FL_UNDERWATER);
 	}
 
-	bool isGravGun()
+	bool isGravGun() const
 	{
 		return hasAllFlags(WEAP_FL_GRAVGUN);
 	}
 
-	bool mustHoldAttack ()
+	bool mustHoldAttack () const
 	{
 		return hasAllFlags(WEAP_FL_HOLDATTACK);
 	}
 
-	bool isGrenade ()
+	bool isGrenade () const
 	{
 		return hasAllFlags(WEAP_FL_GRENADE);
 	}
 
-	bool isMelee ()
+	bool isMelee () const
 	{
 		return hasAllFlags(WEAP_FL_MELEE);
 	}
 
-	bool isMeleeSecondary ()
+	bool isMeleeSecondary () const
 	{
 		return hasAllFlags(WEAP_FL_MELEE_SEC_ATT);
 	}
 
-	bool needsDeployedOrZoomed ()
+	bool needsDeployedOrZoomed () const
 	{
 		return hasAllFlags(WEAP_FL_CANTFIRE_NORM);
 	}
 
-	bool canAttack()
+	bool canAttack() const
 	{
 		return hasAllFlags(WEAP_FL_PRIM_ATTACK);
 	}
 
-	bool isSpecial ()
+	bool isSpecial () const
 	{
 		return hasAllFlags(WEAP_FL_SPECIAL);
 	}
 
-	bool secondaryInRange ( float fDistance )
+	bool secondaryInRange ( float fDistance ) const
 	{
 		return fDistance>m_fSecMinWeaponShootDist&&fDistance<m_fSecMaxWeaponShootDist;
 	}
 
-	int getPreference ()
+	int getPreference () const
 	{
 		return m_iPreference;
 	}
@@ -489,17 +489,17 @@ public:
 		m_fSecMaxWeaponShootDist = fMaxRange;
 	}
 
-	int getAmmoIndex1 ()
+	int getAmmoIndex1 () const
 	{
 		return m_iAmmoIndex1;
 	}
 
-	int getAmmoIndex2 ()
+	int getAmmoIndex2 () const
 	{
 		return m_iAmmoIndex2;
 	}
 
-	int getSlot ()
+	int getSlot () const
 	{
 		return m_iSlot;
 	}
@@ -510,12 +510,12 @@ public:
 		m_iAmmoIndex2 = iAmmoIndex2;
 	}
 
-	bool canUseSecondary ()
+	bool canUseSecondary () const
 	{
 		return hasSomeFlags(WEAP_FL_SEC_ATTACK);
 	}
 
-	float getProjectileSpeed ()
+	float getProjectileSpeed () const
 	{
 		return m_fProjectileSpeed;
 	}
@@ -604,48 +604,48 @@ public:
 		m_pWeaponInfo = pWeapon;
 	}
 
-	float getPrimaryMaxRange()
+	float getPrimaryMaxRange() const
 	{
 		return m_pWeaponInfo->primaryMaxRange();
 	}
 
-	bool primaryInRange ( float fDistance )
+	bool primaryInRange ( float fDistance ) const
 	{
 		return m_pWeaponInfo->primaryInRange(fDistance);
 	}
 
-	bool primaryGreaterThanRange ( float fDistance )
+	bool primaryGreaterThanRange ( float fDistance ) const
 	{
 		return m_pWeaponInfo->primaryGreaterThanRange(fDistance); 
 	}
 
-	bool needsDeployedOrZoomed ()
+	bool needsDeployedOrZoomed () const
 	{
 		return m_pWeaponInfo->needsDeployedOrZoomed();
 	}
 
-	bool isGravGun ()
+	bool isGravGun () const
 	{
 		return m_pWeaponInfo->isGravGun();
 	}
 
 
-	bool isExplosive ()
+	bool isExplosive () const
 	{
 		return m_pWeaponInfo->isExplosive();
 	}
 
-	bool isZoomable () 
+	bool isZoomable () const
 	{
 		return m_pWeaponInfo->isZoomable();
 	}
 
-	bool canUseUnderWater ()
+	bool canUseUnderWater () const
 	{
 		return m_pWeaponInfo->canUseUnderWater();
 	}
 
-	bool hasHighRecoil ()
+	bool hasHighRecoil () const
 	{
 		return m_pWeaponInfo->hasHighRecoil();
 	}
@@ -655,93 +655,93 @@ public:
 		return m_pWeaponInfo->getID();
 	}
 
-	bool isSpecial ()
+	bool isSpecial () const
 	{
 		return m_pWeaponInfo->isSpecial();
 	}
 
-	float primaryMaxRange ( )
+	float primaryMaxRange ( ) const
 	{
 		return m_pWeaponInfo->primaryMaxRange();
 	}
 
-	bool isDeployable ()
+	bool isDeployable () const
 	{
 		return m_pWeaponInfo->isDeployable();
 	}
 
-	bool mustHoldAttack ()
+	bool mustHoldAttack () const
 	{
 		return m_pWeaponInfo->mustHoldAttack();
 	}
 
-	bool canDestroyPipeBombs()
+	bool canDestroyPipeBombs() const
 	{
 		return m_pWeaponInfo->canDestroyPipeBombs();
 	}
 
-	bool isProjectile ()
+	bool isProjectile () const
 	{
 		return m_pWeaponInfo->isProjectile();
 	}
 
-	float getProjectileSpeed ()
+	float getProjectileSpeed () const
 	{
 		return m_pWeaponInfo->getProjectileSpeed();
 	}
 
-	bool canDeflectRockets()
+	bool canDeflectRockets() const
 	{
 		return m_pWeaponInfo->canDeflectRockets();
 	}
 
-	bool canUseSecondary ()
+	bool canUseSecondary () const
 	{
 		return m_pWeaponInfo->canUseSecondary();
 	}
 
-	bool isMelee ()
+	bool isMelee () const
 	{
 		return m_pWeaponInfo->isMelee();
 	}
 
-	bool isMeleeSecondary () 
+	bool isMeleeSecondary () const
 	{
 		return m_pWeaponInfo->isMeleeSecondary();
 	}
 
-	bool secondaryInRange ( float fDistance )
+	bool secondaryInRange ( float fDistance ) const
 	{
 		return m_pWeaponInfo->secondaryInRange(fDistance);
 	}
 
-	int getPreference ()
+	int getPreference () const
 	{
 		return m_pWeaponInfo->getPreference();
 	}
 
-	bool outOfAmmo (CBot *pBot);
+	bool outOfAmmo (CBot *pBot) const;
 
-	bool needToReload (CBot *pBot);
+	bool needToReload (CBot *pBot) const;
 
 	void setHasWeapon ( bool bHas )
 	{
 		m_bHasWeapon = bHas;
 	}
 
-	bool hasWeapon ()
+	bool hasWeapon () const
 	{
 		return m_bHasWeapon;
 	}
 
-	bool canAttack ()
+	bool canAttack () const
 	{
 		return m_pWeaponInfo->canAttack();
 	}
 
 	int getAmmo ( CBot *pBot, int type = AMMO_PRIM ) const;
 
-	int getClip1 ( CBot *pBot ) 
+	int getClip1 ( CBot *pBot ) const
 	{ 
 		if ( m_iClip1 ) 
 			return *m_iClip1; 
@@ -749,7 +749,7 @@ public:
 		return 0; 
 	}
 
-	int getClip2 ( CBot *pBot ) 
+	int getClip2 ( CBot *pBot ) const
 	{ 
 		if ( m_iClip2 ) 
 			return *m_iClip2; 
@@ -757,15 +757,15 @@ public:
 		return 0; 
 	}
 
-	CWeapon *getWeaponInfo () { return m_pWeaponInfo; }
+	CWeapon *getWeaponInfo () const { return m_pWeaponInfo; }
 
-	int getWeaponIndex () { return m_iWeaponIndex; }
+	int getWeaponIndex () const { return m_iWeaponIndex; }
 
 	void setWeaponIndex (int iIndex) { m_iWeaponIndex = iIndex; } // Entity Index
 
 	void setWeaponEntity (edict_t *pent, bool bOverrideAmmoTypes = true );
 
-	edict_t *getWeaponEntity () { return m_pEnt; }
+	edict_t *getWeaponEntity () const { return m_pEnt; }
 
 
 private:
@@ -819,9 +819,9 @@ public:
 
 	void clearWeapons ();
 
-	bool hasWeapon ( int id );
+	bool hasWeapon ( int id ) const;
 
-	bool hasExplosives ();
+	bool hasExplosives () const;
 
 	// returns true if there is a change to the weapons
 	bool update ( bool bOverrideAllFromEngine = true ); // update from sendprop

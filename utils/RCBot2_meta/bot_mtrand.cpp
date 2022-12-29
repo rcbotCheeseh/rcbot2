@@ -129,7 +129,8 @@ void MTRand_int32::seed(unsigned long s)
   p = n; // force gen_state() to be called for next random number
 }
 
-void MTRand_int32::seed(const unsigned long* array, int size) { // init by array
+void MTRand_int32::seed(const unsigned long* array, int size) const
+{ // init by array
   seed(19650218UL);
   int i = 1, j = 0;
   for (int k = n > size ? n : size; k; --k) {

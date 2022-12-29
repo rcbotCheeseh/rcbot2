@@ -77,6 +77,9 @@ CProfileTimer :: CProfileTimer (const char *szFunction)
 	m_average = 2;
 	m_iInvoked = 0;
 	m_overall = 0;
+	start_cycle = 0;
+	end_cycle = 0;
+	m_last = 0;
 }
 
 // "Begin" Timer i.e. update time

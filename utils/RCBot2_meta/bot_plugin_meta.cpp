@@ -160,7 +160,7 @@ public:
 		m_iMaxCount = 0;
 
 		for (int i = 0; i < MAX_PLAYERS; ++i) {
-			CClient* client = CClients::get(i);
+			const CClient* client = CClients::get(i);
 
 			if (client->isUsed()) {
 				IPlayerInfo *p = playerinfomanager->GetPlayerInfo(client->getPlayer());
@@ -732,7 +732,7 @@ bool RCBotPluginMeta::Hook_ClientConnect(edict_t *pEntity,
 void RCBotPluginMeta::Hook_ClientPutInServer(edict_t *pEntity, char const *playername)
 {
 	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pEntity);
-	bool is_Rcbot = false;
+	const bool is_Rcbot = false;
 
 	CClient *pClient = CClients::clientConnected(pEntity);
 
@@ -845,8 +845,8 @@ void RCBotPluginMeta::BotQuotaCheck() {
 
 		// Count Players
 		for (int i = 0; i < MAX_PLAYERS; ++i) {
-			CClient* client = CClients::get(i);
-			CBot* bot = CBots::get(i);
+			const CClient* client = CClients::get(i);
+			const CBot* bot = CBots::get(i);
 
 			if (bot != nullptr && bot->getEdict() != nullptr && bot->inUse()) {
 				IPlayerInfo *p = playerinfomanager->GetPlayerInfo(bot->getEdict());

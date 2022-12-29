@@ -240,7 +240,7 @@ void CCSSBot::listenForPlayers()
 		if(pPlayer->IsFree())
 			continue;
 
-		CClient* pClient = CClients::get(pPlayer);
+		const CClient* pClient = CClients::get(pPlayer);
 
 		if(!pClient->isUsed())
 			continue;
@@ -304,13 +304,13 @@ void CCSSBot::listenForPlayers()
 	}
 }
 
-void CCSSBot::selectTeam()
+void CCSSBot::selectTeam() const
 {
 	const char* cmd = "jointeam 0";
 	helpers->ClientCommand(m_pEdict,cmd);
 }
 
-void CCSSBot::selectModel()
+void CCSSBot::selectModel() const
 {
 	const char* cmd = "joinclass 0";
 	helpers->ClientCommand(m_pEdict,cmd);
@@ -414,7 +414,7 @@ CBotWeapon *CCSSBot::getPrimaryWeapon()
  **/
 bool CCSSBot::IsSniper()
 {
-	CBotWeapon *weapon = getPrimaryWeapon();
+	const CBotWeapon *weapon = getPrimaryWeapon();
 
 	if(!weapon)
 		return false;
@@ -587,7 +587,7 @@ void CCSSBot::modThink()
 
 	if(m_pCurrentWeapon)
 	{
-		CBotWeapon *weapon = m_pWeapons->getWeapon(CWeapons::getWeapon(m_pCurrentWeapon->GetClassName()));
+		const CBotWeapon *weapon = m_pWeapons->getWeapon(CWeapons::getWeapon(m_pCurrentWeapon->GetClassName()));
 		if(weapon && weapon->getClip1(this) == 0 && !weapon->isMelee() && weapon->getID() != CS_WEAPON_C4)
 		{
 			letGoOfButton(IN_ATTACK);
@@ -630,7 +630,7 @@ void CCSSBot::modThink()
 
 	if(getEnemy() != nullptr && isVisible(getEnemy()))
 	{
-		CBotWeapon *currentweapon = getCurrentWeapon();
+		const CBotWeapon *currentweapon = getCurrentWeapon();
 
 		if(!hasSomeConditions(CONDITION_OUT_OF_AMMO))
 		{
@@ -865,7 +865,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 		{
 			CBotSchedule* pSched = new CBotSchedule();
 			pSched->setID(SCHED_DEFENDPOINT);
-			CWaypoint *pGoal = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_GOAL, getTeam());
+			const CWaypoint *pGoal = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_GOAL, getTeam());
 			if(pGoal)
 			{
 				CWaypoint *pDefend = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_DEFEND, getTeam(), pGoal->getArea(), true, this);
@@ -971,7 +971,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 
 					if (pRescueZone)
 					{
-						Vector vRescue = CBotGlobals::worldCenter(pRescueZone);
+						const Vector vRescue = CBotGlobals::worldCenter(pRescueZone);
 						pSched->addTask(new CFindPathTask(vRescue));
 						pSched->addTask(new CMoveToTask(vRescue));
 						pSched->addTask(new CBotWaitTask(0.50f));

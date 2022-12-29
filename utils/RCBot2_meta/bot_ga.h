@@ -38,7 +38,7 @@ class IIndividual
 {
 public:
 	// get fitness for this individual
-	ga_nn_value getFitness () { return m_fFitness; }
+	ga_nn_value getFitness () const { return m_fFitness; }
 	void setFitness ( float fVal ) { m_fFitness = fVal; }
 
 	// crossover with other individual
@@ -64,21 +64,21 @@ public:
 
 	void setGA ( CGA *ga ) { m_ga = ga; }
 	// size of population
-	unsigned int size () { return m_theIndividuals.size(); };
+	unsigned int size () const { return m_theIndividuals.size(); };
 
 	// get from population index
-	IIndividual *get ( int iIndex );
+	IIndividual *get ( int iIndex ) const;
 
 	// add individual to population
 	void add ( IIndividual *individual );
 
 	void clear ();
 
-	ga_nn_value totalFitness ();
+	ga_nn_value totalFitness () const;
 
-	ga_nn_value bestFitness ();
+	ga_nn_value bestFitness () const;
 
-	ga_nn_value averageFitness ();
+	ga_nn_value averageFitness () const;
 
 	// get back individual
 	IIndividual *pick ();
@@ -137,7 +137,7 @@ public:
 	void addToPopulation ( IIndividual *individual );
 
 	// can get an individual off new population
-	bool canPick ();
+	bool canPick () const;
 
 	IIndividual *pick ();
 

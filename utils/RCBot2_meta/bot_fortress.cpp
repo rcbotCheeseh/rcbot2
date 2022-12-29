@@ -341,7 +341,7 @@ bool CBotFortress::someoneCalledMedic()
 			((m_fLastCalledMedicTime+30.0f)>engine->Time());
 }
 
-bool CBotTF2 :: sentryRecentlyHadEnemy ()
+bool CBotTF2 :: sentryRecentlyHadEnemy () const
 {
 	return (m_fLastSentryEnemyTime + 15.0f) > engine->Time();
 }
@@ -561,7 +561,7 @@ bool CBotFortress :: setVisible ( edict_t *pEntity, bool bVisible )
 		{
 			if (CBotGlobals::isPlayer(pEntity) ) // player
 			{
-				CBotWeapon *pMedigun = m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_MEDIGUN));
+				const CBotWeapon *pMedigun = m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_MEDIGUN));
 				const bool bIsSpy = CClassInterface::getTF2Class(pEntity)==TF_CLASS_SPY;
 				int iDisguise = 0;
 
@@ -1476,7 +1476,7 @@ void CBotFortress :: modThink ()
 }
 
 
-bool CBotFortress :: isTeleporterUseful ( edict_t *pTele )
+bool CBotFortress :: isTeleporterUseful ( edict_t *pTele ) const
 {
 	edict_t *pExit = CTeamFortress2Mod::getTeleporterExit(pTele);
 
@@ -1832,7 +1832,7 @@ void CBotTF2 :: setClass ( TF_Class _class )
 	m_iClass = _class;
 }
 
-void CBotTF2 :: highFivePlayer ( edict_t *pPlayer, float fYaw )
+void CBotTF2 :: highFivePlayer ( edict_t *pPlayer, float fYaw ) const
 {
 	if ( !m_pSchedules->isCurrentSchedule(SCHED_TAUNT) )
 		m_pSchedules->addFront(new CBotTauntSchedule(pPlayer,fYaw));
@@ -3295,7 +3295,7 @@ void CBotTF2::enemyFound (edict_t *pEnemy)
 
 	if ( m_pNearestEnemySentry == pEnemy )
 	{
-		CBotWeapon *pWeapon = m_pWeapons->getPrimaryWeapon();
+		const CBotWeapon *pWeapon = m_pWeapons->getPrimaryWeapon();
 
 		if ( (pWeapon != nullptr) && (m_iClass != TF_CLASS_SPY) && !pWeapon->outOfAmmo(this) && pWeapon->primaryGreaterThanRange(TF2_MAX_SENTRYGUN_RANGE+32.0f) )
 		{
@@ -3657,7 +3657,7 @@ void CBotTF2 :: foundSpy (edict_t *pEdict,TF_Class iDisguise)
 	}
 }
 
-int CBotFortress :: getSpyDisguiseClass ( int iTeam )
+int CBotFortress :: getSpyDisguiseClass ( int iTeam ) const
 {
 	std::vector<int> availableClasses;
 
@@ -4351,7 +4351,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	}
 	if ( bNeedAmmo || bNeedHealth )
 	{
-		Vector vOrigin = getOrigin();
+		const Vector vOrigin = getOrigin();
 
 		WaypointList *failed;
 		m_pNavigator->getFailedGoals(&failed);
@@ -4704,7 +4704,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	
 	if ( (m_pNearestEnemySentry.get() != nullptr) && !CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict) )
 	{
-		CBotWeapon *pWeapon = m_pWeapons->getPrimaryWeapon();
+		const CBotWeapon *pWeapon = m_pWeapons->getPrimaryWeapon();
 
 		ADD_UTILITY_DATA(BOT_UTIL_ATTACK_SENTRY,(distanceFrom(m_pNearestEnemySentry) >= CWaypointLocations::REACHABLE_RANGE) && (m_iClass!=TF_CLASS_SPY)&& pWeapon && !pWeapon->outOfAmmo(this) && pWeapon->primaryGreaterThanRange(TF2_MAX_SENTRYGUN_RANGE+32.0f),0.7f,ENTINDEX(m_pNearestEnemySentry.get()));
 	}
@@ -4942,7 +4942,7 @@ bool CBotTF2 :: canDeployStickies ()
 	}
 
 	// enough ammo???
-	CBotWeapon *pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_PIPEBOMBS));
+	const CBotWeapon *pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_PIPEBOMBS));
 
 	if (pWeapon)
 	{
@@ -5110,7 +5110,7 @@ bool CBotTF2::lookAfterBuildings ( float *fTime )
 
 bool CBotTF2 :: select_CWeapon ( CWeapon *pWeapon )
 {
-	CBotWeapon* pBotWeapon = m_pWeapons->getWeapon(pWeapon);
+	const CBotWeapon* pBotWeapon = m_pWeapons->getWeapon(pWeapon);
 
 	if ( pBotWeapon && !pBotWeapon->hasWeapon() )
 		return false;
@@ -7005,7 +7005,7 @@ bool CBotTF2 :: upgradeBuilding ( edict_t *pBuilding, bool removesapper )
 	return true;
 }
 
-void CBotFortress::teamFlagPickup ()
+void CBotFortress::teamFlagPickup () const
 {
 	if ( CTeamFortress2Mod::isMapType(TF_MAP_SD) && m_pSchedules->hasSchedule(SCHED_TF2_GET_FLAG) )
 		m_pSchedules->removeSchedule(SCHED_TF2_GET_FLAG); 
@@ -7377,7 +7377,7 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 	{
 		if ( bCheckWeapons )
 		{
-			CBotWeapon *pWeapon = m_pWeapons->getBestWeapon(pEdict);
+			const CBotWeapon *pWeapon = m_pWeapons->getBestWeapon(pEdict);
 
 			if ( pWeapon == nullptr)
 			{
@@ -7447,7 +7447,7 @@ void CBotTF2::MannVsMachineWaveComplete()
 
 	if (m_pSentryGun.get() != nullptr)
 	{
-		CWaypoint *pBest = CTeamFortress2Mod::getBestWaypointMVM(this, CWaypointTypes::W_FL_SENTRY);
+		const CWaypoint *pBest = CTeamFortress2Mod::getBestWaypointMVM(this, CWaypointTypes::W_FL_SENTRY);
 
 		if (!pBest || (pBest->distanceFrom(CBotGlobals::entityOrigin(m_pSentryGun)) > 768))
 		{
@@ -7477,7 +7477,7 @@ void CBotTF2::MannVsMachineAlarmTriggered(Vector vLoc)
 			{
 				if ((m_fLastSentryEnemyTime + 5.0f) > engine->Time())
 				{
-					CWaypoint *pWaypoint = CTeamFortress2Mod::getBestWaypointMVM(this, CWaypointTypes::W_FL_SENTRY);
+					const CWaypoint *pWaypoint = CTeamFortress2Mod::getBestWaypointMVM(this, CWaypointTypes::W_FL_SENTRY);
 
 					const Vector vSentry = CBotGlobals::entityOrigin(pSentry);
 
@@ -7674,7 +7674,7 @@ void CBotTF2 :: buildingSapped ( eEngiBuild building, edict_t *pSapper, edict_t 
 	}
 }
 
-void CBotTF2 :: sapperDestroyed ( edict_t *pSapper )
+void CBotTF2 :: sapperDestroyed ( edict_t *pSapper ) const
 {
 	m_pSchedules->freeMemory();
 }

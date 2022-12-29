@@ -78,7 +78,7 @@ void CFindEnemyFunc :: execute ( edict_t *pEntity )
 	}
 }
 
-float CFindEnemyFunc :: getFactor ( edict_t *pEntity )
+float CFindEnemyFunc :: getFactor ( edict_t *pEntity ) const
 {
 	return m_pBot->getEnemyFactor(pEntity);
 }
@@ -113,7 +113,7 @@ CBotVisibles :: ~CBotVisibles ()
 	m_iIndicesVisible = nullptr;
 }
 
-void CBotVisibles :: eachVisible ( CVisibleFunc *pFunc )
+void CBotVisibles :: eachVisible ( CVisibleFunc *pFunc ) const
 {
 	for (edict_t *pEnt : m_VisibleSet) {
 		pFunc->execute(pEnt);
@@ -159,7 +159,7 @@ void CBotVisibles :: debugString ( char *string )
 @param	bVisible	returns if the entity is visible or not
 @param  iIndex      saves recalling INDEXENT
 */
-void CBotVisibles :: checkVisible (edict_t* pEntity, int* iTicks, bool* bVisible, const int& iIndex, bool bCheckHead)
+void CBotVisibles :: checkVisible (edict_t* pEntity, int* iTicks, bool* bVisible, const int& iIndex, bool bCheckHead) const
 {
 	// reset
 	*bVisible = false;
@@ -366,7 +366,7 @@ void CBotVisibles :: updateVisibles ()
 #endif
 }
 
-bool CBotVisibles :: isVisible (const edict_t* pEdict) 
+bool CBotVisibles :: isVisible (const edict_t* pEdict) const
 { 
 	static int iIndex;
 	static int iByte;

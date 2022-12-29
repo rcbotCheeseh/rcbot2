@@ -133,7 +133,7 @@ void CWaypointLocations :: GetAllInArea (const Vector& vOrigin, WaypointList* pW
 	const int jLoc = READ_LOC(vOrigin.y);
 	const int kLoc = READ_LOC(vOrigin.z);
 
-	CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
+	const CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 
 	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
@@ -172,7 +172,7 @@ void CWaypointLocations :: GetAllVisible (int iFrom, int iOther, const Vector& v
 
 	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
-	CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
+	const CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 	
 	if ( iFrom == -1 || !pTable)
 		return;
@@ -189,7 +189,7 @@ void CWaypointLocations :: GetAllVisible (int iFrom, int iOther, const Vector& v
 				for (size_t l = 0; l < m_iLocations[i][j][k].size(); l++)
 				{
 					int iWpt = arr[l];
-					CWaypoint* pWpt = CWaypoints::getWaypoint(iWpt);
+					const CWaypoint* pWpt = CWaypoints::getWaypoint(iWpt);
 
 					//int iWpt = tempStack.ChooseFromStack();
 					

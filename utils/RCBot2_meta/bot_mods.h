@@ -103,20 +103,20 @@ public:
 // linux fix
 	void setup ( const char *szModFolder, eModId iModId, eBotType iBotType, const char *szWeaponListName );
 
-	bool isModFolder (const char* szModFolder);
+	bool isModFolder (const char* szModFolder) const;
 
-	char *getModFolder ();
+	char *getModFolder () const;
 
 	virtual const char *getPlayerClass ()
 	{
 		return "CBasePlayer";
 	}
 
-	eModId getModId ();
+	eModId getModId () const;
 
 	virtual bool isAreaOwnedByTeam (int iArea, int iTeam) { return iArea == 0; }
 
-	eBotType getBotType () { return m_iBotType; }
+	eBotType getBotType () const { return m_iBotType; }
 
 	virtual void addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags, int *iArea, float *fMaxDistance ){ return; }
 
@@ -141,7 +141,7 @@ public:
 		*iOff = 0;
 	}
 
-	bool needResetCheatFlag ()
+	bool needResetCheatFlag () const
 	{
 		return m_bBotCommand_ResetCheatFlag;
 	}
@@ -218,8 +218,8 @@ public:
 		}
 	}
 
-	int getNumFlags () { return m_iNumControlPoints; }
-	int getNumFlagsOwned (int iTeam)
+	int getNumFlags () const { return m_iNumControlPoints; }
+	int getNumFlagsOwned (int iTeam) const
 	{
 		int count = 0;
 
@@ -234,21 +234,21 @@ public:
 
 	int setup (edict_t *pResourceEntity);
 
-	bool getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id = nullptr);
-	bool getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id = nullptr);
+	bool getRandomEnemyControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id = nullptr) const;
+	bool getRandomTeamControlledFlag ( CBot *pBot, Vector *position, int iTeam, int *id = nullptr) const;
 
-	bool getRandomBombToDefuse ( Vector *position, int iTeam, edict_t **pBombTarget, int *id = nullptr);
-	bool getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id = nullptr);
-	bool getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id = nullptr);
+	bool getRandomBombToDefuse ( Vector *position, int iTeam, edict_t **pBombTarget, int *id = nullptr) const;
+	bool getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id = nullptr) const;
+	bool getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id = nullptr) const;
 
-	int findNearestObjective ( Vector vOrigin );
+	int findNearestObjective ( Vector vOrigin ) const;
 
-	int getWaypointAtFlag ( int iFlagId )
+	int getWaypointAtFlag ( int iFlagId ) const
 	{
 		return m_iWaypoint[iFlagId];
 	}
 
-	int getNumBombsToDefend ( int iTeam )
+	int getNumBombsToDefend ( int iTeam ) const
 	{
 		int count = 0;
 
@@ -261,7 +261,7 @@ public:
 		return count;
 	}
 
-	int getNumBombsToDefuse ( int iTeam )
+	int getNumBombsToDefuse ( int iTeam ) const
 	{
 		int count = 0;
 
@@ -274,7 +274,7 @@ public:
 		return count;
 	}
 
-	int getNumPlantableBombs (int iTeam)
+	int getNumPlantableBombs (int iTeam) const
 	{
 		int count = 0;
 
@@ -287,7 +287,7 @@ public:
 		return count;
 	}
 
-	float isBombExplodeImminent ( int id )
+	float isBombExplodeImminent ( int id ) const
 	{
 		return engine->Time() - m_fBombPlantedTime[id] > DOD_BOMB_EXPLODE_IMMINENT_TIME;
 	}
@@ -302,7 +302,7 @@ public:
 			m_fBombPlantedTime[id] = 0;
 	}
 
-	int getNumBombsToPlant ( int iTeam)
+	int getNumBombsToPlant ( int iTeam) const
 	{
 		int count = 0;
 
@@ -315,9 +315,9 @@ public:
 		return count;
 	}
 
-	bool ownsFlag ( edict_t *pFlag, int iTeam ) { return ownsFlag(getFlagID(pFlag),iTeam); }
+	bool ownsFlag ( edict_t *pFlag, int iTeam ) const { return ownsFlag(getFlagID(pFlag),iTeam); }
 
-	bool ownsFlag ( int iFlag, int iTeam )
+	bool ownsFlag ( int iFlag, int iTeam ) const
 	{
 		if ( iFlag == -1 )
 			return false;
@@ -325,7 +325,7 @@ public:
 		return m_iOwner[iFlag] == iTeam;
 	}
 
-	int numFlagsOwned (int iTeam)
+	int numFlagsOwned (int iTeam) const
 	{
 		int count = 0;
 
@@ -338,9 +338,9 @@ public:
 		return count;
 	}
 
-	int numCappersRequired ( edict_t *pFlag, int iTeam ) { return numCappersRequired(getFlagID(pFlag),iTeam); }
+	int numCappersRequired ( edict_t *pFlag, int iTeam ) const { return numCappersRequired(getFlagID(pFlag),iTeam); }
 
-	int numCappersRequired ( int iFlag, int iTeam )
+	int numCappersRequired ( int iFlag, int iTeam ) const
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -348,7 +348,7 @@ public:
 		return iTeam == TEAM_ALLIES ? m_iAlliesReqCappers[iFlag] : m_iAxisReqCappers[iFlag];
 	}
 
-	bool isBombPlanted ( int iId )
+	bool isBombPlanted ( int iId ) const
 	{
 		if ( iId == -1 )
 			return false;
@@ -356,33 +356,33 @@ public:
 		return m_bBombPlanted[iId];
 	}
 
-	bool isBombPlanted ( edict_t *pBomb )
+	bool isBombPlanted ( edict_t *pBomb ) const
 	{
 		return isBombPlanted(getBombID(pBomb));
 	}
 
-	bool canDefendBomb ( int iTeam, int iId )
+	bool canDefendBomb ( int iTeam, int iId ) const
 	{
 		return m_pBombs[iId][0]!= nullptr &&m_iOwner[iId]!=iTeam && isBombPlanted(iId);
 	}
 
-	bool canDefuseBomb ( int iTeam, int iId )
+	bool canDefuseBomb ( int iTeam, int iId ) const
 	{
 		return m_pBombs[iId][0]!= nullptr &&m_iOwner[iId]==iTeam && isBombPlanted(iId);
 	}
 
-	bool canPlantBomb ( int iTeam, int iId )
+	bool canPlantBomb ( int iTeam, int iId ) const
 	{
 		return m_pBombs[iId][0]!= nullptr &&m_iOwner[iId]!=iTeam && !isBombPlanted(iId);
 	}
 
-	bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, int id );
-	bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, int id );
+	bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, int id ) const;
+	bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, int id ) const;
 
 	static bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin );
 	static bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin );
 
-	int getNumBombsRequired ( int iId )
+	int getNumBombsRequired ( int iId ) const
 	{
 		if ( iId == -1 )
 			return false;
@@ -390,12 +390,12 @@ public:
 		return m_iBombsRequired[iId];
 	}
 
-	int getNumBombsRequired ( edict_t *pBomb )
+	int getNumBombsRequired ( edict_t *pBomb ) const
 	{
 		return getNumBombsRequired(getBombID(pBomb));
 	}
 
-	int getNumBombsRemaining ( int iId )
+	int getNumBombsRemaining ( int iId ) const
 	{
 		if ( iId == -1 )
 			return false;
@@ -403,12 +403,12 @@ public:
 		return m_iBombsRemaining[iId];
 	}
 
-	int getNumBombsRemaining ( edict_t *pBomb )
+	int getNumBombsRemaining ( edict_t *pBomb ) const
 	{
 		return getNumBombsRemaining(getBombID(pBomb));
 	}
 
-	bool isBombBeingDefused ( int iId )
+	bool isBombBeingDefused ( int iId ) const
 	{
 		if ( iId == -1 )
 			return false;
@@ -416,16 +416,16 @@ public:
 		return m_bBombBeingDefused[iId];
 	}
 
-	bool isBombBeingDefused ( edict_t *pBomb )
+	bool isBombBeingDefused ( edict_t *pBomb ) const
 	{
 		return isBombBeingDefused(getBombID(pBomb));
 	}
 
-	int numEnemiesAtCap ( edict_t *pFlag, int iTeam ) { return numEnemiesAtCap(getFlagID(pFlag),iTeam); }
+	int numEnemiesAtCap ( edict_t *pFlag, int iTeam ) const { return numEnemiesAtCap(getFlagID(pFlag),iTeam); }
 
-	int numFriendliesAtCap ( edict_t *pFlag, int iTeam ) { return numFriendliesAtCap(getFlagID(pFlag),iTeam); }
+	int numFriendliesAtCap ( edict_t *pFlag, int iTeam ) const { return numFriendliesAtCap(getFlagID(pFlag),iTeam); }
 
-	int numFriendliesAtCap ( int iFlag, int iTeam )
+	int numFriendliesAtCap ( int iFlag, int iTeam ) const
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -433,7 +433,7 @@ public:
 		return iTeam == TEAM_ALLIES ? m_iNumAllies[iFlag] : m_iNumAxis[iFlag];
 	}
 
-	int numEnemiesAtCap ( int iFlag, int iTeam )
+	int numEnemiesAtCap ( int iFlag, int iTeam ) const
 	{
 		if ( iFlag == -1 )
 			return 0;
@@ -441,7 +441,7 @@ public:
 		return iTeam == TEAM_ALLIES ? m_iNumAxis[iFlag] : m_iNumAllies[iFlag];
 	}
 
-	edict_t *getFlagByID ( int id )
+	edict_t *getFlagByID ( int id ) const
 	{
 		if ( id >= 0 && id < m_iNumControlPoints )
 			return m_pFlags[id];
@@ -449,7 +449,7 @@ public:
 		return nullptr;
 	}
 
-	int getFlagID ( edict_t *pent )
+	int getFlagID ( edict_t *pent ) const
 	{
 		for ( int i = 0; i < m_iNumControlPoints; i ++ )
 		{
@@ -460,7 +460,7 @@ public:
 		return -1;
 	}
 
-	int getBombID ( edict_t *pent )
+	int getBombID ( edict_t *pent ) const
 	{
 		if ( pent == nullptr)
 			return -1;
@@ -474,17 +474,17 @@ public:
 		return -1;
 	}
 
-	bool isFlag ( edict_t *pent )
+	bool isFlag ( edict_t *pent ) const
 	{
 		return getFlagID(pent) != -1;
 	}
 
-	bool isBomb ( edict_t *pent )
+	bool isBomb ( edict_t *pent ) const
 	{
 		return getBombID(pent) != -1;
 	}
 
-	int getNumBombsOnMap ( int iTeam )
+	int getNumBombsOnMap ( int iTeam ) const
 	{
 		if ( iTeam == TEAM_ALLIES )
 			return m_iNumAlliesBombsOnMap;

@@ -580,7 +580,7 @@ void CHLDMBot :: modThink ()
 
 	if ( m_fLastSeeEnemy && m_fLastSeeEnemy + 5.0f<engine->Time() )
 	{
-		CBotWeapon *pWeapon = getCurrentWeapon();
+		const CBotWeapon *pWeapon = getCurrentWeapon();
 
 		if ( pWeapon && pWeapon->getClip1(this)==0 && pWeapon->getAmmo(this) > 0 )
 		{
@@ -648,7 +648,7 @@ bool CHLDMBot::checkStuck()
 	return bStuck;
 }
 
-bool CHLDMBot :: willCollide ( edict_t *pEntity, bool *bCanJump, float *fTime )
+bool CHLDMBot :: willCollide ( edict_t *pEntity, bool *bCanJump, float *fTime ) const
 {
 	static Vector vel;
 

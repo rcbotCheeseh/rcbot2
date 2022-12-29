@@ -381,7 +381,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	return true;
 }
 
-bool CBot :: FVisible (const Vector &vOrigin, edict_t *pDest )
+bool CBot :: FVisible (const Vector &vOrigin, edict_t *pDest ) const
 {
 	//return CBotGlobals::isVisible(m_pEdict,getEyePosition(),vOrigin);
 	// fix bots seeing through gates/doors
@@ -398,8 +398,8 @@ bool CBot :: FVisible ( edict_t *pEdict, bool bCheckHead )
 	if ( bCheckHead || pEdict == m_pEnemy || CBotGlobals::isPlayer(pEdict) )
 	{
 		// use this method to get origin -- quicker 
-		Vector vOrigin = pEdict->GetCollideable()->GetCollisionOrigin();
-		Vector vHead = vOrigin + Vector(0, 0, pEdict->GetCollideable()->OBBMaxs().z);
+		const Vector vOrigin = pEdict->GetCollideable()->GetCollisionOrigin();
+		const Vector vHead = vOrigin + Vector(0, 0, pEdict->GetCollideable()->OBBMaxs().z);
 
 		if ( FVisible(vHead,pEdict) )
 		{
@@ -450,12 +450,12 @@ bool CBot :: FVisible ( edict_t *pEdict, bool bCheckHead )
 	return CBotGlobals::isVisible(m_pEdict,eye,pEdict);//CBotGlobals::entityOrigin(pEdict)+Vector(0,0,50.0f));
 }
 
-inline QAngle CBot :: eyeAngles ()
+inline QAngle CBot :: eyeAngles () const
 {
 	return CBotGlobals::playerAngles(m_pEdict);
 }
 
-Vector CBot :: getEyePosition ()
+Vector CBot :: getEyePosition () const
 {
 	
 	Vector vOrigin;//'/ = getOrigin();
@@ -479,7 +479,7 @@ bool CBot :: checkStuck ()
 
 	fTime = engine->Time();
 
-	if ( m_fLastWaypointVisible == 0 )
+	if ( m_fLastWaypointVisible == 0.0f )
 	{
 		m_bFailNextMove = false;
 
@@ -523,7 +523,7 @@ bool CBot :: checkStuck ()
 	if ( m_pButtons->holdingButton(IN_DUCK) )
 		fIdealSpeed /= 2;
 
-	if ( fIdealSpeed == 0 )
+	if ( fIdealSpeed == 0.0f )
 	{
 		m_bThinkStuck = false; // not stuck
 		m_fPercentMoved = 1.0f;
@@ -608,7 +608,7 @@ bool CBot :: checkStuck ()
 	return m_bThinkStuck;
 }
 
-bool CBot :: isVisible (const edict_t *pEdict )
+bool CBot :: isVisible (const edict_t *pEdict ) const
 {
 	return m_pVisibles->isVisible(pEdict);
 }
@@ -673,7 +673,7 @@ bool CBot :: setVisible ( edict_t *pEntity, bool bVisible )
 	return bValid;
 }
 
-bool CBot :: isUsingProfile ( CBotProfile *pProfile )
+bool CBot :: isUsingProfile ( CBotProfile *pProfile ) const
 {
 	return m_pProfile == pProfile;
 }
@@ -699,17 +699,17 @@ CBotWeapon *CBot::getCurrentWeapon()
 	return m_pWeapons->getActiveWeapon(m_pPlayerInfo->GetWeaponName());
 }
 
-void CBot :: selectWeaponName ( const char *szWeapon )
+void CBot :: selectWeaponName ( const char *szWeapon ) const
 {
 	m_pController->SetActiveWeapon(szWeapon);
 }
 
-CBotWeapon *CBot :: getBestWeapon (edict_t *pEnemy,bool bAllowMelee, bool bAllowMeleeFallback, bool bMeleeOnly, bool bExplosivesOnly )
+CBotWeapon *CBot :: getBestWeapon (edict_t *pEnemy,bool bAllowMelee, bool bAllowMeleeFallback, bool bMeleeOnly, bool bExplosivesOnly ) const
 {
 	return m_pWeapons->getBestWeapon(pEnemy,bAllowMelee,bAllowMeleeFallback,bMeleeOnly,bExplosivesOnly);
 }
 
-bool CBot::isHoldingPrimaryAttack()
+bool CBot::isHoldingPrimaryAttack() const
 {
 	return m_pButtons->holdingButton(IN_ATTACK);
 }
@@ -736,7 +736,7 @@ void CBot::SquadInPosition ()
 	}
 }
 
-void CBot :: kill ()
+void CBot :: kill () const
 {
 	helpers->ClientCommand(m_pEdict,"kill\n");
 }
@@ -1109,12 +1109,12 @@ void CBot :: init (bool bVarInit)
 		spawnInit();
 }
 
-edict_t *CBot :: getEdict ()
+edict_t *CBot :: getEdict () const
 {
 	return m_pEdict;
 }
 
-bool CBot :: isSquadLeader ()
+bool CBot :: isSquadLeader () const
 {
 	return m_pSquad->GetLeader() == m_pEdict;
 }
@@ -1188,7 +1188,7 @@ void CBot :: updateConditions ()
 					removeCondition(CONDITION_SEE_SQUAD_LEADER);
 
 				float fSpeed = 0.0f;
-				CClient *pClient = CClients::get(pLeader);
+				const CClient *pClient = CClients::get(pLeader);
 
 				if ( pClient )
 					fSpeed = pClient->getSpeed();
@@ -1268,7 +1268,7 @@ bool CBot :: canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWayp
 	return true;
 }
 
-void CBot::updatePosition()
+void CBot::updatePosition() const
 {
 	m_pNavigator->rollBackPosition();
 }
@@ -1293,17 +1293,17 @@ bool CBot::handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy )
 	return true;
 }
 
-int CBot :: getHealth ()
+int CBot :: getHealth () const
 {
 	return m_pPlayerInfo->GetHealth();
 }
 
-float CBot :: getHealthPercent ()
+float CBot :: getHealthPercent () const
 {
 	return static_cast<float>(m_pPlayerInfo->GetHealth()) / static_cast<float>(m_pPlayerInfo->GetMaxHealth());
 }
 
-bool CBot ::isOnLift()
+bool CBot ::isOnLift() const
 {
 	return m_vVelocity.z < -8.0f||m_vVelocity.z >= 8.0f;//&&(CClassInterface::getFlags(m_pEdict) & FL_ONGROUND);
 }
@@ -1318,7 +1318,7 @@ bool CBot::wantToInvestigateSound ()
 	return m_fSpawnTime + 10.0f < engine->Time() && !hasEnemy() && m_bWantToInvestigateSound; 
 }
 
-bool CBot :: recentlyHurt ( float fTime )
+bool CBot :: recentlyHurt ( float fTime ) const
 {
 	return m_fLastHurtTime>0 && m_fLastHurtTime>engine->Time()-fTime;
 }
@@ -1711,7 +1711,7 @@ void CBot :: clearSquad ()
 	m_pSquad = nullptr;
 }
 
-bool CBot :: isFacing ( Vector vOrigin )
+bool CBot :: isFacing ( Vector vOrigin ) const
 {
 	return DotProductFromOrigin(vOrigin) > 0.97f;
 }
@@ -1877,7 +1877,7 @@ void CBot :: updateStatistics ()
 		}
 	}
 
-	CClient *pClient = CClients::get(m_iStatsIndex++);
+	const CClient *pClient = CClients::get(m_iStatsIndex++);
 
 	if ( !pClient->isUsed() )
 		return;
@@ -1923,7 +1923,7 @@ void CBot :: updateStatistics ()
 	}
 }
 
-bool CBot :: wantToListen ()
+bool CBot :: wantToListen () const
 {
 	return m_bWantToListen && m_fWantToListenTime < engine->Time() && m_fLastSeeEnemy+2.5f < engine->Time();
 }
@@ -1955,7 +1955,7 @@ void CBot :: listenForPlayers ()
 		if ( pPlayer->IsFree() )
 			continue;
 
-		CClient* pClient = CClients::get(pPlayer);
+		const CClient* pClient = CClients::get(pPlayer);
 
 		if ( !pClient->isUsed() )
 			continue;
@@ -2117,7 +2117,7 @@ void CBot :: freeAllMemory ()
 	freeMapMemory();
 }
 
-void CBot :: forceGotoWaypoint ( int wpt )
+void CBot :: forceGotoWaypoint ( int wpt ) const
 {
 	if ( wpt != -1 )
 	{
@@ -2265,12 +2265,12 @@ void CBot :: doMove ()
 	}
 }
 
-bool CBot :: recentlySpawned ( float fTime )
+bool CBot :: recentlySpawned ( float fTime ) const
 {
 	return m_fSpawnTime + fTime > engine->Time();
 }
 
-bool CBot :: FInViewCone ( edict_t *pEntity )
+bool CBot :: FInViewCone ( edict_t *pEntity ) const
 {	
 	static Vector origin;
 	
@@ -2282,7 +2282,7 @@ bool CBot :: FInViewCone ( edict_t *pEntity )
 	return (origin - getEyePosition()).Length()>1 && DotProductFromOrigin(origin) > 0; // 90 degree !! 0.422618f ); // 65 degree field of view   
 }
 
-float CBot :: DotProductFromOrigin ( Vector pOrigin )
+float CBot :: DotProductFromOrigin ( Vector pOrigin ) const
 {
 	static Vector vecLOS;
 	static float flDot;
@@ -2413,7 +2413,7 @@ void CBot::modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset
 		return;
 	}
 
-	CBotWeapon *pWp = getCurrentWeapon();
+	const CBotWeapon *pWp = getCurrentWeapon();
 
 	float fVelFactor = 0.003125f;
 
@@ -2750,12 +2750,12 @@ void CBot :: getLookAtVector ()
 	}
 }
 
-int CBot :: getPlayerID ()
+int CBot :: getPlayerID () const
 {
 	return m_pPlayerInfo->GetUserID();
 }
 
-void CBot :: letGoOfButton ( int button )
+void CBot :: letGoOfButton ( int button ) const
 {
 	m_pButtons->letGo(button);
 }
@@ -2808,7 +2808,7 @@ void CBot :: changeAngles (float fSpeed, const float* fIdeal, float* fCurrent, f
 
 bool CBot :: select_CWeapon ( CWeapon *pWeapon )
 {
-	CBotWeapon *pSelect = m_pWeapons->getWeapon(pWeapon);
+	const CBotWeapon *pSelect = m_pWeapons->getWeapon(pWeapon);
 
 	if ( pSelect )
 	{
@@ -2883,7 +2883,7 @@ void CBot :: doButtons ()
 	m_iButtons = m_pButtons->getBitMask();
 }
 
-void CBot :: secondaryAttack ( bool bHold, float fTime )
+void CBot :: secondaryAttack ( bool bHold, float fTime ) const
 {
 	float fLetGoTime = 0.15f;
 	float fHoldTime = 0.12f;
@@ -2911,7 +2911,7 @@ void CBot :: secondaryAttack ( bool bHold, float fTime )
 	}
 }
 
-void CBot :: primaryAttack ( bool bHold, float fTime )
+void CBot :: primaryAttack ( bool bHold, float fTime ) const
 {
 	float fLetGoTime = 0.15f;
 	float fHoldTime = 0.12f;
@@ -2939,22 +2939,22 @@ void CBot :: primaryAttack ( bool bHold, float fTime )
 	}
 }
 
-void CBot :: tapButton ( int iButton )
+void CBot :: tapButton ( int iButton ) const
 {
 	m_pButtons->tap(iButton);
 }
-void CBot :: reload ()
+void CBot :: reload () const
 {
 	if ( m_pButtons->canPressButton(IN_RELOAD) )
 		m_pButtons->tap(IN_RELOAD);
 }
-void CBot :: use ()
+void CBot :: use () const
 {
 	if ( m_pButtons->canPressButton(IN_USE) )
 		m_pButtons->tap(IN_USE);
 }
 
-void CBot :: jump ()
+void CBot :: jump () const
 {
 	if ( m_pButtons->canPressButton(IN_JUMP) )
 	{		
@@ -2964,7 +2964,7 @@ void CBot :: jump ()
 	}
 }
 
-void CBot :: duck ( bool hold )
+void CBot :: duck ( bool hold ) const
 {
 	if ( hold || m_pButtons->canPressButton(IN_DUCK) )
 		m_pButtons->holdButton(IN_DUCK,0.0f/* time to press*/,1.0f/* hold time*/,0.5f/*let go time*/); 
@@ -3228,12 +3228,10 @@ int CBots :: numBots ()
 }
 
 CBot *CBots :: findBotByProfile ( CBotProfile *pProfile )
-{	
-	CBot *pBot;
-
+{
 	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
 	{
-		pBot = m_Bots[i];
+		CBot* pBot = m_Bots[i];
 
 		if ( pBot->inUse() )
 		{
@@ -3519,7 +3517,7 @@ bool CBotLastSee :: hasSeen ( float fTime )
 	return m_pLastSee.get() != nullptr && m_fLastSeeTime + fTime > engine->Time();
 }
 
-Vector CBotLastSee :: getLocation ()
+Vector CBotLastSee :: getLocation () const
 {
 	return m_vLastSeeLoc + m_vLastSeeVel;
 }

@@ -90,7 +90,7 @@ void CTFObjectiveResource::updatePoints()
 
 }
 // INPUT = Waypoint Area
-bool CTFObjectiveResource :: isWaypointAreaValid ( int wptarea, int waypointflags ) 
+bool CTFObjectiveResource :: isWaypointAreaValid ( int wptarea, int waypointflags ) const
 {
 //	CWaypoint *pWaypoint;
 
@@ -130,7 +130,7 @@ const int cpindex = m_WaypointAreaToIndexTranslation[wptarea];
 	return m_ValidAreas[wptarea-1];*/
 }
 
-bool CTFObjectiveResource::isCPValidWptArea ( int iWptArea, int iTeam, ePointAttackDefend_s type )
+bool CTFObjectiveResource::isCPValidWptArea ( int iWptArea, int iTeam, ePointAttackDefend_s type ) const
 {
 	if ( iWptArea == 0 )
 		return true;
@@ -142,7 +142,7 @@ bool CTFObjectiveResource::isCPValidWptArea ( int iWptArea, int iTeam, ePointAtt
 }
 
 // Returns TRUE if waypoint area is worth attacking or defending at this moment
-bool CTFObjectiveResource::testProbWptArea ( int iWptArea, int iTeam )
+bool CTFObjectiveResource::testProbWptArea ( int iWptArea, int iTeam ) const
 {
 	const int iCpIndex = m_WaypointAreaToIndexTranslation[iWptArea];
 
@@ -158,7 +158,7 @@ bool CTFObjectiveResource::testProbWptArea ( int iWptArea, int iTeam )
 	return isCPValid(iCpIndex,iTeam,TF2_POINT_ATTACK) ? randomFloat(0.0f,1.0f) > m_ValidPoints[iTeam-2][TF2_POINT_ATTACK][iCpIndex].fProb : isCPValid(iCpIndex,iTeam,TF2_POINT_DEFEND) ? randomFloat(0.0f,1.0f) > m_ValidPoints[iTeam-2][TF2_POINT_DEFEND][iCpIndex].fProb : true;
 }
 
-bool CTFObjectiveResource::isCPValid ( int iCPIndex, int iTeam, ePointAttackDefend_s type )
+bool CTFObjectiveResource::isCPValid ( int iCPIndex, int iTeam, ePointAttackDefend_s type ) const
 {
 	if ( iCPIndex < 0 || iCPIndex >= MAX_CONTROL_POINTS )
 		return false;
@@ -341,7 +341,7 @@ void CTFObjectiveResource::setup ()
 		{
 			const int iWpt = CWaypointLocations::NearestWaypoint(vOrigin, 1024.0f, -1, false, false, false, nullptr, false, 0, false,
 			                                                     false, Vector(0, 0, 0), CWaypointTypes::W_FL_CAPPOINT);
-			CWaypoint* pWaypoint = CWaypoints::getWaypoint(iWpt);
+			const CWaypoint* pWaypoint = CWaypoints::getWaypoint(iWpt);
 			m_iControlPointWpt[j] = iWpt;
 
 			// For compatibility -- old waypoints are already set with an area, so take the area from the waypoint here
@@ -375,7 +375,7 @@ int CTFObjectiveResource :: getControlPointArea ( edict_t *pPoint )
 
 	return 0;
 }
-void CTFObjectiveResource::	debugprint ()
+void CTFObjectiveResource::	debugprint () const
 {
 	edict_t *pEdict = CClients::getListenServerClient();
 
@@ -387,7 +387,7 @@ void CTFObjectiveResource::	debugprint ()
 	CBotGlobals::botMessage(pEdict,0,"m_iOwner[8]\t[%s,%s,%s,%s,%s,%s,%s,%s]",m_iOwner[0]==2?"red":m_iOwner[0]==3?"blue":"unassigned",m_iOwner[1]==2?"red":m_iOwner[1]==3?"blue":"unassigned",m_iOwner[2]==2?"red":m_iOwner[2]==3?"blue":"unassigned",m_iOwner[3]==2?"red":m_iOwner[3]==3?"blue":"unassigned",m_iOwner[4]==2?"red":m_iOwner[4]==3?"blue":"unassigned",m_iOwner[5]==2?"red":m_iOwner[5]==3?"blue":"unassigned",m_iOwner[6]==2?"red":m_iOwner[6]==3?"blue":"unassigned",m_iOwner[7]==2?"red":m_iOwner[7]==3?"blue":"unassigned");
 }
 
-int CTFObjectiveResource::NearestArea ( Vector vOrigin )
+int CTFObjectiveResource::NearestArea ( Vector vOrigin ) const
 {
 	int iNearest = -1;
 	float fNearest = 2048.0f;
@@ -1002,7 +1002,7 @@ void CTFObjectiveResource :: updateCaptureTime(int index)
 	m_fLastCaptureTime[index] = engine->Time();
 }
 
-float CTFObjectiveResource :: getLastCaptureTime(int index)
+float CTFObjectiveResource :: getLastCaptureTime(int index) const
 {
 	return m_fLastCaptureTime[index];
 }

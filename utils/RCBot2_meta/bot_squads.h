@@ -100,22 +100,22 @@ public:
 			BotPrintTalkMessageOne(m_pLeader.Get(),"Squad is now HOLDING FIRE");*/
 	}
 
-	bool SquadCanShoot ()
+	bool SquadCanShoot () const
 	{
 		return bCanFire;
 	}
 
-	bool IsStealthMode ()
+	bool IsStealthMode () const
 	{
 		return m_CombatType == COMBAT_STEALTH;
 	}
 
-	bool IsProneMode ()
+	bool IsProneMode () const
 	{
 		return m_CombatType == COMBAT_PRONE;
 	}
 
-	bool IsCrouchMode ()
+	bool IsCrouchMode () const
 	{
 		return m_CombatType == COMBAT_CROUCH;
 	}
@@ -169,11 +169,11 @@ public:
 
 	void AddMember ( edict_t *pEdict );
 
-	size_t numMembers ();
+	size_t numMembers () const;
 
 	bool IsMember (const edict_t* pEdict);
 
-	bool isFormation (eSquadForm theFormation)
+	bool isFormation (eSquadForm theFormation) const
 	{
 		return m_theDesiredFormation == theFormation;
 	}
@@ -199,12 +199,12 @@ public:
 
 	void UpdateAngles ();
 
-	bool isDefensive () { return m_Tactics == TACTIC_DEFEND; }
+	bool isDefensive () const { return m_Tactics == TACTIC_DEFEND; }
 
 	void setTactic ( eTacticType iTactics ) { m_Tactics = iTactics; }
 
 	// Squad is waiting for another squad to Syncronize
-	bool isWaitingForOtherSquad ()
+	bool isWaitingForOtherSquad () const
 	{
 		return m_bIsWaitingForOther;
 	}

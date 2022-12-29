@@ -46,7 +46,7 @@ public:
 
 	CProfileTimer (const char *szFunction);
 
-	const char *getFunction () 
+	const char *getFunction () const
 	{ 
 		return m_szFunction; 
 	}
@@ -58,7 +58,7 @@ public:
 	void print(const double* high);
 
 #ifndef __linux__
-	__int64 getOverall ()
+	__int64 getOverall () const
 #else
     inline long long getOverall ()
 #endif

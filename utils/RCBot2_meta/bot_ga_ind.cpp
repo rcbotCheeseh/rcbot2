@@ -100,7 +100,7 @@ void CBotGAValues :: mutate ()
 }
 
 
-float CBotGAValues :: get ( int iIndex )
+float CBotGAValues :: get ( int iIndex ) const
 {
 	return m_theValues[iIndex];
 }

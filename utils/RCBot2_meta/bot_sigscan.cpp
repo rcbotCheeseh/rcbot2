@@ -68,6 +68,7 @@ size_t CSignatureFunction::decodeHexString(unsigned char *buffer, size_t maxleng
 			// Get the hex part. 
 			char s_byte[3];
 			int r_byte;
+			//char r_byte;
 			s_byte[0] = hexstr[i + 2];
 			s_byte[1] = hexstr[i + 3];
 			s_byte[2] = '\0';
@@ -287,7 +288,7 @@ CCreateGameRulesObject::CCreateGameRulesObject(CRCBotKeyValueList &list, const v
 #endif
 }
 
-void **CCreateGameRulesObject::getGameRules()
+void **CCreateGameRulesObject::getGameRules() const
 {
 	char *addr = static_cast<char*>(m_func);
 	return *reinterpret_cast<void ***>(addr + rcbot_gamerules_offset.GetInt());

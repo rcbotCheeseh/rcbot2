@@ -198,7 +198,7 @@ void CCounterStrikeSourceMod::onFreezeTimeEnd()
 {
 	logger->Log(LogLevel::TRACE, "CCounterStrikeSourceMod::OnFreezeTimeEnd()");
 
-    edict_t *pC4 = CClassInterface::FindEntityByClassnameNearest(Vector(0.0, 0.0, 0.0), "weapon_c4", 32000.0f);
+	const edict_t *pC4 = CClassInterface::FindEntityByClassnameNearest(Vector(0.0, 0.0, 0.0), "weapon_c4", 32000.0f);
     if(pC4)
     {
         m_hBomb.Init(engine->IndexOfEdict(pC4), pC4->m_NetworkSerialNumber);
@@ -225,7 +225,7 @@ void CCounterStrikeSourceMod::onBombPlanted()
     m_fBombPlantedTime = engine->Time();
     m_hBomb.Term();
 
-    edict_t *pPlantedC4 = CClassInterface::FindEntityByNetClass(gpGlobals->maxClients+1, "CPlantedC4");
+    const edict_t *pPlantedC4 = CClassInterface::FindEntityByNetClass(gpGlobals->maxClients+1, "CPlantedC4");
     if(pPlantedC4)
     {
         m_hBomb.Init(engine->IndexOfEdict(pPlantedC4), pPlantedC4->m_NetworkSerialNumber);

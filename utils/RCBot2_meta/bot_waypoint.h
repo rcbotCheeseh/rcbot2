@@ -91,17 +91,17 @@ public:
 
 	CWaypointType ( int iBit, const char *szName, const char *szDescription, WptColor vColour, int iModBits = BITS_MOD_ALL, int iImportance = 0 );
 
-	const char *getName () { return m_szName; }
-	const char *getDescription () { return m_szDescription; }
+	const char *getName () const { return m_szName; }
+	const char *getDescription () const { return m_szDescription; }
 
-	bool isBitsInFlags ( int iFlags ) { return (iFlags & m_iBit)==m_iBit; }
-	int getBits () { return m_iBit; }
+	bool isBitsInFlags ( int iFlags ) const { return (iFlags & m_iBit)==m_iBit; }
+	int getBits () const { return m_iBit; }
 	void setMods ( int iMods ){ m_iMods = iMods; }// input bitmask of mods (32 max)
-	bool forMod ( int iMod ) { return (1<<iMod&m_iMods)==1<<iMod; }
-	WptColor getColour () { return m_vColour; }
-	int getImportance () { return m_iImportance; }
+	bool forMod ( int iMod ) const { return (1<<iMod&m_iMods)==1<<iMod; }
+	WptColor getColour () const { return m_vColour; }
+	int getImportance () const { return m_iImportance; }
 
-	bool operator < ( CWaypointType *other )
+	bool operator < ( CWaypointType *other ) const
 	{
 		return m_iImportance < other->getImportance();
 	}
@@ -275,7 +275,7 @@ public:
 		m_iAimYaw = iYaw;
 	}
 
-	float getAimYaw ()
+	float getAimYaw () const
 	{
 		return static_cast<float>(m_iAimYaw);
 	}
@@ -303,12 +303,12 @@ public:
 		m_iFlags = 0;
 	}
 
-	bool hasFlag ( int iFlag )
+	bool hasFlag ( int iFlag ) const
 	{
 		return (m_iFlags & iFlag) == iFlag;
 	}
 
-	bool hasSomeFlags ( int iFlag )
+	bool hasSomeFlags ( int iFlag ) const
 	{
 		return (m_iFlags & iFlag) > 0;
 	}
@@ -339,7 +339,7 @@ public:
 
 	bool isPathOpened ( Vector vPath );
 
-	bool isUsed ()
+	bool isUsed () const
 	{
 		return m_bUsed;
 	}
@@ -354,40 +354,40 @@ public:
 		m_thePaths.clear();
 	}
 
-	int getArea () { return m_iArea; }
+	int getArea () const { return m_iArea; }
 	void setArea (int area) { m_iArea = area; }
 
-	void drawPaths ( edict_t *pEdict, unsigned short int iDrawType );
+	void drawPaths ( edict_t *pEdict, unsigned short int iDrawType ) const;
 
-	void drawPathBeam ( CWaypoint *to, unsigned short int iDrawType );
+	void drawPathBeam ( CWaypoint *to, unsigned short int iDrawType ) const;
 
 	void setUsed ( bool bUsed ){	m_bUsed = bUsed;}
 
 	inline void clearPaths ();
 
-	float distanceFrom ( CWaypoint *other )
+	float distanceFrom ( CWaypoint *other ) const
 	{
 		return distanceFrom(other->getOrigin());
 	}
 
-	float distanceFrom ( Vector vOrigin );
+	float distanceFrom ( Vector vOrigin ) const;
 
-	int numPaths ();
+	int numPaths () const;
 
 	int numPathsToThisWaypoint () const;
 	int getPathToThisWaypoint ( int i ) const;
 
-	int getPath ( int i );
+	int getPath ( int i ) const;
 
 	void load(std::fstream& bfp, int iVersion);
 
 	void save(std::fstream& bfp);
 
-	int getFlags (){return m_iFlags;}
+	int getFlags () const {return m_iFlags;}
 
 	bool forTeam ( int iTeam );
 
-	float getRadius () { return m_fRadius; }
+	float getRadius () const { return m_fRadius; }
 
 	void setRadius ( float fRad ) { m_fRadius = fRad; }
 

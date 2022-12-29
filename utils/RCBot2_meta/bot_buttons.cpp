@@ -32,17 +32,17 @@
 #include "bot_buttons.h"
 #include "in_buttons.h"
 
-void CBotButtons :: attack (float fFor, float fFrom)
+void CBotButtons :: attack (float fFor, float fFrom) const
 {	
 	holdButton(IN_ATTACK,fFrom,fFor,0.1f);
 }
 
-void CBotButtons :: jump (float fFor, float fFrom)
+void CBotButtons :: jump (float fFor, float fFrom) const
 {
 	holdButton(IN_JUMP,fFrom,fFor,0.25f);
 }
 
-void CBotButtons :: duck (float fFor, float fFrom)
+void CBotButtons :: duck (float fFor, float fFrom) const
 {
 	holdButton(IN_DUCK,fFrom,fFor);
 }
@@ -71,7 +71,7 @@ CBotButtons :: CBotButtons()
 	m_bLetGoAll = false;
 }
 
-void CBotButtons :: holdButton ( int iButtonId, float fFrom, float fFor, float fLetGoTime )
+void CBotButtons :: holdButton ( int iButtonId, float fFrom, float fFor, float fLetGoTime ) const
 {
 	for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
 	{			
@@ -83,7 +83,7 @@ void CBotButtons :: holdButton ( int iButtonId, float fFrom, float fFor, float f
 	}
 }
 
-void CBotButtons :: letGo (int iButtonId)
+void CBotButtons :: letGo (int iButtonId) const
 {
 	for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
 	{			
@@ -95,7 +95,7 @@ void CBotButtons :: letGo (int iButtonId)
 	}
 }
 
-int CBotButtons :: getBitMask ()
+int CBotButtons :: getBitMask () const
 {
 	if ( m_bLetGoAll )
 		return 0;
@@ -120,7 +120,7 @@ int CBotButtons :: getBitMask ()
     }
 }
 
-bool CBotButtons :: canPressButton ( int iButtonId )
+bool CBotButtons :: canPressButton ( int iButtonId ) const
 {
 	for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
 	{			
@@ -135,7 +135,7 @@ void CBotButtons :: add ( CBotButton *theButton )
 	m_theButtons.emplace_back(theButton);
 }
 
-bool CBotButtons :: holdingButton ( int iButtonId )
+bool CBotButtons :: holdingButton ( int iButtonId ) const
 {
 	for ( unsigned int i = 0; i < m_theButtons.size(); i ++ )
 	{
@@ -146,7 +146,7 @@ bool CBotButtons :: holdingButton ( int iButtonId )
 	return false;
 }
 
-void CBotButtons :: tap ( int iButtonId )
+void CBotButtons :: tap ( int iButtonId ) const
 {
 	for ( unsigned int i = 0; i < m_theButtons.size(); i ++ )
 	{

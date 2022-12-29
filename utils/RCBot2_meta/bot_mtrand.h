@@ -87,7 +87,7 @@ public:
   MTRand_int32(const unsigned long* array, int size) { seed(array, size); init = true; }
 // the two seed functions
 static void seed(unsigned long); // seed with 32 bit integer
-  void seed(const unsigned long*, int size); // seed with array
+  void seed(const unsigned long*, int size) const; // seed with array
 // overload operator() to make this a generator (functor)
   unsigned long operator()() { return rand_int32(); }
 // 2007-02-11: made the destructor virtual; thanks "double more" for pointing this out

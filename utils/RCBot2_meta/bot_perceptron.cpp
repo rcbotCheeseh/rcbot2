@@ -62,7 +62,7 @@ CPerceptron :: CPerceptron (unsigned short int iInputs)
 		m_weights[i] = -0.3f+randomFloat(0.0f,0.6f);
 }
 
-void CPerceptron :: setWeights (const ga_nn_value* weights)
+void CPerceptron :: setWeights (const ga_nn_value* weights) const
 {
 	memcpy(m_weights,weights,sizeof(ga_nn_value)*m_iInputs);
 }
@@ -96,12 +96,12 @@ ga_nn_value CPerceptron :: execute ()
 	return m_output;
 }
 
-bool CPerceptron :: fired ()
+bool CPerceptron :: fired () const
 {
 	return m_output >= 0.5f;
 }
 
-ga_nn_value CPerceptron :: getOutput ()
+ga_nn_value CPerceptron :: getOutput () const
 {
 	return m_output;
 }
@@ -233,7 +233,7 @@ CBotNeuralNet :: CBotNeuralNet ( unsigned short int numinputs, unsigned short in
 
 #define RCPP_VERB_EPOCHS 1000
 
-void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epochs )
+void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epochs ) const
 {
 	unsigned short int i; // ith node
 	unsigned short int j; //jth output
@@ -342,7 +342,7 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 	delete[] outs;
 }
 
-void CBotNeuralNet :: execute (const ga_nn_value* inputs, ga_nn_value* outputs, ga_nn_value fMin, ga_nn_value fMax)
+void CBotNeuralNet :: execute (const ga_nn_value* inputs, ga_nn_value* outputs, ga_nn_value fMin, ga_nn_value fMax) const
 {
 
 	static CLogisticalNeuron *pNode;

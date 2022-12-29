@@ -451,7 +451,7 @@ float CTeamFortress2Mod :: TF2_GetPlayerSpeed(edict_t *pPlayer, TF_Class iClass 
 
 	fSpeed = CClassInterface::getMaxSpeed(pPlayer);// * CClassInterface::getSpeedFactor(pPlayer);
 
-	if ( fSpeed == 0 )
+	if ( fSpeed == 0.0f )
 	{
 		if (TF2_IsPlayerSlowed(pPlayer)) 
 			return 30.0f; 
@@ -952,7 +952,7 @@ bool CTeamFortress2Mod::buildingNearby ( int iTeam, Vector vOrigin )
 		if ( !pPlayer || pPlayer->IsFree() )
 			continue;
 
-		const short int sentryIndex = i - 1;
+		const auto sentryIndex = static_cast<short>(i - 1);
 
 		if ( CClassInterface::getTF2Class(pPlayer) != TF_CLASS_ENGINEER )
 			continue;

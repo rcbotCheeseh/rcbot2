@@ -69,7 +69,7 @@ public:
 		return nullptr;
 	}
 
-	edict_t *get_old ()
+	edict_t *get_old () const
 	{
 		return m_pEnt;
 	}

@@ -504,7 +504,7 @@ public:
 
 	void pickedUpFlag ();
 
-	bool hasFlag () { return m_bHasFlag; }
+	bool hasFlag () const { return m_bHasFlag; }
 
 	void droppedFlag () { m_bHasFlag = false; }
 
@@ -523,13 +523,13 @@ public:
 		}
 	}
 
-	bool isTeleporterUseful ( edict_t *pTele );
+	bool isTeleporterUseful ( edict_t *pTele ) const;
 
 	bool waitForFlag ( Vector *vOrigin, float *fWait, bool bFindFlag );
 
 	void flagDropped ( Vector vOrigin );
 	void teamFlagDropped ( Vector vOrigin );
-	void teamFlagPickup ();
+	void teamFlagPickup () const;
 
 	virtual bool wantToListenToPlayer ( edict_t *pPlayer, int iWeaponID = -1 ) { return true; }
 	bool wantToListenToPlayerFootsteps ( edict_t *pPlayer ) override { return true; }
@@ -578,7 +578,7 @@ public:
 	// return an enemy sentry gun / special visible (e.g.) for quick checking
 	edict_t *getVisibleSpecial () override;
 
-	bool isBeingHealed () { return m_bIsBeingHealed; }
+	bool isBeingHealed () const { return m_bIsBeingHealed; }
 
 	void handleWeapons () override { CBot::handleWeapons(); }
 
@@ -601,7 +601,7 @@ protected:
 
 	static bool isClassOnTeam ( int iClass, int iTeam );
 
-	int getSpyDisguiseClass ( int iTeam );
+	int getSpyDisguiseClass ( int iTeam ) const;
 
 	virtual bool thinkSpyIsEnemy ( edict_t *pEdict, TF_Class iDisguise );
 
@@ -748,9 +748,9 @@ public:
 	void MannVsMachineWaveComplete();
 	void MannVsMachineAlarmTriggered (Vector vLoc);
 
-	bool sentryRecentlyHadEnemy ();
+	bool sentryRecentlyHadEnemy () const;
 
-	void highFivePlayer ( edict_t *pPlayer, float fYaw );
+	void highFivePlayer ( edict_t *pPlayer, float fYaw ) const;
 
 	bool hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide  = false ) override;
 
@@ -777,8 +777,8 @@ public:
 
 	void getAttackArea ( std::vector<int> *m_iAreas );
 
-	int getCurrentAttackArea () { return m_iCurrentAttackArea; }
-	int getCurrentDefendArea () { return m_iCurrentDefendArea; }
+	int getCurrentAttackArea () const { return m_iCurrentAttackArea; }
+	int getCurrentDefendArea () const { return m_iCurrentDefendArea; }
 
 	void pointsUpdated ( );
 
@@ -873,7 +873,7 @@ public:
 
 	void buildingSapped ( eEngiBuild building, edict_t *pSapper, edict_t *pSpy );
 
-	void sapperDestroyed ( edict_t *pSapper );
+	void sapperDestroyed ( edict_t *pSapper ) const;
 	
 	bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = nullptr) override;
 
@@ -919,7 +919,7 @@ public:
 
 	void teleportedPlayer ();
 
-	bool isCarrying () { return m_bIsCarryingObj; }
+	bool isCarrying () const { return m_bIsCarryingObj; }
 
 	void updateCarrying ();
 

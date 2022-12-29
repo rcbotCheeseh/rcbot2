@@ -866,7 +866,7 @@ void CBotSchedule :: removeTop ()
 	delete pTask;
 }
 
-const char *CBotSchedule :: getIDString ()
+const char *CBotSchedule :: getIDString () const
 {
 	return szSchedules[m_iSchedId];
 }

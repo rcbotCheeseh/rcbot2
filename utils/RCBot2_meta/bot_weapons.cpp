@@ -321,7 +321,7 @@ WeaponsData_t CSSWeaps[] =
 		{ 0, 0, "\0", 0, 0, 0, 0, 0, 0 }//signal last weapon
 };
 
-bool CBotWeapon::needToReload(CBot* pBot)
+bool CBotWeapon::needToReload(CBot* pBot) const
 {
 	if (m_iClip1)
 	{
@@ -345,11 +345,11 @@ int CBotWeapon::getAmmo(CBot* pBot, int type) const
 	return 0;
 }
 
-bool CBotWeapons::hasExplosives()
+bool CBotWeapons::hasExplosives() const
 {
 	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
-		CBotWeapon* pWeapon = &m_theWeapons[i];
+		const CBotWeapon* pWeapon = &m_theWeapons[i];
 		// find weapon info from weapon id
 		if (pWeapon->hasWeapon() && pWeapon->isExplosive())
 		{
@@ -361,7 +361,7 @@ bool CBotWeapons::hasExplosives()
 	return false;
 }
 
-bool CBotWeapons::hasWeapon(int id)
+bool CBotWeapons::hasWeapon(int id) const
 {
 	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
@@ -937,7 +937,7 @@ bool CBotWeaponGravGun ::outOfAmmo (CBot *pBot)
 	return true;
 }
 */
-bool CBotWeapon::outOfAmmo(CBot* pBot)
+bool CBotWeapon::outOfAmmo(CBot* pBot) const
 {
 	if (m_pWeaponInfo && m_pWeaponInfo->isGravGun() && m_pEnt)
 		return CClassInterface::gravityGunObject(m_pEnt) == nullptr;
@@ -979,7 +979,7 @@ public:
 			m_pFound = pWeapon;
 	}
 
-	CWeapon* get()
+	CWeapon* get() const
 	{
 		return m_pFound;
 	}
@@ -1004,7 +1004,7 @@ public:
 			m_pFound = pWeapon;
 	}
 
-	CWeapon* get()
+	CWeapon* get() const
 	{
 		return m_pFound;
 	}
@@ -1028,7 +1028,7 @@ public:
 			m_pFound = pWeapon;
 	}
 
-	CWeapon* get()
+	CWeapon* get() const
 	{
 		return m_pFound;
 	}

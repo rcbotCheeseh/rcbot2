@@ -45,12 +45,12 @@ public:
 
 	void tap () { m_bTapped = true; }
 
-	bool held ( float fTime )
+	bool held ( float fTime ) const
 	{
 		return m_bTapped || fTime >= m_fTimeStart && fTime <= m_fTimeEnd;// && (!m_fLetGoTime||(fTime > m_fLetGoTime));
 	}
 
-	bool canPress (float fTime)
+	bool canPress (float fTime) const
 	{
 		return !m_bTapped || m_fLetGoTime < fTime;
 	}
@@ -95,25 +95,25 @@ public:
 		m_theButtons.clear();
 	}
 
-	void letGo (int iButtonId);
-	void holdButton ( int iButtonId, float fFrom = 0.0f, float fFor = 1.0f, float m_fLetGoTime = 0.0f );
+	void letGo (int iButtonId) const;
+	void holdButton ( int iButtonId, float fFrom = 0.0f, float fFor = 1.0f, float m_fLetGoTime = 0.0f ) const;
 
 	inline void add ( CBotButton *theButton );
 
-	bool holdingButton ( int iButtonId );
-	bool canPressButton ( int iButtonId );
+	bool holdingButton ( int iButtonId ) const;
+	bool canPressButton ( int iButtonId ) const;
 
-	void tap ( int iButtonId );
+	void tap ( int iButtonId ) const;
 
 	void letGoAllButtons ( bool bVal ) { m_bLetGoAll = bVal; }
 
-	int getBitMask ();
+	int getBitMask () const;
 
 	////////////////////////////
 
-	void attack (float fFor = 1.0f, float fFrom = 0);
-	void jump (float fFor = 1.0f, float fFrom = 0);
-	void duck (float fFor = 1.0f, float fFrom = 0);
+	void attack (float fFor = 1.0f, float fFrom = 0) const;
+	void jump (float fFor = 1.0f, float fFrom = 0) const;
+	void duck (float fFor = 1.0f, float fFrom = 0) const;
 
 private:
 	std::vector<CBotButton*> m_theButtons;

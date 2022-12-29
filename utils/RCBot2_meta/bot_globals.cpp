@@ -489,7 +489,7 @@ bool CBotGlobals::initModFolder() {
 	char szGameFolder[512];
 	engine->GetGameDir(szGameFolder, 512);
 
-	const int iLength = strlen(CStrings::getString(szGameFolder));
+	const unsigned int iLength = strlen(CStrings::getString(szGameFolder));
 	int pos = iLength - 1;
 
 	while (pos > 0 && szGameFolder[pos] != '\\' && szGameFolder[pos] != '/') {
@@ -712,7 +712,7 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 {
 	CTraceFilterVis filter = CTraceFilterVis(pPlayer);
 	const float fDistance = sqrt((v_dest - v_src).LengthSqr());
-	CClient *pClient = CClients::get(pPlayer);
+	const CClient *pClient = CClients::get(pPlayer);
 	Vector vcross = v_dest - v_src;
 	float fWidth = rcbot_wptplace_width.GetFloat();
 

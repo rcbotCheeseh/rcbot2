@@ -49,7 +49,7 @@ void CWaypointFlagMenuItem :: activate ( CClient *pClient )
 {
 	const int iWpt = pClient->currentWaypoint();
 	CWaypoint *pWpt = CWaypoints::getWaypoint(iWpt);
-	CWaypointType *type = CWaypointTypes::getTypeByIndex(m_iFlag);
+	const CWaypointType *type = CWaypointTypes::getTypeByIndex(m_iFlag);
 
 	if ( pWpt )
 	{
@@ -65,7 +65,7 @@ const char *CWaypointFlagMenu :: getCaption(CClient *pClient,WptColor &color )
 	pClient->updateCurrentWaypoint();
 
 	const int iWpt = pClient->currentWaypoint();
-	CWaypoint *pWpt = CWaypoints::getWaypoint(iWpt);
+	const CWaypoint *pWpt = CWaypoints::getWaypoint(iWpt);
 
 	if ( pWpt )
 	{
@@ -86,9 +86,9 @@ const char *CWaypointFlagMenuItem :: getCaption ( CClient *pClient, WptColor &co
 	pClient->updateCurrentWaypoint();
 
 	const int iWpt = pClient->currentWaypoint();
-	CWaypoint * pWpt = CWaypoints::getWaypoint(iWpt);
+	const CWaypoint * pWpt = CWaypoints::getWaypoint(iWpt);
 
-	CWaypointType *type = CWaypointTypes::getTypeByIndex(m_iFlag);
+	const CWaypointType *type = CWaypointTypes::getTypeByIndex(m_iFlag);
 
 	color = type->getColour();
 
@@ -158,7 +158,7 @@ void CBotMenuList :: setupMenus ()
 const char *CWaypointRadiusMenu :: getCaption ( CClient *pClient, WptColor &color )
 {
 	const int iWpt = pClient->currentWaypoint();
-	CWaypoint *pWpt = CWaypoints::getWaypoint(iWpt);
+	const CWaypoint *pWpt = CWaypoints::getWaypoint(iWpt);
 	float fRadius = 0.0f;
 
 	if ( pWpt )
@@ -175,7 +175,7 @@ const char *CWaypointRadiusMenu :: getCaption ( CClient *pClient, WptColor &colo
 const char *CWaypointAreaMenu :: getCaption ( CClient *pClient, WptColor &color )
 {
 	const int iWpt = pClient->currentWaypoint();
-	CWaypoint *pWpt = CWaypoints::getWaypoint(iWpt);
+	const CWaypoint *pWpt = CWaypoints::getWaypoint(iWpt);
 	int iArea = 0;
 
 	if ( pWpt )
@@ -205,7 +205,7 @@ const char *CWaypointMenu::getCaption(CClient *pClient,WptColor &color )
 
 const char *CWaypointYawMenuItem :: getCaption ( CClient *pClient, WptColor &color )
 {
-	CWaypoint *pWpt = CWaypoints::getWaypoint(pClient->currentWaypoint());
+	const CWaypoint *pWpt = CWaypoints::getWaypoint(pClient->currentWaypoint());
 
 	if ( pWpt )
 		sprintf(m_szCaption,"Yaw = %d degrees (press to update)",static_cast<int>(pWpt->getAimYaw()));
@@ -394,7 +394,7 @@ void CBotMenuList :: render ( CClient *pClient ) // render
 
 void CBotMenuList :: selectedMenu ( CClient *pClient, unsigned int iMenu )
 {
-	CBotMenu *pMenu = pClient->getCurrentMenu();
+	const CBotMenu *pMenu = pClient->getCurrentMenu();
 
 	pMenu->selectedMenu(pClient, iMenu);
 }
@@ -404,7 +404,7 @@ void CBotMenu :: activate ( CClient *pClient )
 	pClient->setCurrentMenu(this);
 }
 
-void CBotMenu :: selectedMenu ( CClient *pClient, unsigned int iMenu )
+void CBotMenu :: selectedMenu ( CClient *pClient, unsigned int iMenu ) const
 {
 	if ( iMenu < m_MenuItems.size() )
 		m_MenuItems[iMenu]->activate(pClient);
@@ -479,7 +479,7 @@ const char *CWaypointFlagShowMenu::getCaption(CClient *pClient,WptColor &color )
 
 const char *CWaypointFlagShowMenuItem :: getCaption ( CClient *pClient, WptColor &color )
 {
-	CWaypointType *type = CWaypointTypes::getTypeByIndex(m_iFlag);
+	const CWaypointType *type = CWaypointTypes::getTypeByIndex(m_iFlag);
 
 	color = type->getColour();
 
@@ -490,7 +490,7 @@ const char *CWaypointFlagShowMenuItem :: getCaption ( CClient *pClient, WptColor
 
 void CWaypointFlagShowMenuItem::activate ( CClient *pClient )
 {
-	CWaypointType *type = CWaypointTypes::getTypeByIndex(m_iFlag);
+	const CWaypointType *type = CWaypointTypes::getTypeByIndex(m_iFlag);
 
 	// toggle
 	if ( pClient->isShowingWaypoint(type->getBits()) )
@@ -540,7 +540,7 @@ const char *CPathWaypointDeleteToMenuItem :: getCaption ( CClient *pClient, WptC
 		return m_szCaption;
 	}
 
-	CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
+	const CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
 
 	sprintf(m_szCaption,"Delete Paths To This Waypoint (%d)", pWaypoint->numPathsToThisWaypoint());
 
@@ -566,7 +566,7 @@ const char *CPathWaypointDeleteFromMenuItem :: getCaption ( CClient *pClient, Wp
 		return m_szCaption;
 	}
 
-	CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
+	const CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
 
 	sprintf(m_szCaption,"Delete Paths From This Waypoint (%d)", pWaypoint->numPaths());
 

@@ -65,12 +65,12 @@ public:
 	}
 
 
-	bool isWaypointAreaValid ( int wptarea, int waypointflags = 0 );
+	bool isWaypointAreaValid ( int wptarea, int waypointflags = 0 ) const;
 
 
-	bool testProbWptArea ( int iWptArea, int iTeam );
+	bool testProbWptArea ( int iWptArea, int iTeam ) const;
 
-	void debugprint ();
+	void debugprint () const;
 	void updatePoints();
 	bool TeamCanCapPoint( int index, int team )
 	{
@@ -79,12 +79,12 @@ public:
 	}
 
 	// Is the point visible in the objective display
-	bool	IsCPVisible( int index )
+	bool	IsCPVisible( int index ) const
 	{
 		return m_bCPIsVisible[index] == 1;
 	}
 
-	bool	IsCPBlocked( int index )
+	bool	IsCPBlocked( int index ) const
 	{
 		return m_bBlocked[index];
 	}
@@ -94,19 +94,19 @@ public:
 	int getControlPointArea ( edict_t *pPoint );
 
 	// Get the world location of this control point
-	Vector& GetCPPosition( int index )
+	Vector& GetCPPosition( int index ) const
 	{
 		return m_vCPPositions[index];
 	}
 
-	int getControlPointWaypoint ( int index )
+	int getControlPointWaypoint ( int index ) const
 	{
 		return m_iControlPointWpt[index];
 	}
 
-	int NearestArea ( Vector vOrigin );
+	int NearestArea ( Vector vOrigin ) const;
 
-	int GetCappingTeam( int index )
+	int GetCappingTeam( int index ) const
 	{
 		if ( index >= *m_iNumControlPoints )
 			return TEAM_UNASSIGNED;
@@ -114,7 +114,7 @@ public:
 		return m_iCappingTeam[index];
 	}
 
-	int GetTeamInZone( int index )
+	int GetTeamInZone( int index ) const
 	{
 		if ( index >= *m_iNumControlPoints )
 			return TEAM_UNASSIGNED;
@@ -123,12 +123,12 @@ public:
 	}
 
 	// Icons
-	int GetCPCurrentOwnerIcon( int index, int iOwner )
+	int GetCPCurrentOwnerIcon( int index, int iOwner ) const
 	{
 		return GetIconForTeam( index, iOwner );
 	}
 
-	int GetCPCappingIcon( int index )
+	int GetCPCappingIcon( int index ) const
 	{
 		const int iCapper = GetCappingTeam(index);
 
@@ -136,42 +136,42 @@ public:
 	}
 
 	// Icon for the specified team
-	int GetIconForTeam( int index, int team )
+	int GetIconForTeam( int index, int team ) const
 	{		
 		return m_iTeamIcons[ TEAM_ARRAY(index,team) ];
 	}
 
 	// Overlay for the specified team
-	int GetOverlayForTeam( int index, int team )
+	int GetOverlayForTeam( int index, int team ) const
 	{
 		return m_iTeamOverlays[ TEAM_ARRAY(index,team) ];
 	}
 
 	// Number of players in the area
-	int GetNumPlayersInArea( int index, int team )
+	int GetNumPlayersInArea( int index, int team ) const
 	{
 		return m_iNumTeamMembers[ TEAM_ARRAY(index,team) ];
 	}
 	
 	// get the required cappers for the passed team
-	int GetRequiredCappers( int index, int team )
+	int GetRequiredCappers( int index, int team ) const
 	{
 		return m_iTeamReqCappers[ TEAM_ARRAY(index,team) ];
 	}
 
 	// Base Icon for the specified team
-	int GetBaseIconForTeam( int team )
+	int GetBaseIconForTeam( int team ) const
 	{
 		return m_iTeamBaseIcons[ team ];
 	}
 
-	int GetBaseControlPointForTeam( int iTeam ) 
+	int GetBaseControlPointForTeam( int iTeam ) const
 	{ 
 		return m_iBaseControlPoints[iTeam]; 
 	}
 
 	// Data functions, called to set up the state at the beginning of a round
-	int	 GetNumControlPoints() 
+	int	 GetNumControlPoints() const
 	{ 
 		if ( m_iNumControlPoints== nullptr)
 			return 0;
@@ -186,7 +186,7 @@ public:
 		return m_iPreviousPoints[ iIntIndex ];
 	}
 
-	int GetOwningTeam( int index )
+	int GetOwningTeam( int index ) const
 	{
 		if ( index >= *m_iNumControlPoints )
 			return TEAM_UNASSIGNED;
@@ -199,18 +199,18 @@ public:
 		Assert( (0 <= index) && (index <= MAX_CONTROL_POINTS) && (index < *m_iNumControlPoints) );
 	}
 
-	float getLastCaptureTime(int index);
+	float getLastCaptureTime(int index) const;
 
-	bool isCPValidWptArea ( int iWptArea, int iTeam, ePointAttackDefend_s type);
-	bool isCPValid ( int iCPIndex, int iTeam, ePointAttackDefend_s type);
+	bool isCPValidWptArea ( int iWptArea, int iTeam, ePointAttackDefend_s type) const;
+	bool isCPValid ( int iCPIndex, int iTeam, ePointAttackDefend_s type) const;
 
 
 	// Mini-rounds data
-	bool PlayingMiniRounds(){ return *m_bPlayingMiniRounds; }
-	bool IsInMiniRound( int index ) { return m_bInMiniRound[index]; }
+	bool PlayingMiniRounds() const { return *m_bPlayingMiniRounds; }
+	bool IsInMiniRound( int index ) const { return m_bInMiniRound[index]; }
 	void updateCaptureTime(int index);
 	void setup ();
-	bool isInitialised() { return m_bInitialised == true; }
+	bool isInitialised() const { return m_bInitialised == true; }
 	MyEHandle m_ObjectiveResource;
 
 	int getRandomValidPointForTeam ( int team, ePointAttackDefend_s type );

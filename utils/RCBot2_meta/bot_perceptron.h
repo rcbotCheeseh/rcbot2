@@ -75,13 +75,13 @@ public:
 
 	virtual void input ( ga_nn_value *inputs );
 
-	ga_nn_value getWeight ( unsigned short int i ) { return m_weights[i]; }
+	ga_nn_value getWeight ( unsigned short int i ) const { return m_weights[i]; }
 
 	ga_nn_value execute ();
 
 	bool fired ();
 
-	ga_nn_value getOutput () { return m_output; }
+	ga_nn_value getOutput () const { return m_output; }
 
 protected:
 	
@@ -103,13 +103,13 @@ public:
 
 	CPerceptron (unsigned short int iInputs);
 
-	void setWeights (const ga_nn_value* weights);
+	void setWeights (const ga_nn_value* weights) const;
 
 	ga_nn_value execute ();
 
-	bool fired ();
+	bool fired () const;
 
-	ga_nn_value getOutput ();
+	ga_nn_value getOutput () const;
 
 	void train ( ga_nn_value expectedOutput );
 
@@ -139,8 +139,8 @@ public:
 	void addError ( ga_nn_value err ) { m_error += err; }
 	void divError ( unsigned short int samples ) { m_error /= samples; }
 
-	ga_nn_value getError ( unsigned short int w ) { return m_error * m_weights[w]; }
-	ga_nn_value getMSE () { return m_error; }
+	ga_nn_value getError ( unsigned short int w ) const { return m_error * m_weights[w]; }
+	ga_nn_value getMSE () const { return m_error; }
 private:
 	ga_nn_value m_error;
 	ga_nn_value m_netinput;
@@ -242,25 +242,25 @@ public:
 		m_outputNum = 0;
 	}
 
-	unsigned short int getNumBatches ()
+	unsigned short int getNumBatches () const
 	{
 		return m_numBatches;
 	}
 
-	ga_nn_value scale ( ga_nn_value x ) 
+	ga_nn_value scale ( ga_nn_value x ) const
 	{ 
 		return gscale(x,m_fMin,m_fMax);
 	}
 
-	ga_nn_value descale ( ga_nn_value x )
+	ga_nn_value descale ( ga_nn_value x ) const
 	{
 		return gdescale(x,m_fMin,m_fMax);
 	}
 
-	ga_nn_value getMinScale () { return m_fMin; }
-	ga_nn_value getMaxScale () { return m_fMax; }
+	ga_nn_value getMinScale () const { return m_fMin; }
+	ga_nn_value getMaxScale () const { return m_fMax; }
 
-	training_batch_t *getBatches () { return batches; }
+	training_batch_t *getBatches () const { return batches; }
 private:
 	// simple format (ins / outs)
 	training_batch_t *batches;
@@ -295,9 +295,9 @@ public:
 		m_layerinput = nullptr;
 	}
 
-	void execute (const ga_nn_value* inputs, ga_nn_value* outputs, ga_nn_value fMin, ga_nn_value fMax);
+	void execute (const ga_nn_value* inputs, ga_nn_value* outputs, ga_nn_value fMin, ga_nn_value fMax) const;
 
-	void batch_train ( CTrainingSet *tset, unsigned short int epochs );
+	void batch_train ( CTrainingSet *tset, unsigned short int epochs ) const;
 
 	~CBotNeuralNet ()
 	{

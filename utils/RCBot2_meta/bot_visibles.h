@@ -51,7 +51,7 @@ public:
 		m_pFlag = nullptr;
 	}
 
-	edict_t *getFlag ( Vector &vOrigin )
+	edict_t *getFlag ( Vector &vOrigin ) const
 	{
 		return m_pFlag;
 	}
@@ -75,12 +75,12 @@ public:
 		m_pBest = nullptr;
 	}
 
-	edict_t *getBestEnemy ()
+	edict_t *getBestEnemy () const
 	{
 		return m_pBest;
 	}
 
-	float getFactor ( edict_t *pEntity );
+	float getFactor ( edict_t *pEntity ) const;
 	void setOldEnemy ( edict_t *pEntity );
 	void init ();
 
@@ -100,12 +100,12 @@ public:
 	void reset ();
 	void updateVisibles ();
 
-	bool isVisible (const edict_t* pEdict);
+	bool isVisible (const edict_t* pEdict) const;
 	void setVisible ( edict_t *pEdict, bool bVisible );
 
-	void eachVisible ( CVisibleFunc *pFunc );
+	void eachVisible ( CVisibleFunc *pFunc ) const;
 
-	void checkVisible (edict_t* pEntity, int* iTicks, bool* bVisible, const int& iIndex, bool bCheckHead = false);
+	void checkVisible (edict_t* pEntity, int* iTicks, bool* bVisible, const int& iIndex, bool bCheckHead = false) const;
 
 	static void debugString ( char *string );
 

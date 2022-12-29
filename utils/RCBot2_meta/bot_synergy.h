@@ -55,7 +55,7 @@ public:
     virtual bool needAmmo();
     virtual bool filterAmmo(edict_t *pAmmo, const char *szclassname);
     virtual bool wantsToChangeCourseOfAction();
-    float getInterruptionTimer() { return m_flInterruptTime; }
+    float getInterruptionTimer() const { return m_flInterruptTime; }
 protected:
     MyEHandle m_pNearbyWeapon; // weapons
     MyEHandle m_pNearbyHealthKit; // Healthkit
