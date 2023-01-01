@@ -92,66 +92,42 @@ Additionally, `rcbot/logging.{h,cpp}` is released separately under the
 
 ### To-do:-
 
-To allow bots to menuselect in order to buy upgrades for MVM
-
-To prevent bots to shoot at ghost players - like in plr_hightower_event Hell Zone
-
-Bots needs to understand how to play Kart games from sd_doomsday_event as they only wonder around those minigames
-
-CBotTF2::changeClass needs implemented to avoid bots punting when using ClassRestrictionsForBots.smx
-
-And to add TF2C support along with Synergy, Black Mesa Source, Counter-Strike: Source and SDK2013
+- To allow bots to menuselect in order to buy upgrades for MVM
+- To repair Waypoint Menu for TF2 as the latest TF2 VScript update broken it...
+- To improve game detection for non-listed Source gamemods
+- To prevent bots to shoot at ghost players - like in plr_hightower_event Hell Zone
+- Bots needs to understand how to play Kart games from sd_doomsday_event as they only wonder around those minigames
+- CBotTF2::changeClass needs implemented to avoid bots punting when using ClassRestrictionsForBots.smx
+- And to add TF2C support along with Black Mesa Source, Counter-Strike: Source and SDK2013
 
 ## Credits:-
 
-Cheeseh - Founder
-
-Bot base code - Botman's HPB Template
-
-Linux Conversion and waypointing - [APG]RoboCop[CL]
-
-TF2 support and enhancements - Ducky1231/Pongo
-
-SourceMod and AMBuild support - nosoop
-
-Synergy and CSS support - Anonymous Player/caxanga334
-
-TF2 Classic support - Technochips
+- Founder - Cheeseh
+- Bot base code - Botman's HPB Template
+- Linux Conversion and Waypointing - [APG]RoboCop[CL]
+- TF2 support and enhancements - Ducky1231/Pongo
+- SourceMod and AMBuild support - nosoop
+- Synergy and CSS support - Anonymous Player/caxanga334
+- TF2 Classic support - Technochips
+- Linux Black Mesa and SDK2013 mathlib fix - Sappho
 
 ## Waypointers:-
 
-NightC0re
-
-wakaflaka
-
-dgesd
-
-naMelesS
-
-ati251
-
-Sandman[SA]
-
-Speed12	
-
-MarioGuy3
-
-Sjru	
-
-Fillmore
-
-htt123
-
-swede
-
-Witch
-
-YouLoseAndIWin
-
-ChiefEnragedDemo
-
-madmax2
-
-Pyri
-
-LK777
+- NightC0re
+- wakaflaka
+- dgesd
+- naMelesS
+- ati251
+- Sandman[SA]
+- Speed12	
+- MarioGuy3
+- Sjru	
+- Fillmore
+- htt123
+- swede
+- Witch
+- YouLoseAndIWin
+- ChiefEnragedDemo
+- madmax2
+- Pyri
+- LK777
