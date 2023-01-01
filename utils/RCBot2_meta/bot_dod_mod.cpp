@@ -107,7 +107,7 @@ bool CDODMod :: shouldAttack ( int iTeam )
 	static short int iFlags_0;
 	static short int iFlags_1;
 	static short int iNumFlags;
-	
+	//TODO: Improve on the integer and floating point precision conversion [APG]RoboCop[CL]
 	iNumFlags = m_Flags.getNumFlags();
 
 	iFlags_0 = static_cast<int>(static_cast<float>(m_Flags.getNumFlagsOwned(iTeam == TEAM_ALLIES ? TEAM_AXIS : TEAM_ALLIES)) /
@@ -749,7 +749,7 @@ int CDODMod ::getScore(edict_t *pPlayer)
 
 edict_t *CDODMod :: getBreakable ( CWaypoint *pWpt )
 {
-	const unsigned short int size = m_BreakableWaypoints.size();
+	const unsigned int size = m_BreakableWaypoints.size();
 
 	for (unsigned short int i = 0; i < size; i ++ )
 	{
@@ -762,7 +762,7 @@ edict_t *CDODMod :: getBreakable ( CWaypoint *pWpt )
 
 edict_t *CDODMod :: getBombTarget ( CWaypoint *pWpt )
 {
-	const unsigned short int size = m_BombWaypoints.size();
+	const unsigned int size = m_BombWaypoints.size();
 
 	for (unsigned short int i = 0; i < size; i ++ )
 	{

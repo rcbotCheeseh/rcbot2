@@ -200,7 +200,7 @@ void CBot :: runPlayerMove()
 	}
 
 	cmd.buttons = m_iButtons;
-	cmd.impulse = m_iImpulse;
+	cmd.impulse = static_cast<byte>(m_iImpulse);
 	cmd.viewangles = m_vViewAngles;
 	cmd.weaponselect = m_iSelectWeapon;
 	cmd.tick_count = gpGlobals->tickcount;
@@ -1010,7 +1010,7 @@ void CBot :: think ()
 	// deal with it here
 	if ( m_fNextVoiceCommand < engine->Time() && !m_nextVoicecmd.empty() )
 	{
-		const byte cmd = m_nextVoicecmd.front();
+		const byte cmd = static_cast<byte>(m_nextVoicecmd.front());
 
 		m_fNextVoiceCommand = engine->Time() + randomFloat(0.4f,1.2f);
 		

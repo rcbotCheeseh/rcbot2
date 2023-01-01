@@ -67,7 +67,7 @@ size_t CSignatureFunction::decodeHexString(unsigned char *buffer, size_t maxleng
 				continue;
 			// Get the hex part. 
 			char s_byte[3];
-			int r_byte;
+			int r_byte; //char should be used not int? [APG]RoboCop[CL]
 			//char r_byte;
 			s_byte[0] = hexstr[i + 2];
 			s_byte[1] = hexstr[i + 3];

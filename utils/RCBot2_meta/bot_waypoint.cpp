@@ -2034,7 +2034,7 @@ void CWaypoints :: drawWaypoints( CClient *pClient )
 
 	if ( pClient->isPathWaypointOn() )
 	{
-		CWaypoint* pWpt = getWaypoint(pClient->currentWaypoint());
+		const CWaypoint* pWpt = getWaypoint(pClient->currentWaypoint());
 
 		// valid waypoint
 		if ( pWpt )

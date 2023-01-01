@@ -81,8 +81,6 @@ CSomNeuron *CSom :: getBMU (const std::vector<float>* inputs) const
 	return winner;
 }
 
-
-
 void CSom :: updateAround (const std::vector<float>* inputs, CSomNeuron* bmu) const
 {
 	float dist;

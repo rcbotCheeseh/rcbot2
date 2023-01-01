@@ -900,7 +900,7 @@ void CTeamFortress2Mod :: teleporterBuilt ( edict_t *pOwner, eEngiBuild type, ed
 	if ( type != ENGI_TELE ) //(type != ENGI_ENTRANCE) && (type != ENGI_EXIT) )
 		return;
 
-	const short int iIndex = ENTINDEX(pOwner)-1;
+	const short int iIndex = ENTINDEX(pOwner)-1;//short not necessary? [APG]RoboCop[CL]
 
 	if ( iIndex < 0 || iIndex > gpGlobals->maxClients )
 		return;
@@ -992,7 +992,7 @@ bool CTeamFortress2Mod::buildingNearby ( int iTeam, Vector vOrigin )
 //get the building
 edict_t *CTeamFortress2Mod::getBuilding (eEngiBuild object, const edict_t* pOwner)
 {
-	static short int i;
+	static short int i;//short not necessary? [APG]RoboCop[CL]
 	static tf_tele_t *tele; //tele not used [APG]RoboCop[CL]
 
 	//index = ENTINDEX(pOwner)-1;
@@ -1014,7 +1014,7 @@ edict_t *CTeamFortress2Mod::getBuilding (eEngiBuild object, const edict_t* pOwne
 		if ( m_Teleporters[i].entrance.get() != nullptr)
 			return m_Teleporters[i].entrance.get();
 		return m_Teleporters[i].exit.get();
-		//TODO: Added support for Sapper and Teleporter [APG]RoboCop[CL]
+		//TODO: Added support for Sapper and Teleporter? [APG]RoboCop[CL]
 	/*case ENGI_SAPPER:
 		break;
 	case ENGI_EXIT:
@@ -1062,7 +1062,7 @@ edict_t *CTeamFortress2Mod ::getBuildingOwner (eEngiBuild object, short index)
 			tele++;
 		}
 		break;
-		//TODO: Added support for Sapper and Teleporter [APG]RoboCop[CL]
+		//TODO: Added support for Sapper and Teleporter? [APG]RoboCop[CL]
 	/*case ENGI_SAPPER:
 		break;
 	case ENGI_EXIT:
@@ -1105,7 +1105,7 @@ edict_t *CTeamFortress2Mod :: nearestDispenser ( Vector vOrigin, int team )
 
 void CTeamFortress2Mod::sapperPlaced(const edict_t* pOwner, eEngiBuild type, edict_t* pSapper)
 {
-	static short int index;
+	static short int index;//short not necessary? [APG]RoboCop[CL]
 	
 	index = ENTINDEX(pOwner)-1;
 
@@ -1354,7 +1354,7 @@ void CTeamFortress2Mod :: roundReset ()
 
 void CTeamFortress2Mod::sentryBuilt(const edict_t* pOwner, eEngiBuild type, edict_t* pBuilding)
 {
-	static short int index;
+	static short int index;//short not necessary? [APG]RoboCop[CL]
 
 	index = ENTINDEX(pOwner)-1;
 
@@ -1391,7 +1391,7 @@ bool CTeamFortress2Mod::isSentryGun (edict_t *pEdict )
 
 void CTeamFortress2Mod::dispenserBuilt(const edict_t* pOwner, eEngiBuild type, edict_t* pBuilding)
 {
-	static short int index;
+	static short int index;//short not necessary? [APG]RoboCop[CL]
 
 	index = ENTINDEX(pOwner)-1;
 

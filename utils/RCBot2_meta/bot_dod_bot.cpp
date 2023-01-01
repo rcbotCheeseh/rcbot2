@@ -98,7 +98,7 @@ void CDODBot :: bombEvent ( int iEvent, int iCP, int iTeam )
 CDODBot :: CDODBot()
 {
 	CBot();
-	init(true);
+	CDODBot::init(true);
 }
 
 void CDODBot :: init (bool bVarInit)
@@ -1424,7 +1424,7 @@ void CDODBot ::voiceCommand ( int cmd )
 	char scmd[64];
 	u_VOICECMD vcmd;
 
-	vcmd.voicecmd = cmd;
+	vcmd.voicecmd = cmd; //not used? [APG]RoboCop[CL]
 	
 	sprintf(scmd,"voice_%s",g_DODVoiceCommands[cmd].pcmd);
 
@@ -3449,7 +3449,7 @@ void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin,
 			if ( pWp->getProjectileSpeed() > 0 && sv_gravity.IsValid() )
 			{
 				const float fTime = fDist2D/pWp->getProjectileSpeed();
-
+				//TODO: Improve on the floating point precision conversion [APG]RoboCop[CL]
 				v_desired_offset->z = (pow(2, fTime) * (sv_gravity.GetFloat() * rcbot_projectile_tweak.GetFloat()));// - (getOrigin().z - v_origin.z);
 			}
 			//v_desired_offset->z += (distanceFrom(pEntity) * (randomFloat(0.05,0.15)*m_pProfile->m_fAimSkill));
