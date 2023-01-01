@@ -999,7 +999,7 @@ class CBotFF : public CBotFortress
 {
 public:
 
-	CBotFF() { CBotFortress(); }
+	CBotFF() { CBotFortress(); } //TODO: unused object [APG]RoboCop[CL]
 
 	void modThink () override;
 
