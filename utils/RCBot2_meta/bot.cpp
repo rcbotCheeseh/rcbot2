@@ -1721,7 +1721,7 @@ void CBot ::debugBot(char *msg)
 	const bool hastask = m_pSchedules->getCurrentTask()!= nullptr;
 
 	char szConditions[512];
-	int iBit = 0;
+	//int iBit = 0;
 
 	szConditions[0] = 0; // initialise string
 

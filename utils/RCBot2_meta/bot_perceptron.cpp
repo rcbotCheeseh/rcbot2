@@ -28,6 +28,7 @@
  *    version.
  *
  */
+
 #include <cmath>
 #include <mem.h>
 //#include "vstdlib/random.h" // for random functions
@@ -227,8 +228,6 @@ CBotNeuralNet :: CBotNeuralNet ( unsigned short int numinputs, unsigned short in
 	m_numOutputs = numoutputs;
 	m_numHidden = neuronsperhiddenlayer;
 	m_numHiddenLayers = numhiddenlayers;
-
-
 }
 
 #define RCPP_VERB_EPOCHS 1000
@@ -298,7 +297,7 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 				pNode++;
 			}
 
-			for ( signed short int l = m_numHiddenLayers - 2; l >= 0; l -- )
+			for ( signed short int l = m_numHiddenLayers - 2; l >= 0; l -- ) //l should be int only? [APG]RoboCop[CL]
 			{
 				pOutputNode = m_pHidden[l];
 				//Send Error back to Input Layer
@@ -346,7 +345,7 @@ void CBotNeuralNet :: execute (const ga_nn_value* inputs, ga_nn_value* outputs, 
 {
 
 	static CLogisticalNeuron *pNode;
-	static CLogisticalNeuron *pLayer;
+	//static CLogisticalNeuron *pLayer;
 	static unsigned short int i; // i-th node
 	static unsigned short l; // layer
 	static ga_nn_value *output_it;
