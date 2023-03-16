@@ -2916,7 +2916,7 @@ bool CWaypoint :: checkReachable ()
 			}
 		}
 
-		m_bIsReachable = !( i == numPathsTo );
+		m_bIsReachable = i != numPathsTo;
 		m_fCheckReachableTime = engine->Time() + 1.0f;
 	}
 

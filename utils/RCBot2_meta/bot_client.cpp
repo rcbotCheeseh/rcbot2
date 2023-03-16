@@ -630,7 +630,7 @@ void CClient :: think ()
 			// Ladder waypoint
 			// make the frist waypoint (e.g. bottom waypoint)
 			// ****************************************************
-			if ( iMoveType == MOVETYPE_FLY && !(m_iLastMoveType == MOVETYPE_FLY) )
+			if ( iMoveType == MOVETYPE_FLY && m_iLastMoveType != MOVETYPE_FLY )
 			{
 				// went ON to a ladder
 
@@ -661,7 +661,7 @@ void CClient :: think ()
 						m_vLastAutoWaypointCheckPos[i].UnSetPoint();					
 				}
 			}
-			else if ( !(iMoveType == MOVETYPE_FLY) && m_iLastMoveType == MOVETYPE_FLY )
+			else if ( iMoveType != MOVETYPE_FLY && m_iLastMoveType == MOVETYPE_FLY )
 			{
 				// went OFF a ladder
 				m_fCanPlaceLadder = engine->Time() + 0.2f;
