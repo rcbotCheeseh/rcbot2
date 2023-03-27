@@ -834,8 +834,6 @@ void RCBotPluginMeta::BotQuotaCheck() {
 	if (m_fBotQuotaTimer < engine->Time() - rcbot_bot_quota_interval.GetInt()) {
 		m_fBotQuotaTimer = engine->Time();
 
-		// Target Bot Count
-		int bot_target;
 		// Change Notification
 		bool notify = false;
 
@@ -870,7 +868,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 		}
 
 		// Get Bot Quota
-		bot_target = m_iTargetBots[human_count];
+		const int bot_target = m_iTargetBots[human_count];
 
 		// Change Bot Quota
 		if (bot_count > bot_target) {
