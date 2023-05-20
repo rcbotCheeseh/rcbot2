@@ -7027,9 +7027,9 @@ void CBotTF2::roundWon(int iTeam, bool bFullRound )
 }
 
 // TODO: Needs implemented to avoid bots punting when using ClassRestrictionsForBots.smx? [APG]RoboCop[CL]
-void CBotTF2::changeClass()
+/*void CBotTF2::changeClass()
 {
-	/*if (m_fChangeClassTime < engine->Time())
+	if (m_fChangeClassTime < engine->Time())
 	{
 		m_fChangeClassTime = engine->Time() + randomFloat(0.5f, 2.5f); // wait a bit before changing class again
 
@@ -7043,8 +7043,8 @@ void CBotTF2::changeClass()
 			if (m_pSchedules->hasSchedule(SCHED_HEAL))
 				m_pSchedules->freeMemory();
 		}
-	}*/
-}
+	}
+}*/
 
 void CBotTF2::waitRemoveSap ()
 {

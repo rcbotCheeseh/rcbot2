@@ -39,7 +39,7 @@
 #define BOT_WELCOME_MESSAGE "Welcome to RCBot by Cheeseh for Linux"
 #endif
 
-#define BOT_DEFAULT_FOV 75.0f
+#define BOT_DEFAULT_FOV 80.0f
 
 #define __to_lower(a) (((a)>='A')&&((a)<='Z'))?('a'+((a)-'A')):(a)
 #define __strlow(str) { char *__strx = str; while ( __strx && *__strx ) { *__strx = __to_lower(*__strx); __strx++; } }

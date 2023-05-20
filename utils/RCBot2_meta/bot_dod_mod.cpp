@@ -123,7 +123,7 @@ void CDODMod :: initMod ()
 ///-------------------------------------------------
 	CBotGlobals::botMessage(nullptr,0,"Training DOD:S capture decision 'NN' ... hold on...");
 
-	CBotNeuralNet *nn = new CBotNeuralNet(2,2,2,1,0.4f);
+	const CBotNeuralNet *nn = new CBotNeuralNet(2,2,2,1,0.4f);
 
 	CTrainingSet *tset = new CTrainingSet(2,1,4);
 

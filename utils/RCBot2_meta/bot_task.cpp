@@ -487,7 +487,7 @@ void CBotDODBomb :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 		if ( CClassInterface::getDODBombState(m_pBombTarget) == DOD_BOMB_STATE_AVAILABLE )
 			complete();
-		else if ( CDODMod::m_Flags.isTeamMateDefusing(pBot->getEdict(),pBot->getTeam(),CBotGlobals::entityOrigin(m_pBombTarget)) )
+		else if (CDODFlags::isTeamMateDefusing(pBot->getEdict(),pBot->getTeam(),CBotGlobals::entityOrigin(m_pBombTarget)) )
 			complete(); // team mate doing my job
 	}
 
@@ -1702,7 +1702,7 @@ void CBotDefendTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		{
 			m_fTime = engine->Time() + randomFloat(15.0f,45.0f);
 		} 
-		else if ( m_fMaxTime > 0 )
+		else if ( m_fMaxTime > 0.0f )
 			m_fTime = engine->Time() + m_fMaxTime;
 		else
 		{
@@ -1729,9 +1729,9 @@ void CBotDefendTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 	fDist = pBot->distanceFrom(m_vOrigin);
 
-	if ( fDist > 200 )
+	if ( fDist > 200.0f )
 		fail(); // too far -- bug
-	else if ( fDist > 100 )
+	else if ( fDist > 100.0f )
 		pBot->setMoveTo(m_vOrigin);
 	else
 	{
@@ -1844,7 +1844,7 @@ CBotTFEngiBuildTask :: CBotTFEngiBuildTask ( eEngiBuild iObject, CWaypoint *pWay
 	m_iObject = iObject;
 	m_vOrigin = pWaypoint->getOrigin()+pWaypoint->applyRadius();
 	m_iState = 0;
-	m_fTime = 0;
+	m_fTime = 0.0f;
 	m_iTries = 0;
 	m_fNextUpdateAngle = 0.0f;
 	const QAngle ang = QAngle(0,pWaypoint->getAimYaw(),0);
@@ -2319,8 +2319,8 @@ void CBotTF2FindPipeWaypoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 				{			
 					m_fNearesti = fidist;
 					m_fNearestj = fjdist;
-					m_iNearesti = m_WaypointsI[m_i];
-					m_iNearestj = m_WaypointsJ[m_j];
+					m_iNearesti = static_cast<short>(m_WaypointsI[m_i]);
+					m_iNearestj = static_cast<short>(m_WaypointsJ[m_j]);
 				}
 
 				m_iters++;
@@ -3014,7 +3014,7 @@ void CBotTF2SnipeCrossBow::execute(CBot *pBot, CBotSchedule *pSchedule)
 		fail();
 		return;
 	}
-	else if (pBotWeapon->getAmmo(pBot) < 1)
+	if (pBotWeapon->getAmmo(pBot) < 1)
 	{
 		// out of ammo -- finish
 		//if (CTeamFortress2Mod::TF2_IsPlayerZoomed(pBot->getEdict()))
@@ -3308,7 +3308,7 @@ void CBotTF2Snipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		fail();
 		return;
 	}
-	else if ( pBotWeapon->getAmmo(pBot) < 1 )
+	if ( pBotWeapon->getAmmo(pBot) < 1 )
 	{
 		// out of ammo -- finish
 		if ( CTeamFortress2Mod::TF2_IsPlayerZoomed(pBot->getEdict()) )
@@ -3940,7 +3940,7 @@ void CCSSPlantTheBombTask::execute(CBot *pBot,CBotSchedule *pSchedule)
 
 	if(CClassInterface::isCSPlayerInBombZone(pBot->getEdict()))
 	{
-		if(!(pBot->getCurrentWeapon() == pBot->getWeapons()->getWeapon(CWeapons::getWeapon(CS_WEAPON_C4))))
+		if(pBot->getCurrentWeapon() != pBot->getWeapons()->getWeapon(CWeapons::getWeapon(CS_WEAPON_C4)))
 		{
 			pBot->selectBotWeapon(pBot->getWeapons()->getWeapon(CWeapons::getWeapon(CS_WEAPON_C4)));
 		}
@@ -5611,7 +5611,7 @@ void CBotSynDisarmMineTask::execute(CBot *pBot,CBotSchedule *pSchedule)
 	pBot->setMoveLookPriority(MOVELOOK_TASK);
 	
 
-	if(!(pBot->getCurrentWeapon() == pBot->getWeapons()->getWeapon(CWeapons::getWeapon(SYN_WEAPON_PHYSCANNON))))
+	if(pBot->getCurrentWeapon() != pBot->getWeapons()->getWeapon(CWeapons::getWeapon(SYN_WEAPON_PHYSCANNON)))
 	{
 		pBot->selectBotWeapon(pBot->getWeapons()->getWeapon(CWeapons::getWeapon(SYN_WEAPON_PHYSCANNON)));
 	}

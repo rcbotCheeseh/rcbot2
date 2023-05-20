@@ -337,7 +337,7 @@ bool CHLDMBot :: executeAction ( eBotAction iAction )
 
 			if ( pWaypoint )
 			{
-				const auto snipe = new CBotSchedule();
+				auto* snipe = new CBotSchedule();
 				CBotTask *findpath = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
 
 				// use DOD task  //Unstable? [APG]RoboCop[CL]

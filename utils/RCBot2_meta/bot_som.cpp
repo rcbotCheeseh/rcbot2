@@ -30,8 +30,8 @@
  */
 
 #ifdef __linux__
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #endif
 #include "bot_som.h"
 #include "bot_mtrand.h"

@@ -127,7 +127,7 @@ void CProfileTimer :: print (const double* high)
 
 		m_average = m_overall/m_iInvoked;
 
-		const float percent = static_cast<double>(m_overall) / *high * 100.0f;
+		const double percent = static_cast<double>(m_overall) / *high * 100.0;
 		
 		sprintf(str,"%17s|%13lld|%10lld|%10lld|%10lld|%6.1f",m_szFunction,m_overall,m_min,m_max,m_average,percent);			
 

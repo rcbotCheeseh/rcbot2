@@ -928,7 +928,7 @@ int CTeamFortress2Mod ::getHighestScore ()
 
 		if ( edict && CBotGlobals::entityIsValid(edict) )
 		{
-			const auto score = static_cast<short>(CClassInterface::getTF2Score(edict));
+			const short score = static_cast<short>(CClassInterface::getTF2Score(edict));
 		
 			if ( score > highest )
 			{
@@ -952,7 +952,7 @@ bool CTeamFortress2Mod::buildingNearby ( int iTeam, Vector vOrigin )
 		if ( !pPlayer || pPlayer->IsFree() )
 			continue;
 
-		const auto sentryIndex = static_cast<short>(i - 1);
+		const short sentryIndex = static_cast<short>(i - 1);
 
 		if ( CClassInterface::getTF2Class(pPlayer) != TF_CLASS_ENGINEER )
 			continue;

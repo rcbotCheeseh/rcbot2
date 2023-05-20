@@ -146,7 +146,7 @@ void CWaypointLocations :: GetAllInArea (const Vector& vOrigin, WaypointList* pW
 		{
 			for (int k = iMinLock; k <= iMaxLock; k++ )
 			{
-				auto loc = m_iLocations[i][j][k];
+				WaypointList loc = m_iLocations[i][j][k];
 				for (int iWpt : loc)
 				{
 					if ( iWpt == iVisibleTo )
@@ -185,7 +185,7 @@ void CWaypointLocations :: GetAllVisible (int iFrom, int iOther, const Vector& v
 		{
 			for ( int k = iMinLock; k <= iMaxLock; k++ )
 			{
-				auto &arr = m_iLocations[i][j][k];
+				WaypointList& arr = m_iLocations[i][j][k];
 				for (size_t l = 0; l < m_iLocations[i][j][k].size(); l++)
 				{
 					int iWpt = arr[l];
@@ -219,7 +219,7 @@ void CWaypointLocations :: AutoPathInBucket ( edict_t *pPlayer, int i, int j, in
 
 	//CTraceFilterWorldOnly filter;
 
-	const auto &arr = m_iLocations[i][j][k];
+	const WaypointList& arr = m_iLocations[i][j][k];
 	const size_t size = arr.size();
 	
 	for (size_t l = 0; l < size; l++)
@@ -264,11 +264,10 @@ void CWaypointLocations :: AutoPathInBucket ( edict_t *pPlayer, int i, int j, in
 
 void CWaypointLocations :: AddWptLocation ( int iIndex, const float *fOrigin )
 {
-// Add a waypoint with index and at origin (for quick insertion in the list)
-//
-const int i = READ_LOC(fOrigin[0]);
-const int j = READ_LOC(fOrigin[1]);
-const int k = READ_LOC(fOrigin[2]);
+	// Add a waypoint with index and at origin (for quick insertion in the list)
+	const int i = READ_LOC(fOrigin[0]);
+	const int j = READ_LOC(fOrigin[1]);
+	const int k = READ_LOC(fOrigin[2]);
 
 	m_iLocations[i][j][k].emplace_back(iIndex);
 }
@@ -281,7 +280,7 @@ void CWaypointLocations :: DeleteWptLocation ( int iIndex, const float *fOrigin 
 	const int j = READ_LOC(fOrigin[1]);
 	const int k = READ_LOC(fOrigin[2]);
 
-	auto &vec = m_iLocations[i][j][k];
+	WaypointList& vec = m_iLocations[i][j][k];
 	vec.erase(std::remove(vec.begin(), vec.end(), iIndex), vec.end());
 }
 

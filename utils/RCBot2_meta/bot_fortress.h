@@ -451,7 +451,7 @@ public:
 
 	virtual bool hasEngineerBuilt ( eEngiBuild iBuilding ) {return false;}
 
-	virtual void engiBuildSuccess ( eEngiBuild iObject, int index ) {};
+	virtual void engiBuildSuccess ( eEngiBuild iBuilding, int index ) {};
 
 	virtual bool healPlayer ( edict_t *pPlayer, edict_t *pPrevPlayer ) { return false; }
 	virtual bool upgradeBuilding ( edict_t *pBuilding, bool removesapper = false) {return false;}
@@ -796,7 +796,7 @@ public:
 
 	bool handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy ) override;
 
-	void engiBuildSuccess ( eEngiBuild iObject, int index ) override;
+	void engiBuildSuccess ( eEngiBuild iBuilding, int index ) override;
 
 	bool lookAfterBuildings (float *fTime) override;
 
@@ -855,7 +855,7 @@ public:
 	
 	void roundWon ( int iTeam, bool bFullRound );
 
-	void changeClass (); // TODO: Needs implemented to avoid bots punting when using ClassRestrictionsForBots.smx? [APG]RoboCop[CL]
+	//void changeClass (); // TODO: Needs implemented to avoid bots punting when using ClassRestrictionsForBots.smx? [APG]RoboCop[CL]
 
 	bool needAmmo() override;
 
@@ -865,7 +865,7 @@ public:
 
 	void updateClass () override;
 
-	bool healPlayer ( );
+	bool healPlayer ();
 	
 	bool upgradeBuilding ( edict_t *pBuilding, bool removesapper = false ) override;
 

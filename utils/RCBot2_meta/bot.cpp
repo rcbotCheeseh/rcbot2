@@ -1779,7 +1779,7 @@ void CBot ::debugBot(char *msg)
 int CBot :: nearbyFriendlies (float fDistance)
 {
 	int num = 0;
-	const auto maxclients = CBotGlobals::maxClients();
+	const int maxclients = CBotGlobals::maxClients();
 
 	for ( short int i = 0; i <= maxclients; i ++ )
 	{

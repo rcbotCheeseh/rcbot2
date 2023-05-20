@@ -643,7 +643,7 @@ public:
 	{ 
 		m_fMaxTime = fMaxTime; 
 		m_vOrigin = vOrigin; 
-		m_fTime = 0; 
+		m_fTime = 0.0f; 
 		setCompleteInterrupt(iInterrupt); 
 		m_bDefendOrigin = bDefendOrigin;
 		m_vDefendOrigin = vDefendOrigin;
@@ -1291,7 +1291,7 @@ public:
 		m_vAim = vOrigin + m_vAim*1024;
 		m_vOrigin = vOrigin;
 		m_pWeaponToUse = pWeaponToUse;
-		m_fScopeTime = 0;
+		m_fScopeTime = 0.0f;
 		m_bUseZ = bUseZ;
 		m_z = z; // z = ground level
 		m_iWaypointType = iWaypointType;

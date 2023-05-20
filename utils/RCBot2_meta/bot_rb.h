@@ -8,8 +8,8 @@ class CBotRule
 {
 public:
 	CBotRule ()
-	{
-	}
+	= default;
+
 private:
 	std::vector<CBotOperator> m_Rules;
 };

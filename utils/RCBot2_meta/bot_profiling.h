@@ -44,63 +44,63 @@ class CProfileTimer
 {
 public:
 
-	CProfileTimer (const char *szFunction);
+	CProfileTimer(const char* szFunction);
 
-	const char *getFunction () const
-	{ 
-		return m_szFunction; 
+	const char* getFunction() const
+	{
+		return m_szFunction;
 	}
 
-    void Start();
+	void Start();
 
-    void Stop();
+	void Stop();
 
 	void print(const double* high);
 
 #ifndef __linux__
-	__int64 getOverall () const
+	__int64 getOverall() const
 #else
-    inline long long getOverall ()
+	inline long long getOverall()
 #endif
-    {
-        return m_overall;
-    }
-    
+	{
+		return m_overall;
+	}
+
 private:
 #ifndef __linux__
-    unsigned __int64  start_cycle;
-    unsigned __int64  end_cycle;
-    unsigned __int64  m_average;
-    unsigned __int64  m_min;
-    unsigned __int64  m_max;
-    unsigned __int64  m_last;
-    unsigned __int64  m_overall;
-#else    
-    unsigned long long  start_cycle;
-    unsigned long long  end_cycle;
-    unsigned long long  m_average;
-    unsigned long long  m_min;
-    unsigned long long  m_max;
-    unsigned long long  m_last;
-    unsigned long long  m_overall;
+	unsigned __int64  start_cycle;
+	unsigned __int64  end_cycle;
+	unsigned __int64  m_average;
+	unsigned __int64  m_min;
+	unsigned __int64  m_max;
+	unsigned __int64  m_last;
+	unsigned __int64  m_overall;
+#else
+	unsigned long long  start_cycle;
+	unsigned long long  end_cycle;
+	unsigned long long  m_average;
+	unsigned long long  m_min;
+	unsigned long long  m_max;
+	unsigned long long  m_last;
+	unsigned long long  m_overall;
 #endif
-	
-	const char *m_szFunction;
+
+	const char* m_szFunction;
 
 	// helps us to know if the timer has been used recently
 	// is also used to reset the minimum value
 	// and reset the maximum values after
 	// if it is not "invoked" it is not displayed
-	int m_iInvoked; 
+	int m_iInvoked;
 };
 
 enum
 {
-BOTS_THINK_TIMER = 0,
-BOT_THINK_TIMER,
-BOT_ROUTE_TIMER,
-BOT_VISION_TIMER,
-PROFILING_TIMERS
+	BOTS_THINK_TIMER = 0,
+	BOT_THINK_TIMER = 1,
+	BOT_ROUTE_TIMER = 2,
+	BOT_VISION_TIMER = 3,
+	PROFILING_TIMERS = 4
 };
 
 class CProfileTimers
@@ -109,9 +109,9 @@ public:
 
 	static void reset();
 
-	static void updateAndDisplay ();
+	static void updateAndDisplay();
 
-	static CProfileTimer *getTimer (int id);
+	static CProfileTimer* getTimer(int id);
 private:
 	static CProfileTimer m_Timers[PROFILING_TIMERS];
 

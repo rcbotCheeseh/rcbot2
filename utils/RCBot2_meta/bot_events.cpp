@@ -1176,7 +1176,7 @@ bool CBotEvent :: forCurrentMod () const
 	return ((m_iModId == MOD_ANY) || (CBotGlobals::isMod(m_iModId)));
 }
 // should we execute this ??
-inline bool CBotEvent :: isType ( const char *szType )
+inline bool CBotEvent :: isType ( const char *szType ) const
 {
 	return forCurrentMod() && FStrEq(m_szType,szType);
 }

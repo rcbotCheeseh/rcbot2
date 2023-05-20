@@ -179,8 +179,8 @@
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>.;..\..\alliedmodders\hl2sdk-tf2\public\mathlib;..\..\alliedmodders\hl2sdk-tf2\public;..\..\alliedmodders\hl2sdk-tf2\public\engine;..\..\alliedmodders\hl2sdk-tf2\public\tier0;..\..\alliedmodders\hl2sdk-tf2\public\tier1;..\..\alliedmodders\hl2sdk-tf2\game\shared;..\..\alliedmodders\hl2sdk-tf2\game\server;..\..\alliedmodders\hl2sdk-tf2\public\game\server;..\..\alliedmodders\metamod-source\core\;..\..\alliedmodders\metamod-source\core\sourcehook\;..\..\alliedmodders\metamod-source\public\;..\..\alliedmodders\sourcemod\public;..\..\alliedmodders\sourcemod\sourcepawn\include;..\..\sm_ext\;..\..\versioning\;..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>SOURCE_ENGINE=4;SOURCE_ENGINE=TF2;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;..\..\alliedmodders\hl2sdk-tf2\public\mathlib;..\..\alliedmodders\hl2sdk-tf2\public;..\..\alliedmodders\hl2sdk-tf2\public\engine;..\..\alliedmodders\hl2sdk-tf2\public\tier0;..\..\alliedmodders\hl2sdk-tf2\public\tier1;..\..\alliedmodders\hl2sdk-tf2\game\shared;..\..\alliedmodders\hl2sdk-tf2\game\server;..\..\alliedmodders\hl2sdk-tf2\public\game\server;..\..\alliedmodders\metamod-source\core;..\..\alliedmodders\metamod-source\core\sourcehook;..\..\alliedmodders\metamod-source\public;..\..\alliedmodders\sourcemod\public;..\..\alliedmodders\sourcemod\public\amtl;..\..\alliedmodders\sourcemod\sourcepawn\include;..\..\sm_ext;..\..\versioning;..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SOURCE_ENGINE=11;SOURCE_ENGINE=SE_TF2;SOURCE_ENGINE=TF2;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -195,7 +195,9 @@
       <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_ORANGEBOXVALVE=4 /D SE_LEFT4DEAD=5 /D SE_LEFT4DEAD2=6 /D SE_ALIENSWARM=7 /FS %(AdditionalOptions)</AdditionalOptions>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <DisableSpecificWarnings>4028;4058;4464;4710;4820;4996;5045;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4005;4028;4058;4061;4062;4242;4265;4365;4464;4471;4625;4710;4820;4996;5045;5204;5219;5220;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

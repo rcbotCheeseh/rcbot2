@@ -61,7 +61,7 @@ public:
 
 	void setType (const char *szType );
 
-	inline bool isType ( const char *szType );
+	inline bool isType ( const char *szType ) const;
 
 	inline void setActivator ( edict_t *pEdict ) { m_pActivator = pEdict;}
 

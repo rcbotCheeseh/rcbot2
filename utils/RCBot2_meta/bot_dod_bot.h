@@ -164,7 +164,7 @@ public:
 
 	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true ) override;
 
-	float getArmorPercent () const { return 0.01f * m_pPlayerInfo->GetArmorValue(); }
+	float getArmorPercent () const { return 0.01f * int(m_pPlayerInfo->GetArmorValue()); }
 
 	void getTasks (unsigned int iIgnore) override;
 
@@ -205,7 +205,7 @@ public:
 
 	unsigned int maxEntityIndex ( ) override { return gpGlobals->maxEntities; }
 
-	void seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pKillerWeapon ) override; //TODO: parameters vary and needs fixed [APG]RoboCop[CL]
+	void seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWeapon ) override;
 	void seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *pWeapon ) override;
 
 	bool isVisibleThroughSmoke ( edict_t *pSmoke, edict_t *pCheck );

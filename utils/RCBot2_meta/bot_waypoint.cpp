@@ -2569,7 +2569,7 @@ CWaypoint *CWaypoints :: nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, i
 
 	const CWaypointVisibilityTable *pTable = getVisiblity();
 
-	const auto numwaypoints = static_cast<short>(numWaypoints());
+	const short numwaypoints = static_cast<short>(numWaypoints());
 
 	float finearestdist = 9999.0f;
 	float fjnearestdist = 9999.0f;
