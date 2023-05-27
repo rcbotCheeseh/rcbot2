@@ -1,7 +1,7 @@
 ######### General Settings ########
 #
-# General difficulty of the bots. 0.5 = stock, < 0.5 easier, > 0.5 = harder
-rcbot_skill 0.8
+# General difficulty of the bots. 0.5 = stock, < 0.5 easier, > 0.5 = harder -Broken!
+rcbot_skill 0.8 
 #
 # If set to 1 will make every bot skill and reaction much higher
 rcbot_supermode 0
@@ -13,10 +13,10 @@ rcbot_addbottime 3
 rcbot_ffa 0
 #
 # If 1 , bots will all move forward
-rcbot_dontmove 0
+rcbot_dont_move 0
 #
 # Rate for bots to defend
-rcbot_defrate 0.25
+rcbot_defrate 0.20
 #
 # Smaller number will make bots turn slower (1 = instant turn but may overshoot)
 rcbot_anglespeed 0.25
@@ -27,7 +27,7 @@ rcbot_avoid_radius 80
 # Strength of avoidance (0 = disable)
 rcbot_avoid_strength 100
 #
-# (0 = no smoothing)
+# (0 = no smoothing) -Broken!
 rcbot_aimsmoothing 1
 #
 # Bots change classes at random intervals - Required to prevent DoDS crashes
@@ -54,8 +54,36 @@ rcbot_voice_cmds 1
 # Minimum distance to move objects to
 rcbot_move_dist 800
 #
+# Bots don't shoot the host - useful for testing waypoints
+rcbot_notarget 0
+#
+# Distance for autowaypoints to be placed - useful for adding waypoints
+rcbot_autowpt_dist 150.0
+#
 # Show welcome message on player connect
 rcbot_show_welcome_msg 1
+#
+######## DoDS Settings ########
+#
+# Bots don't capture flags in DOD:S
+rcbot_dontcapture 0
+#
+# Bots will form their own squads via voice commands
+rcbot_bots_form_squads 1
+#
+# Time for bots to do other things if squad leader is idle for a short time
+rcbot_squad_idle_time 3
+#
+# The percentage of time bots make squads with other bots
+rcbot_bot_squads_percent 50
+#
+# If 1 bots only prone in DOD:S when they have an enemy
+rcbot_prone_enemy_only 1
+#
+####### HL2DM Settings #######
+#
+# The distance from an obstacle the bot will jump
+rcbot_jump_obst_dist 80
 #
 ######## TF2 Settings ########
 #
@@ -124,6 +152,7 @@ rcbotd config max_bots 10
 #
 # These plugins conflict and may not work well with RCBot2. Please inform us for any plugins that
 # conflicts or prevents RCBot2 from working in rcbot.bots-united.com
+# The plugins that have been commented are considered greylisted as they aren't guaranteed to work
 sm plugins unload bot_ai.smx
 sm plugins unload bot_nologic.smx
 sm plugins unload bot_playerdestruction_ai.smx
@@ -131,12 +160,20 @@ sm plugins unload bot_rocketjump.smx
 sm plugins unload bot_rocketjump_alt.smx
 sm plugins unload bot_trucefix.smx
 sm plugins unload botmanager.smx
-sm plugins unload ClassRestrictionsForBots.smx
+#sm plugins unload ClassRestrictionsForBots.smx
 sm plugins unload ClassWarfare.smx
 #sm plugins unload GiveBotsCosmetics.smx
 #sm plugins unload GiveBotsWeapons.smx
+#sm plugins unload gscramble.smx
 sm plugins unload tf2items_manager.smx
 sm plugins unload smac_cvars.smx
+sm plugins unload superlogs-tf2.smx
 #
 # This is a TF2 lag bot prevention fix that prevents causing rcbots to crash
 sv_quota_stringcmdspersecond 99999
+#
+# Nosoop's new RCBot2 Logging cvar for monitoring warnings and errors
+# Display logging messages with increasing verbosity (higher number = more messages)
+# Loglevel 2 or below is recommended as having it higher can affect the server's performance
+# and can crash when using `rcbot waypoint save` console command and corrupt the waypoint
+rcbot_loglevel 2
