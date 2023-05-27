@@ -93,10 +93,11 @@ MessageColorizationMode GetMessageColorizationMode() {
 	#elif defined WIN32
 		if (!engine->IsDedicatedServer()) {
 			return Colorize_ClientConsole;
-		} else if (CommandLine()->CheckParm("-console") != nullptr) {
+		}
+		if (CommandLine()->CheckParm("-console") != nullptr) {
 			return Colorize_WinConsole;
 		}
-	#endif
+#endif
 	return Colorize_None;
 }
 

@@ -1075,8 +1075,7 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 		}*/
 
 		*iTries = 0;
-			int iNextState;
-			eyes.x = 0; // nullify pitch / we want yaw only
+		eyes.x = 0; // nullify pitch / we want yaw only
 			AngleVectors(eyes,&forward,&v_right,&v_up);
 		const Vector building = v_src + (forward * 100);
 			//////////////////////////////////////////
@@ -1084,7 +1083,7 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 			// forward
 			CBotGlobals::traceLine(building,building + forward*4096.0,MASK_SOLID_BRUSHONLY,&filter);
 
-			iNextState = 8;
+			int iNextState = 8;
 			float bestfraction = tr->fraction;
 
 			////////////////////////////////////////
@@ -1255,11 +1254,8 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 				removeCondition(CONDITION_COVERT);
 				return 1;
 			}
-			else
-			{
-				tapButton(IN_ATTACK);
-				duck(true);// crouch too
-			}
+			tapButton(IN_ATTACK);
+			duck(true);// crouch too
 
 			// someone blew my sentry before I built it!
 			if ( !hasEngineerBuilt(iObject) )
@@ -1327,8 +1323,8 @@ bool CBotTF2 :: needAmmo()
 
 			if ( ( m_pSentryGun.get() == nullptr) || (CClassInterface::getTF2UpgradeLevel(m_pSentryGun) < 3) )
 				return ( iMetal < 200 ); // need 200 to upgrade sentry
-			else
-				return iMetal < 125; // need 125 for other stuff (e.g. teleporters)
+			return iMetal < 125;
+			// need 125 for other stuff (e.g. teleporters)
 		}
 	}
 	else if ( getClass() == TF_CLASS_SOLDIER )
@@ -2569,7 +2565,7 @@ bool CBotTF2 :: canGotoWaypoint (Vector vPrevWaypoint, CWaypoint *pWaypoint, CWa
 
 		return true;
 	}
-	else if ( pWaypoint->hasFlag(CWaypointTypes::W_FL_FALL) )
+	if ( pWaypoint->hasFlag(CWaypointTypes::W_FL_FALL) )
 	{
 		return ( getClass() == TF_CLASS_SCOUT );
 	}
@@ -2607,7 +2603,7 @@ bool CBotFortress:: wantToUnCloak ()
 		// hopefully the enemy can't see me
 		if ( CBotGlobals::isAlivePlayer(m_pEnemy) && ( std::fabs(CBotGlobals::yawAngleFromEdict(m_pEnemy,getOrigin())) > bot_spyknifefov.GetFloat() ) ) 
 			return true;
-		else if ( !m_pEnemy || !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) )
+		if ( !m_pEnemy || !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) )
 			return (m_fCurrentDanger < 1.0f);
 	}
 
@@ -3437,7 +3433,7 @@ bool CBotTF2:: wantToListenToPlayerAttack ( edict_t *pPlayer, int iWeaponID )
 			// don't listen to engis upgrading stuff
 			if ( !strcmp("wrench",&szWeaponClassname[10]) )
 				return false;
-			else if ( !strcmp("builder",&szWeaponClassname[10]) )
+			if ( !strcmp("builder",&szWeaponClassname[10]) )
 				return false;
 		}
 		break;
@@ -3532,15 +3528,15 @@ bool CBotTF2 :: wantToFollowEnemy()
 
 	if (CTeamFortress2Mod::isLosingTeam(CTeamFortress2Mod::getEnemyTeam(m_iTeam)))
 		return true;
-	else if ((m_iClass == TF_CLASS_SCOUT) && ((CClassInterface::getTF2Conditions(m_pEdict)&TF2_PLAYER_BONKED) == TF2_PLAYER_BONKED))
+	if ((m_iClass == TF_CLASS_SCOUT) && ((CClassInterface::getTF2Conditions(m_pEdict)&TF2_PLAYER_BONKED) == TF2_PLAYER_BONKED))
 		return false; // currently can't shoot 
-	else if ( !wantToInvestigateSound() ) // maybe capturing point right now
+	if ( !wantToInvestigateSound() ) // maybe capturing point right now
 		return false;
-	else if ( (pEnemy != nullptr) && CBotGlobals::isPlayer(pEnemy) && CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict) && (m_iClass != TF_CLASS_MEDIC) )
+	if ( (pEnemy != nullptr) && CBotGlobals::isPlayer(pEnemy) && CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pEdict) && (m_iClass != TF_CLASS_MEDIC) )
 		return true; // I am ubered  GO!!!
-	else if ( (pEnemy != nullptr) && CBotGlobals::isPlayer(pEnemy) && CTeamFortress2Mod::TF2_IsPlayerInvuln(pEnemy) )
+	if ( (pEnemy != nullptr) && CBotGlobals::isPlayer(pEnemy) && CTeamFortress2Mod::TF2_IsPlayerInvuln(pEnemy) )
 		return false; // Enemy is UBERED  -- don't follow
-	else if ( (m_iCurrentDefendArea != 0) && (pEnemy != nullptr) && CTeamFortress2Mod::isMapType(TF_MAP_CP) && (CTeamFortress2Mod::m_ObjectiveResource.GetNumControlPoints() > 0) )
+	if ( (m_iCurrentDefendArea != 0) && (pEnemy != nullptr) && CTeamFortress2Mod::isMapType(TF_MAP_CP) && (CTeamFortress2Mod::m_ObjectiveResource.GetNumControlPoints() > 0) )
 	{
 		const Vector vDefend = CTeamFortress2Mod::m_ObjectiveResource.GetCPPosition(CTeamFortress2Mod::m_ObjectiveResource.m_WaypointAreaToIndexTranslation[m_iCurrentDefendArea]);
 
@@ -3602,18 +3598,19 @@ bool CBotFortress :: wantToFollowEnemy ()
         return false;
     if ( m_iClass == TF_CLASS_SCOUT )
         return false;
-	else if ( (m_iClass == TF_CLASS_MEDIC) && m_pHeal )
+	if ( (m_iClass == TF_CLASS_MEDIC) && m_pHeal )
 		return false;
-    else if ( (m_iClass == TF_CLASS_SPY) && isDisguised() ) // sneak around the enemy
-        return true;
-	else if ( (m_iClass == TF_CLASS_SNIPER) && (distanceFrom(m_pLastEnemy)>CWaypointLocations::REACHABLE_RANGE) )
+	if ( (m_iClass == TF_CLASS_SPY) && isDisguised() ) // sneak around the enemy
+		return true;
+	if ( (m_iClass == TF_CLASS_SNIPER) && (distanceFrom(m_pLastEnemy)>CWaypointLocations::REACHABLE_RANGE) )
 		return false; // don't bother!
-	else if ( CBotGlobals::isPlayer(m_pLastEnemy) && (CClassInterface::getTF2Class(m_pLastEnemy) == TF_CLASS_SPY) && (thinkSpyIsEnemy(m_pLastEnemy,CTeamFortress2Mod::getSpyDisguise(m_pLastEnemy))) )
-        return true; // always find spies!
-	else if ( CTeamFortress2Mod::isFlagCarrier(m_pLastEnemy) )
+	if ( CBotGlobals::isPlayer(m_pLastEnemy) && (CClassInterface::getTF2Class(m_pLastEnemy) == TF_CLASS_SPY) && (thinkSpyIsEnemy(m_pLastEnemy,CTeamFortress2Mod::getSpyDisguise(m_pLastEnemy))) )
+		return true; // always find spies!
+	if ( CTeamFortress2Mod::isFlagCarrier(m_pLastEnemy) )
 		return true; // follow flag carriers to the death
-	else if ( m_iClass == TF_CLASS_ENGINEER )
-		return false; // have work to do
+	if ( m_iClass == TF_CLASS_ENGINEER )
+		return false;
+	// have work to do
     
 	return CBot::wantToFollowEnemy();
 }
@@ -3679,9 +3676,9 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam ) const
 	
 	float fTotal = 0.0f;
 
-	for (const int availableClasses : availableClasses) //TODO: Improve for loop, replace it with std::accumulate ? [APG]RoboCop[CL]
+	for (const int availableClass : availableClasses) //TODO: Improve for loop, replace it with std::accumulate ? [APG]RoboCop[CL]
 	{
-		fTotal += m_fClassDisguiseFitness[availableClasses];
+		fTotal += m_fClassDisguiseFitness[availableClass];
 	}
 
 	if ( fTotal > 0 )
@@ -3690,12 +3687,12 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam ) const
 
 		fTotal = 0.0f;
 
-		for (const int availableClasse : availableClasses)
+		for (const int availableClass : availableClasses)
 		{
-			fTotal += m_fClassDisguiseFitness[availableClasse];
+			fTotal += m_fClassDisguiseFitness[availableClass];
 
 			if ( fRand <= fTotal )
-				return availableClasse;
+				return availableClass;
 		}
 
 	}
@@ -5048,7 +5045,7 @@ bool CBotTF2::lookAfterBuildings ( float *fTime )
 
 	if ( !pWeapon )
 		return false;
-	else if ( pWeapon->getID() != TF2_WEAPON_WRENCH )
+	if ( pWeapon->getID() != TF2_WEAPON_WRENCH )
 	{
 		if ( !select_CWeapon(CWeapons::getWeapon(TF2_WEAPON_WRENCH)) )
 			return false;
@@ -5139,8 +5136,7 @@ bool CBotTF2 :: selectBotWeapon ( CBotWeapon *pBotWeapon )
 
 		return false;
 	}
-	else
-		failWeaponSelect();
+	failWeaponSelect();
 
 	return false;
 }
@@ -5398,8 +5394,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 									newSched->addTask(spam);
 									return true;
 								}
-								else
-									delete spam;
+								delete spam;
 							}
 						}
 
@@ -5598,21 +5593,22 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 				m_iSentryArea = pWaypoint->getArea();
 				return true;
 			}
-			else
-				m_iLastFailSentryWpt = -1;
+			m_iLastFailSentryWpt = -1;
 			break;
 		case BOT_UTIL_BACKSTAB:
-			if ( m_pEnemy  && CBotGlobals::isAlivePlayer(m_pEnemy) )
 			{
-				m_pSchedules->add(new CBotBackstabSched(m_pEnemy));
-				return true;
+				if ( m_pEnemy  && CBotGlobals::isAlivePlayer(m_pEnemy) )
+				{
+					m_pSchedules->add(new CBotBackstabSched(m_pEnemy));
+					return true;
+				}
+				if ( m_pLastEnemy &&  CBotGlobals::isAlivePlayer(m_pLastEnemy) )
+				{
+					m_pSchedules->add(new CBotBackstabSched(m_pLastEnemy));
+					return true;
+				}
 			}
-			else if ( m_pLastEnemy &&  CBotGlobals::isAlivePlayer(m_pLastEnemy) )
-			{
-				m_pSchedules->add(new CBotBackstabSched(m_pLastEnemy));
-				return true;
-			}
-			
+
 			break;
 		case  BOT_UTIL_REMOVE_TMTELE_SAPPER:
 			updateCondition(CONDITION_PARANOID);
@@ -7383,17 +7379,14 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 			{
 				return false;
 			}
-			else
-			{
-				if ( bIsPipeBomb && !pWeapon->canDestroyPipeBombs() )
-					return false;
-				else if ( bIsRocket && !pWeapon->canDeflectRockets() )
-					return false;
-				else if ( bIsGrenade && !pWeapon->canDeflectRockets() )
-					return false;
-				else if ( bIsBoss && pWeapon->isMelee() )
-					return false;
-			}
+			if ( bIsPipeBomb && !pWeapon->canDestroyPipeBombs() )
+				return false;
+			if ( bIsRocket && !pWeapon->canDeflectRockets() )
+				return false;
+			if ( bIsGrenade && !pWeapon->canDeflectRockets() )
+				return false;
+			if ( bIsBoss && pWeapon->isMelee() )
+				return false;
 		}
 
 		return true;
@@ -7473,22 +7466,19 @@ void CBotTF2::MannVsMachineAlarmTriggered(Vector vLoc)
 			{
 				return;
 			}
-			else
+			if ((m_fLastSentryEnemyTime + 5.0f) > engine->Time())
 			{
-				if ((m_fLastSentryEnemyTime + 5.0f) > engine->Time())
+				const CWaypoint *pWaypoint = CTeamFortress2Mod::getBestWaypointMVM(this, CWaypointTypes::W_FL_SENTRY);
+
+				const Vector vSentry = CBotGlobals::entityOrigin(pSentry);
+
+				const float fDist = pWaypoint->distanceFrom(vSentry);
+
+				if (fDist > 1024.0f)
 				{
-					const CWaypoint *pWaypoint = CTeamFortress2Mod::getBestWaypointMVM(this, CWaypointTypes::W_FL_SENTRY);
-
-					const Vector vSentry = CBotGlobals::entityOrigin(pSentry);
-
-					const float fDist = pWaypoint->distanceFrom(vSentry);
-
-					if (fDist > 1024.0f)
-					{
-						// move sentry
-						m_iSentryKills = 0;
-						m_fSentryPlaceTime = 1.0f;
-					}
+					// move sentry
+					m_iSentryKills = 0;
+					m_fSentryPlaceTime = 1.0f;
 				}
 			}
 

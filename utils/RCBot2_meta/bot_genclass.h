@@ -684,8 +684,7 @@ class dataUnconstArray
 					it = array.erase(it);
 					return;
 				}
-				else
-					++ it;
+				++ it;
 			}
 #endif
 		}

@@ -434,7 +434,11 @@ public:
 	static void clientDebugMsg ( int iLev, const char *szMsg, CBot *pBot = nullptr);
 	static void clientDebugMsg(CBot *pBot, int iLev, const char *fmt, ... );
 	static CClient *findClientBySteamID (const char* szSteamID);
-	static edict_t *getListenServerClient() { if ( m_pListenServerClient ) return m_pListenServerClient->getPlayer(); else return nullptr; }
+	static edict_t *getListenServerClient()
+	{
+		if ( m_pListenServerClient ) return m_pListenServerClient->getPlayer();
+		return nullptr;
+	}
 
 	static void initall () { for ( int i = 0; i < MAX_PLAYERS; i ++ ) { m_Clients[i].init(); } }
 	static void giveMessage (const char* msg, float fTime = 0.1f, edict_t* pPlayer = nullptr);// NULL to everyone

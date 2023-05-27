@@ -264,12 +264,11 @@ void RCBotPluginMeta::BroadcastTextMessage(const char *szMessage)
 
 	CClientBroadcastRecipientFilter *filter = new CClientBroadcastRecipientFilter();
 
-	bf_write *buf;
 	if (say > 0) {
 		char chatline[128];
 		snprintf(chatline, sizeof(chatline), "\x01\x04[RCBot2]\x01 %s\n", szMessage);
 
-		buf = engine->UserMessageBegin(filter, say);
+		bf_write* buf = engine->UserMessageBegin(filter, say);
 		buf->WriteString(chatline);
 		engine->MessageEnd();
 	}
@@ -401,8 +400,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 	if (fp)
 		kvl.parseFile(fp);
-
-	// ReSharper disable once CppRedundantCastExpression
+	
 	void *gameServerFactory = reinterpret_cast<void*>(ismm->GetServerFactory(false));
 
 	int val;
@@ -546,7 +544,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 bool RCBotPluginMeta::FireGameEvent(IGameEvent * pevent, bool bDontBroadcast)
 {
-	CBotEvents::executeEvent((void*)pevent,TYPE_IGAMEEVENT);
+	CBotEvents::executeEvent(pevent,TYPE_IGAMEEVENT);
 
 	RETURN_META_VALUE(MRES_IGNORED, true);
 }
@@ -691,7 +689,7 @@ void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 
 		RETURN_META(MRES_SUPERCEDE);
 	}
-	else if ( strncmp(pcmd,"menuselect",10) == 0 ) // menu command
+	if ( strncmp(pcmd,"menuselect",10) == 0 ) // menu command
 	{
 		if ( pClient->isUsingMenu() )
 		{
@@ -787,11 +785,10 @@ void RCBotPluginMeta::Hook_GameFrame(bool simulating)
 	 * false | game is not ticking
 	 */
 
-	static CBotMod *currentmod;
-
 	if ( simulating && CBotGlobals::IsMapRunning() )
 	{
-							 
+		static CBotMod *currentmod;
+
 		CBots::botThink();
 		CClients::clientThink();
 

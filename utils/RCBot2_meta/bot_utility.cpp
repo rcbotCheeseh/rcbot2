@@ -215,12 +215,9 @@ void CBotUtilities::execute()
 								m_pBest.head = pnew;
 								break;
 							}
-							else
-							{
-								prev->next = pnew;
-								pnew->next = temp;
-								break;
-							}
+							prev->next = pnew;
+							pnew->next = temp;
+							break;
 						}
 
 						prev = temp;

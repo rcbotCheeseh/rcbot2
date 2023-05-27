@@ -854,7 +854,7 @@ void CTF2PointStartCapture :: execute ( IBotEventInterface *pEvent )
 
 		while ( cappers[i] != 0 )
 		{
-			CTeamFortress2Mod::addCapper(capindex,(int)cappers[i]);
+			CTeamFortress2Mod::addCapper(capindex,cappers[i]);
 			i++;
 		}
 	}

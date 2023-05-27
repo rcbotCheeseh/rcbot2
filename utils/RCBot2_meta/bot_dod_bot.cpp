@@ -135,11 +135,11 @@ bool CDODBot::canGotoWaypoint(Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypo
 		{
 			return false;
 		}
-		else if ( (m_iTeam == TEAM_AXIS) && pWaypoint->hasFlag(CWaypointTypes::W_FL_NOAXIS) )
+		if ( (m_iTeam == TEAM_AXIS) && pWaypoint->hasFlag(CWaypointTypes::W_FL_NOAXIS) )
 		{
 			return false;
 		}
-		else if ( pWaypoint->hasFlag(CWaypointTypes::W_FL_BREAKABLE) )
+		if ( pWaypoint->hasFlag(CWaypointTypes::W_FL_BREAKABLE) )
 		{
 			edict_t *pBreakable = CDODMod::getBreakable(pWaypoint);
 
@@ -166,8 +166,8 @@ bool CDODBot::canGotoWaypoint(Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypo
 
 				return false;
 			}
-			else // entity invalid -- maybe blown up and freed by engine
-				return true;
+			// entity invalid -- maybe blown up and freed by engine
+			return true;
 		}
 
 		return true;
@@ -810,7 +810,7 @@ bool CDODBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 					return (distanceFrom(pEdict) > BLAST_RADIUS) && m_pWeapons->hasExplosives();
 				}
 				//else if ( (m_fLastSeeEnemy + 5.0f) > engine->Time() )
-				else if ( DotProductFromOrigin(CBotGlobals::entityOrigin(pEdict)) > rcbot_shoot_breakable_cos.GetFloat() )
+				if ( DotProductFromOrigin(CBotGlobals::entityOrigin(pEdict)) > rcbot_shoot_breakable_cos.GetFloat() )
 					return ((m_fLastSeeEnemyPlayer+3.0f) < engine->Time()) && (distanceFrom(pEdict) < rcbot_shoot_breakable_dist.GetFloat()) && (CClassInterface::getPlayerHealth(pEdict) > 0);
 			}
 		}
@@ -1514,7 +1514,7 @@ void CDODBot :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
 
 						break;
 					}
-					else if ( randomFloat(0.0f,1.0f) < 0.8f )
+					if ( randomFloat(0.0f,1.0f) < 0.8f )
 						addVoiceCommand(DOD_VC_NO);
 				}
 				else if ( randomFloat(0.0f,1.0f) < 0.6f )
@@ -2873,80 +2873,77 @@ bool CDODBot :: handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy )
 
 				return false;
 			}
-			else
+			fDelay = randomFloat(0.05f,0.2f);
+
+			removeCondition(CONDITION_NEED_AMMO);
+
+			if ( !hasSomeConditions(CONDITION_RUN) )
+				stopMoving();
+
+			if ( pWeapon->needsDeployedOrZoomed() ) // && pWeapon->getID() ==...
 			{
-				fDelay = randomFloat(0.05f,0.2f);
+				//stopMoving();
 
-				removeCondition(CONDITION_NEED_AMMO);
-
-				if ( !hasSomeConditions(CONDITION_RUN) )
-					stopMoving();
-
-				if ( pWeapon->needsDeployedOrZoomed() ) // && pWeapon->getID() ==...
+				if ( pWeapon->isZoomable() ) 
 				{
-					//stopMoving();
-
-					if ( pWeapon->isZoomable() ) 
+					if ( !CClassInterface::isSniperWeaponZoomed(pWeaponEdict) )
+						bAttack = false;
+					else
+						fDelay = randomFloat(0.5f,1.0f);
+				}
+				else if ( pWeapon->isDeployable() ) 
+				{
+					if ( pWeapon->isExplosive() )
+						bAttack = CClassInterface::isRocketDeployed(pWeaponEdict);
+					else
 					{
-						if ( !CClassInterface::isSniperWeaponZoomed(pWeaponEdict) )
-							bAttack = false;
-						else
-							fDelay = randomFloat(0.5f,1.0f);
-					}
-					else if ( pWeapon->isDeployable() ) 
-					{
-						if ( pWeapon->isExplosive() )
-							bAttack = CClassInterface::isRocketDeployed(pWeaponEdict);
-						else
-						{
-							bAttack = CClassInterface::isMachineGunDeployed(pWeaponEdict);
-						}
-
-						if ( !bAttack )
-							fDelay = randomFloat(0.7f,1.2f);
-						//else
-						//	fDelay = 0;
+						bAttack = CClassInterface::isMachineGunDeployed(pWeaponEdict);
 					}
 
-					if ( !bAttack && (m_fZoomOrDeployTime < engine->Time()) )
+					if ( !bAttack )
+						fDelay = randomFloat(0.7f,1.2f);
+					//else
+					//	fDelay = 0;
+				}
+
+				if ( !bAttack && (m_fZoomOrDeployTime < engine->Time()) )
+				{
+					secondaryAttack(); // deploy / zoom
+					m_fZoomOrDeployTime = engine->Time() + randomFloat(0.5f,1.0f);
+				}
+			} 
+			else if ( pWeapon->isDeployable() )
+			{
+				if ( pWeapon->hasHighRecoil() && !CClassInterface::isMachineGunDeployed(pWeaponEdict) )
+				{
+					if ( m_fZoomOrDeployTime < engine->Time() )
 					{
 						secondaryAttack(); // deploy / zoom
 						m_fZoomOrDeployTime = engine->Time() + randomFloat(0.5f,1.0f);
 					}
-				} 
-				else if ( pWeapon->isDeployable() )
-				{
-					if ( pWeapon->hasHighRecoil() && !CClassInterface::isMachineGunDeployed(pWeaponEdict) )
+
+					// not deployed for a while -- go prone to deploy
+					if ( !hasSomeConditions(CONDITION_RUN) && (m_fDeployMachineGunTime + 1.0f) < engine->Time() )
 					{
-						if ( m_fZoomOrDeployTime < engine->Time() )
-						{
-							secondaryAttack(); // deploy / zoom
-							m_fZoomOrDeployTime = engine->Time() + randomFloat(0.5f,1.0f);
-						}
+						// go prone
+						prone();
 
-						// not deployed for a while -- go prone to deploy
-						if ( !hasSomeConditions(CONDITION_RUN) && (m_fDeployMachineGunTime + 1.0f) < engine->Time() )
-						{
-							// go prone
-							prone();
-
-							if ( fDist > 400.0f )
-								return true; // keep enemy but don't shoot yet
-						}
-
-						fDelay = randomFloat(0.7f,1.2f);
+						if ( fDist > 400.0f )
+							return true; // keep enemy but don't shoot yet
 					}
+
+					fDelay = randomFloat(0.7f,1.2f);
 				}
-				else if ( ((pWeapon->getID()==DOD_WEAPON_GARAND)||(pWeapon->getID()==DOD_WEAPON_K98)) && ( distanceFrom(pEnemy) > 1000 ))
+			}
+			else if ( ((pWeapon->getID()==DOD_WEAPON_GARAND)||(pWeapon->getID()==DOD_WEAPON_K98)) && ( distanceFrom(pEnemy) > 1000 ))
+			{
+				if ( !CClassInterface::isK98Zoomed(pWeaponEdict) && !CClassInterface::isGarandZoomed(pWeaponEdict) )
 				{
-					if ( !CClassInterface::isK98Zoomed(pWeaponEdict) && !CClassInterface::isGarandZoomed(pWeaponEdict) )
+					if ( m_fZoomOrDeployTime < engine->Time() )
 					{
-						if ( m_fZoomOrDeployTime < engine->Time() )
-						{
-							secondaryAttack(); // deploy / zoom
-							m_fZoomOrDeployTime = engine->Time() + randomFloat(0.1f,0.2f);
-							fDelay = randomFloat(0.2f,0.4f);
-						}
+						secondaryAttack(); // deploy / zoom
+						m_fZoomOrDeployTime = engine->Time() + randomFloat(0.1f,0.2f);
+						fDelay = randomFloat(0.2f,0.4f);
 					}
 				}
 			}
@@ -3347,8 +3344,7 @@ bool CDODBot :: selectBotWeapon ( CBotWeapon *pBotWeapon )
 
 		return true;
 	}
-	else
-		failWeaponSelect();
+	failWeaponSelect();
 
 	return false;
 }

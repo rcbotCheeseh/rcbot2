@@ -324,8 +324,5 @@ edict_t *CCounterStrikeSourceMod::getRandomHostage()
     {   
         return INDEXENT(temp.at(randomInt(0, temp.size() - 1)).GetEntryIndex());
     }
-    else
-    {
-        return nullptr;
-    }
+    return nullptr;
 }

@@ -81,8 +81,7 @@ CBotCommandInline ControlCommand("control", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATE
 		return COMMAND_ACCESSED;
 
 	}
-	else
-		return COMMAND_ERROR;
+	return COMMAND_ERROR;
 });
 
 CBotCommandInline AddBotCommand("addbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED, [](CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5)

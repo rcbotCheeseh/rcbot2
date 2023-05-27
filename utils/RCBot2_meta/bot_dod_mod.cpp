@@ -940,7 +940,7 @@ bool CDODMod :: isBreakableRegistered ( edict_t *pBreakable, int iTeam )
 
 			if ( pWpt->hasFlag(CWaypointTypes::W_FL_NOALLIES) )
 				return iTeam != TEAM_ALLIES;
-			else if ( pWpt->hasFlag(CWaypointTypes::W_FL_NOAXIS) )
+			if ( pWpt->hasFlag(CWaypointTypes::W_FL_NOAXIS) )
 				return iTeam != TEAM_AXIS;
 
 			return true;

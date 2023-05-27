@@ -873,8 +873,7 @@ void CClient :: think ()
 									
 									break;
 								}
-								else
-									continue;
+								continue;
 							}
 						}
 						
@@ -1200,7 +1199,7 @@ bool CClients :: clientsDebugging (int iLev)
 {
 	if ( iLev == 0 )
 		return m_bClientsDebugging;
-	else if ( m_bClientsDebugging )
+	if ( m_bClientsDebugging )
 	{
 		for ( int i = 0; i < MAX_PLAYERS; i ++ )
 		{

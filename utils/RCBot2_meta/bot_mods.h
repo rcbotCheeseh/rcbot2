@@ -965,7 +965,7 @@ public:
 			*vec = m_vFlagLocationBlue;
 			return m_bFlagLocationValidBlue;
 		}
-		else if ( iTeam == TF2_TEAM_RED )
+		if ( iTeam == TF2_TEAM_RED )
 		{
 			*vec = m_vFlagLocationRed;
 			return m_bFlagLocationValidRed;
@@ -1028,7 +1028,7 @@ public:
 	{
 		if ( iTeam == TF2_TEAM_BLUE )
 			return m_pFlagCarrierBlue;
-		else if ( iTeam == TF2_TEAM_RED )
+		if ( iTeam == TF2_TEAM_RED )
 			return m_pFlagCarrierRed;
 
 		return nullptr;
@@ -1038,7 +1038,7 @@ public:
 	{
 		if ( iTeam == TF2_TEAM_BLUE )
 			return m_pFlagCarrierBlue != nullptr;
-		else if ( iTeam == TF2_TEAM_RED )
+		if ( iTeam == TF2_TEAM_RED )
 			return m_pFlagCarrierRed != nullptr;
 
 		return false;

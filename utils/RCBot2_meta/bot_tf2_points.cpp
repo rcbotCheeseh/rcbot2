@@ -476,34 +476,32 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 						arr[i].bValid = true;
 						continue;
 					}
+					bool bEnemyCanCap = true;
+
+					for ( int j = 0; j < MAX_PREVIOUS_POINTS; j ++ )
+					{
+						// need to go through each previous point to update the array
+						// DONT BREAK!!!
+						prev = GetPreviousPointForPoint(i,other,j);
+						arr[i].iPrev[j] = prev;
+
+						if ( prev == -1 )
+							continue;
+						if ( GetOwningTeam(prev) != other )
+							bEnemyCanCap = false;
+					}
+
+					if ( !bEnemyCanCap )
+					{
+						arr[i].bPrev = true;	
+						arr[i].bValid = false;
+						// Check later by checking prev points
+					}
 					else
 					{
-						bool bEnemyCanCap = true;
-
-						for ( int j = 0; j < MAX_PREVIOUS_POINTS; j ++ )
-						{
-							// need to go through each previous point to update the array
-							// DONT BREAK!!!
-							prev = GetPreviousPointForPoint(i,other,j);
-							arr[i].iPrev[j] = prev;
-
-							if ( prev == -1 )
-								continue;
-							else if ( GetOwningTeam(prev) != other )
-								bEnemyCanCap = false;
-						}
-
-						if ( !bEnemyCanCap )
-						{
-							arr[i].bPrev = true;	
-							arr[i].bValid = false;
-							// Check later by checking prev points
-						}
-						else
-						{
-							arr[i].bValid = true;
-						}
-						/*
+						arr[i].bValid = true;
+					}
+					/*
 						// other team has captured previous points
 						if ( j == 3 )
 						{
@@ -513,7 +511,6 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 						else
 						{
 							continue;*/
-					}						
 				}
 				else
 				{
@@ -844,7 +841,7 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 
 							if ( prev == -1 )
 								continue;
-							else if ( GetOwningTeam(prev) != team )
+							if ( GetOwningTeam(prev) != team )
 								bCanCap = false;
 						}
 
@@ -898,7 +895,7 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 						
 							continue;
 						}
-						else if ( basepoint == *m_iNumControlPoints-1 )
+						if ( basepoint == *m_iNumControlPoints-1 )
 						{
 							bool allowned = true;
 							// make sure team owns all points below this point
@@ -916,7 +913,6 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 
 							continue;
 						}
-
 					}
 
 					arr[i].bValid  = true;

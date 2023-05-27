@@ -434,11 +434,8 @@ bool CBot :: FVisible ( edict_t *pEdict, bool bCheckHead )
 				updateCondition(CONDITION_SEE_ENEMY_GROUND);
 				return true;
 			}
-			else
-			{
-				removeCondition(CONDITION_SEE_ENEMY_GROUND);
-				return false;
-			}
+			removeCondition(CONDITION_SEE_ENEMY_GROUND);
+			return false;
 		}
 
 		return FVisible(vOrigin,pEdict);
@@ -1252,7 +1249,7 @@ bool CBot :: canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWayp
 		{
 			return pPrev->isPathOpened(pWaypoint->getOrigin());
 		}
-		else if ( vPrevWaypoint != pWaypoint->getOrigin() && !CBotGlobals::checkOpensLater(vPrevWaypoint,pWaypoint->getOrigin()) )
+		if ( vPrevWaypoint != pWaypoint->getOrigin() && !CBotGlobals::checkOpensLater(vPrevWaypoint,pWaypoint->getOrigin()) )
 			return false;
 	}
 
@@ -2700,7 +2697,7 @@ void CBot :: getLookAtVector ()
 				setLookAtTask(LOOK_ENEMY);
 				return;
 			}
-			else if ( !m_bListenPositionValid || m_fListenTime < engine->Time() ) // already listening to something ?
+			if ( !m_bListenPositionValid || m_fListenTime < engine->Time() ) // already listening to something ?
 			{
 				setLookAtTask(LOOK_WAYPOINT);
 				return;

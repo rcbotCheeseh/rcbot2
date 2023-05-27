@@ -175,7 +175,11 @@ public:
 	bool hasFlag ( int iFlag ) const { return (m_iFlags & iFlag) == iFlag; }
 	void removeFlag ( int iFlag ) { m_iFlags &= ~iFlag; }
 	/////////////////////////////////////////////////////////
-	int getParent () const { if ( hasFlag(FL_ASTAR_PARENT) ) return m_iParent; else return -1; }
+	int getParent () const
+	{
+		if ( hasFlag(FL_ASTAR_PARENT) ) return m_iParent;
+		return -1;
+	}
 
 	void setParent ( short int iParent ) 
 	{ 

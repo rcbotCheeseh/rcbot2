@@ -78,8 +78,8 @@ bool CSynergyMod::IsEntityLocked(edict_t *pEntity)
     const int value = *reinterpret_cast<int*>(reinterpret_cast<char*>(pBaseEntity) + offset);
     if(value == 1)
         return true; // Locked
-    else
-        return false; // Unlocked
+    return false;
+    // Unlocked
 }
 
 /**

@@ -454,9 +454,8 @@ float CTeamFortress2Mod :: TF2_GetPlayerSpeed(edict_t *pPlayer, TF_Class iClass 
 	if ( fSpeed == 0.0f )
 	{
 		if (TF2_IsPlayerSlowed(pPlayer)) 
-			return 30.0f; 
-		else 
-			return TF2_GetClassSpeed(iClass) * 1.58f; 
+			return 30.0f;
+		return TF2_GetClassSpeed(iClass) * 1.58f;
 	}
 
 	return fSpeed;
@@ -702,8 +701,7 @@ bool CTeamFortress2Mod::canTeamPickupFlag_SD(int iTeam,bool bGetUnknown)
 	{
 		if ( bGetUnknown )
 			return m_iFlagCarrierTeam==iTeam;
-		else
-			return m_iFlagCarrierTeam==0;
+		return m_iFlagCarrierTeam==0;
 	}
 
 	return false;
@@ -715,7 +713,7 @@ bool CTeamFortress2Mod::getFlagLocation ( int iTeam, Vector *vec )
 	{
 		return true;
 	}
-	else if ( hasRoundStarted() && isFlagCarried(iTeam) )
+	if ( hasRoundStarted() && isFlagCarried(iTeam) )
 	{
 		*vec = CBotGlobals::entityOrigin(getFlagCarrier(iTeam));
 		return true;
@@ -846,14 +844,13 @@ CWaypoint *CTeamFortress2Mod :: getBestWaypointMVM ( CBot *pBot, int iFlags )
 	{
 		if ( m_bMVMAlarmSounded )
 			return CWaypoints::randomWaypointGoalNearestArea(iFlags,TF2_TEAM_RED,0,false,pBot,true,&m_vMVMCapturePoint,-1,true,m_iCapturePointWptID);
-		else if (m_pNearestTankBoss.get() != nullptr && m_fNearestTankDistance < vFlagLocation.DistTo(m_vMVMCapturePoint))
+		if (m_pNearestTankBoss.get() != nullptr && m_fNearestTankDistance < vFlagLocation.DistTo(m_vMVMCapturePoint))
 			return CWaypoints::randomWaypointGoalBetweenArea(iFlags, TF2_TEAM_RED, 0, false, pBot, true, &m_vNearestTankLocation, &m_vMVMCapturePoint, true, -1, m_iCapturePointWptID);
-		else if ( (m_vMVMFlagStart-vFlagLocation).Length()<1024.0f )
+		if ( (m_vMVMFlagStart-vFlagLocation).Length()<1024.0f )
 			return CWaypoints::randomWaypointGoalNearestArea(iFlags,TF2_TEAM_RED,0,false,pBot,true,&vFlagLocation,-1,true);
-		else 
-			return CWaypoints::randomWaypointGoalBetweenArea(iFlags,TF2_TEAM_RED,0,false,pBot,true,&vFlagLocation,&m_vMVMCapturePoint,true,-1,m_iCapturePointWptID);
+		return CWaypoints::randomWaypointGoalBetweenArea(iFlags,TF2_TEAM_RED,0,false,pBot,true,&vFlagLocation,&m_vMVMCapturePoint,true,-1,m_iCapturePointWptID);
 	}
-	else if ( bFlagLocationValid )
+	if ( bFlagLocationValid )
 	{
 		return CWaypoints::randomWaypointGoalNearestArea(iFlags,TF2_TEAM_RED,0,false,pBot,true,&vFlagLocation,-1,true,m_iFlagPointWptID);
 	}
@@ -1194,7 +1191,7 @@ void CTeamFortress2Mod::updatePointMaster()
 			const size_t baseEntityOffset = servertools->GetEntityFactoryDictionary()->FindFactory("simple_physics_brush")->GetEntitySize();
 
 			const uintptr_t pMasterMembers = reinterpret_cast<uintptr_t>(servergameents->EdictToBaseEntity(pMaster)) + baseEntityOffset;
-			m_PointMaster = (CTeamControlPointMaster*)pMasterMembers;
+			m_PointMaster = reinterpret_cast<CTeamControlPointMaster*>(pMasterMembers);
 			m_PointMasterResource = pMaster;
 			
 			logger->Log(LogLevel::INFO, "Computed point master offset %d", baseEntityOffset);
@@ -1260,7 +1257,7 @@ edict_t *CTeamFortress2Mod :: getPayloadBomb ( int team )
 {
 	if ( team == TF2_TEAM_BLUE )
 		return m_pPayLoadBombBlue;
-	else if ( team == TF2_TEAM_RED )
+	if ( team == TF2_TEAM_RED )
 		return m_pPayLoadBombRed;
 
 	return nullptr;

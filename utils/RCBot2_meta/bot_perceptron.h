@@ -69,7 +69,7 @@ public:
 
 	CNeuron (unsigned short int iInputs);
 
-	~CNeuron() { if ( m_inputs ) delete[] m_inputs; if ( m_weights ) delete[] m_weights; }
+	~CNeuron() { /*if ( m_inputs )*/ delete[] m_inputs; /*if ( m_weights )*/ delete[] m_weights; }
 
 	void setWeights ( ga_nn_value *weights );
 
@@ -301,7 +301,7 @@ public:
 
 	~CBotNeuralNet ()
 	{
-		if ( m_pOutputs )
+		//if ( m_pOutputs )
 			delete [] m_pOutputs;
 		//if ( m_transferFunction )
 		//	delete m_transferFunction;

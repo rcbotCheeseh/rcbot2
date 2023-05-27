@@ -65,7 +65,7 @@ void CWaypointVisibilityTable::workVisibility()
 			{
 				if (m_fNextShowMessageTime < engine->Time())
 				{
-					const int percent = static_cast<int>(static_cast<float>(iCurFrom) / iSize * 100);
+					const int percent = iCurFrom / iSize * 100;
 
 					if (m_iPrevPercent != percent)
 					{

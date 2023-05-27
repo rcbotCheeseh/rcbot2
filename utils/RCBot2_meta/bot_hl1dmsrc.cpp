@@ -90,11 +90,11 @@ bool CHL1DMSrcBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 		{
 			if ( strcmp(cname,"monster_barney") == 0 )
 				return false;
-			else if ( strcmp(cname,"monster_scientist") == 0 )
+			if ( strcmp(cname,"monster_scientist") == 0 )
 				return false;
-			else if ( strcmp(cname,"monster_gman") == 0 )
+			if ( strcmp(cname,"monster_gman") == 0 )
 				return false;
-			else if ( strcmp(cname,"monster_furniture") == 0 )
+			if ( strcmp(cname,"monster_furniture") == 0 )
 				return false;
 
 			return true;

@@ -363,7 +363,7 @@ public:
 
 	void setUsed ( bool bUsed ){	m_bUsed = bUsed;}
 
-	inline void clearPaths ();
+	inline void clearPaths ();//TODO: Not implemented yet [APG]RoboCop[CL]
 
 	float distanceFrom ( CWaypoint *other ) const
 	{
@@ -445,7 +445,7 @@ public:
 
 	static int addWaypoint ( CClient *pClient, const char *type1, const char *type2,const char *type3,const char *type4, bool bUseTemplate = false );
 
-	static int addWaypoint ( edict_t *pPlayer, Vector vOrigin, int iFlags = CWaypointTypes::W_FL_NONE, bool bAutoPath = false, int iYaw = 0, int iArea = 0, float fRadius = 0 );
+	static int addWaypoint ( edict_t *pPlayer, Vector vOrigin, int iFlags = CWaypointTypes::W_FL_NONE, bool bAutoPath = false, int iYaw = 0, int iArea = 0, float fRadius = 0.0f );
 
 	static void removeWaypoint ( int iIndex );
 

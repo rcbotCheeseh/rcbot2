@@ -357,7 +357,6 @@ void CCSSBot::runBuy()
 bool CCSSBot::setVisible(edict_t *pEntity, bool bVisible)
 {
 	static float fDist;
-	const char *szClassname;
 
 	const bool bValid = CBot::setVisible(pEntity, bVisible);
 
@@ -369,7 +368,7 @@ bool CCSSBot::setVisible(edict_t *pEntity, bool bVisible)
 	// if no draw effect it is invisible
 	if (bValid && bVisible && !(CClassInterface::getEffects(pEntity) & EF_NODRAW))
 	{
-		szClassname = pEntity->GetClassName();
+		const char* szClassname = pEntity->GetClassName();
 
 		if ((strncmp(szClassname, "func_breakable", 14) == 0 || strncmp(szClassname, "func_breakable_surf", 19) == 0))
 		{
@@ -983,17 +982,16 @@ bool CCSSBot::executeAction(eBotAction iAction)
 				}
 		case BOT_UTIL_RESCUE:
 		{
-			// Go to a random Rescue Zone waypoint
-			CWaypoint* pWaypoint;
-			CWaypoint* pRoute;
 			CBotSchedule* pSched = new CBotSchedule();
 			pSched->setID(SCHED_GOTO_ORIGIN);
 
-			pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_RESCUEZONE, getTeam(), 0, false, this, false);
+			CWaypoint* pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_RESCUEZONE, getTeam(), 0, false, this,
+			                                                      false);
 
 			if(pWaypoint)
 			{
-				pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), getTeam(), pWaypoint->getArea());
+				CWaypoint* pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), getTeam(),
+				                                                    pWaypoint->getArea());
 				if((m_fUseRouteTime <= engine->Time()))
 				{
 					if(pRoute)

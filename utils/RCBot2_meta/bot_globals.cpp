@@ -171,10 +171,9 @@ bool CBotGlobals::dirExists(const char *path)
 
 	if (_stat(path, &info) != 0)
 		return false;
-	else if (info.st_mode & _S_IFDIR)
+	if (info.st_mode & _S_IFDIR)
 		return true;
-	else
-		return false;
+	return false;
 
 #else
 
@@ -234,27 +233,24 @@ float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fPro
 	{
 		return false;
 	}
-	else
+	// use angle -- work out time
+	// work out angle
+	float vhorz;
+	float vvert;
+
+	SinCos(DEG2RAD(*fAngle),&vvert,&vhorz);
+
+	vhorz *= fProjSpeed;
+	vvert *= fProjSpeed;
+
+	const float t = fDistance/vhorz;
+
+	// within one second of going off
+	if ( std::fabs(t-fGrenadePrimeTime) < 1.0f )
 	{
-		// use angle -- work out time
-				// work out angle
-		float vhorz;
-		float vvert;
+		const float ffinaly =  vOrigin.z + vvert*t - g*0.5f*(t*t);
 
-		SinCos(DEG2RAD(*fAngle),&vvert,&vhorz);
-
-		vhorz *= fProjSpeed;
-		vvert *= fProjSpeed;
-
-		const float t = fDistance/vhorz;
-
-		// within one second of going off
-		if ( std::fabs(t-fGrenadePrimeTime) < 1.0f )
-		{
-			const float ffinaly =  vOrigin.z + vvert*t - g*0.5f*(t*t);
-
-			return std::fabs(ffinaly - vEnemy.z) < BLAST_RADIUS; // ok why not
-		}
+		return std::fabs(ffinaly - vEnemy.z) < BLAST_RADIUS; // ok why not
 	}
 
 	return false;
@@ -538,12 +534,9 @@ bool CBotGlobals :: gameStart ()
 
 		return true;
 	}
-	else
-	{
-		logger->Log(LogLevel::ERROR, "Mod not found. Please edit the bot_mods.ini in the bot config folder (gamedir = %s)",m_szModFolder);
+	logger->Log(LogLevel::ERROR, "Mod not found. Please edit the bot_mods.ini in the bot config folder (gamedir = %s)",m_szModFolder);
 
-		return false;
-	}
+	return false;
 }
 
 void CBotGlobals :: levelInit ()
@@ -627,8 +620,7 @@ bool CBotGlobals :: entityIsAlive ( edict_t *pEntity )
 
 bool CBotGlobals :: isBrushEntity ( edict_t *pEntity )
 {
-	const char *szModel;
-	szModel = pEntity->GetIServerEntity()->GetModelName().ToCStr();
+	const char* szModel = pEntity->GetIServerEntity()->GetModelName().ToCStr();
 	return szModel[0] == '*';
 }
 

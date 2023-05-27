@@ -766,8 +766,8 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 	}
 	else // Check for button
 	{
-		edict_t *pEntity;
-		pEntity = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_button", rcbot_syn_use_search_range.GetFloat());
+		edict_t* pEntity = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_button",
+		                                                                 rcbot_syn_use_search_range.GetFloat());
 		if(pEntity != nullptr && !CSynergyMod::IsEntityLocked(pEntity))
 		{
 			CBotSchedule *sched = new CBotSchedule();

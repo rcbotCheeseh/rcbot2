@@ -51,7 +51,7 @@ void CStrings :: freeAllMemory()
 		{
 			const char* pszFree = m_Strings[i][j];
 
-			if ( pszFree )
+			//if ( pszFree )
 				delete pszFree;
 
 			m_Strings[i][j] = nullptr;

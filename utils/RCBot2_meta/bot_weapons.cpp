@@ -435,13 +435,13 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 		this->clearWeapons();
 
 		CBaseHandle* m_Weapons = CClassInterface::getWeaponList(m_pBot->getEdict());
-		CBotWeapon* m_BotWeapon_iter = m_theWeapons;
+		CBotWeapon* m_BotWeapon_iter = m_theWeapons; //m_BotWeapon_iter not used? [APG]RoboCop[CL]
 
 		// loop through the weapons array and see if it is in the CBaseCombatCharacter
 		for (unsigned short int i = 0; i < MAX_WEAPONS; i++)
 		{
 			m_Weapon_iter = &m_Weapons[i];
-			bool bFound = false;
+			bool bFound = false; //bFound not used? [APG]RoboCop[CL]
 
 			pWeapon = INDEXENT(m_Weapon_iter->GetEntryIndex());
 

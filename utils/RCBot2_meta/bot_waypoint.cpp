@@ -637,6 +637,7 @@ void CWaypointNavigator :: belief ( Vector vOrigin, Vector vOther, float fBelief
 	m_iVisibles.emplace_back(iWptFrom);
 	m_iVisibles.emplace_back(iWptTo);
 
+	//TODO: duplicates? [APG]RoboCop[CL]
 	CWaypointLocations::GetAllVisible(iWptFrom,iWptTo,vOrigin,vOther,fEDist,&m_iVisibles,&m_iInvisibles);
 	CWaypointLocations::GetAllVisible(iWptFrom,iWptTo,vOther,vOrigin,fEDist,&m_iVisibles,&m_iInvisibles);
 
@@ -2692,7 +2693,7 @@ CWaypoint* CWaypoints::randomWaypointGoalNearestArea(int iFlags, int iTeam, int 
 				//DOD:S Bug
 				if (!bForceArea && !pCurrentMod->isWaypointAreaValid(pWpt->getArea(), iFlags))
 					continue;
-				else if ( bForceArea && pWpt->getArea() != iArea )
+				if ( bForceArea && pWpt->getArea() != iArea )
 					continue;
 
 				node = new AStarNode();
@@ -2771,7 +2772,7 @@ CWaypoint* CWaypoints::randomWaypointGoalBetweenArea(int iFlags, int iTeam, int 
 
 				if ( !bForceArea && !CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(pWpt->getArea()) )
 					continue;
-				else if ( bForceArea && pWpt->getArea() != iArea )
+				if ( bForceArea && pWpt->getArea() != iArea )
 					continue;
 
 				float fCost;
@@ -2846,7 +2847,7 @@ CWaypoint *CWaypoints :: randomWaypointGoal ( int iFlags, int iTeam, int iArea, 
 			{
 				if (!bForceArea && !pCurrentMod->isWaypointAreaValid(pWpt->getArea(), iFlags))
 					continue;
-				else if ( bForceArea && pWpt->getArea() != iArea )
+				if ( bForceArea && pWpt->getArea() != iArea )
 					continue;
 
 				goals.emplace_back(pWpt);

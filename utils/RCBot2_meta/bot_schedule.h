@@ -219,9 +219,8 @@ public:
 			if ((*it)->isID(iSchedule)) {
 				m_Schedules.erase(it);
 				return;
-			} else {
-				++it;
 			}
+			++it;
 		}
 	}
 

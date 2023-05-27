@@ -99,25 +99,20 @@ int CBotButtons :: getBitMask () const
 {
 	if ( m_bLetGoAll )
 		return 0;
-	else
+	int iBitMask = 0;
+
+	const float fTime = engine->Time();
+
+	for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
 	{
+		if ( m_theButtons[i]->held(fTime) )
+		{
+			m_theButtons[i]->unTap();
+			iBitMask |= m_theButtons[i]->getID();
+		}
+	}
 
-        int iBitMask = 0;
-
-        const float fTime = engine->Time();
-
-        for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
-        {
-            if ( m_theButtons[i]->held(fTime) )
-            {
-                m_theButtons[i]->unTap();
-                iBitMask |= m_theButtons[i]->getID();
-            }
-        }
-
-        return iBitMask;
-
-    }
+	return iBitMask;
 }
 
 bool CBotButtons :: canPressButton ( int iButtonId ) const
