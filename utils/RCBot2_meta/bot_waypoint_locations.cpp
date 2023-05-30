@@ -49,7 +49,7 @@ bool CWaypointLocations :: m_bIgnoreBox = false;
 
 #define READ_LOC(loc) abs((int)((int)((loc) + HALF_MAX_MAP_SIZE) / BUCKET_SPACING));
 
-unsigned char *CWaypointLocations :: resetFailedWaypoints (const WaypointList *iIgnoreWpts)
+unsigned char *CWaypointLocations :: resetFailedWaypoints (WaypointList *iIgnoreWpts)
 {
 	Q_memset(g_iFailedWaypoints,0,sizeof(unsigned char)*CWaypoints::MAX_WAYPOINTS);
 	
@@ -104,9 +104,9 @@ void CWaypointLocations :: AutoPath ( edict_t *pPlayer, int iWpt )
 	CWaypoint *pWpt = CWaypoints::getWaypoint(iWpt);
 	const Vector vOrigin = pWpt->getOrigin();
 
-	const int iLoc = READ_LOC(vOrigin.x);
-	const int jLoc = READ_LOC(vOrigin.y);
-	const int kLoc = READ_LOC(vOrigin.z);
+	const int iLoc = READ_LOC(vOrigin.x)
+	const int jLoc = READ_LOC(vOrigin.y)
+	const int kLoc = READ_LOC(vOrigin.z)
 
 	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
@@ -129,9 +129,9 @@ void CWaypointLocations :: AutoPath ( edict_t *pPlayer, int iWpt )
 // @param iFrom waypoint number from a and b within distance
 void CWaypointLocations :: GetAllInArea (const Vector& vOrigin, WaypointList* pWaypointList, int iVisibleTo)
 {
-	const int iLoc = READ_LOC(vOrigin.x);
-	const int jLoc = READ_LOC(vOrigin.y);
-	const int kLoc = READ_LOC(vOrigin.z);
+	const int iLoc = READ_LOC(vOrigin.x)
+	const int jLoc = READ_LOC(vOrigin.y)
+	const int kLoc = READ_LOC(vOrigin.z)
 
 	const CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 
@@ -146,7 +146,7 @@ void CWaypointLocations :: GetAllInArea (const Vector& vOrigin, WaypointList* pW
 		{
 			for (int k = iMinLock; k <= iMaxLock; k++ )
 			{
-				WaypointList loc = m_iLocations[i][j][k];
+				auto loc = m_iLocations[i][j][k];
 				for (int iWpt : loc)
 				{
 					if ( iWpt == iVisibleTo )
@@ -166,9 +166,9 @@ void CWaypointLocations :: GetAllVisible (int iFrom, int iOther, const Vector& v
                                           const Vector& vOther, float fEDist, WaypointList* iVisible,
                                           WaypointList* iInvisible)
 {
-	const int iLoc = READ_LOC(vOrigin.x);
-	const int jLoc = READ_LOC(vOrigin.y);
-	const int kLoc = READ_LOC(vOrigin.z);
+	const int iLoc = READ_LOC(vOrigin.x)
+	const int jLoc = READ_LOC(vOrigin.y)
+	const int kLoc = READ_LOC(vOrigin.z)
 
 	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
@@ -185,7 +185,7 @@ void CWaypointLocations :: GetAllVisible (int iFrom, int iOther, const Vector& v
 		{
 			for ( int k = iMinLock; k <= iMaxLock; k++ )
 			{
-				WaypointList& arr = m_iLocations[i][j][k];
+				auto &arr = m_iLocations[i][j][k];
 				for (size_t l = 0; l < m_iLocations[i][j][k].size(); l++)
 				{
 					int iWpt = arr[l];
@@ -219,7 +219,7 @@ void CWaypointLocations :: AutoPathInBucket ( edict_t *pPlayer, int i, int j, in
 
 	//CTraceFilterWorldOnly filter;
 
-	const WaypointList& arr = m_iLocations[i][j][k];
+	const auto &arr = m_iLocations[i][j][k];
 	const size_t size = arr.size();
 	
 	for (size_t l = 0; l < size; l++)
@@ -264,23 +264,24 @@ void CWaypointLocations :: AutoPathInBucket ( edict_t *pPlayer, int i, int j, in
 
 void CWaypointLocations :: AddWptLocation ( int iIndex, const float *fOrigin )
 {
-	// Add a waypoint with index and at origin (for quick insertion in the list)
-	const int i = READ_LOC(fOrigin[0]);
-	const int j = READ_LOC(fOrigin[1]);
-	const int k = READ_LOC(fOrigin[2]);
+// Add a waypoint with index and at origin (for quick insertion in the list)
+//
+const int i = READ_LOC(fOrigin[0])
+const int j = READ_LOC(fOrigin[1])
+const int k = READ_LOC(fOrigin[2])
 
-	m_iLocations[i][j][k].emplace_back(iIndex);
+m_iLocations[i][j][k].emplace_back(iIndex);
 }
 
 void CWaypointLocations :: DeleteWptLocation ( int iIndex, const float *fOrigin )
 // Delete the waypoint index at the origin (for finding it quickly in the list)
 //
 {
-	const int i = READ_LOC(fOrigin[0]);
-	const int j = READ_LOC(fOrigin[1]);
-	const int k = READ_LOC(fOrigin[2]);
+	const int i = READ_LOC(fOrigin[0])
+	const int j = READ_LOC(fOrigin[1])
+	const int k = READ_LOC(fOrigin[2])
 
-	WaypointList& vec = m_iLocations[i][j][k];
+	auto &vec = m_iLocations[i][j][k];
 	vec.erase(std::remove(vec.begin(), vec.end(), iIndex), vec.end());
 }
 
@@ -300,9 +301,9 @@ int CWaypointLocations :: GetCoverWaypoint ( Vector vPlayerOrigin, Vector vCover
 	
 	int iNearestIndex = -1;
 
-	const int iLoc = READ_LOC(vPlayerOrigin.x);
-	const int jLoc = READ_LOC(vPlayerOrigin.y);
-	const int kLoc = READ_LOC(vPlayerOrigin.z);
+	const int iLoc = READ_LOC(vPlayerOrigin.x)
+	const int jLoc = READ_LOC(vPlayerOrigin.y)
+	const int kLoc = READ_LOC(vPlayerOrigin.z)
 
 	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
@@ -344,7 +345,7 @@ void CWaypointLocations :: FindNearestCoverWaypointInBucket ( int i, int j, int 
 															 const Vector &vOrigin, float *pfMinDist, 
 															 int *piIndex, 
 															 WaypointList *iIgnoreWpts, 
-															 int iCoverFromWpt, const Vector *vGoalOrigin, 
+															 int iCoverFromWpt, Vector *vGoalOrigin, 
 															 int iTeam, float fMinDist )
 // Search for the nearest waypoint : I.e.
 // Find the waypoint that is closest to vOrigin from the distance pfMinDist
@@ -648,9 +649,9 @@ int CWaypointLocations :: NearestWaypoint ( const Vector &vOrigin, float fNeares
 {
 	int iNearestIndex = -1;
 
-	const int iLoc = READ_LOC(vOrigin.x);
-	const int jLoc = READ_LOC(vOrigin.y);
-	const int kLoc = READ_LOC(vOrigin.z);
+	const int iLoc = READ_LOC(vOrigin.x)
+	const int jLoc = READ_LOC(vOrigin.y)
+	const int kLoc = READ_LOC(vOrigin.z)
 
 	int iMinLoci,iMaxLoci,iMinLocj,iMaxLocj,iMinLock,iMaxLock;
 
@@ -722,9 +723,9 @@ void CWaypointLocations :: DrawWaypoints ( CClient *pClient, float fDist )
 	static Vector vOrigin;
 	static edict_t *pEntity;
 
-	const int iLoc = READ_LOC(vOrigin.x);
-	const int jLoc = READ_LOC(vOrigin.y);
-	const int kLoc = READ_LOC(vOrigin.z);
+	const int iLoc = READ_LOC(vOrigin.x)
+	const int jLoc = READ_LOC(vOrigin.y)
+	const int kLoc = READ_LOC(vOrigin.z)
 
 	pEntity = pClient->getPlayer();
 	vOrigin = pClient->getOrigin();

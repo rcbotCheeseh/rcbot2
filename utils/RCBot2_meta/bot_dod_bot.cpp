@@ -383,8 +383,6 @@ void CDODBot :: killed ( edict_t *pVictim, char *weapon )
 		addVoiceCommand(DOD_VC_ENEMY_DOWN);
 		//addVoiceCommand(DOD_VC_GOGOGO);
 	}
-
-	return;
 }
 
 void CDODBot :: died ( edict_t *pKiller, const char *pszWeapon )
@@ -578,9 +576,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 
 			if ( !m_pSchedules->isCurrentSchedule(SCHED_INVESTIGATE_NOISE) )
 			{
-				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_INVESTIGATE_POINT,
-				                        !m_pSchedules->hasSchedule(SCHED_DEPLOY_MACHINE_GUN)&&!m_pSchedules->hasSchedule
-				                        (SCHED_SNIPE), 0.5f, reinterpret_cast<unsigned int>(pDied), m_vListenPosition)
+				ADD_UTILITY_DATA_VECTOR(BOT_UTIL_INVESTIGATE_POINT,!m_pSchedules->hasSchedule(SCHED_DEPLOY_MACHINE_GUN)&&!m_pSchedules->hasSchedule(SCHED_SNIPE),0.5f,reinterpret_cast<unsigned>(pDied),m_vListenPosition)
 
 				//m_pSchedules->removeSchedule(SCHED_INVESTIGATE_NOISE);
 				//m_pSchedules->addFront(new CBotInvestigateNoiseSched(CBotGlobals::entityOrigin(pDied),m_vListenPosition));
@@ -684,7 +680,7 @@ void CDODBot :: seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *p
 		if ( m_pLastEnemy == pDied )
 		{
 			m_pLastEnemy = nullptr;
-			m_fLastSeeEnemy = 0;
+			m_fLastSeeEnemy = 0.0f;
 
 			if ( inSquad() && isSquadLeader() )
 			{
@@ -754,19 +750,19 @@ void CDODBot :: spawnInit ()
 	while ( !m_nextVoicecmd.empty() )
 		m_nextVoicecmd.pop();
 
-	m_fNextVoiceCommand = 0;
+	m_fNextVoiceCommand = 0.0f;
 
-	m_fDeployMachineGunTime = 0;
+	m_fDeployMachineGunTime = 0.0f;
 	m_pNearestFlag = nullptr;
 
-	m_fShoutRocket = 0;
-	m_fShoutGrenade = 0;
+	m_fShoutRocket = 0.0f;
+	m_fShoutGrenade = 0.0f;
 	m_pEnemyRocket = nullptr;
 	m_pEnemyGrenade = nullptr;
 
-	m_fShootTime = 0;
-	m_fProneTime = 0;
-	m_fZoomOrDeployTime = 0;
+	m_fShootTime = 0.0f;
+	m_fProneTime = 0.0f;
+	m_fZoomOrDeployTime = 0.0f;
 
 	if ( m_pWeapons )
 		m_pWeapons->clearWeapons();
@@ -865,7 +861,7 @@ void CDODBot :: handleWeapons ()
 
 		if ( pWeapon && pWeapon->getWeaponEntity() && !rcbot_melee_only.GetBool() && pWeapon->isDeployable() && !pWeapon->outOfAmmo(this) && CClassInterface::isMachineGunDeployed(pWeapon->getWeaponEntity()))
 		{
-			; // keep current weapon on
+			;// keep current weapon on
 		}
 		else 
 			pWeapon = getBestWeapon(m_pEnemy,true,true,rcbot_melee_only.GetBool(),!rcbot_melee_only.GetBool() && (((m_pEnemy == m_pNearestBreakable) || CDODMod::isBreakableRegistered(m_pEnemy,m_iTeam))));
@@ -916,6 +912,7 @@ void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 			if ( pBombTarget && (state != 0) && (CClassInterface::getDODBombTeam(pBombTarget) == m_iTeam) )
 			{
 					// check if someone isn't bombing already
+					// if ( (state == 2) || CDODMod::m_Flags.isTeamMatePlanting(m_pEdict,m_iTeam,pWaypoint->getOrigin()) )
 					if ( (state == 2) || CDODFlags::isTeamMatePlanting(m_pEdict,m_iTeam,pWaypoint->getOrigin()) )
 					{
 						CBotSchedule *bombsched = new CBotSchedule();
@@ -1391,6 +1388,7 @@ void CDODBot :: modThink ()
 
 			if ( distanceFrom(vNearestBomb) < (BLAST_RADIUS*2) )
 			{
+				// if ( !CDODMod::m_Flags.isTeamMatePlanting(m_pEdict,m_iTeam,vNearestBomb) )
 				if ( !CDODFlags::isTeamMatePlanting(m_pEdict,m_iTeam,vNearestBomb) )
 				{
 					CWaypoint *pWaypoint = CDODMod::getBombWaypoint(m_pNearestBomb);
@@ -1974,7 +1972,7 @@ void CDODBot :: listenForPlayers ()
 
 	m_bListenPositionValid = false;
 
-	for (int i = 1; i <= gpGlobals->maxClients; i ++ )
+	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
 		edict_t* pPlayer = INDEXENT(i);
 
@@ -3201,12 +3199,12 @@ void CDODBot :: getTasks (unsigned int iIgnore)
 			// attack the flag if I've reached the last one
 			ADD_UTILITY_DATA_VECTOR(BOT_UTIL_PLANT_NEAREST_BOMB,
 				CDODMod::m_Flags.canPlantBomb(m_iTeam,iFlagID),fPlantUtil+randomFloat(-0.05f,0.1f),iFlagID,vBomb)
-// attack the flag if I've reached the last one
+			// attack the flag if I've reached the last one
 			ADD_UTILITY_DATA_VECTOR(BOT_UTIL_DEFEND_NEAREST_BOMB,
 				CDODMod::m_Flags.canDefendBomb(m_iTeam,iFlagID),fDefendBombUtil+randomFloat(-0.05f,0.1f),iFlagID,vBomb)
-// attack the flag if I've reached the last one
+			// attack the flag if I've reached the last one
 			ADD_UTILITY_DATA_VECTOR(BOT_UTIL_DEFUSE_NEAREST_BOMB,
-				CDODMod::m_Flags.canDefuseBomb(m_iTeam,iFlagID),fDefuseBombUtil+randomFloat(-0.05f,0.1f),iFlagID,vBomb);
+				CDODMod::m_Flags.canDefuseBomb(m_iTeam,iFlagID),fDefuseBombUtil+randomFloat(-0.05f,0.1f),iFlagID,vBomb)
 		}
 	}
 	
@@ -3443,8 +3441,8 @@ void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin,
 			}
 
 			if ( pWp->getProjectileSpeed() > 0 && sv_gravity.IsValid() )
-			{
-				const float fTime = fDist2D/pWp->getProjectileSpeed();
+				{
+					const float fTime = fDist2D/pWp->getProjectileSpeed();
 				//TODO: Improve on the floating point precision conversion [APG]RoboCop[CL]
 				v_desired_offset->z = (pow(2, fTime) * (sv_gravity.GetFloat() * rcbot_projectile_tweak.GetFloat()));// - (getOrigin().z - v_origin.z);
 			}

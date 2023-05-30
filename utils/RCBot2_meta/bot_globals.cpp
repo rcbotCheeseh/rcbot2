@@ -142,17 +142,17 @@ int CBotGlobals ::numPlayersOnTeam(int iTeam, bool bAliveOnly)
 {
 	int num = 0;
 
-	for ( int i = 1; i <= numClients(); i ++ )
+	for ( int i = 1; i <= CBotGlobals::numClients(); i ++ )
 	{
 		edict_t* pEdict = INDEXENT(i);
 
-		if (entityIsValid(pEdict) )
+		if ( CBotGlobals::entityIsValid(pEdict) )
 		{
 			if ( CClassInterface::getTeam(pEdict) == iTeam )
 			{
 				if ( bAliveOnly )
 				{
-					if (entityIsAlive(pEdict) )
+					if ( CBotGlobals::entityIsAlive(pEdict) )
 						num++;
 				}
 				else 
@@ -175,7 +175,7 @@ bool CBotGlobals::dirExists(const char *path)
 		return true;
 	return false;
 
-#else
+#elif __linux__
 
 	struct stat info;
 
@@ -201,7 +201,7 @@ void CBotGlobals::readRCBotFolder()
 			logger->Log(LogLevel::INFO, "RCBot Folder -> trying %s", szRCBotFolder);
 
 			if (!dirExists(szRCBotFolder)) {
-				snprintf(folder, sizeof folder, "%s/%s", modFolder(), szRCBotFolder);
+				snprintf(folder, sizeof folder, "%s/%s", CBotGlobals::modFolder(), szRCBotFolder);
 
 				szRCBotFolder = CStrings::getString(folder);
 				logger->Log(LogLevel::INFO, "RCBot Folder -> trying %s", szRCBotFolder);
@@ -210,7 +210,6 @@ void CBotGlobals::readRCBotFolder()
 					logger->Log(LogLevel::ERROR, "RCBot Folder -> not found ...");
 				}
 			}
-
 
 			m_szRCBotFolder = CStrings::getString(szRCBotFolder);
 		}
@@ -265,7 +264,7 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 	{
 		edict_t* pent = INDEXENT(i);
 
-		if( pent && isNetworkable(pent) )
+		if( pent && CBotGlobals::isNetworkable(pent) )
 		{
 			const int length = strlen(name);						 
 
@@ -388,7 +387,7 @@ bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest )
 	if ( isBrushEntity(pDest) )
 		traceLine (vSrc,worldCenter(pDest),MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
 	else
-		traceLine (vSrc,entityOrigin(pDest),MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
+	traceLine (vSrc,entityOrigin(pDest),MASK_SOLID_BRUSHONLY|CONTENTS_OPAQUE,&filter);
 
 	return traceVisible(pDest);
 }
@@ -449,7 +448,7 @@ float CBotGlobals :: DotProductFromOrigin ( edict_t *pEnemy, Vector pOrigin )
 	// in fov? Check angle to edict
 	AngleVectors(eyes,&vForward);
 	
-	vecLOS = pOrigin - entityOrigin(pEnemy);
+	vecLOS = pOrigin - CBotGlobals::entityOrigin(pEnemy);
 	vecLOS = vecLOS/vecLOS.Length();
 	
 	flDot = DotProduct (vecLOS , vForward );
@@ -485,7 +484,7 @@ bool CBotGlobals::initModFolder() {
 	char szGameFolder[512];
 	engine->GetGameDir(szGameFolder, 512);
 
-	const unsigned int iLength = strlen(CStrings::getString(szGameFolder));
+	const int iLength = strlen(CStrings::getString(szGameFolder));
 	int pos = iLength - 1;
 
 	while (pos > 0 && szGameFolder[pos] != '\\' && szGameFolder[pos] != '/') {
@@ -548,7 +547,7 @@ int CBotGlobals :: countTeamMatesNearOrigin ( Vector vOrigin, float fRange, int 
 {
 	int iCount = 0;
 
-	for ( int i = 1; i <= maxClients(); i ++ )
+	for ( int i = 1; i <= CBotGlobals::maxClients(); i ++ )
 	{
 		edict_t *pEdict = INDEXENT(i);
 
@@ -579,7 +578,7 @@ int CBotGlobals :: numClients ()
 {
 	int iCount = 0;
 
-	for ( int i = 1; i <= maxClients(); i ++ )
+	for ( int i = 1; i <= CBotGlobals::maxClients(); i ++ )
 	{
 		edict_t *pEdict = INDEXENT(i);
 
@@ -742,24 +741,24 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 	}
 
 	// find the ground
-	traceLine(v_src,v_src-Vector(0,0,256.0),MASK_NPCSOLID_BRUSHONLY,&filter);
+	CBotGlobals::traceLine(v_src,v_src-Vector(0,0,256.0f),MASK_NPCSOLID_BRUSHONLY,&filter);
 #ifndef __linux__
-	debugoverlay->AddLineOverlay(v_src,v_src-Vector(0,0,256.0),255,0,255,false,3);
+	debugoverlay->AddLineOverlay(v_src,v_src-Vector(0,0,256.0f),255,0,255,false,3);
 #endif
-	const Vector v_ground_src = getTraceResult()->endpos + Vector(0,0,1);
+	const Vector v_ground_src = CBotGlobals::getTraceResult()->endpos + Vector(0,0,1);
 
-	traceLine(v_dest,v_dest-Vector(0,0,256.0),MASK_NPCSOLID_BRUSHONLY,&filter);
+	CBotGlobals::traceLine(v_dest,v_dest-Vector(0,0,256.0f),MASK_NPCSOLID_BRUSHONLY,&filter);
 #ifndef __linux__
-	debugoverlay->AddLineOverlay(v_dest,v_dest-Vector(0,0,256.0),255,255,0,false,3);
+	debugoverlay->AddLineOverlay(v_dest,v_dest-Vector(0,0,256.0f),255,255,0,false,3);
 #endif
-	const Vector v_ground_dest = getTraceResult()->endpos + Vector(0,0,1);
+	const Vector v_ground_dest = CBotGlobals::getTraceResult()->endpos + Vector(0,0,1);
 
-	if ( !isVisible(pPlayer,v_ground_src,v_ground_dest) )
+	if ( !CBotGlobals::isVisible(pPlayer,v_ground_src,v_ground_dest) )
 	{
 #ifndef __linux__
 		debugoverlay->AddLineOverlay(v_ground_src,v_ground_dest,0,255,255,false,3);		
 #endif
-		const trace_t *tr = getTraceResult();
+		const trace_t *tr = CBotGlobals::getTraceResult();
 
 		// no slope there
 		if ( tr->endpos.z > v_src.z )
@@ -768,7 +767,7 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 			debugoverlay->AddTextOverlay((v_ground_src+v_ground_dest)/2,0,3,"ground fail");
 #endif
 
-			traceLine(tr->endpos,tr->endpos-Vector(0,0,45),MASK_NPCSOLID_BRUSHONLY,&filter);
+			CBotGlobals::traceLine(tr->endpos,tr->endpos-Vector(0,0,45),MASK_NPCSOLID_BRUSHONLY,&filter);
 
 			const Vector v_jsrc = tr->endpos;
 
@@ -792,9 +791,9 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 						Vector v_checkpoint = v_src + v_norm * fDistCheck;
 
 						// check jump height again
-						traceLine(v_checkpoint,v_checkpoint-Vector(0,0,45.0f),MASK_NPCSOLID_BRUSHONLY,&filter);
+						CBotGlobals::traceLine(v_checkpoint,v_checkpoint-Vector(0,0,45.0f),MASK_NPCSOLID_BRUSHONLY,&filter);
 
-						if (traceVisible(nullptr) )
+						if ( CBotGlobals::traceVisible(nullptr) )
 						{
 #ifndef __linux__
 							debugoverlay->AddTextOverlay(tr->endpos,0,3,"step/jump fail");
@@ -807,7 +806,7 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 		}
 	}
 
-	return isVisible(pPlayer,vleftsrc,vleftdest) && isVisible(pPlayer,vrightsrc,vrightdest);
+	return CBotGlobals::isVisible(pPlayer,vleftsrc,vleftdest) && CBotGlobals::isVisible(pPlayer,vrightsrc,vrightdest);
 
 	//return true;
 }
@@ -1118,7 +1117,7 @@ void CBotGlobals :: buildFileName ( char *szOutput, const char *szFile, const ch
 
 	if ( bModDependent )
 	{
-		strcat(szOutput, modFolder());
+		strcat(szOutput,CBotGlobals::modFolder());
 		addDirectoryDelimiter(szOutput);
 	}
 
@@ -1201,11 +1200,11 @@ float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity,Vector vOrigin)
 	VectorAngles(vAngles/vAngles.Length(),qAngles);
 
 	fYaw = qAngles.y;
-	fixFloatAngle(&fYaw);
+	CBotGlobals::fixFloatAngle(&fYaw);
 
 	fAngle = qBotAngles.y - fYaw;
 
-	fixFloatAngle(&fAngle);
+	CBotGlobals::fixFloatAngle(&fAngle);
 
 	return fAngle;
 

@@ -128,7 +128,7 @@ void CHLDMBot :: spawnInit ()
 	// reset objects
 	m_pNearbyWeapon = nullptr;
 	m_FailedPhysObj = nullptr;
-	m_flSprintTime = 0;
+	m_fSprintTime = 0.0f;
 	m_NearestPhysObj = nullptr;
 	
 	m_pBattery = nullptr;
@@ -569,13 +569,13 @@ void CHLDMBot :: modThink ()
 		setMoveLookPriority(MOVELOOK_MODTHINK);
 	}
 
-	if ( m_fCurrentDanger >= 20.0f && CClassInterface::auxPower(m_pEdict) > 90.f && m_flSprintTime < engine->Time())
+	if ( m_fCurrentDanger >= 20.0f && CClassInterface::auxPower(m_pEdict) > 90.f && m_fSprintTime < engine->Time())
 	{
 		m_pButtons->holdButton(IN_SPEED,0,1,0);
 	}
 	else if (m_fCurrentDanger < 1 || CClassInterface::auxPower(m_pEdict) < 5.0f)
 	{
-		m_flSprintTime = engine->Time() + randomFloat(5.0f,20.0f);
+		m_fSprintTime = engine->Time() + randomFloat(5.0f,20.0f);
 	}
 
 	if ( m_fLastSeeEnemy && m_fLastSeeEnemy + 5.0f<engine->Time() )
@@ -584,7 +584,7 @@ void CHLDMBot :: modThink ()
 
 		if ( pWeapon && pWeapon->getClip1(this)==0 && pWeapon->getAmmo(this) > 0 )
 		{
-			m_fLastSeeEnemy = 0;
+			m_fLastSeeEnemy = 0.0f;
 			m_pButtons->tap(IN_RELOAD);
 		}
 	}

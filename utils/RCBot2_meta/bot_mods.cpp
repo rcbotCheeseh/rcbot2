@@ -229,25 +229,26 @@ void CBotMods::readMods()
 {
 	// TODO improve game detection
 	// caxanga334: Better game detection required if we want to support multiple mods on the same engine (IE: SDK 2013)
-	#if SOURCE_ENGINE == SE_TF2
-		m_Mods.emplace_back(new CTeamFortress2Mod());
-	#elif SOURCE_ENGINE == SE_DODS
-		m_Mods.emplace_back(new CDODMod());
-	#elif SOURCE_ENGINE == SE_CSS
-		m_Mods.emplace_back(new CCounterStrikeSourceMod());
-	#elif SOURCE_ENGINE == SE_HL2DM
-		m_Mods.emplace_back(new CHalfLifeDeathmatchMod());
-	#elif SOURCE_ENGINE == SE_SDK2013
-		m_Mods.emplace_back(new CSynergyMod());
-	#else
-		m_Mods.emplace_back(new CFortressForeverMod());
+#if SOURCE_ENGINE == SE_TF2
+	m_Mods.emplace_back(new CTeamFortress2Mod());
+#elif SOURCE_ENGINE == SE_DODS
+	m_Mods.emplace_back(new CDODMod());
+#elif SOURCE_ENGINE == SE_CSS
+	m_Mods.emplace_back(new CCounterStrikeSourceMod());
+#elif SOURCE_ENGINE == SE_HL2DM
+	m_Mods.emplace_back(new CHalfLifeDeathmatchMod());
+#elif SOURCE_ENGINE == SE_SDK2013
+	m_Mods.emplace_back(new CSynergyMod());
+#else
+	
+	m_Mods.emplace_back(new CFortressForeverMod());
 
-		m_Mods.emplace_back(new CHLDMSourceMod());
+	m_Mods.emplace_back(new CHLDMSourceMod());
 
-		// Look for extra MODs
+	// Look for extra MODs
 
-		parseFile();
-	#endif
+	parseFile();
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////

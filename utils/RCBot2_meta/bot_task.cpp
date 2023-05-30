@@ -80,8 +80,6 @@ void getGrenadeAngle ( float v, float g, float desx, float desy, float *fa1, flo
 
 	*fa1 = RAD2DEG(*fa1);
 	*fa2 = RAD2DEG(*fa2);
-
-	return;
 }
 
 float getGrenadeZ ( edict_t *pShooter, edict_t *pTarget, Vector vOrigin, Vector vTarget, float fInitialSpeed ) 
@@ -402,7 +400,7 @@ CBotDODBomb :: CBotDODBomb ( int iBombType, int iBombID, edict_t *pBomb, Vector 
 {
 	m_iType = iBombType;
 	m_iBombID = iBombID; 
-	m_fTime = 0;
+	m_fTime = 0.0f;
 
 	if ( m_iBombID == -1 )
 		m_iBombID = CDODMod::m_Flags.getBombID(pBomb);
@@ -477,7 +475,7 @@ void CBotDODBomb :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 			complete();
 		}
-		else if (CDODFlags::isTeamMatePlanting(pBot->getEdict(),pBot->getTeam(),CBotGlobals::entityOrigin(m_pBombTarget)) )
+		else if ( CDODMod::m_Flags.isTeamMatePlanting(pBot->getEdict(),pBot->getTeam(),CBotGlobals::entityOrigin(m_pBombTarget)) )
 			complete(); // team mate doing my job
 
 	}
@@ -487,7 +485,7 @@ void CBotDODBomb :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 		if ( CClassInterface::getDODBombState(m_pBombTarget) == DOD_BOMB_STATE_AVAILABLE )
 			complete();
-		else if (CDODFlags::isTeamMateDefusing(pBot->getEdict(),pBot->getTeam(),CBotGlobals::entityOrigin(m_pBombTarget)) )
+		else if ( CDODMod::m_Flags.isTeamMateDefusing(pBot->getEdict(),pBot->getTeam(),CBotGlobals::entityOrigin(m_pBombTarget)) )
 			complete(); // team mate doing my job
 	}
 
@@ -655,7 +653,6 @@ void CBotDODAttackPoint :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	else if ( m_fAttackTime < engine->Time() )
 	{
 		complete();
-		return;
 	}
 	else
 	{
@@ -861,7 +858,6 @@ void CBotTF2PushPayloadBombTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	else if(m_pPayloadBomb.get() == nullptr)
 	{
 		complete();
-		return;
 	}
 	else 
 	{
@@ -914,7 +910,6 @@ void CBotTF2DefendPayloadBombTask :: execute (CBot *pBot,CBotSchedule *pSchedule
 	else if(m_pPayloadBomb.get() == nullptr)
 	{
 		complete();
-		return;
 	}
 	else
 	{
@@ -1025,14 +1020,12 @@ void CBotTF2UpgradeBuilding :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	else if ( pBuilding == nullptr)
 	{
 		fail();
-		return;
 	}
 	else if ( (pOwner = CTeamFortress2Mod::getSentryOwner(pBuilding)) != nullptr && 
 		CClassInterface::isCarryingObj(pOwner) && CClassInterface::getCarriedObj(pOwner)==pBuilding)
 	{
 		// Owner is carrying it
 		fail();
-		return;
 	}
 	else if ( !pBot->isVisible(pBuilding) )
 	{
@@ -1986,7 +1979,6 @@ void CBotTFEngiBuildTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 			{
 				// can't build here
 				fail();
-				return; 
 			}
 		}
 	}
@@ -2387,7 +2379,7 @@ void CTF2_TauntTask :: debugString ( char *string )
 //////////////////////////////////////
 void CMoveToTask :: init () 
 { 
-	fPrevDist = 0;
+	fPrevDist = 0.0f;
 	//m_vVector = Vector(0,0,0);
 	//m_pEdict = NULL;
 }
@@ -2724,7 +2716,6 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 			if ( p->GetLastUserCommand().buttons & IN_ATTACK )
 			{
 				complete();
-				return;
 			}
 		}
 	}
@@ -3146,7 +3137,7 @@ CBotTF2Snipe :: CBotTF2Snipe ( Vector vOrigin, int iWpt )
 	const CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
 	m_iSnipeWaypoint = iWpt;
 	m_fAimTime = 0.0f;
-	m_fTime = 0.0f;	
+	m_fTime = 0.0f;
 	const QAngle angle = QAngle(0, pWaypoint->getAimYaw(), 0);
 	
 	AngleVectors(angle,&m_vAim);
@@ -3985,7 +3976,7 @@ void CCSSEngageEnemyTask::execute(CBot *pBot, CBotSchedule *pSchedule)
 					if(isBrush)
 						pBot->setMoveTo(CBotGlobals::worldCenter(pEnemy));
 					else
-						pBot->setMoveTo(CBotGlobals::entityOrigin(pEnemy));
+					pBot->setMoveTo(CBotGlobals::entityOrigin(pEnemy));
 				}
 				else
 				{
@@ -4009,7 +4000,6 @@ void CCSSEngageEnemyTask::execute(CBot *pBot, CBotSchedule *pSchedule)
 	else
 	{
 		complete();
-		return;
 	}
 }
 
@@ -4147,7 +4137,7 @@ CFindLastEnemy::CFindLastEnemy (Vector vLast,Vector vVelocity)
 {
 	setCompleteInterrupt(CONDITION_SEE_CUR_ENEMY);
 	m_vLast = vLast+vVelocity*10;
-	m_fTime = 0;
+	m_fTime = 0.0f;
 }
 
 void CFindLastEnemy::execute ( CBot *pBot, CBotSchedule *pSchedule )
@@ -4178,7 +4168,7 @@ CFollowTask :: CFollowTask ( edict_t *pFollow )
 
 void CFollowTask :: init ()
 {
-	
+
 }
 
 void CFollowTask::execute ( CBot *pBot, CBotSchedule *pSchedule )
@@ -4263,7 +4253,6 @@ void CDODDropAmmoTask :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		CDODBot *pDODBot = static_cast<CDODBot*>(pBot);
 		pDODBot->dropAmmo();
 		complete();
-		return;
 	}
 		
 }
@@ -5775,7 +5764,7 @@ CBotTF2EngineerInterrupt :: CBotTF2EngineerInterrupt( CBot *pBot )
 		m_fPrevSentryHealth = CClassInterface::getSentryHealth(m_pSentryGun);
 	}
 	else
-		m_fPrevSentryHealth = 0;
+		m_fPrevSentryHealth = 0.0f;
 }
 
 bool CBotTF2CoverInterrupt::isInterrupted ( CBot *pBot, bool *bFailed, bool *bCompleted )
@@ -5942,12 +5931,10 @@ void CBotTask :: _init()
 
 void CBotTask :: init ()
 {
-	return;
 }
 
 void CBotTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 {
-	return;
 }
 
 bool CBotTask :: hasFailed () const

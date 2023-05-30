@@ -46,7 +46,7 @@ class CBotEvent
 public:
 	CBotEvent()
 	{
-		//m_pActivator = NULL;
+		m_pActivator = nullptr;
 		m_iEventId = -1;
 		m_szType = nullptr;
 		m_iModId = MOD_ANY;
@@ -59,27 +59,28 @@ public:
 
 	bool forCurrentMod () const;
 
-	void setType (const char *szType );
+	void setType (const char* szType);
 
 	inline bool isType ( const char *szType ) const;
 
-	inline void setActivator ( edict_t *pEdict ) { m_pActivator = pEdict;}
+	void setActivator ( edict_t *pEdict ) { m_pActivator = pEdict;}
 
-	virtual void execute ( IBotEventInterface *pEvent ) { return; }
+	virtual void execute ( IBotEventInterface *pEvent ) {
+	}
 
-	inline void setEventId ( int iEventId )
+	void setEventId ( int iEventId )
 	{
 		m_iEventId = iEventId;
 	}
 
-	inline bool isEventId ( int iEventId ) const
+	bool isEventId ( int iEventId ) const
 	{
-		return forCurrentMod() && (m_iEventId == iEventId);
+		return forCurrentMod() && m_iEventId == iEventId;
 	}
 
-	inline bool hasEventId () const
+	bool hasEventId () const
 	{
-		return (m_iEventId != -1);
+		return m_iEventId != -1;
 	}
 
 	const char *getName () const

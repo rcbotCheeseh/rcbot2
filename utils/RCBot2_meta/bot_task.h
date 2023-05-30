@@ -159,7 +159,7 @@ public:
 		m_LookTask = LOOK_WAYPOINT;
 		m_iWaypointId = -1;
 		m_flags.m_data = 0;
-		m_fRange = 0;
+		m_fRange = 0.0f;
 		m_iInt = 0;
 		m_iDangerPoint = -1;
 		m_bGetPassedIntAsWaypointId = false;
@@ -172,7 +172,7 @@ public:
 		m_LookTask = looktask;
 		m_iWaypointId = -1;
 		m_flags.m_data = 0;
-		m_fRange = 0;
+		m_fRange = 0.0f;
 		m_iInt = 0;
 		m_iDangerPoint = -1;
 		m_bGetPassedIntAsWaypointId = false;
@@ -639,7 +639,7 @@ private:
 class CBotDefendTask : public CBotTask
 {
 public:
-	CBotDefendTask ( Vector vOrigin, float fMaxTime = 0, int iInterrupt = CONDITION_SEE_CUR_ENEMY, bool bDefendOrigin = false, Vector vDefendOrigin = Vector(0,0,0), eLookTask looktask = LOOK_SNIPE, int iWaypointType = 0 ) 
+	CBotDefendTask ( Vector vOrigin, float fMaxTime = 0.0f, int iInterrupt = CONDITION_SEE_CUR_ENEMY, bool bDefendOrigin = false, Vector vDefendOrigin = Vector(0,0,0), eLookTask looktask = LOOK_SNIPE, int iWaypointType = 0 ) 
 	{ 
 		m_fMaxTime = fMaxTime; 
 		m_vOrigin = vOrigin; 
@@ -675,8 +675,8 @@ public:
 		m_fMaxTime = fMaxTime; 
 		m_vOrigin = vOrigin; 
 		m_fRadius = fRadius;
-		m_fTime = 0; 
-		setCompleteInterrupt(iInterrupt);
+		m_fTime = 0.0f; 
+		setCompleteInterrupt(iInterrupt); 
 		m_iCurPath = 0;
 		m_iState = 0;
 		m_vPOV = vPOV;
@@ -704,7 +704,7 @@ private:
 class CBotTF2EngiLookAfter : public CBotTask
 {
 public:
-	CBotTF2EngiLookAfter ( edict_t *pSentry ) { m_pSentry = pSentry; m_fTime = 0; m_fHitSentry = 0; }
+	CBotTF2EngiLookAfter ( edict_t *pSentry ) { m_pSentry = pSentry; m_fTime = 0.0f; m_fHitSentry = 0.0f; }
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
@@ -1242,7 +1242,7 @@ public:
 class CCSSEngageEnemyTask : public CBotTask
 {
 public:
-	CCSSEngageEnemyTask( const edict_t *pEnemy )
+	CCSSEngageEnemyTask( edict_t *pEnemy )
 	{
 		isBrush = false;
 		m_hEnemy.Init(engine->IndexOfEdict(pEnemy), pEnemy->m_NetworkSerialNumber);
@@ -1328,7 +1328,7 @@ public:
 	void init () override;
 	void execute ( CBot *pBot, CBotSchedule *pSchedule ) override;
 	void debugString ( char *string ) override;
-	
+
 private:
 	Vector m_vPlayer;
 	Vector m_vOrigin;

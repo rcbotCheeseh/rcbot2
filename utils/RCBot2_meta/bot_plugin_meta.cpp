@@ -104,8 +104,6 @@ static ConVar rcbot2_ver_cvar("rcbot_ver", build_info::long_version, FCVAR_REPLI
 
 CON_COMMAND(rcbotd, "access the bot commands on a server")
 {
-	eBotCommandResult iResult;
-
 	if (!engine->IsDedicatedServer() || !CBotGlobals::IsMapRunning())
 	{
 		logger->Log(LogLevel::ERROR, "Error, no map running or not dedicated server");
@@ -113,8 +111,8 @@ CON_COMMAND(rcbotd, "access the bot commands on a server")
 	}
 
 	//iResult = CBotGlobals::m_pCommands->execute(NULL,engine->Cmd_Argv(1),engine->Cmd_Argv(2),engine->Cmd_Argv(3),engine->Cmd_Argv(4),engine->Cmd_Argv(5),engine->Cmd_Argv(6));
-	iResult = CBotGlobals::m_pCommands->execute(nullptr, args.Arg(1), args.Arg(2), args.Arg(3), args.Arg(4), args.Arg(5), args.Arg(6));
-																																																
+	eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(nullptr, args.Arg(1), args.Arg(2), args.Arg(3),
+	                                                              args.Arg(4), args.Arg(5), args.Arg(6));
 
 	if (iResult == COMMAND_ACCESSED)
 	{
@@ -137,7 +135,7 @@ CON_COMMAND(rcbotd, "access the bot commands on a server")
 class CBotRecipientFilter : public IRecipientFilter
 {
 public:
-	CBotRecipientFilter(const edict_t *pPlayer)
+	CBotRecipientFilter(edict_t *pPlayer)
 	{
 		m_iPlayerSlot = ENTINDEX(pPlayer);
 	}
@@ -400,7 +398,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 	if (fp)
 		kvl.parseFile(fp);
-	
+
 	void *gameServerFactory = reinterpret_cast<void*>(ismm->GetServerFactory(false));
 
 	int val;
@@ -459,7 +457,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	// Find the RCBOT2 Path from metamod VDF
 	extern IFileSystem *filesystem;
 	KeyValues *mainkv = new KeyValues("metamodplugin");
-	
+
 	const char *rcbot2path;
 	logger->Log(LogLevel::INFO, "Reading rcbot2 path from VDF...");
 	

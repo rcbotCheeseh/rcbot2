@@ -8,7 +8,7 @@
 class CRCBotKeyValue
 {
 public:
-	CRCBotKeyValue(const char *szKey, const char *szValue);
+	CRCBotKeyValue(const char *szKey, char *szValue);
 
 	char *getKey ()
 	{

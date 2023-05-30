@@ -1,4 +1,3 @@
-
 #include "engine_wrappers.h"
 #include "bot.h"
 #include "bot_cvars.h"
@@ -559,8 +558,6 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 								arr[i].fProb = 0.001f;
 						}
 					}
-
-					continue;
 				}
 			}
 			else

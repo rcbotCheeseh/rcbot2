@@ -189,7 +189,7 @@ void CBotVisibles :: checkVisible (edict_t* pEntity, int* iTicks, bool* bVisible
 			if ( CBotGlobals::isBrushEntity(pEntity) )
 				vEntityOrigin = CBotGlobals::worldCenter(pEntity);
 			else
-				vEntityOrigin = CBotGlobals::entityOrigin(pEntity);
+			vEntityOrigin = CBotGlobals::entityOrigin(pEntity);
 
 			// for some reason the origin is their feet. add body height
 			if ( iIndex <= gpGlobals->maxClients )
@@ -277,7 +277,7 @@ void CBotVisibles :: updateVisibles ()
 
 	if ( m_pBot->moveToIsValid() )
 	{
-		const Vector vMoveTo = m_pBot->getMoveTo();
+		Vector vMoveTo = m_pBot->getMoveTo();
 		if ( m_pBot->FVisible(vMoveTo) )
 			m_pBot->updateCondition(CONDITION_SEE_WAYPOINT);
 		else

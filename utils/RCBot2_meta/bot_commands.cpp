@@ -152,7 +152,7 @@ eBotCommandResult CBotCommand :: execute ( CClient *pClient, const char *pcmd, c
 }
 
 eBotCommandResult CBotSubcommands::execute(CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5) {
-	for (CBotCommand* cmd : m_theCommands) {
+	for (const auto cmd : m_theCommands) {
 		if (!cmd->isCommand(pcmd)) {
 			continue;
 		}

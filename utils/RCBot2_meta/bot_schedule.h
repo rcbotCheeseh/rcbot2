@@ -119,7 +119,8 @@ public:
 	CBotSchedule();
 
 	void _init ();
-	virtual void init () { return; } // nothing, used by sub classes
+	virtual void init () {
+	} // nothing, used by sub classes
 
 	void addTask( CBotTask *pTask );
 

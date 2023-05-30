@@ -125,7 +125,7 @@ void RCBOT2_Cvar_setup (ICvar *cvar)
 	if ( sv_tags.IsValid() )
 	{
 		char sv_tags_str[512];
-	
+
 		strcpy(sv_tags_str,sv_tags.GetString());
 
 		// fix
@@ -141,5 +141,4 @@ void RCBOT2_Cvar_setup (ICvar *cvar)
 
 		}
 	}
-
 }

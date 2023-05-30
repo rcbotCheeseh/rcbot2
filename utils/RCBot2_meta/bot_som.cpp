@@ -97,7 +97,7 @@ void CSom :: updateAround (const std::vector<float>* inputs, CSomNeuron* bmu) co
 	}
 }
 
-CSomNeuron *CSom :: inputOne ( const std::vector <float> *inputs )
+CSomNeuron *CSom :: inputOne ( std::vector <float> *inputs )
 {
 	CSomNeuron *winner = getBMU(inputs);
 
@@ -121,7 +121,7 @@ void CSom::input(std::vector<std::vector<float>>* inputs, int epochs)// Experime
 	}
 }
 
-CSomNeuron *CSom :: input ( const std::vector < std::vector <float> > *inputs )
+CSomNeuron *CSom :: input ( std::vector < std::vector <float> > *inputs )
 {
 	return inputOne(&(*inputs)[randomInt(0,static_cast<int>(inputs->size())-1)]);
 }

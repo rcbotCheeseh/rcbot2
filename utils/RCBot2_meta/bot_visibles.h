@@ -39,14 +39,15 @@
 class CVisibleFunc
 {
 public:
-	virtual void execute ( edict_t *pEntity ) { return; }
+	virtual void execute ( edict_t *pEntity ) {
+	}
 };
 
 class CTF2FindFlagFunc : public CVisibleFunc
 {
 public:
 	CTF2FindFlagFunc ( CBot *pBot ) 
-	{
+	{ 
 		m_pBot = nullptr;
 		m_pFlag = nullptr;
 	}
@@ -71,7 +72,7 @@ public:
 	CFindEnemyFunc ( CBot *pBot ) 
 	{ 
 		m_pBot = pBot; 
-		m_fBestFactor = 0;
+		m_fBestFactor = 0.0f;
 		m_pBest = nullptr;
 	}
 

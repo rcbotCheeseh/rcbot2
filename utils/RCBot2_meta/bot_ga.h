@@ -64,10 +64,10 @@ public:
 
 	void setGA ( CGA *ga ) { m_ga = ga; }
 	// size of population
-	unsigned int size () const { return m_theIndividuals.size(); };
+	unsigned int size () const { return m_theIndividuals.size(); }
 
 	// get from population index
-	IIndividual *get (unsigned iIndex) const;
+	IIndividual *get ( int iIndex ) const;
 
 	// add individual to population
 	void add ( IIndividual *individual );
@@ -117,7 +117,7 @@ public:
 		m_theNewPopulation.setGA(this);
 
 		m_iNumGenerations = 0;
-		m_fPrevAvgFitness = 0;
+		m_fPrevAvgFitness = 0.0f;
 
 		m_iMaxPopSize = iMaxPopSize;
 		

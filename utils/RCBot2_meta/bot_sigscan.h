@@ -42,7 +42,7 @@ public:
 class CCreateGameRulesObject : public CSignatureFunction
 {
 public:
-	CCreateGameRulesObject(CRCBotKeyValueList &list, const void *pAddrBase);
+	CCreateGameRulesObject(CRCBotKeyValueList &list, void *pAddrBase);
 
 	bool found() const { return m_func != nullptr; }
 

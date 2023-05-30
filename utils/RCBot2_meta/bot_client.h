@@ -67,16 +67,16 @@ public:
 
 	void SetVector ( Vector vVec ) 
 	{ 
-		m_x = (T)vVec.x;
-		m_y = (T)vVec.y;
-		m_z = (T)vVec.z;
+		m_x = static_cast<T>(vVec.x);
+		m_y = static_cast<T>(vVec.y);
+		m_z = static_cast<T>(vVec.z);
 
 		m_bVectorSet = TRUE;
 	}
 
 	Vector GetVector () const
 	{
-		return Vector((float)m_x,(float)m_y,(float)m_z);
+		return Vector(static_cast<float>(m_x),static_cast<float>(m_y),static_cast<float>(m_z));
 	}
 
 	BOOL IsVectorSet () const
@@ -115,7 +115,7 @@ public:
 		m_iFlags = 0;
 	}
 private:
-	int m_iFlags = 0;
+	int m_iFlags;
 };
 
 class CToolTip
@@ -418,14 +418,14 @@ class CClients
 public:
 	// called when player joins
 	static CClient *clientConnected ( edict_t *pPlayer );
-	static void clientDisconnected (const edict_t *pPlayer );
+	static void clientDisconnected ( edict_t *pPlayer );
 	// player starts game
-	static void clientActive (const edict_t *pPlayer );
+	static void clientActive ( edict_t *pPlayer );
 	// get index in array
 	static int slotOfEdict (const edict_t* pPlayer);
-	static void init (const edict_t *pPlayer );
+	static void init ( edict_t *pPlayer );
 	static CClient *get ( int iIndex ) { return &m_Clients[iIndex]; }
-	static CClient *get ( const edict_t *pPlayer ) { return &m_Clients[slotOfEdict(pPlayer)]; }
+	static CClient *get ( edict_t *pPlayer ) { return &m_Clients[slotOfEdict(pPlayer)]; }
 	static void setListenServerClient ( CClient *pClient ) { m_pListenServerClient = pClient; }
 	static bool isListenServerClient ( CClient *pClient ) { return m_pListenServerClient == pClient; }
 	static bool noListenServerClient () { return m_pListenServerClient == nullptr; }

@@ -33,63 +33,63 @@
 
 #include "bot_utility.h"
 
-// bot for HLDM
+ // bot for HLDM
 class CHLDMBot : public CBot
 {
 public:
-	bool handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy ) override;
+	bool handleAttack(CBotWeapon* pWeapon, edict_t* pEnemy) override;
 
-	void handleWeapons () override;
+	void handleWeapons() override;
 
-	bool isHLDM () override { return true; }
+	bool isHLDM() override { return true; }
 
-	void modThink () override;
+	void modThink() override;
 
-	void init ();
-	void setup () override;
+	void init();
+	void setup() override;
 
-	bool startGame () override;
+	bool startGame() override;
 
-	void died ( edict_t *pKiller, const char *pszWeapon ) override;
-	void killed ( edict_t *pVictim, char *weapon ) override;
+	void died(edict_t* pKiller, const char* pszWeapon) override;
+	void killed(edict_t* pVictim, char* weapon) override;
 
-	void spawnInit () override;
+	void spawnInit() override;
 
-	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true ) override;
+	bool isEnemy(edict_t* pEdict, bool bCheckWeapons = true) override;
 
-	void getTasks (unsigned int iIgnore=0) override;
-	bool executeAction ( eBotAction iAction );
+	void getTasks(unsigned int iIgnore = 0) override;
+	bool executeAction(eBotAction iAction);
 
-	float getArmorPercent () const { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
+	float getArmorPercent() const { return (0.01f * m_pPlayerInfo->GetArmorValue()); }
 
-	bool setVisible ( edict_t *pEntity, bool bVisible ) override;
+	bool setVisible(edict_t* pEntity, bool bVisible) override;
 
-	unsigned int maxEntityIndex ( ) override { return gpGlobals->maxEntities; }
+	unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
 
-	void enemyLost (edict_t *pEnemy) override;
+	void enemyLost(edict_t* pEnemy) override;
 
-	void setFailedObject ( edict_t *pent ) 
-	{ 
-		m_FailedPhysObj = pent; 
+	void setFailedObject(edict_t* pent)
+	{
+		m_FailedPhysObj = pent;
 
-		if ( m_NearestPhysObj == pent ) 
+		if (m_NearestPhysObj == pent)
 			m_NearestPhysObj = nullptr;
 	}
 
-	bool checkStuck () override;
+	bool checkStuck() override;
 
-	bool willCollide ( edict_t *pEntity, bool *bCanJump, float *fTime ) const;
+	bool willCollide(edict_t* pEntity, bool* bCanJump, float* fTime) const;
 
-	edict_t *getFailedObject () const { return m_FailedPhysObj; }
+	edict_t* getFailedObject() const { return m_FailedPhysObj; }
 
-	virtual void touchedWpt ( CWaypoint *pWaypoint );
+	virtual void touchedWpt(CWaypoint* pWaypoint);
 
 private:
 	// blah blah
 	MyEHandle m_NearestPhysObj;
 	MyEHandle m_NearestBreakable;
-	edict_t * m_FailedPhysObj = nullptr;
-	float m_flSprintTime = 0.0f;
+	edict_t* m_FailedPhysObj = nullptr;
+	float m_fSprintTime = 0.0f;
 	MyEHandle m_pHealthCharger;
 	MyEHandle m_pHealthKit;
 	MyEHandle m_pAmmoKit; // nearest healthkit
@@ -99,19 +99,19 @@ private:
 	MyEHandle m_pNearestButton;
 	//MyEHandle m_pNearestBreakable;
 	MyEHandle m_pAmmoCrate;
-	edict_t * m_pCurrentWeapon = nullptr;
+	edict_t* m_pCurrentWeapon = nullptr;
 
 	float m_fUseButtonTime = 0.0f;
 	float m_fUseCrateTime = 0.0f;
 
-	CBaseHandle * m_Weapons = nullptr;
+	CBaseHandle* m_Weapons = nullptr;
 
 	float m_fFixWeaponTime = 0.0f;
 
 	int m_iClip1 = 0;
 	int m_iClip2 = 0;
 
-	edict_t * m_pCarryingObject = nullptr; // using grav gun
+	edict_t* m_pCarryingObject = nullptr; // using grav gun
 };
 
 #endif

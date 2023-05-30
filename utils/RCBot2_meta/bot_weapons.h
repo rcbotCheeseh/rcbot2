@@ -282,7 +282,7 @@ extern WeaponsData_t CSSWeaps[];
 class CWeapon
 {
 public:
-	CWeapon ( const WeaponsData_t *data )
+	CWeapon ( WeaponsData_t *data )
 	{
 		m_iSlot = data->iSlot;
 		setID(data->iId);

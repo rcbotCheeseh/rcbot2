@@ -432,16 +432,16 @@ public:
 
 	bool wantToFollowEnemy () override;
 
-	virtual void checkBuildingsValid (bool bForce = false) {};
+	virtual void checkBuildingsValid (bool bForce = false) {}
 
 	virtual void checkHealingValid ();
 
 // linux fix 2
 	virtual edict_t *findEngineerBuiltObject ( eEngiBuild iBuilding, int index ) { return nullptr; }
 
-	virtual void engineerBuild ( eEngiBuild iBuilding, eEngiCmd iEngiCmd ) {};
+	virtual void engineerBuild ( eEngiBuild iBuilding, eEngiCmd iEngiCmd ) {}
 
-	virtual void spyDisguise ( int iTeam, int iClass ) {};
+	virtual void spyDisguise ( int iTeam, int iClass ) {}
 
 	virtual bool lookAfterBuildings (float *fTime) { return false; }
 
@@ -451,7 +451,7 @@ public:
 
 	virtual bool hasEngineerBuilt ( eEngiBuild iBuilding ) {return false;}
 
-	virtual void engiBuildSuccess ( eEngiBuild iBuilding, int index ) {};
+	virtual void engiBuildSuccess ( eEngiBuild iBuilding, int index ) {}
 
 	virtual bool healPlayer ( edict_t *pPlayer, edict_t *pPrevPlayer ) { return false; }
 	virtual bool upgradeBuilding ( edict_t *pBuilding, bool removesapper = false) {return false;}

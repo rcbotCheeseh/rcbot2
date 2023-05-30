@@ -118,7 +118,8 @@ public:
 
 	eBotType getBotType () const { return m_iBotType; }
 
-	virtual void addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags, int *iArea, float *fMaxDistance ){ return; }
+	virtual void addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, int *iFlags, int *iArea, float *fMaxDistance ){
+	}
 
 ////////////////////////////////
 	virtual void initMod ();
@@ -127,11 +128,11 @@ public:
 
 	virtual bool playerSpawned ( edict_t *pPlayer ); //TODO: should be *pEntity not *pPlayer? [APG]RoboCop[CL]
 
-	virtual void clientCommand ( edict_t *pEntity, int argc,const char *pcmd, const char *arg1, const char *arg2 ) {};
+	virtual void clientCommand ( edict_t *pEntity, int argc,const char *pcmd, const char *arg1, const char *arg2 ) {}
 
-	virtual void modFrame () { };
+	virtual void modFrame () { }
 
-	virtual void freeMemory() {};
+	virtual void freeMemory() {}
 
 	virtual bool isWaypointAreaValid ( int iWptArea, int iWptFlags ) { return true; }
 
@@ -223,7 +224,7 @@ public:
 	{
 		int count = 0;
 
-		for ( int i = 0; i < m_iNumControlPoints; i ++ )
+		for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 		{
 			if ( m_iOwner[i] == iTeam )
 				count++;
@@ -252,7 +253,7 @@ public:
 	{
 		int count = 0;
 
-		for ( int i = 0; i < m_iNumControlPoints; i ++ )
+		for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 		{
 			if ( canDefendBomb(iTeam,i) )
 				count++;
@@ -265,7 +266,7 @@ public:
 	{
 		int count = 0;
 
-		for ( int i = 0; i < m_iNumControlPoints; i ++ )
+		for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 		{
 			if ( canDefuseBomb(iTeam,i) )
 				count++;
@@ -278,7 +279,7 @@ public:
 	{
 		int count = 0;
 
-		for ( int i = 0; i < m_iNumControlPoints; i ++ )
+		for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 		{
 			if ( canPlantBomb(iTeam,i) )
 				count += getNumBombsRequired(i);
@@ -306,7 +307,7 @@ public:
 	{
 		int count = 0;
 
-		for ( int i = 0; i < m_iNumControlPoints; i ++ )
+		for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 		{
 			if ( canPlantBomb(iTeam,i) )
 				count += getNumBombsRemaining(i);
@@ -329,7 +330,7 @@ public:
 	{
 		int count = 0;
 
-		for ( int i = 0; i < m_iNumControlPoints; i ++ )
+		for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 		{
 			if ( m_iOwner[i] == iTeam )
 				count++;
@@ -451,7 +452,7 @@ public:
 
 	int getFlagID ( edict_t *pent ) const
 	{
-		for ( int i = 0; i < m_iNumControlPoints; i ++ )
+		for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 		{
 			if ( m_pFlags[i] == pent )
 				return i;
@@ -465,7 +466,7 @@ public:
 		if ( pent == nullptr)
 			return -1;
 
-		for ( int i = 0; i < m_iNumControlPoints; i ++ )
+		for ( short int i = 0; i < m_iNumControlPoints; i ++ )
 		{
 			if ( m_pBombs[i][0] == pent || m_pBombs[i][1] == pent )
 				return i;
@@ -686,7 +687,8 @@ public:
 	static void updateHostages();
 	static edict_t *getRandomHostage();
 	static bool canRescueHostages();
-	inline static std::vector<CBaseHandle> getHostageVector()
+
+	static std::vector<CBaseHandle> getHostageVector()
 	{
 		return m_hHostages;
 	}

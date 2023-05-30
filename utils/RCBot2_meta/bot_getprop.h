@@ -191,12 +191,12 @@ public:
 		m_offset = 0;
 	}
 
-	CClassInterfaceValue ( const char *key, const char *value, unsigned int preoffset )
+	CClassInterfaceValue ( char *key, char *value, unsigned int preoffset )
 	{
 		init(key,value,preoffset);
 	}
 
-	void init (const char* key, const char* value, unsigned preoffset = 0);
+	void init (const char* key, char* value, unsigned preoffset = 0);
 
 	void findOffset ( );
 
@@ -860,7 +860,7 @@ public:
 	 * @param pHostage		The hostage entity edict
 	 * @return				How much health the given hostage has
 	 **/
-	inline static int getCSHostageHealth(edict_t* pHostage)
+	static int getCSHostageHealth(edict_t* pHostage)
 	{
 		return g_GetProps[GETPROP_CSS_HOSTAGE_HEALTH].getInt(pHostage, 0);
 	}
@@ -871,7 +871,7 @@ public:
 	 * @param pHostage		The hostage entity edict
 	 * @return				TRUE if the given hostage has been rescued
 	 **/
-	inline static bool isCSHostageRescued(edict_t* pHostage)
+	static bool isCSHostageRescued(edict_t* pHostage)
 	{
 		return g_GetProps[GETPROP_CSS_HOSTAGE_RESCUED].getBool(pHostage, false);
 	}
@@ -882,7 +882,7 @@ public:
 	 * @param pHostage		The hostage entity edict
 	 * @return				Edict pointer of the player leading the hostage
 	 **/
-	inline static edict_t* getCSHostageLeader(edict_t* pHostage)
+	static edict_t* getCSHostageLeader(edict_t* pHostage)
 	{
 		return g_GetProps[GETPROP_CSS_HOSTAGE_LEADER].getEntity(pHostage);
 	}

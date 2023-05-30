@@ -194,7 +194,7 @@ void CCSSBot::died(edict_t *pKiller, const char *pszWeapon)
 	if(m_pBuyManager)
 	{
 		m_pBuyManager->onDeath();
-	}
+}
 }
 
 void CCSSBot::spawnInit()
@@ -218,7 +218,7 @@ void CCSSBot::spawnInit()
 void CCSSBot::listenForPlayers()
 {
 	edict_t *pListenNearest = nullptr;
-	float fMaxFactor = 0;
+	float fMaxFactor = 0.0f;
 	Vector vVelocity;
 	bool bIsNearestAttacking = false;
 
@@ -362,7 +362,7 @@ bool CCSSBot::setVisible(edict_t *pEntity, bool bVisible)
 
 	if (CBotGlobals::isBrushEntity(pEntity))
 		fDist = distanceFrom(CBotGlobals::worldCenter(pEntity));
-	else
+		else
 		fDist = distanceFrom(pEntity);
 
 	// if no draw effect it is invisible
@@ -501,7 +501,7 @@ bool CCSSBot::handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy)
 			}
 			else
 			{
-				setMoveTo(CBotGlobals::entityOrigin(pEnemy));
+			setMoveTo(CBotGlobals::entityOrigin(pEnemy));
 			}
 			setMoveSpeed(CClassInterface::getMaxSpeed(m_pEdict)); // in case some task changed the move speed
 		}
@@ -575,7 +575,7 @@ void CCSSBot::modAim(edict_t *pEntity, Vector &v_origin, Vector *v_desired_offse
 		v_desired_offset->x = 0;
 		v_desired_offset->y = 0;
 		v_desired_offset->z = 0;
-	}
+}
 }
 
 void CCSSBot::modThink()
@@ -929,7 +929,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			}
 			break;
 		}
-				case BOT_UTIL_GET_HOSTAGE:
+		case BOT_UTIL_GET_HOSTAGE:
 		{
 			// Select a random hostage to rescue
 			CWaypoint* pRoute;

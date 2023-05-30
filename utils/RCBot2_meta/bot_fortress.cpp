@@ -238,8 +238,8 @@ void CBroadcastRoundStart :: execute ( CBot *pBot )
 }
 
 CBotFortress :: CBotFortress()
-{
-	CBot();
+{ 
+	CBot(); 
 
 	m_iLastFailSentryWpt = -1;
 	m_iLastFailTeleExitWpt = -1;
@@ -288,17 +288,17 @@ CBotFortress :: CBotFortress()
 	m_fSnipeAttackTime = 0.0f;
 	m_pAmmo = nullptr;
 	m_pHealthkit = nullptr;
-	m_pFlag = nullptr;
-	m_pHeal = nullptr;
+	m_pFlag = nullptr; 
+	m_pHeal = nullptr; 
 	m_fCallMedic = 0.0f;
 	m_fTauntTime = 0.0f;
-	m_fLastKnownFlagTime = 0.0f;
+	m_fLastKnownFlagTime = 0.0f; 
 	m_bHasFlag = false;
 	
-	m_pSentryGun = nullptr;
-	m_pDispenser = nullptr;
-	m_pTeleExit = nullptr;
-	m_pTeleEntrance = nullptr;
+	m_pSentryGun = nullptr; 
+	m_pDispenser = nullptr; 
+	m_pTeleExit = nullptr; 
+	m_pTeleEntrance = nullptr; 
 	m_pNearestDisp = nullptr;
 	m_pNearestEnemySentry = nullptr;
 	m_pNearestEnemyTeleporter = nullptr;
@@ -836,8 +836,6 @@ void CBotFortress :: shot ( edict_t *pEnemy )
 void CBotFortress :: killed ( edict_t *pVictim, char *weapon )
 {
 	CBot::killed(pVictim,weapon);
-
-	return;
 }
 
 void CBotFortress :: died ( edict_t *pKiller, const char *pszWeapon )
@@ -972,7 +970,7 @@ void CBotFortress :: spawnInit ()
 
 	memset(m_fCallMedicTime,0,sizeof(float)*MAX_PLAYERS);
 	m_fWaitTurnSentry = 0.0f;
-
+	
 	m_pLastSeeMedic.reset();
 
 	memset(m_fSpyList,0,sizeof(float)*MAX_PLAYERS);
@@ -1075,7 +1073,7 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 		}*/
 
 		*iTries = 0;
-		eyes.x = 0; // nullify pitch / we want yaw only
+			eyes.x = 0; // nullify pitch / we want yaw only
 			AngleVectors(eyes,&forward,&v_right,&v_up);
 		const Vector building = v_src + (forward * 100);
 			//////////////////////////////////////////
@@ -1399,7 +1397,7 @@ void CBotFortress :: modThink ()
 
 	if ( m_fCallMedic < engine->Time() )
 	{
-		if ( getHealthPercent() < 0.5 )
+		if ( getHealthPercent() < 0.5f )
 		{
 			m_fCallMedic = engine->Time() + randomFloat(10.0f,30.0f);
 
@@ -2286,7 +2284,7 @@ void CBotTF2 :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 		// encourage bots to snoop out enemy or throw grenades
 		m_fLastSeeEnemy = engine->Time();
 		m_pLastEnemy = pKiller;
-		m_fLastUpdateLastSeeEnemy = 0;
+		m_fLastUpdateLastSeeEnemy = 0.0f;
 		m_vLastSeeEnemy = CBotGlobals::entityOrigin(m_pLastEnemy);
 		m_vLastSeeEnemyBlastWaypoint = m_vLastSeeEnemy;
 
@@ -2904,7 +2902,7 @@ void CBotTF2::modThink()
 	}
 
 	m_fIdealMoveSpeed = CTeamFortress2Mod::TF2_GetPlayerSpeed(m_pEdict, m_iClass)*rcbot_speed_boost.GetFloat();
-
+	
 	/* spy check code */
 	if (((m_iClass != TF_CLASS_SPY) || (!isDisguised())) && ((m_pEnemy.get() == nullptr) || !hasSomeConditions(CONDITION_SEE_CUR_ENEMY)) && (m_pPrevSpy.get() != nullptr) && (m_fSeeSpyTime > engine->Time()) &&
 		!m_bIsCarryingObj && CBotGlobals::isAlivePlayer(m_pPrevSpy) && !CTeamFortress2Mod::TF2_IsPlayerInvuln(getEdict()))
@@ -3051,7 +3049,7 @@ void CBotTF2::modThink()
 		if (bRevMiniGun)
 		{
 			// record time when bot started revving up
-			if (m_fRevMiniGunTime == 0)
+			if (m_fRevMiniGunTime == 0.0f)
 			{
 				const float fMinTime = (m_fCurrentDanger / 200) * 10;
 
@@ -3065,7 +3063,7 @@ void CBotTF2::modThink()
 				secondaryAttack(true);
 				//m_fIdealMoveSpeed = 30.0f; Improve Max Speed here
 
-				if (m_fCurrentDanger < 1)
+				if (m_fCurrentDanger < 1.0f)
 				{
 					m_fRevMiniGunTime = 0.0f;
 					m_fNextRevMiniGunTime = 0.0f;
@@ -3501,7 +3499,6 @@ void CBotTF2::checkStuckonSpy()
 				m_fFrenzyTime = engine->Time() + randomFloat(0.0f,getHealthPercent());
 
 			detectedAsSpy(pStuck,false);
-			return;
 		}
 	}
 }
@@ -3670,7 +3667,7 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam ) const
 				availableClasses.emplace_back(_class);
 		}
 	}
-
+	
 	if ( availableClasses.empty() )
 		return randomInt(1,9);
 	
@@ -3681,7 +3678,7 @@ int CBotFortress :: getSpyDisguiseClass ( int iTeam ) const
 		fTotal += m_fClassDisguiseFitness[availableClass];
 	}
 
-	if ( fTotal > 0 )
+	if ( fTotal > 0.0f )
 	{
 		const float fRand = randomFloat(0.0f, fTotal);
 
@@ -3878,7 +3875,7 @@ void CBotTF2 :: checkBeingHealed ()
 	static edict_t *pWeapon;
 	static IPlayerInfo *pi;
 	static const char *szWeaponName;
-
+	
 	if ( m_fCheckHealTime > engine->Time() )
 		return;
 
@@ -3890,7 +3887,7 @@ void CBotTF2 :: checkBeingHealed ()
 	for ( i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
 		p = INDEXENT(i);
-		
+
 		if ( p == m_pEdict )
 			continue;
 
@@ -4192,7 +4189,7 @@ float CBotTF2 :: getEnemyFactor ( edict_t *pEnemy )
 
 		if ( CTeamFortress2Mod::isSentry(pEnemy,CTeamFortress2Mod::getEnemyTeam(getTeam())) )
 		{
-			const edict_t *pOwner = CTeamFortress2Mod::getBuildingOwner(ENGI_SENTRY,ENTINDEX(pEnemy));
+			edict_t *pOwner = CTeamFortress2Mod::getBuildingOwner(ENGI_SENTRY,ENTINDEX(pEnemy));
 
 			if ( pOwner && isVisible(pOwner) )
 			{
@@ -4839,7 +4836,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 				(hasSomeConditions(CONDITION_PUSH)?0.25f:randomFloat(-0.1f,0.2f)));
 		}
 	}
-
+	
 	if ((m_iClass == TF_CLASS_DEMOMAN) && (m_iTrapType == TF_TRAP_TYPE_NONE) && canDeployStickies())
 	{
 		ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_LASTENEMY, m_pLastEnemy &&
@@ -5644,7 +5641,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 			if ( m_bDispenserVectorValid )
 			{
 				pWaypoint = CWaypoints::getWaypoint(CWaypointLocations::NearestWaypoint(m_vDispenser,150.0f,-1,true,false,true, nullptr,false,getTeam(),true,false,Vector(0,0,0),CWaypointTypes::W_FL_SENTRY));
-
+				
 				// no use going back to this waypoint
 				if (pWaypoint && (pWaypoint->getArea() > 0) && (pWaypoint->getArea() != m_iCurrentAttackArea) && (pWaypoint->getArea() != m_iCurrentDefendArea))
 				{
@@ -5874,7 +5871,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 
 				m_pSchedules->add(new CBotSchedule(new CBotTaskEngiPlaceBuilding(iObject,getOrigin()+vForward*32.0f)));
-				*/
+*/
 				return true;
 			}
 			return false;
@@ -6037,7 +6034,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 					int iWptFrom = CWaypointLocations::NearestWaypoint(vPoint,2048.0f,-1,true,true,true, nullptr,false,0,false);
 
-					//int m_iVisiblePoints[CWaypoints::MAX_WAYPOINTS]; // make searching quicker
+		//int m_iVisiblePoints[CWaypoints::MAX_WAYPOINTS]; // make searching quicker
 
 					CWaypointLocations::GetAllVisible(iWptFrom,iWptFrom,vPoint,vPoint,2048.0f,&m_iVisibles,&m_iInvisibles);
 
@@ -6955,7 +6952,7 @@ int CBotFortress :: getMetal ()
 		}
 	}
 
-	return 0;
+	return false;
 }
 
 bool CBotTF2 :: upgradeBuilding ( edict_t *pBuilding, bool removesapper )
@@ -7323,7 +7320,7 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 			{
 				edict_t *pSentryEnemy = CClassInterface::getSentryEnemy(m_pSentryGun);
 
-				if ( pSentryEnemy == nullptr)
+				if ( pSentryEnemy == nullptr )
 					bValid = true; // attack
 				else if ( pSentryEnemy == pEdict )
 				{
@@ -7671,69 +7668,69 @@ void CBotTF2 :: sapperDestroyed ( edict_t *pSapper ) const
 
 CBotTF2::CBotTF2() 
 { 
-		CBotFortress(); 
-		m_iDesiredResistType = 0;
-		m_pVTable = nullptr;
-		m_fDispenserPlaceTime = 0.0f;
-		m_fDispenserHealAmount = 0.0f;
-		m_fTeleporterEntPlacedTime = 0.0f;
-		m_fTeleporterExtPlacedTime = 0.0f;
-		m_iTeleportedPlayers = 0;
+	CBotFortress(); 
+	m_iDesiredResistType = 0;
+	m_pVTable = nullptr;
+	m_fDispenserPlaceTime = 0.0f;
+	m_fDispenserHealAmount = 0.0f;
+	m_fTeleporterEntPlacedTime = 0.0f;
+	m_fTeleporterExtPlacedTime = 0.0f;
+	m_iTeleportedPlayers = 0;
 	
-		m_fDoubleJumpTime = 0.0f;
-		m_fSpySapTime = 0.0f;
-		m_iCurrentDefendArea = 0;
-		m_iCurrentAttackArea = 0;
+	m_fDoubleJumpTime = 0.0f;
+	m_fSpySapTime = 0.0f;
+	m_iCurrentDefendArea = 0;
+	m_iCurrentAttackArea = 0;
 
-	    //m_bBlockPushing = false;
-	    //m_fBlockPushTime = 0;
+	//m_bBlockPushing = false;
+	//m_fBlockPushTime = 0;
 
-		m_pDefendPayloadBomb = nullptr;
-		m_pPushPayloadBomb = nullptr;
-		m_pRedPayloadBomb = nullptr;
-		m_pBluePayloadBomb = nullptr;
+	m_pDefendPayloadBomb = nullptr;
+	m_pPushPayloadBomb = nullptr;
+	m_pRedPayloadBomb = nullptr;
+	m_pBluePayloadBomb = nullptr;
 		
-		m_iTrapType = TF_TRAP_TYPE_NONE;
-		m_pLastEnemySentry = MyEHandle(nullptr);
-		m_prevSentryHealth = 0;
-		m_prevDispHealth = 0;
-		m_prevTeleExtHealth = 0;
-		m_prevTeleEntHealth = 0;
-		m_fHealClickTime = 0.0f;
-		m_fCheckHealTime = 0.0f;
+	m_iTrapType = TF_TRAP_TYPE_NONE;
+	m_pLastEnemySentry = MyEHandle(nullptr);
+	m_prevSentryHealth = 0;
+	m_prevDispHealth = 0;
+	m_prevTeleExtHealth = 0;
+	m_prevTeleEntHealth = 0;
+	m_fHealClickTime = 0.0f;
+	m_fCheckHealTime = 0.0f;
 
-		m_iTrapCPIndex = 0;
-		m_fRemoveSapTime = 0.0f;
-		m_fRevMiniGunTime = 0.0f;
-		m_fNextRevMiniGunTime = 0.0f;
-		m_fRevMiniGunBelief = 0.0f;
-		m_fCloakBelief = 0.0f;
+	m_iTrapCPIndex = 0;
+	m_fRemoveSapTime = 0.0f;
+	m_fRevMiniGunTime = 0.0f;
+	m_fNextRevMiniGunTime = 0.0f;
+	m_fRevMiniGunBelief = 0.0f;
+	m_fCloakBelief = 0.0f;
 
-		m_bIsCarryingTeleExit = false;
-		m_bIsCarryingSentry = false;
-		m_bIsCarryingDisp = false;
-		m_bIsCarryingTeleEnt = false;
-		m_bIsCarryingObj = false;
-		m_fCarryTime = 0.0f;
-		m_fCheckNextCarrying = 0.0f;
-		m_fUseBuffItemTime = 0.0f;
+	m_bIsCarryingTeleExit = false;
+	m_bIsCarryingSentry = false;
+	m_bIsCarryingDisp = false;
+	m_bIsCarryingTeleEnt = false;
+	m_bIsCarryingObj = false;
+	m_fCarryTime = 0.0f;
+	m_fCheckNextCarrying = 0.0f;
+	m_fUseBuffItemTime = 0.0f;
 		
-		m_fAttackPointTime  = 0.0f; // used in cart maps
+	m_fAttackPointTime  = 0.0f; // used in cart maps
 
-		m_prevSentryHealth = 0;
-		m_prevDispHealth = 0;
-		m_prevTeleExtHealth = 0;
-		m_prevTeleEntHealth = 0;
+	m_prevSentryHealth = 0;
+	m_prevDispHealth = 0;
+	m_prevTeleExtHealth = 0;
+	m_prevTeleEntHealth = 0;
 
-		m_iSentryArea = 0;
-		m_iDispenserArea = 0;
-		m_iTeleEntranceArea = 0;
-		m_iTeleExitArea = 0;
+	m_iSentryArea = 0;
+	m_iDispenserArea = 0;
+	m_iTeleEntranceArea = 0;
+	m_iTeleExitArea = 0;
 
-		for ( unsigned int i = 0; i < 10; i ++ )
-			m_fClassDisguiseFitness[i] = 1.0f;
+	for ( unsigned int i = 0; i < 10; i ++ )
+		m_fClassDisguiseFitness[i] = 1.0f;
 
-		memset(m_fClassDisguiseTime,0,sizeof(float)*10);
+	memset(m_fClassDisguiseTime,0,sizeof(float)*10);
 }
 
 void CBotTF2 ::init(bool bVarInit)

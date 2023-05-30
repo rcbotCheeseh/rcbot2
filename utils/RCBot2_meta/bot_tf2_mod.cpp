@@ -149,7 +149,7 @@ bool CTeamFortress2Mod :: checkWaypointForTeam(CWaypoint *pWpt, int iTeam)
 
 bool CTeamFortress2Mod :: isWaypointAreaValid ( int iWptArea, int iWptFlags )
 {
-	return m_ObjectiveResource.isWaypointAreaValid(iWptArea,iWptFlags);
+	return CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(iWptArea,iWptFlags);
 }
 ///////////////////////////
 bool CTeamFortress2Mod :: withinEndOfRound ( float fTime )	
@@ -187,7 +187,7 @@ void CTeamFortress2Mod ::modFrame ()
 				m_ObjectiveResource.setup();			
 		}
 		else
-			m_ObjectiveResource.think();
+			CTeamFortress2Mod::m_ObjectiveResource.think();
 		/*
 		if (m_pGameRules.get() == NULL)
 		{
@@ -366,7 +366,7 @@ bool CTeamFortress2Mod :: TF2_IsPlayerKrits(edict_t *pPlayer)
 	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
 	return (pcond & TF2_PLAYER_KRITS) == TF2_PLAYER_KRITS;
 
-	//return false; //Unreachable? [APG]RoboCop[CL]
+	return false; //Unreachable? [APG]RoboCop[CL]
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerInvuln(edict_t *pPlayer)
@@ -526,7 +526,7 @@ bool CTeamFortress2Mod ::isBoss ( edict_t *pEntity, float *fFactor )
 			return true;
 		}
 	}
-	else if (isMapType(TF_MAP_CARTRACE) || isMapType(TF_MAP_CART) || isMapType(TF_MAP_KOTH) || 
+	else if (CTeamFortress2Mod::isMapType(TF_MAP_CARTRACE) || isMapType(TF_MAP_CART) || isMapType(TF_MAP_KOTH) ||
 		isMapType(TF_MAP_CP) ||	isMapType(TF_MAP_PD) || isMapType(TF_MAP_ARENA) || isMapType(TF_MAP_SD))
 	{
 		if ( m_pBoss.get() == pEntity )
@@ -545,7 +545,7 @@ bool CTeamFortress2Mod ::isBoss ( edict_t *pEntity, float *fFactor )
 		//}
 		
 	}
-	else if (isMapType(TF_MAP_MVM) )
+	else if ( CTeamFortress2Mod::isMapType(TF_MAP_MVM) )
 	{
 		if ( m_pBoss.get() == pEntity )
 			return true;
@@ -686,9 +686,9 @@ bool CTeamFortress2Mod :: isHealthKit (const edict_t* pEntity)
 
 bool CTeamFortress2Mod :: isAreaOwnedByTeam (int iArea, int iTeam)
 {
-	if (m_ObjectiveResource.isInitialised() )
+	if ( CTeamFortress2Mod::m_ObjectiveResource.isInitialised() )
 	{
-		return iArea==0 || m_ObjectiveResource.GetOwningTeam(m_ObjectiveResource.m_WaypointAreaToIndexTranslation[iArea])==iTeam;
+		return iArea==0 || CTeamFortress2Mod::m_ObjectiveResource.GetOwningTeam(CTeamFortress2Mod::m_ObjectiveResource.m_WaypointAreaToIndexTranslation[iArea])==iTeam;
 	}
 
 	return false;
@@ -828,8 +828,8 @@ CWaypoint *CTeamFortress2Mod :: getBestWaypointMVM ( CBot *pBot, int iFlags )
 {
 	Vector vFlagLocation;
 
-	const bool bFlagLocationValid = getFlagLocation(TF2_TEAM_BLUE,&vFlagLocation);		
-	
+	const bool bFlagLocationValid = CTeamFortress2Mod::getFlagLocation(TF2_TEAM_BLUE,&vFlagLocation);		
+
 	float fTankDistance = 0.0f; //never used? [APG]RoboCop[CL]
 
 	edict_t *pTank;
@@ -839,7 +839,7 @@ CWaypoint *CTeamFortress2Mod :: getBestWaypointMVM ( CBot *pBot, int iFlags )
 		if (CBotGlobals::entityIsAlive(pTank) == false)
 			m_pNearestTankBoss = nullptr;
 	}
-
+	
 	if ( hasRoundStarted() && m_bMVMFlagStartValid && m_bMVMCapturePointValid && bFlagLocationValid )
 	{
 		if ( m_bMVMAlarmSounded )
@@ -904,9 +904,9 @@ void CTeamFortress2Mod :: teleporterBuilt ( edict_t *pOwner, eEngiBuild type, ed
 
 	const int team = getTeam(pOwner);
 
-	if (isTeleporterEntrance(pBuilding,team) )
+	if ( CTeamFortress2Mod::isTeleporterEntrance(pBuilding,team) )
 		m_Teleporters[iIndex].entrance = MyEHandle(pBuilding);
-	else if (isTeleporterExit(pBuilding,team) )
+	else if ( CTeamFortress2Mod::isTeleporterExit(pBuilding,team) )
 		m_Teleporters[iIndex].exit = MyEHandle(pBuilding);
 
 	m_Teleporters[iIndex].sapper = MyEHandle();
@@ -1084,7 +1084,7 @@ edict_t *CTeamFortress2Mod :: nearestDispenser ( Vector vOrigin, int team )
 
 		if ( pDisp )
 		{
-			if (getTeam(pDisp) == team )
+			if ( CTeamFortress2Mod::getTeam(pDisp) == team )
 			{
 				const float fDist = (CBotGlobals::entityOrigin(pDisp) - vOrigin).Length();
 
@@ -1131,9 +1131,9 @@ void CTeamFortress2Mod:: addWaypointFlags (edict_t *pPlayer, edict_t *pEdict, in
 		{
 			*iFlags |= CWaypointTypes::W_FL_RESUPPLY;
 
-			if (getTeam(pPlayer) == TF2_TEAM_BLUE )
+			if ( CTeamFortress2Mod::getTeam(pPlayer) == TF2_TEAM_BLUE )
 				*iFlags |= CWaypointTypes::W_FL_NORED;
-			else if (getTeam(pPlayer) == TF2_TEAM_RED )
+			else if ( CTeamFortress2Mod::getTeam(pPlayer) == TF2_TEAM_RED )
 				*iFlags |= CWaypointTypes::W_FL_NOBLU;
 		}
 	}
@@ -1239,7 +1239,7 @@ void CTeamFortress2Mod::updatePointMaster()
 				//{
 				//	logger->Log(LogLevel::WARN, "If you are playing cp_* maps, and you get this message, something might be wrong with your mstr_offset!");
 				//}
-			} 
+			}
 			//else 
 			//{
 			//	logger->Log(LogLevel::WARN, "If you are playing cp_* maps, and you get this message, something might be wrong with your mstr_offset!");

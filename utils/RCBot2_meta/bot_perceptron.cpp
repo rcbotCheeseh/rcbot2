@@ -345,7 +345,7 @@ void CBotNeuralNet :: execute (const ga_nn_value* inputs, ga_nn_value* outputs, 
 {
 
 	static CLogisticalNeuron *pNode;
-	//static CLogisticalNeuron *pLayer;
+	static CLogisticalNeuron *pLayer;
 	static unsigned short int i; // i-th node
 	static unsigned short l; // layer
 	static ga_nn_value *output_it;

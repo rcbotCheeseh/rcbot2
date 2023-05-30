@@ -84,6 +84,7 @@
 #include <random>
 #include <vector>
 #include <algorithm>
+#include <random>
 
 #define DEG_TO_RAD(x) ((x)*0.0174533)
 #define RAD_TO_DEG(x) ((x)*57.29578)
@@ -200,7 +201,7 @@ void CBot :: runPlayerMove()
 	}
 
 	cmd.buttons = m_iButtons;
-	cmd.impulse = static_cast<byte>(m_iImpulse);
+	cmd.impulse = m_iImpulse;
 	cmd.viewangles = m_vViewAngles;
 	cmd.weaponselect = m_iSelectWeapon;
 	cmd.tick_count = gpGlobals->tickcount;
@@ -334,7 +335,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 		strcpy(m_szBotName,pProfile->m_szName);
 	}
 
-	if ( m_pPlayerInfo && (pProfile->m_iTeam != -1) )
+	if ( m_pPlayerInfo && pProfile->m_iTeam != -1 )
 		m_pPlayerInfo->ChangeTeam(pProfile->m_iTeam);
 
 	/////////////////////////////
@@ -381,7 +382,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	return true;
 }
 
-bool CBot :: FVisible (const Vector &vOrigin, edict_t *pDest ) const
+bool CBot :: FVisible ( Vector &vOrigin, edict_t *pDest ) const
 {
 	//return CBotGlobals::isVisible(m_pEdict,getEyePosition(),vOrigin);
 	// fix bots seeing through gates/doors
@@ -398,8 +399,8 @@ bool CBot :: FVisible ( edict_t *pEdict, bool bCheckHead )
 	if ( bCheckHead || pEdict == m_pEnemy || CBotGlobals::isPlayer(pEdict) )
 	{
 		// use this method to get origin -- quicker 
-		const Vector vOrigin = pEdict->GetCollideable()->GetCollisionOrigin();
-		const Vector vHead = vOrigin + Vector(0, 0, pEdict->GetCollideable()->OBBMaxs().z);
+		Vector vOrigin = pEdict->GetCollideable()->GetCollisionOrigin();
+		Vector vHead = vOrigin + Vector(0, 0, pEdict->GetCollideable()->OBBMaxs().z);
 
 		if ( FVisible(vHead,pEdict) )
 		{
@@ -491,7 +492,7 @@ bool CBot :: checkStuck ()
 		{
 			if ( m_fLastWaypointVisible + 2.0f < fTime )
 			{
-				m_fLastWaypointVisible = 0;
+				m_fLastWaypointVisible = 0.0f;
 				m_bFailNextMove = true;
 
 				return true;
@@ -605,7 +606,7 @@ bool CBot :: checkStuck ()
 	return m_bThinkStuck;
 }
 
-bool CBot :: isVisible (const edict_t *pEdict ) const
+bool CBot :: isVisible ( edict_t *pEdict ) const
 {
 	return m_pVisibles->isVisible(pEdict);
 }
@@ -687,8 +688,6 @@ void CBot :: currentlyDead ()
 
 	// keep updating until alive
 	m_fSpawnTime = engine->Time();
-
-	return;
 }
 
 CBotWeapon *CBot::getCurrentWeapon()
@@ -1602,7 +1601,7 @@ bool CBot :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 		}
 
 		m_iAccumulatedDamage = 0;
-		m_fUpdateDamageTime = 0;
+		m_fUpdateDamageTime = 0.0f;
 
 		return true;
 	}
@@ -2254,11 +2253,11 @@ void CBot :: doMove ()
 	}
 	else
 	{	
-		m_fForwardSpeed = 0;
+		m_fForwardSpeed = 0.0f;
 		// bots side move speed
-		m_fSideSpeed = 0;
+		m_fSideSpeed = 0.0f;
 		// bots upward move speed (e.g in water)
-		m_fUpSpeed = 0;
+		m_fUpSpeed = 0.0f;
 	}
 }
 
@@ -2274,7 +2273,7 @@ bool CBot :: FInViewCone ( edict_t *pEntity ) const
 	if ( CBotGlobals::isBrushEntity(pEntity) )
 		origin = CBotGlobals::worldCenter(pEntity);
 	else
-		origin = CBotGlobals::entityOrigin(pEntity);
+	origin = CBotGlobals::entityOrigin(pEntity);
 
 	return (origin - getEyePosition()).Length()>1 && DotProductFromOrigin(origin) > 0; // 90 degree !! 0.422618f ); // 65 degree field of view   
 }
@@ -2326,8 +2325,8 @@ Vector CBot::getAimVector ( edict_t *pEntity )
 	}
 	else
 	{
-		fDist = distanceFrom(pEntity);
-		fDist2D = distanceFrom2D(pEntity);
+	fDist = distanceFrom(pEntity);
+	fDist2D = distanceFrom2D(pEntity);
 		v_origin = CBotGlobals::entityOrigin(pEntity);
 	}
 
@@ -2472,7 +2471,7 @@ void CBot::hearVoiceCommand(edict_t* pPlayer, byte cmd) //Needs properly impleme
 
 void CBot :: grenadeThrown ()
 {
-	
+
 }
 
 void CBot::voiceCommand(int cmd)
@@ -2482,7 +2481,7 @@ void CBot::voiceCommand(int cmd)
 
 void CBot :: checkCanPickup ( edict_t *pPickup )
 {
-	
+
 }
 
 Vector CBot::snipe (const Vector& vAiming)
@@ -3060,7 +3059,7 @@ bool CBots :: controlBot ( const char *szOldName, const char *szName, const char
 		return false;
 	}
 
-	if ( (m_iMaxBots != -1) && (CBotGlobals::numClients() >= m_iMaxBots) )
+	if ( m_iMaxBots != -1 && CBotGlobals::numClients() >= m_iMaxBots )
 	{
 		logger->Log(LogLevel::ERROR, "Can't create bot, max_bots reached");
 		return false;
@@ -3094,7 +3093,7 @@ bool CBots :: createBot (const char *szClass, const char *szTeam, const char *sz
 	CBotMod *pMod = CBotGlobals::getCurrentMod();
 	const char *szOVName = "";
 
-	if ( (m_iMaxBots != -1) && (CBotGlobals::numClients() >= m_iMaxBots) )
+	if ( m_iMaxBots != -1 && CBotGlobals::numClients() >= m_iMaxBots )
 		logger->Log(LogLevel::ERROR, "Can't create bot, max_bots reached");
 
 	m_flAddKickBotTime = engine->Time() + rcbot_addbottime.GetFloat();
@@ -3114,13 +3113,13 @@ bool CBots :: createBot (const char *szClass, const char *szTeam, const char *sz
 	SET_PROFILE_DATA_INT(szClass,m_iClass)
 	SET_PROFILE_DATA_INT(szTeam,m_iTeam)
 	SET_PROFILE_STRING(szName,szOVName,m_szName)
-	
+
 	edict_t* pEdict = g_pBotManager->CreateBot(szOVName);
 
 	if ( pEdict == nullptr)
 		return false;
 
-	return ( m_Bots[slotOfEdict(pEdict)]->createBotFromEdict(pEdict,pBotProfile) );
+	return m_Bots[slotOfEdict(pEdict)]->createBotFromEdict(pEdict,pBotProfile);
 }
 
 int CBots::createDefaultBot(const char* name) {
@@ -3263,11 +3262,9 @@ void CBots :: botThink ()
 	const bool bBotStop = bot_stop.GetInt() > 0;
 
 #ifdef _DEBUG
-	CProfileTimer *CBotsBotThink;
-	CProfileTimer *CBotThink;
 
-	CBotsBotThink = CProfileTimers::getTimer(BOTS_THINK_TIMER);
-	CBotThink = CProfileTimers::getTimer(BOT_THINK_TIMER);
+	CProfileTimer* CBotsBotThink = CProfileTimers::getTimer(BOTS_THINK_TIMER);
+	CProfileTimer* CBotThink = CProfileTimers::getTimer(BOT_THINK_TIMER);
 
 	if ( CClients::clientsDebugging(BOT_DEBUG_PROFILE) )
 	{
@@ -3412,14 +3409,14 @@ bool CBots :: needToAddBot ()
 {
 	const int iClients = CBotGlobals::numClients();
 
-	return m_iMinBots!=-1&& numBots() < m_iMinBots || iClients < m_iMaxBots&&m_iMaxBots!=-1;
+	return m_iMinBots!=-1&&CBots::numBots() < m_iMinBots || iClients < m_iMaxBots&&m_iMaxBots!=-1;
 }
 
 bool CBots :: needToKickBot ()
 {
 	if ( m_flAddKickBotTime < engine->Time() )
 	{
-		if ( m_iMinBots != -1 && numBots() <= m_iMinBots )
+		if ( m_iMinBots != -1 && CBots::numBots() <= m_iMinBots )
 			return false;
 
 		if ( m_iMaxBots > 0 && CBotGlobals::numClients() > m_iMaxBots )

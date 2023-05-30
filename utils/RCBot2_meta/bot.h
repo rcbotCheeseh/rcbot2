@@ -319,7 +319,7 @@ public:
 
 	virtual unsigned int maxEntityIndex ( ) { return MAX_PLAYERS; }
 
-	// linux fix 1
+// linux fix 1
 	virtual void onInventoryApplication (){}
 	
 	// return distance from this origin
@@ -387,7 +387,8 @@ public:
 
 	CBotWeapon *getBestWeapon ( edict_t *pEnemy, bool bAllowMelee = true, bool bAllowMeleeFallback = true, bool bMeleeOnly = false, bool bExplosivesOnly = false ) const;
 
-	virtual void modThink () { return; }
+	virtual void modThink () {
+	}
 
 	virtual bool isEnemy ( edict_t *pEdict, bool bCheckWeapons = true ) { return false; }
 
@@ -402,7 +403,7 @@ public:
 
 	bool FVisible ( edict_t *pEdict, bool bCheckHead = false );
 
-	bool isVisible ( const edict_t *pEdict ) const;
+	bool isVisible ( edict_t *pEdict ) const;
 
     void setEnemy ( edict_t *pEnemy )
 	{
@@ -458,7 +459,7 @@ public:
 
 	void setEdict ( edict_t *pEdict);
 
-	bool FVisible ( const Vector &vOrigin, edict_t *pDest = nullptr) const;
+	bool FVisible ( Vector &vOrigin, edict_t *pDest = nullptr) const;
 
 	Vector getEyePosition () const;
 
@@ -1099,7 +1100,7 @@ public:
 	static void runPlayerMoveAll ();
 
 	static CBot *get ( int iIndex ) { return m_Bots[iIndex]; }
-	static CBot *get ( const edict_t *pPlayer ) { return m_Bots[slotOfEdict(pPlayer)]; }
+	static CBot *get ( edict_t *pPlayer ) { return m_Bots[slotOfEdict(pPlayer)]; }
 
 private:
 	static CBot **m_Bots;

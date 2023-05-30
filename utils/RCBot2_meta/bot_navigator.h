@@ -106,9 +106,9 @@ public:
 
 	virtual bool nextPointIsOnLadder () { return false; }
 
-	virtual bool beliefLoad ( ) { return false; };
+	virtual bool beliefLoad ( ) { return false; }
 
-	virtual bool beliefSave ( bool bOverride = false ) { return false; };
+	virtual bool beliefSave ( bool bOverride = false ) { return false; }
 
 	virtual void belief ( Vector origin, Vector vOther, float fBelief, float fStrength, BotBelief iType ) = 0;
 
@@ -121,11 +121,12 @@ public:
 
 	virtual float getBelief ( int index ) { return 0; }
 
-	virtual void beliefOne ( int iWptIndex, BotBelief iBeliefType, float fDist ) { return; }
+	virtual void beliefOne ( int iWptIndex, BotBelief iBeliefType, float fDist ) {
+	}
 
 	virtual int numPaths ( ) { return 0; }
 
-	virtual Vector getPath ( int pathid ) { return {0,0,0}; }
+	virtual Vector getPath ( int pathid ) { return Vector(0,0,0); }
 
 	virtual bool randomDangerPath (Vector *vec) { return false; }
 
@@ -516,11 +517,11 @@ public:
 
 	bool hasNextPoint () override;
 
-	void rollBackPosition () override {};
+	void rollBackPosition () override {}
 
-    void init () override;
+	void init () override;
 
-    void belief ( Vector origin, Vector facing, float fBelief, float fStrength, BotBelief iType ) override {}; //bir3yk
+    void belief ( Vector origin, Vector facing, float fBelief, float fStrength, BotBelief iType ) override {} //bir3yk
 
 	//void rememberEnemyPosition ( Vector vOrigin );
 

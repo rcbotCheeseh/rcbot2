@@ -53,7 +53,7 @@ void UTIL_FindServerClassPrint(const char *name_cmd)
 
 	strncpy(name,name_cmd,127);
 	name[127] = 0;
-	__strlow(name);
+	__strlow(name)
 
 	const ServerClass *pClass = servergamedll->GetAllServerClasses();
 
@@ -62,7 +62,7 @@ void UTIL_FindServerClassPrint(const char *name_cmd)
 		strncpy(temp,pClass->m_pNetworkName,127);
 		temp[127] = 0;
 
-		__strlow(temp);
+		__strlow(temp)
 
 		if (strstr(temp,name) != nullptr)
 		{
@@ -251,7 +251,7 @@ edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict )
 	return nullptr;
 }
 
-void CClassInterfaceValue :: init (const char* key, const char* value, unsigned preoffset)
+void CClassInterfaceValue :: init (const char* key, char* value, unsigned preoffset)
 {
 	m_class = CStrings::getString(key);
 	m_value = CStrings::getString(value);
@@ -301,7 +301,7 @@ void CClassInterfaceValue :: findOffset ( )
 #ifdef _DEBUG	
 	else
 	{
-		CBotGlobals::botMessage(NULL,1,"Warning: Couldn't find CLASS %s",m_class);
+		CBotGlobals::botMessage(nullptr,1,"Warning: Couldn't find CLASS %s",m_class);
 		return;
 	}
 #endif
@@ -311,7 +311,7 @@ void CClassInterfaceValue :: findOffset ( )
 #ifdef _DEBUG	
 	else
 	{
-		CBotGlobals::botMessage(NULL,1,"Warning: Couldn't find getprop %s for class %s",m_value,m_class);
+		CBotGlobals::botMessage(nullptr,1,"Warning: Couldn't find getprop %s for class %s",m_value,m_class);
 	}
 #endif
 }
@@ -711,7 +711,7 @@ edict_t *CClassInterface::FindEntityByNetClassNearest(Vector vstart, const char 
 	edict_t *pfound = nullptr;
 	float fMindist = 8192.0f;
 
-	for (int i = 0; i < gpGlobals->maxEntities; i++)
+	for (short int i = 0; i < gpGlobals->maxEntities; i++)
 	{
 		edict_t* current = engine->PEntityOfEntIndex(i);
 		if (current == nullptr)

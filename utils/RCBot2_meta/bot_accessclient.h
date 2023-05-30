@@ -39,7 +39,7 @@
 class CAccessClient
 {
 public:
-	CAccessClient(const char *szSteamID, int iAccessLevel );
+	CAccessClient( const char *szSteamID, int iAccessLevel );
 
 	bool isForSteamID ( const char *szSteamID ) const;
 

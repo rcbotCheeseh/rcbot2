@@ -830,7 +830,7 @@ void CClient :: think ()
 						debugoverlay->AddLineOverlay(vPlayerOrigin,vCheckOrigin,255,255,255,false,2);
 					}
 #endif					
-					if ( tr->fraction < 1.0 )
+					if ( tr->fraction < 1.0f )
 					{
 						if ( tr->m_pEnt )
 						{
@@ -841,7 +841,7 @@ void CClient :: think ()
 							if ( CClassInterface::getVelocity(pEdict,&vel) )
 							{
 								// on a lift/train moving "fast"
-								if ( vel.Length() > 20.0 )
+								if ( vel.Length() > 20.0f )
 									continue;
 							}
 						}
@@ -861,7 +861,7 @@ void CClient :: think ()
 							if ( m_bDebugAutoWaypoint )
 								debugoverlay->AddLineOverlay(vPlayerOrigin,vCheckOrigin,255,255,255,false,2);
 #endif							
-							if ( tr->fraction >= 1.0 )
+							if ( tr->fraction >= 1.0f )
 							{
 								int iNearestWpt = CWaypointLocations::NearestWaypoint(vCheckOrigin, 100.0f, -1, true, false, false, nullptr);
 								
@@ -873,7 +873,6 @@ void CClient :: think ()
 									
 									break;
 								}
-								continue;
 							}
 						}
 						
@@ -1068,7 +1067,7 @@ Vector CClient :: getOrigin () const
 	return CBotGlobals::entityOrigin(m_pPlayer) + Vector(0,0,32);//m_pPlayer->GetCollideable()->GetCollisionOrigin();
 }
 
-void CClients :: clientActive ( const edict_t *pPlayer )
+void CClients :: clientActive ( edict_t *pPlayer )
 {
 	CClient *pClient = &m_Clients[slotOfEdict(pPlayer)];
 
@@ -1084,12 +1083,12 @@ CClient *CClients :: clientConnected ( edict_t *pPlayer )
 	return pClient;
 }
 
-void CClients :: init ( const edict_t *pPlayer )
+void CClients :: init ( edict_t *pPlayer )
 {
 	m_Clients[slotOfEdict(pPlayer)].init();
 }
 
-void CClients :: clientDisconnected ( const edict_t *pPlayer )
+void CClients :: clientDisconnected ( edict_t *pPlayer )
 {
 	CClient *pClient = &m_Clients[slotOfEdict(pPlayer)];
 
@@ -1203,7 +1202,7 @@ bool CClients :: clientsDebugging (int iLev)
 	{
 		for ( int i = 0; i < MAX_PLAYERS; i ++ )
 		{
-			const CClient* pClient = get(i);
+			const CClient* pClient = CClients::get(i);
 
 			if ( pClient->isUsed() )
 			{

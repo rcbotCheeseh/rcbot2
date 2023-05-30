@@ -182,9 +182,9 @@ void CCounterStrikeSourceMod::onRoundStart()
 		if(pCSBot && pCSBot->inUse())
         {
             pCSBot->onRoundStart();
-        }
+		}
 	}
-	
+
     if(isMapType(CS_MAP_HOSTAGERESCUE))
     {
         updateHostages();
@@ -196,9 +196,9 @@ void CCounterStrikeSourceMod::onRoundStart()
  **/
 void CCounterStrikeSourceMod::onFreezeTimeEnd()
 {
-	logger->Log(LogLevel::TRACE, "CCounterStrikeSourceMod::OnFreezeTimeEnd()");
+    logger->Log(LogLevel::TRACE, "CCounterStrikeSourceMod::OnFreezeTimeEnd()");
 
-	const edict_t *pC4 = CClassInterface::FindEntityByClassnameNearest(Vector(0.0, 0.0, 0.0), "weapon_c4", 32000.0f);
+    const edict_t *pC4 = CClassInterface::FindEntityByClassnameNearest(Vector(0.0, 0.0, 0.0), "weapon_c4", 32000.0f);
     if(pC4)
     {
         m_hBomb.Init(engine->IndexOfEdict(pC4), pC4->m_NetworkSerialNumber);
