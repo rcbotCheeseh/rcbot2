@@ -161,6 +161,10 @@ for sdk_name in MMS.sdks:
       else:
         lib_folder = os.path.join(sdk.path, 'lib', 'mac')
 
+    if sdk.name in ['css', 'hl2dm', 'dods', 'sdk2013', 'bms', 'tf2', 'l4d', 'nucleardawn', 'l4d2']:
+      if builder.target.platform in ['linux', 'mac']:
+        cxx.defines += ['NO_HOOK_MALLOC', 'NO_MALLOC_OVERRIDE']
+
     if builder.target.platform in ['linux', 'mac']:
       ## RCBot2: link other dependencies
       if sdk.name in ['sdk2013', 'bms']:
