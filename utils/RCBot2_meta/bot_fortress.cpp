@@ -2699,14 +2699,14 @@ void CBotFortress::chooseClass()
 
 		if (CTeamFortress2Mod::isMapType(TF_MAP_MVM))
 		{
-			fClassFitness[TF_CLASS_ENGINEER] *= 1.5f;
-			fClassFitness[TF_CLASS_SPY] *= 0.6f;
+			fClassFitness[TF_CLASS_ENGINEER] *= 1.6f;
+			fClassFitness[TF_CLASS_SPY] *= 0.5f;
 			fClassFitness[TF_CLASS_SCOUT] *= 0.6f;
 			fClassFitness[TF_CLASS_HWGUY] *= 1.5f;
-			fClassFitness[TF_CLASS_MEDIC] *= 1.1f;
+			fClassFitness[TF_CLASS_MEDIC] *= 1.0f;
 			fClassFitness[TF_CLASS_SOLDIER] *= 1.5f;
 			fClassFitness[TF_CLASS_DEMOMAN] *= 1.4f;
-			fClassFitness[TF_CLASS_PYRO] *= 1.6f;
+			fClassFitness[TF_CLASS_PYRO] *= 1.2f;
 			// attacking team?
 		}
 		else if (CTeamFortress2Mod::isAttackDefendMap())
