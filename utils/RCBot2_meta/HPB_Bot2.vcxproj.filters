@@ -15,6 +15,12 @@
     <Filter Include="Source Files\rcbot_subcmds">
       <UniqueIdentifier>{e6487d5d-1015-4df5-8b5f-038779fe57e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\rcbot">
+      <UniqueIdentifier>{5fc43177-eeaf-41e5-a623-5a472eac464c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rcbot\tf2">
+      <UniqueIdentifier>{6884231c-53d4-4673-9b74-c1811a727656}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bot.cpp">
@@ -184,6 +190,21 @@
     </ClCompile>
     <ClCompile Include="..\..\rcbot_subcmds\waypoint.cpp">
       <Filter>Source Files\rcbot_subcmds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\rcbot\entprops.cpp">
+      <Filter>Source Files\rcbot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\rcbot\helper.cpp">
+      <Filter>Source Files\rcbot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\rcbot\logging.cpp">
+      <Filter>Source Files\rcbot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\rcbot\math_fix.cpp">
+      <Filter>Source Files\rcbot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\rcbot\tf2\conditions.cpp">
+      <Filter>Source Files\rcbot\tf2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -357,6 +378,18 @@
     </ClInclude>
     <ClInclude Include="..\..\sm_ext\smsdk_config.h">
       <Filter>Source Files\sm_ext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\rcbot\entprops.h">
+      <Filter>Source Files\rcbot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\rcbot\helper.h">
+      <Filter>Source Files\rcbot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\rcbot\logging.h">
+      <Filter>Source Files\rcbot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\rcbot\tf2\conditions.h">
+      <Filter>Source Files\rcbot\tf2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
