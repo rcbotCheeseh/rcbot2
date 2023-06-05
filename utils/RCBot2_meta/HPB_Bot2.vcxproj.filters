@@ -158,9 +158,6 @@
     <ClCompile Include="bot_css_mod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="logging.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\sm_ext\bot_sm_ext.cpp">
       <Filter>Source Files\sm_ext</Filter>
     </ClCompile>
@@ -187,9 +184,6 @@
     </ClCompile>
     <ClCompile Include="..\..\rcbot_subcmds\waypoint.cpp">
       <Filter>Source Files\rcbot_subcmds</Filter>
-    </ClCompile>
-    <ClCompile Include="math_fix.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

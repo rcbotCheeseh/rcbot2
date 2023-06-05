@@ -274,8 +274,6 @@
     <ClCompile Include="bot_sigscan.cpp" />
     <ClCompile Include="bot_cvars.cpp" />
     <ClCompile Include="bot_plugin_meta.cpp" />
-    <ClCompile Include="logging.cpp" />
-    <ClCompile Include="math_fix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\sm_ext\bot_sm_ext.h" />
