@@ -67,8 +67,8 @@ void CToolTip::send(edict_t *pPlayer) const
 void CClient :: init ()
 {
 	m_iWaypointShowFlags = 0;
-	m_fMonitorHighFiveTime = 0;
-	m_fSpeed = 0;
+	m_fMonitorHighFiveTime = 0.0f;
+	m_fSpeed = 0.0f;
 	m_pPlayer = nullptr;
 	m_szSteamID = nullptr;
 	m_bWaypointOn = false;
@@ -95,10 +95,10 @@ void CClient :: init ()
 	while ( !m_NextTooltip.empty() )
 		m_NextTooltip.pop();
 
-	m_fNextBotServerMessage = 0;
+	m_fNextBotServerMessage = 0.0f;
 	m_bSentWelcomeMessage = false;
-	m_fSpeed = 0;
-	m_fUpdatePos = 0;
+	m_fSpeed = 0.0f;
+	m_fUpdatePos = 0.0f;
 }
 
 bool CClient :: needToRenderMenu () const
@@ -213,7 +213,7 @@ public:
 		m_pPlayer = pPlayer;
 		m_iTeam = iTeam;
 		m_pNearestBot = nullptr;
-		m_fNearestDist = 0;
+		m_fNearestDist = 0.0f;
 	}
 
 	void execute ( CBot *pBot ) override
@@ -302,7 +302,7 @@ void CClient :: think ()
 		if ( m_fTeleportTime < engine->Time() )
 		{
 			m_bIsTeleporting = false;
-			m_fTeleportTime = 0;
+			m_fTeleportTime = 0.0f;
 			//reset movetypes
 			byte *pMoveType = CClassInterface::getMoveTypePointer(m_pPlayer);
 			int *pPlayerFlags = CClassInterface::getPlayerFlagsPointer(m_pPlayer);
@@ -469,13 +469,13 @@ void CClient :: think ()
 
 			m_vLastAutoWaypointPlacePos = getOrigin();
 			m_bSetUpAutoWaypoint = TRUE;
-			m_fCanPlaceJump = 0;
+			m_fCanPlaceJump = 0.0f;
 			m_iLastButtons = 0;
 
 			m_iLastJumpWaypointIndex = -1;
 			m_iLastLadderWaypointIndex = -1;
 			m_iLastMoveType = 0;
-			m_fCanPlaceLadder = 0;
+			m_fCanPlaceLadder = 0.0f;
 			m_iJoinLadderWaypointIndex = -1;
 		}
 		else
@@ -653,7 +653,7 @@ void CClient :: think ()
 
 				bCheckDistance = false;
 
-				m_fCanPlaceLadder = 0;
+				m_fCanPlaceLadder = 0.0f;
 
 				// need to unset every check point when going on ladder first time
 				for ( int i = 0; i < MAX_STORED_AUTOWAYPOINT; i ++ )
@@ -705,7 +705,7 @@ void CClient :: think ()
 				
 				bCheckDistance = false;
 
-				m_fCanPlaceLadder = 0;
+				m_fCanPlaceLadder = 0.0f;
 			}
 			
 			// ****************************************************
@@ -1010,7 +1010,7 @@ void CClient :: clientConnected ( edict_t *pPlayer )
 
 void CClient :: updateCurrentWaypoint ()
 {
-	setWaypoint(CWaypointLocations::NearestWaypoint(getOrigin(),50,-1,false,true,false, nullptr,false,0,false,false,Vector(0,0,0),m_iWaypointShowFlags));
+	setWaypoint(CWaypointLocations::NearestWaypoint(getOrigin(),50.0f,-1,false,true,false, nullptr,false,0,false,false,Vector(0,0,0),m_iWaypointShowFlags));
 }
 // this player disconnects
 void CClient :: clientDisconnected ()

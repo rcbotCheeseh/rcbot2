@@ -65,13 +65,13 @@ class IMoveHelper;
 class RCBotPluginMeta : public ISmmPlugin, public IMetamodListener
 {
 public:
-	bool Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxlen, bool late) override;
-	bool Unload(char *error, size_t maxlen) override;
-	bool Pause(char *error, size_t maxlen) override;
-	bool Unpause(char *error, size_t maxlen) override;
-	void AllPluginsLoaded() override;
+	bool Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxlen, bool late);
+	bool Unload(char *error, size_t maxlen);
+	bool Pause(char *error, size_t maxlen);
+	bool Unpause(char *error, size_t maxlen);
+	void AllPluginsLoaded();
 public: //IMetamodListener stuff
-	void OnVSPListening(IServerPluginCallbacks *iface) override;
+	void OnVSPListening(IServerPluginCallbacks *iface);
 public: //hooks
 
 	void Hook_ServerActivate(edict_t *pEdictList, int edictCount, int clientMax);
@@ -113,14 +113,14 @@ public: // SourceMod
 
 public:
 
-	const char *GetAuthor() override;
-	const char *GetName() override;
-	const char *GetDescription() override;
-	const char *GetURL() override;
-	const char *GetLicense() override;
-	const char *GetVersion() override;
-	const char *GetDate() override;
-	const char *GetLogTag() override;
+	const char *GetAuthor();
+	const char *GetName();
+	const char *GetDescription();
+	const char *GetURL();
+	const char *GetLicense();
+	const char *GetVersion();
+	const char *GetDate();
+	const char *GetLogTag();
 
 private:
 #if defined SM_EXT
@@ -130,7 +130,7 @@ private:
 	int m_iClientCommandIndex = 0;
 
 	// Bot Quota
-	float m_fBotQuotaTimer = 0;
+	float m_fBotQuotaTimer = 0.0f;
 	int m_iTargetBots[MAX_PLAYERS];
 
 	void BotQuotaCheck();

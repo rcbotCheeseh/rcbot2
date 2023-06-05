@@ -12,7 +12,7 @@ class CWaypointDistances
 public:
 	CWaypointDistances()
 	{
-		m_fSaveTime = 0;
+		m_fSaveTime = 0.0f;
 	}
 
 	static float getDistance ( int iFrom, int iTo );

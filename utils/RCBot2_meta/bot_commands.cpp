@@ -93,10 +93,11 @@ CBotCommandInline AddBotCommand("addbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED,
 	if ( pClient )
 		pEntity = pClient->getPlayer();
 
-	if (rcbot_bot_quota_interval.GetFloat() > 0) {
+	// That breaks the bot quota system? [APG]RoboCop[CL]
+	/*if (rcbot_bot_quota_interval.GetFloat() > 0) {
 		CBotGlobals::botMessage(pEntity, 0, "error: cannot manually add bot while rcbot_bot_quota_interval is active");
 		return COMMAND_ACCESSED;
-	}
+	}*/
 
 	//if ( !bot_sv_cheat_warning.GetBool() || bot_sv_cheats_auto.GetBool() || (!sv_cheats || sv_cheats->GetBool()) )
 	//{
@@ -132,7 +133,7 @@ CBotCommandInline KickBotCommand("kickbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATE
 
 	
 	return COMMAND_ACCESSED;
-}, R"(usage "kickbot" or "kickbot <team>" : kicks random bot or bot on team: <team>)");
+}, "usage \"kickbot\" or \"kickbot <team>\" : kicks random bot or bot on team: <team>");
 
 bool CBotCommand :: hasAccess ( CClient *pClient ) const
 {
@@ -152,7 +153,7 @@ eBotCommandResult CBotCommand :: execute ( CClient *pClient, const char *pcmd, c
 }
 
 eBotCommandResult CBotSubcommands::execute(CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5) {
-	for (const auto cmd : m_theCommands) {
+	for (auto cmd : m_theCommands) {
 		if (!cmd->isCommand(pcmd)) {
 			continue;
 		}
@@ -170,7 +171,7 @@ eBotCommandResult CBotSubcommands::execute(CClient *pClient, const char *pcmd, c
 		//const eBotCommandResult result = cmd->execute(pClient, pcmd, arg1, arg2, arg3, arg4, arg5); //pcmd used as arg1?
 											//TODO: And this causes waypoint flag menu to go outta range on last page?[APG]RoboCop[CL]
 		
-		const eBotCommandResult result = cmd->execute(pClient, arg1, arg2, arg3, arg4, arg5, nullptr);
+		eBotCommandResult result = cmd->execute(pClient, arg1, arg2, arg3, arg4, arg5, nullptr);
 		if (result == COMMAND_ERROR) {
 			cmd->printHelp(pClient? pClient->getPlayer() : nullptr);
 		}
@@ -190,7 +191,7 @@ void CBotSubcommands::printCommand(edict_t *pPrintTo, int indent)
 
 		int i;
 
-		for ( i = 0; i < indent*2 && i < maxIndent-1; i ++ )
+		for ( i = 0; (i < (indent*2)) && (i < maxIndent-1); i ++ )
 			szIndent[i] = ' ';
 
 		szIndent[maxIndent-1] = 0;
@@ -237,7 +238,7 @@ void CBotCommand :: printCommand ( edict_t *pPrintTo, int indent )
 		char szIndent[maxIndent];
 		int i;
 
-		for ( i = 0; i < indent*2 && i < maxIndent-1; i ++ )
+		for ( i = 0; (i < (indent*2)) && (i < maxIndent-1); i ++ )
 			szIndent[i] = ' ';
 
 		szIndent[maxIndent-1] = 0;

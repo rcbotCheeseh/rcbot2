@@ -12,7 +12,7 @@ typedef struct
 }wpt_dist_hdr_t;
 
 int CWaypointDistances::m_Distances [CWaypoints::MAX_WAYPOINTS][CWaypoints::MAX_WAYPOINTS];
-float CWaypointDistances::m_fSaveTime = 0;
+float CWaypointDistances::m_fSaveTime = 0.0f;
 
 void CWaypointDistances :: load ()
 {

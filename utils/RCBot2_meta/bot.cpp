@@ -2179,8 +2179,6 @@ void CBot :: doMove ()
 					else
 						m_vMoveTo = getOrigin() + vMove/vMove.Length()*bot_avoid_strength.GetFloat() - vLeft*bot_avoid_strength.GetFloat();
 				}
-
-			
 			}
 			else
 				m_pAvoidEntity = nullptr;
@@ -2398,7 +2396,7 @@ void CBot::modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset
 
 	const int iPlayerFlags = CClassInterface::getPlayerFlags(pEntity);
 
-	fHeadOffset = 0;
+	fHeadOffset = 0.0f;
 
 	if ( rcbot_supermode.GetBool() )
 	{
@@ -2420,7 +2418,7 @@ void CBot::modAim ( edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset
 	}
 	else
 	{
-		if ( fDist < 160 )
+		if ( fDist < 160.0f )
 			fVelFactor = 0.001f;
 
 		fDistFactor = 1.0f - m_pProfile->m_fAimSkill + fDist*0.000125f*(m_fFov/90.0f);

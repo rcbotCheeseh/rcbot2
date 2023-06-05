@@ -140,11 +140,11 @@ public:
 		m_iPlayerSlot = ENTINDEX(pPlayer);
 	}
 
-	bool IsReliable() const override { return false; }
-	bool IsInitMessage() const override { return false; }
+	bool IsReliable() const { return false; }
+	bool IsInitMessage() const { return false; }
 
-	int	GetRecipientCount() const override { return 1; }
-	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot; }
+	int	GetRecipientCount() const { return 1; }
+	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot; }
 
 private:
 	int m_iPlayerSlot;
@@ -158,7 +158,7 @@ public:
 		m_iMaxCount = 0;
 
 		for (int i = 0; i < MAX_PLAYERS; ++i) {
-			const CClient* client = CClients::get(i);
+			CClient* client = CClients::get(i);
 
 			if (client->isUsed()) {
 				IPlayerInfo *p = playerinfomanager->GetPlayerInfo(client->getPlayer());
@@ -171,11 +171,11 @@ public:
 		}
 	}
 
-	bool IsReliable() const override { return false; }
-	bool IsInitMessage() const override { return false; }
+	bool IsReliable() const { return false; }
+	bool IsInitMessage() const { return false; }
 
-	int	GetRecipientCount() const override { return m_iMaxCount; }
-	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot[slot] + 1; }
+	int	GetRecipientCount() const { return m_iMaxCount; }
+	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot[slot] + 1; }
 
 private:
 
@@ -311,7 +311,7 @@ void RCBotPluginMeta::Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper)
 class BaseAccessor : public IConCommandBaseAccessor
 {
 public:
-	bool RegisterConCommandBase(ConCommandBase *pCommandBase) override
+	bool RegisterConCommandBase(ConCommandBase *pCommandBase)
 	{
 		/* Always call META_REGCVAR instead of going through the engine. */
 		return META_REGCVAR(pCommandBase);
@@ -368,7 +368,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientPutInServer, gameclients, this, &RCBotPluginMeta::Hook_ClientPutInServer, true);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientConnect, gameclients, this, &RCBotPluginMeta::Hook_ClientConnect, false);
 	SH_ADD_HOOK_MEMFUNC(IServerGameClients, ClientCommand, gameclients, this, &RCBotPluginMeta::Hook_ClientCommand, false);
-	//Hook FireEvent to our function - unstable for TF2? [APG]RoboCop[CL]														  
+	//Hook FireEvent to our function - unstable for TF2? [APG]RoboCop[CL]
 	SH_ADD_HOOK_MEMFUNC(IGameEventManager2, FireEvent, gameevents, this, &RCBotPluginMeta::FireGameEvent, false);
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
@@ -441,7 +441,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	{
 		SH_MANUALHOOK_RECONFIGURE(MHook_PlayerRunCmd, rcbot_runplayercmd_syn.GetInt(), 0, 0);
 	}
-	#endif
+#endif
 
 #endif
 
@@ -457,7 +457,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	// Find the RCBOT2 Path from metamod VDF
 	extern IFileSystem *filesystem;
 	KeyValues *mainkv = new KeyValues("metamodplugin");
-
+	
 	const char *rcbot2path;
 	logger->Log(LogLevel::INFO, "Reading rcbot2 path from VDF...");
 	
@@ -533,8 +533,8 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 
 				m_iTargetBots[human_count] = bot_count;
 				logger->Log(LogLevel::INFO, "Bot Quota - Humans: %d, Bots: %d", human_count, bot_count);
-			}
 		}
+	}
 	}
 
 	return true;
@@ -552,8 +552,8 @@ bool RCBotPluginMeta::Unload(char *error, size_t maxlen)
 #if defined SM_EXT
 	SM_UnloadExtension();
 #endif
-
-	CBots::kickRandomBot(MAX_PLAYERS);
+	
+	//CBots::kickRandomBot(MAX_PLAYERS); //breaks the bot quota system? [APG]RoboCop[CL]
 	
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameDLL, LevelInit, server, this, &RCBotPluginMeta::Hook_LevelInit, true);
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameDLL, ServerActivate, server, this, &RCBotPluginMeta::Hook_ServerActivate, true);
@@ -666,7 +666,7 @@ void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 	if ( CBotGlobals::m_pCommands->isCommand(pcmd) )
 	{		
 		//eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient,engine->Cmd_Argv(1),engine->Cmd_Argv(2),engine->Cmd_Argv(3),engine->Cmd_Argv(4),engine->Cmd_Argv(5),engine->Cmd_Argv(6));
-		const eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient,args.Arg(1),args.Arg(2),args.Arg(3),args.Arg(4),args.Arg(5),args.Arg(6));
+		eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient,args.Arg(1),args.Arg(2),args.Arg(3),args.Arg(4),args.Arg(5),args.Arg(6));
 
 		if ( iResult == COMMAND_ACCESSED )
 		{
@@ -728,7 +728,7 @@ bool RCBotPluginMeta::Hook_ClientConnect(edict_t *pEntity,
 void RCBotPluginMeta::Hook_ClientPutInServer(edict_t *pEntity, char const *playername)
 {
 	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pEntity);
-	const bool is_Rcbot = false;
+	bool is_Rcbot = false;
 
 	CClient *pClient = CClients::clientConnected(pEntity);
 
@@ -829,6 +829,9 @@ void RCBotPluginMeta::BotQuotaCheck() {
 	if (m_fBotQuotaTimer < engine->Time() - rcbot_bot_quota_interval.GetInt()) {
 		m_fBotQuotaTimer = engine->Time();
 
+		// Target Bot Count
+		int bot_target = 0; //not used? [APG]RoboCop[CL]
+
 		// Change Notification
 		bool notify = false;
 
@@ -838,8 +841,8 @@ void RCBotPluginMeta::BotQuotaCheck() {
 
 		// Count Players
 		for (int i = 0; i < MAX_PLAYERS; ++i) {
-			const CClient* client = CClients::get(i);
-			const CBot* bot = CBots::get(i);
+			CClient* client = CClients::get(i);
+			CBot* bot = CBots::get(i);
 
 			if (bot != nullptr && bot->getEdict() != nullptr && bot->inUse()) {
 				IPlayerInfo *p = playerinfomanager->GetPlayerInfo(bot->getEdict());
@@ -863,14 +866,14 @@ void RCBotPluginMeta::BotQuotaCheck() {
 		}
 
 		// Get Bot Quota
-		const int bot_target = m_iTargetBots[human_count];
+		bot_target = m_iTargetBots[human_count];
 
 		// Change Bot Quota
 		if (bot_count > bot_target) {
 			CBots::kickRandomBot(bot_count - bot_target);
 			notify = true;
 		} else if (bot_target > bot_count) {
-			const int bot_diff = bot_target - bot_count;
+			int bot_diff = bot_target - bot_count;
 
 			for (int i = 0; i < bot_diff; ++i) {
 				CBots::createBot("", "", "");
