@@ -205,10 +205,10 @@ typedef enum
     TF_VC_SENTRYAHEAD = 9,
 	TF_VC_CHEERS = 10,
     TF_VC_MOVEUP = 12,
-    TF_VC_TELEPORTERHERE =13,
+    TF_VC_TELEPORTERHERE = 13,//TODO: allow engineers to hearcommands [APG]RoboCop[CL]
     TF_VC_JEERS = 14,
     TF_VC_GOLEFT = 16,
-	TF_VC_DISPENSERHERE = 17,
+	TF_VC_DISPENSERHERE = 17,// TODO: allow engineers to hearcommands [APG]RoboCop[CL]
 	TF_VC_POSITIVE = 18,
     TF_VC_GORIGHT = 20,
     TF_VC_SENTRYHERE = 21,

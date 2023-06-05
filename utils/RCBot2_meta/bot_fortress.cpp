@@ -1507,7 +1507,7 @@ bool CBotFortress :: isTeleporterUseful ( edict_t *pTele ) const
 				float fWaitTime = (fEntranceDist / fMaxSpeed);
 
 				// Teleporter never been used before and is ready to teleport
-				if ( fTeleRechargeTime > 0 )
+				if ( fTeleRechargeTime > 0.0f )
 				{
 					fWaitTime = (fEntranceDist / fMaxSpeed) + MAX(0,(fTeleRechargeTime - fTime) + fDuration);
 
