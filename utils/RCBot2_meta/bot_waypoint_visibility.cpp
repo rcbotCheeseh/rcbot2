@@ -36,7 +36,7 @@
 #include "bot_globals.h"
 #include <cstdio>
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
  /*unsigned char *CWaypointVisibilityTable :: m_VisTable = NULL;
  bool CWaypointVisibilityTable :: bWorkVisibility = false;

@@ -45,7 +45,7 @@
 #include "bot_waypoint_locations.h"
 #include "bot_perceptron.h"
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
 // For debug messages
 const char *szMapTypes[CS_MAP_MAX+1] =

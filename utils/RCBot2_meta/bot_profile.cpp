@@ -36,7 +36,7 @@
 #include "bot_navigator.h"
 #include "bot_kv.h"
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
 std::vector <CBotProfile*> CBotProfiles :: m_Profiles;
 CBotProfile *CBotProfiles :: m_pDefaultProfile = nullptr;

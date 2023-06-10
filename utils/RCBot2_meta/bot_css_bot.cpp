@@ -54,7 +54,7 @@
 #include "bot_waypoint_visibility.h"
 #include "bot_visibles.h"
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
 extern IServerGameEnts *servergameents; // for accessing the server game entities
 

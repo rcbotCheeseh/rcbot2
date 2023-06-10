@@ -6,7 +6,7 @@ proj_c_flags = [
 ]
 proj_c_flags_opt = [
   '-O2',
-  '-s',
+  '-pipe',
 ]
 proj_c_flags_dbg = [
   '-g',
@@ -198,7 +198,6 @@ class MMSConfig(object):
         cxx.cflags += [
           '-fvisibility=hidden',
           '-fvisibility-inlines-hidden',
-          '-std=c11',
           '-std=c++14',
           '-w',
           '-D__linux__',

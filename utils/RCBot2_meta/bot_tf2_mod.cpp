@@ -50,7 +50,7 @@
 #include "bot_tf2_points.h"
 #include "bot_sigscan.h"
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
 eTFMapType CTeamFortress2Mod :: m_MapType = TF_MAP_CTF;
 tf_tele_t CTeamFortress2Mod :: m_Teleporters[MAX_PLAYERS];

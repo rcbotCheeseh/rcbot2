@@ -40,7 +40,7 @@
 #include "ndebugoverlay.h"
 //#include "filesystem.h"
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
 #ifndef __linux__
 #include <direct.h> // for mkdir

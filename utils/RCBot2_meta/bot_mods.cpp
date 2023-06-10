@@ -46,7 +46,7 @@
 #include "bot_waypoint_locations.h"
 #include "bot_perceptron.h"
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
 std::vector<edict_wpt_pair_t> CHalfLifeDeathmatchMod::m_LiftWaypoints;
 

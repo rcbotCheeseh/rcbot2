@@ -925,6 +925,10 @@ public:
 
 	void resetCarryTime () { m_fCarryTime = engine->Time(); }
 
+	void MvM_Update(); // Mann vs Machine think function!
+
+	bool MvM_IsReady();
+
 	void MvM_Upgrade (); // TODO: To allow bots to menuselect in order to buy upgrades? [APG]RoboCop[CL]
 
 private:
@@ -993,6 +997,8 @@ private:
 	float m_fUseBuffItemTime;
 
 	int m_iDesiredResistType;
+
+	int m_iMvMUpdateTime; // Tick based update time
 };
 
 class CBotFF : public CBotFortress

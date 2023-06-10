@@ -55,7 +55,7 @@
 #include "bot_fortress.h"
 #include "bot_wpt_dist.h"
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
 #include <cmath>
 #include <vector>    //bir3yk

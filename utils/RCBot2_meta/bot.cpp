@@ -79,7 +79,7 @@
 #include "bot_getprop.h"
 #include "bot_profiling.h"
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
 #include <random>
 #include <vector>
