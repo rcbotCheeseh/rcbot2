@@ -361,9 +361,6 @@
     <ClInclude Include="bot_plugin_meta.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="logging.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="engine_wrappers.h">
       <Filter>Header Files</Filter>
     </ClInclude>

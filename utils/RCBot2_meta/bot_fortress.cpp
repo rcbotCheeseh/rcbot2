@@ -60,6 +60,8 @@
 
 #include <cmath>
 
+#include "rcbot/logging.h"
+
 //caxanga334: SDK 2013 contains macros for std::min and std::max which causes errors when compiling
 #if SOURCE_ENGINE == SE_SDK2013 || SOURCE_ENGINE == SE_BMS
 #include "valve_minmax_off.h"
@@ -1807,6 +1809,8 @@ void CBotTF2 :: spawnInit()
 	m_iPrevWeaponSelectFailed = 0;
 
 	m_fCheckNextCarrying = 0.0f;
+
+	m_iMvMUpdateTime = TIME_TO_TICKS(10.0f); // Wait about 10 seconds after spawning
 }
 
 // return true if we don't want to hang around on the point
@@ -2000,6 +2004,86 @@ void CBotTF2 :: updateCarrying ()
 		m_bIsCarryingTeleEnt = NULL;
 	}
 }
+
+/// @brief TF2 Mann vs Machine update/think function
+/*void CBotTF2::MvM_Update()
+{
+	if (getTeam() != TF2_TEAM_RED)
+		return; // ?? bots should be on RED team
+
+	if (!MvM_IsReady() && entprops->GameRules_GetRoundState() == RoundState_BetweenRounds)
+	{
+		int num_players = 0, num_ready = 0;
+		edict_t* player = nullptr;
+		edict_t* medigun = nullptr;
+		IPlayerInfo* info = nullptr;
+		CBotSchedule* sched = m_pSchedules->getCurrentSchedule();
+
+		// Engineer: Doesn't have a dispenser and is not building something
+		if (getClass() == TF_CLASS_ENGINEER && m_pDispenser.get() == NULL && sched && !sched->isID(SCHED_TF_BUILD))
+		{
+			updateCondition(CONDITION_CHANGED);
+		}
+
+		for (int i = 1; i <= gpGlobals->maxClients; i++)
+		{
+			player = INDEXENT(i);
+
+			if (!CBotGlobals::entityIsValid(player))
+				continue;
+
+			info = playerinfomanager->GetPlayerInfo(player);
+
+			if (!info)
+				continue;
+
+			if (info->GetTeamIndex() != TF2_TEAM_RED)
+				continue;
+
+			if (info->IsFakeClient())
+				continue;
+
+			// Engineer: Only ready up if my sentry is setup. TO-DO: Also do the same for dispenser and teleporter
+			if (getClass() == TF_CLASS_ENGINEER && m_pSentryGun.get() == NULL)
+			{
+				num_players = 99;
+				logger->Log(LogLevel::DEBUG, "%3.2f - %s is skipping Ready Check. Reason: Dispenser not built!", gpGlobals->curtime, m_szBotName);
+				break;
+			}
+
+			// Medic: Only ready up if my uber is near ready.
+			if (getClass() == TF_CLASS_MEDIC)
+			{
+				medigun = CTeamFortress2Mod::getMediGun(m_pEdict);
+				if (medigun && CClassInterface::getUberChargeLevel(medigun) <= 98)
+				{
+					num_players = 99;
+					logger->Log(LogLevel::DEBUG, "%3.2f - %s is skipping Ready Check. Reason: Waiting to fill Übercharge!", gpGlobals->curtime, m_szBotName);
+					break;
+				}
+			}
+
+			// at this point we know the player is a human and is on RED team
+			num_players++; // increase player count
+
+			if (entprops->GameRules_GetProp("m_bPlayerReady", 4, i) != 0)
+				num_ready++;
+		}
+
+		logger->Log(LogLevel::DEBUG, "%3.2f - %s Ready Check - <%i/%i>", gpGlobals->curtime, m_szBotName, num_players, num_ready);
+
+		if (num_players == num_ready) // All humans on RED team are ready
+		{
+			helpers->ClientCommand(m_pEdict, "tournament_player_readystate 1");
+			logger->Log(LogLevel::INFO, "%3.2f - TF2 MvM RCBot \"<%s><>\" is ready.", gpGlobals->curtime, m_szBotName);
+		}
+	}
+}
+
+bool CBotTF2::MvM_IsReady()
+{
+	return entprops->GameRules_GetProp("m_bPlayerReady", 4, engine->IndexOfEdict(getEdict())) == 1;
+}*/
 
 // TODO: To allow bots to menuselect in order to buy upgrades? [APG]RoboCop[CL]
 void CBotTF2::MvM_Upgrade()
@@ -2852,6 +2936,24 @@ void CBotTF2::modThink()
 			m_pDefendPayloadBomb = m_pBluePayloadBomb;
 		}
 	}
+	/*else if (CTeamFortress2Mod::isMapType(TF_MAP_MVM))
+	{
+		m_iMvMUpdateTime--; // update timer
+
+		if (m_iMvMUpdateTime <= 0)
+		{
+			if (entprops->GameRules_GetRoundState() == RoundState_BetweenRounds) // MvM: Waiting for all players to be ready
+			{
+				m_iMvMUpdateTime = TIME_TO_TICKS(randomFloat(3.0f, 12.0f)); // Slower updates while the wave isn't running, makes the bot more 'human' when readying up
+			}
+			else
+			{
+				m_iMvMUpdateTime = TIME_TO_TICKS(randomFloat(2.0f, 4.0f)); // Faster updates while the wave is running
+			}
+
+			MvM_Update(); // run MvM Think;
+		}
+	}*/
 
 	// when respawned -- check if I should change class
 	if (!m_pPlayerInfo->IsDead())

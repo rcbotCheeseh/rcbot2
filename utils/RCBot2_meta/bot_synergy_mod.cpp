@@ -45,7 +45,7 @@
 #include "bot_waypoint_locations.h"
 #include "bot_perceptron.h"
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
 void CSynergyMod::initMod()
 {

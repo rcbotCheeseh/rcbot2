@@ -2,7 +2,7 @@
 #include "bot_kv.h"
 #include "bot_globals.h"
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
 void CRCBotKeyValueList::parseFile(std::fstream& fp)
 {

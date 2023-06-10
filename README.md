@@ -106,7 +106,7 @@ Additionally, `rcbot/logging.{h,cpp}` is released separately under the
 - Linux Conversion and Waypointing - [APG]RoboCop[CL]
 - TF2 support and enhancements - Ducky1231/Pongo
 - SourceMod and AMBuild support - nosoop
-- Synergy and CSS support - Anonymous Player/caxanga334
+- Synergy, MvM and CSS support - Anonymous Player/caxanga334
 - TF2 Classic support - Technochips
 - Linux Black Mesa and SDK2013 mathlib fix - Sappho
 - Dystopia support - Soft As Hell

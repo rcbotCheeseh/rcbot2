@@ -33,7 +33,7 @@
 #include "bot_accessclient.h"
 #include "bot_globals.h"
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
 #include <vector>
 ///////////

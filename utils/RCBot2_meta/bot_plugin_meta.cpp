@@ -52,7 +52,7 @@
 
 #include "tier0/icommandline.h"
 
-#include "logging.h"
+#include "rcbot/logging.h"
 
 #include <build_info.h>
 

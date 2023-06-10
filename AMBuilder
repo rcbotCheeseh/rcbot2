@@ -52,8 +52,9 @@ sourceFiles = [
   "utils/RCBot2_meta/bot_sigscan.cpp",
   "utils/RCBot2_meta/bot_cvars.cpp",
   "utils/RCBot2_meta/bot_plugin_meta.cpp",
-  "utils/RCBot2_meta/logging.cpp",
-  "utils/RCBot2_meta/math_fix.cpp"
+
+  "rcbot/logging.cpp",
+  "rcbot/math_fix.cpp"
 ]
 
 include_paths = [
