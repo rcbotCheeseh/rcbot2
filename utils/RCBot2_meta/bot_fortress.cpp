@@ -7322,6 +7322,13 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 	{
 		if ( CBotGlobals::getTeam(pEdict) != getTeam() )
 		{
+			//TODO:
+			//if (tf2_conditions->TF2_IsPlayerInCondition(engine->IndexOfEdict(pEdict), TFCond_UberchargedHidden)) // Don't attack MvM bots who are inside spawn.
+			//	return false;
+
+			//if (tf2_conditions->TF2_IsPlayerInCondition(engine->IndexOfEdict(pEdict), TFCond_HalloweenGhostMode)) // Don't attack Ghost Players
+			//	return false;
+			
 			if ( m_iClass == TF_CLASS_SPY )	
 			{
 				if ( !bCheckWeapons )
