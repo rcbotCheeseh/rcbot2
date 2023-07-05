@@ -1570,8 +1570,8 @@ void CWaypoint :: draw ( edict_t *pEdict, bool bDrawPaths, unsigned short int iD
 
 					if ( pBot )
 					{
-						const char belief = static_cast<char>(static_cast<int>(pBot->getNavigator()->getBelief(
-							CWaypoints::getWaypointIndex(this))));
+						const char belief = static_cast<int>(pBot->getNavigator()->getBelief(
+							CWaypoints::getWaypointIndex(this)));
 
 						// show danger - red = dangerous / blue = safe
 						r = belief;

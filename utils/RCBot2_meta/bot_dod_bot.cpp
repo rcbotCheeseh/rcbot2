@@ -1048,52 +1048,87 @@ void CDODBot :: changeClass ()
 
 void CDODBot :: chooseClass ( bool bIsChangingClass )
 {
-	float fClassFitness[6]; // 6 classes
-	float fTotalFitness = 0;
-
-	const int iTeam = getTeam();
-
-	for ( int i = 0; i < 6; i ++ )
+	const int _forcedClass = rcbot_force_class.GetInt();
+	if (_forcedClass > 0 && _forcedClass < 10)
 	{
-		fClassFitness[i] = 1.0f;
-	}
-
-	if ( bIsChangingClass && ((m_iClass >= 0) && (m_iClass < 6)) )
-		fClassFitness[m_iClass] = 0.1f;
-
-	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
-	{
-		edict_t* pPlayer = INDEXENT(i);
-		
-		if ( CBotGlobals::entityIsValid(pPlayer) && (CClassInterface::getTeam(pPlayer) == iTeam))
+		switch (_forcedClass)
 		{
-			const int iClass = CClassInterface::getPlayerClassDOD(pPlayer);
-
-			if ( (iClass >= 0) && (iClass < 6) )
-				fClassFitness [iClass] *= 0.6f; 
-		}
-	}
-
-	for ( int i = 0; i < 6; i ++ )
-		fTotalFitness += fClassFitness[i];
-
-	const float fRandom = randomFloat(0, fTotalFitness);
-
-	fTotalFitness = 0;
-
-	m_iDesiredClass = 0;
-
-	for ( int i = 0; i < 6; i ++ )
-	{
-		fTotalFitness += fClassFitness[i];
-
-		if ( fRandom <= fTotalFitness )
-		{
-			m_iDesiredClass = i;
+		case 1:
+			m_iDesiredClass = DOD_CLASS_RIFLEMAN;
+			break;
+		case 2:
+			m_iDesiredClass = DOD_CLASS_ASSAULT;
+			break;
+		case 3:
+			m_iDesiredClass = DOD_CLASS_SUPPORT;
+			break;
+		case 4:
+			m_iDesiredClass = DOD_CLASS_SNIPER;
+			break;
+		case 5:
+			m_iDesiredClass = DOD_CLASS_MACHINEGUNNER;
+			break;
+		case 6:
+			m_iDesiredClass = DOD_CLASS_ROCKET;
 			break;
 		}
 	}
+	else
+	{
+		float fClassFitness[6]; // 6 classes
+		float fTotalFitness = 0;
 
+		const int iTeam = getTeam();
+
+		//TODO: allow bots to choose less heavy classes [APG]RoboCop[CL]
+		fClassFitness[DOD_CLASS_RIFLEMAN] *= 1.5f;
+		fClassFitness[DOD_CLASS_ASSAULT] *= 1.2f;
+		fClassFitness[DOD_CLASS_SUPPORT] *= 1.0f;
+		fClassFitness[DOD_CLASS_SNIPER] *= 0.6f;
+		fClassFitness[DOD_CLASS_MACHINEGUNNER] *= 0.8f;
+		fClassFitness[DOD_CLASS_ROCKET] *= 0.5f;
+
+		for (int i = 0; i < 6; i++)
+		{
+			fClassFitness[i] = 1.0f;
+		}
+
+		if (bIsChangingClass && ((m_iClass >= 0) && (m_iClass < 6)))
+			fClassFitness[m_iClass] = 0.1f;
+
+		for (int i = 1; i <= gpGlobals->maxClients; i++)
+		{
+			edict_t* pPlayer = INDEXENT(i);
+
+			if (CBotGlobals::entityIsValid(pPlayer) && (CClassInterface::getTeam(pPlayer) == iTeam))
+			{
+				const int iClass = CClassInterface::getPlayerClassDOD(pPlayer);
+
+				if ((iClass >= 0) && (iClass < 6))
+					fClassFitness[iClass] *= 0.6f;
+			}
+		}
+
+		for (int i = 0; i < 6; i++)
+			fTotalFitness += fClassFitness[i];
+
+		const float fRandom = randomFloat(0, fTotalFitness);
+
+		fTotalFitness = 0.0f;
+
+		m_iDesiredClass = 0;
+
+		for (int i = 0; i < 6; i++)
+		{
+			fTotalFitness += fClassFitness[i];
+
+			if (fRandom <= fTotalFitness)
+			{
+				m_iDesiredClass = i;
+				break;
+			}
+		}
+	}
 }
 
 void CDODBot :: prone ()
