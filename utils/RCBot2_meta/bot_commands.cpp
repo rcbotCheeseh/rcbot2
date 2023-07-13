@@ -153,7 +153,7 @@ eBotCommandResult CBotCommand :: execute ( CClient *pClient, const char *pcmd, c
 }
 
 eBotCommandResult CBotSubcommands::execute(CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5) {
-	for (auto cmd : m_theCommands) {
+	for (const auto cmd : m_theCommands) {
 		if (!cmd->isCommand(pcmd)) {
 			continue;
 		}
@@ -170,8 +170,8 @@ eBotCommandResult CBotSubcommands::execute(CClient *pClient, const char *pcmd, c
 		// shift arguments and call
 		//const eBotCommandResult result = cmd->execute(pClient, pcmd, arg1, arg2, arg3, arg4, arg5); //pcmd used as arg1?
 											//TODO: And this causes waypoint flag menu to go outta range on last page?[APG]RoboCop[CL]
-		
-		eBotCommandResult result = cmd->execute(pClient, arg1, arg2, arg3, arg4, arg5, nullptr);
+
+		const eBotCommandResult result = cmd->execute(pClient, arg1, arg2, arg3, arg4, arg5, nullptr);
 		if (result == COMMAND_ERROR) {
 			cmd->printHelp(pClient? pClient->getPlayer() : nullptr);
 		}

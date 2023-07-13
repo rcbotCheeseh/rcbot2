@@ -201,7 +201,7 @@ void CBot :: runPlayerMove()
 	}
 
 	cmd.buttons = m_iButtons;
-	cmd.impulse = m_iImpulse;
+	cmd.impulse = m_iImpulse; //impluse should be as 'byte' not 'int'? [APG]RoboCop[CL]
 	cmd.viewangles = m_vViewAngles;
 	cmd.weaponselect = m_iSelectWeapon;
 	cmd.tick_count = gpGlobals->tickcount;

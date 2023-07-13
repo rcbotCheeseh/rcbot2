@@ -12,7 +12,7 @@ ConVar rcbot_tf2_pyro_airblast("rcbot_tf2_pyro_airblast_ammo", "50", 0, "Ammo mu
 ConVar rcbot_projectile_tweak("rcbot_projtweak", "0.05", 0, "Tweaks the bots knowledge of projectiles and gravity");
 
 ConVar bot_cmd_enable_wpt_sounds("rcbot_enable_wpt_sounds", "1", 0, "Enable/disable sound effects when editing waypoints");
-ConVar bot_general_difficulty("rcbot_skill", "0.6", 0, "General difficulty of the bots. 0.5 = stock, < 0.5 easier, > 0.5 = harder");
+ConVar bot_general_difficulty("rcbot_skill", "0.6", 0, "General difficulty of the bots. 0.5 = stock, < 0.5 easier, > 0.5 = harder");//TODO: Broken! [APG]RoboCop[CL]
 ConVar bot_visrevs_clients("rcbot_visrevs_clients", "3", 0, "how many revs the bot searches for visible players and enemies, lower to reduce cpu usage");
 ConVar bot_spyknifefov("rcbot_spyknifefov", "80", 0, "the FOV from the enemy that spies must backstab from");
 ConVar bot_visrevs("rcbot_visrevs", "6", 0, "how many revs the bot searches for visible monsters, lower to reduce cpu usage min:5");
@@ -25,7 +25,7 @@ ConVar bot_stop("rcbot_stop", "0", 0, "Make bots stop thinking!");
 ConVar bot_waypointpathdist("rcbot_wpt_pathdist", "400", 0, "Length for waypoints to automatically add paths at");
 
 ConVar bot_rj("rcbot_rj", "0.01", 0, "time for soldier to fire rocket after jumping");
-ConVar bot_defrate("rcbot_defrate", "0.20", 0, "rate for bots to defend"); //Not referenced properly? [APG]RoboCop[CL]
+ConVar bot_defrate("rcbot_defrate", "0.20", 0, "rate for bots to defend");
 ConVar bot_beliefmulti("rcbot_beliefmulti", "20.0", 0, "multiplier for increasing bot belief"); //Not referenced properly? [APG]RoboCop[CL]
 ConVar bot_belief_fade("rcbot_belief_fade", "0.75", 0, "the multiplayer rate bot belief decreases");
 ConVar bot_change_class("rcbot_change_classes", "0", 0, "bots change classes at random intervals");
@@ -95,11 +95,11 @@ ConVar rcbot_tf2_autoupdate_point_time("rcbot_tf2_autoupdate_point_time", "60", 
 ConVar rcbot_tf2_payload_dist_retreat("rcbot_tf2_payload_dist_retreat", "512.0", 0, "Distance for payload bomb to be greater than at cap before defend team retreats");
 ConVar rcbot_spy_runaway_health("rcbot_spy_runaway_health", "70", 0, "health which spies run away after attacking");
 ConVar rcbot_supermode("rcbot_supermode", "0", 0, "If 1 will make every bot skill and reaction much higher");
-ConVar rcbot_addbottime("rcbot_addbottime", "3", 0, "The time in seconds for bots to be added after another");
+ConVar rcbot_addbottime("rcbot_addbottime", "6", 0, "The time in seconds for bots to be added after another");
 ConVar rcbot_gamerules_offset("rcbot_gamerules_offset", "5", 0, "offset for gamerules object");
 ConVar rcbot_datamap_offset("rcbot_datamap_offset", "0", 0, "offset for datamaps");
 ConVar rcbot_bot_quota_interval("rcbot_bot_quota_interval", "10", 0, "Interval between bot quota checks, 0 or lower to disable");
-ConVar rcbot_show_welcome_msg("rcbot_show_welcome_msg", "1", 0, "Show welcome message on player connect");
+ConVar rcbot_show_welcome_msg("rcbot_show_welcome_msg", "1", 0, "Show welcome message on player connect");//Not referenced properly? [APG]RoboCop[CL]
 ConVar rcbot_force_class("rcbot_force_class", "0", 0, "Force bots to choose specified class, kills alive bots on change (1 - 9, set to 0 for none)");
 
 // Synergy CVars
