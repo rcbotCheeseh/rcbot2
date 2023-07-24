@@ -274,9 +274,9 @@ private:
 class CBotTF2Spam : public CBotTask
 {
 public:
-	CBotTF2Spam ( Vector vStart, Vector vTarget, CBotWeapon *pWeapon );
+	CBotTF2Spam (const Vector& vStart, const Vector& vTarget, CBotWeapon *pWeapon );
 
-	CBotTF2Spam ( CBot *pBot, Vector vStart, int iYaw, CBotWeapon *pWeapon );
+	CBotTF2Spam ( CBot *pBot, const Vector& vStart, int iYaw, CBotWeapon *pWeapon );
 
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
@@ -304,7 +304,7 @@ private:
 class CBotTF2DemomanPipeJump : public CBotTask
 {
 public:
-	CBotTF2DemomanPipeJump ( CBot *pBot, Vector vWaypointGround, Vector vWaypointNext, CBotWeapon *pWeapon );
+	CBotTF2DemomanPipeJump ( CBot *pBot, const Vector& vWaypointGround, const Vector& vWaypointNext, CBotWeapon *pWeapon );
 
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
@@ -332,7 +332,7 @@ class CBotTF2DemomanPipeEnemy : public CBotTask
 {
 public:
 	//CBotTF2DemomanPipeEnemy ( Vector vStand, Vector vBlastPoint, CBotWeapon *pPipeLauncher, Vector vEnemy, edict_t *pEnemy );
-	CBotTF2DemomanPipeEnemy ( CBotWeapon *pPipeLauncher, Vector vEnemy, edict_t *pEnemy );
+	CBotTF2DemomanPipeEnemy ( CBotWeapon *pPipeLauncher, const Vector& vEnemy, edict_t *pEnemy );
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
 	void debugString ( char *string ) override
@@ -356,7 +356,7 @@ public:
 	// Set up a pipe trap or fire pipe bombs -- 
 	// if autodetonate, detonate them when I've shot them rather than wait for an enemy
 	// such as when attacking a sentry
-	CBotTF2DemomanPipeTrap ( eDemoTrapType type, Vector vStand, Vector vLoc, Vector vSpread, bool bAutoDetonate = false, int m_iWptArea = -1 );
+	CBotTF2DemomanPipeTrap ( eDemoTrapType type, const Vector& vStand, const Vector& vLoc, const Vector& vSpread, bool bAutoDetonate = false, int m_iWptArea = -1 );
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
@@ -382,7 +382,7 @@ private:
 class CBotTF2FindPipeWaypoint : public CBotTask
 {
 public:
-	CBotTF2FindPipeWaypoint ( Vector vOrigin, Vector vTarget );
+	CBotTF2FindPipeWaypoint (const Vector& vOrigin, const Vector& vTarget );
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
@@ -721,7 +721,7 @@ private:
 class CBotTF2SnipeCrossBow : public CBotTask
 {
 public:
-	CBotTF2SnipeCrossBow(Vector vOrigin, int iWpt);
+	CBotTF2SnipeCrossBow(const Vector& vOrigin, int iWpt);
 
 	void execute(CBot *pBot, CBotSchedule *pSchedule) override;
 
@@ -750,7 +750,7 @@ private:
 class CBotTF2Snipe : public CBotTask
 {
 public:
-	CBotTF2Snipe ( Vector vOrigin, int iWpt );
+	CBotTF2Snipe (const Vector& vOrigin, int iWpt );
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
@@ -780,7 +780,7 @@ private:
 class CBotDODSnipe : public CBotTask
 {
 public:
-	CBotDODSnipe ( CBotWeapon *pWeaponToUse, Vector vOrigin, float fYaw, bool bUseZ = false, float z = 0, int iWaypointType = 0 );
+	CBotDODSnipe ( CBotWeapon *pWeaponToUse, const Vector& vOrigin, float fYaw, bool bUseZ = false, float z = 0, int iWaypointType = 0 );
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override; 
 
@@ -803,7 +803,7 @@ private:
 class CBotHL2DMSnipe : public CBotTask
 {
 public:
-	CBotHL2DMSnipe ( CBotWeapon *pWeaponToUse, Vector vOrigin, float fYaw, bool bUseZ = false, float z = 0, int iWaypointType = 0 );
+	CBotHL2DMSnipe ( CBotWeapon *pWeaponToUse, const Vector& vOrigin, float fYaw, bool bUseZ = false, float z = 0, int iWaypointType = 0 );
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override; 
 
@@ -917,7 +917,7 @@ private:
 class CBotDODBomb : public CBotTask
 {
 public:
-	CBotDODBomb ( int iBombType, int iBombID, edict_t *m_pBombTarget, Vector vPosition, int iPrevOwner ); //TODO: *m_pBombTarget should be defined properly? [APG]RoboCop[CL]
+	CBotDODBomb ( int iBombType, int iBombID, edict_t *m_pBombTarget, const Vector& vPosition, int iPrevOwner ); //TODO: *m_pBombTarget should be defined properly? [APG]RoboCop[CL]
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
 	void debugString ( char *string ) override;
@@ -933,7 +933,7 @@ private:
 class CBotDODAttackPoint : public CBotTask
 {
 public:
-	CBotDODAttackPoint ( int iFlagID, Vector vOrigin, float fRadius );
+	CBotDODAttackPoint ( int iFlagID, const Vector& vOrigin, float fRadius );
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
 	void debugString ( char *string ) override;
@@ -951,7 +951,7 @@ private:
 class CBotTF2AttackPoint : public CBotTask
 {
 public:
-	CBotTF2AttackPoint ( int iArea, Vector vOrigin, int iRadius );
+	CBotTF2AttackPoint ( int iArea, const Vector& vOrigin, int iRadius );
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
 	void debugString ( char *string ) override;
@@ -968,7 +968,7 @@ private:
 class CBotTF2ShootLastEnemyPosition : public CBotTask
 {
 public:
-	CBotTF2ShootLastEnemyPosition ( Vector vPosition, edict_t *pEnemy, Vector velocity );
+	CBotTF2ShootLastEnemyPosition (const Vector& vPosition, edict_t *pEnemy, const Vector& velocity );
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
 	void debugString ( char *string ) override;
@@ -982,7 +982,7 @@ private:
 class CBotTF2DefendPoint : public CBotTask
 {
 public:
-	CBotTF2DefendPoint ( int iArea, Vector vOrigin, int iRadius );
+	CBotTF2DefendPoint ( int iArea, const Vector& vOrigin, int iRadius );
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
 	void debugString ( char *string ) override;
@@ -1062,7 +1062,7 @@ private:
 class CBotTF2WaitAmmoTask : public CBotTask
 {
 public:
-	CBotTF2WaitAmmoTask ( Vector vOrigin );
+	CBotTF2WaitAmmoTask (const Vector& vOrigin );
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 	void debugString ( char *string ) override;
@@ -1074,7 +1074,7 @@ private:
 class CBotTF2WaitHealthTask : public CBotTask
 {
 public:
-	CBotTF2WaitHealthTask ( Vector vOrigin );
+	CBotTF2WaitHealthTask (const Vector& vOrigin );
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 	void debugString ( char *string ) override;
@@ -1149,7 +1149,7 @@ private:
 class CBotTaskEngiPlaceBuilding : public CBotTask
 {
 public:
-	CBotTaskEngiPlaceBuilding ( eEngiBuild iObject, Vector vOrigin ); // going to use this 
+	CBotTaskEngiPlaceBuilding ( eEngiBuild iObject, const Vector& vOrigin ); // going to use this 
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 	void debugString ( char *string ) override;
 private:
@@ -1163,7 +1163,7 @@ private:
 class CBotTF2WaitFlagTask : public CBotTask
 {
 public:
-	CBotTF2WaitFlagTask ( Vector vOrigin, bool bFind = false );
+	CBotTF2WaitFlagTask (const Vector& vOrigin, bool bFind = false );
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 	void debugString ( char *string ) override;
@@ -1176,7 +1176,7 @@ private:
 class CThrowGrenadeTask : public CBotTask
 {
 public:
-	CThrowGrenadeTask ( CBotWeapon *pWeapon, int ammo, Vector vLoc );
+	CThrowGrenadeTask ( CBotWeapon *pWeapon, int ammo, const Vector& vLoc );
 	void init () override;
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 	void debugString ( char *string ) override;
@@ -1383,7 +1383,7 @@ private:
 class CFindLastEnemy : public CBotTask
 {
 public:
-	CFindLastEnemy (Vector vLast,Vector vVelocity);
+	CFindLastEnemy (const Vector& vLast, const Vector& vVelocity);
 
 	void execute ( CBot *pBot, CBotSchedule *pSchedule ) override;
 
@@ -1401,7 +1401,7 @@ class CFindGoodHideSpot : public CBotTask
 public:
 	CFindGoodHideSpot ( edict_t *pEntity );
 
-	CFindGoodHideSpot ( Vector vec );
+	CFindGoodHideSpot (const Vector& vec );
 
 	void init () override;
 
@@ -1419,7 +1419,7 @@ private:
 class CHideTask : public CBotTask
 {
 public:
-	CHideTask ( Vector vHideFrom );
+	CHideTask (const Vector& vHideFrom );
 
 	void init () override;
 
