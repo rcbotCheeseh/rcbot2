@@ -56,10 +56,10 @@
 // desx and desy must be normalized
 // desx = distance (should be 2d)
 // desy = height offset
-void getGrenadeAngle ( float v, float g, float desx, float desy, float *fa1, float *fa2 )
+void getGrenadeAngle ( double v, double g, double desx, double desy, double *fa1, double*fa2 )
 {
 	//normalize
-	const float fmax = MAX(v,MAX(g,MAX(desx,desy)));
+	const double fmax = MAX(v,MAX(g,MAX(desx,desy)));
 
 	v /= fmax;
 	g /= fmax;
@@ -75,8 +75,8 @@ void getGrenadeAngle ( float v, float g, float desx, float desy, float *fa1, flo
 	const double topminus = vsquared - sqrt(fourabplusa);
 	const double bottom = g*desx;
 
-	*fa1 = static_cast<float>(atan(topplus / bottom));
-	*fa2 = static_cast<float>(atan(topminus / bottom));
+	*fa1 = atan(topplus / bottom);
+	*fa2 = atan(topminus / bottom);
 
 	*fa1 = RAD2DEG(*fa1);
 	*fa2 = RAD2DEG(*fa2);

@@ -1333,9 +1333,9 @@ void CBot :: spawnInit ()
 	m_StatsCanUse.data = 0;
 	m_Stats.data = 0;
 	m_iStatsIndex = 0;
-	m_fStatsTime = 0;
+	m_fStatsTime = 0.0f;
 
-	m_fWantToListenTime = 0;
+	m_fWantToListenTime = 0.0f;
 
 	resetTouchDistance(48.0f);
 	m_pLastCoverFrom = MyEHandle(nullptr);
@@ -1348,7 +1348,7 @@ void CBot :: spawnInit ()
 
 	memset(m_fLastVoiceCommand,0,sizeof(float)*MAX_VOICE_CMDS);
 
-	m_fLastUpdateLastSeeEnemy = 0;
+	m_fLastUpdateLastSeeEnemy = 0.0f;
 	m_fPercentMoved = 1.0f;
 
 	for (short int i = 0; i < BOT_UTIL_MAX; i ++ )
@@ -1371,8 +1371,8 @@ void CBot :: spawnInit ()
 	m_fListenTime = 0.0f;
 	m_bListenPositionValid = false;
 	m_bPrevAimVectorValid = false;
-	m_fLastSeeEnemy = 0;
-	m_fAvoidTime = 0;
+	m_fLastSeeEnemy = 0.0f;
+	m_fAvoidTime = 0.0f;
 	m_vLookAroundOffset = Vector(0,0,0);
 	m_fWaypointStuckTime = 0.0f;
 	m_pPickup = nullptr;
@@ -1387,10 +1387,10 @@ void CBot :: spawnInit ()
 	////////////////////////
 	m_vStuckPos = Vector(0,0,0);
 	//m_iTimesStuck = 0;
-	m_fUpdateDamageTime = 0;
+	m_fUpdateDamageTime = 0.0f;
 	m_iAccumulatedDamage = 0;
 	m_fCheckStuckTime = engine->Time() + 8.0f;
-	m_fStuckTime = 0;
+	m_fStuckTime = 0.0f;
 	m_vLastOrigin = Vector(0,0,0);
 	m_vVelocity = Vector(0,0,0);
 	m_fUpdateOriginTime = 0;
@@ -1452,7 +1452,7 @@ void CBot::setLastEnemy(edict_t *pEnemy)
 
 	m_fLastSeeEnemy = engine->Time();
 	m_pLastEnemy = pEnemy;
-	m_fLastUpdateLastSeeEnemy = 0;
+	m_fLastUpdateLastSeeEnemy = 0.0f;
 	m_vLastSeeEnemy = CBotGlobals::entityOrigin(m_pLastEnemy);
 	m_vLastSeeEnemyBlastWaypoint = m_vLastSeeEnemy;
 
@@ -1553,11 +1553,16 @@ void CBot :: killed ( edict_t *pVictim, char *weapon )
 // called when bot shoots a wall or similar object -i.e. not the enemy
 void CBot :: shotmiss ()
 {
-
+	
 }
-// shot an enemy (or teammate?)
+// shot an enemy (or teammate?) //TODO: Experimental [APG]RoboCop[CL]
 void CBot :: shot ( edict_t *pEnemy )
 {
+	if ( pEnemy == nullptr )
+		return;
+
+	if ( CClassInterface::getTeam(pEnemy) == getTeam() )
+		friendlyFire(pEnemy);
 
 }
 // got shot by someone
