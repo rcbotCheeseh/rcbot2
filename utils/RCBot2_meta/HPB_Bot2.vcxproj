@@ -317,6 +317,7 @@
     <ClInclude Include="bot_mods.h" />
     <ClInclude Include="bot_mtrand.h" />
     <ClInclude Include="bot_navigator.h" />
+    <ClInclude Include="nav_mesh.h" />
     <ClInclude Include="bot_perceptron.h" />
     <ClInclude Include="bot_plugin_meta.h" />
     <ClInclude Include="bot_profile.h" />

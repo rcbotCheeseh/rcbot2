@@ -234,7 +234,7 @@ bool CDODFlags::isTeamMateDefusing ( edict_t *pIgnore, int iTeam, int id ) const
 	return false;
 }
 
-bool CDODFlags::isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin )
+bool CDODFlags::isTeamMateDefusing ( edict_t *pIgnore, int iTeam, const Vector& vOrigin )
 {
 	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
@@ -264,7 +264,7 @@ bool CDODFlags::isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin
 	return false;
 }
 
-bool CDODFlags::isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin )
+bool CDODFlags::isTeamMatePlanting ( edict_t *pIgnore, int iTeam, const Vector& vOrigin )
 {
 	for ( int i = 1; i <= gpGlobals->maxClients; i ++ )
 	{
@@ -299,7 +299,7 @@ bool CDODFlags::isTeamMatePlanting ( edict_t *pIgnore, int iTeam, int id ) const
 	return false;
 }
 
-int CDODFlags::findNearestObjective ( Vector vOrigin ) const
+int CDODFlags::findNearestObjective (const Vector& vOrigin ) const
 {
 	float fNearest = 1024.0f;
 	float fDistance;

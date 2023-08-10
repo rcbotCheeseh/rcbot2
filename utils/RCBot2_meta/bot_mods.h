@@ -242,7 +242,7 @@ public:
 	bool getRandomBombToPlant ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id = nullptr) const;
 	bool getRandomBombToDefend ( CBot *pBot, Vector *position, int iTeam, edict_t **pBombTarget, int *id = nullptr) const;
 
-	int findNearestObjective ( Vector vOrigin ) const;
+	int findNearestObjective (const Vector& vOrigin ) const;
 
 	int getWaypointAtFlag ( int iFlagId ) const
 	{
@@ -380,8 +380,8 @@ public:
 	bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, int id ) const;
 	bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, int id ) const;
 
-	static bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, Vector vOrigin );
-	static bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, Vector vOrigin );
+	static bool isTeamMateDefusing ( edict_t *pIgnore, int iTeam, const Vector& vOrigin );
+	static bool isTeamMatePlanting ( edict_t *pIgnore, int iTeam, const Vector& vOrigin );
 
 	int getNumBombsRequired ( int iId ) const
 	{
