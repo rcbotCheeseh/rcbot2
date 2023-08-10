@@ -912,8 +912,9 @@ void CBot :: think ()
 	m_vGoal = m_pNavigator->getGoalOrigin();
 
 	if ( m_pNavigator->hasNextPoint() )
-	{		
-		m_pNavigator->updatePosition();
+	{
+		const Vector currentPosition;
+		m_pNavigator->updatePosition(currentPosition);
 	}
 	else
 	{
@@ -1264,7 +1265,7 @@ bool CBot :: canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWayp
 	return true;
 }
 
-void CBot::updatePosition() const
+void CBot::updatePosition(const Vector& currentPosition) const
 {
 	m_pNavigator->rollBackPosition();
 }

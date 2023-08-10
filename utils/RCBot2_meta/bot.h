@@ -658,6 +658,8 @@ public:
     CBotProfile *getProfile () const { return m_pProfile; }
 
 	virtual bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = nullptr);
+	
+	void updatePosition(const Vector& currentPosition) const;
 
 	void tapButton ( int iButton ) const;
 
@@ -670,8 +672,6 @@ public:
 
 	virtual bool select_CWeapon ( CWeapon *pWeapon );
 	virtual bool selectBotWeapon ( CBotWeapon *pBotWeapon );
-
-	void updatePosition () const;
 
 	MyEHandle m_pLookEdict;
 

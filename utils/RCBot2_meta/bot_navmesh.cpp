@@ -28,45 +28,80 @@
  *    version.
  *
  */
-#include <cstdio>
+
+/*#include <cstdio>
 #include <cstdlib>
+
 #include "bot_navigator.h"
+#include "nav_mesh.h"
 
-//#include "nav_mesh.h"
-
-bool CNavMeshNavigator :: workRoute ( Vector vFrom, Vector vTo, bool *bFail, bool bRestart, bool bNoInterruptions, int iGoalId, int iConditions, int iDangerId )
+CNavMeshNavigator::CNavMeshNavigator()
 {
-	return true;
+	// Create a new instance of the NavMesh class
+	m_theNavMesh = new NavMesh();
 }
 
-Vector CNavMeshNavigator :: getNextPoint ()
+CNavMeshNavigator::~CNavMeshNavigator()
 {
-	return Vector(0,0,0);
+    delete m_theNavMesh; // Clean up the NavMesh instance
 }
 
-void CNavMeshNavigator :: updatePosition ()
+bool CNavMeshNavigator::workRoute(Vector vFrom, Vector vTo, bool* bFail, bool bRestart, bool bNoInterruptions, int iGoalId, int iConditions, int iDangerId)
 {
+    //bool success = m_theNavMesh->CalculateRoute(vFrom, vTo);
+    //*bFail = !success;
+    //return success;
+	
+	// Call the CalculateRoute function from the NavMesh class
+    m_theNavMesh->CalculateRoute(vFrom, vTo);
+
+    // Since we can't determine success, we assume the route was successfully calculated
+    *bFail = false;
+
+    // Return true as we don't have a way to determine success
+    return true;
 }
 
-void CNavMeshNavigator :: freeMapMemory ()
+Vector CNavMeshNavigator::getNextPoint()
 {
+    // Get the next point from the calculated route using Nav Mesh
+    return m_theNavMesh->GetNextRoutePoint();
 }
 
-void CNavMeshNavigator :: freeAllMemory ()
+void CNavMeshNavigator::updatePosition(const Vector& currentPosition)
 {
+    // Update the bot's position during navigation using Nav Mesh
+	m_theNavMesh->botPosition(currentPosition); // Use the botPosition function to update the bot's position
 }
 
-bool CNavMeshNavigator :: routeFound ()
+void CNavMeshNavigator::freeMapMemory()
 {
-	return false;
+    // Free memory related to Nav Mesh map data
+    m_theNavMesh->FreeMapMemory();
 }
 
-bool CNavMeshNavigator :: hasNextPoint ()
+void CNavMeshNavigator::freeAllMemory()
 {
-	return false;
+    // Free all allocated memory related to Nav Mesh
+    m_theNavMesh->FreeAllMemory();
 }
 
-void CNavMeshNavigator :: init ()
+bool CNavMeshNavigator::routeFound()
 {
-	//m_theNavMesh->Reset();
+    // Check if a route has been successfully calculated
+    // In this case, we can't accurately determine if the route is found, so return false
+    return false;
 }
+
+bool CNavMeshNavigator::hasNextPoint()
+{
+    // Check if there are more points in the calculated route
+    return m_theNavMesh->HasNextRoutePoint();
+}
+
+void CNavMeshNavigator::init()
+{
+    // Initialize the Nav Mesh here if needed
+    // If the Init function is available in the NavMesh class, call it
+    m_theNavMesh->Init();
+}*/

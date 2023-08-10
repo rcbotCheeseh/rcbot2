@@ -39,6 +39,7 @@
 #include "bot_waypoint.h"
 
 #include "bot_belief.h"
+#include "nav_mesh.h"
 
 class CNavMesh;
 class CWaypointVisibilityTable;
@@ -79,7 +80,7 @@ public:
 
 	virtual Vector getNextPoint () = 0;
 
-	virtual void updatePosition () = 0;
+	virtual void updatePosition (const Vector& currentPosition) = 0;
 
 	virtual bool canGetTo ( Vector vOrigin ) = 0;
 
@@ -393,7 +394,7 @@ public:
 
 	Vector getNextPoint () override;
 
-	void updatePosition () override;
+	void updatePosition (const Vector& currentPosition) override;
 
     float getBelief ( int index ) override
     { if ( index >= 0 ) return m_fBelief[index]; return 0; }
@@ -503,11 +504,16 @@ private:
 class CNavMeshNavigator : public IBotNavigator
 {
 public:
+	NavMesh* m_theNavMesh; // Add a member variable for the NavMesh instance
+
+	CNavMeshNavigator();
+	~CNavMeshNavigator();
+	
 	bool workRoute ( Vector vFrom, Vector vTo, bool *bFail, bool bRestart = true, bool bNoInterruptions = false, int iGoalId = -1, int iConditions = 0, int iDangerId = -1  ) override;
 
 	Vector getNextPoint () override;
 
-	void updatePosition () override;
+	void updatePosition (const Vector& currentPosition) override;
 
 	void freeMapMemory () override;
 
