@@ -659,7 +659,7 @@ public:
 
 	virtual bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = nullptr);
 	
-	void updatePosition(const Vector& currentPosition) const;
+	void updatePosition() const;
 
 	void tapButton ( int iButton ) const;
 

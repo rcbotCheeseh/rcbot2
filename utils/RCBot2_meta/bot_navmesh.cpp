@@ -28,80 +28,85 @@
  *    version.
  *
  */
-
-/*#include <cstdio>
+#include <cstdio>
 #include <cstdlib>
 
 #include "bot_navigator.h"
-#include "nav_mesh.h"
+//#include "nav_mesh.h"
 
 CNavMeshNavigator::CNavMeshNavigator()
 {
 	// Create a new instance of the NavMesh class
-	m_theNavMesh = new NavMesh();
+	//m_theNavMesh = new CNavMesh();
 }
 
 CNavMeshNavigator::~CNavMeshNavigator()
 {
-    delete m_theNavMesh; // Clean up the NavMesh instance
+	// Clean up the NavMesh instance
+	//delete m_theNavMesh;
 }
 
-bool CNavMeshNavigator::workRoute(Vector vFrom, Vector vTo, bool* bFail, bool bRestart, bool bNoInterruptions, int iGoalId, int iConditions, int iDangerId)
+void CNavMeshNavigator::CalculateRoute(Vector startNodeID, Vector goalNodeID)
 {
-    //bool success = m_theNavMesh->CalculateRoute(vFrom, vTo);
-    //*bFail = !success;
-    //return success;
-	
 	// Call the CalculateRoute function from the NavMesh class
-    m_theNavMesh->CalculateRoute(vFrom, vTo);
+	//m_theNavMesh->CalculateRoute(vFrom, vTo);
 
-    // Since we can't determine success, we assume the route was successfully calculated
-    *bFail = false;
+	// Since we can't determine success, we assume the route was successfully calculated
+	//*bFail = false;
+	
+	// Calculate the route
+	//m_theNavMesh->CalculateRoute(startNodeID, goalNodeID);
+}
 
-    // Return true as we don't have a way to determine success
-    return true;
+bool CNavMeshNavigator::workRoute(Vector vFrom, Vector vTo, bool* bFail, bool bRestart, bool bNoInterruptions,
+	int iGoalId, int iConditions, int iDangerId)
+{
+	return false;
 }
 
 Vector CNavMeshNavigator::getNextPoint()
 {
-    // Get the next point from the calculated route using Nav Mesh
-    return m_theNavMesh->GetNextRoutePoint();
+	// Get the next point from the calculated route using Nav Mesh
+	//return m_theNavMesh->GetNextRoutePoint();
+	return { 0,0,0 };
 }
 
-void CNavMeshNavigator::updatePosition(const Vector& currentPosition)
+void CNavMeshNavigator::updatePosition()
 {
-    // Update the bot's position during navigation using Nav Mesh
-	m_theNavMesh->botPosition(currentPosition); // Use the botPosition function to update the bot's position
+	// Update the bot's position during navigation using Nav Mesh
+	//m_theNavMesh->botPosition(currentPosition); // Use the botPosition function to update the bot's position
+	
+	// Update the bot's position
+	//m_theNavMesh->UpdatePosition(m_pBot->pEdict->v.origin);
 }
 
 void CNavMeshNavigator::freeMapMemory()
 {
-    // Free memory related to Nav Mesh map data
-    m_theNavMesh->FreeMapMemory();
+	// Free the memory used by the NavMesh
+	//m_theNavMesh->FreeMemory();
 }
 
 void CNavMeshNavigator::freeAllMemory()
 {
-    // Free all allocated memory related to Nav Mesh
-    m_theNavMesh->FreeAllMemory();
+	// Free the memory used by the NavMesh
+	//m_theNavMesh->FreeMemory();
 }
 
 bool CNavMeshNavigator::routeFound()
 {
-    // Check if a route has been successfully calculated
-    // In this case, we can't accurately determine if the route is found, so return false
-    return false;
+	// Check if a route has been successfully calculated
+	// In this case, we can't accurately determine if the route is found, so return false
+	return false;
 }
 
 bool CNavMeshNavigator::hasNextPoint()
 {
-    // Check if there are more points in the calculated route
-    return m_theNavMesh->HasNextRoutePoint();
+	// Check if there are more points in the calculated route
+	//return m_theNavMesh->HasNextRoutePoint();
+	return false;
 }
 
 void CNavMeshNavigator::init()
 {
-    // Initialize the Nav Mesh here if needed
-    // If the Init function is available in the NavMesh class, call it
-    m_theNavMesh->Init();
-}*/
+	//m_theNavMesh->Reset();
+}

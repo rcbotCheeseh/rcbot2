@@ -55,8 +55,6 @@
 #include "bot_fortress.h"
 #include "bot_wpt_dist.h"
 
-#include "nav_mesh.h"
-
 #include "rcbot/logging.h"
 
 #include <cmath>
@@ -322,17 +320,6 @@ int CWaypointNavigator ::  getPathFlags ( int iPath )
 
 	return CWaypoints::getWaypoint(pWpt->getPath(iPath))->getFlags();
 }
-
-/*CNavMeshNavigator::CNavMeshNavigator() //TODO: NavMesh support [APG]RoboCop[CL]	
-{
-	m_pNavMesh = new CNavMesh();
-}
-
-CNavMeshNavigator::~CNavMeshNavigator()
-{
-	if ( m_pNavMesh )
-		delete m_pNavMesh;
-}*/
 
 bool CWaypointNavigator::nextPointIsOnLadder()
 {
@@ -1268,7 +1255,7 @@ void CWaypointNavigator :: rollBackPosition ()
 	// find waypoint in route
 }
 // update the bots current walk vector
-void CWaypointNavigator :: updatePosition (const Vector& currentPosition) //TODO: currentPosition perimeter experimental [APG]RoboCop[CL]
+void CWaypointNavigator :: updatePosition ()
 {
 	static Vector vWptOrigin;
 	static float fRadius;
