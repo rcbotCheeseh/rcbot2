@@ -159,7 +159,7 @@ public:
 
 	void passInt(int i);
 	void passFloat(float f);
-	void passVector(Vector v);
+	void passVector(const Vector& v);
 	void passEdict(edict_t *p);
 	//////////////////////////
 
@@ -305,7 +305,7 @@ private:
 class CBotTF2DemoPipeTrapSched : public CBotSchedule
 {
 public:
-	CBotTF2DemoPipeTrapSched ( eDemoTrapType type, Vector vStand, Vector vLoc, Vector vSpread, bool bAutoDetonate = false, int wptarea = -1 );
+	CBotTF2DemoPipeTrapSched ( eDemoTrapType type, const Vector& vStand, const Vector& vLoc, const Vector& vSpread, bool bAutoDetonate = false, int wptarea = -1 );
 
 	void init() override;
 };
@@ -325,7 +325,7 @@ public:
 class CBotTF2ShootLastEnemyPos : public CBotSchedule
 {
 public:
-	CBotTF2ShootLastEnemyPos ( Vector vLastSeeEnemyPos, Vector vVelocity, edict_t *pLastEnemy );
+	CBotTF2ShootLastEnemyPos (const Vector& vLastSeeEnemyPos, const Vector& vVelocity, edict_t *pLastEnemy );
 
 	void init() override;
 };
@@ -362,7 +362,7 @@ public:
 class CBotEngiMoveBuilding : public CBotSchedule
 {
 public:
-	CBotEngiMoveBuilding ( edict_t *pBotEdict, edict_t *pBuilding, eEngiBuild iObject, Vector vNewLocation, bool bCarrying );
+	CBotEngiMoveBuilding ( edict_t *pBotEdict, edict_t *pBuilding, eEngiBuild iObject, const Vector& vNewLocation, bool bCarrying );
 
 	void init () override;
 };
@@ -371,7 +371,7 @@ public:
 class CBotAttackPointSched : public CBotSchedule
 {
 public:
-	CBotAttackPointSched ( Vector vPoint, int iRadius, int iArea, bool bHasRoute = false, Vector vRoute = Vector(0,0,0), bool bNest = false, edict_t *pLastEnemySentry = nullptr);
+	CBotAttackPointSched (const Vector& vPoint, int iRadius, int iArea, bool bHasRoute = false, const Vector& vRoute = Vector(0,0,0), bool bNest = false, edict_t *pLastEnemySentry = nullptr);
 
 	void init () override;
 }; 
@@ -379,7 +379,7 @@ public:
 class CBotDefendPointSched : public CBotSchedule
 {
 public:
-	CBotDefendPointSched ( Vector vPoint, int iRadius, int iArea );
+	CBotDefendPointSched (const Vector& vPoint, int iRadius, int iArea );
 
 	void init () override;
 }; 
@@ -459,7 +459,7 @@ public:
 class CBotDefendSched : public CBotSchedule
 {
 public:
-	CBotDefendSched ( Vector vOrigin, float fMaxTime = 0 );
+	CBotDefendSched (const Vector& vOrigin, float fMaxTime = 0 );
 
 	CBotDefendSched ( int iWaypointID, float fMaxTime = 0 );
 
@@ -469,7 +469,7 @@ public:
 class CBotGetMetalSched : public CBotSchedule
 {
 public:
-	CBotGetMetalSched ( Vector vOrigin );
+	CBotGetMetalSched (const Vector& vOrigin );
 
 	void init () override;
 };
@@ -493,7 +493,7 @@ public:
 class CBotFollowLastEnemy : public CBotSchedule
 {
 public:
-	CBotFollowLastEnemy ( CBot *pBot, edict_t *pEnemy, Vector vLastSee );
+	CBotFollowLastEnemy ( CBot *pBot, edict_t *pEnemy, const Vector& vLastSee );
 
 	void init () override;
 };
@@ -501,7 +501,7 @@ public:
 class CBotTF2SnipeSched : public CBotSchedule
 {
 public:
-	CBotTF2SnipeSched ( Vector vOrigin, int iWpt );
+	CBotTF2SnipeSched (const Vector& vOrigin, int iWpt );
 
 	void init () override;
 };
@@ -509,7 +509,7 @@ public:
 class CBotTF2SnipeCrossBowSched : public CBotSchedule
 {
 public:
-	CBotTF2SnipeCrossBowSched(Vector vOrigin, int iWpt);
+	CBotTF2SnipeCrossBowSched(const Vector& vOrigin, int iWpt);
 
 	void init() override;
 };
@@ -528,7 +528,7 @@ public:
 class CBotTF2GetAmmoSched : public CBotSchedule
 {
 public:
-	CBotTF2GetAmmoSched ( Vector vOrigin );
+	CBotTF2GetAmmoSched (const Vector& vOrigin );
 
 	void init () override;
 };
@@ -536,7 +536,7 @@ public:
 class CBotTF2GetHealthSched : public CBotSchedule
 {
 public:
-	CBotTF2GetHealthSched ( Vector vOrigin );
+	CBotTF2GetHealthSched (const Vector& vOrigin );
 
 	void init () override;
 };
@@ -544,7 +544,7 @@ public:
 class CBotTF2GetFlagSched : public CBotSchedule
 {
 public:
-	CBotTF2GetFlagSched ( Vector vOrigin, bool bUseRoute = false, Vector vRoute = Vector(0,0,0) );
+	CBotTF2GetFlagSched (const Vector& vOrigin, bool bUseRoute = false, const Vector& vRoute = Vector(0,0,0) );
 
 	void init () override;
 };
@@ -552,7 +552,7 @@ public:
 class CBotTF2FindFlagSched : public CBotSchedule
 {
 public:
-	CBotTF2FindFlagSched ( Vector vOrigin );
+	CBotTF2FindFlagSched (const Vector& vOrigin );
 
 	void init () override;
 };
@@ -576,7 +576,7 @@ public:
 class CBotGotoOriginSched : public CBotSchedule
 {
 public:
-	CBotGotoOriginSched ( Vector vOrigin );
+	CBotGotoOriginSched (const Vector& vOrigin );
 
 	CBotGotoOriginSched ( edict_t *pEdict );
 
@@ -606,7 +606,7 @@ public:
 class CBotInvestigateNoiseSched : public CBotSchedule
 {
 public:
-	CBotInvestigateNoiseSched ( Vector vSource, Vector vAttackPoint );
+	CBotInvestigateNoiseSched (const Vector& vSource, const Vector& vAttackPoint );
 
 	void init () override;
 };
@@ -618,7 +618,7 @@ public:
 	// hide from an enemy (pEdict)
 	CGotoHideSpotSched ( CBot *pBot, edict_t *pEdict, bool bIsGrenade = false );
 	// hide from a Vector
-	CGotoHideSpotSched ( CBot *pBot, Vector vOrigin, IBotTaskInterrupt *interrupt = nullptr);
+	CGotoHideSpotSched ( CBot *pBot, const Vector& vOrigin, IBotTaskInterrupt *interrupt = nullptr);
 
 	void init () override;
 };
@@ -648,7 +648,7 @@ class CDeployMachineGunSched : public CBotSchedule
 public:
 	// iWaypoint = the waypoint number the bot will go to (to nest)
 	// if iWaypoint is -1 it will find a random, suitable nest
-	CDeployMachineGunSched ( CBotWeapon *pWeapon, CWaypoint *pWaypoint, Vector vEnemy );
+	CDeployMachineGunSched ( CBotWeapon *pWeapon, CWaypoint *pWaypoint, const Vector& vEnemy );
 
 	void init () override
 	{

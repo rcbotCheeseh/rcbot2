@@ -251,7 +251,7 @@ public:
 //		m_iId = -1;
 	}
 
-	CWaypoint ( Vector vOrigin, int iFlags = 0, int iYaw = 0 )
+	CWaypoint (const Vector& vOrigin, int iFlags = 0, int iYaw = 0)
 	{
 		m_thePaths.clear();
 		init();
@@ -313,7 +313,7 @@ public:
 		return (m_iFlags & iFlag) > 0;
 	}
 
-	void move ( Vector origin )
+	void move (const Vector& origin)
 	{
 		// move to new origin
 		m_vOrigin = origin;
@@ -337,7 +337,7 @@ public:
 
 	bool checkReachable ();
 
-	bool isPathOpened ( Vector vPath );
+	bool isPathOpened (const Vector& vPath );
 
 	bool isUsed () const
 	{
@@ -345,7 +345,7 @@ public:
 	}
 
 	//bool touched ( edict_t *pEdict );
-	bool touched ( Vector vOrigin, Vector vOffset, float fTouchDist, bool onground = true );
+	bool touched (const Vector& vOrigin, const Vector& vOffset, float fTouchDist, bool onground = true );
 
 	void botTouch ( CBot *pBot ); // TODO: Needs implemented properly [APG]RoboCop[CL]
 
@@ -370,7 +370,7 @@ public:
 		return distanceFrom(other->getOrigin());
 	}
 
-	float distanceFrom ( Vector vOrigin ) const;
+	float distanceFrom (const Vector& vOrigin ) const;
 
 	int numPaths () const;
 
@@ -445,7 +445,7 @@ public:
 
 	static int addWaypoint ( CClient *pClient, const char *type1, const char *type2,const char *type3,const char *type4, bool bUseTemplate = false );
 
-	static int addWaypoint ( edict_t *pPlayer, Vector vOrigin, int iFlags = CWaypointTypes::W_FL_NONE, bool bAutoPath = false, int iYaw = 0, int iArea = 0, float fRadius = 0.0f );
+	static int addWaypoint ( edict_t *pPlayer, const Vector& vOrigin, int iFlags = CWaypointTypes::W_FL_NONE, bool bAutoPath = false, int iYaw = 0, int iArea = 0, float fRadius = 0.0f );
 
 	static void removeWaypoint ( int iIndex );
 
@@ -453,7 +453,7 @@ public:
 
 	static bool checkReachable ( CWaypoint *pWaypoint, int iStart ); // TODO: Needs implemented properly [APG]RoboCop[CL]
 
-	static CWaypoint *nearestPipeWaypoint ( Vector vTarget, Vector vOrigin, int *iAiming );
+	static CWaypoint *nearestPipeWaypoint (const Vector& vTarget, const Vector& vOrigin, int *iAiming );
 
 	static int freeWaypointIndex ();
 
@@ -493,7 +493,7 @@ public:
 	static int getClosestFlagged (int iFlags, const Vector& vOrigin, int iTeam, float* fReturnDist = nullptr, const unsigned char* failedwpts = nullptr);
 
 	static int nearestWaypointGoal (int iFlags, const Vector& origin, float fDist, int iTeam = 0);
-	static CWaypoint *randomRouteWaypoint ( CBot *pBot, Vector vOrigin, Vector vGoal, int iTeam, int iArea );
+	static CWaypoint *randomRouteWaypoint ( CBot *pBot, const Vector& vOrigin, const Vector& vGoal, int iTeam, int iArea );
 	static CWaypoint *randomWaypointGoal ( int iFlags, int iTeam = 0, int iArea = 0, bool bForceArea = false, CBot *pBot = nullptr, bool bHighDanger = false, int iSearchFlags = 0, int iIgnore = -1 );
 	static CWaypoint *randomWaypointGoalBetweenArea (int iFlags, int iTeam, int iArea, bool bForceArea, CBot* pBot, bool bHighDanger, const Vector* org1, const Vector* org2, bool
 	                                                 bIgnoreBelief = false, int iWpt1 = -1, int iWpt2 = -1);
@@ -503,7 +503,7 @@ public:
 
 	static CWaypointVisibilityTable *getVisiblity () { return m_pVisibilityTable; }
 	static void setupVisibility ();
-	static CWaypoint *getPinchPointFromWaypoint ( Vector vPlayerOrigin, Vector vPinchOrigin );
+	static CWaypoint *getPinchPointFromWaypoint (const Vector& vPlayerOrigin, Vector vPinchOrigin );
 	static CWaypoint *getNestWaypoint ( int iTeam, int iArea, bool bForceArea = false, CBot *pBot = nullptr);
 
 	static void updateWaypointPairs ( std::vector<edict_wpt_pair_t> *pPairs, int iWptFlag, const char *szClassname );

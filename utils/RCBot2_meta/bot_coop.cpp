@@ -6,6 +6,7 @@
 
 #include "vstdlib/random.h" // for random functions
 
+#include <cstring>
 
 void CBotCoop :: modThink ()
 {
@@ -25,10 +26,10 @@ bool CBotCoop :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 
 	const char* classname = pEdict->GetClassName();
 
-	if ( strncmp(classname,"npc_",4) == 0 )
+	if ( std::strncmp(classname,"npc_",4) == 0 )
 	{
-		if ( !strcmp(classname,"npc_antlionguard") || !strcmp(classname,"npc_citizen") || 
-			 !strcmp(classname,"npc_barney") || !strcmp(classname,"npc_kliener") || !strcmp(classname,"npc_alyx") )
+		if ( !std::strcmp(classname,"npc_antlionguard") || !std::strcmp(classname,"npc_citizen") || 
+			 !std::strcmp(classname,"npc_barney") || !std::strcmp(classname,"npc_kliener") || !std::strcmp(classname,"npc_alyx") )
 		{
 			return false; // ally
 		}

@@ -82,11 +82,11 @@ char *CStrings :: getString ( const char *szString )
 			return szCompString;
 	}
 
-	const unsigned int len = strlen(szString);
+	const unsigned int len = std::strlen(szString);
 
 	char *szNew = new char[len+1];
 
-	strcpy(szNew,szString);
+	std::strcpy(szNew,szString);
 
 	szNew[len] = 0;
 

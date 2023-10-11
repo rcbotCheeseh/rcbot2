@@ -92,7 +92,7 @@ void CSom :: updateAround (const std::vector<float>* inputs, CSomNeuron* bmu) co
 
 		if ( (dist = bmu->neighbourDistance(current)) <= nsiz )
 		{
-			bmu->update(inputs,exp(-dist / (2*nsiz)));    
+			bmu->update(inputs,std::exp(-dist / (2*nsiz)));    
 		}           
 	}
 }
@@ -194,7 +194,7 @@ void CSomNeuron :: displayWeights () const
 {
 	for ( unsigned int i = 0; i < fWeights.size(); i ++ )
 	{
-		printf("%0.4f,",fWeights[i]);
+		std::printf("%0.4f,",fWeights[i]);
 	}
 }
 

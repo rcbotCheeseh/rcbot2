@@ -35,6 +35,7 @@
 
 #include "rcbot/logging.h"
 
+#include <cstring>
 #include <vector>
 ///////////
 
@@ -140,7 +141,7 @@ void CAccessClients :: load ()
 			if ( buffer[0] == '#' )
 				continue;
 
-			const int len = strlen(buffer);
+			const int len = std::strlen(buffer);
 
 			int i = 0;
 

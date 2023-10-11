@@ -46,6 +46,8 @@
 #include "bot_waypoint_locations.h"
 #include "bot_perceptron.h"
 
+#include <cstring>
+
 #include "rcbot/logging.h"
 
 std::vector<edict_wpt_pair_t> CHalfLifeDeathmatchMod::m_LiftWaypoints;
@@ -79,7 +81,7 @@ void CBotMods::parseFile()
 		if (buffer[0] == '#')
 			continue;
 
-		unsigned int len = strlen(buffer);
+		unsigned int len = std::strlen(buffer);
 
 		if (len == 0)
 			continue;
@@ -112,7 +114,7 @@ void CBotMods::parseFile()
 
 		val[j] = 0;
 
-		if (!strcmp(key, "mod"))
+		if (!std::strcmp(key, "mod"))
 		{
 			if (curmod)
 			{
@@ -185,7 +187,7 @@ void CBotMods::parseFile()
 			else
 				curmod = new CBotMod();
 		}
-		else if (curmod && !strcmp(key, "bot"))
+		else if (curmod && !std::strcmp(key, "bot"))
 		{
 			if (!strcmpi("GENERIC", val))
 				bottype = BOTTYPE_GENERIC;
@@ -210,11 +212,11 @@ void CBotMods::parseFile()
 		}
 		else if (curmod && !strcmpi(key, "gamedir"))
 		{
-			strncpy(gamefolder, val, 255);
+			std::strncpy(gamefolder, val, 255);
 		}
 		else if (curmod && !strcmpi(key, "weaponlist"))
 		{
-			strncpy(weaponlist, val, 63);
+			std::strncpy(weaponlist, val, 63);
 		}
 	}
 

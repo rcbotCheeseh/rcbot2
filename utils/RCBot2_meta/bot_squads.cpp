@@ -39,6 +39,7 @@
 #include "bot_getprop.h"
 
 #include <algorithm>
+#include <cstring>
 
 std::deque<CBotSquad*> CBotSquads::m_theSquads;
 

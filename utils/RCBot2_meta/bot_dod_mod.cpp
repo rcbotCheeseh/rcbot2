@@ -45,6 +45,8 @@
 #include "bot_waypoint_locations.h"
 #include "bot_perceptron.h"
 
+#include <cstring>
+
 edict_t *CDODMod::m_pResourceEntity = nullptr;
 CDODFlags CDODMod::m_Flags;
 edict_t * CDODMod::m_pPlayerResourceEntity = nullptr;
@@ -599,7 +601,7 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 
 	m_iNumControlPoints = 0;
 
-	memset(m_bBombPlanted,0,sizeof(bool)*MAX_DOD_FLAGS); // all false
+	std::memset(m_bBombPlanted,0,sizeof(bool)*MAX_DOD_FLAGS); // all false
 
 	//CPsVisible = CClassInterface::getDODCPVisible(pResourceEntity);
 
@@ -637,7 +639,7 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 			if ( !pent || pent->IsFree() )
 				continue;
 
-			if ( strcmp(pent->GetClassName(),DOD_CLASSNAME_CONTROLPOINT) == 0 )
+			if ( std::strcmp(pent->GetClassName(),DOD_CLASSNAME_CONTROLPOINT) == 0 )
 			{
 				vOrigin = CBotGlobals::entityOrigin(pent);
 
@@ -680,7 +682,7 @@ int CDODFlags::setup(edict_t *pResourceEntity)
 			if ( !pent || pent->IsFree() )
 				continue;
 
-			if ( strcmp(pent->GetClassName(),DOD_CLASSNAME_BOMBTARGET) == 0 )
+			if ( std::strcmp(pent->GetClassName(),DOD_CLASSNAME_BOMBTARGET) == 0 )
 			{
 				vOrigin = CBotGlobals::entityOrigin(pent);
 
@@ -909,11 +911,11 @@ void CDODMod ::clientCommand( edict_t *pEntity, int argc, const char *pcmd, cons
 {
 	if ( argc == 1 )
 	{
-		if ( strncmp(pcmd,"voice_",6) == 0 )
+		if ( std::strncmp(pcmd,"voice_",6) == 0 )
 		{
 			for ( short int i = 0; i < DOD_VC_INVALID; i ++ )
 			{
-				if ( strcmp(&pcmd[6],g_DODVoiceCommands[i].pcmd) == 0 )
+				if ( std::strcmp(&pcmd[6],g_DODVoiceCommands[i].pcmd) == 0 )
 				{
 					u_VOICECMD vcmd;
 					vcmd.voicecmd = i;

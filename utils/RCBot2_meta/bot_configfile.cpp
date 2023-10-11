@@ -33,6 +33,8 @@
 #include "bot_globals.h"
 #include "bot_configfile.h"
 
+#include <cstring>
+
 #include "rcbot/logging.h"
 
 std::vector <char *> CBotConfigFile::m_Commands;
@@ -64,7 +66,7 @@ void CBotConfigFile :: load ()
 		if ( line[0] == '#' )
 			continue;
 
-		size_t len = strlen(line);
+		size_t len = std::strlen(line);
 
 		if (len && line[len-1] == '\n') {
 			line[--len] = '\0';
@@ -147,11 +149,11 @@ void CRCBotTF2UtilFile :: loadConfig()
 		 char szFullFilename[512];
 		 if ( iFile == BOT_ATT_UTIL )
 		 {
-			sprintf(szFilename,"attack_util.csv");
+			std::sprintf(szFilename,"attack_util.csv");
 		 }
 		 else
 		 {
-			sprintf(szFilename,"normal_util.csv");
+			std::sprintf(szFilename,"normal_util.csv");
 		}
 
 		CBotGlobals::buildFileName(szFullFilename,szFilename,BOT_CONFIG_FOLDER);
@@ -177,7 +179,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 					//               o  i  l  m  d  g  r  y  g
 					// 
 					
-					if ( sscanf(line,"%[^,],%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\r\n",utiltype,
+					if ( std::sscanf(line,"%[^,],%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\r\n",utiltype,
 						&iClassList[0][0],&iClassList[0][1],
 						&iClassList[1][0],&iClassList[1][1],
 						&iClassList[2][0],&iClassList[2][1],

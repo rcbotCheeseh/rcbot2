@@ -156,7 +156,7 @@ const char* g_szUtils[BOT_UTIL_MAX + 1] =
 "BOT_UTIL_MAX"
 };
 
-CBotUtility::CBotUtility(CBot* pBot, eBotAction id, bool bCanDo, float fUtil, CBotWeapon* pWeapon, int iData, Vector vec)
+CBotUtility::CBotUtility(CBot* pBot, eBotAction id, bool bCanDo, float fUtil, CBotWeapon* pWeapon, int iData, const Vector& vec)
 {
 	m_iData = iData;
 	m_fUtility = fUtil;
@@ -194,7 +194,7 @@ void CBotUtilities::execute()
 			util_node_t* temp = m_pBest.head;
 
 			// put in correct order by making a linked list
-			util_node_t* pnew = static_cast<util_node_t*>(malloc(sizeof(util_node_t)));
+			util_node_t* pnew = static_cast<util_node_t*>(std::malloc(sizeof(util_node_t)));
 
 			if (pnew != nullptr)
 			{
@@ -246,7 +246,7 @@ void CBotUtilities::freeMemory()
 	{
 		temp = m_pBest.head;
 		m_pBest.head = m_pBest.head->next;
-		free(temp);
+		std::free(temp);
 	}
 }
 
@@ -261,7 +261,7 @@ CBotUtility* CBotUtilities::nextBest()
 
 	m_pBest.head = m_pBest.head->next;
 
-	free(temp);
+	std::free(temp);
 
 	return pBest;
 }

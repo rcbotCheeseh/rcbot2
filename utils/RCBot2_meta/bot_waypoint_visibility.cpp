@@ -34,7 +34,9 @@
 #include "bot_waypoint.h"
 #include "bot_waypoint_visibility.h"
 #include "bot_globals.h"
+
 #include <cstdio>
+#include <cstring>
 
 #include "rcbot/logging.h"
 
@@ -167,7 +169,7 @@ bool CWaypointVisibilityTable::SaveToFile() const
 	}
 
 	header.numwaypoints = CWaypoints::numWaypoints();
-	strncpy(header.szMapName, CBotGlobals::getMapName(), 63);
+	std::strncpy(header.szMapName, CBotGlobals::getMapName(), 63);
 	header.waypoint_version = CWaypoints::WAYPOINT_VERSION;
 
 	bfp.write(reinterpret_cast<char*>(&header), sizeof(wpt_vis_header_t));
@@ -198,7 +200,7 @@ bool CWaypointVisibilityTable::ReadFromFile(int numwaypoints) const
 		return false;
 	if (header.waypoint_version != CWaypoints::WAYPOINT_VERSION)
 		return false;
-	if (strncmp(header.szMapName, CBotGlobals::getMapName(), 63) != 0)
+	if (std::strncmp(header.szMapName, CBotGlobals::getMapName(), 63) != 0)
 		return false;
 
 	bfp.read(reinterpret_cast<char*>(m_VisTable), sizeof(byte) * g_iMaxVisibilityByte);

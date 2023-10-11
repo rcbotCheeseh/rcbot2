@@ -54,6 +54,8 @@
 
 #include "rcbot/logging.h"
 
+#include <cstring>
+
 #include <build_info.h>
 
 SH_DECL_HOOK6(IServerGameDLL, LevelInit, SH_NOATTRIB, 0, bool, char const *, char const *, char const *, char const *, bool, bool);
@@ -140,11 +142,11 @@ public:
 		m_iPlayerSlot = ENTINDEX(pPlayer);
 	}
 
-	bool IsReliable() const { return false; }
-	bool IsInitMessage() const { return false; }
+	bool IsReliable() const override { return false; }
+	bool IsInitMessage() const override { return false; }
 
-	int	GetRecipientCount() const { return 1; }
-	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot; }
+	int	GetRecipientCount() const override { return 1; }
+	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot; }
 
 private:
 	int m_iPlayerSlot;
@@ -171,11 +173,11 @@ public:
 		}
 	}
 
-	bool IsReliable() const { return false; }
-	bool IsInitMessage() const { return false; }
+	bool IsReliable() const override { return false; }
+	bool IsInitMessage() const override { return false; }
 
-	int	GetRecipientCount() const { return m_iMaxCount; }
-	int	GetRecipientIndex(int slot) const { return m_iPlayerSlot[slot] + 1; }
+	int	GetRecipientCount() const override { return m_iMaxCount; }
+	int	GetRecipientIndex(int slot) const override { return m_iPlayerSlot[slot] + 1; }
 
 private:
 
@@ -198,9 +200,9 @@ void RCBotPluginMeta::HudTextMessage(edict_t *pEntity, const char *szMessage)
 
 	while ((bOK = servergamedll->GetUserMessageInfo(msgid, msgbuf, 63, imsgsize)) == true)
 	{
-		if (strcmp(msgbuf, "HintText") == 0)
+		if (std::strcmp(msgbuf, "HintText") == 0)
 			hint = msgid;
-		else if (strcmp(msgbuf, "SayText") == 0)
+		else if (std::strcmp(msgbuf, "SayText") == 0)
 			say = msgid;
 
 		msgid++;
@@ -249,9 +251,9 @@ void RCBotPluginMeta::BroadcastTextMessage(const char *szMessage)
 
 	while ((bOK = servergamedll->GetUserMessageInfo(msgid, msgbuf, 63, imsgsize)) == true)
 	{
-		if (strcmp(msgbuf, "HintText") == 0)
+		if (std::strcmp(msgbuf, "HintText") == 0)
 			hint = msgid;
-		else if (strcmp(msgbuf, "SayText") == 0)
+		else if (std::strcmp(msgbuf, "SayText") == 0)
 			say = msgid;
 
 		msgid++;
@@ -311,7 +313,7 @@ void RCBotPluginMeta::Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper)
 class BaseAccessor : public IConCommandBaseAccessor
 {
 public:
-	bool RegisterConCommandBase(ConCommandBase *pCommandBase)
+	bool RegisterConCommandBase(ConCommandBase *pCommandBase) override
 	{
 		/* Always call META_REGCVAR instead of going through the engine. */
 		return META_REGCVAR(pCommandBase);
@@ -451,7 +453,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	//ConVar_Register( 0 );
 	//InitCVars( interfaceFactory ); // register any cvars we have defined
 
-	srand( static_cast<unsigned>(time(nullptr)) );  // initialize the random seed
+	std::srand( static_cast<unsigned>(time(nullptr)) );  // initialize the random seed
 	irand.seed( static_cast<unsigned>(time(nullptr)) );
 
 	// Find the RCBOT2 Path from metamod VDF
@@ -505,7 +507,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	CBotGlobals::buildFileName(filename, "bot_quota", BOT_CONFIG_FOLDER, "ini");
 	fp = std::fstream(filename, std::fstream::in);
 
-	memset(bq_line, 0, sizeof(bq_line));
+	std::memset(bq_line, 0, sizeof(bq_line));
 
 	if (fp) {
 		while (fp.getline(bq_line, sizeof(bq_line))) {
@@ -520,7 +522,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 					bq_line[i] = ' ';
 			}
 
-			if (sscanf(bq_line, "%d %d", &human_count, &bot_count) == 2) {
+			if (std::sscanf(bq_line, "%d %d", &human_count, &bot_count) == 2) {
 				if (human_count < 0 || human_count > 32) {
 					logger->Log(LogLevel::WARN, "Bot Quota - Invalid Human Count %d", human_count);
 					continue;
@@ -622,7 +624,7 @@ void RCBotPluginMeta::AllPluginsLoaded()
 
 #if defined SM_EXT
 void* RCBotPluginMeta::OnMetamodQuery(const char* iface, int *ret) {
-	if (strcmp(iface, SOURCEMOD_NOTICE_EXTENSIONS) == 0) {
+	if (std::strcmp(iface, SOURCEMOD_NOTICE_EXTENSIONS) == 0) {
 		BindToSourcemod();
 	}
 	
@@ -687,7 +689,7 @@ void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 
 		RETURN_META(MRES_SUPERCEDE);
 	}
-	if ( strncmp(pcmd,"menuselect",10) == 0 ) // menu command
+	if ( std::strncmp(pcmd,"menuselect",10) == 0 ) // menu command
 	{
 		if ( pClient->isUsingMenu() )
 		{

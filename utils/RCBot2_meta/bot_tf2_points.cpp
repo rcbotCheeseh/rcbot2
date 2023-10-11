@@ -8,6 +8,8 @@
 #include "bot_globals.h"
 #include "bot_waypoint_locations.h"
 
+#include <cstring>
+
 class CBotFuncResetAttackPoint : public IBotFunction
 {
 public:
@@ -294,17 +296,17 @@ void CTFObjectiveResource::setup ()
 {
 	CClassInterface::getTF2ObjectiveResource(this);
 
-	memset(m_pControlPoints,0,sizeof(edict_t*)*MAX_CONTROL_POINTS);
-	memset(m_iControlPointWpt,0xFF,sizeof(int)*MAX_CONTROL_POINTS);
-	memset(m_fLastCaptureTime,0,sizeof(float)*MAX_CONTROL_POINTS);
+	std::memset(m_pControlPoints,0,sizeof(edict_t*)*MAX_CONTROL_POINTS);
+	std::memset(m_iControlPointWpt,0xFF,sizeof(int)*MAX_CONTROL_POINTS);
+	std::memset(m_fLastCaptureTime,0,sizeof(float)*MAX_CONTROL_POINTS);
 	// Find control point entities
 
 	Vector vOrigin;
 
 	int i = gpGlobals->maxClients;
 
-	memset(m_IndexToWaypointAreaTranslation,0,sizeof(int)*MAX_CONTROL_POINTS);
-	memset(m_WaypointAreaToIndexTranslation,0xFF,sizeof(int)*(MAX_CONTROL_POINTS+1));
+	std::memset(m_IndexToWaypointAreaTranslation,0,sizeof(int)*MAX_CONTROL_POINTS);
+	std::memset(m_WaypointAreaToIndexTranslation,0xFF,sizeof(int)*(MAX_CONTROL_POINTS+1));
 
 	// find visible flags -- with a model
 	while ( ++i < gpGlobals->maxEntities )
@@ -314,7 +316,7 @@ void CTFObjectiveResource::setup ()
 		if ( !pent || pent->IsFree() )
 			continue;
 			
-		if ( strcmp(pent->GetClassName(),"team_control_point") == 0 )
+		if ( std::strcmp(pent->GetClassName(),"team_control_point") == 0 )
 		{
 			vOrigin = CBotGlobals::entityOrigin(pent);
 
@@ -386,7 +388,7 @@ void CTFObjectiveResource::	debugprint () const
 	CBotGlobals::botMessage(pEdict,0,"m_iOwner[8]\t[%s,%s,%s,%s,%s,%s,%s,%s]",m_iOwner[0]==2?"red":m_iOwner[0]==3?"blue":"unassigned",m_iOwner[1]==2?"red":m_iOwner[1]==3?"blue":"unassigned",m_iOwner[2]==2?"red":m_iOwner[2]==3?"blue":"unassigned",m_iOwner[3]==2?"red":m_iOwner[3]==3?"blue":"unassigned",m_iOwner[4]==2?"red":m_iOwner[4]==3?"blue":"unassigned",m_iOwner[5]==2?"red":m_iOwner[5]==3?"blue":"unassigned",m_iOwner[6]==2?"red":m_iOwner[6]==3?"blue":"unassigned",m_iOwner[7]==2?"red":m_iOwner[7]==3?"blue":"unassigned");
 }
 
-int CTFObjectiveResource::NearestArea ( Vector vOrigin ) const
+int CTFObjectiveResource::NearestArea (const Vector& vOrigin) const
 {
 	int iNearest = -1;
 	float fNearest = 2048.0f;
@@ -437,13 +439,13 @@ bool CTFObjectiveResource :: updateDefendPoints ( int team )
 	TF2PointProb_t* arr = m_ValidPoints[team - 2][TF2_POINT_DEFEND];
 
 	// reset array
-	memset(arr,0,sizeof(TF2PointProb_t)*MAX_CONTROL_POINTS);
+	std::memset(arr,0,sizeof(TF2PointProb_t)*MAX_CONTROL_POINTS);
 
 	for ( int i = 0; i < *m_iNumControlPoints; i ++ )
 	{
 		arr[i].fProbMultiplier = 1.0f;
 		arr[i].fProb = 1.0f;
-		memset(arr[i].iPrev,0xFF,sizeof(int)*MAX_PREVIOUS_POINTS);
+		std::memset(arr[i].iPrev,0xFF,sizeof(int)*MAX_PREVIOUS_POINTS);
 
 		// not visible
 		if ( m_bCPIsVisible[i] == 0 )
@@ -777,8 +779,8 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 	TF2PointProb_t* arr = m_ValidPoints[team - 2][TF2_POINT_ATTACK];
 
 	// reset array
-	memset(arr,0,sizeof(TF2PointProb_t)*MAX_CONTROL_POINTS);
-	memset(arr->iPrev,0xFF,sizeof(int)*MAX_PREVIOUS_POINTS);
+	std::memset(arr,0,sizeof(TF2PointProb_t)*MAX_CONTROL_POINTS);
+	std::memset(arr->iPrev,0xFF,sizeof(int)*MAX_PREVIOUS_POINTS);
 
 	if ( team == TF2_TEAM_RED && CTeamFortress2Mod::isAttackDefendMap() )
 	{
@@ -790,7 +792,7 @@ bool CTFObjectiveResource :: updateAttackPoints ( int team )
 	{
 		arr[i].fProb = 1.0f;
 		arr[i].fProbMultiplier = 1.0f;
-		memset(arr[i].iPrev,0xFF,sizeof(int)*MAX_PREVIOUS_POINTS);
+		std::memset(arr[i].iPrev,0xFF,sizeof(int)*MAX_PREVIOUS_POINTS);
 
 		// not visible
 		if ( m_bCPIsVisible[i] == 0 )

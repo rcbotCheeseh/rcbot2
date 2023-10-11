@@ -31,6 +31,7 @@
 
 #include <cmath>
 #include <mem.h>
+#include <cstring>
 //#include "vstdlib/random.h" // for random functions
 #include "bot_mtrand.h"
 #include "bot_perceptron.h"
@@ -65,12 +66,12 @@ CPerceptron :: CPerceptron (unsigned short int iInputs)
 
 void CPerceptron :: setWeights (const ga_nn_value* weights) const
 {
-	memcpy(m_weights,weights,sizeof(ga_nn_value)*m_iInputs);
+	std::memcpy(m_weights,weights,sizeof(ga_nn_value)*m_iInputs);
 }
 
 void CNeuron :: input ( ga_nn_value *inputs )
 {
-	memcpy(m_inputs,inputs,sizeof(ga_nn_value)*m_iInputs);
+	std::memcpy(m_inputs,inputs,sizeof(ga_nn_value)*m_iInputs);
 }
 
 ga_nn_value CPerceptron :: execute ()
@@ -92,7 +93,7 @@ ga_nn_value CPerceptron :: execute ()
 	}
 	
 	// sigmoid function
-	m_output = 1.0f/(1.0f+exp(-m_output)); //m_transferFunction->transfer(fNetInput);
+	m_output = 1.0f/(1.0f+std::exp(-m_output)); //m_transferFunction->transfer(fNetInput);
 	
 	return m_output;
 }
@@ -170,7 +171,7 @@ ga_nn_value CLogisticalNeuron :: execute (  )//, bool usebias )
 		x++;
 	}
 
-	m_output = 1/(1+exp(-m_netinput));//transferFunction->transfer(m_netinput);
+	m_output = 1/(1+std::exp(-m_netinput));//transferFunction->transfer(m_netinput);
 	
 	return m_output;
 }
@@ -256,7 +257,7 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 
 		for ( unsigned short int bi = 0; bi < numbatches; bi ++ )
 		{
-			memset(outs,0,sizeof(ga_nn_value)*m_numOutputs);
+			std::memset(outs,0,sizeof(ga_nn_value)*m_numOutputs);
 
 			execute(batches[bi].in,outs,min_value,max_value);
 
@@ -350,9 +351,9 @@ void CBotNeuralNet :: execute (const ga_nn_value* inputs, ga_nn_value* outputs, 
 	static unsigned short l; // layer
 	static ga_nn_value *output_it;
 
-	memset(outputs,0,sizeof(ga_nn_value)*m_numOutputs);
-	memset(m_layeroutput,0,sizeof(ga_nn_value)*m_numInputs);
-	memcpy(m_layerinput,inputs,sizeof(ga_nn_value)*m_numInputs);
+	std::memset(outputs,0,sizeof(ga_nn_value)*m_numOutputs);
+	std::memset(m_layeroutput,0,sizeof(ga_nn_value)*m_numInputs);
+	std::memcpy(m_layerinput,inputs,sizeof(ga_nn_value)*m_numInputs);
 
 	// Missing inputs!!!
 	for (i = 0; i < m_numInputs; i++)
@@ -379,7 +380,7 @@ void CBotNeuralNet :: execute (const ga_nn_value* inputs, ga_nn_value* outputs, 
 			//layeroutput.emplace_back(pNode->getOutput());
 		}
 
-		memcpy(m_layerinput,m_layeroutput,sizeof(ga_nn_value) * m_numHidden);
+		std::memcpy(m_layerinput,m_layeroutput,sizeof(ga_nn_value) * m_numHidden);
 
 		//pLayer++;
 	}

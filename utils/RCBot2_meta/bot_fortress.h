@@ -237,14 +237,14 @@ typedef enum
 {
 	TF_CLASS_UNDEFINED = 0,
 	TF_CLASS_SCOUT,
-	TF_CLASS_SNIPER,
 	TF_CLASS_SOLDIER,
-	TF_CLASS_DEMOMAN,
-	TF_CLASS_MEDIC,
-	TF_CLASS_HWGUY,
 	TF_CLASS_PYRO,
-	TF_CLASS_SPY,
+	TF_CLASS_DEMOMAN,
+	TF_CLASS_HWGUY,
 	TF_CLASS_ENGINEER,
+	TF_CLASS_MEDIC,
+	TF_CLASS_SNIPER,
+	TF_CLASS_SPY,
 	TF_CLASS_MAX
 }TF_Class;
 
@@ -284,7 +284,7 @@ typedef enum
 class CBotTF2FunctionEnemyAtIntel : public IBotFunction
 {
 public:
-	CBotTF2FunctionEnemyAtIntel(int iTeam, Vector vPos, int type, edict_t* pPlayer = nullptr, int capindex = -1)
+	CBotTF2FunctionEnemyAtIntel(int iTeam, const Vector& vPos, int type, edict_t* pPlayer = nullptr, int capindex = -1)
 	{
 		m_iTeam = iTeam;
 		m_vPos = vPos;
@@ -332,7 +332,7 @@ private:
 class CBroadcastFlagDropped : public IBotFunction
 {
 public:
-	CBroadcastFlagDropped (int iTeam, Vector origin) { m_iTeam = iTeam; m_vOrigin = origin; }
+	CBroadcastFlagDropped (int iTeam, const Vector& origin) { m_iTeam = iTeam; m_vOrigin = origin; }
 	void execute ( CBot *pBot ) override;
 
 private:
@@ -527,8 +527,8 @@ public:
 
 	bool waitForFlag ( Vector *vOrigin, float *fWait, bool bFindFlag );
 
-	void flagDropped ( Vector vOrigin );
-	void teamFlagDropped ( Vector vOrigin );
+	void flagDropped (const Vector& vOrigin );
+	void teamFlagDropped (const Vector& vOrigin );
 	void teamFlagPickup () const;
 
 	virtual bool wantToListenToPlayer ( edict_t *pPlayer, int iWeaponID = -1 ) { return true; }
@@ -746,7 +746,7 @@ public:
 	void onInventoryApplication() override;
 
 	void MannVsMachineWaveComplete();
-	void MannVsMachineAlarmTriggered (Vector vLoc);
+	void MannVsMachineAlarmTriggered (const Vector& vLoc);
 
 	bool sentryRecentlyHadEnemy () const;
 
@@ -877,11 +877,11 @@ public:
 	
 	bool canGotoWaypoint ( Vector vPrevWaypoint, CWaypoint *pWaypoint, CWaypoint *pPrev = nullptr) override;
 
-	bool deployStickies ( eDemoTrapType type, Vector vStand, Vector vLocation, Vector vSpread, Vector *vPoint, int *iState, int *iStickyNum, bool *bFail, float *fTime, int wptindex );
+	bool deployStickies ( eDemoTrapType type, const Vector& vStand, const Vector& vLocation, const Vector& vSpread, Vector *vPoint, int *iState, int *iStickyNum, bool *bFail, float *fTime, int wptindex );
 
 	void detonateStickies (bool isJumping = false);
 
-	void setStickyTrapType ( Vector vLocation, eDemoTrapType iTrapType ) { m_vStickyLocation = vLocation; m_iTrapType = iTrapType; }
+	void setStickyTrapType (const Vector& vLocation, eDemoTrapType iTrapType) { m_vStickyLocation = vLocation; m_iTrapType = iTrapType; }
 
 	bool canDeployStickies ();
 

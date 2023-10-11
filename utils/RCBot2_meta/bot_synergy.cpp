@@ -52,6 +52,8 @@
 #include "bot_plugin_meta.h"
 #include "bot_waypoint_visibility.h"
 
+#include <cstring>
+
 extern IVDebugOverlay *debugoverlay;
 extern IServerGameEnts *servergameents; // for accessing the server game entities
 
@@ -104,7 +106,7 @@ void CBotSynergy::died(edict_t *pKiller, const char *pszWeapon)
  **/
 bool CBotSynergy::needHealth()
 {
-	return getHealthPercent() <= 0.7;
+	return getHealthPercent() <= 0.7f;
 }
 
 /**
@@ -344,15 +346,15 @@ bool CBotSynergy::isEnemy(edict_t *pEdict, bool bCheckWeapons)
     const char* szclassname = pEdict->GetClassName();
 
 	// BUGBUG!! Maps can override NPC relationship with the ai_relationship entity, making this classname filter useless
-    if(strncmp(szclassname, "npc_", 4) == 0) // Attack NPCs
+    if(std::strncmp(szclassname, "npc_", 4) == 0) // Attack NPCs
     {
-		if (strcmp(szclassname, "npc_metropolice") == 0 || strcmp(szclassname, "npc_combine_s") == 0 || strcmp(szclassname, "npc_manhack") == 0 ||
-			strcmp(szclassname, "npc_zombie") == 0 || strcmp(szclassname, "npc_fastzombie") == 0 || strcmp(szclassname, "npc_poisonzombie") == 0 || strcmp(szclassname, "npc_zombine") == 0 ||
-			strcmp(szclassname, "npc_antlionguard") == 0 || strcmp(szclassname, "npc_antlion") == 0 || strcmp(szclassname, "npc_headcrab") == 0 || strcmp(szclassname, "npc_headcrab_fast") == 0 ||
-			strcmp(szclassname, "npc_headcrab_black") == 0 || strcmp(szclassname, "npc_hunter") == 0 || strcmp(szclassname, "npc_fastzombie_torso") == 0 || strcmp(szclassname, "npc_zombie_torso") == 0 ||
-			strcmp(szclassname, "npc_barnacle") == 0 || (strcmp(szclassname, "npc_combinegunship") == 0) || (strcmp(szclassname, "npc_helicopter") == 0) 
-			|| (strcmp(szclassname, "npc_strider") == 0) || (strcmp(szclassname, "npc_combinedropship") == 0) || (strcmp(szclassname, "npc_clawscanner") == 0)
-			|| (strcmp(szclassname, "npc_combine_camera") == 0) || (strcmp(szclassname, "npc_antlion_worker") == 0) || (strcmp(szclassname, "npc_cscanner") == 0))
+		if (std::strcmp(szclassname, "npc_metropolice") == 0 || std::strcmp(szclassname, "npc_combine_s") == 0 || std::strcmp(szclassname, "npc_manhack") == 0 ||
+			std::strcmp(szclassname, "npc_zombie") == 0 || std::strcmp(szclassname, "npc_fastzombie") == 0 || std::strcmp(szclassname, "npc_poisonzombie") == 0 || std::strcmp(szclassname, "npc_zombine") == 0 ||
+			std::strcmp(szclassname, "npc_antlionguard") == 0 || std::strcmp(szclassname, "npc_antlion") == 0 || std::strcmp(szclassname, "npc_headcrab") == 0 || std::strcmp(szclassname, "npc_headcrab_fast") == 0 ||
+			std::strcmp(szclassname, "npc_headcrab_black") == 0 || std::strcmp(szclassname, "npc_hunter") == 0 || std::strcmp(szclassname, "npc_fastzombie_torso") == 0 || std::strcmp(szclassname, "npc_zombie_torso") == 0 ||
+			std::strcmp(szclassname, "npc_barnacle") == 0 || (std::strcmp(szclassname, "npc_combinegunship") == 0) || (std::strcmp(szclassname, "npc_helicopter") == 0) 
+			|| (std::strcmp(szclassname, "npc_strider") == 0) || (std::strcmp(szclassname, "npc_combinedropship") == 0) || (std::strcmp(szclassname, "npc_clawscanner") == 0)
+			|| (std::strcmp(szclassname, "npc_combine_camera") == 0) || (std::strcmp(szclassname, "npc_antlion_worker") == 0) || (std::strcmp(szclassname, "npc_cscanner") == 0))
 		{
 			return true;
 		}
@@ -372,17 +374,17 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 	// Is valid and NOT invisible
 	if (bValid && bVisible && !(CClassInterface::getEffects(pEntity) & EF_NODRAW))
 	{
-		if(strcmp(szclassname, "item_ammo_crate") == 0 && (!m_pNearbyCrate.get() || fDist < distanceFrom(m_pNearbyCrate.get())))
+		if(std::strcmp(szclassname, "item_ammo_crate") == 0 && (!m_pNearbyCrate.get() || fDist < distanceFrom(m_pNearbyCrate.get())))
 		{
 			m_pNearbyCrate = pEntity;
 		}
-		else if(strncmp(szclassname, "item_ammo", 9) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
+		else if(std::strncmp(szclassname, "item_ammo", 9) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
 		{
-			if(strncmp(szclassname, "item_ammo_crate", 15))
+			if(std::strncmp(szclassname, "item_ammo_crate", 15))
 			{
 				m_pNearbyAmmo = nullptr; // Invalidate if this entity is an ammo crate
 			}
-			else if(strncmp(szclassname, "item_ammo_pack", 14)) // Ignore these
+			else if(std::strncmp(szclassname, "item_ammo_pack", 14)) // Ignore these
 			{
 				m_pNearbyAmmo = nullptr;
 			}
@@ -391,29 +393,29 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 				m_pNearbyAmmo = pEntity;
 			}
 		}
-		else if(strncmp(szclassname, "item_box_buckshot", 17) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
+		else if(std::strncmp(szclassname, "item_box_buckshot", 17) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
 		{
 			if(filterAmmo(pEntity, szclassname))
 			{
 				m_pNearbyAmmo = pEntity;
 			}
 		}
-		else if(strncmp(szclassname, "item_rpg_round", 14) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
+		else if(std::strncmp(szclassname, "item_rpg_round", 14) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
 		{
 			if(filterAmmo(pEntity, szclassname))
 			{
 				m_pNearbyAmmo = pEntity;
 			}
 		}
-		else if(strncmp(szclassname, "item_healthkit", 14) == 0 && (!m_pNearbyHealthKit.get() || fDist < distanceFrom(m_pNearbyHealthKit.get())))
+		else if(std::strncmp(szclassname, "item_healthkit", 14) == 0 && (!m_pNearbyHealthKit.get() || fDist < distanceFrom(m_pNearbyHealthKit.get())))
 		{
 			m_pNearbyHealthKit = pEntity;
 		}
-		else if(strncmp(szclassname, "item_battery", 12) == 0 && (!m_pNearbyBattery.get() || fDist < distanceFrom(m_pNearbyBattery.get())))
+		else if(std::strncmp(szclassname, "item_battery", 12) == 0 && (!m_pNearbyBattery.get() || fDist < distanceFrom(m_pNearbyBattery.get())))
 		{
 			m_pNearbyBattery = pEntity;
 		}
-		else if(strncmp(szclassname, "weapon_", 7) == 0 && (!m_pNearbyWeapon.get() || fDist < distanceFrom(m_pNearbyWeapon.get())))
+		else if(std::strncmp(szclassname, "weapon_", 7) == 0 && (!m_pNearbyWeapon.get() || fDist < distanceFrom(m_pNearbyWeapon.get())))
 		{
 			const CBotWeapon* pWeapon = nullptr;
 			pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(szclassname));
@@ -430,7 +432,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 				}
 			}
 		}
-		else if(strncmp(szclassname, "npc_grenade_frag", 16) == 0 && (!m_pNearbyGrenade.get() || fDist < distanceFrom(m_pNearbyGrenade.get())))
+		else if(std::strncmp(szclassname, "npc_grenade_frag", 16) == 0 && (!m_pNearbyGrenade.get() || fDist < distanceFrom(m_pNearbyGrenade.get())))
 		{
 			const edict_t *pOwner = CClassInterface::getOwner(pEntity);
 			const IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEntity);
@@ -444,7 +446,7 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 				}	
 			}
 		}
-		else if(strncmp(szclassname, "combine_mine", 12) == 0 && (!m_pNearbyMine.get() || fDist < distanceFrom(m_pNearbyMine.get())))
+		else if(std::strncmp(szclassname, "combine_mine", 12) == 0 && (!m_pNearbyMine.get() || fDist < distanceFrom(m_pNearbyMine.get())))
 		{
 			if(!CSynergyMod::IsCombineMinePlayerPlaced(pEntity)) // Ignore player placed (friendly) mines
 			{
@@ -456,18 +458,18 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 				}
 			}
 		}
-		else if(strncmp(szclassname, "item_item_crate", 12) == 0 && (!m_pNearbyItemCrate.get() || fDist < distanceFrom(m_pNearbyItemCrate.get())))
+		else if(std::strncmp(szclassname, "item_item_crate", 12) == 0 && (!m_pNearbyItemCrate.get() || fDist < distanceFrom(m_pNearbyItemCrate.get())))
 		{
 			m_pNearbyItemCrate = pEntity;
 		}
-		else if(strncmp(szclassname, "item_healthcharger", 18) == 0 && (!m_pNearbyHealthCharger.get() || fDist < distanceFrom(m_pNearbyHealthCharger.get())))
+		else if(std::strncmp(szclassname, "item_healthcharger", 18) == 0 && (!m_pNearbyHealthCharger.get() || fDist < distanceFrom(m_pNearbyHealthCharger.get())))
 		{
 			if(CClassInterface::getAnimCycle(pEntity) < 1.0f)
 			{
 				m_pNearbyHealthCharger = pEntity;
 			}
 		}
-		else if(strncmp(szclassname, "item_suitcharger", 16) == 0 && (!m_pNearbyArmorCharger.get() || fDist < distanceFrom(m_pNearbyArmorCharger.get())))
+		else if(std::strncmp(szclassname, "item_suitcharger", 16) == 0 && (!m_pNearbyArmorCharger.get() || fDist < distanceFrom(m_pNearbyArmorCharger.get())))
 		{
 			if(CClassInterface::getAnimCycle(pEntity) < 1.0f)
 			{
@@ -731,7 +733,7 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 				{
 					edict_t *pDoor = servergameents->BaseEntityToEdict(tr->m_pEnt);
 					const char *szclassname = pDoor->GetClassName();
-					if(strncmp(szclassname, "prop_door_rotating", 18) == 0 || strncmp(szclassname, "func_door", 9) == 0 || strncmp(szclassname, "func_door_rotating", 18) == 0)
+					if(std::strncmp(szclassname, "prop_door_rotating", 18) == 0 || std::strncmp(szclassname, "func_door", 9) == 0 || std::strncmp(szclassname, "func_door_rotating", 18) == 0)
 					{
 						if(!CSynergyMod::IsEntityLocked(pDoor))
 						{
@@ -801,8 +803,8 @@ void CBotSynergy::handleWeapons()
 		const char *szclassname = m_pEnemy.get()->GetClassName();
 		CBotWeapon *pWeapon = nullptr;
 
-		if((strncmp(szclassname, "npc_combinegunship", 18) == 0) || (strncmp(szclassname, "npc_combinedropship", 19) == 0) || (strncmp(szclassname, "npc_strider", 11) == 0) ||
-		(strncmp(szclassname, "npc_helicopter", 14) == 0))
+		if((std::strncmp(szclassname, "npc_combinegunship", 18) == 0) || (std::strncmp(szclassname, "npc_combinedropship", 19) == 0) || (std::strncmp(szclassname, "npc_strider", 11) == 0) ||
+		(std::strncmp(szclassname, "npc_helicopter", 14) == 0))
 		{
 			pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_RPG));
 		}
@@ -831,8 +833,8 @@ bool CBotSynergy::handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy)
 {
 	const char *szclassname = pEnemy->GetClassName();
 
-	if((strncmp(szclassname, "npc_combinegunship", 18) == 0) || (strncmp(szclassname, "npc_combinedropship", 19) == 0) || (strncmp(szclassname, "npc_strider", 11) == 0) ||
-	(strncmp(szclassname, "npc_helicopter", 14) == 0))
+	if((std::strncmp(szclassname, "npc_combinegunship", 18) == 0) || (std::strncmp(szclassname, "npc_combinedropship", 19) == 0) || (std::strncmp(szclassname, "npc_strider", 11) == 0) ||
+	(std::strncmp(szclassname, "npc_helicopter", 14) == 0))
 	{
 		if(!m_pWeapons->hasWeapon(SYN_WEAPON_RPG))
 		{
@@ -869,7 +871,7 @@ bool CBotSynergy::handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy)
  **/
 bool CBotSynergy::filterAmmo(edict_t *pAmmo, const char *szclassname)
 {
-	if(strncmp(szclassname, "item_ammo_pistol", 16) == 0)
+	if(std::strncmp(szclassname, "item_ammo_pistol", 16) == 0)
 	{
 		if(m_pWeapons->hasWeapon(SYN_WEAPON_PISTOL))
 		{
@@ -879,7 +881,7 @@ bool CBotSynergy::filterAmmo(edict_t *pAmmo, const char *szclassname)
 			}
 		}
 	}
-	else if(strncmp(szclassname, "item_ammo_357", 13) == 0)
+	else if(std::strncmp(szclassname, "item_ammo_357", 13) == 0)
 	{
 		if(m_pWeapons->hasWeapon(SYN_WEAPON_357) || m_pWeapons->hasWeapon(SYN_WEAPON_DESERTEAGLE))
 		{
@@ -890,9 +892,9 @@ bool CBotSynergy::filterAmmo(edict_t *pAmmo, const char *szclassname)
 			}
 		}
 	}
-	else if(strncmp(szclassname, "item_ammo_smg1", 14) == 0)
+	else if(std::strncmp(szclassname, "item_ammo_smg1", 14) == 0)
 	{
-		if(strncmp(szclassname, "item_ammo_smg1_grenade", 22) == 0)
+		if(std::strncmp(szclassname, "item_ammo_smg1_grenade", 22) == 0)
 		{
 			if(m_pWeapons->hasWeapon(SYN_WEAPON_SMG1))
 			{
@@ -914,9 +916,9 @@ bool CBotSynergy::filterAmmo(edict_t *pAmmo, const char *szclassname)
 			}
 		}
 	}
-	else if(strncmp(szclassname, "item_ammo_ar2", 13) == 0)
+	else if(std::strncmp(szclassname, "item_ammo_ar2", 13) == 0)
 	{
-		if(strncmp(szclassname, "item_ammo_ar2_altfire", 21) == 0)
+		if(std::strncmp(szclassname, "item_ammo_ar2_altfire", 21) == 0)
 		{
 			if(m_pWeapons->hasWeapon(SYN_WEAPON_AR2))
 			{
@@ -938,7 +940,7 @@ bool CBotSynergy::filterAmmo(edict_t *pAmmo, const char *szclassname)
 			}
 		}
 	}
-	else if(strncmp(szclassname, "item_ammo_crossbow", 18) == 0)
+	else if(std::strncmp(szclassname, "item_ammo_crossbow", 18) == 0)
 	{
 		if(m_pWeapons->hasWeapon(SYN_WEAPON_CROSSBOW))
 		{
@@ -948,7 +950,7 @@ bool CBotSynergy::filterAmmo(edict_t *pAmmo, const char *szclassname)
 			}
 		}
 	}
-	else if(strncmp(szclassname, "item_box_buckshot", 17) == 0)
+	else if(std::strncmp(szclassname, "item_box_buckshot", 17) == 0)
 	{
 		if(m_pWeapons->hasWeapon(SYN_WEAPON_SHOTGUN))
 		{
@@ -958,7 +960,7 @@ bool CBotSynergy::filterAmmo(edict_t *pAmmo, const char *szclassname)
 			}
 		}
 	}
-	else if(strncmp(szclassname, "item_rpg_round", 14) == 0)
+	else if(std::strncmp(szclassname, "item_rpg_round", 14) == 0)
 	{
 		if(m_pWeapons->hasWeapon(SYN_WEAPON_RPG))
 		{

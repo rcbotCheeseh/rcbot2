@@ -47,7 +47,7 @@ float CWaypointLocations :: m_fIgnoreSize = 0;
 Vector CWaypointLocations :: m_vIgnoreLoc = Vector(0,0,0);
 bool CWaypointLocations :: m_bIgnoreBox = false;
 
-#define READ_LOC(loc) abs((int)((int)((loc) + HALF_MAX_MAP_SIZE) / BUCKET_SPACING));
+#define READ_LOC(loc) std::abs((int)((int)((loc) + HALF_MAX_MAP_SIZE) / BUCKET_SPACING));
 
 unsigned char *CWaypointLocations :: resetFailedWaypoints (WaypointList *iIgnoreWpts)
 {
@@ -287,9 +287,9 @@ void CWaypointLocations :: DeleteWptLocation ( int iIndex, const float *fOrigin 
 
 ///////////////
 // return nearest waypoint that can be used to cover from vCoverFrom vector
-int CWaypointLocations :: GetCoverWaypoint ( Vector vPlayerOrigin, Vector vCoverFrom, 
-											WaypointList *iIgnoreWpts, Vector *vGoalOrigin, 
-											int iTeam, float fMinDist, float fMaxDist )
+int CWaypointLocations :: GetCoverWaypoint (const Vector& vPlayerOrigin, const Vector& vCoverFrom, 
+                                            WaypointList *iIgnoreWpts, Vector *vGoalOrigin, 
+                                            int iTeam, float fMinDist, float fMaxDist)
 {
 	const int iWaypoint = NearestWaypoint(vCoverFrom, REACHABLE_RANGE, -1, true, true, false, nullptr, false,
 	                                      0, false, true, vPlayerOrigin);
@@ -524,12 +524,12 @@ void CWaypointLocations::FindNearestGrenadeWptInBucket(int i, int j, int k, cons
 ///////////////////////////////////////////////
 //
 
-void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vector &vOrigin,
+void CWaypointLocations :: FindNearestInBucket (int i, int j, int k, const Vector &vOrigin,
 												float *pfMinDist, int *piIndex, int iIgnoreWpt, 
 												bool bGetVisible, bool bGetUnReachable, bool bIsBot, 
 												WaypointList *iFailedWpts, bool bNearestAimingOnly, 
-												int iTeam, bool bCheckArea, bool bGetVisibleFromOther, 
-												Vector vOther, int iFlagsOnly, edict_t *pPlayer )
+												int iTeam, bool bCheckArea, bool bGetVisibleFromOther,
+												const Vector& vOther, int iFlagsOnly, edict_t *pPlayer)
 // Search for the nearest waypoint : I.e.
 // Find the waypoint that is closest to vOrigin from the distance pfMinDist
 // And set the piIndex to the waypoint index if closer.
@@ -640,12 +640,12 @@ void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vect
 
 /////////////////////////////
 // get the nearest waypoint INDEX from an origin
-int CWaypointLocations :: NearestWaypoint ( const Vector &vOrigin, float fNearestDist, 
+int CWaypointLocations :: NearestWaypoint (const Vector &vOrigin, float fNearestDist, 
 										   int iIgnoreWpt, bool bGetVisible, bool bGetUnReachable, 
 										   bool bIsBot, WaypointList *iFailedWpts, 
 										   bool bNearestAimingOnly, int iTeam, bool bCheckArea,
-										   bool bGetVisibleFromOther, Vector vOther, int iFlagsOnly, 
-										   edict_t *pPlayer, bool bIgnorevOther, float fIgnoreSize )
+										   bool bGetVisibleFromOther, const Vector& vOther, int iFlagsOnly, 
+										   edict_t *pPlayer, bool bIgnorevOther, float fIgnoreSize)
 {
 	int iNearestIndex = -1;
 

@@ -71,11 +71,11 @@ public:
 		return index>0&&index<=gpGlobals->maxClients;
 	}
 
-	static bool walkableFromTo (edict_t *pPlayer,Vector v_src, Vector v_dest);
+	static bool walkableFromTo (edict_t *pPlayer, const Vector& v_src, const Vector& v_dest);
 
-	static void teleportPlayer ( edict_t *pPlayer, Vector v_dest );
+	static void teleportPlayer ( edict_t *pPlayer, const Vector& v_dest );
 
-	static float yawAngleFromEdict(edict_t *pEntity,Vector vOrigin);
+	static float yawAngleFromEdict(edict_t *pEntity, const Vector& vOrigin);
 	//static float getAvoidAngle(edict_t *pEdict,Vector origin);
 
 	// make folders for a file if they don't exist
@@ -91,8 +91,8 @@ public:
 	
 	static void fixFloatAngle ( float *fAngle );
 
-	static float DotProductFromOrigin ( edict_t *pEnemy, Vector pOrigin );
-	static float DotProductFromOrigin ( Vector vPlayer, Vector vFacing, QAngle eyes );
+	static float DotProductFromOrigin ( edict_t *pEnemy, const Vector& pOrigin );
+	static float DotProductFromOrigin (const Vector& vPlayer, const Vector& vFacing, const QAngle& eyes );
 
 	static int numPlayersOnTeam(int iTeam, bool bAliveOnly);
 	static void setMapName ( const char *szMapName );
@@ -150,7 +150,7 @@ public:
 		const Vector &amins, const Vector &amaxs,
 		const Vector &bmins, const Vector &bmaxs );
 
-	static float grenadeWillLand (  Vector vOrigin, Vector vEnemy, float fProjSpeed = 400.0f, float fGrenadePrimeTime = 5.0f, float *fAngle = nullptr);
+	static float grenadeWillLand (const Vector& vOrigin, const Vector& vEnemy, float fProjSpeed = 400.0f, float fGrenadePrimeTime = 5.0f, float *fAngle = nullptr);
 	////////////////////////////////////////////////////////////////////////
 
 	/*static Vector forwardVec ();
@@ -158,13 +158,13 @@ public:
 	static Vector upVec ();*/
 	////////
 	static trace_t *getTraceResult () { return &m_TraceResult; }
-	static bool isVisibleHitAllExceptPlayer ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest = nullptr);
-	static bool isVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest);
-	static bool isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest);
-	static bool isShotVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest );
-	static bool isVisible ( Vector vSrc, Vector vDest);
-	static void traceLine ( Vector vSrc, Vector vDest, unsigned int mask, ITraceFilter *pFilter);
-	static float quickTraceline ( edict_t *pIgnore, Vector vSrc, Vector vDest ); // return fFraction
+	static bool isVisibleHitAllExceptPlayer ( edict_t *pPlayer, const Vector& vSrc, const Vector& vDest, edict_t *pDest = nullptr);
+	static bool isVisible ( edict_t *pPlayer, const Vector& vSrc, const Vector& vDest);
+	static bool isVisible ( edict_t *pPlayer, const Vector& vSrc, edict_t *pDest);
+	static bool isShotVisible ( edict_t *pPlayer, const Vector& vSrc, const Vector& vDest, edict_t *pDest );
+	static bool isVisible (const Vector& vSrc, const Vector& vDest);
+	static void traceLine (const Vector& vSrc, const Vector& vDest, unsigned int mask, ITraceFilter *pFilter);
+	static float quickTraceline ( edict_t *pIgnore, const Vector& vSrc, const Vector& vDest ); // return fFraction
 	static bool traceVisible (edict_t *pEnt);
 	////////
 	static Vector entityOrigin ( edict_t *pEntity ) 
@@ -174,7 +174,7 @@ public:
 	static int getTeam ( edict_t *pEntity );
 	static bool entityIsAlive ( edict_t *pEntity );
 	static bool isBrushEntity( edict_t *pEntity );
-	static int countTeamMatesNearOrigin ( Vector vOrigin, float fRange, int iTeam, edict_t *pIgnore = nullptr);
+	static int countTeamMatesNearOrigin (const Vector& vOrigin, float fRange, int iTeam, edict_t *pIgnore = nullptr);
 	static int numClients ();
 	static void levelInit();
 
@@ -198,7 +198,7 @@ public:
 
 	static bool isCurrentMod ( eModId modid );
 
-	static bool checkOpensLater ( Vector vSrc, Vector vDest );
+	static bool checkOpensLater (const Vector& vSrc, const Vector& vDest );
 
 	static bool setupMapTime ( ) { return m_fMapStartTime == 0.0f; }
 

@@ -1,4 +1,3 @@
-
 #include "engine_wrappers.h"
 #include "server_class.h"
 #include "bot_const.h"
@@ -7,6 +6,8 @@
 #include "bot_getprop.h"
 #include "bot_cvars.h"
 #include "datamap.h"
+
+#include <cstring>
 
 CClassInterfaceValue CClassInterface :: g_GetProps[GET_PROPDATA_MAX];
 bool CClassInterfaceValue :: m_berror = false;
@@ -34,7 +35,7 @@ void UTIL_FindServerClassnamePrint(const char *name_cmd)
 		const char *name = sClass->GetName();
 		
 
-		if (strcmp(name, name_cmd) == 0)
+		if (std::strcmp(name, name_cmd) == 0)
 		{
 			CBotGlobals::botMessage(nullptr,0,"%s",current->GetClassName());
 			return;
@@ -51,7 +52,7 @@ void UTIL_FindServerClassPrint(const char *name_cmd)
 	char temp[128];
 	char name[128];
 
-	strncpy(name,name_cmd,127);
+	std::strncpy(name,name_cmd,127);
 	name[127] = 0;
 	__strlow(name)
 
@@ -59,12 +60,12 @@ void UTIL_FindServerClassPrint(const char *name_cmd)
 
 	while (pClass)
 	{
-		strncpy(temp,pClass->m_pNetworkName,127);
+		std::strncpy(temp,pClass->m_pNetworkName,127);
 		temp[127] = 0;
 
 		__strlow(temp)
 
-		if (strstr(temp,name) != nullptr)
+		if (std::strstr(temp,name) != nullptr)
 		{
 			CBotGlobals::botMessage(nullptr,0,"%s",pClass->m_pNetworkName);
 			//break;
@@ -114,7 +115,7 @@ SendProp *UTIL_FindSendProp(SendTable *pTable, const char *name)
 		if ( g_PrintProps )
 			Msg("%s\n",pProp->GetName());
 
-		if (strcmp(pProp->GetName(), name) == 0)
+		if (std::strcmp(pProp->GetName(), name) == 0)
 		{
 			return pProp;
 		}
@@ -181,12 +182,12 @@ bool UTIL_FindInSendTable(SendTable *pTable,
 		if ( g_PrintProps )
 			Msg("%d : %s\n",offset + prop->GetOffset(),pname);
 
-		if (pname && strcmp(name, pname) == 0)
+		if (pname && std::strcmp(name, pname) == 0)
 		{
 			info->prop = prop;
 			// for some reason offset is sometimes negative when it shouldn't be
 			// so take the absolute value
-			info->actual_offset = offset + abs(info->prop->GetOffset());
+			info->actual_offset = offset + std::abs(info->prop->GetOffset());
 			return true;
 		}
 		if (prop->GetDataTable())
@@ -333,7 +334,7 @@ unsigned int UTIL_FindInDataMap(datamap_t* pMap, const char* name)
 			{
 				continue;
 			}
-			if (strcmp(name, pMap->dataDesc[i].fieldName) == 0)
+			if (std::strcmp(name, pMap->dataDesc[i].fieldName) == 0)
 			{
 				return pMap->dataDesc[i].fieldOffset[TD_OFFSET_NORMAL];
 			}
@@ -667,7 +668,7 @@ void CClassInterfaceValue :: getData ( void *edict, bool bIsEdict )
 
 }
 
-edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char *classname, float fMindist, edict_t *pOwner)
+edict_t *CClassInterface::FindEntityByClassnameNearest(const Vector& vstart, const char *classname, float fMindist, edict_t *pOwner)
 {
 	edict_t *pfound = nullptr;
 	// speed up loop by by using smaller ints in register
@@ -691,7 +692,7 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 
 		const char* pszClassname = current->GetClassName(); // For Debugging purposes
 
-		if (strcmp(classname, pszClassname) == 0)
+		if (std::strcmp(classname, pszClassname) == 0)
 		{
 			const float fDist = (vstart - CBotGlobals::entityOrigin(current)).Length();
 
@@ -706,7 +707,7 @@ edict_t *CClassInterface::FindEntityByClassnameNearest(Vector vstart, const char
 	return pfound;
 }
 
-edict_t *CClassInterface::FindEntityByNetClassNearest(Vector vstart, const char *classname)
+edict_t *CClassInterface::FindEntityByNetClassNearest(const Vector& vstart, const char *classname)
 {
 	edict_t *pfound = nullptr;
 	float fMindist = 8192.0f;
@@ -733,7 +734,7 @@ edict_t *CClassInterface::FindEntityByNetClassNearest(Vector vstart, const char 
 		ServerClass *sClass = network->GetServerClass();
 		const char *name = sClass->GetName();
 		
-		if (strcmp(name, classname) == 0)
+		if (std::strcmp(name, classname) == 0)
 		{
 			const float fDist = (vstart - CBotGlobals::entityOrigin(current)).Length();
 
@@ -765,7 +766,7 @@ const char *CClassInterface::FindEntityNetClass(int start, const char *classname
 			continue;
 		}
 
-		if (strcmp(current->GetClassName(), classname) == 0)
+		if (std::strcmp(current->GetClassName(), classname) == 0)
 		{
 			ServerClass *sClass = network->GetServerClass();
 			
@@ -798,7 +799,7 @@ edict_t *CClassInterface::FindEntityByNetClass(int start, const char *classname)
 		const char *name = sClass->GetName();
 		
 
-		if (strcmp(name, classname) == 0)
+		if (std::strcmp(name, classname) == 0)
 		{
 			return current;
 		}

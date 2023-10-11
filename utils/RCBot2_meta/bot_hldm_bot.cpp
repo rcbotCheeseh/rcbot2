@@ -48,6 +48,8 @@
 #include "bot_waypoint_locations.h"
 #include "bot_getprop.h"
 
+#include <cstring>
+
 // initialise , i.e. set everything to a default value
 void CHLDMBot :: init ()
 {
@@ -448,7 +450,7 @@ void CHLDMBot :: getTasks (unsigned int iIgnore)
 		if ( CBotGlobals::entityIsValid(pent) )
 		{
 			ADD_UTILITY(BOT_UTIL_HL2DM_GRAVIGUN_PICKUP,
-			            (!m_pEnemy||m_pCurrentWeapon&&strcmp("weapon_physcannon",m_pCurrentWeapon->GetClassName())) &&
+			            (!m_pEnemy||m_pCurrentWeapon&&std::strcmp("weapon_physcannon",m_pCurrentWeapon->GetClassName())) &&
 			            gravgun && gravgun->hasWeapon() && (m_NearestPhysObj.get()!=NULL) && gravgun->getWeaponIndex() >
 			            0 && (CClassInterface::gravityGunObject(INDEXENT(gravgun->getWeaponIndex()))==NULL), 0.9f)
 		}
@@ -594,7 +596,7 @@ void CHLDMBot :: modThink ()
 		bool bCarry = false;
 		edict_t *pEntity = m_NearestPhysObj.get();
 
-		if ( m_pCurrentWeapon && !strcmp("weapon_physcannon",m_pCurrentWeapon->GetClassName()) )
+		if ( m_pCurrentWeapon && !std::strcmp("weapon_physcannon",m_pCurrentWeapon->GetClassName()) )
 		{
 			m_pCarryingObject = CClassInterface::gravityGunObject(m_pCurrentWeapon);
 			bCarry = CClassInterface::gravityGunObject(m_pCurrentWeapon) == m_NearestPhysObj.get();
@@ -733,12 +735,12 @@ bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 	{
 		const char* szClassname = pEntity->GetClassName();
 
-		if ( strncmp(szClassname,"item_ammo",9)==0 && 
+		if ( std::strncmp(szClassname,"item_ammo",9)==0 && 
 			( !m_pAmmoKit.get() || fDist<distanceFrom(m_pAmmoKit.get()) ))
 		{
 			m_pAmmoKit = pEntity;
 		}
-		else if ( strncmp(szClassname,"item_health",11)==0 && 
+		else if ( std::strncmp(szClassname,"item_health",11)==0 && 
 			( !m_pHealthKit.get() || fDist<distanceFrom(m_pHealthKit.get()) ))
 		{
 			//if ( getHealthPercent() < 1.0f )
@@ -746,33 +748,33 @@ bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 
 			m_pHealthKit = pEntity;
 		}
-		else if ( strcmp(szClassname,"item_battery")==0 && 
+		else if ( std::strcmp(szClassname,"item_battery")==0 && 
 			( !m_pBattery.get() || fDist<distanceFrom(m_pBattery.get()) ))
 		{
 			m_pBattery = pEntity;
 		}
-		else if ( ( strcmp(szClassname,"func_breakable")==0 || strncmp(szClassname,"prop_physics",12)==0 ) && CClassInterface::getPlayerHealth(pEntity)>0 &&
+		else if ( ( std::strcmp(szClassname,"func_breakable")==0 || std::strncmp(szClassname,"prop_physics",12)==0 ) && CClassInterface::getPlayerHealth(pEntity)>0 &&
 			( !m_NearestBreakable.get() || fDist<distanceFrom(m_NearestBreakable.get()) ))
 		{
 			m_NearestBreakable = pEntity;
 		}
-		else if ( pEntity != m_pNearestButton && strcmp(szClassname,"func_button")==0 )
+		else if ( pEntity != m_pNearestButton && std::strcmp(szClassname,"func_button")==0 )
 		{
 			if ( !m_pNearestButton.get() || fDist<distanceFrom(m_pNearestButton.get()) )
 				m_pNearestButton = pEntity;
 		}
 		// covered above
-		/*else if ( (pEntity != m_pNearestBreakable) && ( strcmp(szClassname,"func_breakable")==0 ) )
+		/*else if ( (pEntity != m_pNearestBreakable) && ( std::strcmp(szClassname,"func_breakable")==0 ) )
 		{
 			if ( !m_pNearestBreakable.get() || (fDist<distanceFrom(m_pNearestBreakable.get())) )
 				m_pNearestBreakable = pEntity;
 		}*/
-		else if ( pEntity != m_pAmmoCrate && strcmp(szClassname,"item_ammo_crate") == 0 )
+		else if ( pEntity != m_pAmmoCrate && std::strcmp(szClassname,"item_ammo_crate") == 0 )
 		{
 			if ( !m_pAmmoCrate.get() || fDist<distanceFrom(m_pAmmoCrate.get()) )
 				m_pAmmoCrate = pEntity;
 		}
-		else if ( pEntity != m_FailedPhysObj && strncmp(szClassname,"prop_physics",12)==0 && 
+		else if ( pEntity != m_FailedPhysObj && std::strncmp(szClassname,"prop_physics",12)==0 && 
 			( !m_NearestPhysObj.get() || fDist<distanceFrom(m_NearestPhysObj.get()) ))
 		{
 			//if ( !m_bCarryingObject )
@@ -780,7 +782,7 @@ bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 
 			m_NearestPhysObj = pEntity;
 		}
-		else if ( strncmp(szClassname,"item_suitcharger",16)==0 && 
+		else if ( std::strncmp(szClassname,"item_suitcharger",16)==0 && 
 			( !m_pCharger.get() || fDist<distanceFrom(m_pCharger.get()) ))
 		{
 			if ( m_pCharger.get() )
@@ -797,7 +799,7 @@ bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 
 			m_pCharger = pEntity;
 		}
-		else if ( strncmp(szClassname,"item_healthcharger",18)==0 && 
+		else if ( std::strncmp(szClassname,"item_healthcharger",18)==0 && 
 			( !m_pHealthCharger.get() || fDist<distanceFrom(m_pHealthCharger.get()) ))
 		{
 			if ( m_pHealthCharger.get() )
@@ -814,7 +816,7 @@ bool CHLDMBot :: setVisible ( edict_t *pEntity, bool bVisible )
 
 			m_pHealthCharger = pEntity;
 		}
-		else if ( strncmp(szClassname,"weapon_",7)==0 && 
+		else if ( std::strncmp(szClassname,"weapon_",7)==0 && 
 			( !m_pNearbyWeapon.get() || fDist<distanceFrom(m_pNearbyWeapon.get()) ))
 		{
 			/*static CWeapon *pWeapon;

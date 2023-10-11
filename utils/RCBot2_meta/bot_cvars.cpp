@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include "icvar.h"
 //#include "iconvar.h"
 #include "convar.h"
@@ -126,16 +128,16 @@ void RCBOT2_Cvar_setup (ICvar *cvar)
 	{
 		char sv_tags_str[512];
 
-		strcpy(sv_tags_str,sv_tags.GetString());
+		std::strcpy(sv_tags_str,sv_tags.GetString());
 
 		// fix
-		if ( strstr(sv_tags_str,"rcbot2") == nullptr)
+		if ( std::strstr(sv_tags_str,"rcbot2") == nullptr)
 		{
 
 			if ( sv_tags_str[0] == 0 )
-				strcat(sv_tags_str,"rcbot2");
+				std::strcat(sv_tags_str,"rcbot2");
 			else
-				strcat(sv_tags_str,",rcbot2");
+				std::strcat(sv_tags_str,",rcbot2");
 
 			sv_tags.SetValue(sv_tags_str);
 

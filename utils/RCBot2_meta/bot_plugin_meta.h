@@ -60,19 +60,21 @@ class IMoveHelper;
 
 #if defined WIN32 && !defined snprintf
 #define snprintf _snprintf
+#elif defined __linux__ && !defined snprintf
+#define snprintf std::snprintf
 #endif
 
 class RCBotPluginMeta : public ISmmPlugin, public IMetamodListener
 {
 public:
-	bool Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxlen, bool late);
-	bool Unload(char *error, size_t maxlen);
-	bool Pause(char *error, size_t maxlen);
-	bool Unpause(char *error, size_t maxlen);
-	void AllPluginsLoaded();
-public: //IMetamodListener stuff
-	void OnVSPListening(IServerPluginCallbacks *iface);
-public: //hooks
+	bool Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxlen, bool late) override;
+	bool Unload(char *error, size_t maxlen) override;
+	bool Pause(char *error, size_t maxlen) override;
+	bool Unpause(char *error, size_t maxlen) override;
+	void AllPluginsLoaded() override;
+//public: //IMetamodListener stuff
+	void OnVSPListening(IServerPluginCallbacks *iface) override;
+//public: //hooks
 
 	void Hook_ServerActivate(edict_t *pEdictList, int edictCount, int clientMax);
 	bool Hook_LevelInit(const char *pMapName,
@@ -106,21 +108,21 @@ public: //hooks
 	void Hook_ClientCommand(edict_t *pEntity);
 #endif
 
-public: // SourceMod
+//public: // SourceMod
 #if defined SM_EXT
 	void *OnMetamodQuery(const char* iface, int *ret);
 #endif
 
-public:
+//public:
 
-	const char *GetAuthor();
-	const char *GetName();
-	const char *GetDescription();
-	const char *GetURL();
-	const char *GetLicense();
-	const char *GetVersion();
-	const char *GetDate();
-	const char *GetLogTag();
+	const char *GetAuthor() override;
+	const char *GetName() override;
+	const char *GetDescription() override;
+	const char *GetURL() override;
+	const char *GetLicense() override;
+	const char *GetVersion() override;
+	const char *GetDate() override;
+	const char *GetLogTag() override;
 
 private:
 #if defined SM_EXT

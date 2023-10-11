@@ -37,6 +37,7 @@
 //============================================================================//
 
 #include <cstdio>
+#include <cstring>
 #include <cmath>
 
 #include "mathlib.h"
@@ -81,10 +82,9 @@
 
 #include "rcbot/logging.h"
 
-#include <random>
-#include <vector>
 #include <algorithm>
 #include <random>
+#include <vector>
 
 #define DEG_TO_RAD(x) ((x)*0.0174533)
 #define RAD_TO_DEG(x) ((x)*57.29578)
@@ -201,7 +201,7 @@ void CBot :: runPlayerMove()
 	}
 
 	cmd.buttons = m_iButtons;
-	cmd.impulse = m_iImpulse; //impluse should be as 'byte' not 'int'? [APG]RoboCop[CL]
+	cmd.impulse = m_iImpulse; //impulse should be as 'byte' not 'int'? [APG]RoboCop[CL]
 	cmd.viewangles = m_vViewAngles;
 	cmd.weaponselect = m_iSelectWeapon;
 	cmd.tick_count = gpGlobals->tickcount;
@@ -217,7 +217,7 @@ void CBot :: runPlayerMove()
 	{
 			char dbg[512];
 
-			sprintf(dbg,"m_pButtons = %d/%x, Weapon Select = %d, impulse = %d",cmd.buttons,cmd.buttons,cmd.weaponselect,cmd.impulse);
+			std::sprintf(dbg,"m_pButtons = %d/%x, Weapon Select = %d, impulse = %d",cmd.buttons,cmd.buttons,cmd.weaponselect,cmd.impulse);
 
 			CClients::clientDebugMsg(BOT_DEBUG_BUTTONS,dbg,this);
 	}
@@ -283,7 +283,7 @@ void CBot :: setEdict ( edict_t *pEdict)
 	{
 		m_pPlayerInfo = playerinfomanager->GetPlayerInfo(m_pEdict);
 		m_pController = g_pBotManager->GetBotController(m_pEdict);		
-		strncpy(m_szBotName,m_pPlayerInfo->GetName(),63);
+		std::strncpy(m_szBotName,m_pPlayerInfo->GetName(),63);
 		m_szBotName[63]=0;
 	}
 	else
@@ -329,10 +329,10 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	engine->SetFakeClientConVarValue(pEdict,"tf_medigun_autoheal","0");	
 
 	// joining name not the same as the profile name, change name
-	if (strcmp(m_szBotName,pProfile->m_szName) != 0)
+	if (std::strcmp(m_szBotName,pProfile->m_szName) != 0)
 	{
 		engine->SetFakeClientConVarValue(pEdict,"name",pProfile->m_szName);
-		strcpy(m_szBotName,pProfile->m_szName);
+		std::strcpy(m_szBotName,pProfile->m_szName);
 	}
 
 	if ( m_pPlayerInfo && pProfile->m_iTeam != -1 )
@@ -340,7 +340,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 
 	/////////////////////////////
 	// safe copy
-	strncpy(szModel,pProfile->m_szModel,127);
+	std::strncpy(szModel,pProfile->m_szModel,127);
 	szModel[127] = 0;
 
 	if ( FStrEq(szModel,"default") )	
@@ -348,9 +348,9 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 		const int iModel = randomInt(1,7);	
 
 		if ( randomInt(0,1) )
-			sprintf(szModel,"models/humans/Group03/Male_0%d.mdl",iModel);
+			std::sprintf(szModel,"models/humans/Group03/Male_0%d.mdl",iModel);
 		else
-			sprintf(szModel,"models/humans/Group03/female_0%d.mdl",iModel);
+			std::sprintf(szModel,"models/humans/Group03/female_0%d.mdl",iModel);
 	}
 
 	m_iDesiredTeam = pProfile->m_iTeam;
@@ -362,10 +362,10 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	// TODO find the right place for this
 	#if SOURCE_ENGINE == SE_TF2
 	helpers->ClientCommand(pEdict, "jointeam auto");
-	
+
+	//"heavy" should me "heavyweapons" in TF2? [APG]RoboCop[CL]
 	char classNames[32][10] = {
-		"auto", "scout", "sniper", "soldier", "demoman", "medic", "heavy",
-		"pyro", "spy", "engineer"
+		"auto", "scout", "soldier", "pyro", "demoman", "heavy", "engineer", "medic", "sniper", "spy"
 	};
 	
 	char cmd[32];
@@ -487,7 +487,7 @@ bool CBot :: checkStuck ()
 	else
 	{
 		if ( hasSomeConditions(CONDITION_SEE_WAYPOINT) )
-			m_fLastWaypointVisible = 0;
+			m_fLastWaypointVisible = 0.0f;
 		else
 		{
 			if ( m_fLastWaypointVisible + 2.0f < fTime )
@@ -626,7 +626,7 @@ bool CBot :: canAvoid ( edict_t *pEntity )
 
 	const float distance = distanceFrom(vAvoidOrigin);
 
-	if ( distance > 1 && distance < bot_avoid_radius.GetFloat() && fabs(getOrigin().z - vAvoidOrigin.z) < 32 )
+	if ( distance > 1 && distance < bot_avoid_radius.GetFloat() && std::fabs(getOrigin().z - vAvoidOrigin.z) < 32 )
 	{
 		const SolidType_t solid = pEntity->GetCollideable()->GetSolid() ;
 
@@ -641,7 +641,7 @@ bool CBot :: canAvoid ( edict_t *pEntity )
 
 void CBot :: reachedCoverSpot (int flags)
 {
-
+	
 }
 
 // something now visiable or not visible anymore
@@ -716,7 +716,7 @@ void CBot :: debugMsg ( int iLev, const char *szMsg )
 	{
 		char szMsg2[512];
 
-		sprintf(szMsg2,"(%s):%s",m_pPlayerInfo->GetName(),szMsg);
+		std::sprintf(szMsg2,"(%s):%s",m_pPlayerInfo->GetName(),szMsg);
 
 		CClients::clientDebugMsg (iLev,szMsg2,this);
 	}
@@ -1346,7 +1346,7 @@ void CBot :: spawnInit ()
 
 	m_fAimMoment = 0.0f;
 
-	memset(m_fLastVoiceCommand,0,sizeof(float)*MAX_VOICE_CMDS);
+	std::memset(m_fLastVoiceCommand,0,sizeof(float)*MAX_VOICE_CMDS);
 
 	m_fLastUpdateLastSeeEnemy = 0.0f;
 	m_fPercentMoved = 1.0f;
@@ -1393,8 +1393,8 @@ void CBot :: spawnInit ()
 	m_fStuckTime = 0.0f;
 	m_vLastOrigin = Vector(0,0,0);
 	m_vVelocity = Vector(0,0,0);
-	m_fUpdateOriginTime = 0;
-	m_fNextUpdateAimVector = 0;
+	m_fUpdateOriginTime = 0.0f;
+	m_fNextUpdateAimVector = 0.0f;
 	m_vAimVector = Vector(0,0,0);
 
 	m_fLookSetTime = 0.0f;
@@ -1578,7 +1578,7 @@ bool CBot :: hurt ( edict_t *pAttacker, int iHealthNow, bool bDontHide )
 
 	if ( !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) )
 	{
-		m_fLookSetTime = 0;
+		m_fLookSetTime = 0.0f;
 		setLookAtTask(LOOK_HURT_ORIGIN);
 		m_fLookSetTime = engine->Time() + randomFloat(3.0f,8.0f);
 	}
@@ -1712,7 +1712,7 @@ void CBot :: clearSquad ()
 	m_pSquad = nullptr;
 }
 
-bool CBot :: isFacing ( Vector vOrigin ) const
+bool CBot :: isFacing (const Vector& vOrigin) const
 {
 	return DotProductFromOrigin(vOrigin) > 0.97f;
 }
@@ -1730,8 +1730,8 @@ void CBot ::debugBot(char *msg)
 	{
 		if ( m_iConditions[iCond] )
 		{
-			strcat(szConditions, pszConditionsDebugStrings[iCond]);
-			strcat(szConditions, "\n");
+			std::strcat(szConditions, pszConditionsDebugStrings[iCond]);
+			std::strcat(szConditions, "\n");
 		}
 	}
 
@@ -1752,7 +1752,7 @@ void CBot ::debugBot(char *msg)
 	if ( hastask )
 		m_pSchedules->getCurrentTask()->debugString(task_string);
 
-	sprintf(msg,"Debugging bot: %s\n \
+	std::sprintf(msg,"Debugging bot: %s\n \
 		Current Util: %s \n \
 		Current Schedule: %s\n \
 		Current Task: {%s}\n \
@@ -2217,7 +2217,7 @@ void CBot :: doMove ()
 
 		if ( hasSomeConditions(CONDITION_LIFT) )//fabs(m_vMoveTo.z - getOrigin().z) > 48 )
 		{
-			if ( fabs(m_vVelocity.z) > 16.0f )
+			if ( std::fabs(m_vVelocity.z) > 16.0f )
 			{
 				m_fForwardSpeed = 0.0f;
 				m_fSideSpeed = 0.0f;
@@ -2226,9 +2226,9 @@ void CBot :: doMove ()
 
 		// moving less than 1.0 units/sec? just stop to 
 		// save bot jerking around..
-		if ( fabs(m_fForwardSpeed) < 1.0f )
+		if ( std::fabs(m_fForwardSpeed) < 1.0f )
 			m_fForwardSpeed = 0.0f;
-		if ( fabs(m_fSideSpeed) < 1.0f )
+		if ( std::fabs(m_fSideSpeed) < 1.0f )
 			m_fSideSpeed = 0.0f;
 
 		if ( m_fForwardSpeed < 1.0f && m_fSideSpeed < 1.0f )
@@ -2281,7 +2281,7 @@ bool CBot :: FInViewCone ( edict_t *pEntity ) const
 	return (origin - getEyePosition()).Length()>1 && DotProductFromOrigin(origin) > 0; // 90 degree !! 0.422618f ); // 65 degree field of view   
 }
 
-float CBot :: DotProductFromOrigin ( Vector pOrigin ) const
+float CBot :: DotProductFromOrigin (const Vector& pOrigin) const
 {
 	static Vector vecLOS;
 	static float flDot;
@@ -3451,7 +3451,7 @@ void CBots :: kickRandomBot (size_t count)
 	while (numBotsKicked < count && !botList.empty()) {
 		char szCommand[512];
 
-		sprintf(szCommand, "kickid %d\n", botList.back());
+		std::sprintf(szCommand, "kickid %d\n", botList.back());
 		engine->ServerCommand(szCommand);
 		numBotsKicked++;
 		
@@ -3480,7 +3480,7 @@ void CBots :: kickRandomBotOnTeam ( int team )
 		return;
 	}
 
-	sprintf(szCommand,"kickid %d\n", botList[ randomInt(0, botList.size() - 1) ]);
+	std::sprintf(szCommand,"kickid %d\n", botList[ randomInt(0, botList.size() - 1) ]);
 
 	m_flAddKickBotTime = engine->Time() + 2.0f;
 

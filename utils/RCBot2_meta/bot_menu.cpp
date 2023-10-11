@@ -41,6 +41,8 @@
 #include "bot_globals.h"
 #include "bot_client.h"
 
+#include <cstring>
+
 extern IVDebugOverlay *debugoverlay;
 
 CBotMenu *CBotMenuList :: m_MenuList[BOT_MENU_MAX];
@@ -70,12 +72,12 @@ const char *CWaypointFlagMenu :: getCaption(CClient *pClient,WptColor &color )
 	if ( pWpt )
 	{
 		color = CWaypointTypes::getColour(pWpt->getFlags());
-		sprintf(m_szCaption,"Waypoint Flags ID = [%d]",iWpt);
+		std::sprintf(m_szCaption,"Waypoint Flags ID = [%d]",iWpt);
 	}
 	else
 	{
 		color = WptColor::white;
-		sprintf(m_szCaption,"No Waypoint");
+		std::sprintf(m_szCaption,"No Waypoint");
 	}
 
 	return m_szCaption;
@@ -92,7 +94,7 @@ const char *CWaypointFlagMenuItem :: getCaption ( CClient *pClient, WptColor &co
 
 	color = type->getColour();
 
-	sprintf(m_szCaption,"[%s] %s",pWpt!= nullptr ?(pWpt->hasFlag(type->getBits())?"x":" "):"No Waypoint",type->getName());
+	std::sprintf(m_szCaption,"[%s] %s",pWpt!= nullptr ?(pWpt->hasFlag(type->getBits())?"x":" "):"No Waypoint",type->getName());
 
 	return m_szCaption;
 }
@@ -166,7 +168,7 @@ const char *CWaypointRadiusMenu :: getCaption ( CClient *pClient, WptColor &colo
 		fRadius = pWpt->getRadius();
 	}
 
-	sprintf(m_szCaption,"Waypoint Radius (%0.1f)",fRadius);
+	std::sprintf(m_szCaption,"Waypoint Radius (%0.1f)",fRadius);
 	color = WptColor::white;
 
 	return m_szCaption;
@@ -183,7 +185,7 @@ const char *CWaypointAreaMenu :: getCaption ( CClient *pClient, WptColor &color 
 		iArea = pWpt->getArea();
 	}
 
-	sprintf(m_szCaption,"Waypoint Area (%d)",iArea);
+	std::sprintf(m_szCaption,"Waypoint Area (%d)",iArea);
 	color = WptColor::white;
 
 	return m_szCaption;
@@ -194,9 +196,9 @@ const char *CWaypointMenu::getCaption(CClient *pClient,WptColor &color )
 	const int iWpt = pClient->currentWaypoint();
 	
 	if ( iWpt == -1 )
-		sprintf(m_szCaption,"Waypoint Menu - No waypoint - Walk towards a waypoint");
+		std::sprintf(m_szCaption,"Waypoint Menu - No waypoint - Walk towards a waypoint");
 	else
-		sprintf(m_szCaption,"Waypoint Menu [%d]",iWpt);
+		std::sprintf(m_szCaption,"Waypoint Menu [%d]",iWpt);
 
 	color = WptColor::white;
 
@@ -208,9 +210,9 @@ const char *CWaypointYawMenuItem :: getCaption ( CClient *pClient, WptColor &col
 	const CWaypoint *pWpt = CWaypoints::getWaypoint(pClient->currentWaypoint());
 
 	if ( pWpt )
-		sprintf(m_szCaption,"Yaw = %d degrees (press to update)",static_cast<int>(pWpt->getAimYaw()));
+		std::sprintf(m_szCaption,"Yaw = %d degrees (press to update)",static_cast<int>(pWpt->getAimYaw()));
 	else
-		sprintf(m_szCaption,"No Waypoint");
+		std::sprintf(m_szCaption,"No Waypoint");
 
 	return m_szCaption;
 }
@@ -280,7 +282,7 @@ void CWaypointRadiusDecrease :: activate ( CClient *pClient )
 
 const char *CWaypointCutMenuItem :: getCaption ( CClient *pClient, WptColor &color )
 {
-	sprintf(m_szCaption,"Cut Waypoint");
+	std::sprintf(m_szCaption,"Cut Waypoint");
 	color = WptColor::white;
 
 	return m_szCaption;
@@ -301,7 +303,7 @@ void CWaypointCutMenuItem :: activate ( CClient *pClient )
 
 const char *CWaypointCopyMenuItem :: getCaption ( CClient *pClient, WptColor &color )
 {
-	sprintf(m_szCaption,"Copy Waypoint");
+	std::sprintf(m_szCaption,"Copy Waypoint");
 	color = WptColor::white;
 
 	return m_szCaption;
@@ -321,7 +323,7 @@ void CWaypointCopyMenuItem :: activate ( CClient *pClient )
 
 const char *CWaypointPasteMenuItem :: getCaption ( CClient *pClient, WptColor &color )
 {
-	sprintf(m_szCaption,"Paste Waypoint");
+	std::sprintf(m_szCaption,"Paste Waypoint");
 	color = WptColor::white;
 
 	return m_szCaption;
@@ -469,12 +471,12 @@ const char *CWaypointFlagShowMenu::getCaption(CClient *pClient,WptColor &color )
 {
 	if ( pClient->isShowingAllWaypoints() )
 	{
-		sprintf(m_szCaption,"Showing All Waypoints (change)");
+		std::sprintf(m_szCaption,"Showing All Waypoints (change)");
 		color = WptColor::white;
 	}
 	else
 	{
-		sprintf(m_szCaption,"Showing Only Some Waypoints (change)");
+		std::sprintf(m_szCaption,"Showing Only Some Waypoints (change)");
 		color = CWaypointTypes::getColour(pClient->getShowWaypointFlags());
 	}
 
@@ -488,7 +490,7 @@ const char *CWaypointFlagShowMenuItem :: getCaption ( CClient *pClient, WptColor
 
 	color = type->getColour();
 
-	sprintf(m_szCaption,"[%s] %s",pClient->isShowingAllWaypoints()||pClient->isShowingWaypoint(type->getBits())?"showing":"hiding",type->getName());
+	std::sprintf(m_szCaption,"[%s] %s",pClient->isShowingAllWaypoints()||pClient->isShowingWaypoint(type->getBits())?"showing":"hiding",type->getName());
 
 	return m_szCaption;
 }
@@ -541,13 +543,13 @@ const char *CPathWaypointDeleteToMenuItem :: getCaption ( CClient *pClient, WptC
 
 	if ( iWpt == -1 )
 	{
-		strcpy(m_szCaption,"No Waypoint");
+		std::strcpy(m_szCaption,"No Waypoint");
 		return m_szCaption;
 	}
 
 	const CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
 
-	sprintf(m_szCaption,"Delete Paths To This Waypoint (%d)", pWaypoint->numPathsToThisWaypoint());
+	std::sprintf(m_szCaption,"Delete Paths To This Waypoint (%d)", pWaypoint->numPathsToThisWaypoint());
 
 	return m_szCaption;
 }
@@ -567,13 +569,13 @@ const char *CPathWaypointDeleteFromMenuItem :: getCaption ( CClient *pClient, Wp
 
 	if ( iWpt == -1 )
 	{
-		strcpy(m_szCaption,"No Waypoint");
+		std::strcpy(m_szCaption,"No Waypoint");
 		return m_szCaption;
 	}
 
 	const CWaypoint *pWaypoint = CWaypoints::getWaypoint(iWpt);
 
-	sprintf(m_szCaption,"Delete Paths From This Waypoint (%d)", pWaypoint->numPaths());
+	std::sprintf(m_szCaption,"Delete Paths From This Waypoint (%d)", pWaypoint->numPaths());
 
 	return m_szCaption;
 }

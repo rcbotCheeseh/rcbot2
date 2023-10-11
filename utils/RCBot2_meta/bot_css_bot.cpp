@@ -56,6 +56,8 @@
 
 #include "rcbot/logging.h"
 
+#include <cstring>
+
 extern IServerGameEnts *servergameents; // for accessing the server game entities
 
 void CCSSBot::init(bool bVarInit)
@@ -325,7 +327,7 @@ void CCSSBot::selectModel() const
 void CCSSBot::say(const char *message)
 {
 	char buffer[256];
-	sprintf(buffer, "say \"%s\"", message);
+	std::sprintf(buffer, "say \"%s\"", message);
 	helpers->ClientCommand(m_pEdict,buffer);
 }
 
@@ -338,7 +340,7 @@ void CCSSBot::say(const char *message)
 void CCSSBot::sayteam(const char *message)
 {
 	char buffer[256];
-	sprintf(buffer, "say_team \"%s\"", message);
+	std::sprintf(buffer, "say_team \"%s\"", message);
 	helpers->ClientCommand(m_pEdict,buffer);
 }
 
@@ -370,7 +372,7 @@ bool CCSSBot::setVisible(edict_t *pEntity, bool bVisible)
 	{
 		const char* szClassname = pEntity->GetClassName();
 
-		if ((strncmp(szClassname, "func_breakable", 14) == 0 || strncmp(szClassname, "func_breakable_surf", 19) == 0))
+		if ((std::strncmp(szClassname, "func_breakable", 14) == 0 || std::strncmp(szClassname, "func_breakable_surf", 19) == 0))
 		{
 			if ((INDEXENT(m_hNearestBreakable.GetEntryIndex()) == nullptr || fDist < distanceFrom(CBotGlobals::worldCenter(INDEXENT(m_hNearestBreakable.GetEntryIndex())))))
 			{
@@ -1108,7 +1110,7 @@ void CCSSBot::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWaypo
 				{
 					edict_t *pDoor = servergameents->BaseEntityToEdict(tr->m_pEnt);
 					const char *szclassname = pDoor->GetClassName();
-					if(strncmp(szclassname, "prop_door_rotating", 18) == 0 || strncmp(szclassname, "func_door", 9) == 0 || strncmp(szclassname, "func_door_rotating", 18) == 0)
+					if(std::strncmp(szclassname, "prop_door_rotating", 18) == 0 || std::strncmp(szclassname, "func_door", 9) == 0 || std::strncmp(szclassname, "func_door_rotating", 18) == 0)
 					{
 						m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
 					}

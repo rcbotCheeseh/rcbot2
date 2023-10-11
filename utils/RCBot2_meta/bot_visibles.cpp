@@ -41,6 +41,8 @@
 
 #include "ndebugoverlay.h"
 
+#include <cstring>
+
 extern IVDebugOverlay *debugoverlay;
 ////////////////////////////////////////////
 
@@ -52,7 +54,7 @@ byte CBotVisibles :: m_bPvs[MAX_MAP_CLUSTERS/8];
 void CTF2FindFlagFunc :: execute ( edict_t *pEntity )
 {
 	if ( m_pBot->
-	if ( strcmp(pEntity->GetClassName(),"");
+	if ( std::strcmp(pEntity->GetClassName(),"");
 }
 
 void CTF2FindFlagFunc :: init ()
@@ -122,7 +124,7 @@ void CBotVisibles :: eachVisible ( CVisibleFunc *pFunc ) const
 
 void CBotVisibles :: reset ()
 {
-	memset(m_iIndicesVisible,0,sizeof(unsigned char)*m_iMaxSize);
+	std::memset(m_iIndicesVisible,0,sizeof(unsigned char)*m_iMaxSize);
 	m_VisibleSet.clear();
 	m_iCurrentIndex = CBotGlobals::maxClients()+1;
 	m_iCurPlayer = 1;
@@ -150,7 +152,7 @@ void CBotVisibles :: debugString ( char *string )
 			// continue;
 
 		// sprintf(szNum,"%d,",ENTINDEX(pEnt));
-		// strcat(string,szNum);
+		// std::strcat(string,szNum);
 	// }
 }
 /*

@@ -71,6 +71,8 @@
 
 #if defined WIN32 && !defined snprintf
 #define snprintf _snprintf
+#elif defined __linux__ && !defined snprintf
+#define snprintf std::snprintf
 #endif
 
 #define MAX_AMMO_TYPES 32
@@ -336,7 +338,7 @@ public:
 		return m_pController->GetLocalOrigin();
 	}
 	// linux fix 2
-    float distanceFrom(Vector vOrigin) const
+    float distanceFrom(const Vector& vOrigin) const
     {
 		return (vOrigin - m_pController->GetLocalOrigin()).Length();
 	}
@@ -346,7 +348,7 @@ public:
 		return (pEntity->GetCollideable()->GetCollisionOrigin() - m_pController->GetLocalOrigin()).Length();
 		//return distanceFrom(CBotGlobals::entityOrigin(pEntity));
 	}
-	float distanceFrom2D(Vector vOrigin) const
+	float distanceFrom2D(const Vector& vOrigin) const
 	{
 		return (vOrigin - m_pController->GetLocalOrigin()).Length2D();
 	}
@@ -399,7 +401,7 @@ public:
 
 	virtual bool handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy );
 
-	float DotProductFromOrigin ( Vector pOrigin ) const;
+	float DotProductFromOrigin (const Vector& pOrigin ) const;
 
 	bool FVisible ( edict_t *pEdict, bool bCheckHead = false );
 
@@ -508,7 +510,7 @@ public:
     edict_t *getEnemy () { return m_pEnemy; }
 
 
-    void setMoveTo ( Vector vNew )
+    void setMoveTo ( const Vector& vNew )
 	{
 		if ( m_iMoveLookPriority >= m_iMovePriority )
 		{
@@ -683,11 +685,11 @@ public:
 
 	virtual void touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint = -1, int iPrevWaypoint = -1 );
 
-    void setAiming ( Vector aiming ) { m_vWaypointAim = aiming; }
+    void setAiming (const Vector& aiming) { m_vWaypointAim = aiming; }
 
     Vector getAiming () { return m_vWaypointAim; }
 
-    void setLookVector ( Vector vLook ) { m_vLookVector = vLook; }
+    void setLookVector (const Vector& vLook) { m_vLookVector = vLook; }
 
     Vector getLookVector () { return m_vLookVector; }
 
@@ -718,7 +720,7 @@ public:
 
 	int nearbyFriendlies (float fDistance);
 	
-	bool isFacing ( Vector vOrigin ) const;
+	bool isFacing (const Vector& vOrigin) const;
 
 	bool isOnLift () const;
 
@@ -826,7 +828,7 @@ public:
 	bool recentlySpawned ( float fTime ) const;
 
 protected:
-    void setLookAt ( Vector vNew )
+    void setLookAt (const Vector& vNew)
 	{
 		m_vLookAt = vNew;
 		m_bLookAtIsValid = true;
@@ -1101,6 +1103,7 @@ public:
 
 	static CBot *get ( int iIndex ) { return m_Bots[iIndex]; }
 	static CBot *get ( edict_t *pPlayer ) { return m_Bots[slotOfEdict(pPlayer)]; }
+	int levelInit();
 
 private:
 	static CBot **m_Bots;

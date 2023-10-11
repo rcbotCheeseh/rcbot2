@@ -97,7 +97,7 @@ protected:
 class CAutoWaypointCheck : public CTypeVector<vec_t>
 {
 public:
-	void SetPoint ( Vector vec, int iFlags )
+	void SetPoint (const Vector& vec, int iFlags)
 	{
 		m_iFlags = iFlags;
 
@@ -272,7 +272,7 @@ public:
 	int getPathFrom () const { return m_iPathFrom; }
 	int getPathTo () const { return m_iPathTo; }
 
-	void teleportTo ( Vector vOrigin );
+	void teleportTo (const Vector& vOrigin );
 
 	const char *getSteamID () const { return m_szSteamID; }
 	const char *getName () const;
@@ -315,7 +315,7 @@ public:
 	}
 
 	bool autoWaypointOn () const { return m_bAutoWaypoint; }
-	void autoEventWaypoint ( int iType, float fRadius, bool bAtOtherOrigin = false, int iTeam = 0, Vector vOrigin = Vector(0,0,0), bool bIgnoreTeam = false, bool bAutoType = false );
+	void autoEventWaypoint ( int iType, float fRadius, bool bAtOtherOrigin = false, int iTeam = 0, const Vector& vOrigin = Vector(0,0,0), bool bIgnoreTeam = false, bool bAutoType = false );
 	void giveMessage(const char*msg, float fTime=0.1f);
 private:
 	edict_t *m_pPlayer;

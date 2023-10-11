@@ -36,6 +36,7 @@
 #include "bot_getprop.h"
 
 #include <cmath>
+#include <cstring>
 
 const char* g_szDODWeapons[] =
 {
@@ -228,30 +229,30 @@ WeaponsData_t TF2Weaps[] =
 
 		// Custom Weapons
 	
-		{ TF2_SLOT_PRMRY, TF2_WEAPON_POMSON6000, "tf_weapon_drg_pomson", WEAP_FL_PRIM_ATTACK | WEAP_FL_UNDERWATER, 0, 800, 1, 2, 0 },
+		{TF2_SLOT_PRMRY, TF2_WEAPON_POMSON6000, "tf_weapon_drg_pomson", WEAP_FL_PRIM_ATTACK | WEAP_FL_UNDERWATER, 0, 800, 1, 2, 0 },
 		//{TF2_SLOT_PDA,TF2_WEAPON_PDA_ENGI_BUILD,		"tf_weapon_pda_engineer_build",	WEAP_FL_NONE,0,100,0,1,0},
 		// this class is used with all classes that can use shotgun but the slot might be different
-		{ TF2_SLOT_SCNDR, TF2_WEAPON_SHOTGUN, "tf_weapon_shotgun", WEAP_FL_KILLPIPEBOMBS | WEAP_FL_PRIM_ATTACK | WEAP_FL_UNDERWATER, 0, 500, 2, 2, 0 },
+		{TF2_SLOT_SCNDR, TF2_WEAPON_SHOTGUN, "tf_weapon_shotgun", WEAP_FL_KILLPIPEBOMBS | WEAP_FL_PRIM_ATTACK | WEAP_FL_UNDERWATER, 0, 500, 2, 2, 0 },
 		//{TF2_SLOT_OTHER,TF2_WEAPON_PDA_ENGI_DESTROY,	"tf_weapon_pda_engineer_destroy",	WEAP_FL_NONE,0,100,0,1,0},
 		//{TF2_SLOT_PDA, TF2_WEAPON_PDA_SPY, "tf_weapon_pda_spy", WEAP_FL_NONE, 0, 100, 0, 1, 0 },
-		{ TF2_SLOT_PRMRY, TF2_WEAPON_FRONTIERJUSTICE, "tf_weapon_sentry_revenge", WEAP_FL_KILLPIPEBOMBS | WEAP_FL_PRIM_ATTACK | WEAP_FL_UNDERWATER, 0, 800, 1, 2, 0 },
+		{TF2_SLOT_PRMRY, TF2_WEAPON_FRONTIERJUSTICE, "tf_weapon_sentry_revenge", WEAP_FL_KILLPIPEBOMBS | WEAP_FL_PRIM_ATTACK | WEAP_FL_UNDERWATER, 0, 800, 1, 2, 0 },
 		{TF2_SLOT_PDA, TF2_WEAPON_BUILDER, "tf_weapon_builder", WEAP_FL_NONE, 0, 100, 0, 1, 0 },
 		{TF2_SLOT_SCNDR,TF2_WEAPON_MEDIGUN,			"tf_weapon_medigun",	WEAP_FL_NONE,0,100,0,1,0},
 		{TF2_SLOT_PDA, TF2_WEAPON_INVIS, "tf_weapon_invis", WEAP_FL_NONE, 0, 100, 0, 1, 0 },
 		{TF2_SLOT_SCNDR,TF2_WEAPON_BUFF_ITEM,	"tf_weapon_buff_item",	WEAP_FL_NONE,0,100,0,1,0},
-		{ TF2_SLOT_SCNDR, TF2_WEAPON_FLAREGUN, "tf_weapon_flaregun", WEAP_FL_PRIM_ATTACK, 0, 1600, 2, 2, TF2_GRENADESPEED },
+		{TF2_SLOT_SCNDR, TF2_WEAPON_FLAREGUN, "tf_weapon_flaregun", WEAP_FL_PRIM_ATTACK, 0, 1600, 2, 2, TF2_GRENADESPEED },
 		{TF2_SLOT_PDA, TF2_WEAPON_SENTRYGUN, "obj_sentrygun", 0, 0, 0, 0, 0, 0 },
 		{TF2_SLOT_MELEE,TF2_WEAPON_SAXXY,		"saxxy",	WEAP_FL_PRIM_ATTACK | WEAP_FL_MELEE | WEAP_FL_UNDERWATER,0,150,0,1,0},
 		//Bat Wood AKA The Sandman
 		{TF2_SLOT_MELEE,TF2_WEAPON_BAT_WOOD,		"tf_weapon_bat_wood",	WEAP_FL_PRIM_ATTACK | WEAP_FL_MELEE | WEAP_FL_UNDERWATER,0,180,0,1,0},
 		{TF2_SLOT_SCNDR,TF2_WEAPON_LUNCHBOX_DRINK,		"tf_weapon_lunchbox_drink",	WEAP_FL_NONE,0,180,0,1,0},
-		{ TF2_SLOT_PRMRY, TF2_WEAPON_BOW, "tf_weapon_compound_bow", WEAP_FL_SCOPE | WEAP_FL_PRIM_ATTACK | WEAP_FL_PROJECTILE, 400, 2500, 1, 3, 1875},
+		{TF2_SLOT_PRMRY, TF2_WEAPON_BOW, "tf_weapon_compound_bow", WEAP_FL_SCOPE | WEAP_FL_PRIM_ATTACK | WEAP_FL_PROJECTILE, 400, 2500, 1, 3, 1875},
 		{TF2_SLOT_SCNDR,TF2_WEAPON_JAR,		"tf_weapon_jar",	WEAP_FL_NONE,0,180,0,1,0},
 		{TF2_SLOT_MELEE,TF2_WEAPON_BAT_FISH,		"tf_weapon_bat_fish",	WEAP_FL_PRIM_ATTACK | WEAP_FL_MELEE | WEAP_FL_UNDERWATER,0,180,0,1,0},
 		{TF2_SLOT_PRMRY,TF2_WEAPON_DIRECTHIT,		"tf_weapon_rocketlauncher_directhit",	WEAP_FL_PRIM_ATTACK | WEAP_FL_EXPLOSIVE | WEAP_FL_UNDERWATER,BLAST_RADIUS,4096,1,3,TF2_ROCKETSPEED * 1.8},
 		{TF2_SLOT_MELEE,TF2_WEAPON_SWORD,		"tf_weapon_sword",	WEAP_FL_PRIM_ATTACK | WEAP_FL_MELEE | WEAP_FL_UNDERWATER,0,190,0,1,0},
 		{TF2_SLOT_MELEE,TF2_WEAPON_KATANA,		"tf_weapon_katana",	WEAP_FL_PRIM_ATTACK | WEAP_FL_MELEE | WEAP_FL_UNDERWATER,0,210,0,1,0},
-		{ TF2_SLOT_PRMRY, TF2_WEAPON_COWMANGLER, "tf_weapon_particle_cannon", WEAP_FL_KILLPIPEBOMBS | WEAP_FL_PRIM_ATTACK | WEAP_FL_UNDERWATER, 0, 1500, 1, 2, TF2_ROCKETSPEED },
+		{TF2_SLOT_PRMRY, TF2_WEAPON_COWMANGLER, "tf_weapon_particle_cannon", WEAP_FL_KILLPIPEBOMBS | WEAP_FL_PRIM_ATTACK | WEAP_FL_UNDERWATER, 0, 1500, 1, 2, TF2_ROCKETSPEED },
 		{TF2_SLOT_PRMRY,TF2_WEAPON_CROSSBOW,		"tf_weapon_crossbow",	WEAP_FL_PRIM_ATTACK,600,2500,1,3,0},
 		{TF2_SLOT_MELEE,TF2_WEAPON_CLEAVER,		"tf_weapon_cleaver",	WEAP_FL_PRIM_ATTACK | WEAP_FL_MELEE | WEAP_FL_UNDERWATER,0,150,0,1,0},
 		{TF2_SLOT_MELEE,TF2_WEAPON_BAT_GIFTWRAP,		"tf_weapon_bat_giftwrap",	WEAP_FL_PRIM_ATTACK | WEAP_FL_MELEE | WEAP_FL_UNDERWATER,0,150,0,1,0},
@@ -395,8 +396,8 @@ CBotWeapons::CBotWeapons(CBot* pBot)
 
 edict_t* CWeapons::findWeapon(edict_t* pPlayer, const char* pszWeaponName)
 {
-	CBaseHandle* m_Weapons = CClassInterface::getWeaponList(pPlayer);
-	CBaseHandle* m_Weapon_iter = m_Weapons;
+	const CBaseHandle* m_Weapons = CClassInterface::getWeaponList(pPlayer);
+	const CBaseHandle* m_Weapon_iter = m_Weapons;
 	// loop through the weapons array and see if it is in the CBaseCombatCharacter
 
 	for (unsigned short int j = 0; j < MAX_WEAPONS; j++)
@@ -404,7 +405,7 @@ edict_t* CWeapons::findWeapon(edict_t* pPlayer, const char* pszWeaponName)
 		edict_t* pWeapon = INDEXENT(m_Weapon_iter->GetEntryIndex());
 
 		// TODO get familiar with validity of handles / edicts
-		if (pWeapon && !pWeapon->IsFree() && strcmp(pWeapon->GetClassName(), pszWeaponName) == 0)
+		if (pWeapon && !pWeapon->IsFree() && std::strcmp(pWeapon->GetClassName(), pszWeaponName) == 0)
 			return pWeapon;
 
 		m_Weapon_iter++;
@@ -417,9 +418,9 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 {
 	unsigned short int iWeaponsSignature = 0x0; // check sum of weapons
 	edict_t* pWeapon;
-	CBaseHandle* m_Weapons = CClassInterface::getWeaponList(m_pBot->getEdict());
+	const CBaseHandle* m_Weapons = CClassInterface::getWeaponList(m_pBot->getEdict());
 
-	CBaseHandle* m_Weapon_iter = m_Weapons;
+	const CBaseHandle* m_Weapon_iter = m_Weapons;
 
 	for (short int i = 0; i < MAX_WEAPONS; i++)
 	{
@@ -673,7 +674,7 @@ CBotWeapon* CBotWeapons::addWeapon(CWeapon* pWeaponInfo, int iId, edict_t* pent,
 			{
 				if (CBotGlobals::entityOrigin(pEnt) == origin)
 				{
-					if (strcmp(pEnt->GetClassName(), classname) == 0)
+					if (std::strcmp(pEnt->GetClassName(), classname) == 0)
 					{
 						m_theWeapons[iId].setWeaponEntity(pEnt, bOverrideAll);// .setWeaponIndex(ENTINDEX(pEnt));
 
@@ -805,13 +806,13 @@ void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault
 					{
 						WeaponsData_t newWeapon;
 
-						memset(&newWeapon, 0, sizeof(WeaponsData_t));
+						std::memset(&newWeapon, 0, sizeof(WeaponsData_t));
 
 						const char* szKeyName = kv->GetName();
 
 						char lowered[64];
 
-						strncpy(lowered, szKeyName, 63);
+						std::strncpy(lowered, szKeyName, 63);
 						lowered[63] = 0;
 
 						__strlow(lowered)
@@ -869,7 +870,7 @@ void CBotWeapons::clearWeapons()
 {
 	for (unsigned short i = 0; i < MAX_WEAPONS; i++)
 	{
-		memset(&m_theWeapons[i], 0, sizeof(CBotWeapon));
+		std::memset(&m_theWeapons[i], 0, sizeof(CBotWeapon));
 		//m_theWeapons[i].setHasWeapon(false);
 	}
 }
@@ -912,7 +913,7 @@ CBotWeapon* CBotWeapons::getActiveWeapon(const char* szWeaponName, edict_t* pWea
 				if (!p)
 					continue;
 
-				if (strcmp(p->getWeaponName(), szWeaponName) == 0)
+				if (std::strcmp(p->getWeaponName(), szWeaponName) == 0)
 				{
 					toReturn = &m_theWeapons[i];
 					break;
@@ -960,7 +961,7 @@ bool CBotWeapon :: needToReload(CBot *pBot)
 class IWeaponFunc
 {
 public:
-	//virtual ~IWeaponFunc() = default;
+	virtual ~IWeaponFunc() = default;
 	virtual void execute(CWeapon* pWeapon) = 0;
 };
 

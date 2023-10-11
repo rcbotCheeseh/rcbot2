@@ -154,11 +154,11 @@ void CClient :: playSound ( const char *pszSound )
 	if ( isWaypointOn() )
 	{
 		if ( bot_cmd_enable_wpt_sounds.GetBool() )
-			sprintf(m_szSoundToPlay,"play \"%s\"",pszSound);
+			std::sprintf(m_szSoundToPlay,"play \"%s\"",pszSound);
 	}
 }
 
-void CClient :: autoEventWaypoint ( int iType, float fRadius, bool bAtOtherOrigin, int iTeam, Vector vOrigin, bool bIgnoreTeam, bool bAutoType )
+void CClient :: autoEventWaypoint ( int iType, float fRadius, bool bAtOtherOrigin, int iTeam, const Vector& vOrigin, bool bIgnoreTeam, bool bAutoType )
 {
 	m_iAutoEventWaypoint = iType;
 	m_fAutoEventWaypointRadius = fRadius;
@@ -186,7 +186,7 @@ void CClient :: autoEventWaypoint ( int iType, float fRadius, bool bAtOtherOrigi
 	}	
 }
 
-void CClient :: teleportTo (Vector vOrigin)
+void CClient :: teleportTo (const Vector& vOrigin)
 {
 	m_bIsTeleporting = true;
 	m_fTeleportTime = engine->Time()+0.1f;
@@ -1139,7 +1139,7 @@ void CClients::clientDebugMsg(CBot *pBot, int iLev, const char *fmt, ... )
 	static char string[1024];
 
 	va_start (argptr, fmt);
-	vsprintf (string, fmt, argptr); 
+	std::vsprintf (string, fmt, argptr); 
 	va_end (argptr); 
 
 	clientDebugMsg(iLev,string,pBot);

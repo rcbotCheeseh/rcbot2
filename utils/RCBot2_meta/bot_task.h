@@ -165,7 +165,7 @@ public:
 		m_bGetPassedIntAsWaypointId = false;
 	}
 
-	CFindPathTask ( Vector vOrigin, eLookTask looktask = LOOK_WAYPOINT )
+	CFindPathTask (const Vector& vOrigin, eLookTask looktask = LOOK_WAYPOINT)
 	{
 		m_vVector = vOrigin;
 		m_pEdict = nullptr; // no edict
@@ -639,7 +639,7 @@ private:
 class CBotDefendTask : public CBotTask
 {
 public:
-	CBotDefendTask ( Vector vOrigin, float fMaxTime = 0.0f, int iInterrupt = CONDITION_SEE_CUR_ENEMY, bool bDefendOrigin = false, Vector vDefendOrigin = Vector(0,0,0), eLookTask looktask = LOOK_SNIPE, int iWaypointType = 0 ) 
+	CBotDefendTask (const Vector& vOrigin, float fMaxTime = 0.0f, int iInterrupt = CONDITION_SEE_CUR_ENEMY, bool bDefendOrigin = false, const Vector& vDefendOrigin = Vector(0,0,0), eLookTask looktask = LOOK_SNIPE, int iWaypointType = 0) 
 	{ 
 		m_fMaxTime = fMaxTime; 
 		m_vOrigin = vOrigin; 
@@ -670,7 +670,7 @@ private:
 class CBotInvestigateTask : public CBotTask
 {
 public:
-	CBotInvestigateTask ( Vector vOrigin, float fRadius, Vector vPOV, bool bHasPOV, float fMaxTime = 0, int iInterrupt = CONDITION_SEE_CUR_ENEMY ) 
+	CBotInvestigateTask (const Vector& vOrigin, float fRadius, const Vector& vPOV, bool bHasPOV, float fMaxTime = 0, int iInterrupt = CONDITION_SEE_CUR_ENEMY) 
 	{ 
 		m_fMaxTime = fMaxTime; 
 		m_vOrigin = vOrigin; 
@@ -1262,7 +1262,7 @@ private:
 class CCSSDefuseTheBombTask : public CBotTask
 {
 public:
-	CCSSDefuseTheBombTask(Vector vBomb)
+	CCSSDefuseTheBombTask(const Vector& vBomb)
 	{
 		m_vBomb = vBomb;
 	}
@@ -1282,7 +1282,7 @@ private:
 class CCSSGuardTask : public CBotTask
 {
 public:
-	CCSSGuardTask( CBotWeapon *pWeaponToUse, Vector vOrigin, float fYaw, bool bUseZ, float z, int iWaypointType )
+	CCSSGuardTask(CBotWeapon *pWeaponToUse, const Vector& vOrigin, float fYaw, bool bUseZ, float z, int iWaypointType)
 	{
 		m_fEnemyTime = 0.0f;
 		m_fTime = 0.0f;
@@ -1317,7 +1317,7 @@ private:
 class CTF2_TauntTask : public CBotTask
 {
 public:
-	CTF2_TauntTask ( Vector vPlayer, Vector vOrigin, float fDist )
+	CTF2_TauntTask (const Vector& vPlayer, const Vector& vOrigin, float fDist)
 	{
 		m_vPlayer = vPlayer;
 		m_vOrigin = vOrigin;
@@ -1340,7 +1340,7 @@ private:
 class CMoveToTask : public CBotTask
 {
 public:
-	CMoveToTask ( Vector vOrigin )
+	CMoveToTask (const Vector& vOrigin)
 	{
 		m_vVector = vOrigin;
 		m_pEdict = nullptr;
@@ -1524,7 +1524,7 @@ public:
 		m_ftime = engine->Time() + waittime;
 		m_bAimSet = false;
 	}
-	CBotWaitTask(float waittime, Vector vAim)
+	CBotWaitTask(float waittime, const Vector& vAim)
 	{
 		m_ftime = engine->Time() + waittime;
 		m_vAim = vAim;

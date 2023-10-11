@@ -49,6 +49,7 @@
 #include "bot_waypoint_visibility.h"
 
 #include <cmath>
+#include <cstring>
 
 const char *g_DODClassCmd[2][6] = 
 { {"cls_garand","cls_tommy","cls_bar","cls_spring","cls_30cal","cls_bazooka"},
@@ -205,7 +206,7 @@ bool CDODBot :: setVisible ( edict_t *pEntity, bool bVisible )
 		{
 			UPDATE_VISIBLE_OBJECT(m_pNearestDeadTeamMate,pEntity)
 		}
-		else if ( (m_pNearestBreakable != pEntity) && (strncmp(pEntity->GetClassName(),"prop_physics",12)==0) )
+		else if ( (m_pNearestBreakable != pEntity) && (std::strncmp(pEntity->GetClassName(),"prop_physics",12)==0) )
 		{
 			UPDATE_VISIBLE_OBJECT_CONDITION(m_pNearestBreakable,pEntity,CClassInterface::getPlayerHealth(pEntity) > 0)
 		}
@@ -220,13 +221,13 @@ bool CDODBot :: setVisible ( edict_t *pEntity, bool bVisible )
 		// grenade_smoke
 		// 012345678
 		// don't run away from smoke grenades
-		else if ( (pEntity!=m_pEnemyGrenade) && (szClassname[8]!='s') && (strncmp(szClassname,"grenade",7) == 0 ) && 
+		else if ( (pEntity!=m_pEnemyGrenade) && (szClassname[8]!='s') && (std::strncmp(szClassname,"grenade",7) == 0 ) && 
 			((CClassInterface::getGrenadeThrower(pEntity) == m_pEdict) || 
 			 ((CClassInterface::getTeam(pEntity) == m_iEnemyTeam)||bFriendlyFire)))
 		{
 			UPDATE_VISIBLE_OBJECT(m_pEnemyGrenade,pEntity)
 		}
-		else if ( (pEntity!=m_pEnemyRocket) && (strncmp(szClassname,"rocket",6) == 0 ) && 
+		else if ( (pEntity!=m_pEnemyRocket) && (std::strncmp(szClassname,"rocket",6) == 0 ) && 
 			(CClassInterface::getTeam(pEntity) == m_iEnemyTeam) )
 		{
 			UPDATE_VISIBLE_OBJECT(m_pEnemyRocket,pEntity)
@@ -235,7 +236,7 @@ bool CDODBot :: setVisible ( edict_t *pEntity, bool bVisible )
 		{
 			UPDATE_VISIBLE_OBJECT(m_pNearestPathBomb,pEntity)
 		}
-		else if ( (pEntity!=m_pNearestWeapon) && (strncmp(szClassname,"weapon_",7)==0) )
+		else if ( (pEntity!=m_pNearestWeapon) && (std::strncmp(szClassname,"weapon_",7)==0) )
 		{
 			UPDATE_VISIBLE_OBJECT(m_pNearestWeapon,pEntity)
 		}
@@ -251,7 +252,7 @@ bool CDODBot :: setVisible ( edict_t *pEntity, bool bVisible )
 		NULLIFY_VISIBLE(m_pNearestWeapon,pEntity,CWaypointLocations::REACHABLE_RANGE)
 	}
 
-	if ( !bNoDraw && (pEntity != m_pNearestSmokeToEnemy) && (strncmp(szClassname,"grenade_smoke",13) == 0) )
+	if ( !bNoDraw && (pEntity != m_pNearestSmokeToEnemy) && (std::strncmp(szClassname,"grenade_smoke",13) == 0) )
 	{
 		fSmokeTime = gpGlobals->curtime - CClassInterface::getSmokeSpawnTime(pEntity);
 
@@ -412,7 +413,6 @@ void CDODBot :: died ( edict_t *pKiller, const char *pszWeapon )
 				m_pWantToProne->train(1.0f);
 		}
 	}
-
 }
 
 // TO COMPLETE
@@ -688,7 +688,6 @@ void CDODBot :: seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *p
 				//addVoiceCommand(DOD_VC_GOGOGO);
 			}
 		}
-
 	}
 }
 
@@ -745,7 +744,7 @@ void CDODBot :: spawnInit ()
 
 	m_pNearestBomb = nullptr;
 
-	memset(m_CheckSmoke,0,sizeof(smoke_t)*MAX_PLAYERS);
+	std::memset(m_CheckSmoke,0,sizeof(smoke_t)*MAX_PLAYERS);
 
 	while ( !m_nextVoicecmd.empty() )
 		m_nextVoicecmd.pop();
@@ -769,9 +768,9 @@ void CDODBot :: spawnInit ()
 
 	m_CurrentUtil = BOT_UTIL_MAX;
 	// reset objects
-	m_flSprintTime = 0;
+	m_flSprintTime = 0.0f;
 	m_pCurrentWeapon = nullptr;
-	m_fFixWeaponTime = 0;
+	m_fFixWeaponTime = 0.0f;
 	m_LastHearVoiceCommand = DOD_VC_INVALID;
 }
 
@@ -793,7 +792,7 @@ bool CDODBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 		if ( !CBotGlobals::isBreakableOpen(pEdict) && ((pEdict == m_pNearestBreakable) || bRegisteredBreakable) )
 		{
 
-			/*if ( strcmp("dod_ragdoll",pszClassname) == 0 )
+			/*if ( std::strcmp("dod_ragdoll",pszClassname) == 0 )
 			{
 				// break;
 				return false;
@@ -911,39 +910,39 @@ void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 			// find bomb target for this waypoint and place bomb
 			if ( pBombTarget && (state != 0) && (CClassInterface::getDODBombTeam(pBombTarget) == m_iTeam) )
 			{
-					// check if someone isn't bombing already
-					// if ( (state == 2) || CDODMod::m_Flags.isTeamMatePlanting(m_pEdict,m_iTeam,pWaypoint->getOrigin()) )
-					if ( (state == 2) || CDODFlags::isTeamMatePlanting(m_pEdict,m_iTeam,pWaypoint->getOrigin()) )
-					{
-						CBotSchedule *bombsched = new CBotSchedule();
-						//todob
-						m_pSchedules->freeMemory();
+				// check if someone isn't bombing already
+				// if ( (state == 2) || CDODMod::m_Flags.isTeamMatePlanting(m_pEdict,m_iTeam,pWaypoint->getOrigin()) )
+				if ( (state == 2) || CDODFlags::isTeamMatePlanting(m_pEdict,m_iTeam,pWaypoint->getOrigin()) )
+				{
+					CBotSchedule *bombsched = new CBotSchedule();
+					//todob
+					m_pSchedules->freeMemory();
 
-						bombsched->setID(SCHED_GOOD_HIDE_SPOT);
+					bombsched->setID(SCHED_GOOD_HIDE_SPOT);
 
-						bombsched->addTask(new CDODWaitForBombTask(pBombTarget,pWaypoint));
+					bombsched->addTask(new CDODWaitForBombTask(pBombTarget,pWaypoint));
 
-						m_pSchedules->add(bombsched);
-					}
-					else if ( m_bHasBomb ) // state must be 1 and no team mate planting
-					// plant
-					{
-						CBotSchedule *bombsched = new CBotSchedule();
-						//todob
-						m_pSchedules->freeMemory();
+					m_pSchedules->add(bombsched);
+				}
+				else if ( m_bHasBomb ) // state must be 1 and no team mate planting
+				// plant
+				{
+					CBotSchedule *bombsched = new CBotSchedule();
+					//todob
+					m_pSchedules->freeMemory();
 
-						bombsched->setID(SCHED_BOMB);
+					bombsched->setID(SCHED_BOMB);
 
-						bombsched->addTask(new CBotDODBomb(DOD_BOMB_PATH_PLANT,-1,pBombTarget,CBotGlobals::entityOrigin(pBombTarget),-1));
-						bombsched->addTask(new CDODWaitForBombTask(pBombTarget,pWaypoint));
+					bombsched->addTask(new CBotDODBomb(DOD_BOMB_PATH_PLANT,-1,pBombTarget,CBotGlobals::entityOrigin(pBombTarget),-1));
+					bombsched->addTask(new CDODWaitForBombTask(pBombTarget,pWaypoint));
 
-						m_pSchedules->add(bombsched);
-					}
-					else
-					{
-						updateCondition(CONDITION_NEED_BOMB);
-						updateCondition(CONDITION_CHANGED);
-					}
+					m_pSchedules->add(bombsched);
+				}
+				else
+				{
+					updateCondition(CONDITION_NEED_BOMB);
+					updateCondition(CONDITION_CHANGED);
+				}
 			}
 		}
 	}
@@ -1214,8 +1213,6 @@ void CDODBot :: modThink ()
 		{
 			m_fFov = 20.0f;
 		}
-
-	
 	}
 
 
@@ -1459,7 +1456,7 @@ void CDODBot ::voiceCommand ( int cmd )
 
 	vcmd.voicecmd = cmd; //not used? [APG]RoboCop[CL]
 	
-	sprintf(scmd,"voice_%s",g_DODVoiceCommands[cmd].pcmd);
+	std::sprintf(scmd,"voice_%s",g_DODVoiceCommands[cmd].pcmd);
 
 	helpers->ClientCommand(m_pEdict,scmd);
 }
@@ -1468,7 +1465,7 @@ void CDODBot ::signal ( const char *signal ) const
 {
 	char scmd[64];
 
-	sprintf(scmd,"signal_%s",signal);
+	std::sprintf(scmd,"signal_%s",signal);
 
 	helpers->ClientCommand(m_pEdict,scmd);
 }
@@ -1767,7 +1764,6 @@ void CDODBot :: hearVoiceCommand ( edict_t *pPlayer, byte cmd )
 						addVoiceCommand(DOD_VC_YES);
 					}
 				}
-
 			}
 			else if ( randomFloat(0.0f,1.0f) > 0.75f )
 			{
@@ -2175,7 +2171,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 			int i = 0;
 			edict_t *pEdict;
 			edict_t *pNearby = nullptr;
-			float fMaxDistance = 500;
+			float fMaxDistance = 500.0f;
 			float fDistance;
 
 			for ( i = 1; i <= CBotGlobals::maxClients(); i ++ )
@@ -2839,7 +2835,7 @@ bool CDODBot:: checkStuck ()
 
 		if ( pGroundEnt ) // stuck on furniture? 
 		{
-			if ( strncmp(pGroundEnt->GetClassName(),"prop_physics",12) != 0 )
+			if ( std::strncmp(pGroundEnt->GetClassName(),"prop_physics",12) != 0 )
 			{
 				// Duck
 				if ( randomFloat(0.0f,1.0f) < 0.9f )
@@ -3355,7 +3351,7 @@ bool CDODBot :: select_CWeapon ( CWeapon *pWeapon )
 {
 	char cmd[128];
 
-	sprintf(cmd,"use %s\n",pWeapon->getWeaponName());
+	std::sprintf(cmd,"use %s\n",pWeapon->getWeaponName());
 
 	helpers->ClientCommand(m_pEdict,cmd);
 
@@ -3371,7 +3367,7 @@ bool CDODBot :: selectBotWeapon ( CBotWeapon *pBotWeapon )
 		//int id = pSelect->getWeaponIndex();
 		char cmd[128];
 
-		sprintf(cmd,"use %s\n",pSelect->getWeaponName());
+		std::sprintf(cmd,"use %s\n",pSelect->getWeaponName());
 
 		helpers->ClientCommand(m_pEdict,cmd);
 
@@ -3479,7 +3475,7 @@ void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin,
 				{
 					const float fTime = fDist2D/pWp->getProjectileSpeed();
 				//TODO: Improve on the floating point precision conversion [APG]RoboCop[CL]
-				v_desired_offset->z = (pow(2, fTime) * (sv_gravity.GetFloat() * rcbot_projectile_tweak.GetFloat()));// - (getOrigin().z - v_origin.z);
+				v_desired_offset->z = (std::pow(2, fTime) * (sv_gravity.GetFloat() * rcbot_projectile_tweak.GetFloat()));// - (getOrigin().z - v_origin.z);
 			}
 			//v_desired_offset->z += (distanceFrom(pEntity) * (randomFloat(0.05,0.15)*m_pProfile->m_fAimSkill));
 		}

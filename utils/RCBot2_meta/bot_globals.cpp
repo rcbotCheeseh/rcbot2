@@ -44,13 +44,13 @@
 
 #ifndef __linux__
 #include <direct.h> // for mkdir
-#include <sys/stat.h>
 #else
 #include <fcntl.h>
-#include <sys/stat.h>
 #endif
 
+#include <sys/stat.h>
 #include <cmath>
+#include <cstring>
 
 //caxanga334: SDK 2013 contains macros for std::min and std::max which causes errors when compiling
 #if SOURCE_ENGINE == SE_SDK2013 || SOURCE_ENGINE == SE_BMS
@@ -124,7 +124,7 @@ bool CBotGlobals ::isAlivePlayer ( edict_t *pEntity )
 //new map
 void CBotGlobals :: setMapName ( const char *szMapName ) 
 { 
-	strncpy(m_szMapName,szMapName,MAX_MAP_STRING_LEN-1); 
+	std::strncpy(m_szMapName,szMapName,MAX_MAP_STRING_LEN-1); 
 	m_szMapName[MAX_MAP_STRING_LEN-1] = 0; 	
 }
 
@@ -218,7 +218,7 @@ void CBotGlobals::readRCBotFolder()
 	mainkv->deleteThis();
 }
 
-float CBotGlobals :: grenadeWillLand ( Vector vOrigin, Vector vEnemy, float fProjSpeed, float fGrenadePrimeTime, float *fAngle )
+float CBotGlobals :: grenadeWillLand (const Vector& vOrigin, const Vector& vEnemy, float fProjSpeed, float fGrenadePrimeTime, float *fAngle )
 {
 	static float g;
 	Vector v_comp = vEnemy-vOrigin;
@@ -266,24 +266,24 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 
 		if( pent && CBotGlobals::isNetworkable(pent) )
 		{
-			const int length = strlen(name);						 
+			const int length = std::strlen(name);						 
 
 			char arg_lwr[128];
 			char pent_lwr[128];
 
-			strcpy(arg_lwr,name);
+			std::strcpy(arg_lwr,name);
 
 			IPlayerInfo* pInfo = playerinfomanager->GetPlayerInfo(pent);
 			
 			if ( pInfo == nullptr)
 				continue;
 
-			strcpy(pent_lwr,pInfo->GetName());
+			std::strcpy(pent_lwr,pInfo->GetName());
 
 			__strlow(arg_lwr);
 			__strlow(pent_lwr);
 
-			if( strncmp( arg_lwr,pent_lwr,length) == 0 )
+			if( std::strncmp( arg_lwr,pent_lwr,length) == 0 )
 			{
 				return pent;
 			}
@@ -348,7 +348,7 @@ private:
 	int m_collisionGroup;
 };
 
-bool CBotGlobals :: checkOpensLater ( Vector vSrc, Vector vDest )
+bool CBotGlobals :: checkOpensLater (const Vector& vSrc, const Vector& vDest)
 {
 	CTraceFilterSimple traceFilter(nullptr, nullptr, MASK_PLAYERSOLID );
 
@@ -358,7 +358,7 @@ bool CBotGlobals :: checkOpensLater ( Vector vSrc, Vector vDest )
 }
 
 
-bool CBotGlobals :: isVisibleHitAllExceptPlayer ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest )
+bool CBotGlobals :: isVisibleHitAllExceptPlayer ( edict_t *pPlayer, const Vector& vSrc, const Vector& vDest, edict_t *pDest )
 {
 	const IHandleEntity *ignore = pPlayer->GetIServerEntity();
 
@@ -369,7 +369,7 @@ bool CBotGlobals :: isVisibleHitAllExceptPlayer ( edict_t *pPlayer, Vector vSrc,
 	return traceVisible(pDest);
 }
 
-bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest)
+bool CBotGlobals :: isVisible (edict_t *pPlayer, const Vector& vSrc, const Vector& vDest)
 {
 	CTraceFilterWorldAndPropsOnly filter;
 
@@ -378,7 +378,7 @@ bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest)
 	return traceVisible(nullptr);
 }
 
-bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest )
+bool CBotGlobals :: isVisible (edict_t *pPlayer, const Vector& vSrc, edict_t *pDest)
 {
 	//CTraceFilterWorldAndPropsOnly filter;//	CTraceFilterHitAll filter;
 
@@ -392,7 +392,7 @@ bool CBotGlobals :: isVisible ( edict_t *pPlayer, Vector vSrc, edict_t *pDest )
 	return traceVisible(pDest);
 }
 
-bool CBotGlobals :: isShotVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest, edict_t *pDest )
+bool CBotGlobals :: isShotVisible (edict_t *pPlayer, const Vector& vSrc, const Vector& vDest, edict_t *pDest)
 {
 	//CTraceFilterWorldAndPropsOnly filter;//	CTraceFilterHitAll filter;
 
@@ -403,7 +403,7 @@ bool CBotGlobals :: isShotVisible ( edict_t *pPlayer, Vector vSrc, Vector vDest,
 	return traceVisible(pDest);
 }
 
-bool CBotGlobals :: isVisible (Vector vSrc, Vector vDest)
+bool CBotGlobals :: isVisible (const Vector& vSrc, const Vector& vDest)
 {
 	CTraceFilterWorldAndPropsOnly filter;
 
@@ -412,26 +412,26 @@ bool CBotGlobals :: isVisible (Vector vSrc, Vector vDest)
 	return traceVisible(nullptr);
 }
 
-void CBotGlobals :: traceLine (Vector vSrc, Vector vDest, unsigned int mask, ITraceFilter *pFilter)
+void CBotGlobals :: traceLine (const Vector& vSrc, const Vector& vDest, unsigned int mask, ITraceFilter *pFilter)
 {
 	Ray_t ray;
-	memset(&m_TraceResult,0,sizeof(trace_t));
+	std::memset(&m_TraceResult,0,sizeof(trace_t));
 	ray.Init( vSrc, vDest );
 	enginetrace->TraceRay( ray, mask, pFilter, &m_TraceResult );
 }
 
-float CBotGlobals :: quickTraceline (edict_t *pIgnore,Vector vSrc, Vector vDest)
+float CBotGlobals :: quickTraceline (edict_t *pIgnore, const Vector& vSrc, const Vector& vDest)
 {
 	CTraceFilterVis filter = CTraceFilterVis(pIgnore);
 
 	Ray_t ray;
-	memset(&m_TraceResult,0,sizeof(trace_t));
+	std::memset(&m_TraceResult,0,sizeof(trace_t));
 	ray.Init( vSrc, vDest );
 	enginetrace->TraceRay( ray, MASK_NPCSOLID_BRUSHONLY, &filter, &m_TraceResult );
 	return m_TraceResult.fraction;
 }
 
-float CBotGlobals :: DotProductFromOrigin ( edict_t *pEnemy, Vector pOrigin )
+float CBotGlobals :: DotProductFromOrigin ( edict_t *pEnemy, const Vector& pOrigin )
 {
 	static Vector vecLOS;
 	static float flDot;
@@ -457,7 +457,7 @@ float CBotGlobals :: DotProductFromOrigin ( edict_t *pEnemy, Vector pOrigin )
 }
 
 
-float CBotGlobals :: DotProductFromOrigin ( Vector vPlayer, Vector vFacing, QAngle eyes )
+float CBotGlobals :: DotProductFromOrigin (const Vector& vPlayer, const Vector& vFacing, const QAngle& eyes)
 {
 	static Vector vecLOS;
 	static float flDot;
@@ -484,7 +484,7 @@ bool CBotGlobals::initModFolder() {
 	char szGameFolder[512];
 	engine->GetGameDir(szGameFolder, 512);
 
-	const int iLength = strlen(CStrings::getString(szGameFolder));
+	const int iLength = std::strlen(CStrings::getString(szGameFolder));
 	int pos = iLength - 1;
 
 	while (pos > 0 && szGameFolder[pos] != '\\' && szGameFolder[pos] != '/') {
@@ -507,7 +507,7 @@ bool CBotGlobals :: gameStart ()
 */
 	//filesystem->GetCurrentDirectory(szSteamFolder,512);
 
-	const size_t iLength = strlen(CStrings::getString(szGameFolder));
+	const size_t iLength = std::strlen(CStrings::getString(szGameFolder));
 
 	size_t pos = iLength-1;
 
@@ -543,7 +543,7 @@ void CBotGlobals :: levelInit ()
 
 }
 
-int CBotGlobals :: countTeamMatesNearOrigin ( Vector vOrigin, float fRange, int iTeam, edict_t *pIgnore )
+int CBotGlobals :: countTeamMatesNearOrigin (const Vector& vOrigin, float fRange, int iTeam, edict_t *pIgnore )
 {
 	int iCount = 0;
 
@@ -676,13 +676,13 @@ void CBotGlobals :: serverSay ( char *fmt, ... )
 
 	va_start (argptr, fmt);
 	
-	strcpy(string,"say \"");
+	std::strcpy(string,"say \"");
 
-	vsprintf (&string[5], fmt, argptr); 
+	std::vsprintf (&string[5], fmt, argptr); 
 
 	va_end (argptr); 
 
-	strcat(string,"\"");
+	std::strcat(string,"\"");
 
 	engine->ServerCommand(string);
 }
@@ -699,10 +699,10 @@ bool CBotGlobals :: setWaypointDisplayType ( int iType )
 	return false;
 }
 // work on this
-bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_dest)
+bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, const Vector& v_src, const Vector& v_dest)
 {
 	CTraceFilterVis filter = CTraceFilterVis(pPlayer);
-	const float fDistance = sqrt((v_dest - v_src).LengthSqr());
+	const float fDistance = std::sqrt((v_dest - v_src).LengthSqr());
 	const CClient *pClient = CClients::get(pPlayer);
 	Vector vcross = v_dest - v_src;
 	float fWidth = rcbot_wptplace_width.GetFloat();
@@ -784,7 +784,7 @@ bool CBotGlobals :: walkableFromTo (edict_t *pPlayer, Vector v_src, Vector v_des
 #endif
 					// check for slope or stairs
 					Vector v_norm = v_dest-v_src;
-					v_norm = v_norm/sqrt(v_norm.LengthSqr());
+					v_norm = v_norm/std::sqrt(v_norm.LengthSqr());
 
 					for ( float fDistCheck = 45.0f; fDistCheck < fDistance; fDistCheck += 45.0f ) //Floating-point not recommended [APG]RoboCop[CL]
 					{
@@ -881,12 +881,12 @@ void CBotGlobals :: botMessage ( edict_t *pEntity, int iErr, const char *fmt, ..
 	static char string[1024];
 
 	va_start (argptr, fmt);
-	vsprintf (string, fmt, argptr); 
+	std::vsprintf (string, fmt, argptr); 
 	va_end (argptr); 
 
 	const char *bot_tag = BOT_TAG;
-	const int len = strlen(string);
-	const int taglen = strlen(BOT_TAG);
+	const int len = std::strlen(string);
+	const int taglen = std::strlen(BOT_TAG);
 	// add tag -- push tag into string
 	for ( int i = len + taglen; i >= taglen; i -- )
 		string[i] = string[i-taglen];
@@ -896,7 +896,7 @@ void CBotGlobals :: botMessage ( edict_t *pEntity, int iErr, const char *fmt, ..
 	for ( int i = 0; i < taglen; i ++ )
 		string[i] = bot_tag[i];
 
-	strcat(string,"\n");
+	std::strcat(string,"\n");
 
 	if ( pEntity )
 	{
@@ -925,7 +925,7 @@ bool CBotGlobals :: makeFolders (const char* szFile)
 	int folderNameSize = 0;
 	szFolderName[0] = 0;
 
-	const int iLen = strlen(szFile);
+	const int iLen = std::strlen(szFile);
 
 	int i = 0;
 
@@ -965,9 +965,9 @@ bool CBotGlobals :: makeFolders (const char* szFile)
 void CBotGlobals :: addDirectoryDelimiter ( char *szString )
 {
 #ifndef __linux__
-	strcat(szString,"\\");
+	std::strcat(szString,"\\");
 #else
-	strcat(szString,"/");
+	std::strcat(szString,"/");
 #endif
 }
 
@@ -1081,11 +1081,11 @@ void CBotGlobals :: buildFileName ( char *szOutput, const char *szFile, const ch
 
 		if (lhome != NULL) 
 		{
-			strncpy(home,lhome,511);
+			std::strncpy(home,lhome,511);
 			home[511] = 0; 
 		}
 		else
-			strcpy(home,".");
+			std::strcpy(home,".");
 #endif
 
 #if defined(HOMEFOLDER) && defined(WIN32)
@@ -1093,40 +1093,40 @@ void CBotGlobals :: buildFileName ( char *szOutput, const char *szFile, const ch
 #endif
 
 #ifdef HOMEFOLDER
-		strcat(szOutput, home);
+		std::strcat(szOutput, home);
 		addDirectoryDelimiter(szOutput);
 #endif
 
 		/*#ifndef HOMEFOLDER
-			strcat(szOutput,"..");
+			std::strcat(szOutput,"..");
 			#endif HOMEFOLDER*/
 
-		strcat(szOutput, BOT_FOLDER);
+		std::strcat(szOutput, BOT_FOLDER);
 	}
 	else
-		strcpy(szOutput, m_szRCBotFolder);
+		std::strcpy(szOutput, m_szRCBotFolder);
 
-	if ( szOutput[strlen(szOutput)-1] != '\\' && szOutput[strlen(szOutput)-1] != '/' )
+	if ( szOutput[std::strlen(szOutput)-1] != '\\' && szOutput[std::strlen(szOutput)-1] != '/' )
 		addDirectoryDelimiter(szOutput);
 
 	if ( szFolder )
 	{
-		strcat(szOutput,szFolder);
+		std::strcat(szOutput,szFolder);
 		addDirectoryDelimiter(szOutput);
 	}
 
 	if ( bModDependent )
 	{
-		strcat(szOutput,CBotGlobals::modFolder());
+		std::strcat(szOutput,CBotGlobals::modFolder());
 		addDirectoryDelimiter(szOutput);
 	}
 
-	strcat(szOutput,szFile);
+	std::strcat(szOutput,szFile);
 
 	if ( szExtension )
 	{
-		strcat(szOutput,".");
-		strcat(szOutput,szExtension);
+		std::strcat(szOutput,".");
+		std::strcat(szOutput,szExtension);
 	}
 
 	//if (m_szRCBotFolder != NULL)
@@ -1168,7 +1168,7 @@ void CBotGlobals :: fixFloatDegrees360 ( float *pFloat )
 		*pFloat += 360;
 }
 
-float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity,Vector vOrigin)
+float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity, const Vector& vOrigin)
 {
 	/*
 	float fAngle;
@@ -1210,7 +1210,7 @@ float CBotGlobals :: yawAngleFromEdict (edict_t *pEntity,Vector vOrigin)
 
 }
 
-void CBotGlobals::teleportPlayer ( edict_t *pPlayer, Vector v_dest )
+void CBotGlobals::teleportPlayer ( edict_t *pPlayer, const Vector& v_dest )
 {
 	CClient *pClient = CClients::get(pPlayer);
 	

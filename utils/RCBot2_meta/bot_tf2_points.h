@@ -104,7 +104,7 @@ public:
 		return m_iControlPointWpt[index];
 	}
 
-	int NearestArea ( Vector vOrigin ) const;
+	int NearestArea (const Vector& vOrigin ) const;
 
 	int GetCappingTeam( int index ) const
 	{

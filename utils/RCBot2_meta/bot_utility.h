@@ -161,7 +161,7 @@ extern const char *g_szUtils[BOT_UTIL_MAX+1];
 class CBotUtility
 {
 public:
-	CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil, CBotWeapon *pWeapon = nullptr, int iData = 0, Vector vec = Vector(0,0,0) );
+	CBotUtility ( CBot *pBot, eBotAction id, bool bCanDo, float fUtil, CBotWeapon *pWeapon = nullptr, int iData = 0, const Vector& vec = Vector(0,0,0) );
 
 	float getUtility () const { return m_fUtility; }
 

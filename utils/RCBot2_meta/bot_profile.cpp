@@ -113,7 +113,7 @@ void CBotProfiles :: setupProfiles ()
 	{
 		char szId[4];
 		char filename[512];
-		sprintf(szId,"%d",iId);
+		std::sprintf(szId,"%d",iId);
 		CBotGlobals::buildFileName(filename,szId,BOT_PROFILE_FOLDER,BOT_CONFIG_EXTENSION);
 
 		std::fstream fp = CBotGlobals::openFile(filename, std::fstream::in);

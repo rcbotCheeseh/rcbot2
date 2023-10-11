@@ -111,7 +111,7 @@ void CBotTF2DemoPipeEnemySched :: init()
 	setID(SCHED_TF2_DEMO_PIPEENEMY);
 }
 ///////////////////
-CBotTF2DemoPipeTrapSched :: CBotTF2DemoPipeTrapSched ( eDemoTrapType type, Vector vStand, Vector vLoc, Vector vSpread, bool bAutoDetonate, int wptarea )
+CBotTF2DemoPipeTrapSched :: CBotTF2DemoPipeTrapSched ( eDemoTrapType type, const Vector& vStand, const Vector& vLoc, const Vector& vSpread, bool bAutoDetonate, int wptarea )
 {
 	addTask(new CFindPathTask(vStand));
 	addTask(new CBotTF2DemomanPipeTrap(type,vStand,vLoc,vSpread,bAutoDetonate,wptarea));
@@ -155,7 +155,7 @@ void CBotTFEngiBuild :: init ()
 }
 //////////////////////////////////////////////
 
-CBotGetMetalSched :: CBotGetMetalSched ( Vector vOrigin )
+CBotGetMetalSched :: CBotGetMetalSched (const Vector& vOrigin)
 {
 
 	CFindPathTask *task1 = new CFindPathTask(vOrigin);
@@ -173,7 +173,7 @@ void CBotGetMetalSched :: init ()
 	setID(SCHED_GET_METAL);
 }
 //////////////////////////////////////////////
-CBotEngiMoveBuilding :: CBotEngiMoveBuilding ( edict_t *pBotEdict, edict_t *pBuilding, eEngiBuild iObject, Vector vNewLocation, bool bCarrying )
+CBotEngiMoveBuilding :: CBotEngiMoveBuilding ( edict_t *pBotEdict, edict_t *pBuilding, eEngiBuild iObject, const Vector& vNewLocation, bool bCarrying )
 {
 	// not carrying
 	if ( !bCarrying )
@@ -271,7 +271,7 @@ void CBotBackstabSched :: init ()
 ///////////
 
 
-CBotTF2SnipeCrossBowSched::CBotTF2SnipeCrossBowSched(Vector vOrigin, int iWpt)
+CBotTF2SnipeCrossBowSched::CBotTF2SnipeCrossBowSched(const Vector& vOrigin, int iWpt)
 {
 	CBotTask *pFindPath = new CFindPathTask(iWpt);
 	CBotTask *pSnipeTask = new CBotTF2SnipeCrossBow(vOrigin, iWpt);
@@ -290,7 +290,7 @@ void CBotTF2SnipeCrossBowSched::init()
 	setID(SCHED_SNIPE);
 }
 
-CBotTF2SnipeSched :: CBotTF2SnipeSched ( Vector vOrigin, int iWpt )
+CBotTF2SnipeSched :: CBotTF2SnipeSched (const Vector& vOrigin, int iWpt)
 {
 	CBotTask *pFindPath = new CFindPathTask(iWpt);
 	CBotTask *pSnipeTask = new CBotTF2Snipe(vOrigin,iWpt);
@@ -322,7 +322,7 @@ void CBotTFEngiLookAfterSentry :: init ()
 }
 
 ////////////
-CBotTF2GetHealthSched :: CBotTF2GetHealthSched ( Vector vOrigin )
+CBotTF2GetHealthSched :: CBotTF2GetHealthSched (const Vector& vOrigin)
 {
 	CFindPathTask *task1 = new CFindPathTask(vOrigin);
 	CBotTF2WaitHealthTask *task2 = new CBotTF2WaitHealthTask(vOrigin);
@@ -342,7 +342,7 @@ void CBotTF2GetHealthSched :: init ()
 }
 ///////////////////////////////////////
 
-CBotTF2GetAmmoSched :: CBotTF2GetAmmoSched ( Vector vOrigin )
+CBotTF2GetAmmoSched :: CBotTF2GetAmmoSched (const Vector& vOrigin)
 {
 	CFindPathTask *task1 = new CFindPathTask(vOrigin);
 	CBotTF2WaitAmmoTask *task2 = new CBotTF2WaitAmmoTask(vOrigin);
@@ -362,7 +362,7 @@ void CBotTF2GetAmmoSched ::  init ()
 }
 
 //////////////////////////////////////////////
-CBotTF2GetFlagSched :: CBotTF2GetFlagSched ( Vector vOrigin, bool bUseRoute, Vector vRoute )
+CBotTF2GetFlagSched :: CBotTF2GetFlagSched (const Vector& vOrigin, bool bUseRoute, const Vector& vRoute)
 {
 	if ( bUseRoute )
 		addTask(new CFindPathTask(vRoute));
@@ -454,7 +454,7 @@ void CBotTauntSchedule :: init ()
 
 
 ///////////////////////////////////////////
-CBotTF2FindFlagSched :: CBotTF2FindFlagSched ( Vector vOrigin )
+CBotTF2FindFlagSched :: CBotTF2FindFlagSched (const Vector& vOrigin)
 {
 	addTask(new CFindPathTask(vOrigin)); // first
 	addTask(new CBotTF2WaitFlagTask(vOrigin,true)); // second
@@ -489,7 +489,7 @@ void CBotPickupSchedUse :: init ()
 
 }
 /////////////////////////////////////////////
-CBotInvestigateNoiseSched::CBotInvestigateNoiseSched ( Vector vSource, Vector vAttackPoint )
+CBotInvestigateNoiseSched::CBotInvestigateNoiseSched (const Vector& vSource, const Vector& vAttackPoint)
 {
 	addTask(new CFindPathTask(vSource,LOOK_NOISE));	
 	addTask(new CBotInvestigateTask(vSource,200.0f,vAttackPoint,true,3.0f));
@@ -501,7 +501,7 @@ void CBotInvestigateNoiseSched::init ()
 }
 
 ////////////////////////////////////////////////
-CBotGotoOriginSched :: CBotGotoOriginSched ( Vector vOrigin )
+CBotGotoOriginSched :: CBotGotoOriginSched (const Vector& vOrigin)
 {
 	addTask(new CFindPathTask(vOrigin)); // first
 	addTask(new CMoveToTask(vOrigin)); // second
@@ -518,7 +518,7 @@ void CBotGotoOriginSched :: init ()
 	setID(SCHED_GOTO_ORIGIN);
 }
 ///////////////////////////////////////
-CBotDefendSched ::CBotDefendSched ( Vector vOrigin, float fMaxTime )
+CBotDefendSched ::CBotDefendSched (const Vector& vOrigin, float fMaxTime)
 {
 	addTask(new CFindPathTask(vOrigin));
 	addTask(new CBotDefendTask(vOrigin,fMaxTime));
@@ -579,7 +579,7 @@ CGotoHideSpotSched :: CGotoHideSpotSched ( CBot *pBot, edict_t *pEdict, bool bIs
 	}
 }
 
-CGotoHideSpotSched :: CGotoHideSpotSched (CBot *pBot, Vector vOrigin, IBotTaskInterrupt *interrupt )
+CGotoHideSpotSched :: CGotoHideSpotSched (CBot *pBot, const Vector& vOrigin, IBotTaskInterrupt *interrupt)
 {
 	// run at flank while shooting	
 	CFindPathTask *pHideGoalPoint = new CFindPathTask();
@@ -647,7 +647,7 @@ void CBotAttackSched :: init ()
 	setID(SCHED_ATTACK);
 }
 ///////////////////////////////////////////
-CBotAttackPointSched :: CBotAttackPointSched ( Vector vPoint, int iRadius, int iArea, bool bHasRoute, Vector vRoute, bool bNest, edict_t *pLastEnemySentry )
+CBotAttackPointSched :: CBotAttackPointSched (const Vector& vPoint, int iRadius, int iArea, bool bHasRoute, const Vector& vRoute, bool bNest, edict_t *pLastEnemySentry)
 {
 	int iDangerWpt = -1;
 
@@ -687,7 +687,7 @@ void CBotTF2MessAroundSched :: init()
 }
 ////////////////////////////////////////////////
 
-CBotFollowLastEnemy ::	CBotFollowLastEnemy ( CBot *pBot, edict_t *pEnemy, Vector vLastSee )
+CBotFollowLastEnemy ::	CBotFollowLastEnemy ( CBot *pBot, edict_t *pEnemy, const Vector& vLastSee )
 {
 	Vector vVelocity = Vector(0,0,0);
 	CClient *pClient = CClients::get(pEnemy);
@@ -726,7 +726,7 @@ void CBotFollowLastEnemy :: init ()
 }
  
 
-CBotTF2ShootLastEnemyPos::CBotTF2ShootLastEnemyPos ( Vector vLastSeeEnemyPos, Vector vVelocity, edict_t *pLastEnemy )
+CBotTF2ShootLastEnemyPos::CBotTF2ShootLastEnemyPos (const Vector& vLastSeeEnemyPos, const Vector& vVelocity, edict_t *pLastEnemy)
 {
 	addTask(new CBotTF2ShootLastEnemyPosition(vLastSeeEnemyPos,pLastEnemy,vVelocity));
 }
@@ -737,13 +737,13 @@ void CBotTF2ShootLastEnemyPos::init()
 }
 
 ///////////////////////////////
-CDeployMachineGunSched :: CDeployMachineGunSched ( CBotWeapon *pWeapon, CWaypoint *pWaypoint, Vector vEnemy )
+CDeployMachineGunSched :: CDeployMachineGunSched (CBotWeapon *pWeapon, CWaypoint *pWaypoint, const Vector& vEnemy)
 {
 	addTask(new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint),LOOK_LAST_ENEMY));
 	addTask(new CBotDODSnipe(pWeapon,pWaypoint->getOrigin(),pWaypoint->getAimYaw(),true,vEnemy.z,pWaypoint->getFlags()));
 }
 //////////////////////////////////////////////////
-CBotDefendPointSched ::	CBotDefendPointSched ( Vector vPoint, int iRadius, int iArea )
+CBotDefendPointSched ::	CBotDefendPointSched (const Vector& vPoint, int iRadius, int iArea)
 {
 	addTask(new CFindPathTask(vPoint)); // first
 	addTask(new CBotTF2DefendPoint(iArea,vPoint,iRadius)); // second
@@ -903,7 +903,7 @@ void CBotSchedule :: passFloat(float f)
 	fPass = f;
 	m_bitsPass |= BITS_SCHED_PASS_FLOAT;
 }
-void CBotSchedule :: passVector(Vector v)
+void CBotSchedule :: passVector(const Vector& v)
 {
 	vPass = v;
 	m_bitsPass |= BITS_SCHED_PASS_VECTOR;

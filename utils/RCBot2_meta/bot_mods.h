@@ -908,7 +908,7 @@ public:
 
 	static int getEnemyTeam ( int iTeam );
 
-	static bool buildingNearby ( int iTeam, Vector vOrigin );
+	static bool buildingNearby ( int iTeam, const Vector& vOrigin );
 
 // Naris @ AlliedModders .net
 
@@ -946,7 +946,7 @@ public:
 
 	static int getHighestScore ();
 
-	static edict_t *nearestDispenser ( Vector vOrigin, int team );
+	static edict_t *nearestDispenser (const Vector& vOrigin, int team );
 
 	static void flagPickedUp (int iTeam, edict_t *pPlayer);
 	static void flagReturned (int iTeam);
@@ -976,7 +976,7 @@ public:
 		return false;
 	}
 
-	static void flagDropped (int iTeam, Vector vLoc)
+	static void flagDropped (int iTeam, const Vector& vLoc)
 	{
 		if ( iTeam == TF2_TEAM_BLUE )
 		{

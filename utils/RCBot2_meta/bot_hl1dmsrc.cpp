@@ -34,8 +34,9 @@
 #include "bot_globals.h"
 #include "bot_profile.h"
 
-
 #include "bot_mtrand.h"
+
+#include <cstring>
 
 void CHL1DMSrcBot :: init ()
 {
@@ -86,15 +87,15 @@ bool CHL1DMSrcBot :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 	{
 		const char *cname = pEdict->GetNetworkable()->GetClassName();
 
-		if ( strncmp("monster_",cname,8) == 0 )
+		if ( std::strncmp("monster_",cname,8) == 0 )
 		{
-			if ( strcmp(cname,"monster_barney") == 0 )
+			if ( std::strcmp(cname,"monster_barney") == 0 )
 				return false;
-			if ( strcmp(cname,"monster_scientist") == 0 )
+			if ( std::strcmp(cname,"monster_scientist") == 0 )
 				return false;
-			if ( strcmp(cname,"monster_gman") == 0 )
+			if ( std::strcmp(cname,"monster_gman") == 0 )
 				return false;
-			if ( strcmp(cname,"monster_furniture") == 0 )
+			if ( std::strcmp(cname,"monster_furniture") == 0 )
 				return false;
 
 			return true;

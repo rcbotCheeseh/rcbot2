@@ -372,8 +372,8 @@ public:
 
 	static const char *FindEntityNetClass(int start, const char *classname);
 	static edict_t *FindEntityByNetClass(int start, const char *classname);
-	static edict_t *FindEntityByNetClassNearest(Vector vstart, const char *classname);
-	static edict_t *FindEntityByClassnameNearest(Vector vstart, const char *classname, float fMinDist = 8192.0f, edict_t *pOwner = nullptr);
+	static edict_t *FindEntityByNetClassNearest(const Vector& vstart, const char *classname);
+	static edict_t *FindEntityByClassnameNearest(const Vector& vstart, const char *classname, float fMinDist = 8192.0f, edict_t *pOwner = nullptr);
 
 	// TF2
 	static int getTF2Score (const edict_t* edict);
@@ -550,7 +550,7 @@ public:
 		return g_GetProps[GETPROP_ORIGIN].getVectorPointer(pPlayer);
 	}
 
-	static void setOrigin ( edict_t *pPlayer, Vector vOrigin )
+	static void setOrigin ( edict_t *pPlayer, const Vector& vOrigin )
 	{
 		Vector *vEntOrigin = g_GetProps[GETPROP_ORIGIN].getVectorPointer(pPlayer);
 

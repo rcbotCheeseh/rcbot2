@@ -2,6 +2,8 @@
 #include "bot_kv.h"
 #include "bot_globals.h"
 
+#include <cstring>
+
 #include "rcbot/logging.h"
 
 void CRCBotKeyValueList::parseFile(std::fstream& fp)
@@ -20,7 +22,7 @@ void CRCBotKeyValueList::parseFile(std::fstream& fp)
 		if ( buffer[0] == '#' ) // skip comment
 			continue;
 
-		int iLen = strlen(buffer);
+		int iLen = std::strlen(buffer);
 
 		if ( iLen == 0 )
 			continue;
@@ -101,7 +103,7 @@ bool CRCBotKeyValueList :: getFloat ( const char *key, float *val ) const
 	if ( !pKV )
 		return false;
 	
-	*val = atof(pKV->getValue());
+	*val = std::atof(pKV->getValue());
 
 	return true;
 }
@@ -134,8 +136,8 @@ bool CRCBotKeyValueList :: getString ( const char *key, char **val ) const
 
 CRCBotKeyValue :: CRCBotKeyValue ( const char *szKey, char *szValue )
 {
-	strncpy(m_szKey,szKey,RCBOT_MAX_KV_LEN-1);
+	std::strncpy(m_szKey,szKey,RCBOT_MAX_KV_LEN-1);
 	m_szKey[RCBOT_MAX_KV_LEN-1] = 0;
-	strncpy(m_szValue,szValue,RCBOT_MAX_KV_LEN-1);
+	std::strncpy(m_szValue,szValue,RCBOT_MAX_KV_LEN-1);
 	m_szValue[RCBOT_MAX_KV_LEN-1] = 0;
 }

@@ -38,6 +38,8 @@
 #include "bot_sigscan.h"
 #include "bot_mods.h"
 
+#include <cstring>
+
 CGameRulesObject *g_pGameRules_Obj = nullptr;
 CCreateGameRulesObject *g_pGameRules_Create_Obj = nullptr;
 
@@ -54,7 +56,7 @@ void *GetGameRules()
 size_t CSignatureFunction::decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr)
 {
 	size_t written = 0;
-	const size_t length = strlen(hexstr);
+	const size_t length = std::strlen(hexstr);
 
 	for (size_t i = 0; i < length; i++)
 	{
@@ -213,7 +215,7 @@ void *CSignatureFunction::findPattern(const void *libPtr, const char *pattern, s
 {
 	DynLibInfo lib;
 
-	memset(&lib, 0, sizeof(DynLibInfo));
+	std::memset(&lib, 0, sizeof(DynLibInfo));
 
 	if (!getLibraryInfo(libPtr, lib))
 	{

@@ -47,6 +47,8 @@
 
 #include "rcbot/logging.h"
 
+#include <cstring>
+
 // For debug messages
 const char *szMapTypes[CS_MAP_MAX+1] =
 {
@@ -75,9 +77,9 @@ void CCounterStrikeSourceMod::mapInit()
 	const string_t mapname = gpGlobals->mapname;
 	const char *szmapname = mapname.ToCStr();
 
-    if(strncmp(szmapname, "de_", 3) == 0)
+    if(std::strncmp(szmapname, "de_", 3) == 0)
         m_MapType = CS_MAP_BOMBDEFUSAL;
-    else if(strncmp(szmapname, "cs_", 3) == 0)
+    else if(std::strncmp(szmapname, "cs_", 3) == 0)
         m_MapType = CS_MAP_HOSTAGERESCUE;
     else
         m_MapType = CS_MAP_DEATHMATCH;
@@ -273,10 +275,10 @@ void CCounterStrikeSourceMod::updateHostages()
 		ServerClass *sClass = network->GetServerClass();
 		const char *sname = sClass->GetName();
 
-        if(strcmp(sname, "CHostage") == 0)
+        if(std::strcmp(sname, "CHostage") == 0)
         {
             bh.Init(i, current->m_NetworkSerialNumber);
-            m_hHostages.push_back(bh);
+            m_hHostages.emplace_back(bh);
         }
     }
 }
@@ -316,7 +318,7 @@ edict_t *CCounterStrikeSourceMod::getRandomHostage()
 
         if (CBotGlobals::entityIsValid(pEdict) && !CClassInterface::isCSHostageRescued(pEdict) && CClassInterface::getCSHostageLeader(pEdict) && CClassInterface::getCSHostageHealth(pEdict) > 0)
         {
-            temp.push_back(i);
+            temp.emplace_back(i);
         }
     }
 
