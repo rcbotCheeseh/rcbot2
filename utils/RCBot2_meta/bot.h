@@ -319,7 +319,7 @@ public:
 
 	void debugMsg ( int iLev, const char *szMsg );
 
-	virtual unsigned int maxEntityIndex ( ) { return MAX_PLAYERS; }
+	virtual unsigned int maxEntityIndex ( ) { return RCBOT_MAXPLAYERS; }
 
 // linux fix 1
 	virtual void onInventoryApplication (){}

@@ -3144,7 +3144,7 @@ int CBots::createDefaultBot(const char* name) {
 
 void CBots :: botFunction ( IBotFunction *function )
 {
-	for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( unsigned int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		if ( m_Bots[i]->inUse() && m_Bots[i]->getEdict() )
 			function->execute (m_Bots[i]);
@@ -3158,10 +3158,10 @@ int CBots :: slotOfEdict (const edict_t* pEdict)
 
 void CBots :: init ()
 {
-	m_Bots = new CBot*[MAX_PLAYERS];
-	//m_Bots = (CBot**)malloc(sizeof(CBot*) * MAX_PLAYERS);
+	m_Bots = new CBot*[RCBOT_MAXPLAYERS];
+	//m_Bots = (CBot**)malloc(sizeof(CBot*) * RCBOT_MAXPLAYERS);
 
-	for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( unsigned int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		switch ( CBotGlobals::getCurrentMod()->getBotType() )
 		{
@@ -3184,7 +3184,7 @@ void CBots :: init ()
 			m_Bots[i] = new CBotCoop();
 			break;
 		case BOTTYPE_TF2:
-			m_Bots[i] = new CBotTF2();//MAX_PLAYERS];
+			m_Bots[i] = new CBotTF2();//RCBOT_MAXPLAYERS];
 			//CBotGlobals::setEventVersion(2);
 			break;
 		case BOTTYPE_FF:
@@ -3215,7 +3215,7 @@ int CBots :: numBots ()
 
 	int iCount = 0;
 
-	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( short int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		pBot = m_Bots[i];
 
@@ -3228,7 +3228,7 @@ int CBots :: numBots ()
 
 CBot *CBots :: findBotByProfile ( CBotProfile *pProfile )
 {
-	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( short int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		CBot* pBot = m_Bots[i];
 
@@ -3245,7 +3245,7 @@ CBot *CBots :: findBotByProfile ( CBotProfile *pProfile )
 void CBots :: runPlayerMoveAll ()
 {
 	static CBot *pBot;
-	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( short int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		pBot = m_Bots[i];
 
@@ -3276,7 +3276,7 @@ void CBots :: botThink ()
 
 #endif
 
-	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( short int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		pBot = m_Bots[i];
 
@@ -3343,7 +3343,7 @@ CBot *CBots :: getBotPointer ( edict_t *pEdict )
 
 	const int slot = slotOfEdict(pEdict);
 
-	if ( slot < 0 || slot >= MAX_PLAYERS )
+	if ( slot < 0 || slot >= RCBOT_MAXPLAYERS )
 		return nullptr;
 
 	CBot *pBot = m_Bots[slot];
@@ -3368,7 +3368,7 @@ void CBots :: freeMapMemory ()
 
 	//bots should have been freed when they disconnected
 	// just incase do this 
-	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( short int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		if ( m_Bots[i] )
 			m_Bots[i]->freeMapMemory();
@@ -3380,7 +3380,7 @@ void CBots :: freeAllMemory ()
 	if ( m_Bots == nullptr)
 		return;
 
-	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( short int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		if ( m_Bots[i] != nullptr)
 		{
@@ -3396,7 +3396,7 @@ void CBots :: freeAllMemory ()
 
 void CBots :: roundStart ()
 {
-	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( short int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		if ( m_Bots[i]->inUse() )
 			m_Bots[i]->spawnInit();
@@ -3433,7 +3433,7 @@ void CBots :: kickRandomBot (size_t count)
 {
 	std::vector<int> botList;
 	//gather list of bots
-	for ( size_t i = 0; i < MAX_PLAYERS; i ++ )
+	for ( size_t i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		if ( m_Bots[i]->inUse() )
 			botList.emplace_back(m_Bots[i]->getPlayerID());
@@ -3466,7 +3466,7 @@ void CBots :: kickRandomBotOnTeam ( int team )
 	std::vector<int> botList;
 	char szCommand[512];
 	//gather list of bots
-	for ( short int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( short int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		if ( m_Bots[i]->inUse() && m_Bots[i]->getTeam() == team )
 		{

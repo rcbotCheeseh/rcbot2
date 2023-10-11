@@ -706,14 +706,14 @@ protected:
 
 	// list of spies who I saw were attacked by my team-mates recently
 	// for use with spy checking
-	float m_fSpyList[MAX_PLAYERS];
+	float m_fSpyList[RCBOT_MAXPLAYERS];
 
 	int m_iTeam;
 
 	float m_fWaitTurnSentry;			// amount of time to wait before engineer turns their sentry before building
 
 	// currently unused
-	float m_fCallMedicTime[MAX_PLAYERS]; // for every player ID is kept the last time they called medic
+	float m_fCallMedicTime[RCBOT_MAXPLAYERS]; // for every player ID is kept the last time they called medic
 
 	int m_iLastFailSentryWpt;
 	int m_iLastFailTeleExitWpt;

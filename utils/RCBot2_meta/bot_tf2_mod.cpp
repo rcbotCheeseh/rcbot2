@@ -55,7 +55,7 @@
 #include "rcbot/logging.h"
 
 eTFMapType CTeamFortress2Mod :: m_MapType = TF_MAP_CTF;
-tf_tele_t CTeamFortress2Mod :: m_Teleporters[MAX_PLAYERS];
+tf_tele_t CTeamFortress2Mod :: m_Teleporters[RCBOT_MAXPLAYERS];
 
 int CTeamFortress2Mod :: m_iArea = 0;
 
@@ -68,8 +68,8 @@ MyEHandle CTeamFortress2Mod::m_pFlagCarrierBlue = MyEHandle(nullptr);
 float CTeamFortress2Mod::m_fArenaPointOpenTime = 0.0f;
 float CTeamFortress2Mod::m_fPointTime = 0.0f;
 
-tf_sentry_t CTeamFortress2Mod::m_SentryGuns[MAX_PLAYERS];	// used to let bots know if sentries have been sapped or not
-tf_disp_t  CTeamFortress2Mod::m_Dispensers[MAX_PLAYERS];	// used to let bots know where friendly/enemy dispensers are
+tf_sentry_t CTeamFortress2Mod::m_SentryGuns[RCBOT_MAXPLAYERS];	// used to let bots know if sentries have been sapped or not
+tf_disp_t  CTeamFortress2Mod::m_Dispensers[RCBOT_MAXPLAYERS];	// used to let bots know where friendly/enemy dispensers are
 
 MyEHandle CTeamFortress2Mod::m_pResourceEntity = MyEHandle(nullptr);
 MyEHandle CTeamFortress2Mod::m_pGameRules = MyEHandle(nullptr);
@@ -82,7 +82,7 @@ bool CTeamFortress2Mod::m_bDontClearPoints = false;
 int CTeamFortress2Mod::m_iFlagCarrierTeam = 0;
 MyEHandle CTeamFortress2Mod::m_pBoss = MyEHandle(nullptr);
 bool CTeamFortress2Mod::m_bBossSummoned = false;
-MyEHandle CTeamFortress2Mod::pMediGuns[MAX_PLAYERS];
+MyEHandle CTeamFortress2Mod::pMediGuns[RCBOT_MAXPLAYERS];
 CTFObjectiveResource CTeamFortress2Mod::m_ObjectiveResource = CTFObjectiveResource();
 CTeamControlPointMaster *CTeamFortress2Mod::m_PointMaster = nullptr;
 CTeamRoundTimer CTeamFortress2Mod::m_Timer;
@@ -297,7 +297,7 @@ void CTeamFortress2Mod :: mapInit ()
 	m_iFlagCarrierTeam = 0;
 	m_bDontClearPoints = false;
 
-	for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( unsigned int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		m_Teleporters[i].m_iWaypoint = -1;
 		m_Teleporters[i].m_fLastTeleported = 0.0f;
@@ -322,7 +322,7 @@ void CTeamFortress2Mod :: mapInit ()
 
 int CTeamFortress2Mod :: getTeleporterWaypoint ( edict_t *pTele )
 {
-	for ( int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		if ( m_Teleporters[i].exit.get() == pTele )
 			return m_Teleporters[i].m_iWaypoint; 
@@ -664,7 +664,7 @@ edict_t *CTeamFortress2Mod :: getTeleporterExit ( edict_t *pTele )
 {
 	edict_t *pExit;
 
-	for ( int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		if ( m_Teleporters[i].entrance.get() == pTele )
 		{
@@ -1034,7 +1034,7 @@ edict_t *CTeamFortress2Mod ::getBuildingOwner (eEngiBuild object, short index)
 		static short int i;
 		static tf_tele_t *tele;
 	case ENGI_DISP:
-		for ( i = 0; i < MAX_PLAYERS; i ++ )
+		for ( i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 		{
 			if ( m_Dispensers[i].disp.get() && ENTINDEX(m_Dispensers[i].disp.get())==index )
 				return INDEXENT(i+1);
@@ -1042,7 +1042,7 @@ edict_t *CTeamFortress2Mod ::getBuildingOwner (eEngiBuild object, short index)
 		//m_SentryGuns[i].
 		break;
 	case ENGI_SENTRY:
-		for ( i = 0; i < MAX_PLAYERS; i ++ )
+		for ( i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 		{
 			if ( m_SentryGuns[i].sentry.get() && ENTINDEX(m_SentryGuns[i].sentry.get())==index )
 				return INDEXENT(i+1);
@@ -1051,7 +1051,7 @@ edict_t *CTeamFortress2Mod ::getBuildingOwner (eEngiBuild object, short index)
 	case ENGI_TELE:
 		tele = m_Teleporters;
 
-		for ( i = 0; i < MAX_PLAYERS; i ++ )
+		for ( i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 		{
 			if ( tele->entrance.get() && ENTINDEX(tele->entrance.get())==index )
 				return INDEXENT(i+1);
@@ -1079,7 +1079,7 @@ edict_t *CTeamFortress2Mod :: nearestDispenser (const Vector& vOrigin, int team)
 	edict_t *pNearest = nullptr;
 	float fNearest = bot_use_disp_dist.GetFloat();
 
-	for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( unsigned int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		//m_Dispensers[i]
 		edict_t* pDisp = m_Dispensers[i].disp.get();
@@ -1108,7 +1108,7 @@ void CTeamFortress2Mod::sapperPlaced(const edict_t* pOwner, eEngiBuild type, edi
 	
 	index = ENTINDEX(pOwner)-1;
 
-	if ( index>=0 && index<MAX_PLAYERS )
+	if ( index>=0 && index<RCBOT_MAXPLAYERS )
 	{
 		if ( type == ENGI_TELE )
 			m_Teleporters[index].sapper = MyEHandle(pSapper);
@@ -1157,7 +1157,7 @@ void CTeamFortress2Mod::sapperDestroyed(edict_t *pOwner,eEngiBuild type, edict_t
 {
 	static short int index; 
 
-	for ( index = 0; index < MAX_PLAYERS; index ++ )
+	for ( index = 0; index < RCBOT_MAXPLAYERS; index ++ )
 	{
 		if ( type == ENGI_TELE )
 		{
@@ -1357,7 +1357,7 @@ void CTeamFortress2Mod::sentryBuilt(const edict_t* pOwner, eEngiBuild type, edic
 
 	index = ENTINDEX(pOwner)-1;
 
-	if ( index>=0 && index<MAX_PLAYERS )
+	if ( index>=0 && index<RCBOT_MAXPLAYERS )
 	{
 		if ( type == ENGI_SENTRY )
 		{
@@ -1377,7 +1377,7 @@ bool CTeamFortress2Mod::isSentryGun (edict_t *pEdict )
 
 	temp = m_SentryGuns;
 
-	for ( i = 0; i < MAX_PLAYERS; i ++ )
+	for ( i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		if ( temp->sentry == pEdict )
 			return true;
@@ -1394,7 +1394,7 @@ void CTeamFortress2Mod::dispenserBuilt(const edict_t* pOwner, eEngiBuild type, e
 
 	index = ENTINDEX(pOwner)-1;
 
-	if ( index>=0 && index<MAX_PLAYERS )
+	if ( index>=0 && index<RCBOT_MAXPLAYERS )
 	{
 		if ( type == ENGI_DISP )
 		{

@@ -744,7 +744,7 @@ void CDODBot :: spawnInit ()
 
 	m_pNearestBomb = nullptr;
 
-	std::memset(m_CheckSmoke,0,sizeof(smoke_t)*MAX_PLAYERS);
+	std::memset(m_CheckSmoke,0,sizeof(smoke_t)*RCBOT_MAXPLAYERS);
 
 	while ( !m_nextVoicecmd.empty() )
 		m_nextVoicecmd.pop();
@@ -3487,7 +3487,7 @@ void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin,
 		static short int iSlot;
 		iSlot = ENTINDEX(pEntity)-1;
 
-		if (( iSlot >= 0 ) && ( iSlot < MAX_PLAYERS ))
+		if (( iSlot >= 0 ) && ( iSlot < RCBOT_MAXPLAYERS ))
 		{
 			static smoke_t *smokeinfo;
 			smokeinfo = &(m_CheckSmoke[iSlot]);
@@ -3513,7 +3513,7 @@ bool CDODBot :: isVisibleThroughSmoke ( edict_t *pSmoke, edict_t *pCheck )
 	iSlot = ENTINDEX(pCheck)-1;
 
 	// if pCheck is a player
-	if (( iSlot >= 0 ) && ( iSlot < MAX_PLAYERS ))
+	if (( iSlot >= 0 ) && ( iSlot < RCBOT_MAXPLAYERS ))
 	{
 		static smoke_t *smokeinfo;
 		smokeinfo = &(m_CheckSmoke[iSlot]);

@@ -1068,7 +1068,7 @@ public:
 	static edict_t *getSentryOwner ( edict_t *pSentry )
 	{
 		//for ( short int i = 1; i <= gpGlobals->maxClients; i ++ )
-		for ( short int i = 0; i < MAX_PLAYERS; i ++ )
+		for ( short int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 		{			
 			if ( m_SentryGuns[i].sentry.get() == pSentry )
 				return INDEXENT(i+1);
@@ -1125,7 +1125,7 @@ public:
 
 	static bool isSentrySapped ( edict_t *pSentry )
 	{
-		for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
+		for ( unsigned int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 		{
 			if ( m_SentryGuns[i].sentry.get() == pSentry )
 				return m_SentryGuns[i].sapper.get()!= nullptr;
@@ -1136,7 +1136,7 @@ public:
 
 	static bool isTeleporterSapped ( edict_t *pTele )
 	{
-		for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
+		for ( unsigned int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 		{
 			if ( m_Teleporters[i].entrance.get() == pTele || m_Teleporters[i].exit.get() == pTele )
 				return m_Teleporters[i].sapper.get()!= nullptr;
@@ -1147,7 +1147,7 @@ public:
 
 	static bool isDispenserSapped ( edict_t *pDisp )
 	{
-		for ( unsigned int i = 0; i < MAX_PLAYERS; i ++ )
+		for ( unsigned int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 		{
 			if ( m_Dispensers[i].disp.get() == pDisp )
 				return m_Dispensers[i].sapper.get()!= nullptr;
@@ -1267,9 +1267,9 @@ private:
 	static MyEHandle m_pPayLoadBombRed;
 	static MyEHandle m_pPayLoadBombBlue;
 
-	static tf_tele_t m_Teleporters[MAX_PLAYERS];	// used to let bots know who made a teleport ans where it goes
-	static tf_sentry_t m_SentryGuns[MAX_PLAYERS];	// used to let bots know if sentries have been sapped or not
-	static tf_disp_t  m_Dispensers[MAX_PLAYERS];	// used to let bots know where friendly/enemy dispensers are
+	static tf_tele_t m_Teleporters[RCBOT_MAXPLAYERS];	// used to let bots know who made a teleport ans where it goes
+	static tf_sentry_t m_SentryGuns[RCBOT_MAXPLAYERS];	// used to let bots know if sentries have been sapped or not
+	static tf_disp_t  m_Dispensers[RCBOT_MAXPLAYERS];	// used to let bots know where friendly/enemy dispensers are
 
 	static int m_iArea;
 
@@ -1297,7 +1297,7 @@ private:
 	static bool m_bBossSummoned;
 	static bool bFlagStateDefault;
 
-	static MyEHandle pMediGuns[MAX_PLAYERS];
+	static MyEHandle pMediGuns[RCBOT_MAXPLAYERS];
 	static bool m_bDontClearPoints;
 
 	static bool m_bRoundOver;

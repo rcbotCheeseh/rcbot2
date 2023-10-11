@@ -970,12 +970,12 @@ void CBotFortress :: spawnInit ()
 
 	//m_bWantToZoom = false;
 
-	std::memset(m_fCallMedicTime,0,sizeof(float)*MAX_PLAYERS);
+	std::memset(m_fCallMedicTime,0,sizeof(float)*RCBOT_MAXPLAYERS);
 	m_fWaitTurnSentry = 0.0f;
 	
 	m_pLastSeeMedic.reset();
 
-	std::memset(m_fSpyList,0,sizeof(float)*MAX_PLAYERS);
+	std::memset(m_fSpyList,0,sizeof(float)*RCBOT_MAXPLAYERS);
 
 	m_fTaunting = 0.0f; // bots not moving FIX
 

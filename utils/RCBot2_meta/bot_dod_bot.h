@@ -276,7 +276,7 @@ private:
 	bool m_bCheckClass;
 	bool m_bHasBomb;
 
-	smoke_t m_CheckSmoke[MAX_PLAYERS];
+	smoke_t m_CheckSmoke[RCBOT_MAXPLAYERS];
 
 	float m_fDeployMachineGunTime;
 	MyEHandle m_pNearestBomb; // "capture" bomb

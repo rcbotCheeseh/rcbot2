@@ -159,7 +159,7 @@ public:
 	CClientBroadcastRecipientFilter() {
 		m_iMaxCount = 0;
 
-		for (int i = 0; i < MAX_PLAYERS; ++i) {
+		for (int i = 0; i < RCBOT_MAXPLAYERS; ++i) {
 			const CClient* client = CClients::get(i);
 
 			if (client->isUsed()) {
@@ -182,7 +182,7 @@ public:
 private:
 
 	int m_iMaxCount;
-	int m_iPlayerSlot[MAX_PLAYERS];
+	int m_iPlayerSlot[RCBOT_MAXPLAYERS];
 };
 
 ///////////////
@@ -500,7 +500,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	int bot_count = 0;
 	int human_count = 0;
 
-	for (int i = 0; i < MAX_PLAYERS; ++i) {
+	for (int i = 0; i < RCBOT_MAXPLAYERS; ++i) {
 		m_iTargetBots[i] = 0;
 	}
 
@@ -555,7 +555,7 @@ bool RCBotPluginMeta::Unload(char *error, size_t maxlen)
 	SM_UnloadExtension();
 #endif
 	
-	//CBots::kickRandomBot(MAX_PLAYERS); //breaks the bot quota system? [APG]RoboCop[CL]
+	//CBots::kickRandomBot(RCBOT_MAXPLAYERS); //breaks the bot quota system? [APG]RoboCop[CL]
 	
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameDLL, LevelInit, server, this, &RCBotPluginMeta::Hook_LevelInit, true);
 	SH_REMOVE_HOOK_MEMFUNC(IServerGameDLL, ServerActivate, server, this, &RCBotPluginMeta::Hook_ServerActivate, true);
@@ -842,7 +842,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 		int human_count = 0;
 
 		// Count Players
-		for (int i = 0; i < MAX_PLAYERS; ++i) {
+		for (int i = 0; i < RCBOT_MAXPLAYERS; ++i) {
 			const CClient* client = CClients::get(i);
 			const CBot* bot = CBots::get(i);
 
@@ -863,7 +863,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 			}
 		}
 
-		if (human_count >= MAX_PLAYERS) {
+		if (human_count >= RCBOT_MAXPLAYERS) {
 			human_count = 0;
 		}
 

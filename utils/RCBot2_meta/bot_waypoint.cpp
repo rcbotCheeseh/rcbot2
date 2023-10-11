@@ -507,7 +507,7 @@ CWaypoint *CWaypointNavigator :: chooseBestFromBelief ( const std::vector<CWaypo
 
 				if ( iSearchFlags & WPT_SEARCH_AVOID_SENTRIES )
 				{
-					for ( int j = 0; j < MAX_PLAYERS; j ++ )
+					for ( int j = 0; j < RCBOT_MAXPLAYERS; j ++ )
 					{
 						edict_t *pSentry = CTeamFortress2Mod::getSentryGun(j);
 

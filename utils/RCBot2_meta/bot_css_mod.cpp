@@ -176,7 +176,7 @@ void CCounterStrikeSourceMod::onRoundStart()
     m_bIsBombPlanted = false;
     setBombFound(false);
     m_hBomb.Term();
-	for(short int i = 0; i < MAX_PLAYERS; i++)
+	for(short int i = 0; i < RCBOT_MAXPLAYERS; i++)
 	{
         CBot *pBot = CBots::get(i);
         CCSSBot *pCSBot = static_cast<CCSSBot*>(pBot);
@@ -206,7 +206,7 @@ void CCounterStrikeSourceMod::onFreezeTimeEnd()
         m_hBomb.Init(engine->IndexOfEdict(pC4), pC4->m_NetworkSerialNumber);
     }
 
-	for(short int i = 0; i < MAX_PLAYERS; i++)
+	for(short int i = 0; i < RCBOT_MAXPLAYERS; i++)
 	{
         CBot *pBot = CBots::get(i);
 
@@ -233,7 +233,7 @@ void CCounterStrikeSourceMod::onBombPlanted()
         m_hBomb.Init(engine->IndexOfEdict(pPlantedC4), pPlantedC4->m_NetworkSerialNumber);
     }
 
-	for(short int i = 0; i < MAX_PLAYERS; i++)
+	for(short int i = 0; i < RCBOT_MAXPLAYERS; i++)
 	{
         CBot *pBot = CBots::get(i);
 

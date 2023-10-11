@@ -47,7 +47,7 @@
 #include "bot_plugin_meta.h"
 
 // setup static client array
-CClient CClients::m_Clients[MAX_PLAYERS];
+CClient CClients::m_Clients[RCBOT_MAXPLAYERS];
 CClient *CClients::m_pListenServerClient = nullptr;
 bool CClients::m_bClientsDebugging = false;
 
@@ -1101,7 +1101,7 @@ void CClients :: clientThink ()
 
 	m_bClientsDebugging = false;
 
-	for ( int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		pClient = &m_Clients[i];
 
@@ -1119,7 +1119,7 @@ void CClients :: clientThink ()
 
 CClient *CClients :: findClientBySteamID (const char* szSteamID)
 {
-	for ( int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		CClient* pClient = &m_Clients[i];
 
@@ -1167,7 +1167,7 @@ const char *g_szDebugTags[15] =
 
 void CClients :: clientDebugMsg ( int iLev, const char *szMsg, CBot *pBot )
 {
-	for ( int i = 0; i < MAX_PLAYERS; i ++ )
+	for ( int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 	{
 		CClient* pClient = &m_Clients[i];
 
@@ -1200,7 +1200,7 @@ bool CClients :: clientsDebugging (int iLev)
 		return m_bClientsDebugging;
 	if ( m_bClientsDebugging )
 	{
-		for ( int i = 0; i < MAX_PLAYERS; i ++ )
+		for ( int i = 0; i < RCBOT_MAXPLAYERS; i ++ )
 		{
 			const CClient* pClient = CClients::get(i);
 

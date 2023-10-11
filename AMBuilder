@@ -96,6 +96,13 @@ sdks_requring_extern_math_functions = [
   'bms',
 ]
 
+# Decouple sourcesdk MAX_PLAYERS from the project - NoSoop
+# https://github.com/nosoop/rcbot2/commit/684f2a28189b4523d067a31b26778632e5e50212
+default_maxplayers = 65
+override_maxplayers = {
+  'tf2': 101
+}
+
 ###############
 # Make sure to edit PackageScript, which copies your files to their appropriate locations
 # Simple extensions do not need to modify past this point.
@@ -165,6 +172,9 @@ for sdk_name in MMS.sdks:
     if sdk.name in ['css', 'hl2dm', 'dods', 'sdk2013', 'bms', 'tf2', 'l4d', 'nucleardawn', 'l4d2']:
       if builder.target.platform in ['linux', 'mac']:
         cxx.defines += ['NO_HOOK_MALLOC', 'NO_MALLOC_OVERRIDE']
+		
+	# Decouple sourcesdk MAX_PLAYERS from the project - NoSoop
+    cxx.defines += ['RCBOT_MAXPLAYERS={}'.format(override_maxplayers.get(sdk.name, default_maxplayers))]
 
     if builder.target.platform in ['linux', 'mac']:
       ## RCBot2: link other dependencies
