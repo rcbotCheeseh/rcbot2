@@ -365,7 +365,8 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 
 	//"heavy" should me "heavyweapons" in TF2? [APG]RoboCop[CL]
 	char classNames[32][10] = {
-		"auto", "scout", "soldier", "pyro", "demoman", "heavy", "engineer", "medic", "sniper", "spy"
+		"auto", "scout", "sniper", "soldier", "demoman", "medic", "heavy",
+		"pyro", "spy", "engineer"
 	};
 	
 	char cmd[32];

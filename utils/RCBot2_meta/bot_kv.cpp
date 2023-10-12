@@ -116,7 +116,7 @@ bool CRCBotKeyValueList :: getInt ( const char *key, int *val ) const
 	if ( !pKV )
 		return false;
 	
-	*val = atoi(pKV->getValue());
+	*val = std::atoi(pKV->getValue());
 
 	return true;
 }
