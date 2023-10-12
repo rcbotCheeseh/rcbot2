@@ -461,7 +461,7 @@ public:
 
 	void setEdict ( edict_t *pEdict);
 
-	bool FVisible ( Vector &vOrigin, edict_t *pDest = nullptr) const;
+	bool FVisible (const Vector &vOrigin, edict_t *pDest = nullptr) const;
 
 	Vector getEyePosition () const;
 

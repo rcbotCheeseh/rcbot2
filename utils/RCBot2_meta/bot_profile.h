@@ -10,7 +10,7 @@ public:
 	{
 		memset(this,0,sizeof(CBotProfile));
 	}
-	CBotProfile ( CBotProfile &other );
+	CBotProfile (const CBotProfile &other );
 	// setup profile
 	CBotProfile (
 		const char *szName, 

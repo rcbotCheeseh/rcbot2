@@ -24,7 +24,7 @@ private:
 
 	void *findSignature (const void* addrInBase, const char* signature);
 protected:
-	void findFunc (CRCBotKeyValueList& kv, const char* pKey, const void* pAddrBase, const char* defaultsig);
+	void findFunc (const CRCBotKeyValueList& kv, const char* pKey, const void* pAddrBase, const char* defaultsig);
 
 	void *m_func;
 };

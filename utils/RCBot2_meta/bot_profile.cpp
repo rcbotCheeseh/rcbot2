@@ -41,7 +41,7 @@
 std::vector <CBotProfile*> CBotProfiles :: m_Profiles;
 CBotProfile *CBotProfiles :: m_pDefaultProfile = nullptr;
 
-CBotProfile :: CBotProfile ( CBotProfile &other )
+CBotProfile :: CBotProfile (const CBotProfile &other)
 {
 	*this = other;
 
