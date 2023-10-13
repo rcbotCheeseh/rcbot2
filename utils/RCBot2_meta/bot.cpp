@@ -593,7 +593,7 @@ bool CBot :: checkStuck ()
 					m_fSideSpeed = m_fIdealMoveSpeed/2;
 
 				m_fStrafeTime = engine->Time() + 2.0f;
-*/
+				*/
 				
 			}
 
@@ -1775,7 +1775,6 @@ void CBot ::debugBot(char *msg)
 		p!= nullptr ?p->GetName():"none",
 		szConditions
 		);
-
 }
 
 int CBot :: nearbyFriendlies (float fDistance)
@@ -3042,7 +3041,7 @@ bool CBots :: controlBot ( edict_t *pEdict )
 	return true;
 }
 
-#define SET_PROFILE_DATA_INT(varname,membername) if ( (varname) && *(varname) ) { pBotProfile->membername = atoi(varname); }
+#define SET_PROFILE_DATA_INT(varname,membername) if ( (varname) && *(varname) ) { pBotProfile->membername = std::atoi(varname); }
 #define SET_PROFILE_STRING(varname,localname,membername) if ( (varname) && *(varname) ) { (localname) = (char*)(varname); } else { (localname) = pBotProfile->membername; }
 
 bool CBots :: controlBot ( const char *szOldName, const char *szName, const char *szTeam, const char *szClass )

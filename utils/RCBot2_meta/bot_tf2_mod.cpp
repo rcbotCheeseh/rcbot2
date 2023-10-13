@@ -871,8 +871,8 @@ void CTeamFortress2Mod:: clientCommand ( edict_t *pEntity, int argc, const char 
 			u_VOICECMD vcmd;
 
 			vcmd.voicecmd = 0;
-			vcmd.b1.v1 = atoi(arg1);
-			vcmd.b1.v2 = atoi(arg2);
+			vcmd.b1.v1 = std::atoi(arg1);
+			vcmd.b1.v2 = std::atoi(arg2);
 
 			CBroadcastVoiceCommand voicecmd = CBroadcastVoiceCommand(pEntity,vcmd.voicecmd); 
 

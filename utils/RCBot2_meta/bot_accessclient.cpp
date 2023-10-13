@@ -167,7 +167,7 @@ void CAccessClients :: load ()
 				continue; // invalid
 			}
 
-			const int iAccess = atoi(&buffer[i]);
+			const int iAccess = std::atoi(&buffer[i]);
 
 			// invalid
 			if ( (szSteamID[0] == 0) || (szSteamID[0] == ' ' ) )

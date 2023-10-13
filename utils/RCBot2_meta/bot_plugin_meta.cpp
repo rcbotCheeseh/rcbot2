@@ -693,7 +693,7 @@ void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 	{
 		if ( pClient->isUsingMenu() )
 		{
-			int iCommand = atoi(args.Arg(1));
+			int iCommand = std::atoi(args.Arg(1));
 
 			// format is 1.2.3.4.5.6.7.8.9.0
 			if ( iCommand == 0 )

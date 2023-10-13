@@ -126,7 +126,7 @@ CBotCommandInline KickBotCommand("kickbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATE
 	}
 	else
 	{
-		const int team = atoi(pcmd);
+		const int team = std::atoi(pcmd);
 
 		CBots::kickRandomBotOnTeam(team);
 	}

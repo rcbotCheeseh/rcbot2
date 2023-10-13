@@ -1580,7 +1580,6 @@ void CWaypoint :: draw ( edict_t *pEdict, bool bDrawPaths, unsigned short int iD
 						g = 0;
 						a = 255;
 					}
-
 				}
 			}
 		}
@@ -2269,24 +2268,24 @@ int CWaypoints :: addWaypoint ( CClient *pClient, const char *type1, const char 
 
 		if ( t )
 			iFlags |= t->getBits();
-		else if ( atoi(type1) > 0 )
-			iArea = atoi(type1);
+		else if ( std::atoi(type1) > 0 )
+			iArea = std::atoi(type1);
 
 		if ( type2 && *type2 )
 		{
 			t = CWaypointTypes::getType(type2);
 			if ( t )
 				iFlags |= t->getBits();
-			else if ( atoi(type2) > 0 )
-				iArea = atoi(type2);
+			else if ( std::atoi(type2) > 0 )
+				iArea = std::atoi(type2);
 
 			if ( type3 && *type3 )
 			{
 				t = CWaypointTypes::getType(type3);
 				if ( t )
 					iFlags |= t->getBits();
-				else if ( atoi(type3) > 0 )
-					iArea = atoi(type3);
+				else if ( std::atoi(type3) > 0 )
+					iArea = std::atoi(type3);
 
 				if ( type4 && *type4 )
 				{
@@ -2294,8 +2293,8 @@ int CWaypoints :: addWaypoint ( CClient *pClient, const char *type1, const char 
 
 					if ( t )
 						iFlags |= t->getBits();
-					else if ( atoi(type4) > 0 )
-						iArea = atoi(type4);
+					else if ( std::atoi(type4) > 0 )
+						iArea = std::atoi(type4);
 
 				}
 			}
@@ -3364,7 +3363,6 @@ void CWaypointTest :: go ( edict_t *pPlayer )
 				}
 			}
 		}
-
 	}
 
 	delete pBots[0];
