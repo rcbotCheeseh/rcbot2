@@ -400,8 +400,8 @@ bool CBot :: FVisible ( edict_t *pEdict, bool bCheckHead )
 	if ( bCheckHead || pEdict == m_pEnemy || CBotGlobals::isPlayer(pEdict) )
 	{
 		// use this method to get origin -- quicker 
-		Vector vOrigin = pEdict->GetCollideable()->GetCollisionOrigin();
-		Vector vHead = vOrigin + Vector(0, 0, pEdict->GetCollideable()->OBBMaxs().z);
+		const Vector vOrigin = pEdict->GetCollideable()->GetCollisionOrigin();
+		const Vector vHead = vOrigin + Vector(0, 0, pEdict->GetCollideable()->OBBMaxs().z);
 
 		if ( FVisible(vHead,pEdict) )
 		{

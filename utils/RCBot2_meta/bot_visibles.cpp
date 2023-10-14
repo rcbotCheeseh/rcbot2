@@ -279,7 +279,7 @@ void CBotVisibles :: updateVisibles ()
 
 	if ( m_pBot->moveToIsValid() )
 	{
-		Vector vMoveTo = m_pBot->getMoveTo();
+		const Vector vMoveTo = m_pBot->getMoveTo();
 		if ( m_pBot->FVisible(vMoveTo) )
 			m_pBot->updateCondition(CONDITION_SEE_WAYPOINT);
 		else

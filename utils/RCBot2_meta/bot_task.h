@@ -284,7 +284,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotTF2Spam");
+		std::sprintf(string,"CBotTF2Spam");
 	}
 
 	float getDistance () const;
@@ -310,7 +310,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotTF2DemomanPipeJump");
+		std::sprintf(string,"CBotTF2DemomanPipeJump");
 	}
 private:
 	
@@ -337,7 +337,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotTF2DemomanPipeEnemy");
+		std::sprintf(string,"CBotTF2DemomanPipeEnemy");
 	}
 private:
 	Vector m_vStand;
@@ -362,7 +362,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotTF2DemomanPipeTrap");
+		std::sprintf(string,"CBotTF2DemomanPipeTrap");
 	}
 private:
 	Vector m_vPoint;
@@ -388,7 +388,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"Finding Pipe Waypoint");
+		std::sprintf(string,"Finding Pipe Waypoint");
 	}
 private:
 	int m_iters;
@@ -424,7 +424,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"Grav Gun Pickup");
+		std::sprintf(string,"Grav Gun Pickup");
 	}
 private:
 	MyEHandle m_Weapon;
@@ -451,7 +451,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"Use Charger");
+		std::sprintf(string,"Use Charger");
 	}
 private:
 	MyEHandle m_pCharger;
@@ -481,7 +481,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"Use Button");
+		std::sprintf(string,"Use Button");
 	}
 private:
 	MyEHandle m_pButton;
@@ -498,7 +498,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotTF2MedicHeal");
+		std::sprintf(string,"CBotTF2MedicHeal");
 	}
 private:
 	MyEHandle m_pHeal;
@@ -516,7 +516,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotRemoveSapper");
+		std::sprintf(string,"CBotRemoveSapper");
 	}
 private:
 	float m_fTime;
@@ -534,7 +534,7 @@ public:
 
 	void debugString(char *string) override
 	{
-		sprintf(string, "CBotUseLunchBoxDrink");
+		std::sprintf(string, "CBotUseLunchBoxDrink");
 	}
 private:
 	float m_fTime;
@@ -549,7 +549,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotUseBuffITem");
+		std::sprintf(string,"CBotUseBuffITem");
 	}
 private:
 	float m_fTime;
@@ -564,7 +564,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotBackstab");
+		std::sprintf(string,"CBotBackstab");
 	}
 private:
 	float m_fTime;
@@ -584,7 +584,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotFollowSquadLeader");
+		std::sprintf(string,"CBotFollowSquadLeader");
 	}
 private:
 	edict_t *m_pPlayer;
@@ -608,7 +608,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotFollowSquadLeader");
+		std::sprintf(string,"CBotFollowSquadLeader");
 	}
 private:
 	CBotSquad *m_pSquad;
@@ -629,7 +629,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotNest");
+		std::sprintf(string,"CBotNest");
 	}
 private:
 	float m_fTime;
@@ -655,7 +655,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotDefendTask");
+		std::sprintf(string,"CBotDefendTask");
 	}
 private:
 	float m_fTime;
@@ -687,7 +687,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotInvestigateTask");
+		std::sprintf(string,"CBotInvestigateTask");
 	}
 private:
 	int m_iState;
@@ -710,7 +710,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotTF2EngiLookAfter");
+		std::sprintf(string,"CBotTF2EngiLookAfter");
 	}
 private:
 	float m_fTime;
@@ -727,7 +727,7 @@ public:
 
 	void debugString(char *string) override
 	{
-		sprintf(string, "CBotSnipe");
+		std::sprintf(string, "CBotSnipe");
 	}
 private:
 	float m_fTime; // time of task
@@ -756,7 +756,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotSnipe");
+		std::sprintf(string,"CBotSnipe");
 	}
 private:
 	float m_fTime; // time of task
@@ -830,7 +830,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CBotTF2SpyDisguise");
+		std::sprintf(string,"CBotTF2SpyDisguise");
 	}
 };
 
@@ -1219,7 +1219,7 @@ public:
 	void execute(CBot *pBot,CBotSchedule *pSchedule) override;
 	void debugString(char *string) override
 	{
-		sprintf(string,"CSS Perform Buy");
+		std::sprintf(string,"CSS Perform Buy");
 	}
 private:
 	float m_fDelay = 0.0f;
@@ -1235,7 +1235,7 @@ public:
 	void execute(CBot *pBot,CBotSchedule *pSchedule) override;
 	void debugString(char *string) override
 	{
-		sprintf(string,"CSS Plant C4");
+		std::sprintf(string,"CSS Plant C4");
 	}
 };
 
@@ -1273,7 +1273,7 @@ public:
 	void execute(CBot *pBot,CBotSchedule *pSchedule) override;
 	void debugString(char *string) override
 	{
-		sprintf(string,"CSS Defuse C4\nBomb Vector (%0.4f,%0.4f,%0.4f)", m_vBomb.x, m_vBomb.y, m_vBomb.z);
+		std::sprintf(string,"CSS Defuse C4\nBomb Vector (%0.4f,%0.4f,%0.4f)", m_vBomb.x, m_vBomb.y, m_vBomb.z);
 	}
 private:
 	Vector m_vBomb;
@@ -1299,7 +1299,7 @@ public:
 	void execute(CBot *pBot, CBotSchedule *pSchedule) override;
 	void debugString(char *string) override
 	{
-		sprintf(string,"CSS Guard Task\nm_fEnemyTime = %.1f\nm_fTime = %.1f", m_fEnemyTime, m_fTime);
+		std::sprintf(string,"CSS Guard Task\nm_fEnemyTime = %.1f\nm_fTime = %.1f", m_fEnemyTime, m_fTime);
 	}
 private:
 	float m_fTime;
@@ -1370,7 +1370,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CMessAround");
+		std::sprintf(string,"CMessAround");
 	}
 private:
 	float m_fTime;
@@ -1389,7 +1389,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CFindLastEnemy");
+		std::sprintf(string,"CFindLastEnemy");
 	}
 private:
 	Vector m_vLast;
@@ -1410,7 +1410,7 @@ public:
 
 	void debugString ( char *string ) override
 	{
-		sprintf(string,"CFindGoodHideSpot");
+		std::sprintf(string,"CFindGoodHideSpot");
 	}
 private:
 	Vector m_vHideFrom;
@@ -1569,7 +1569,7 @@ public:
 	}
 	void debugString(char *string) override
 	{
-		sprintf(string, "Break Item Crate");
+		std::sprintf(string, "Break Item Crate");
 	}
 	void execute ( CBot *pBot, CBotSchedule *pSchedule ) override;
 private:
@@ -1590,7 +1590,7 @@ public:
 	}
 	void debugString(char *string) override
 	{
-		sprintf(string, "Use Charger");
+		std::sprintf(string, "Use Charger");
 	}
 	void execute ( CBot *pBot, CBotSchedule *pSchedule ) override;
 private:

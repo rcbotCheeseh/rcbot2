@@ -435,7 +435,7 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 	{
 		this->clearWeapons();
 
-		CBaseHandle* m_Weapons = CClassInterface::getWeaponList(m_pBot->getEdict());
+		const CBaseHandle* m_Weapons = CClassInterface::getWeaponList(m_pBot->getEdict());
 		CBotWeapon* m_BotWeapon_iter = m_theWeapons; //m_BotWeapon_iter not used? [APG]RoboCop[CL]
 
 		// loop through the weapons array and see if it is in the CBaseCombatCharacter
