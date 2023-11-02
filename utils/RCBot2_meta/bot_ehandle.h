@@ -102,7 +102,7 @@ public:
 		return get() == other.get();
 	}
 
-	edict_t * operator = ( edict_t *pent )
+	edict_t *operator = ( edict_t *pent )
 	{
 		m_pEnt = pent;
 

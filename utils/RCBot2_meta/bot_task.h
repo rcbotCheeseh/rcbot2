@@ -917,7 +917,7 @@ private:
 class CBotDODBomb : public CBotTask
 {
 public:
-	CBotDODBomb ( int iBombType, int iBombID, edict_t *m_pBombTarget, const Vector& vPosition, int iPrevOwner ); //TODO: *m_pBombTarget should be defined properly? [APG]RoboCop[CL]
+	CBotDODBomb ( int iBombType, int iBombID, edict_t *m_pBomb, const Vector& vPosition, int iPrevOwner );
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
 
 	void debugString ( char *string ) override;

@@ -126,7 +126,7 @@ public:
 
 	virtual void mapInit ();
 
-	virtual bool playerSpawned ( edict_t *pPlayer ); //TODO: should be *pEntity not *pPlayer? [APG]RoboCop[CL]
+	virtual bool playerSpawned ( edict_t *pPlayer );
 
 	virtual void clientCommand ( edict_t *pEntity, int argc,const char *pcmd, const char *arg1, const char *arg2 ) {}
 

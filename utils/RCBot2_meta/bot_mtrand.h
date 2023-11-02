@@ -91,7 +91,7 @@ static void seed(unsigned long); // seed with 32 bit integer
 // overload operator() to make this a generator (functor)
   unsigned long operator()() { return rand_int32(); }
 // 2007-02-11: made the destructor virtual; thanks "double more" for pointing this out
-  virtual ~MTRand_int32() {} // destructor
+  virtual ~MTRand_int32() = default; // destructor
 protected: // used by derived classes, otherwise not accessible; use the ()-operator
   unsigned long rand_int32(); // generate 32 bit random integer
 private:
@@ -128,10 +128,11 @@ inline unsigned long MTRand_int32::rand_int32() { // generate 32 bit random int
 // generates double floating point numbers in the half-open interval [0, 1)
 class MTRand : public MTRand_int32 {
 public:
-  MTRand() : MTRand_int32() {}
+  MTRand() = default;
   MTRand(unsigned long seed) : MTRand_int32(seed) {}
   MTRand(const unsigned long* seed, int size) : MTRand_int32(seed, size) {}
-  ~MTRand() override {}
+  ~MTRand() override = default;
+
   double operator()() {
     return static_cast<double>(rand_int32()) * (1. / 4294967296.); } // divided by 2^32
 private:
@@ -142,10 +143,11 @@ private:
 // generates double floating point numbers in the closed interval [0, 1]
 class MTRand_closed : public MTRand_int32 {
 public:
-  MTRand_closed() : MTRand_int32() {}
+  MTRand_closed() = default;
   MTRand_closed(unsigned long seed) : MTRand_int32(seed) {}
   MTRand_closed(const unsigned long* seed, int size) : MTRand_int32(seed, size) {}
-  ~MTRand_closed() override {}
+  ~MTRand_closed() override = default;
+
   double operator()() {
     return static_cast<double>(rand_int32()) * (1. / 4294967295.); } // divided by 2^32 - 1
 private:
@@ -156,10 +158,11 @@ private:
 // generates double floating point numbers in the open interval (0, 1)
 class MTRand_open : public MTRand_int32 {
 public:
-  MTRand_open() : MTRand_int32() {}
+  MTRand_open() = default;
   MTRand_open(unsigned long seed) : MTRand_int32(seed) {}
   MTRand_open(const unsigned long* seed, int size) : MTRand_int32(seed, size) {}
-  ~MTRand_open() override {}
+  ~MTRand_open() override = default;
+
   double operator()() {
     return (static_cast<double>(rand_int32()) + .5) * (1. / 4294967296.); } // divided by 2^32
 private:
@@ -170,10 +173,11 @@ private:
 // generates 53 bit resolution doubles in the half-open interval [0, 1)
 class MTRand53 : public MTRand_int32 {
 public:
-  MTRand53() : MTRand_int32() {}
+  MTRand53() = default;
   MTRand53(unsigned long seed) : MTRand_int32(seed) {}
   MTRand53(const unsigned long* seed, int size) : MTRand_int32(seed, size) {}
-  ~MTRand53() override {}
+  ~MTRand53() override = default;
+
   double operator()() {
     return (static_cast<double>(rand_int32() >> 5) * 67108864. + 
       static_cast<double>(rand_int32() >> 6)) * (1. / 9007199254740992.); }

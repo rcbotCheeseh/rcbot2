@@ -331,7 +331,7 @@ void CBotMod::mapInit()
 	m_bPlayerHasSpawned = false;
 }
 
-bool CBotMod::playerSpawned(edict_t* pEntity)
+bool CBotMod::playerSpawned(edict_t* pPlayer)
 {
 	if (m_bPlayerHasSpawned)
 		return false;
