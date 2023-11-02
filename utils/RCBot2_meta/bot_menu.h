@@ -194,7 +194,7 @@ private:
 class CWaypointFlagMenu : public CBotMenu
 {
 public:
-	CWaypointFlagMenu (CBotMenu *pPrev); //TODO: should be defined properly? [APG]RoboCop[CL]
+	CWaypointFlagMenu (CBotMenu *pPrev);
 	//CWaypointFlagMenu ( int iShow );
 	const char *getCaption(CClient *pClient,WptColor &color ) override;
 };

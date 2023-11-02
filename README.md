@@ -111,6 +111,7 @@ Additionally, `rcbot/logging.{h,cpp}` is released separately under the
 - TF2 Classic support - Technochips
 - Linux Black Mesa and SDK2013 mathlib fix - Sappho
 - Dystopia support - Soft As Hell
+- Major waypointer for TF2 - LK777
 
 ## Waypointers:-
 
@@ -131,4 +132,3 @@ Additionally, `rcbot/logging.{h,cpp}` is released separately under the
 - ChiefEnragedDemo
 - madmax2
 - Pyri
-- LK777
