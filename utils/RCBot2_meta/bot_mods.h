@@ -794,6 +794,7 @@ typedef enum
 	TF_MAP_RD,
 	TF_MAP_BUMPERCARS,
 	TF_MAP_PD, // Player Destruction
+	TF_MAP_ZI, // Scream Fortress XV (Oct 9th, 2023) update for Zombie Infection maps - [APG]RoboCop[CL]
 	TF_MAP_MAX
 }eTFMapType;
 
