@@ -426,6 +426,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 	{
 		if (CTeamFortress2Mod::isMapType(TF_MAP_MVM))
 		{
+			//TODO: MedicBots doesn't appear to revive players [APG]RoboCop[CL]
 			if (std::strcmp(pPlayer->GetClassName(), "entity_revive_marker") == 0)
 			{
 				const float fDistance = distanceFrom(pPlayer);
@@ -627,6 +628,7 @@ bool CBotFortress :: setVisible ( edict_t *pEntity, bool bVisible )
 			}
 			else
 			{
+				//TODO: MedicBots doesn't appear to revive players [APG]RoboCop[CL]
 				// I can see player recently shouted MEDIC! (and this is an MVM map)
 				if (CTeamFortress2Mod::isMapType(TF_MAP_MVM) && std::strcmp(pEntity->GetClassName(), "entity_revive_marker") == 0)
 				{
