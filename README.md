@@ -77,7 +77,6 @@ in `build/package`.
 
 [Building SourceMod]: https://wiki.alliedmods.net/Building_SourceMod
 
-
 ## License:-
 
 RCBot2 is released under the [GNU Affero General Public License][].  Among other things, this
@@ -112,8 +111,8 @@ Additionally, `rcbot/logging.{h,cpp}` is released separately under the
 - TF2 Classic support - Technochips
 - Linux Black Mesa and SDK2013 mathlib fix - Sappho
 - Dystopia support - Soft As Hell
-- Major waypointer for TF2 - LK777, RussianTails, Witch
-- Major waypointer for DoDS - INsane, Gamelarg05
+- Major waypointer for TF2 - LK777, RussiaTails, Witch
+- Major waypointer for DoDS - INsane, Gamelarg05, genmac
 
 ## Waypointers:-
 
