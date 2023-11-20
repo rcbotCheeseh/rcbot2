@@ -59,7 +59,7 @@
 void getGrenadeAngle ( double v, double g, double desx, double desy, float *fa1, float *fa2 )
 {
 	//normalize
-	const double fmax = std::max(v, std::max(g, std::max(desx, desy)));
+	const float fmax = MAX(v, MAX(g, MAX(desx, desy)));
 
 	v /= fmax;
 	g /= fmax;
