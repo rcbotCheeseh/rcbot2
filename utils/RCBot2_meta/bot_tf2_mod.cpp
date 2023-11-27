@@ -284,7 +284,9 @@ void CTeamFortress2Mod :: mapInit ()
 	else if ( std::strncmp(szmapname,"pd_",3) == 0 )
 		m_MapType = TF_MAP_PD; // player destruction
 	else if (std::strncmp(szmapname, "zi_", 3) == 0)
-		m_MapType = TF_MAP_ZI; // Zombie Infection //TODO: add support for this gamemode [APG]RoboCop[CL]
+		m_MapType = TF_MAP_ZI; // Zombie Infection //TODO: add support for those gamemodes [APG]RoboCop[CL]
+	else if (std::strncmp(szmapname, "pass_", 3) == 0)
+		m_MapType = TF_MAP_PASS; // PASS Time
 	else
 		m_MapType = TF_MAP_DM; // deathmatch //TODO: to prevent bots from idling in their spawns by giving them basic tasks [APG]RoboCop[CL]
 
@@ -535,18 +537,19 @@ bool CTeamFortress2Mod ::isBoss ( edict_t *pEntity, float *fFactor )
 	{
 		if ( m_pBoss.get() == pEntity )
 			return true;
+		// TODO: to allow RCBot to target Mafia Skeleton in pl_spineyard [APG]RoboCop[CL]
 		// for bots to target skeletons [APG]RoboCop[CL]
 		if (std::strcmp(pEntity->GetClassName(),"tf_zombie")==0)
 		{
 			m_pBoss = pEntity;
 			return true;
 		}
-		// to prevent shooting at ghosts? [APG]RoboCop[CL]
-		//if (std::strcmp(pEntity->GetClassName(),"ghost")==0)
-		//{
-		//	m_pBoss = pEntity;
-		//	return false;
-		//}
+		// TODO: to prevent shooting at ghosts? [APG]RoboCop[CL]
+		if (std::strcmp(pEntity->GetClassName(),"ghost")==0)
+		{
+			m_pBoss = pEntity;
+			return false;
+		}
 		
 	}
 	else if ( CTeamFortress2Mod::isMapType(TF_MAP_MVM) )
