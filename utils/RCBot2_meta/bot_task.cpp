@@ -52,6 +52,10 @@
 #include "bot_waypoint_visibility.h"
 #include "bot_synergy.h"
 
+#ifdef WIN32
+#undef min
+#undef max
+#endif
 
 // desx and desy must be normalized
 // desx = distance (should be 2d)
