@@ -134,3 +134,25 @@ Additionally, `rcbot/logging.{h,cpp}` is released separately under the
 - ChiefEnragedDemo
 - madmax2
 - Pyri
+- Softny		
+- Wolf
+- TesterYYY		
+- darkranger		
+- Emotional
+- J@ck@l		
+- YuriFR
+- Otakumanu		
+- 芝士人
+- Eye of Justice
+- TheSpyhasaGun (ScoutDogger)		
+- NifesNforks
+- parkourtrane
+- assface
+- Doc Lithius
+- Kamaji
+- Geralt
+- Smoker		
+- dzoo11
+- Combine Soldier		
+- cyglade
+- TFBot_Maverick

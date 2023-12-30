@@ -663,15 +663,18 @@ CBotCommandInline WaypointShowVisCommand("showvis", 0, [](CClient *pClient, cons
 	return COMMAND_ACCESSED;
 }, "Go to a waypoint, use showvis to see visibility");
 
-CBotCommandInline WaypointAutoWaypointCommand("autowaypoint", CMD_ACCESS_WAYPOINT, [](CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5)
-{
-	if ( pClient )
+CBotCommandInline WaypointAutoWaypointCommand("autowaypoint", CMD_ACCESS_WAYPOINT, [](CClient* pClient, const char* pcmd, const char* arg1, const char* arg2, const char* arg3, const char* arg4, const char* arg5)
 	{
-		pClient->setAutoWaypointMode(atoi(pcmd)>0,atoi(pcmd)==2);
-		CBotGlobals::botMessage(pClient->getPlayer(),0,"Autowaypointing Mode %s, Debug %s",(atoi(pcmd)>0)?"ON":"OFF",(atoi(pcmd)==2)?"ON":"OFF");
-	}
-	return COMMAND_ACCESSED;
-});
+		if (pClient)
+		{
+			const int pcmdValue = atoi(pcmd);
+			const bool isPcmdGreaterThanZero = pcmdValue > 0;
+			const bool isPcmdEqualToTwo = pcmdValue == 2;
+			pClient->setAutoWaypointMode(isPcmdGreaterThanZero, isPcmdEqualToTwo);
+			CBotGlobals::botMessage(pClient->getPlayer(), 0, "Autowaypointing Mode %s, Debug %s", isPcmdGreaterThanZero ? "ON" : "OFF", isPcmdEqualToTwo ? "ON" : "OFF");
+		}
+		return COMMAND_ACCESSED;
+	});
 
 CBotCommandInline WaypointAutoFix("autofix", 0, [](CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5)
 {
