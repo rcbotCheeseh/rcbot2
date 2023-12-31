@@ -156,3 +156,6 @@ Additionally, `rcbot/logging.{h,cpp}` is released separately under the
 - Combine Soldier		
 - cyglade
 - TFBot_Maverick
+- apdonato
+- Sntr
+- mehdichallenger		
