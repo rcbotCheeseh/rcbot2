@@ -244,7 +244,7 @@ void CBotUtilities::freeMemory()
 	// FREE LIST
 	while ((temp = m_pBest.head) != nullptr)
 	{
-		temp = m_pBest.head;
+		//temp = m_pBest.head;
 		m_pBest.head = m_pBest.head->next;
 		std::free(temp);
 	}

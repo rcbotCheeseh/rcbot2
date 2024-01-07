@@ -2166,10 +2166,10 @@ void CFindPathTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 				{
 					pBot->lookAtEdict(m_pEdict);
 
-					if ( m_flags.bits.m_bCompleteInRangeOfEdict && m_flags.bits.m_bCompleteSeeTaskEdict )
+					if (m_flags.bits.m_bCompleteInRangeOfEdict && m_flags.bits.m_bCompleteSeeTaskEdict)
 					{
 						// complete if inrange AND see edict
-						if ( m_flags.bits.m_bCompleteInRangeOfEdict && pBot->distanceFrom(m_pEdict)<m_fRange && pBot->isVisible(m_pEdict) )
+						if (pBot->distanceFrom(m_pEdict) < m_fRange && pBot->isVisible(m_pEdict))
 							complete();
 					}
 					else if ( !m_flags.bits.m_bDontGoToEdict && pBot->isVisible(m_pEdict) )

@@ -189,6 +189,7 @@ public:
 		m_class = nullptr;
 		m_value = nullptr;
 		m_offset = 0;
+		m_preoffset = 0;
 	}
 
 	CClassInterfaceValue ( char *key, char *value, unsigned int preoffset )

@@ -122,57 +122,55 @@ bool CDODMod :: shouldAttack ( int iTeam )
 ////////////////////////////////////////////////
 void CDODMod :: initMod ()
 {
-///-------------------------------------------------
-	CBotGlobals::botMessage(nullptr,0,"Training DOD:S capture decision 'NN' ... hold on...");
+	///-------------------------------------------------
+	CBotGlobals::botMessage(nullptr, 0, "Training DOD:S capture decision 'NN' ... hold on...");
 
-	const CBotNeuralNet *nn = new CBotNeuralNet(2,2,2,1,0.4f);
-
-	CTrainingSet *tset = new CTrainingSet(2,1,4);
-
-	tset->setScale(0.0f,1.0f);
-
-	tset->addSet();
-	tset->in(1.0f/5); // E - enemy flag ratio
-	tset->in(1.0f/5); // T - team flag ratio
-	tset->out(0.9f); // probability of attack
-
-	tset->addSet();
-	tset->in(4.0f/5); // E - enemy flag ratio
-	tset->in(1.0f/5); // T - team flag ratio
-	tset->out(0.2f); // probability of attack (mostly defend)
+	const CBotNeuralNet nn(2, 2, 2, 1, 0.4f);
 	
-	tset->addSet();
-	tset->in(1.0f/5); // E - enemy flag ratio
-	tset->in(4.0f/5); // T - team flag ratio
-	tset->out(0.9f); // probability of attack
+	CTrainingSet tset(2, 1, 4);
 
-	tset->addSet();
-	tset->in(0.5f); // E - enemy flag ratio
-	tset->in(0.5f); // T - team flag ratio
-	tset->out(0.6f); // probability of attack
+	tset.setScale(0.0f,1.0f);
 
-	nn->batch_train(tset,1000);
+	tset.addSet();
+	tset.in(1.0f/5); // E - enemy flag ratio
+	tset.in(1.0f/5); // T - team flag ratio
+	tset.out(0.9f); // probability of attack
+
+	tset.addSet();
+	tset.in(4.0f/5); // E - enemy flag ratio
+	tset.in(1.0f/5); // T - team flag ratio
+	tset.out(0.2f); // probability of attack (mostly defend)
+	
+	tset.addSet();
+	tset.in(1.0f/5); // E - enemy flag ratio
+	tset.in(4.0f/5); // T - team flag ratio
+	tset.out(0.9f); // probability of attack
+
+	tset.addSet();
+	tset.in(0.5f); // E - enemy flag ratio
+	tset.in(0.5f); // T - team flag ratio
+	tset.out(0.6f); // probability of attack
+
+	nn.batch_train(&tset,1000);
 
 	// create look up table for probabilities
 	for ( short int i = 0; i <= MAX_DOD_FLAGS; i ++ )
 	{
 		for ( short int j = 0; j <= MAX_DOD_FLAGS; j ++ )
 		{
-			tset->init();
-			tset->addSet();
-			tset->in(static_cast<float>(i) / MAX_DOD_FLAGS);
-			tset->in(static_cast<float>(j) / MAX_DOD_FLAGS);
-			nn->execute(tset->getBatches()->in,&fAttackProbLookUp[i][j],0.0f,1.0f);
+			tset.init();
+			tset.addSet();
+			tset.in(static_cast<float>(i) / MAX_DOD_FLAGS);
+			tset.in(static_cast<float>(j) / MAX_DOD_FLAGS);
+			nn.execute(tset.getBatches()->in,&fAttackProbLookUp[i][j],0.0f,1.0f);
 		}
 	}
 
-	tset->freeMemory();
-	delete tset;
-	delete nn;
+	tset.freeMemory();
 
-	CBotGlobals::botMessage(nullptr,0,"... done!");
-///-------------------------------------------------
-
+	CBotGlobals::botMessage(nullptr, 0, "... done!");
+	///-------------------------------------------------
+	
 	CWeapons::loadWeapons(m_szWeaponListName == nullptr ? "DOD" : m_szWeaponListName, DODWeaps);
 	//CWeapons::loadWeapons("DOD", DODWeaps);
 	/*

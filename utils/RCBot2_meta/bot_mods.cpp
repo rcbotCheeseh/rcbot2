@@ -127,7 +127,7 @@ void CBotMods::parseFile()
 
 			bottype = BOTTYPE_GENERIC;
 
-			modtype = MOD_CUSTOM;
+			//modtype = MOD_CUSTOM;
 
 			if (!strcmpi("CUSTOM", val))
 			{

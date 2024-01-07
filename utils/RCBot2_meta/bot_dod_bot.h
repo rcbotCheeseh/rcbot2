@@ -164,7 +164,7 @@ public:
 
 	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true ) override;
 
-	float getArmorPercent () const { return 0.01f * int(m_pPlayerInfo->GetArmorValue()); }
+	float getArmorPercent () const { return 0.01f * static_cast<float>(m_pPlayerInfo->GetArmorValue()); }
 
 	void getTasks (unsigned int iIgnore) override;
 
