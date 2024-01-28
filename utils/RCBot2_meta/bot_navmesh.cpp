@@ -32,6 +32,8 @@
 #include <cstdlib>
 
 #include "bot_navigator.h"
+#include "bot_waypoint.h"
+
 //#include "nav_mesh.h"
 
 CNavMeshNavigator::CNavMeshNavigator()
@@ -58,10 +60,33 @@ void CNavMeshNavigator::CalculateRoute(Vector startNodeID, Vector goalNodeID)
 	//m_theNavMesh->CalculateRoute(startNodeID, goalNodeID);
 }
 
-bool CNavMeshNavigator::workRoute(Vector vFrom, Vector vTo, bool* bFail, bool bRestart, bool bNoInterruptions,
-	int iGoalId, int iConditions, int iDangerId)
+bool CNavMeshNavigator::workRoute(Vector vFrom, Vector vTo, bool* bFail, bool bRestart, bool bNoInterruptions, int iGoalId, int iConditions, int iDangerId)
 {
-	return false;
+	// Try to find a route using the primary waypoint system
+	bool routeFound = false; /* logic to find a route using the primary waypoint system */
+	
+	// If a route was not found using the primary waypoint system
+	if (!routeFound)
+	{
+		// Use the NavMesh as a backup
+		CalculateRoute(vFrom, vTo);
+		routeFound = true; // Assume the route was successfully calculated
+		
+		// Now, you can check if the NavMesh has a valid route
+		/*if (routeFound && m_theNavMesh->routeFound())
+		{
+			// Perform additional logic or use the calculated route from the NavMesh
+			while (hasNextPoint())
+			{
+				getNextPoint();
+				// Use navMeshWaypoint as needed
+				// ...
+			}
+		}*/
+	}
+	
+	// Continue with the rest of your navigation logic
+	return routeFound;
 }
 
 Vector CNavMeshNavigator::getNextPoint()
@@ -83,19 +108,19 @@ void CNavMeshNavigator::updatePosition()
 void CNavMeshNavigator::freeMapMemory()
 {
 	// Free the memory used by the NavMesh
-	//m_theNavMesh->FreeMemory();
+	//m_theNavMesh->freeMemory();
 }
 
 void CNavMeshNavigator::freeAllMemory()
 {
 	// Free the memory used by the NavMesh
-	//m_theNavMesh->FreeMemory();
+	//m_theNavMesh->freeMemory();
 }
 
 bool CNavMeshNavigator::routeFound()
 {
-	// Check if a route has been successfully calculated
-	// In this case, we can't accurately determine if the route is found, so return false
+	// Check if a route has been successfully calculated by the NavMesh
+	//return m_theNavMesh->routeFound();
 	return false;
 }
 

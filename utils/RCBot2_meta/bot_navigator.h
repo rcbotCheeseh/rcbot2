@@ -40,7 +40,14 @@
 
 #include "bot_belief.h"
 
-class CNavMesh;
+class CNavMesh {
+public:
+	// other methods...
+	static void freeMemory()
+	{
+		// implementation of freeing memory
+	}
+};
 class CWaypointVisibilityTable;
 
 #define MAX_BELIEF 200.0f
@@ -535,7 +542,7 @@ public:
 
 	//Vector getEnemyPositionPinchPoint ( Vector vOrigin );
 private:
-	CNavMesh * m_pNavMesh = nullptr;
+	CNavMesh * m_pNavMesh;
 };
 
 #endif
