@@ -226,9 +226,6 @@
     <ClInclude Include="bot_commands.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="bot_config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="bot_configfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -350,9 +347,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bot_sigscan.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="bot_hooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bot_cvars.h">

@@ -294,7 +294,6 @@
     <ClInclude Include="bot_buttons.h" />
     <ClInclude Include="bot_client.h" />
     <ClInclude Include="bot_commands.h" />
-    <ClInclude Include="bot_config.h" />
     <ClInclude Include="bot_configfile.h" />
     <ClInclude Include="bot_const.h" />
     <ClInclude Include="bot_coop.h" />
@@ -311,7 +310,6 @@
     <ClInclude Include="bot_globals.h" />
     <ClInclude Include="bot_hl1dmsrc_bot.h" />
     <ClInclude Include="bot_hldm_bot.h" />
-    <ClInclude Include="bot_hooks.h" />
     <ClInclude Include="bot_kv.h" />
     <ClInclude Include="bot_menu.h" />
     <ClInclude Include="bot_mods.h" />
