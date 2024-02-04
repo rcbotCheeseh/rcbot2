@@ -47,15 +47,17 @@ typedef enum
 
 #define NEED_ARG(x) if ( !(x) || !*(x) ) return COMMAND_ERROR;
 
-
-#define CMD_ACCESS_NONE				0
-#define CMD_ACCESS_WAYPOINT			(1<<0)
-#define CMD_ACCESS_BOT				(1<<1)
-#define CMD_ACCESS_UTIL				(1<<2)
-#define CMD_ACCESS_CONFIG			(1<<3)
-#define CMD_ACCESS_DEBUG			(1<<4)
-#define CMD_ACCESS_USERS			(1<<5)
-#define CMD_ACCESS_DEDICATED		(1<<6) // replaces canbeUsedDedicated
+enum
+{
+	CMD_ACCESS_NONE = 0,
+	CMD_ACCESS_WAYPOINT = 1<<0,
+	CMD_ACCESS_BOT = 1<<1,
+	CMD_ACCESS_UTIL = 1<<2,
+	CMD_ACCESS_CONFIG = 1<<3,
+	CMD_ACCESS_DEBUG = 1<<4,
+	CMD_ACCESS_USERS = 1<<5,
+	CMD_ACCESS_DEDICATED = 1<<6 // replaces canbeUsedDedicated
+};
 
 #define CMD_ACCESS_ALL (CMD_ACCESS_WAYPOINT|CMD_ACCESS_UTIL|CMD_ACCESS_BOT|CMD_ACCESS_CONFIG|CMD_ACCESS_DEBUG|CMD_ACCESS_USERS)
 
@@ -67,6 +69,8 @@ protected:
 	CBotCommand () : m_iAccessLevel{0}, m_szCommand{nullptr}, m_szHelp{nullptr} { }
 	
 public:
+	virtual ~CBotCommand() = default;
+	
 	// initialise
 	//CBotCommand(const char *command, int iAccessLevel = 0) :
 	//		m_iAccessLevel{iAccessLevel}, m_szCommand{command} {};

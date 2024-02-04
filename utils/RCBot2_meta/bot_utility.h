@@ -189,7 +189,7 @@ private:
 typedef struct util_node_s
 {
   CBotUtility *util;
-  struct util_node_s *next;
+  util_node_s *next;
 }util_node_t;
 
 

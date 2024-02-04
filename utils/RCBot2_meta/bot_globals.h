@@ -44,9 +44,12 @@
 #include <cctype>
 #endif
 
-#define MAX_MAP_STRING_LEN 64
-#define MAX_PATH_LEN 512
-#define MAX_ENTITIES 2048
+enum
+{
+	MAX_MAP_STRING_LEN = 64,
+	MAX_PATH_LEN = 512,
+	MAX_ENTITIES = 2048
+};
 
 class CBotGlobals
 {
@@ -206,10 +209,11 @@ public:
 
 	static Vector getVelocity ( edict_t *pPlayer );
 
-	static bool isBoundsDefinedInEntitySpace( edict_t *pEntity )
+	static bool isBoundsDefinedInEntitySpace(edict_t* pEntity)
 	{
-		return (pEntity->GetCollideable()->GetSolidFlags() & FSOLID_FORCE_WORLD_ALIGNED) == 0 &&
-			pEntity->GetCollideable()->GetSolid() != SOLID_BBOX && pEntity->GetCollideable()->GetSolid() != SOLID_NONE;
+		const auto pCollideable = pEntity->GetCollideable();
+		return (pCollideable->GetSolidFlags() & FSOLID_FORCE_WORLD_ALIGNED) == 0 &&
+			pCollideable->GetSolid() != SOLID_BBOX && pCollideable->GetSolid() != SOLID_NONE;
 	}
 	
 	static Vector getOBBCenter( edict_t *pEntity );

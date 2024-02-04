@@ -35,6 +35,7 @@
 #include <edict.h>
 
 #include "bot_const.h"
+#include "engine_wrappers.h"
 #include "irecipientfilter.h"
 
 class CEdictRecipient : public IRecipientFilter

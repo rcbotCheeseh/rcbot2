@@ -33,7 +33,10 @@
 
 #include <vector>
 
-#define MAX_STRINGS_HASH 26
+enum
+{
+	MAX_STRINGS_HASH = 26
+};
 
 /*
  * CStrings

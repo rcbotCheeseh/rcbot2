@@ -47,7 +47,7 @@ public:
 
 	bool held ( float fTime ) const
 	{
-		return m_bTapped || fTime >= m_fTimeStart && fTime <= m_fTimeEnd;// && (!m_fLetGoTime||(fTime > m_fLetGoTime));
+		return (m_bTapped || fTime >= m_fTimeStart) && fTime <= m_fTimeEnd;// && (!m_fLetGoTime||(fTime > m_fLetGoTime));
 	}
 
 	bool canPress (float fTime) const

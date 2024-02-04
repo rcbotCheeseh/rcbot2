@@ -393,10 +393,11 @@ public:
 	static float TF2_getEnergyDrinkMeter(edict_t * edict) { return g_GetProps[GETPROP_TF2_ENERGYDRINKMETER].getFloat(edict, 0); }
 	static edict_t *TF2_getActiveWeapon(edict_t *edict) { return g_GetProps[GETPROP_TF2_ACTIVEWEAPON].getEntity(edict); }
 	// set weapon
-	static bool TF2_setActiveWeapon(edict_t *edict, edict_t *pWeapon)
+	static bool TF2_setActiveWeapon(edict_t* edict, edict_t* pWeapon)
 	{
-		CBaseHandle *pHandle = g_GetProps[GETPROP_TF2_ACTIVEWEAPON].getEntityHandle(edict);
+		CBaseHandle* pHandle = g_GetProps[GETPROP_TF2_ACTIVEWEAPON].getEntityHandle(edict);
 		pHandle->Set(pWeapon->GetNetworkable()->GetEntityHandle());
+		return true; // TODO: or some condition indicating success or failure [APG]RoboCop[CL]
 	}
 
 	static void TF2_SetBuilderType(edict_t *pBuilder, int itype)

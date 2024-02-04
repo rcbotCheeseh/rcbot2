@@ -37,7 +37,10 @@
 //#include "bot_ehandle.h"
 #include "bot_waypoint.h"
 
-#define MAX_STORED_AUTOWAYPOINT 5
+enum
+{
+	MAX_STORED_AUTOWAYPOINT = 5
+};
 
 typedef enum eWptCopyType
 {
@@ -76,7 +79,7 @@ public:
 
 	Vector GetVector () const
 	{
-		return Vector(static_cast<float>(m_x),static_cast<float>(m_y),static_cast<float>(m_z));
+		return {static_cast<float>(m_x),static_cast<float>(m_y),static_cast<float>(m_z)};
 	}
 
 	BOOL IsVectorSet () const
@@ -86,7 +89,7 @@ public:
 
 	void UnSet ()
 	{
-		m_bVectorSet = FALSE;
+		m_bVectorSet = false;
 	}
 protected:
 	T m_x,m_y,m_z;
@@ -111,7 +114,7 @@ public:
 
 	void UnSetPoint ()
 	{
-		m_bVectorSet = FALSE;
+		m_bVectorSet = false;
 		m_iFlags = 0;
 	}
 private:

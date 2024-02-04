@@ -37,6 +37,8 @@
 class IIndividual
 {
 public:
+	virtual ~IIndividual() = default;
+
 	// get fitness for this individual
 	ga_nn_value getFitness () const { return m_fFitness; }
 	void setFitness ( float fVal ) { m_fFitness = fVal; }
@@ -92,6 +94,7 @@ private:
 class ISelection
 {
 public:
+	virtual ~ISelection() = default;
 	virtual IIndividual *select ( CPopulation *population ) = 0;
 };
 

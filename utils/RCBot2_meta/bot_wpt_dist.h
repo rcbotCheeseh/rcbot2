@@ -3,7 +3,10 @@
 
 #include "bot_waypoint.h"
 
-#define WPT_DIST_VER 0x03
+enum
+{
+	WPT_DIST_VER = 0x03
+};
 
 #define BOT_WAYPOINT_DST_EXTENSION "rcd"
 

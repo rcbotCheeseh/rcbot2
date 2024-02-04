@@ -41,14 +41,24 @@
 #include "bot_tf2_points.h"
 #include "bot_cvars.h"
 
-#define MAX_CAP_POINTS 32
+enum
+{
+	MAX_CAP_POINTS = 32
+};
 
-#define DOD_MAPTYPE_UNKNOWN 0 
-#define DOD_MAPTYPE_FLAG 1
-#define DOD_MAPTYPE_BOMB 2
+enum
+{
+	DOD_MAPTYPE_UNKNOWN = 0,
+	DOD_MAPTYPE_FLAG = 1,
+	DOD_MAPTYPE_BOMB = 2
+};
 
-#define BOT_ADD_METHOD_DEFAULT 0
-#define BOT_ADD_METHOD_PUPPET 1
+enum
+{
+	BOT_ADD_METHOD_DEFAULT = 0,
+	BOT_ADD_METHOD_PUPPET = 1
+};
+
 #define BOT_ADD_PUPPET_COMMAND "bot"
 
 class CBotNeuralNet;
@@ -96,6 +106,8 @@ public:
 		m_bBotCommand_ResetCheatFlag = false;
 	}
 
+	virtual ~CBotMod() = default;
+	
 	virtual bool checkWaypointForTeam(CWaypoint *pWpt, int iTeam)
 	{
 		return true; // okay -- no teams!!
@@ -183,7 +195,10 @@ private:
 	int m_iId;
 };
 */
-#define MAX_DOD_FLAGS 8
+enum
+{
+	MAX_DOD_FLAGS = 8
+};
 
 class CDODFlags
 {

@@ -96,10 +96,9 @@ void CDODBot :: bombEvent ( int iEvent, int iCP, int iTeam )
 	}
 }
 
-CDODBot :: CDODBot()
+CDODBot::CDODBot()
 {
-	CBot();
-	CDODBot::init(true);
+	init();
 }
 
 void CDODBot :: init (bool bVarInit)
@@ -416,21 +415,21 @@ void CDODBot :: died ( edict_t *pKiller, const char *pszWeapon )
 }
 
 // TO COMPLETE
-void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWeapon )
+void CDODBot::seeFriendlyDie(edict_t* pDied, edict_t* pKiller, CWeapon* pWeapon)
 {
 	static CBotUtilities utils;
-
+	
 	utils.freeMemory();
-
-	if ( (pKiller != m_pEdict) && pKiller && !m_pEnemy && !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && isEnemy(pKiller,false) )
+	
+	if (pKiller != m_pEdict && pKiller && !m_pEnemy && !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && isEnemy(pKiller, false))
 	{
-		static CWaypoint *pWpt;
+		static CWaypoint* pWpt;
 		//bool bInvestigate = true;
 		//bool bFollow = true;
-		const Vector vecEnemy = CBotGlobals::entityOrigin(pKiller);
 		
-		if ( pWeapon )
+		if (pWeapon)
 		{
+			const Vector vecEnemy = CBotGlobals::entityOrigin(pKiller);
 			const DOD_Class pclass = static_cast<DOD_Class>(CClassInterface::getPlayerClassDOD(pKiller));
 
 			if ( (pclass == DOD_CLASS_SNIPER) && pWeapon->isZoomable() )
@@ -2297,7 +2296,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 			return true;
 		}
-		break;
+		//break;
 	case BOT_UTIL_SNIPE: // find snipe or machine gun waypoint
 		{
 			int iFlagID = -1;
@@ -2467,7 +2466,8 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 		if ( CDODMod::m_Flags.isTeamMateDefusing(m_pEdict,m_iTeam,util->getIntData()) )
 			return false; // teammate doing the job already
-
+		break;
+		
 	case BOT_UTIL_PLANT_NEAREST_BOMB:
 		id = util->getIntData();
 		vGoal = util->getVectorData();
@@ -2478,6 +2478,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 		if ( CDODMod::m_Flags.isTeamMatePlanting(m_pEdict,m_iTeam,id) )
 			return false; // teammate doing the job already
+		break;
 
 	case BOT_UTIL_DEFUSE_BOMB:
 		if ( util->getId() == BOT_UTIL_DEFUSE_BOMB )
@@ -2490,6 +2491,8 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 			iBombType = DOD_BOMB_DEFUSE;
 		}
+		break;
+		
 	case BOT_UTIL_PLANT_BOMB:
 		{
 			if ( util->getId() == BOT_UTIL_PLANT_BOMB )
@@ -2502,7 +2505,6 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 				iBombType = DOD_BOMB_PLANT;
 			}
-
 
 			int iWptGoal = CDODMod::m_Flags.getWaypointAtFlag(id);
 	
@@ -2538,7 +2540,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 			return true;
 		
 		}
-		break;
+		//break;
 	case BOT_UTIL_PICKUP_BOMB:
 		{
 			CWaypoint *pWaypoint;
@@ -2642,7 +2644,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 			return true;
 		}
-		break;
+		//break;
 	case BOT_UTIL_ATTACK_POINT:
 		{
 			Vector vGoal;
@@ -2718,7 +2720,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 			return true;
 		}
-		break;
+		//break;
 	case BOT_UTIL_FOLLOW_SQUAD_LEADER:
 		{
 			Vector pos = m_pSquad->GetFormationVector(m_pEdict);
@@ -2727,7 +2729,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 			return true;
 		}
-		break;
+		//break;
 	case BOT_UTIL_ROAM:
 		{
 		// roam			

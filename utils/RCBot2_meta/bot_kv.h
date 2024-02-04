@@ -1,7 +1,10 @@
 #ifndef __RCBOT_KEY_VAL__
 #define __RCBOT_KEY_VAL__
 
-#define RCBOT_MAX_KV_LEN 256
+enum
+{
+	RCBOT_MAX_KV_LEN = 256
+};
 
 #include <vector>
 

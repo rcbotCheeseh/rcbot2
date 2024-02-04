@@ -424,27 +424,24 @@ CBotSpySapBuildingSched :: CBotSpySapBuildingSched ( edict_t *pBuilding, eEngiBu
 	findpath->setDangerPoint(CWaypointLocations::NearestWaypoint(CBotGlobals::entityOrigin(pBuilding),200.0f,-1));
 }
 //////////////////////////////////////
-CBotTauntSchedule :: CBotTauntSchedule ( edict_t *pPlayer, float fYaw )
+CBotTauntSchedule::CBotTauntSchedule(edict_t* pPlayer, float fYaw)
+	: m_pPlayer(pPlayer), m_fYaw(180 - fYaw)
 {
-	const QAngle angles = QAngle(0,fYaw,0);
+	const QAngle angles = QAngle(0, fYaw, 0);
 	Vector forward;
 	const float fTauntDist = 40.0f;
-
-	m_pPlayer = pPlayer;
-	m_fYaw = 180 - fYaw;
-
-	AngleVectors(angles,&forward);
-
-	forward = forward/forward.Length();
+	
+	AngleVectors(angles, &forward);
+	forward = forward / forward.Length();
+	
 	const Vector vOrigin = CBotGlobals::entityOrigin(pPlayer);
-
 	const Vector vGoto = vOrigin + forward * fTauntDist;
-
+	
 	CBotGlobals::fixFloatAngle(&m_fYaw);
-
+	
 	addTask(new CFindPathTask(vOrigin));
 	addTask(new CMoveToTask(vOrigin));
-	addTask(new CTF2_TauntTask(vOrigin,vGoto,fTauntDist));
+	addTask(new CTF2_TauntTask(vOrigin, vGoto, fTauntDist));
 }
 
 void CBotTauntSchedule :: init ()

@@ -84,17 +84,17 @@ void CBotConfigFile :: load ()
 	}
 }
 
-void CBotConfigFile :: doNextCommand ()
+void CBotConfigFile::doNextCommand()
 {
-	char cmd[64] = {0};
-
-	if ( m_fNextCommandTime < engine->Time() && m_iCmd < m_Commands.size() )
+	if (m_fNextCommandTime < engine->Time() && m_iCmd < m_Commands.size())
 	{
+		char cmd[64] = { 0 };
+		
 		snprintf(cmd, sizeof cmd, "%s\n", m_Commands[m_iCmd]);
 		engine->ServerCommand(cmd);
-
+		
 		logger->Log(LogLevel::TRACE, "Bot Command '%s' executed", m_Commands[m_iCmd]);
-		m_iCmd ++;
+		m_iCmd++;
 		m_fNextCommandTime = engine->Time() + 0.1f;
 	}
 }

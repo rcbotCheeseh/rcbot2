@@ -39,7 +39,6 @@ extern const char *g_szTF2Weapons[];
 
 class CBot;
 
-
 extern int m_TF2AmmoIndices[];
 
 typedef struct
@@ -251,27 +250,30 @@ enum
 	CS_WEAPON_MAX
 };
 
-#define WEAP_FL_NONE			0
-#define WEAP_FL_PRIM_ATTACK		(1 << 0)
-#define WEAP_FL_SEC_ATTACK		(1 << 1)
-#define WEAP_FL_EXPLOSIVE		(1 << 2) // weapon is an explosive weapon eg. rpg
-#define WEAP_FL_MELEE			(1 << 3) //
-#define WEAP_FL_UNDERWATER		(1 << 4) // weapon can be used under water
-#define WEAP_FL_HOLDATTACK		(1 << 5) // weapon must hold attack (e.g. minigun)
-#define WEAP_FL_SPECIAL			(1 << 6) //
-#define WEAP_FL_KILLPIPEBOMBS	(1 << 7) // weapon can destroy pipe bombs (tf2)
-#define WEAP_FL_DEFLECTROCKETS	(1 << 8) // weapon can deflect rocekts (tf2)
-#define WEAP_FL_GRAVGUN			(1 << 9) // weapon is a grav gun
-#define WEAP_FL_EXPLOSIVE_SEC	(1 << 10) // weapon has an explosive secondary attack
-#define WEAP_FL_ZOOMABLE		(1 << 11) // weapon can be zoomed
-#define WEAP_FL_DEPLOYABLE		(1 << 12) // weapon can be deployed
-#define WEAP_FL_MELEE_SEC_ATT	(1 << 13) // weapon has a melee secondary attack
-#define WEAP_FL_FIRE_SELECT		(1 << 14) // weapon can choose fire mode
-#define WEAP_FL_CANTFIRE_NORM	(1 << 15) // weapon can't be fired normally, needs to be zoomed/deployed
-#define WEAP_FL_GRENADE			(1 << 16)
-#define WEAP_FL_HIGH_RECOIL		(1 << 17) // can't be fired at long distance, but ok when deployed
-#define WEAP_FL_SCOPE			(1 << 18) // has a scope . i.e. sniper rifle
-#define WEAP_FL_PROJECTILE		(1 << 19) // affected by gravity
+enum
+{
+	WEAP_FL_NONE = 0,
+	WEAP_FL_PRIM_ATTACK = 1 << 0,
+	WEAP_FL_SEC_ATTACK = 1 << 1,
+	WEAP_FL_EXPLOSIVE = 1 << 2,	// weapon is an explosive weapon eg. rpg
+	WEAP_FL_MELEE = 1 << 3,	//
+	WEAP_FL_UNDERWATER = 1 << 4,	// weapon can be used under water
+	WEAP_FL_HOLDATTACK = 1 << 5,	// weapon must hold attack (e.g. minigun)
+	WEAP_FL_SPECIAL = 1 << 6,	//
+	WEAP_FL_KILLPIPEBOMBS = 1 << 7,	// weapon can destroy pipe bombs (tf2)
+	WEAP_FL_DEFLECTROCKETS = 1 << 8,	// weapon can deflect rocekts (tf2)
+	WEAP_FL_GRAVGUN = 1 << 9,	// weapon is a grav gun
+	WEAP_FL_EXPLOSIVE_SEC = 1 << 10,	// weapon has an explosive secondary attack
+	WEAP_FL_ZOOMABLE = 1 << 11,	// weapon can be zoomed
+	WEAP_FL_DEPLOYABLE = 1 << 12,	// weapon can be deployed
+	WEAP_FL_MELEE_SEC_ATT = 1 << 13,	// weapon has a melee secondary attack
+	WEAP_FL_FIRE_SELECT = 1 << 14,	// weapon can choose fire mode
+	WEAP_FL_CANTFIRE_NORM = 1 << 15,	// weapon can't be fired normally, needs to be zoomed/deployed
+	WEAP_FL_GRENADE = 1 << 16,
+	WEAP_FL_HIGH_RECOIL = 1 << 17,	// can't be fired at long distance, but ok when deployed
+	WEAP_FL_SCOPE = 1 << 18,	// has a scope . i.e. sniper rifle
+	WEAP_FL_PROJECTILE = 1 << 19 // affected by gravity
+};
 
 extern WeaponsData_t TF2Weaps[];
 extern WeaponsData_t HL2DMWeaps[];
@@ -580,8 +582,12 @@ private:
 	// available weapons in game
 	static std::vector<CWeapon*> m_theWeapons;
 };
-#define AMMO_PRIM 1
-#define AMMO_SEC 2
+
+enum
+{
+	AMMO_PRIM = 1,
+	AMMO_SEC = 2
+};
 
 ////////////////////////////////////////////////////////////
 // Weapon but with bot holding it and ammo information etc

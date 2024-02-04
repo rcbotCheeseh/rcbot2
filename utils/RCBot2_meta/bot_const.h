@@ -55,21 +55,24 @@
 
 #define BOT_WPT_TOUCH_DIST 72 // distance for bot to touch waypoint
 
-#define BOT_DEBUG_GAME_EVENT	0 
-#define BOT_DEBUG_NAV			1 
-#define BOT_DEBUG_SPEED			2 
-#define BOT_DEBUG_VIS			3
-#define BOT_DEBUG_TASK			4 
-#define BOT_DEBUG_BUTTONS		5  
-#define BOT_DEBUG_USERCMD		6 
-#define BOT_DEBUG_UTIL			7
-#define BOT_DEBUG_PROFILE		8 
-#define BOT_DEBUG_EDICTS		9 
-#define BOT_DEBUG_THINK			10 
-#define BOT_DEBUG_LOOK			11 
-#define BOT_DEBUG_HUD			12 
-#define BOT_DEBUG_AIM			13 
-#define BOT_DEBUG_CHAT			14
+enum
+{
+	BOT_DEBUG_GAME_EVENT = 0,
+	BOT_DEBUG_NAV = 1,
+	BOT_DEBUG_SPEED = 2,
+	BOT_DEBUG_VIS = 3,
+	BOT_DEBUG_TASK = 4,
+	BOT_DEBUG_BUTTONS = 5,
+	BOT_DEBUG_USERCMD = 6,
+	BOT_DEBUG_UTIL = 7,
+	BOT_DEBUG_PROFILE = 8,
+	BOT_DEBUG_EDICTS = 9,
+	BOT_DEBUG_THINK = 10,
+	BOT_DEBUG_LOOK = 11,
+	BOT_DEBUG_HUD = 12,
+	BOT_DEBUG_AIM = 13,
+	BOT_DEBUG_CHAT = 14
+};
 
 // from sourcemod
 enum RoundState 
@@ -178,9 +181,11 @@ typedef enum
 
 #define BITS_MOD_ALL ~(1<<MOD_MAX)
 
-#define BOT_JUMP_HEIGHT 45
-
-#define MIN_COVER_MOVE_DIST 128
+enum
+{
+	BOT_JUMP_HEIGHT = 45,
+	MIN_COVER_MOVE_DIST = 128
+};
 
 #undef INDEXENT
 #define INDEXENT(iEdictNum) engine->PEntityOfEntIndex(iEdictNum)

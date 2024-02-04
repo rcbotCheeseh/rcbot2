@@ -786,7 +786,7 @@ void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault
 	{
 		KeyValues* kv = new KeyValues("Weapons");
 		char szFilename[1024];
-
+		
 		CBotGlobals::buildFileName(szFilename, "weapons", BOT_CONFIG_FOLDER, "ini", false);
 
 		if (kv)
@@ -794,13 +794,13 @@ void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault
 			if (kv->LoadFromFile(filesystem, szFilename, nullptr))
 			{
 				kv = kv->FindKey(szWeaponListName);
-
+				
 				if (kv)
 				{
 					kv = kv->GetFirstSubKey();
-
-					if (false)
-						kv = kv->GetFirstTrueSubKey();
+					
+					//if (false)
+					//	kv = kv->GetFirstTrueSubKey();
 
 					while (kv != nullptr)
 					{
@@ -847,7 +847,7 @@ void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault
 					}
 				}
 			}
-
+			
 			kv->deleteThis();
 		}
 	}

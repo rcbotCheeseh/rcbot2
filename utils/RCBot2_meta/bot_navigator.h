@@ -63,6 +63,7 @@ protected:
 class IBotNavigator
 {
 public:
+	virtual ~IBotNavigator() = default;
 	virtual void init () = 0;
 
 	// returns true when working out route finishes, not if successful
@@ -157,10 +158,13 @@ protected:
 	bool m_bLoadBelief = false;
 };
 
-#define FL_ASTAR_CLOSED		1
-#define FL_ASTAR_PARENT		2
-#define FL_ASTAR_OPEN		4
-#define FL_HEURISTIC_SET	8
+enum
+{
+	FL_ASTAR_CLOSED = 1,
+	FL_ASTAR_PARENT = 2,
+	FL_ASTAR_OPEN = 4,
+	FL_HEURISTIC_SET = 8
+};
 
 class AStarNode
 {
@@ -358,9 +362,12 @@ bool operator<( const AStarNode * A, const AStarNode * B )
     return A->betterCost(B);
 }*/
 
-#define WPT_SEARCH_AVOID_SENTRIES 1
-#define WPT_SEARCH_AVOID_SNIPERS 2
-#define WPT_SEARCH_AVOID_TEAMMATE 4
+enum
+{
+	WPT_SEARCH_AVOID_SENTRIES = 1,
+	WPT_SEARCH_AVOID_SNIPERS = 2,
+	WPT_SEARCH_AVOID_TEAMMATE = 4
+};
 
 typedef struct
 {
@@ -373,18 +380,21 @@ typedef struct
 class CWaypointNavigator : public IBotNavigator
 {
 public:
-	CWaypointNavigator ( CBot *pBot ) 
+	CWaypointNavigator(CBot* pBot)
 	{
 		CWaypointNavigator::init();
-		m_pBot = pBot; 
+		m_pBot = pBot;
 		m_fNextClearFailedGoals = 0;
 		m_bDangerPoint = false;
 		m_iBeliefTeam = -1;
 		m_bLoadBelief = true;
 		m_bBeliefChanged = false;
-		memset(&m_lastFailedPath,0,sizeof(failedpath_t));
+		memset(&m_lastFailedPath, 0, sizeof(failedpath_t));
+		// Initialize curr and succ
+		curr = nullptr; // or another appropriate value
+		succ = nullptr; // or another appropriate value
 	}
-
+	
 	void init () override;
 
 	CWaypoint *chooseBestFromBelief (const std::vector<CWaypoint*>& goals, bool bHighDanger = false, int iSearchFlags = 0, int iTeam = 0) const;
@@ -514,7 +524,7 @@ public:
 	CNavMesh* m_theNavMesh; // Add a member variable for the NavMesh instance
 
 	CNavMeshNavigator();
-	~CNavMeshNavigator();
+	virtual ~CNavMeshNavigator();
 
 	void CalculateRoute(Vector startNodeID, Vector goalNodeID);
 

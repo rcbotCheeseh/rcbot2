@@ -37,39 +37,57 @@
 
 //#include <stack>
 
-#define TF2_ROCKETSPEED   1100
-#define TF2_GRENADESPEED  1065 // TF2 wiki
-#define TF2_MAX_SENTRYGUN_RANGE 1024
-#define TF2_STICKYGRENADE_MAX_DISTANCE 1600
+enum
+{
+	TF2_ROCKETSPEED = 1100,
+	TF2_GRENADESPEED = 1065,
+	TF2_MAX_SENTRYGUN_RANGE = 1024,
+	TF2_STICKYGRENADE_MAX_DISTANCE = 1600
+};
 
 class CBotWeapon;
 class CWaypoint;
 class CBotUtility;
 
-#define TF2_SLOT_PRMRY 0 // primary
-#define TF2_SLOT_SCNDR 1 // secondary
-#define TF2_SLOT_MELEE 2
-#define TF2_SLOT_PDA 3
-#define TF2_SLOT_PDA2 4
-#define TF2_SLOT_HAT 5
-#define TF2_SLOT_MISC 6
-#define TF2_SLOT_ACTION 7
-#define TF2_SLOT_MAX 8
+enum
+{
+	TF2_SLOT_PRMRY = 0,	// primary
+	TF2_SLOT_SCNDR = 1,	// secondary
+	TF2_SLOT_MELEE = 2,
+	TF2_SLOT_PDA = 3,
+	TF2_SLOT_PDA2 = 4,
+	TF2_SLOT_HAT = 5,
+	TF2_SLOT_MISC = 6,
+	TF2_SLOT_ACTION = 7,
+	TF2_SLOT_MAX = 8
+};
 
-#define TF2_TEAM_BLUE 3
-#define TF2_TEAM_RED 2
+enum
+{
+	TF2_TEAM_BLUE = 3,
+	TF2_TEAM_RED = 2
+};
 
-#define RESIST_BULLETS 0
-#define RESIST_EXPLO 1
-#define RESIST_FIRE 2
+enum
+{
+	RESIST_BULLETS = 0,
+	RESIST_EXPLO = 1,
+	RESIST_FIRE = 2
+};
 
-#define TF2_SENTRY_LEVEL1_HEALTH 150
-#define TF2_SENTRY_LEVEL2_HEALTH 180
-#define TF2_SENTRY_LEVEL3_HEALTH 216
+enum
+{
+	TF2_SENTRY_LEVEL1_HEALTH = 150,
+	TF2_SENTRY_LEVEL2_HEALTH = 180,
+	TF2_SENTRY_LEVEL3_HEALTH = 216
+};
 
-#define TF2_DISPENSER_LEVEL1_HEALTH 150
-#define TF2_DISPENSER_LEVEL2_HEALTH 180
-#define TF2_DISPENSER_LEVEL3_HEALTH 216
+enum
+{
+	TF2_DISPENSER_LEVEL1_HEALTH = 150,
+	TF2_DISPENSER_LEVEL2_HEALTH = 180,
+	TF2_DISPENSER_LEVEL3_HEALTH = 216
+};
 
 // Naris @ Alliedmodders.net
 /*
@@ -177,19 +195,22 @@ enum TFCond
 	TFCond_RuneAgility,
 };*/
 
-#define TF2_PLAYER_BONKED		(1<<14)
-#define TF2_PLAYER_SLOWED       (1 << 0)    // 1
-#define TF2_PLAYER_ZOOMED       (1 << 1)    // 2
-#define TF2_PLAYER_DISGUISING   (1 << 2)    // 4
-#define TF2_PLAYER_DISGUISED	(1 << 3)    // 8
-#define TF2_PLAYER_CLOAKED      (1 << 4)    // 16
-#define TF2_PLAYER_INVULN       (1 << 5)    // 32
-#define TF2_PLAYER_TELEGLOW     (1 << 6)    // 64
-#define TF2_PLAYER_KRITS		524288
-#define TF2_PLAYER_HEALING	    2097152    
-#define TF2_PLAYER_TAUNTING	    (1 << 7)    // 128
-#define TF2_PLAYER_TELEPORTING	(1<<10)    // 1024 Player is teleporting
-#define TF2_PLAYER_ONFIRE	    4194304 // fix may 2013
+enum
+{
+	TF2_PLAYER_BONKED = 1<<14,
+	TF2_PLAYER_SLOWED = 1 << 0,	// 1
+	TF2_PLAYER_ZOOMED = 1 << 1,	// 2
+	TF2_PLAYER_DISGUISING = 1 << 2,	// 4
+	TF2_PLAYER_DISGUISED = 1 << 3,	// 8
+	TF2_PLAYER_CLOAKED = 1 << 4,	// 16
+	TF2_PLAYER_INVULN = 1 << 5,	// 32
+	TF2_PLAYER_TELEGLOW = 1 << 6,	// 64
+	TF2_PLAYER_KRITS = 524288,
+	TF2_PLAYER_HEALING = 2097152,
+	TF2_PLAYER_TAUNTING = 1 << 7,	// 128
+	TF2_PLAYER_TELEPORTING = 1<<10,	// 1024 Player is teleporting
+	TF2_PLAYER_ONFIRE = 4194304 // fix may 2013
+};
 
 //#define TF2_SPY_FOV_KNIFEATTACK 90.0f
 
@@ -285,12 +306,8 @@ class CBotTF2FunctionEnemyAtIntel : public IBotFunction
 {
 public:
 	CBotTF2FunctionEnemyAtIntel(int iTeam, const Vector& vPos, int type, edict_t* pPlayer = nullptr, int capindex = -1)
+		: m_iTeam(iTeam), m_vPos(vPos), m_iType(type), m_pPlayer(pPlayer), m_iCapIndex(capindex)
 	{
-		m_iTeam = iTeam;
-		m_vPos = vPos;
-		m_iType = type;
-		m_pPlayer = pPlayer;
-		m_iCapIndex = capindex;
 	}
 
 	void execute (CBot *pBot) override;
@@ -332,7 +349,7 @@ private:
 class CBroadcastFlagDropped : public IBotFunction
 {
 public:
-	CBroadcastFlagDropped (int iTeam, const Vector& origin) { m_iTeam = iTeam; m_vOrigin = origin; }
+	CBroadcastFlagDropped(int iTeam, const Vector& origin) : m_vOrigin(origin), m_iTeam(iTeam) {}
 	void execute ( CBot *pBot ) override;
 
 private:
@@ -371,9 +388,11 @@ private:
 	const char *m_szName;
 };
 
-#define EVENT_FLAG_PICKUP 0
-#define EVENT_CAPPOINT    1
-
+enum
+{
+	EVENT_FLAG_PICKUP = 0,
+	EVENT_CAPPOINT = 1
+};
 
 class CBotFortress : public CBot
 {
@@ -1004,15 +1023,14 @@ private:
 class CBotFF : public CBotFortress
 {
 public:
-
-	CBotFF() { CBotFortress(); } //TODO: unused object [APG]RoboCop[CL]
-
-	void modThink () override;
-
-	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true ) override;
-
-	bool isTF () override { return true; }
-
+	CBotFF() {} //TODO: Base class constructor is automatically called? [APG]RoboCop[CL]
+	
+    void modThink () override;
+	
+    bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true ) override;
+	
+    bool isTF () override { return true; }
+	
 };
 
 #endif

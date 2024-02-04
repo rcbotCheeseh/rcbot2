@@ -36,7 +36,7 @@
 
 //#include "nav_mesh.h"
 
-CNavMeshNavigator::CNavMeshNavigator()
+CNavMeshNavigator::CNavMeshNavigator(): m_theNavMesh(nullptr), m_pNavMesh(nullptr)
 {
 	// Create a new instance of the NavMesh class
 	//m_theNavMesh = new CNavMesh();

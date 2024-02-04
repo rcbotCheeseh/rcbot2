@@ -3,7 +3,10 @@
 
 // gone for the american spelling of 'colour' :)
 
-#define WAYPOINT_ALPHA 200
+enum
+{
+	WAYPOINT_ALPHA = 200
+};
 
 class WptColor
 {

@@ -44,6 +44,8 @@ class IGameEvent;
 class CBotEvent
 {
 public:
+	virtual ~CBotEvent() = default;
+
 	CBotEvent()
 	{
 		m_pActivator = nullptr;

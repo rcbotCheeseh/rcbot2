@@ -53,11 +53,11 @@ void *GetGameRules()
 	return *g_pGameRules;
 }
 
-size_t CSignatureFunction::decodeHexString(unsigned char *buffer, size_t maxlength, const char *hexstr)
+size_t CSignatureFunction::decodeHexString(unsigned char* buffer, size_t maxlength, const char* hexstr)
 {
 	size_t written = 0;
 	const size_t length = std::strlen(hexstr);
-
+	
 	for (size_t i = 0; i < length; i++)
 	{
 		if (written >= maxlength)
@@ -69,21 +69,28 @@ size_t CSignatureFunction::decodeHexString(unsigned char *buffer, size_t maxleng
 				continue;
 			// Get the hex part. 
 			char s_byte[3];
-			int r_byte; //char should be used not int? [APG]RoboCop[CL]
-			//char r_byte;
+			unsigned int r_byte; // Use unsigned int here
 			s_byte[0] = hexstr[i + 2];
 			s_byte[1] = hexstr[i + 3];
 			s_byte[2] = '\0';
 			// Read it as an integer 
-			sscanf_s(s_byte, "%x", &r_byte);
+			std::sscanf(s_byte, "%x", &r_byte);
 			
-			// Save the value 
-			buffer[written - 1] = r_byte;
+			// Check if the value fits into a char
+			if (r_byte <= UCHAR_MAX)
+			{
+				// Save the value 
+				buffer[written - 1] = static_cast<unsigned char>(r_byte);
+			}
+			else
+			{
+				// Handle the error
+			}
 			// Adjust index 
 			i += 3;
 		}
 	}
-
+	
 	return written;
 }
 
