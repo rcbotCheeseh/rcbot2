@@ -427,7 +427,9 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 		// create a 'hash' of current weapons
 		pWeapon = m_Weapon_iter == nullptr ? nullptr : INDEXENT(m_Weapon_iter->GetEntryIndex());
 		iWeaponsSignature += reinterpret_cast<unsigned>(pWeapon) + (pWeapon == nullptr ? 0 : static_cast<unsigned>(CClassInterface::getWeaponState(pWeapon)));
-		m_Weapon_iter++;
+		if (m_Weapon_iter != nullptr) {
+			m_Weapon_iter++;
+		}
 	}
 
 	// if weapons have changed this will be different
@@ -581,8 +583,8 @@ CBotWeapon* CBotWeapons::getBestWeapon(edict_t* pEnemy, bool bAllowMelee, bool b
 	{
 		CBotWeapon* pWeapon = &m_theWeapons[i];
 
-		if (!pWeapon)
-			continue;
+		//if (!pWeapon)
+		//	continue;
 
 		if (!pWeapon->hasWeapon())
 			continue;

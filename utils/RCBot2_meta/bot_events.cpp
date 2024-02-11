@@ -887,8 +887,8 @@ void CTF2PointCaptured :: execute ( IBotEventInterface *pEvent )
 	CTeamFortress2Mod::m_ObjectiveResource.m_fUpdatePointTime = 0;
 	CTeamFortress2Mod::m_ObjectiveResource.m_fNextCheckMonitoredPoint = engine->Time() + 0.2f;
 
-    // MUST BE AFTER POINTS HAVE BEEN UPDATED!
-    CBots::botFunction(&cap);
+	// MUST BE AFTER POINTS HAVE BEEN UPDATED!
+	CBots::botFunction(&cap);
 
 }
 

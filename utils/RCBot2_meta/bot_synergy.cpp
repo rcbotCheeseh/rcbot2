@@ -65,12 +65,12 @@ void CBotSynergy::init(bool bVarInit)
 
 void CBotSynergy::spawnInit()
 {
-    CBot::spawnInit();
+	CBot::spawnInit();
 
 	if (m_pWeapons) // reset weapons
 		m_pWeapons->clearWeapons();
 
-    m_CurrentUtil = BOT_UTIL_MAX;
+	m_CurrentUtil = BOT_UTIL_MAX;
 	m_pNearbyAmmo = nullptr;
 	m_pNearbyBattery = nullptr;
 	m_pNearbyCrate = nullptr;
@@ -176,7 +176,7 @@ bool CBotSynergy::needAmmo()
 
 void CBotSynergy::modThink()
 {
-    m_fIdealMoveSpeed = CClassInterface::getMaxSpeed(m_pEdict);
+	m_fIdealMoveSpeed = CClassInterface::getMaxSpeed(m_pEdict);
 	m_pCurrentWeapon = CClassInterface::getCurrentWeapon(m_pEdict);
 	m_flSuitPower = CClassInterface::getSynPlayerSuitPower(m_pEdict);
 
@@ -337,17 +337,17 @@ void CBotSynergy::updateConditions()
 
 bool CBotSynergy::isEnemy(edict_t *pEdict, bool bCheckWeapons)
 {
-    if(m_pEdict == pEdict) // Not self
-        return false;
+	if(m_pEdict == pEdict) // Not self
+		return false;
 
-    if(ENTINDEX(pEdict) <= CBotGlobals::maxClients()) // Coop mod, don't attack players
-        return false;
+	if(ENTINDEX(pEdict) <= CBotGlobals::maxClients()) // Coop mod, don't attack players
+		return false;
 
-    const char* szclassname = pEdict->GetClassName();
+	const char* szclassname = pEdict->GetClassName();
 
 	// BUGBUG!! Maps can override NPC relationship with the ai_relationship entity, making this classname filter useless
-    if(std::strncmp(szclassname, "npc_", 4) == 0) // Attack NPCs
-    {
+	if(std::strncmp(szclassname, "npc_", 4) == 0) // Attack NPCs
+	{
 		if (std::strcmp(szclassname, "npc_metropolice") == 0 || std::strcmp(szclassname, "npc_combine_s") == 0 || std::strcmp(szclassname, "npc_manhack") == 0 ||
 			std::strcmp(szclassname, "npc_zombie") == 0 || std::strcmp(szclassname, "npc_fastzombie") == 0 || std::strcmp(szclassname, "npc_poisonzombie") == 0 || std::strcmp(szclassname, "npc_zombine") == 0 ||
 			std::strcmp(szclassname, "npc_antlionguard") == 0 || std::strcmp(szclassname, "npc_antlion") == 0 || std::strcmp(szclassname, "npc_headcrab") == 0 || std::strcmp(szclassname, "npc_headcrab_fast") == 0 ||
@@ -358,9 +358,9 @@ bool CBotSynergy::isEnemy(edict_t *pEdict, bool bCheckWeapons)
 		{
 			return true;
 		}
-    }
+	}
 
-    return false;
+	return false;
 }
 
 bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
@@ -506,15 +506,15 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 
 void CBotSynergy::getTasks (unsigned int iIgnore)
 {
-    static CBotUtilities utils;
-    static CBotUtility* next;
-    static bool bCheckCurrent;
+	static CBotUtilities utils;
+	static CBotUtility* next;
+	static bool bCheckCurrent;
 
 	if (!hasSomeConditions(CONDITION_CHANGED) && !m_pSchedules->isEmpty())
 		return;
 
-    removeCondition(CONDITION_CHANGED);
-    bCheckCurrent = true; // important for checking current schedule
+	removeCondition(CONDITION_CHANGED);
+	bCheckCurrent = true; // important for checking current schedule
 
 	// Utilities
 	ADD_UTILITY(BOT_UTIL_PICKUP_WEAPON, m_pNearbyWeapon.get() != NULL, 0.75f) // New weapons are interesting, high priority
@@ -560,8 +560,8 @@ void CBotSynergy::getTasks (unsigned int iIgnore)
 
 bool CBotSynergy::executeAction(eBotAction iAction)
 {
-    switch (iAction)
-    {
+	switch (iAction)
+	{
 	case BOT_UTIL_PICKUP_WEAPON:
 		m_pSchedules->add(new CBotPickupSched(m_pNearbyWeapon.get()));
 		m_fUtilTimes[BOT_UTIL_PICKUP_WEAPON] = engine->Time() + randomFloat(5.0f, 10.0f);
@@ -612,8 +612,8 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 			return true;
 		}
 	}
-    case BOT_UTIL_ATTACK_POINT:
-    {
+	case BOT_UTIL_ATTACK_POINT:
+	{
 		// roam
 		CWaypoint* pWaypoint = nullptr;
 		CWaypoint* pRoute = nullptr;
@@ -629,7 +629,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		else
 			removeCondition(CONDITION_COVERT);
 
-        pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_GOAL);
+		pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_GOAL);
 
 		if (pWaypoint)
 		{
@@ -659,9 +659,9 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		}
 
 		break;
-    }
-    case BOT_UTIL_ROAM:
-    {
+	}
+	case BOT_UTIL_ROAM:
+	{
 		// roam
 		CWaypoint* pWaypoint = nullptr;
 		CWaypoint* pRoute = nullptr;
@@ -676,7 +676,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		else
 			removeCondition(CONDITION_COVERT);
 
-        pWaypoint = CWaypoints::randomWaypointGoal(-1);
+		pWaypoint = CWaypoints::randomWaypointGoal(-1);
 
 		if (pWaypoint)
 		{
@@ -706,10 +706,10 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		}
 
 		break;
-    }
-    }
+	}
+	}
 
-    return false;
+	return false;
 }
 
 void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWaypoint)
@@ -769,7 +769,7 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 	else // Check for button
 	{
 		edict_t* pEntity = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_button",
-		                                                                 rcbot_syn_use_search_range.GetFloat());
+																		 rcbot_syn_use_search_range.GetFloat());
 		if(pEntity != nullptr && !CSynergyMod::IsEntityLocked(pEntity))
 		{
 			CBotSchedule *sched = new CBotSchedule();

@@ -837,10 +837,10 @@ bool CBotGlobals :: onOppositeSides2d (
 		const Vector2D &bmins, const Vector2D &bmaxs )
 {
 	const float g = (amaxs.x - amins.x) * (bmins.y - amins.y) - 
-	        (amaxs.y - amins.y) * (bmins.x - amins.x);
+			(amaxs.y - amins.y) * (bmins.x - amins.x);
 
 	const float h = (amaxs.x - amins.x) * (bmaxs.y - amins.y) - 
-	        (amaxs.y - amins.y) * (bmaxs.x - amins.x);
+			(amaxs.y - amins.y) * (bmaxs.x - amins.x);
 
   return g * h <= 0.0f;
 }
@@ -853,10 +853,10 @@ bool CBotGlobals :: onOppositeSides3d (
 	amaxs.Cross(bmaxs);
 
 	const float g = (amaxs.x - amins.x) * (bmins.y - amins.y) * (bmins.z - amins.z) - 
-	        (amaxs.z - amins.z) * (amaxs.y - amins.y) * (bmins.x - amins.x);
+			(amaxs.z - amins.z) * (amaxs.y - amins.y) * (bmins.x - amins.x);
 
 	const float h = (amaxs.x - amins.x) * (bmaxs.y - amins.y) * (bmaxs.z - amins.z) - 
-	        (amaxs.z - amins.z) * (amaxs.y - amins.y) * (bmaxs.x - amins.x);
+			(amaxs.z - amins.z) * (amaxs.y - amins.y) * (bmaxs.x - amins.x);
 
   return g * h <= 0.0f;
 }
@@ -942,10 +942,10 @@ bool CBotGlobals :: makeFolders (const char* szFile)
 
 		i++;
 		szFolderName[folderNameSize++]=*delimiter;//next
-        szFolderName[folderNameSize] = 0;
-        
+		szFolderName[folderNameSize] = 0;
+		
 #ifndef __linux__
-        mkdir(szFolderName);
+		mkdir(szFolderName);
 #else
 		if ( mkdir(szFolderName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0 ) {
 			logger->Log(LogLevel::INFO, "Trying to create folder '%s' successful", szFolderName);

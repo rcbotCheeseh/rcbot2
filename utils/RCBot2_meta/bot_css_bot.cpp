@@ -662,16 +662,16 @@ void CCSSBot::modThinkSlow()
 
 void CCSSBot::getTasks(unsigned int iIgnore)
 {
-    static CBotUtilities utils;
-    static CBotUtility* next;
-    static bool bCheckCurrent;
+	static CBotUtilities utils;
+	static CBotUtility* next;
+	static bool bCheckCurrent;
 	static int team;
 
 	if(!hasSomeConditions(CONDITION_CHANGED) && !m_pSchedules->isEmpty())
 		return;
 
-    removeCondition(CONDITION_CHANGED);
-    bCheckCurrent = true; // important for checking current schedule
+	removeCondition(CONDITION_CHANGED);
+	bCheckCurrent = true; // important for checking current schedule
 	team = getTeam();
 	setMoveSpeed(CClassInterface::getMaxSpeed(m_pEdict)); // Some tasks changes the bot move speed, reset it back.
 
@@ -763,8 +763,8 @@ void CCSSBot::getTasks(unsigned int iIgnore)
 
 bool CCSSBot::executeAction(eBotAction iAction)
 {
-    switch (iAction)
-    {
+	switch (iAction)
+	{
 		case BOT_UTIL_ENGAGE_ENEMY:
 		{
 			CBotSchedule* pSched = new CBotSchedule();
@@ -909,7 +909,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			if(pWaypoint)
 			{
 				CWaypoint* pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), getTeam(),
-				                                                    pWaypoint->getArea());
+																	pWaypoint->getArea());
 				if(m_fUseRouteTime <= engine->Time())
 				{
 					if(pRoute)
@@ -988,12 +988,12 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			pSched->setID(SCHED_GOTO_ORIGIN);
 
 			CWaypoint* pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_RESCUEZONE, getTeam(), 0, false, this,
-			                                                      false);
+																  false);
 
 			if(pWaypoint)
 			{
 				CWaypoint* pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), getTeam(),
-				                                                    pWaypoint->getArea());
+																	pWaypoint->getArea());
 				if((m_fUseRouteTime <= engine->Time()))
 				{
 					if(pRoute)
@@ -1049,9 +1049,9 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			}
 			break;
 		}
-    }
+	}
 
-    return false;
+	return false;
 }
 
 // Called when the round starts
@@ -1102,8 +1102,8 @@ void CCSSBot::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWaypo
 			CTraceFilterHitAll filter;
 			const trace_t *tr = CBotGlobals::getTraceResult();
 			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0, 0, CWaypoint::WAYPOINT_HEIGHT / 2),
-			                       pNext->getOrigin() + Vector(0, 0, CWaypoint::WAYPOINT_HEIGHT / 2), MASK_PLAYERSOLID,
-			                       &filter);
+								   pNext->getOrigin() + Vector(0, 0, CWaypoint::WAYPOINT_HEIGHT / 2), MASK_PLAYERSOLID,
+								   &filter);
 			if(tr->fraction < 1.0f)
 			{
 				if(tr->m_pEnt)

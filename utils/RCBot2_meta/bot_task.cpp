@@ -2182,9 +2182,10 @@ void CFindPathTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 }
 
 CBotTF2FindPipeWaypoint::CBotTF2FindPipeWaypoint(const Vector& vOrigin, const Vector& vTarget)
-	: m_iters(0), m_i(0), m_j(0), m_vOrigin(vOrigin), m_vTarget(vTarget), m_iTargetWaypoint(static_cast<short>(CWaypointLocations::NearestWaypoint(m_vTarget, BLAST_RADIUS, -1, true, true))), m_fNearesti(2048.0f),
-	m_fNearestj(4096.0f), m_iNearesti(-1), m_iNearestj(-1),
-	m_pTable(CWaypoints::getVisiblity())
+    : m_iters(0), m_i(0), m_j(0), m_vOrigin(vOrigin), m_vTarget(vTarget), 
+      m_iTargetWaypoint(static_cast<short>(CWaypointLocations::NearestWaypoint(m_vTarget, BLAST_RADIUS, -1, true, true))), 
+      m_fNearesti(2048.0f), m_fNearestj(4096.0f), m_iNearesti(-1), m_iNearestj(-1),
+      m_pTable(CWaypoints::getVisiblity()), m_pTarget(nullptr) // initialize m_pTarget to nullptr
 {
 	if (m_iTargetWaypoint != -1)
 	{

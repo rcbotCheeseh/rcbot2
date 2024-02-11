@@ -122,6 +122,7 @@ public:
 	CBotSchedule();
 
 	void _init ();
+
 	virtual void init () {
 	} // nothing, used by sub classes
 

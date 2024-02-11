@@ -207,7 +207,7 @@ int CTFObjectiveResource::getRandomValidPointForTeam ( int team, ePointAttackDef
 					// IF this is not base point and a lot of players are here, reduce probability of defending
 					if ( i != GetBaseControlPointForTeam(team) && numplayers > 1  )
 					{
-						arr[i].fProbMultiplier = 1.0f - static_cast<float>(numplayers)/(gpGlobals->maxClients/4);
+						arr[i].fProbMultiplier = 1.0f - static_cast<float>(numplayers) / static_cast<float>(gpGlobals->maxClients) / 4;
 
 						if ( arr[i].fProbMultiplier <= 0.0f )
 							arr[i].fProbMultiplier = 0.1f;

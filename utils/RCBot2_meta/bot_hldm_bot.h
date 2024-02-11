@@ -45,7 +45,7 @@ public:
 
 	void modThink() override;
 
-	void init();
+	void init(); //TODO: Needs checked [APG]RoboCop[CL]
 	void setup() override;
 
 	bool startGame() override;

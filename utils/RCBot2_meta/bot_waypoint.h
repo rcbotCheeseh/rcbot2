@@ -251,21 +251,21 @@ public:
 //		m_iId = -1;
 	}
 
-	CWaypoint (const Vector& vOrigin, int iFlags = 0, int iYaw = 0)
+	CWaypoint::CWaypoint(const Vector& vOrigin, int iFlags = 0, int iYaw = 0)
+		: m_iFlags(iFlags),
+		m_vOrigin(vOrigin),
+		m_bUsed(true),
+		m_fNextCheckGroundTime(0.0f),
+		m_bHasGround(false),
+		m_fRadius(0.0f),
+		m_bIsReachable(true),
+		m_fCheckReachableTime(0.0f)
 	{
 		m_thePaths.clear();
 		init();
-		m_iFlags = iFlags;
-		m_vOrigin = vOrigin;		
-		m_bUsed = true;
 		setAim(iYaw);
-		m_fNextCheckGroundTime = 0.0f;
-		m_bHasGround = false;
-		m_fRadius = 0.0f;
 		m_OpensLaterInfo.clear();
-		m_bIsReachable = true; 
-		m_fCheckReachableTime = 0.0f;
-//		m_iId = iId;
+		//m_iId(iId);
 	}
 
 	bool checkGround ();

@@ -285,7 +285,7 @@ void CTeamFortress2Mod :: mapInit ()
 		m_MapType = TF_MAP_PD; // player destruction
 	else if (std::strncmp(szmapname, "zi_", 3) == 0)
 		m_MapType = TF_MAP_ZI; // Zombie Infection //TODO: add support for those gamemodes [APG]RoboCop[CL]
-	else if (std::strncmp(szmapname, "pass_", 3) == 0)
+	else if (std::strncmp(szmapname, "pass_", 5) == 0)
 		m_MapType = TF_MAP_PASS; // PASS Time
 	else
 		m_MapType = TF_MAP_DM; // deathmatch //TODO: to prevent bots from idling in their spawns by giving them basic tasks [APG]RoboCop[CL]

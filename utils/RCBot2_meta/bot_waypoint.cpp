@@ -342,7 +342,7 @@ float CWaypointNavigator :: getNextYaw ()
 	if ( m_iCurrentWaypoint != -1 )
 		return CWaypoints::getWaypoint(m_iCurrentWaypoint)->getAimYaw();
 
-	return false;
+	return 0.0f;
 }
 
 // best waypoints are those with lowest danger
@@ -640,7 +640,7 @@ void CWaypointNavigator :: belief ( Vector vOrigin, Vector vOther, float fBelief
 
 	//TODO: duplicates? [APG]RoboCop[CL]
 	CWaypointLocations::GetAllVisible(iWptFrom,iWptTo,vOrigin,vOther,fEDist,&m_iVisibles,&m_iInvisibles);
-	CWaypointLocations::GetAllVisible(iWptFrom,iWptTo,vOther,vOrigin,fEDist,&m_iVisibles,&m_iInvisibles);
+	//CWaypointLocations::GetAllVisible(iWptFrom,iWptTo,vOther,vOrigin,fEDist,&m_iVisibles,&m_iInvisibles);
 
 	for (size_t i = 0; i < m_iVisibles.size(); i++)
 	{
@@ -1939,7 +1939,6 @@ void CWaypoint :: init ()
 	m_bUsed = true;
 	m_fNextCheckGroundTime = 0.0f;
 	m_bHasGround = false;
-	m_fRadius = 0.0f;
 	m_OpensLaterInfo.clear();
 	m_bIsReachable = true; 
 	m_fCheckReachableTime = 0.0f;
@@ -3247,14 +3246,14 @@ void CWaypointType :: removeTypeFromWaypoint ( CWaypoint *pWaypoint )
 
 }*/
 
-CWaypointType :: CWaypointType (int iBit, const char *szName, const char *szDescription, WptColor vColour, int iModBits, int iImportance )
+CWaypointType::CWaypointType(int iBit, const char* szName, const char* szDescription, WptColor vColour, int iModBits, int iImportance)
+	: m_iMods(iModBits),
+	m_iBit(iBit),
+	m_szName(CStrings::getString(szName)),
+	m_szDescription(CStrings::getString(szDescription)),
+	m_iImportance(iImportance),
+	m_vColour(vColour)
 {
-	m_iBit = iBit;
-	m_szName = CStrings::getString(szName);
-	m_szDescription = CStrings::getString(szDescription);
-	m_vColour = vColour;
-	m_iMods = iModBits;
-	m_iImportance = iImportance;
 }
 
 bool CWaypoint :: forTeam ( int iTeam )

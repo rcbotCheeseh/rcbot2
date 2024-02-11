@@ -3488,9 +3488,8 @@ void CBots :: kickRandomBotOnTeam ( int team )
 }
 ////////////////////////
 
-CBotLastSee :: CBotLastSee ( edict_t *pEdict )
+CBotLastSee::CBotLastSee(edict_t* pEdict) : m_pLastSee(pEdict)
 {
-	m_pLastSee = pEdict;
 	update();
 }
 
