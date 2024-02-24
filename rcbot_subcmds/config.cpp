@@ -29,26 +29,26 @@
  *
  */
 
-CBotCommandInline GameEventVersion("event_version", CMD_ACCESS_CONFIG, [](CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5)
+CBotCommandInline GameEventVersion("event_version", CMD_ACCESS_CONFIG, [](CClient *pClient, BotCommandArgs args)
 {
-	if ( !pcmd || !*pcmd )
+	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	CBotGlobals::setEventVersion(atoi(pcmd));
+	CBotGlobals::setEventVersion(atoi(args[0]));
 	
 	return COMMAND_ACCESSED;
 });
 
-CBotCommandInline MaxBotsCommand("max_bots", CMD_ACCESS_CONFIG | CMD_ACCESS_DEDICATED, [](CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5)
+CBotCommandInline MaxBotsCommand("max_bots", CMD_ACCESS_CONFIG | CMD_ACCESS_DEDICATED, [](CClient *pClient, BotCommandArgs args)
 {
 	edict_t *pEntity = NULL;
 
 	if ( pClient )
 		pEntity = pClient->getPlayer();
 
-	if ( pcmd && *pcmd )
+	if ( args[0] && *args[0] )
 	{
-		int max = atoi(pcmd);
+		int max = atoi(args[0]);
 
 		bool err = false;
 		int min_bots = CBots::getMinBots();
@@ -77,16 +77,16 @@ CBotCommandInline MaxBotsCommand("max_bots", CMD_ACCESS_CONFIG | CMD_ACCESS_DEDI
 	return COMMAND_ACCESSED;
 });
 
-CBotCommandInline MinBotsCommand("min_bots", CMD_ACCESS_CONFIG | CMD_ACCESS_DEDICATED, [](CClient *pClient, const char *pcmd, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5)
+CBotCommandInline MinBotsCommand("min_bots", CMD_ACCESS_CONFIG | CMD_ACCESS_DEDICATED, [](CClient *pClient, BotCommandArgs args)
 {
 	edict_t *pEntity = NULL;
 
 	if ( pClient )
 		pEntity = pClient->getPlayer();
 
-	if ( pcmd && *pcmd )
+	if ( args[0] && *args[0] )
 	{
-		int min = atoi(pcmd);
+		int min = atoi(args[0]);
 		int max_bots = CBots::getMaxBots();
 
 		bool err = false;

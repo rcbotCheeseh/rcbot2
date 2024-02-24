@@ -148,18 +148,24 @@ bool CBotHelper::isBrushEntity( edict_t *pEntity )
 	return szModel[0] == '*';
 }
 
+/// @brief Searches for entities by classname
+/// @return Entity index/reference or INVALID_EHANDLE_INDEX if none is found
 int CBotHelper::FindEntityByClassname(int start,const char *classname)
 {
 	CBaseEntity *pEntity = servertools->FindEntityByClassname(GetEntity(start), classname);
 	return sm_gamehelpers->EntityToBCompatRef(pEntity);
 }
 
+/// @brief Searches for entities in a sphere
+/// @return Entity index/reference or INVALID_EHANDLE_INDEX if none is found
 int CBotHelper::FindEntityInSphere(int start, Vector center, float radius)
 {
 	CBaseEntity *pEntity = servertools->FindEntityInSphere(GetEntity(start), center, radius);
 	return sm_gamehelpers->EntityToBCompatRef(pEntity);
 }
 
+/// @brief Searches for entities by their networkable class
+/// @return Entity index or INVALID_EHANDLE_INDEX if none is found
 int CBotHelper::FindEntityByNetClass(int start, const char *classname)
 {
 	edict_t *current;
@@ -189,7 +195,7 @@ int CBotHelper::FindEntityByNetClass(int start, const char *classname)
 		}
 	}
 
-	return -1;
+	return INVALID_EHANDLE_INDEX;
 }
 
 /// @brief check if a point is in the field of a view of an object. supports up to 180 degree fov.

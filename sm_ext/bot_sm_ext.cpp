@@ -1,6 +1,10 @@
 #include "bot_sm_ext.h"
 #include "bot_sm_natives.h"
 
+//SourceMod::IBinTools *sm_bintools = nullptr;
+SourceMod::ISDKTools *sm_sdktools = nullptr;
+//SourceMod::ISDKHooks *sm_sdkhooks = nullptr;
+
 using namespace SourceMod;
 
 RCBotSourceModExt g_RCBotSourceMod;
@@ -25,7 +29,6 @@ void RCBotSourceModExt::OnExtensionUnload() {
 }
 
 void RCBotSourceModExt::OnExtensionsAllLoaded() {
-	
 }
 
 void RCBotSourceModExt::OnExtensionPauseChange(bool pause) {
@@ -38,6 +41,20 @@ bool RCBotSourceModExt::QueryRunning(char *error, size_t maxlength) {
 
 bool RCBotSourceModExt::IsMetamodExtension() {
 	return false;
+}
+
+/// @brief caxanga334: Trying to get the interface for other SM extensions on RCBotSourceModExt::OnExtensionsAllLoaded() seems to always fail.
+/// My guess is since RCBot2 is loaded from MM first, it loads before every other SM extension.
+/// So we call this function from RCBotPluginMeta::Hook_LevelInit
+void RCBotSourceModExt::LateLoadExtensions() {
+	//SM_FIND_IFACE(BINTOOLS, sm_bintools);
+	SM_FIND_IFACE(SDKTOOLS, sm_sdktools);
+	//SM_FIND_IFACE(SDKHOOKS, sm_sdkhooks);
+
+	if (sm_sdktools)
+	{
+		sm_main->LogMessage(myself, "Loaded extensions interface");
+	}
 }
 
 const char *RCBotSourceModExt::GetExtensionName() {

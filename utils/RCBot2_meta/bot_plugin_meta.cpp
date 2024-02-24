@@ -58,6 +58,9 @@
 
 #include <build_info.h>
 
+#if defined SM_EXT
+#include "rcbot/entprops.h"
+#endif
 SH_DECL_HOOK6(IServerGameDLL, LevelInit, SH_NOATTRIB, 0, bool, char const *, char const *, char const *, char const *, bool, bool);
 SH_DECL_HOOK3_void(IServerGameDLL, ServerActivate, SH_NOATTRIB, 0, edict_t *, int, int);
 SH_DECL_HOOK1_void(IServerGameDLL, GameFrame, SH_NOATTRIB, 0, bool);
@@ -112,9 +115,12 @@ CON_COMMAND(rcbotd, "access the bot commands on a server")
 		return;
 	}
 
-	//iResult = CBotGlobals::m_pCommands->execute(NULL,engine->Cmd_Argv(1),engine->Cmd_Argv(2),engine->Cmd_Argv(3),engine->Cmd_Argv(4),engine->Cmd_Argv(5),engine->Cmd_Argv(6));
-	eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(nullptr, args.Arg(1), args.Arg(2), args.Arg(3),
-	                                                              args.Arg(4), args.Arg(5), args.Arg(6));
+	// shift args and call subcommand
+	BotCommandArgs argList;
+	for (size_t i = 1; i <= static_cast<size_t>(args.ArgC()); i++) {
+		argList.push_back(args.Arg(i));
+	}
+	eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(NULL, argList);
 
 	if (iResult == COMMAND_ACCESSED)
 	{
@@ -667,8 +673,12 @@ void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 	// is bot command?
 	if ( CBotGlobals::m_pCommands->isCommand(pcmd) )
 	{		
-		//eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient,engine->Cmd_Argv(1),engine->Cmd_Argv(2),engine->Cmd_Argv(3),engine->Cmd_Argv(4),engine->Cmd_Argv(5),engine->Cmd_Argv(6));
-		eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient,args.Arg(1),args.Arg(2),args.Arg(3),args.Arg(4),args.Arg(5),args.Arg(6));
+		// create shifted command list
+		BotCommandArgs argList;
+		for (size_t i = 1; i <= static_cast<size_t>(args.ArgC()); i++) {
+			argList.push_back(args.Arg(i));
+		}
+		eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient, argList);
 
 		if ( iResult == COMMAND_ACCESSED )
 		{

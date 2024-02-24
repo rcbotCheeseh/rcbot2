@@ -968,7 +968,7 @@ public:
 
 	void MvM_Update(); // Mann vs Machine think function!
 
-	bool MvM_IsReady();
+	bool MvM_IsReady() const;
 
 	void MvM_Upgrade (); // TODO: To allow bots to menuselect in order to buy upgrades? [APG]RoboCop[CL]
 

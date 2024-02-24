@@ -3,6 +3,9 @@
 
 #include <IExtensionSys.h>
 #include <smsdk_config.h>
+//#include <IBinTools.h>
+//#include <ISDKHooks.h>
+#include <ISDKTools.h>
 
 #include "bot_plugin_meta.h"
 
@@ -26,6 +29,8 @@ class RCBotSourceModExt : public SourceMod::IExtensionInterface
 	virtual const char *GetExtensionVerString();
 	virtual const char *GetExtensionDescription();
 	virtual const char *GetExtensionDateString();
+
+	virtual void LateLoadExtensions();
 };
 
 bool SM_AcquireInterfaces(char *error, size_t maxlength);
@@ -39,5 +44,9 @@ extern SourceMod::IExtensionManager *smexts;
 
 extern SourceMod::IShareSys *sharesys;
 extern SourceMod::IExtension *myself;
+
+//extern SourceMod::IBinTools *sm_bintools;
+extern SourceMod::ISDKTools *sm_sdktools;
+//extern SourceMod::ISDKHooks *sm_sdkhooks;
 
 #endif

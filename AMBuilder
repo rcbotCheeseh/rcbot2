@@ -54,7 +54,11 @@ sourceFiles = [
   "utils/RCBot2_meta/bot_plugin_meta.cpp",
 
   "rcbot/logging.cpp",
-  "rcbot/math_fix.cpp"
+  "rcbot/helper.cpp",
+  "rcbot/entprops.cpp",
+  #"rcbot/propvar.cpp",
+  "rcbot/math_fix.cpp",
+  "rcbot/tf2/conditions.cpp",
 ]
 
 include_paths = [

@@ -53,7 +53,7 @@ public:
 	float GetForwardViewCone(float angle);
 
 private:
-    inline bool isBoundsDefinedInEntitySpace( edict_t *pEntity )
+	bool isBoundsDefinedInEntitySpace( edict_t *pEntity )
 	{
 		return ((pEntity->GetCollideable()->GetSolidFlags() & FSOLID_FORCE_WORLD_ALIGNED) == 0 &&
 		pEntity->GetCollideable()->GetSolid() != SOLID_BBOX && pEntity->GetCollideable()->GetSolid() != SOLID_NONE);

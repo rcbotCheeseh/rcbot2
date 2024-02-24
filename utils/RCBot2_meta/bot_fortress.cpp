@@ -61,6 +61,7 @@
 #include <cmath>
 #include <cstring>
 
+#include "rcbot/entprops.h"
 #include "rcbot/logging.h"
 
 //caxanga334: SDK 2013 contains macros for std::min and std::max which causes errors when compiling
@@ -70,8 +71,12 @@
 
 extern IVDebugOverlay *debugoverlay;
 
-#define TF2_SPY_CLOAK_BELIEF 40
-#define TF2_HWGUY_REV_BELIEF 60
+enum
+{
+	TF2_SPY_CLOAK_BELIEF = 40,
+	TF2_HWGUY_REV_BELIEF = 60
+};
+
 //extern float g_fBotUtilityPerturb [TF_CLASS_MAX][BOT_UTIL_MAX];
 
 // Payload stuff by   The_Shadow
@@ -2006,7 +2011,7 @@ void CBotTF2 :: updateCarrying ()
 }
 
 /// @brief TF2 Mann vs Machine update/think function
-/*void CBotTF2::MvM_Update()
+void CBotTF2::MvM_Update()
 {
 	if (getTeam() != TF2_TEAM_RED)
 		return; // ?? bots should be on RED team
@@ -2014,25 +2019,22 @@ void CBotTF2 :: updateCarrying ()
 	if (!MvM_IsReady() && entprops->GameRules_GetRoundState() == RoundState_BetweenRounds)
 	{
 		int num_players = 0, num_ready = 0;
-		edict_t* player = nullptr;
-		edict_t* medigun = nullptr;
-		IPlayerInfo* info = nullptr;
-		CBotSchedule* sched = m_pSchedules->getCurrentSchedule();
+		const CBotSchedule* sched = m_pSchedules->getCurrentSchedule();
 
 		// Engineer: Doesn't have a dispenser and is not building something
-		if (getClass() == TF_CLASS_ENGINEER && m_pDispenser.get() == NULL && sched && !sched->isID(SCHED_TF_BUILD))
+		if (getClass() == TF_CLASS_ENGINEER && m_pDispenser.get() == nullptr && sched && !sched->isID(SCHED_TF_BUILD))
 		{
 			updateCondition(CONDITION_CHANGED);
 		}
 
 		for (int i = 1; i <= gpGlobals->maxClients; i++)
 		{
-			player = INDEXENT(i);
+			edict_t* player = INDEXENT(i);
 
 			if (!CBotGlobals::entityIsValid(player))
 				continue;
 
-			info = playerinfomanager->GetPlayerInfo(player);
+			IPlayerInfo* info = playerinfomanager->GetPlayerInfo(player);
 
 			if (!info)
 				continue;
@@ -2044,21 +2046,21 @@ void CBotTF2 :: updateCarrying ()
 				continue;
 
 			// Engineer: Only ready up if my sentry is setup. TO-DO: Also do the same for dispenser and teleporter
-			if (getClass() == TF_CLASS_ENGINEER && m_pSentryGun.get() == NULL)
+			if (getClass() == TF_CLASS_ENGINEER && m_pSentryGun.get() == nullptr)
 			{
 				num_players = 99;
-				logger->Log(LogLevel::DEBUG, "%3.2f - %s is skipping Ready Check. Reason: Dispenser not built!", gpGlobals->curtime, m_szBotName);
+				logger->Log(LogLevel::DEBUG, "%3.2f - %s is skipping Ready Check. Reason: Sentry Gun not built!", gpGlobals->curtime, m_szBotName);
 				break;
 			}
 
 			// Medic: Only ready up if my uber is near ready.
 			if (getClass() == TF_CLASS_MEDIC)
 			{
-				medigun = CTeamFortress2Mod::getMediGun(m_pEdict);
+				edict_t* medigun = CTeamFortress2Mod::getMediGun(m_pEdict);
 				if (medigun && CClassInterface::getUberChargeLevel(medigun) <= 98)
 				{
 					num_players = 99;
-					logger->Log(LogLevel::DEBUG, "%3.2f - %s is skipping Ready Check. Reason: Waiting to fill Übercharge!", gpGlobals->curtime, m_szBotName);
+					logger->Log(LogLevel::DEBUG, "%3.2f - %s is skipping Ready Check. Reason: Waiting to fill Ubercharge!", gpGlobals->curtime, m_szBotName);
 					break;
 				}
 			}
@@ -2066,7 +2068,8 @@ void CBotTF2 :: updateCarrying ()
 			// at this point we know the player is a human and is on RED team
 			num_players++; // increase player count
 
-			if (entprops->GameRules_GetProp("m_bPlayerReady", 4, i) != 0)
+			char prop[] = "m_bPlayerReady";
+			if (entprops->GameRules_GetProp(prop, 4, i) != 0)
 				num_ready++;
 		}
 
@@ -2080,10 +2083,12 @@ void CBotTF2 :: updateCarrying ()
 	}
 }
 
-bool CBotTF2::MvM_IsReady()
+bool CBotTF2::MvM_IsReady() const
 {
-	return entprops->GameRules_GetProp("m_bPlayerReady", 4, engine->IndexOfEdict(getEdict())) == 1;
-}*/
+	char prop[] = "m_bPlayerReady";
+	return entprops->GameRules_GetProp(prop, 4, engine->IndexOfEdict(getEdict())) == 1;
+}
+
 
 // TODO: To allow bots to menuselect in order to buy upgrades? [APG]RoboCop[CL]
 void CBotTF2::MvM_Upgrade()
@@ -5069,10 +5074,10 @@ bool CBotTF2::deployStickies(eDemoTrapType type, const Vector& vStand, const Vec
 
 	if (*iState == STICKY_INIT)
 	{
-		if (iPipesLeft < 6)
+		if (iPipesLeft < 8)
 			*iStickyNum = iPipesLeft;
 		else
-			*iStickyNum = 6;
+			*iStickyNum = 8;
 
 		*iState = 1;
 	}

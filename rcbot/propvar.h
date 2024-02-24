@@ -26,20 +26,63 @@
  *    to your version of the file, but you are not obligated to do so.  If
  *    you do not wish to do so, delete this exception statement from your
  *    version.
+ *
  */
 
-CBotCommandInline ShowUsersCommand("show", CMD_ACCESS_USERS | CMD_ACCESS_DEDICATED, [](CClient *pClient, BotCommandArgs args)
+#ifndef _PROPERTY_VARIABLE_H_
+#define _PROPERTY_VARIABLE_H_
+
+#include <string>
+#include "entprops.h"
+#include "vector.h"
+
+/// @brief Base class for easy access to entity network propteries and datamaps.
+class CPropertyVarBase
 {
-	edict_t *pEntity = NULL;
+public:
+	CPropertyVarBase();
+	virtual ~CPropertyVarBase();
 
-	if ( pClient )
-		pEntity = pClient->getPlayer();
+	/// @brief Initializes the property variable
+	/// @param propname Property name. Get a netprops and datamaps dump for a list of available property names.
+	/// @param type Property type. Prop_Send for network propertys and Prop_Data for datamaps.
+	/// @param entity Entity index to read the property from.
+	virtual void Init(const char* propname, PropType type, int entity);
+	/// @brief Checks if the property is initialized with a property name, type and entity index.
+	bool IsInitialized() { return m_initialized; }
+	/// @brief Marks this as not initialized.
+	virtual void Term();
+protected:
 
-	CAccessClients::showUsers(pEntity);
+	std::string m_propname;
+	PropType m_type;
+	CBaseHandle m_entity;
+	bool m_initialized;
+};
 
-	return COMMAND_ACCESSED;
-});
+class CPropertyVarInt : public CPropertyVarBase
+{
+public:
+	int Get();
+};
 
-CBotSubcommands UserSubcommands("users", CMD_ACCESS_DEDICATED, {
-	&ShowUsersCommand
-});
+class CPropertyVarBool : public CPropertyVarBase
+{
+public:
+	bool Get();
+};
+
+class CPropertyVarFloat : public CPropertyVarBase
+{
+public:
+	float Get();
+};
+
+class CPropertyVarVector : public CPropertyVarBase
+{
+public:
+	Vector Get();
+	void Get(Vector &dest);
+};
+
+#endif

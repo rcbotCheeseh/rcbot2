@@ -34,6 +34,8 @@
 #include <dt_send.h>
 #include <server_class.h>
 
+#define INVALID_ENT_REFERENCE 0xFFFFFFFF
+
 enum PropType
 {
 	Prop_Send = 0,

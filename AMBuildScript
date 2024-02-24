@@ -231,12 +231,12 @@ class MMSConfig(object):
       cxx.cflags += [
         '/W3',
 		'/std:c++14',
-		'/arch:SSE2',
       ]
       cxx.cxxflags += [
         '/EHsc',
         '/GR-',
         '/TP',
+        '/arch:SSE2',
       ]
       cxx.linkflags += [
         '/MACHINE:X86',

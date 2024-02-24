@@ -35,6 +35,10 @@
 static CTF2Conditions s_tf2_conditions;
 CTF2Conditions *tf2_conditions = &s_tf2_conditions;
 
+/// @brief Checks if the player is in a specific condition
+/// @param client Client/Player entity index to check
+/// @param cond Condition number to check
+/// @return TRUE if the given condition is active on the player
 bool CTF2Conditions::TF2_IsPlayerInCondition(int client, TFCond cond)
 {
 	int iCond = static_cast<int>(cond);

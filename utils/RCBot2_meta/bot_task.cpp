@@ -4648,7 +4648,7 @@ CBotTF2DemomanPipeTrap::CBotTF2DemomanPipeTrap(eDemoTrapType type, const Vector&
 	m_vPoint = vLoc;
 	m_vLocation = vLoc;
 	m_vSpread = vSpread;
-	m_iStickies = 6;
+	m_iStickies = 8;
 	m_iTrapType = type;
 	m_vStand = vStand;
 	m_bAutoDetonate = bAutoDetonate;
