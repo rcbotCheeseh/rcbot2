@@ -51,9 +51,15 @@
 
 #define DEFAULT_BOT_NAME "RCBot"
 
-#define BOT_CONVAR_FLAGS_OFFSET 20
+enum
+{
+	BOT_CONVAR_FLAGS_OFFSET = 20
+};
 
-#define BOT_WPT_TOUCH_DIST 72 // distance for bot to touch waypoint
+enum
+{
+	BOT_WPT_TOUCH_DIST = 72 // distance for bot to touch waypoint
+};
 
 enum
 {
@@ -198,7 +204,7 @@ enum
 typedef enum
 {
 	BOT_FUNC_FAIL = 0,
-    BOT_FUNC_CONTINUE,
+	BOT_FUNC_CONTINUE,
 	BOT_FUNC_COMPLETE,
 }eBotFuncState;
 

@@ -49,10 +49,10 @@ float CProfileTimers::m_fNextUpdate = 0;
 // if windows USE THE QUERYPERFORMANCECOUNTER
 #ifdef _WIN32
 inline unsigned __int64 RDTSC()
-    {
-            _asm    _emit 0x0F
-            _asm    _emit 0x31
-    }
+	{
+			_asm    _emit 0x0F
+			_asm    _emit 0x31
+	}
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #else
@@ -63,9 +63,9 @@ inline unsigned __int64 RDTSC()
 //    }
    extern __inline__ unsigned long long int rdtsc()
    {
-     unsigned long long int x;
-     __asm__ volatile (".byte 0x0f, 0x31" : "=A" (x));
-     return x;
+	 unsigned long long int x;
+	 __asm__ volatile (".byte 0x0f, 0x31" : "=A" (x));
+	 return x;
    }
 #endif
 
@@ -86,9 +86,9 @@ CProfileTimer :: CProfileTimer (const char *szFunction)
 void CProfileTimer :: Start()
 {
 #ifdef _WIN32
-    QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&start_cycle));
+	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&start_cycle));
 #else
-        start_cycle = rdtsc();
+		start_cycle = rdtsc();
 #endif
 
 }
@@ -96,11 +96,11 @@ void CProfileTimer :: Start()
 void CProfileTimer :: Stop()
 {
 #ifdef _WIN32
-    unsigned __int64 end_cycle;
-    QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&end_cycle));
+	unsigned __int64 end_cycle;
+	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&end_cycle));
 #else
-    unsigned long long end_cycle;
-    end_cycle = rdtsc();
+	unsigned long long end_cycle;
+	end_cycle = rdtsc();
 #endif
 
 	m_last = end_cycle - start_cycle;

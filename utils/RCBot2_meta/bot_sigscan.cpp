@@ -57,7 +57,7 @@ size_t CSignatureFunction::decodeHexString(unsigned char* buffer, size_t maxleng
 {
 	size_t written = 0;
 	const size_t length = std::strlen(hexstr);
-	
+
 	for (size_t i = 0; i < length; i++)
 	{
 		if (written >= maxlength)
@@ -79,7 +79,7 @@ size_t CSignatureFunction::decodeHexString(unsigned char* buffer, size_t maxleng
 			// Check if the value fits into a char
 			if (r_byte <= UCHAR_MAX)
 			{
-				// Save the value 
+			// Save the value 
 				buffer[written - 1] = static_cast<unsigned char>(r_byte);
 			}
 			else
@@ -90,7 +90,7 @@ size_t CSignatureFunction::decodeHexString(unsigned char* buffer, size_t maxleng
 			i += 3;
 		}
 	}
-	
+
 	return written;
 }
 

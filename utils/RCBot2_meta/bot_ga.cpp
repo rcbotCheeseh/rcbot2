@@ -81,7 +81,7 @@ ga_nn_value CPopulation::totalFitness() const
 
 ga_nn_value CPopulation::bestFitness() const
 {
-	BOOL gotBestFitness = FALSE;
+	BOOL gotBestFitness = false;
 	float fBestFitness = 0.0f;
 
 	for (unsigned int i = 0; i < size(); i++)
@@ -91,7 +91,7 @@ ga_nn_value CPopulation::bestFitness() const
 		if (!gotBestFitness || fFitness > fBestFitness)
 		{
 			fBestFitness = fFitness;
-			gotBestFitness = TRUE;
+			gotBestFitness = true;
 		}
 	}
 

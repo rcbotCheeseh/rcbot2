@@ -74,12 +74,12 @@ public:
 		m_y = static_cast<T>(vVec.y);
 		m_z = static_cast<T>(vVec.z);
 
-		m_bVectorSet = TRUE;
+		m_bVectorSet = true;
 	}
 
 	Vector GetVector () const
 	{
-		return {static_cast<float>(m_x),static_cast<float>(m_y),static_cast<float>(m_z)};
+		return Vector(static_cast<float>(m_x),static_cast<float>(m_y),static_cast<float>(m_z));
 	}
 
 	BOOL IsVectorSet () const
@@ -139,7 +139,7 @@ private:
 class CClient
 {
 public:
-	CClient ()
+	CClient (): m_vLastAutoWaypointCheckPos{}
 	{
 		m_pPlayer = nullptr;
 		m_bWaypointOn = false;
@@ -155,7 +155,7 @@ public:
 		m_fCopyWptRadius = 0.0f;
 		m_iCopyWptFlags = 0;
 		m_iCopyWptArea = 0;
-		
+
 		m_fNextPrintDebugInfo = 0.0f;
 		m_iPrevMenu = 0;
 		m_bDebugAutoWaypoint = false;
@@ -164,7 +164,7 @@ public:
 		m_bSetUpAutoWaypoint = false;
 		m_fCanPlaceJump = 0.0f;
 		m_iLastButtons = 0;
-		
+
 		m_iLastJumpWaypointIndex = 0;
 		m_iLastLadderWaypointIndex = 0;
 		m_iLastMoveType = 0;
@@ -175,7 +175,7 @@ public:
 		m_iAutoEventWaypointTeam = 0;
 		m_bIsTeleporting = false;
 		m_fTeleportTime = 0.0f;
-		
+
 		m_szSteamID = nullptr;
 		m_pPlayerInfo = nullptr;
 		m_pDebugBot = nullptr;

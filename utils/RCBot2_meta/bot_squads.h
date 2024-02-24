@@ -145,15 +145,15 @@ public:
 			break;
 		case COMBAT_PRONE:
 			strcpy(szCombatType,"PRONE");
-            break;
-        case COMBAT_CROUCH:
-            strcpy(szCombatType,"CROUCH");
-            break;
+			break;
+		case COMBAT_CROUCH:
+			strcpy(szCombatType,"CROUCH");
+			break;
 		case COMBAT_NONE:
 		case COMBAT_COMBAT:
 			strcpy(szCombatType,"NORMAL");
 			break;
-        }
+		}
 
 		//BotPrintTalkMessageOne ( pLeader, "Combat mode is now %s\n", szCombatType );
 	}

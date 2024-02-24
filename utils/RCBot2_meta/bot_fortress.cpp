@@ -7291,9 +7291,12 @@ void CBotTF2::pointCaptured(int iPoint, int iTeam, const char *szPointName)
 // take a pEdict entity to check if its an enemy
 // return TRUE to "OPEN FIRE" (Attack)
 // return FALSE to ignore
-#define RCBOT_ISENEMY_UNDEF (-1)
-#define RCBOT_ISENEMY_TRUE 1
-#define RCBOT_ISENEMY_FALSE 0
+enum
+{
+	RCBOT_ISENEMY_UNDEF = (-1),
+	RCBOT_ISENEMY_TRUE = 1,
+	RCBOT_ISENEMY_FALSE = 0
+};
 
 bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 {

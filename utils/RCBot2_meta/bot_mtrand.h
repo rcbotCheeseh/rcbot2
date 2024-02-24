@@ -110,8 +110,8 @@ static unsigned long twiddle(unsigned long, unsigned long); // used by gen_state
 
 // inline for speed, must therefore reside in header file
 inline unsigned long MTRand_int32::twiddle(unsigned long u, unsigned long v) {
-    return ((u & 0x80000000UL) | (v & 0x7FFFFFFFUL)) >> 1
-        ^ (v & 1UL ? 0x9908B0DFUL : 0x0UL);
+	return ((u & 0x80000000UL) | (v & 0x7FFFFFFFUL)) >> 1
+		^ (v & 1UL ? 0x9908B0DFUL : 0x0UL);
 }
 
 inline unsigned long MTRand_int32::rand_int32() { // generate 32 bit random int
@@ -134,7 +134,7 @@ public:
   ~MTRand() override = default;
 
   double operator()() {
-    return static_cast<double>(rand_int32()) * (1. / 4294967296.); } // divided by 2^32
+	return static_cast<double>(rand_int32()) * (1. / 4294967296.); } // divided by 2^32
 private:
   MTRand(const MTRand&); // copy constructor not defined
   void operator=(const MTRand&); // assignment operator not defined
@@ -149,7 +149,7 @@ public:
   ~MTRand_closed() override = default;
 
   double operator()() {
-    return static_cast<double>(rand_int32()) * (1. / 4294967295.); } // divided by 2^32 - 1
+	return static_cast<double>(rand_int32()) * (1. / 4294967295.); } // divided by 2^32 - 1
 private:
   MTRand_closed(const MTRand_closed&); // copy constructor not defined
   void operator=(const MTRand_closed&); // assignment operator not defined
@@ -164,7 +164,7 @@ public:
   ~MTRand_open() override = default;
 
   double operator()() {
-    return (static_cast<double>(rand_int32()) + .5) * (1. / 4294967296.); } // divided by 2^32
+	return (static_cast<double>(rand_int32()) + .5) * (1. / 4294967296.); } // divided by 2^32
 private:
   MTRand_open(const MTRand_open&); // copy constructor not defined
   void operator=(const MTRand_open&); // assignment operator not defined
@@ -179,8 +179,8 @@ public:
   ~MTRand53() override = default;
 
   double operator()() {
-    return (static_cast<double>(rand_int32() >> 5) * 67108864. + 
-      static_cast<double>(rand_int32() >> 6)) * (1. / 9007199254740992.); }
+	return (static_cast<double>(rand_int32() >> 5) * 67108864. + 
+	  static_cast<double>(rand_int32() >> 6)) * (1. / 9007199254740992.); }
 private:
   MTRand53(const MTRand53&); // copy constructor not defined
   void operator=(const MTRand53&); // assignment operator not defined

@@ -74,12 +74,12 @@ typedef struct
 
 enum
 {
- DRAWTYPE_EFFECTS = 0,
- DRAWTYPE_DEBUGENGINE,
- DRAWTYPE_DEBUGENGINE2,
- DRAWTYPE_DEBUGENGINE3,
- DRAWTYPE_BELIEF,
- DRAWTYPE_MAX
+	DRAWTYPE_EFFECTS = 0,
+	DRAWTYPE_DEBUGENGINE,
+	DRAWTYPE_DEBUGENGINE2,
+	DRAWTYPE_DEBUGENGINE3,
+	DRAWTYPE_BELIEF,
+	DRAWTYPE_MAX
 };
 
 class CWaypoint;
@@ -124,7 +124,7 @@ class CCrouchWaypointType : public CWaypointType
 {
 public:
 	CCrouchWaypointType();
-    
+	
 	void giveTypeToWaypoint ( CWaypoint *pWaypoint );
 	void removeTypeFromWaypoint ( CWaypoint *pWaypoint );
 };*/
@@ -248,23 +248,23 @@ public:
 	{
 		m_thePaths.clear();
 		init();
-//		m_iId = -1;
+		//m_iId = -1;
 	}
 
-	CWaypoint::CWaypoint(const Vector& vOrigin, int iFlags = 0, int iYaw = 0)
-		: m_iFlags(iFlags),
-		m_vOrigin(vOrigin),
-		m_bUsed(true),
-		m_fNextCheckGroundTime(0.0f),
-		m_bHasGround(false),
-		m_fRadius(0.0f),
-		m_bIsReachable(true),
-		m_fCheckReachableTime(0.0f)
+	CWaypoint(const Vector& vOrigin, int iFlags = 0, int iYaw = 0)
 	{
 		m_thePaths.clear();
 		init();
+		m_iFlags = iFlags;
+		m_vOrigin = vOrigin;
+		m_bUsed = true;
 		setAim(iYaw);
+		m_fNextCheckGroundTime = 0.0f;
+		m_bHasGround = false;
+		m_fRadius = 0.0f;
 		m_OpensLaterInfo.clear();
+		m_bIsReachable = true;
+		m_fCheckReachableTime = 0.0f;
 		//m_iId(iId);
 	}
 
@@ -325,7 +325,7 @@ public:
 	void info ( edict_t *pEdict );
 
 	// methods
-    void touched (); // TODO: Needs implemented properly [APG]RoboCop[CL]
+	void touched (); // TODO: Needs implemented properly [APG]RoboCop[CL]
 
 	void draw ( edict_t *pEdict, bool bDrawPaths, unsigned short int iDrawType );
 
@@ -496,9 +496,9 @@ public:
 	static CWaypoint *randomRouteWaypoint ( CBot *pBot, const Vector& vOrigin, const Vector& vGoal, int iTeam, int iArea );
 	static CWaypoint *randomWaypointGoal ( int iFlags, int iTeam = 0, int iArea = 0, bool bForceArea = false, CBot *pBot = nullptr, bool bHighDanger = false, int iSearchFlags = 0, int iIgnore = -1 );
 	static CWaypoint *randomWaypointGoalBetweenArea (int iFlags, int iTeam, int iArea, bool bForceArea, CBot* pBot, bool bHighDanger, const Vector* org1, const Vector* org2, bool
-	                                                 bIgnoreBelief = false, int iWpt1 = -1, int iWpt2 = -1);
+													 bIgnoreBelief = false, int iWpt1 = -1, int iWpt2 = -1);
 	static CWaypoint *randomWaypointGoalNearestArea (int iFlags, int iTeam, int iArea, bool bForceArea, CBot* pBot, bool bHighDanger, const Vector* origin, int iIgnore = -1, bool
-	                                                 bIgnoreBelief = false, int iWpt1 = -1);
+													 bIgnoreBelief = false, int iWpt1 = -1);
 	static int randomFlaggedWaypoint (int iTeam = 0);
 
 	static CWaypointVisibilityTable *getVisiblity () { return m_pVisibilityTable; }

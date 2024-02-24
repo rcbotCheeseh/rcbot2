@@ -92,5 +92,5 @@ char *CStrings :: getString ( const char *szString )
 
 	m_Strings[iHash].emplace_back(szNew);
 
-    return szNew;
+	return szNew;
 }

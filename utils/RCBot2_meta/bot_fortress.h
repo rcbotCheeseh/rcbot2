@@ -216,30 +216,30 @@ enum
 
 typedef enum
 {
-    TF_VC_MEDIC = 0,
+	TF_VC_MEDIC = 0,
 	TF_VC_INCOMING = 1,
 	TF_VC_HELP = 2,
-    TF_VC_THANKS = 4,
+	TF_VC_THANKS = 4,
 	TF_VC_SPY = 5,
 	TF_VC_BATTLECRY = 6,
-    TF_VC_GOGOGO = 8,
-    TF_VC_SENTRYAHEAD = 9,
+	TF_VC_GOGOGO = 8,
+	TF_VC_SENTRYAHEAD = 9,
 	TF_VC_CHEERS = 10,
-    TF_VC_MOVEUP = 12,
-    TF_VC_TELEPORTERHERE = 13,//TODO: allow engineers to hearcommands [APG]RoboCop[CL]
-    TF_VC_JEERS = 14,
-    TF_VC_GOLEFT = 16,
+	TF_VC_MOVEUP = 12,
+	TF_VC_TELEPORTERHERE = 13,//TODO: allow engineers to hearcommands [APG]RoboCop[CL]
+	TF_VC_JEERS = 14,
+	TF_VC_GOLEFT = 16,
 	TF_VC_DISPENSERHERE = 17,// TODO: allow engineers to hearcommands [APG]RoboCop[CL]
 	TF_VC_POSITIVE = 18,
-    TF_VC_GORIGHT = 20,
-    TF_VC_SENTRYHERE = 21,
-    TF_VC_NEGATIVE = 22,
-    TF_VC_YES = 24,
-    TF_VC_ACTIVATEUBER = 25,
-    TF_VC_NICESHOT = 26,
-    TF_VC_NO = 28,
-    TF_VC_UBERREADY = 29,
-    TF_VC_GOODJOB = 30,
+	TF_VC_GORIGHT = 20,
+	TF_VC_SENTRYHERE = 21,
+	TF_VC_NEGATIVE = 22,
+	TF_VC_YES = 24,
+	TF_VC_ACTIVATEUBER = 25,
+	TF_VC_NICESHOT = 26,
+	TF_VC_NO = 28,
+	TF_VC_UBERREADY = 29,
+	TF_VC_GOODJOB = 30,
 	TF_VC_INVALID = 31
 }eTFVoiceCMD;
 
@@ -253,6 +253,24 @@ typedef enum
 	TF_TRAP_TYPE_PL,
 	TF_TRAP_TYPE_ENEMY
 }eDemoTrapType;
+
+//TODO: To allow the proper slot# values to be used,
+//the class names should be changed to the slot names [APG]RoboCop[CL]
+
+/*typedef enum
+{
+	TF_CLASS_UNDEFINED = 0,
+	TF_CLASS_SCOUT = 1,
+	TF_CLASS_SOLDIER = 2,
+	TF_CLASS_PYRO = 3,
+	TF_CLASS_DEMOMAN = 4,
+	TF_CLASS_HWGUY = 5,
+	TF_CLASS_MEDIC = 6,
+	TF_CLASS_ENGINEER = 7,
+	TF_CLASS_SNIPER = 8,
+	TF_CLASS_SPY = 9,
+	TF_CLASS_MAX = 10
+}TF_Class;*/
 
 typedef enum
 {
@@ -306,8 +324,12 @@ class CBotTF2FunctionEnemyAtIntel : public IBotFunction
 {
 public:
 	CBotTF2FunctionEnemyAtIntel(int iTeam, const Vector& vPos, int type, edict_t* pPlayer = nullptr, int capindex = -1)
-		: m_iTeam(iTeam), m_vPos(vPos), m_iType(type), m_pPlayer(pPlayer), m_iCapIndex(capindex)
 	{
+		m_iTeam = iTeam;
+		m_vPos = vPos;
+		m_iType = type;
+		m_pPlayer = pPlayer;
+		m_iCapIndex = capindex;
 	}
 
 	void execute (CBot *pBot) override;
@@ -349,7 +371,7 @@ private:
 class CBroadcastFlagDropped : public IBotFunction
 {
 public:
-	CBroadcastFlagDropped(int iTeam, const Vector& origin) : m_vOrigin(origin), m_iTeam(iTeam) {}
+	CBroadcastFlagDropped (int iTeam, const Vector& origin) { m_iTeam = iTeam; m_vOrigin = origin; }
 	void execute ( CBot *pBot ) override;
 
 private:
@@ -825,8 +847,8 @@ public:
 
 	//Vector getAimVector ( edict_t *pEntity );
 	void modAim ( edict_t *pEntity, Vector &v_origin, 
-	              Vector *v_desired_offset, Vector &v_size,
-	              float fDist, float fDist2D) override;
+				  Vector *v_desired_offset, Vector &v_size,
+				  float fDist, float fDist2D) override;
 
 	void modThink () override;
 
@@ -1023,14 +1045,14 @@ private:
 class CBotFF : public CBotFortress
 {
 public:
-	CBotFF() {} //TODO: Base class constructor is automatically called? [APG]RoboCop[CL]
-	
-    void modThink () override;
-	
-    bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true ) override;
-	
-    bool isTF () override { return true; }
-	
+	CBotFF() { CBotFortress(); } //TODO: unused object [APG]RoboCop[CL]
+
+	void modThink () override;
+
+	bool isEnemy ( edict_t *pEdict,bool bCheckWeapons = true ) override;
+
+	bool isTF () override { return true; }
+
 };
 
 #endif

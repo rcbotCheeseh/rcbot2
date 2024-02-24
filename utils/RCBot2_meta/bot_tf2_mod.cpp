@@ -340,31 +340,31 @@ int CTeamFortress2Mod :: getTeleporterWaypoint ( edict_t *pTele )
 bool CTeamFortress2Mod :: TF2_IsPlayerZoomed(edict_t *pPlayer)
 {
 	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
-    return (pcond & TF2_PLAYER_ZOOMED) == TF2_PLAYER_ZOOMED;
+	return (pcond & TF2_PLAYER_ZOOMED) == TF2_PLAYER_ZOOMED;
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerSlowed(edict_t *pPlayer)
 {
 	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
-    return (pcond & TF2_PLAYER_SLOWED) == TF2_PLAYER_SLOWED;
+	return (pcond & TF2_PLAYER_SLOWED) == TF2_PLAYER_SLOWED;
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerDisguised(edict_t *pPlayer)
 {
 	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
-    return (pcond & TF2_PLAYER_DISGUISED) == TF2_PLAYER_DISGUISED;
+	return (pcond & TF2_PLAYER_DISGUISED) == TF2_PLAYER_DISGUISED;
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerTaunting ( edict_t *pPlayer )
 {
 	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
-    return (pcond & TF2_PLAYER_TAUNTING) == TF2_PLAYER_TAUNTING;
+	return (pcond & TF2_PLAYER_TAUNTING) == TF2_PLAYER_TAUNTING;
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerCloaked(edict_t *pPlayer)
 {
 	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
-    return (pcond & TF2_PLAYER_CLOAKED) == TF2_PLAYER_CLOAKED;
+	return (pcond & TF2_PLAYER_CLOAKED) == TF2_PLAYER_CLOAKED;
 }
 
 bool CTeamFortress2Mod :: TF2_IsPlayerKrits(edict_t *pPlayer)
@@ -389,7 +389,7 @@ bool CTeamFortress2Mod :: TF2_IsPlayerInvuln(edict_t *pPlayer)
 bool CTeamFortress2Mod :: TF2_IsPlayerOnFire(edict_t *pPlayer)
 {
 	const int pcond = CClassInterface :: getTF2Conditions(pPlayer);
-    return (pcond & TF2_PLAYER_ONFIRE) == TF2_PLAYER_ONFIRE;
+	return (pcond & TF2_PLAYER_ONFIRE) == TF2_PLAYER_ONFIRE;
 }
 
 int CTeamFortress2Mod ::numClassOnTeam( int iTeam, int iClass )
@@ -438,15 +438,15 @@ float CTeamFortress2Mod :: TF2_GetClassSpeed(int iClass)
 { 
 switch (iClass) 
 { 
-case TF_CLASS_SCOUT: return 133.0f; 
-case TF_CLASS_SOLDIER: return 80.0f; 
-case TF_CLASS_DEMOMAN: return 93.0f; 
-case TF_CLASS_MEDIC: return 109.0f; 
-case TF_CLASS_PYRO: return 100.0f; 
-case TF_CLASS_SPY: return 109.0f; 
-case TF_CLASS_ENGINEER: return 100.0f;
-case TF_CLASS_HWGUY: return 77.0f;
-case TF_CLASS_SNIPER: return 100.0f; 
+	case TF_CLASS_SCOUT: return 133.0f; 
+	case TF_CLASS_SOLDIER: return 80.0f; 
+	case TF_CLASS_DEMOMAN: return 93.0f; 
+	case TF_CLASS_MEDIC: return 109.0f; 
+	case TF_CLASS_PYRO: return 100.0f; 
+	case TF_CLASS_SPY: return 109.0f; 
+	case TF_CLASS_ENGINEER: return 100.0f;
+	case TF_CLASS_HWGUY: return 77.0f;
+	case TF_CLASS_SNIPER: return 100.0f; 
 } 
 return 0.0f; 
 } 

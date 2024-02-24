@@ -468,7 +468,7 @@ void CClient :: think ()
 			}
 
 			m_vLastAutoWaypointPlacePos = getOrigin();
-			m_bSetUpAutoWaypoint = TRUE;
+			m_bSetUpAutoWaypoint = true;
 			m_fCanPlaceJump = 0.0f;
 			m_iLastButtons = 0;
 

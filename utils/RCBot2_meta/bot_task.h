@@ -643,8 +643,8 @@ public:
 		m_vDefendOrigin(vDefendOrigin),
 		m_LookTask(looktask),
 		m_iWaypointType(iWaypointType)
-	{
-		setCompleteInterrupt(iInterrupt);
+	{ 
+		setCompleteInterrupt(iInterrupt); 
 	}
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
@@ -675,8 +675,8 @@ public:
 		m_iCurPath(0),
 		m_bHasPOV(bHasPOV),
 		m_vPOV(vPOV)
-	{
-		setCompleteInterrupt(iInterrupt);
+	{ 
+		setCompleteInterrupt(iInterrupt); 
 	}
 	
 	void execute (CBot *pBot,CBotSchedule *pSchedule) override;
@@ -966,7 +966,7 @@ public:
 
 	void debugString ( char *string ) override;
 private:
-    MyEHandle m_pEnemy;
+	MyEHandle m_pEnemy;
 	Vector m_vPosition;
 	float m_fTime;
 };
@@ -1401,8 +1401,7 @@ public:
 	void init () override;
 
 	void execute ( CBot *pBot, CBotSchedule *pSchedule ) override;
-
-
+	
 	void debugString ( char *string ) override
 	{
 		std::sprintf(string,"CFindGoodHideSpot");
@@ -1442,7 +1441,6 @@ private:
 	Vector m_vLastSeeVector;
 	Vector m_vLastSeeVelocity;
 };
-
 
 class CCrouchHideTask : public CBotTask
 {
@@ -1573,7 +1571,7 @@ private:
 	Vector m_vPos;
 };
 
-class CBotSynUseCharger : public CBotTask
+class CBotSynUseCharger: public CBotTask
 {
 public:
 	CBotSynUseCharger(edict_t* pCharger, int type)

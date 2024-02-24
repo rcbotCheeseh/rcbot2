@@ -328,7 +328,7 @@ struct AstarNodeCompare : binary_function<AStarNode*, AStarNode*, bool>
   // Other stuff...
   bool operator()(AStarNode* x, AStarNode* y) const 
   {
-    return y->betterCost(x);
+	return y->betterCost(x);
   }
 };
 
@@ -337,16 +337,16 @@ class AStarOpenList : public vector<AStarNode*>
   AstarNodeCompare comp;
 public:
   AStarOpenList(AstarNodeCompare cmp = AstarNodeCompare()) : comp(cmp) {
-    make_heap(begin(), end(), comp);
+	make_heap(begin(), end(), comp);
   }
   AStarNode* top() { return front(); }
   void push(AStarNode* x) {
-    emplace_back(x);
-    push_heap(begin(), end(), comp);
+	emplace_back(x);
+	push_heap(begin(), end(), comp);
   }
   void pop() {
-    pop_heap(begin(), end(), comp);
-    pop_back();
+	pop_heap(begin(), end(), comp);
+	pop_back();
   }  
 };*/
 
@@ -354,12 +354,12 @@ public:
 /*
 bool operator<( const AStarNode & A, const AStarNode & B )
 {
-    return A.betterCost(&B);
+	return A.betterCost(&B);
 }
 
 bool operator<( const AStarNode * A, const AStarNode * B )
 {
-    return A->betterCost(B);
+	return A->betterCost(B);
 }*/
 
 enum
@@ -383,18 +383,15 @@ public:
 	CWaypointNavigator(CBot* pBot)
 	{
 		CWaypointNavigator::init();
-		m_pBot = pBot;
+		m_pBot = pBot; 
 		m_fNextClearFailedGoals = 0;
 		m_bDangerPoint = false;
 		m_iBeliefTeam = -1;
 		m_bLoadBelief = true;
 		m_bBeliefChanged = false;
-		memset(&m_lastFailedPath, 0, sizeof(failedpath_t));
-		// Initialize curr and succ
-		curr = nullptr; // or another appropriate value
-		succ = nullptr; // or another appropriate value
+		memset(&m_lastFailedPath,0,sizeof(failedpath_t));
 	}
-	
+
 	void init () override;
 
 	CWaypoint *chooseBestFromBelief (const std::vector<CWaypoint*>& goals, bool bHighDanger = false, int iSearchFlags = 0, int iTeam = 0) const;
@@ -412,8 +409,8 @@ public:
 
 	void updatePosition () override;
 
-    float getBelief ( int index ) override
-    { if ( index >= 0 ) return m_fBelief[index]; return 0; }
+	float getBelief ( int index ) override
+	{ if ( index >= 0 ) return m_fBelief[index]; return 0; }
 
 	void failMove () override;
 
@@ -546,7 +543,7 @@ public:
 
 	void init () override;
 
-    void belief ( Vector origin, Vector facing, float fBelief, float fStrength, BotBelief iType ) override {} //bir3yk
+	void belief ( Vector origin, Vector facing, float fBelief, float fStrength, BotBelief iType ) override {} //bir3yk
 
 	//void rememberEnemyPosition ( Vector vOrigin );
 

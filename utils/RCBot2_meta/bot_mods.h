@@ -529,7 +529,7 @@ private:
 
 	// reply on this one
 	bool *m_bBombPlanted_Unreliable;
-    bool m_bBombPlanted[MAX_DOD_FLAGS];
+	bool m_bBombPlanted[MAX_DOD_FLAGS];
 	float m_fBombPlantedTime[MAX_DOD_FLAGS];
 	int *m_iBombsRequired;
 	int *m_iBombsRemaining;
@@ -1014,7 +1014,7 @@ public:
 	static void roundStarted ()
 	{
 		m_bHasRoundStarted = true;
-	    m_bRoundOver = false;
+		m_bRoundOver = false;
 		m_iWinningTeam = 0; 
 	}
 

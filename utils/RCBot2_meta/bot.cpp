@@ -363,12 +363,21 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	#if SOURCE_ENGINE == SE_TF2
 	helpers->ClientCommand(pEdict, "jointeam auto");
 
-	//"heavy" should me "heavyweapons" in TF2? [APG]RoboCop[CL]
+	//"heavy" should me "heavyweapons" in TF2?
+	//
+	//TODO: To allow the proper slot# values to be used,
+	//the class names should be changed to the slot names [APG]RoboCop[CL]
+	
+	/*char classNames[32][10] = {
+	"auto", "scout", "soldier", "pyro", "demoman", "heavy", "medic",
+	"engineer",	"sniper", "spy",
+	};*/
+	
 	char classNames[32][10] = {
 		"auto", "scout", "sniper", "soldier", "demoman", "medic", "heavy",
 		"pyro", "spy", "engineer"
 	};
-	
+
 	char cmd[32];
 	if (m_iDesiredClass >= 0 && static_cast<unsigned>(m_iDesiredClass) < sizeof(classNames)) {
 		snprintf(cmd, sizeof(cmd), "joinclass %s", classNames[m_iDesiredClass]);
@@ -456,7 +465,6 @@ inline QAngle CBot :: eyeAngles () const
 
 Vector CBot :: getEyePosition () const
 {
-	
 	Vector vOrigin;//'/ = getOrigin();
 	//vOrigin.z = m_pPlayerInfo->GetPlayerMaxs().z;
 
@@ -2194,8 +2202,8 @@ void CBot :: doMove ()
 
 		const float radians = DEG_TO_RAD(fAngle);
 		//radians = fAngle * 3.141592f / 180.0f; // degrees to radians
-        // fl Move is percentage (0 to 1) of forward speed,
-        // flSide is percentage (0 to 1) of side speed.
+		// fl Move is percentage (0 to 1) of forward speed,
+		// flSide is percentage (0 to 1) of side speed.
 		
 		// quicker
 		SinCos(radians,&move.y,&move.x);
@@ -2831,7 +2839,7 @@ void CBot :: doLook ()
 	getLookAtVector();
 
 	// looking at something?
-    if ( lookAtIsValid () )
+	if ( lookAtIsValid () )
 	{	
 		float fSensitivity;
 		if ( rcbot_supermode.GetBool() || m_bIncreaseSensitivity || onLadder() )
@@ -3488,8 +3496,9 @@ void CBots :: kickRandomBotOnTeam ( int team )
 }
 ////////////////////////
 
-CBotLastSee::CBotLastSee(edict_t* pEdict) : m_pLastSee(pEdict)
+CBotLastSee :: CBotLastSee ( edict_t *pEdict )
 {
+	m_pLastSee = pEdict;
 	update();
 }
 

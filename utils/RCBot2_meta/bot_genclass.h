@@ -651,7 +651,7 @@ class dataUnconstArray
 			array.clear();
 			array = newVec;
 #elif defined(__linux__) && !defined(_DEBUG)
-            typename std::vector<T> ::iterator it;
+			typename std::vector<T> ::iterator it;
 			for ( it = array.begin(); it != array.end(); )
 			{
 				if ( *it == obj )

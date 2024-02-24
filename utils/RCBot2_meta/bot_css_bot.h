@@ -55,8 +55,8 @@ class CCSSBot : public CBot
 {
 public:
 	bool isCSS() override { return true; }
-    void init(bool bVarInit=false) override;
-    void spawnInit() override;
+	void init(bool bVarInit=false) override;
+	void spawnInit() override;
 	void died(edict_t *pKiller, const char *pszWeapon) override;
 	void setup() override;
 	void selectTeam() const;
@@ -64,8 +64,8 @@ public:
 	bool startGame() override;
 	bool isAlive() override;
 	bool isEnemy(edict_t *pEdict,bool bCheckWeapons = true) override;
-    void handleWeapons() override;
-    bool handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy) override;
+	void handleWeapons() override;
+	bool handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy) override;
 	void modAim(edict_t *pEntity, Vector &v_origin, Vector *v_desired_offset, Vector &v_size, float fDist, float fDist2D) override;
 	void updateConditions() override;
 	void modThink() override;

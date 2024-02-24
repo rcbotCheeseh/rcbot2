@@ -109,7 +109,7 @@ bool CWaypointNavigator :: beliefLoad ( )
 {
 	unsigned short int filebelief [ CWaypoints::MAX_WAYPOINTS ];
 
-    char filename[1024];
+	char filename[1024];
 
 	char mapname[512];
 
@@ -183,7 +183,7 @@ bool CWaypointNavigator :: beliefSave ( bool bOverride )
 
 	   const int iSize = bfp.tellg(); // get file size
 	   const int iDesiredSize = CWaypoints::numWaypoints() * sizeof(unsigned short int);
-	    
+		
 	   // size not right, return false to re workout table
 	   if ( iSize == iDesiredSize )
 	   {
@@ -219,11 +219,11 @@ bool CWaypointNavigator :: beliefSave ( bool bOverride )
    bfp.write(reinterpret_cast<char*>(filebelief), sizeof(unsigned short) * num);
 
    // new team -- load belief 
-    m_iBeliefTeam = m_pBot->getTeam();
+	m_iBeliefTeam = m_pBot->getTeam();
 	m_bLoadBelief = true;
 	m_bBeliefChanged = false; // saved
 
-    return true;
+	return true;
 }
 
 bool CWaypointNavigator :: wantToSaveBelief () 
@@ -824,7 +824,7 @@ float CWaypointNavigator :: distanceTo ( Vector vOrigin )
 	if ( m_iCurrentWaypoint != -1 )
 	{
 		const int iGoal = CWaypointLocations::NearestWaypoint(vOrigin, CWaypointLocations::REACHABLE_RANGE, -1, true, false, true,
-		                                                      nullptr, false, m_pBot->getTeam());
+															  nullptr, false, m_pBot->getTeam());
 
 		if ( iGoal != -1 )
 			return CWaypointDistances::getDistance(m_iCurrentWaypoint,iGoal);
@@ -1187,7 +1187,7 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 		m_vGoal = CWaypoints::getWaypoint(m_iGoalWaypoint)->getOrigin();
 	}
 
-    return true; 
+	return true; 
 }
 // if bot has a current position to walk to return the boolean
 bool CWaypointNavigator :: hasNextPoint ()
@@ -2358,7 +2358,7 @@ int CWaypoints :: addWaypoint ( CClient *pClient, const char *type1, const char 
 	else
 	{
 		iIndex = addWaypoint(pClient->getPlayer(), vWptOrigin, iFlags, pClient->isAutoPathOn(), static_cast<int>(playerAngles.y),
-		                     iArea, iFlags != iPrevFlags ? fMaxDistance / 2 : 0); // sort flags out	
+							 iArea, iFlags != iPrevFlags ? fMaxDistance / 2 : 0); // sort flags out	
 	}
 
 	pClient->playSound("weapons/crossbow/hit1");
@@ -2469,7 +2469,7 @@ CWaypoint *CWaypoints :: randomRouteWaypoint (CBot *pBot, const Vector& vOrigin,
 		{
 			if ( pWpt->hasFlag(CWaypointTypes::W_FL_ROUTE) )
 			{
-			    if (pWpt->getArea() != iArea )
+				if (pWpt->getArea() != iArea )
 					continue;
 
 				// CHECK THAT ROUTE WAYPOINT IS USEFUL...
@@ -2657,8 +2657,8 @@ void CWaypoints :: checkAreas ( edict_t *pActivator )
 }
 
 CWaypoint* CWaypoints::randomWaypointGoalNearestArea(int iFlags, int iTeam, int iArea, bool bForceArea, CBot* pBot,
-                                                     bool bHighDanger, const Vector* origin, int iIgnore, bool
-                                                     bIgnoreBelief, int iWpt1)
+													 bool bHighDanger, const Vector* origin, int iIgnore, bool
+													 bIgnoreBelief, int iWpt1)
 {
 	int i;
 	static short int size; 
@@ -2741,8 +2741,8 @@ CWaypoint* CWaypoints::randomWaypointGoalNearestArea(int iFlags, int iTeam, int 
 }
 
 CWaypoint* CWaypoints::randomWaypointGoalBetweenArea(int iFlags, int iTeam, int iArea, bool bForceArea, CBot* pBot,
-                                                     bool bHighDanger, const Vector* org1, const Vector* org2, bool
-                                                     bIgnoreBelief, int iWpt1, int iWpt2)
+													 bool bHighDanger, const Vector* org1, const Vector* org2, bool
+													 bIgnoreBelief, int iWpt1, int iWpt2)
 {
 	static short int size; 
 	CWaypoint *pWpt;
@@ -3177,7 +3177,7 @@ void CWaypointTypes:: printInfo ( CWaypoint *pWpt, edict_t *pPrintTo, float dura
 	const CBotMod *pCurrentMod = CBotGlobals::getCurrentMod();
 	char szMessage[1024];
 	Q_snprintf(szMessage, 1024, "Waypoint ID %d (Area = %d | Radius = %0.1f)[", CWaypoints::getWaypointIndex(pWpt),
-	           pWpt->getArea(), static_cast<double>(pWpt->getRadius()));	
+			   pWpt->getArea(), static_cast<double>(pWpt->getRadius()));	
 
 	if ( pWpt->getFlags() )
 	{
@@ -3213,7 +3213,7 @@ void CWaypointTypes:: printInfo ( CWaypoint *pWpt, edict_t *pPrintTo, float dura
 /*
 CCrouchWaypointType :: CCrouchWaypointType()
 {
-    CWaypointType(W_FL_CROUCH,"crouch","bot will duck here",WptColor(200,100,0));
+	CWaypointType(W_FL_CROUCH,"crouch","bot will duck here",WptColor(200,100,0));
 }
 
 void CCrouchWaypointType :: giveTypeToWaypoint ( CWaypoint *pWaypoint )
