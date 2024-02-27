@@ -54,8 +54,8 @@
 
 #include <cstring>
 
-extern IVDebugOverlay *debugoverlay;
-extern IServerGameEnts *servergameents; // for accessing the server game entities
+extern IVDebugOverlay* debugoverlay;
+extern IServerGameEnts* servergameents; // for accessing the server game entities
 
 void CBotSynergy::init(bool bVarInit)
 {
@@ -86,13 +86,13 @@ void CBotSynergy::spawnInit()
 	m_flPickUpTime = engine->Time();
 }
 
-void CBotSynergy::died(edict_t *pKiller, const char *pszWeapon)
+void CBotSynergy::died(edict_t* pKiller, const char* pszWeapon)
 {
 	CBot::died(pKiller, pszWeapon);
 
-	if(pKiller)
+	if (pKiller)
 	{
-		if(CBotGlobals::entityIsValid(pKiller))
+		if (CBotGlobals::entityIsValid(pKiller))
 		{
 			m_pNavigator->belief(CBotGlobals::entityOrigin(pKiller), getEyePosition(), bot_beliefmulti.GetFloat(), distanceFrom(pKiller), BELIEF_DANGER);
 		}
@@ -101,7 +101,7 @@ void CBotSynergy::died(edict_t *pKiller, const char *pszWeapon)
 
 /**
  * Determines if the bot needs health
- * 
+ *
  * @return          True if the bot needs health
  **/
 bool CBotSynergy::needHealth()
@@ -111,21 +111,21 @@ bool CBotSynergy::needHealth()
 
 /**
  * Determines if the bot needs ammo
- * 
+ *
  * @return          True if the bot needs ammo
  **/
 bool CBotSynergy::needAmmo()
 {
-	if(m_pCurrentWeapon == nullptr)
+	if (m_pCurrentWeapon == nullptr)
 	{
 		return false;
 	}
 
-	const CBotWeapon *weapon = m_pWeapons->getWeapon(CWeapons::getWeapon(m_pCurrentWeapon->GetClassName()));
-	if(weapon)
+	const CBotWeapon* weapon = m_pWeapons->getWeapon(CWeapons::getWeapon(m_pCurrentWeapon->GetClassName()));
+	if (weapon)
 	{
 		const int iAmmo = weapon->getAmmo(this); // Current weapon reserve ammo
-		
+
 		switch (weapon->getID())
 		{
 		case SYN_WEAPON_PISTOL:
@@ -155,7 +155,7 @@ bool CBotSynergy::needAmmo()
 		case SYN_WEAPON_CROSSBOW:
 		{
 			return iAmmo < 2;
-			break;			
+			break;
 		}
 		case SYN_WEAPON_RPG:
 		{
@@ -180,28 +180,28 @@ void CBotSynergy::modThink()
 	m_pCurrentWeapon = CClassInterface::getCurrentWeapon(m_pEdict);
 	m_flSuitPower = CClassInterface::getSynPlayerSuitPower(m_pEdict);
 
-	if(needHealth())
+	if (needHealth())
 		updateCondition(CONDITION_NEED_HEALTH);
 	else
 		removeCondition(CONDITION_NEED_HEALTH);
 
-	if(needAmmo())
+	if (needAmmo())
 		updateCondition(CONDITION_NEED_AMMO);
 	else
 		removeCondition(CONDITION_NEED_AMMO);
 
-	if(onLadder())
+	if (onLadder())
 	{
 		setMoveLookPriority(MOVELOOK_OVERRIDE);
 		setLookAtTask(LOOK_WAYPOINT);
-		m_pButtons->holdButton(IN_FORWARD,0,1,0);
+		m_pButtons->holdButton(IN_FORWARD, 0, 1, 0);
 		setMoveLookPriority(MOVELOOK_MODTHINK);
 	}
 
-	if(m_pNearbyGrenade && distanceFrom(m_pNearbyGrenade.get()) <= 200.0f) // Nearby grenade, RUN for cover!
+	if (m_pNearbyGrenade && distanceFrom(m_pNearbyGrenade.get()) <= 200.0f) // Nearby grenade, RUN for cover!
 	{
 		updateCondition(CONDITION_RUN);
-		if(!m_pSchedules->isCurrentSchedule(SCHED_GOOD_HIDE_SPOT))
+		if (!m_pSchedules->isCurrentSchedule(SCHED_GOOD_HIDE_SPOT))
 		{
 			m_pSchedules->removeSchedule(SCHED_GOOD_HIDE_SPOT);
 			m_pSchedules->addFront(new CGotoHideSpotSched(this, m_pNearbyGrenade, false)); // bIsGrenade is false because when true the bot will do a DoD specific task
@@ -209,17 +209,17 @@ void CBotSynergy::modThink()
 		}
 	}
 
-	if(m_pNearbyMine && distanceFrom(m_pNearbyMine.get()) <= 512.0f && !CSynergyMod::IsCombineMineDisarmed(m_pNearbyMine.get()))
+	if (m_pNearbyMine && distanceFrom(m_pNearbyMine.get()) <= 512.0f && !CSynergyMod::IsCombineMineDisarmed(m_pNearbyMine.get()))
 	{
-		if(CSynergyMod::IsCombineMinePlayerPlaced(m_pNearbyMine.get()))
+		if (CSynergyMod::IsCombineMinePlayerPlaced(m_pNearbyMine.get()))
 		{
 			m_pNearbyMine = nullptr; // The mine is friendly now.
 		}
 		else
 		{
-			if(m_pWeapons->hasWeapon(SYN_WEAPON_PHYSCANNON) && !CSynergyMod::IsCombineMineHeldByPhysgun(m_pNearbyMine.get()))
+			if (m_pWeapons->hasWeapon(SYN_WEAPON_PHYSCANNON) && !CSynergyMod::IsCombineMineHeldByPhysgun(m_pNearbyMine.get()))
 			{
-				if(!m_pSchedules->isCurrentSchedule(SCHED_SYN_DISARM_MINE))
+				if (!m_pSchedules->isCurrentSchedule(SCHED_SYN_DISARM_MINE))
 				{
 					m_pSchedules->removeSchedule(SCHED_SYN_DISARM_MINE);
 					m_pSchedules->addFront(new CSynDisarmMineSched(m_pNearbyMine.get()));
@@ -234,17 +234,17 @@ void CBotSynergy::modThink()
 	}
 
 	// Pick nearby weapons that the bot doesn't already have
-	if(m_pNearbyWeapon && distanceFrom(m_pNearbyWeapon.get()) <= 400.0f && m_flPickUpTime <= engine->Time())
+	if (m_pNearbyWeapon && distanceFrom(m_pNearbyWeapon.get()) <= 400.0f && m_flPickUpTime <= engine->Time())
 	{
-		const edict_t *pOwner = CClassInterface::getOwner(m_pNearbyWeapon);
+		const edict_t* pOwner = CClassInterface::getOwner(m_pNearbyWeapon);
 
-		if(pOwner != nullptr) // Someone already owns this weapon
+		if (pOwner != nullptr) // Someone already owns this weapon
 		{
 			m_pNearbyWeapon = nullptr;
 		}
 		else
 		{
-			if(!m_pSchedules->isCurrentSchedule(SCHED_PICKUP))
+			if (!m_pSchedules->isCurrentSchedule(SCHED_PICKUP))
 			{
 				m_pSchedules->removeSchedule(SCHED_PICKUP);
 				m_pSchedules->addFront(new CBotPickupSched(m_pNearbyWeapon.get()));
@@ -255,37 +255,37 @@ void CBotSynergy::modThink()
 	}
 
 	// Checks for nearby item boxes and try to break them
-	if(m_pNearbyItemCrate && distanceFrom(m_pNearbyItemCrate.get()) <= 400.0f && m_flPickUpTime <= engine->Time())
+	if (m_pNearbyItemCrate && distanceFrom(m_pNearbyItemCrate.get()) <= 400.0f && m_flPickUpTime <= engine->Time())
 	{
-		if(!m_pSchedules->isCurrentSchedule(SCHED_SYN_BREAK_ICRATE))
+		if (!m_pSchedules->isCurrentSchedule(SCHED_SYN_BREAK_ICRATE))
 		{
-			CBotWeapon *pWeapon = nullptr;
+			CBotWeapon* pWeapon = nullptr;
 
-			if(m_pWeapons->hasWeapon(SYN_WEAPON_PHYSCANNON))
+			if (m_pWeapons->hasWeapon(SYN_WEAPON_PHYSCANNON))
 			{
 				pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_PHYSCANNON));
 			}
-			else if(m_pWeapons->hasWeapon(SYN_WEAPON_CROWBAR))
+			else if (m_pWeapons->hasWeapon(SYN_WEAPON_CROWBAR))
 			{
 				pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_CROWBAR));
 			}
-			else if(m_pWeapons->hasWeapon(SYN_WEAPON_STUNSTICK))
+			else if (m_pWeapons->hasWeapon(SYN_WEAPON_STUNSTICK))
 			{
 				pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_STUNSTICK));
 			}
-			else if(m_pWeapons->hasWeapon(SYN_WEAPON_LEADPIPE))
+			else if (m_pWeapons->hasWeapon(SYN_WEAPON_LEADPIPE))
 			{
 				pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_LEADPIPE));
 			}
-			else if(m_pWeapons->hasWeapon(SYN_WEAPON_SHOTGUN))
+			else if (m_pWeapons->hasWeapon(SYN_WEAPON_SHOTGUN))
 			{
 				pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_SHOTGUN));
 			}
-			else if(m_pWeapons->hasWeapon(SYN_WEAPON_SMG1))
+			else if (m_pWeapons->hasWeapon(SYN_WEAPON_SMG1))
 			{
 				pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_SMG1));
 			}
-			else if(m_pWeapons->hasWeapon(SYN_WEAPON_PISTOL))
+			else if (m_pWeapons->hasWeapon(SYN_WEAPON_PISTOL))
 			{
 				pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_PISTOL));
 			}
@@ -300,20 +300,20 @@ void CBotSynergy::modThink()
 	/**
 	 * Bot sprinting logic
 	 **/
-	if(hasSomeConditions(CONDITION_RUN) && m_flSuitPower > 1.0f && m_flNextSprintTime <= engine->Time()) // The bot wants to sprint
+	if (hasSomeConditions(CONDITION_RUN) && m_flSuitPower > 1.0f && m_flNextSprintTime <= engine->Time()) // The bot wants to sprint
 	{
 		m_pButtons->holdButton(IN_SPEED, 0.0f, 1.0f, 0.0f);
 	}
-	else if(m_fCurrentDanger >= 75.0f && m_flSuitPower > 1.0f && !isUnderWater()) // dangerous area, sprint
+	else if (m_fCurrentDanger >= 75.0f && m_flSuitPower > 1.0f && !isUnderWater()) // dangerous area, sprint
 	{
 		m_pButtons->holdButton(IN_SPEED, 0.0f, 1.0f, 0.0f);
 	}
-	else if(m_flSuitPower < 1.0f) // Low on suit power, don't sprint for a while
+	else if (m_flSuitPower < 1.0f) // Low on suit power, don't sprint for a while
 	{
 		m_flNextSprintTime = engine->Time() + randomFloat(8.0f, 10.0f);
 		removeCondition(CONDITION_RUN);
 	}
-	else if(isUnderWater()) // In Synergy/HL2 suit power is also used for oxygen
+	else if (isUnderWater()) // In Synergy/HL2 suit power is also used for oxygen
 	{
 		m_flNextSprintTime = engine->Time() + 0.5f;
 	}
@@ -325,7 +325,7 @@ void CBotSynergy::updateConditions()
 
 	if (m_pEnemy.get() != nullptr)
 	{
-		if(CDataInterface::GetEntityHealth(m_pEnemy.get()->GetNetworkable()->GetBaseEntity()) <= 0)
+		if (CDataInterface::GetEntityHealth(m_pEnemy.get()->GetNetworkable()->GetBaseEntity()) <= 0)
 		{
 			updateCondition(CONDITION_ENEMY_DEAD);
 			m_pNavigator->belief(getOrigin(), CBotGlobals::entityOrigin(m_pEnemy), bot_belief_fade.GetFloat(), distanceFrom(m_pEnemy), BELIEF_SAFETY);
@@ -335,24 +335,24 @@ void CBotSynergy::updateConditions()
 	}
 }
 
-bool CBotSynergy::isEnemy(edict_t *pEdict, bool bCheckWeapons)
+bool CBotSynergy::isEnemy(edict_t* pEdict, bool bCheckWeapons)
 {
-	if(m_pEdict == pEdict) // Not self
+	if (m_pEdict == pEdict) // Not self
 		return false;
 
-	if(ENTINDEX(pEdict) <= CBotGlobals::maxClients()) // Coop mod, don't attack players
+	if (ENTINDEX(pEdict) <= CBotGlobals::maxClients()) // Coop mod, don't attack players
 		return false;
 
 	const char* szclassname = pEdict->GetClassName();
 
 	// BUGBUG!! Maps can override NPC relationship with the ai_relationship entity, making this classname filter useless
-	if(std::strncmp(szclassname, "npc_", 4) == 0) // Attack NPCs
+	if (std::strncmp(szclassname, "npc_", 4) == 0) // Attack NPCs
 	{
 		if (std::strcmp(szclassname, "npc_metropolice") == 0 || std::strcmp(szclassname, "npc_combine_s") == 0 || std::strcmp(szclassname, "npc_manhack") == 0 ||
 			std::strcmp(szclassname, "npc_zombie") == 0 || std::strcmp(szclassname, "npc_fastzombie") == 0 || std::strcmp(szclassname, "npc_poisonzombie") == 0 || std::strcmp(szclassname, "npc_zombine") == 0 ||
 			std::strcmp(szclassname, "npc_antlionguard") == 0 || std::strcmp(szclassname, "npc_antlion") == 0 || std::strcmp(szclassname, "npc_headcrab") == 0 || std::strcmp(szclassname, "npc_headcrab_fast") == 0 ||
 			std::strcmp(szclassname, "npc_headcrab_black") == 0 || std::strcmp(szclassname, "npc_hunter") == 0 || std::strcmp(szclassname, "npc_fastzombie_torso") == 0 || std::strcmp(szclassname, "npc_zombie_torso") == 0 ||
-			std::strcmp(szclassname, "npc_barnacle") == 0 || (std::strcmp(szclassname, "npc_combinegunship") == 0) || (std::strcmp(szclassname, "npc_helicopter") == 0) 
+			std::strcmp(szclassname, "npc_barnacle") == 0 || (std::strcmp(szclassname, "npc_combinegunship") == 0) || (std::strcmp(szclassname, "npc_helicopter") == 0)
 			|| (std::strcmp(szclassname, "npc_strider") == 0) || (std::strcmp(szclassname, "npc_combinedropship") == 0) || (std::strcmp(szclassname, "npc_clawscanner") == 0)
 			|| (std::strcmp(szclassname, "npc_combine_camera") == 0) || (std::strcmp(szclassname, "npc_antlion_worker") == 0) || (std::strcmp(szclassname, "npc_cscanner") == 0))
 		{
@@ -363,7 +363,7 @@ bool CBotSynergy::isEnemy(edict_t *pEdict, bool bCheckWeapons)
 	return false;
 }
 
-bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
+bool CBotSynergy::setVisible(edict_t* pEntity, bool bVisible)
 {
 	const bool bValid = CBot::setVisible(pEntity, bVisible);
 
@@ -374,104 +374,104 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 	// Is valid and NOT invisible
 	if (bValid && bVisible && !(CClassInterface::getEffects(pEntity) & EF_NODRAW))
 	{
-		if(std::strcmp(szclassname, "item_ammo_crate") == 0 && (!m_pNearbyCrate.get() || fDist < distanceFrom(m_pNearbyCrate.get())))
+		if (std::strcmp(szclassname, "item_ammo_crate") == 0 && (!m_pNearbyCrate.get() || fDist < distanceFrom(m_pNearbyCrate.get())))
 		{
 			m_pNearbyCrate = pEntity;
 		}
-		else if(std::strncmp(szclassname, "item_ammo", 9) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
+		else if (std::strncmp(szclassname, "item_ammo", 9) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
 		{
-			if(std::strncmp(szclassname, "item_ammo_crate", 15))
+			if (std::strncmp(szclassname, "item_ammo_crate", 15))
 			{
 				m_pNearbyAmmo = nullptr; // Invalidate if this entity is an ammo crate
 			}
-			else if(std::strncmp(szclassname, "item_ammo_pack", 14)) // Ignore these
+			else if (std::strncmp(szclassname, "item_ammo_pack", 14)) // Ignore these
 			{
 				m_pNearbyAmmo = nullptr;
 			}
-			else if(filterAmmo(pEntity, szclassname))
+			else if (filterAmmo(pEntity, szclassname))
 			{
 				m_pNearbyAmmo = pEntity;
 			}
 		}
-		else if(std::strncmp(szclassname, "item_box_buckshot", 17) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
+		else if (std::strncmp(szclassname, "item_box_buckshot", 17) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
 		{
-			if(filterAmmo(pEntity, szclassname))
+			if (filterAmmo(pEntity, szclassname))
 			{
 				m_pNearbyAmmo = pEntity;
 			}
 		}
-		else if(std::strncmp(szclassname, "item_rpg_round", 14) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
+		else if (std::strncmp(szclassname, "item_rpg_round", 14) == 0 && (!m_pNearbyAmmo.get() || fDist < distanceFrom(m_pNearbyAmmo.get())))
 		{
-			if(filterAmmo(pEntity, szclassname))
+			if (filterAmmo(pEntity, szclassname))
 			{
 				m_pNearbyAmmo = pEntity;
 			}
 		}
-		else if(std::strncmp(szclassname, "item_healthkit", 14) == 0 && (!m_pNearbyHealthKit.get() || fDist < distanceFrom(m_pNearbyHealthKit.get())))
+		else if (std::strncmp(szclassname, "item_healthkit", 14) == 0 && (!m_pNearbyHealthKit.get() || fDist < distanceFrom(m_pNearbyHealthKit.get())))
 		{
 			m_pNearbyHealthKit = pEntity;
 		}
-		else if(std::strncmp(szclassname, "item_battery", 12) == 0 && (!m_pNearbyBattery.get() || fDist < distanceFrom(m_pNearbyBattery.get())))
+		else if (std::strncmp(szclassname, "item_battery", 12) == 0 && (!m_pNearbyBattery.get() || fDist < distanceFrom(m_pNearbyBattery.get())))
 		{
 			m_pNearbyBattery = pEntity;
 		}
-		else if(std::strncmp(szclassname, "weapon_", 7) == 0 && (!m_pNearbyWeapon.get() || fDist < distanceFrom(m_pNearbyWeapon.get())))
+		else if (std::strncmp(szclassname, "weapon_", 7) == 0 && (!m_pNearbyWeapon.get() || fDist < distanceFrom(m_pNearbyWeapon.get())))
 		{
 			const CBotWeapon* pWeapon = nullptr;
 			pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(szclassname));
-			if(pWeapon && pWeapon->hasWeapon())
+			if (pWeapon && pWeapon->hasWeapon())
 			{
 				m_pNearbyWeapon = nullptr; // bot already has this weapon
 			}
 			else
 			{
 				const edict_t* pOwner = CClassInterface::getOwner(pEntity);
-				if(pOwner == nullptr) // Don't pick weapons owned by someone
+				if (pOwner == nullptr) // Don't pick weapons owned by someone
 				{
 					m_pNearbyWeapon = pEntity;
 				}
 			}
 		}
-		else if(std::strncmp(szclassname, "npc_grenade_frag", 16) == 0 && (!m_pNearbyGrenade.get() || fDist < distanceFrom(m_pNearbyGrenade.get())))
+		else if (std::strncmp(szclassname, "npc_grenade_frag", 16) == 0 && (!m_pNearbyGrenade.get() || fDist < distanceFrom(m_pNearbyGrenade.get())))
 		{
-			const edict_t *pOwner = CClassInterface::getOwner(pEntity);
-			const IPlayerInfo *p = playerinfomanager->GetPlayerInfo(pEntity);
-			if(pOwner == nullptr || p == nullptr) // Only care about grenades that doesn't have an owner or isn't owned by a player
+			const edict_t* pOwner = CClassInterface::getOwner(pEntity);
+			const IPlayerInfo* p = playerinfomanager->GetPlayerInfo(pEntity);
+			if (pOwner == nullptr || p == nullptr) // Only care about grenades that doesn't have an owner or isn't owned by a player
 			{
 				m_pNearbyGrenade = pEntity;
 				const int iWaypoint = CWaypointLocations::NearestWaypoint(entityorigin, 512.0f, -1);
-				if(iWaypoint != -1)
-				{
-					m_pNavigator->beliefOne(iWaypoint, BELIEF_DANGER, distanceFrom(pEntity));
-				}	
-			}
-		}
-		else if(std::strncmp(szclassname, "combine_mine", 12) == 0 && (!m_pNearbyMine.get() || fDist < distanceFrom(m_pNearbyMine.get())))
-		{
-			if(!CSynergyMod::IsCombineMinePlayerPlaced(pEntity)) // Ignore player placed (friendly) mines
-			{
-				m_pNearbyMine = pEntity;
-				const int iWaypoint = CWaypointLocations::NearestWaypoint(entityorigin, 512.0f, -1);
-				if(iWaypoint != -1)
+				if (iWaypoint != -1)
 				{
 					m_pNavigator->beliefOne(iWaypoint, BELIEF_DANGER, distanceFrom(pEntity));
 				}
 			}
 		}
-		else if(std::strncmp(szclassname, "item_item_crate", 12) == 0 && (!m_pNearbyItemCrate.get() || fDist < distanceFrom(m_pNearbyItemCrate.get())))
+		else if (std::strncmp(szclassname, "combine_mine", 12) == 0 && (!m_pNearbyMine.get() || fDist < distanceFrom(m_pNearbyMine.get())))
+		{
+			if (!CSynergyMod::IsCombineMinePlayerPlaced(pEntity)) // Ignore player placed (friendly) mines
+			{
+				m_pNearbyMine = pEntity;
+				const int iWaypoint = CWaypointLocations::NearestWaypoint(entityorigin, 512.0f, -1);
+				if (iWaypoint != -1)
+				{
+					m_pNavigator->beliefOne(iWaypoint, BELIEF_DANGER, distanceFrom(pEntity));
+				}
+			}
+		}
+		else if (std::strncmp(szclassname, "item_item_crate", 12) == 0 && (!m_pNearbyItemCrate.get() || fDist < distanceFrom(m_pNearbyItemCrate.get())))
 		{
 			m_pNearbyItemCrate = pEntity;
 		}
-		else if(std::strncmp(szclassname, "item_healthcharger", 18) == 0 && (!m_pNearbyHealthCharger.get() || fDist < distanceFrom(m_pNearbyHealthCharger.get())))
+		else if (std::strncmp(szclassname, "item_healthcharger", 18) == 0 && (!m_pNearbyHealthCharger.get() || fDist < distanceFrom(m_pNearbyHealthCharger.get())))
 		{
-			if(CClassInterface::getAnimCycle(pEntity) < 1.0f)
+			if (CClassInterface::getAnimCycle(pEntity) < 1.0f)
 			{
 				m_pNearbyHealthCharger = pEntity;
 			}
 		}
-		else if(std::strncmp(szclassname, "item_suitcharger", 16) == 0 && (!m_pNearbyArmorCharger.get() || fDist < distanceFrom(m_pNearbyArmorCharger.get())))
+		else if (std::strncmp(szclassname, "item_suitcharger", 16) == 0 && (!m_pNearbyArmorCharger.get() || fDist < distanceFrom(m_pNearbyArmorCharger.get())))
 		{
-			if(CClassInterface::getAnimCycle(pEntity) < 1.0f)
+			if (CClassInterface::getAnimCycle(pEntity) < 1.0f)
 			{
 				m_pNearbyArmorCharger = pEntity;
 			}
@@ -479,32 +479,32 @@ bool CBotSynergy::setVisible ( edict_t *pEntity, bool bVisible )
 	}
 	else
 	{
-		if(pEntity == m_pNearbyAmmo.get_old())
+		if (pEntity == m_pNearbyAmmo.get_old())
 			m_pNearbyAmmo = nullptr;
-		else if(pEntity == m_pNearbyCrate.get_old())
+		else if (pEntity == m_pNearbyCrate.get_old())
 			m_pNearbyCrate = nullptr;
-		else if(pEntity == m_pNearbyHealthKit.get_old())
+		else if (pEntity == m_pNearbyHealthKit.get_old())
 			m_pNearbyHealthKit = nullptr;
-		else if(pEntity == m_pNearbyBattery.get_old())
+		else if (pEntity == m_pNearbyBattery.get_old())
 			m_pNearbyBattery = nullptr;
-		else if(pEntity == m_pNearbyWeapon.get_old())
+		else if (pEntity == m_pNearbyWeapon.get_old())
 			m_pNearbyWeapon = nullptr;
-		else if(pEntity == m_pNearbyMine.get_old())
+		else if (pEntity == m_pNearbyMine.get_old())
 			m_pNearbyMine = nullptr;
-		else if(pEntity == m_pNearbyGrenade.get_old())
+		else if (pEntity == m_pNearbyGrenade.get_old())
 			m_pNearbyGrenade = nullptr;
-		else if(pEntity == m_pNearbyItemCrate.get_old())
+		else if (pEntity == m_pNearbyItemCrate.get_old())
 			m_pNearbyItemCrate = nullptr;
-		else if(pEntity == m_pNearbyHealthCharger.get_old())
+		else if (pEntity == m_pNearbyHealthCharger.get_old())
 			m_pNearbyHealthCharger = nullptr;
-		else if(pEntity == m_pNearbyArmorCharger.get_old())
+		else if (pEntity == m_pNearbyArmorCharger.get_old())
 			m_pNearbyArmorCharger = nullptr;
 	}
 
 	return bValid;
 }
 
-void CBotSynergy::getTasks (unsigned int iIgnore)
+void CBotSynergy::getTasks(unsigned int iIgnore)
 {
 	static CBotUtilities utils;
 	static CBotUtility* next;
@@ -518,7 +518,7 @@ void CBotSynergy::getTasks (unsigned int iIgnore)
 
 	// Utilities
 	ADD_UTILITY(BOT_UTIL_PICKUP_WEAPON, m_pNearbyWeapon.get() != NULL, 0.75f) // New weapons are interesting, high priority
-	ADD_UTILITY(BOT_UTIL_GETHEALTHKIT, m_pNearbyHealthKit.get() != NULL, 1.0f - getHealthPercent()); // Pick up health kits
+		ADD_UTILITY(BOT_UTIL_GETHEALTHKIT, m_pNearbyHealthKit.get() != NULL, 1.0f - getHealthPercent()); // Pick up health kits
 	ADD_UTILITY(BOT_UTIL_HL2DM_FIND_ARMOR, m_pNearbyBattery.get() != NULL, 1.0f - getArmorPercent()); // Pick up armor batteries
 	ADD_UTILITY(BOT_UTIL_FIND_NEAREST_HEALTH, hasSomeConditions(CONDITION_NEED_HEALTH), 1.0f - getHealthPercent()); // Search for health kits
 	ADD_UTILITY(BOT_UTIL_FIND_NEAREST_AMMO, hasSomeConditions(CONDITION_NEED_AMMO), 0.15f); // Search for ammo
@@ -566,17 +566,17 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		m_pSchedules->add(new CBotPickupSched(m_pNearbyWeapon.get()));
 		m_fUtilTimes[BOT_UTIL_PICKUP_WEAPON] = engine->Time() + randomFloat(5.0f, 10.0f);
 		return true;
-	break;
+		//break;
 	case BOT_UTIL_GETHEALTHKIT:
 		m_pSchedules->add(new CBotPickupSched(m_pNearbyHealthKit.get()));
 		m_fUtilTimes[BOT_UTIL_GETHEALTHKIT] = engine->Time() + randomFloat(5.0f, 10.0f);
 		return true;
-	break;
+		//break;
 	case BOT_UTIL_HL2DM_FIND_ARMOR:
 		m_pSchedules->add(new CBotPickupSched(m_pNearbyBattery.get()));
 		m_fUtilTimes[BOT_UTIL_HL2DM_FIND_ARMOR] = engine->Time() + randomFloat(5.0f, 10.0f);
 		return true;
-	break;
+		//break;
 	case BOT_UTIL_FIND_NEAREST_HEALTH:
 	{
 		CWaypoint* pWaypoint = nullptr;
@@ -587,7 +587,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		pWaypoint = CWaypoints::getWaypoint(CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_HEALTH, vOrigin, 2048.0f));
 		m_fUtilTimes[BOT_UTIL_FIND_NEAREST_HEALTH] = engine->Time() + randomFloat(60.0f, 90.0f);
 
-		if(pWaypoint)
+		if (pWaypoint)
 		{
 			pSched->addTask(new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint), LOOK_WAYPOINT));
 			pSched->addTask(new CMoveToTask(pWaypoint->getOrigin()));
@@ -604,7 +604,7 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		pWaypoint = CWaypoints::getWaypoint(CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_AMMO, vOrigin, 2048.0f));
 		m_fUtilTimes[BOT_UTIL_FIND_NEAREST_AMMO] = engine->Time() + randomFloat(60.0f, 90.0f);
 
-		if(pWaypoint)
+		if (pWaypoint)
 		{
 			pSched->addTask(new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint), LOOK_WAYPOINT));
 			pSched->addTask(new CMoveToTask(pWaypoint->getOrigin()));
@@ -615,25 +615,23 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 	case BOT_UTIL_ATTACK_POINT:
 	{
 		// roam
-		CWaypoint* pWaypoint = nullptr;
-		CWaypoint* pRoute = nullptr;
 		CBotSchedule* pSched = new CBotSchedule();
-		CBotTask* pFindPath;
 		m_fUtilTimes[BOT_UTIL_ATTACK_POINT] = engine->Time() + randomFloat(60.0f, 180.0f);
 
 		pSched->setID(SCHED_ATTACKPOINT);
 
 		// Make the bot more likely to use alternate paths based on their braveness and current health
-		if(getHealthPercent() + m_pProfile->m_fBraveness <= 1.0f)
+		if (getHealthPercent() + m_pProfile->m_fBraveness <= 1.0f)
 			updateCondition(CONDITION_COVERT);
 		else
 			removeCondition(CONDITION_COVERT);
 
-		pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_GOAL);
+		CWaypoint* pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_GOAL);
 
 		if (pWaypoint)
 		{
-			pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), 0, 0);
+			CBotTask* pFindPath;
+			CWaypoint* pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), 0, 0);
 			if ((m_fUseRouteTime <= engine->Time()))
 			{
 				if (pRoute)
@@ -663,24 +661,22 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 	case BOT_UTIL_ROAM:
 	{
 		// roam
-		CWaypoint* pWaypoint = nullptr;
-		CWaypoint* pRoute = nullptr;
 		CBotSchedule* pSched = new CBotSchedule();
-		CBotTask* pFindPath;
 
 		pSched->setID(SCHED_GOTO_ORIGIN);
 
 		// Make the bot more likely to use alternate paths based on their braveness and current health
-		if(getHealthPercent() + m_pProfile->m_fBraveness <= 1.0f)
+		if (getHealthPercent() + m_pProfile->m_fBraveness <= 1.0f)
 			updateCondition(CONDITION_COVERT);
 		else
 			removeCondition(CONDITION_COVERT);
 
-		pWaypoint = CWaypoints::randomWaypointGoal(-1);
+		CWaypoint* pWaypoint = CWaypoints::randomWaypointGoal(-1);
 
 		if (pWaypoint)
 		{
-			pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), 0, 0);
+			CBotTask* pFindPath;
+			CWaypoint* pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), pWaypoint->getOrigin(), 0, 0);
 			if ((m_fUseRouteTime <= engine->Time()))
 			{
 				if (pRoute)
@@ -707,17 +703,17 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 
 		break;
 	}
-	}
+	} //Not required? [APG]RoboCop[CL]
 
 	return false;
 }
 
-void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWaypoint)
+void CBotSynergy::touchedWpt(CWaypoint* pWaypoint, int iNextWaypoint, int iPrevWaypoint)
 {
-	if(iNextWaypoint != -1 && pWaypoint->hasFlag(CWaypointTypes::W_FL_USE)) // Use waypoint: Check for door
+	if (iNextWaypoint != -1 && pWaypoint->hasFlag(CWaypointTypes::W_FL_USE)) // Use waypoint: Check for door
 	{
-		CWaypoint *pNext = CWaypoints::getWaypoint(iNextWaypoint);
-		if(pNext && pNext->hasFlag(CWaypointTypes::W_FL_USE))
+		CWaypoint* pNext = CWaypoints::getWaypoint(iNextWaypoint);
+		if (pNext && pNext->hasFlag(CWaypointTypes::W_FL_USE))
 		{
 			/**
 			 * Perform a trace to check if there is something blocking the path between the current waypoint and the next waypoint.
@@ -725,54 +721,53 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 			 * but that function causes link errors when compiling, so I had to fall back to manually searching for door entities.
 			**/
 			CTraceFilterHitAll filter;
-			const trace_t *tr = CBotGlobals::getTraceResult();
-			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), pNext->getOrigin() + Vector(0,0,CWaypoint::WAYPOINT_HEIGHT/2), MASK_PLAYERSOLID, &filter);
-			if(tr->fraction < 1.0f)
+			const trace_t* tr = CBotGlobals::getTraceResult();
+			CBotGlobals::traceLine(pWaypoint->getOrigin() + Vector(0, 0, CWaypoint::WAYPOINT_HEIGHT / 2), pNext->getOrigin() + Vector(0, 0, CWaypoint::WAYPOINT_HEIGHT / 2), MASK_PLAYERSOLID, &filter);
+			if (tr->fraction < 1.0f)
 			{
-				if(tr->m_pEnt)
+				if (tr->m_pEnt)
 				{
-					edict_t *pDoor = servergameents->BaseEntityToEdict(tr->m_pEnt);
-					const char *szclassname = pDoor->GetClassName();
-					if(std::strncmp(szclassname, "prop_door_rotating", 18) == 0 || std::strncmp(szclassname, "func_door", 9) == 0 || std::strncmp(szclassname, "func_door_rotating", 18) == 0)
+					edict_t* pDoor = servergameents->BaseEntityToEdict(tr->m_pEnt);
+					const char* szclassname = pDoor->GetClassName();
+					if (std::strncmp(szclassname, "prop_door_rotating", 18) == 0 || std::strncmp(szclassname, "func_door", 9) == 0 || std::strncmp(szclassname, "func_door_rotating", 18) == 0)
 					{
-						if(!CSynergyMod::IsEntityLocked(pDoor))
-						{
-							m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
-						}
-						
-					}
-				}
-/* 				pDoor = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "prop_door_rotating", rcbot_syn_use_search_range.GetFloat());
-				if(pDoor != NULL && !CSynergyMod::IsEntityLocked(pDoor))
-				{
-					m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
-				}
-				else
-				{
-					pDoor = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_door", rcbot_syn_use_search_range.GetFloat());
-					if(pDoor != NULL && !CSynergyMod::IsEntityLocked(pDoor))
-					{
-						m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
-					}
-					else
-					{
-						pDoor = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_door_rotating", rcbot_syn_use_search_range.GetFloat());
-						if(pDoor != NULL && !CSynergyMod::IsEntityLocked(pDoor))
+						if (!CSynergyMod::IsEntityLocked(pDoor))
 						{
 							m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
 						}
 					}
-				} */
+				}
+				/* 				pDoor = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "prop_door_rotating", rcbot_syn_use_search_range.GetFloat());
+								if(pDoor != NULL && !CSynergyMod::IsEntityLocked(pDoor))
+								{
+									m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
+								}
+								else
+								{
+									pDoor = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_door", rcbot_syn_use_search_range.GetFloat());
+									if(pDoor != NULL && !CSynergyMod::IsEntityLocked(pDoor))
+									{
+										m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
+									}
+									else
+									{
+										pDoor = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_door_rotating", rcbot_syn_use_search_range.GetFloat());
+										if(pDoor != NULL && !CSynergyMod::IsEntityLocked(pDoor))
+										{
+											m_pSchedules->addFront(new CSynOpenDoorSched(pDoor));
+										}
+									}
+								} */
 			}
 		}
 	}
 	else // Check for button
 	{
 		edict_t* pEntity = CClassInterface::FindEntityByClassnameNearest(getOrigin(), "func_button",
-																		 rcbot_syn_use_search_range.GetFloat());
-		if(pEntity != nullptr && !CSynergyMod::IsEntityLocked(pEntity))
+			rcbot_syn_use_search_range.GetFloat());
+		if (pEntity != nullptr && !CSynergyMod::IsEntityLocked(pEntity))
 		{
-			CBotSchedule *sched = new CBotSchedule();
+			CBotSchedule* sched = new CBotSchedule();
 			sched->setID(SCHED_GOTO_ORIGIN);
 			sched->addTask(new CMoveToTask(pEntity));
 			sched->addTask(new CBotHL2DMUseButton(pEntity));
@@ -784,7 +779,7 @@ void CBotSynergy::touchedWpt(CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 	CBot::touchedWpt(pWaypoint, iNextWaypoint, iPrevWaypoint);
 }
 
-bool CBotSynergy::walkingTowardsWaypoint(CWaypoint *pWaypoint, bool *bOffsetApplied, Vector &vOffset)
+bool CBotSynergy::walkingTowardsWaypoint(CWaypoint* pWaypoint, bool* bOffsetApplied, Vector& vOffset)
 {
 	return CBot::walkingTowardsWaypoint(pWaypoint, bOffsetApplied, vOffset);
 }
@@ -796,15 +791,15 @@ void CBotSynergy::reachedCoverSpot(int flags)
 
 void CBotSynergy::handleWeapons()
 {
-	if(m_pEnemy && !hasSomeConditions(CONDITION_ENEMY_DEAD) && 
-		hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && wantToShoot() && 
+	if (m_pEnemy && !hasSomeConditions(CONDITION_ENEMY_DEAD) &&
+		hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && wantToShoot() &&
 		isVisible(m_pEnemy) && isEnemy(m_pEnemy))
 	{
-		const char *szclassname = m_pEnemy.get()->GetClassName();
-		CBotWeapon *pWeapon = nullptr;
+		const char* szclassname = m_pEnemy.get()->GetClassName();
+		CBotWeapon* pWeapon = nullptr;
 
-		if((std::strncmp(szclassname, "npc_combinegunship", 18) == 0) || (std::strncmp(szclassname, "npc_combinedropship", 19) == 0) || (std::strncmp(szclassname, "npc_strider", 11) == 0) ||
-		(std::strncmp(szclassname, "npc_helicopter", 14) == 0))
+		if ((std::strncmp(szclassname, "npc_combinegunship", 18) == 0) || (std::strncmp(szclassname, "npc_combinedropship", 19) == 0) || (std::strncmp(szclassname, "npc_strider", 11) == 0) ||
+			(std::strncmp(szclassname, "npc_helicopter", 14) == 0))
 		{
 			pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_RPG));
 		}
@@ -813,14 +808,14 @@ void CBotSynergy::handleWeapons()
 			pWeapon = getBestWeapon(m_pEnemy, true, true, false, false);
 		}
 
-		if(m_bWantToChangeWeapon && (pWeapon != nullptr) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex())
+		if (m_bWantToChangeWeapon && (pWeapon != nullptr) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex())
 		{
 			selectBotWeapon(pWeapon);
 		}
 
 		setLookAtTask(LOOK_ENEMY);
 
-		if(!handleAttack(pWeapon, m_pEnemy))
+		if (!handleAttack(pWeapon, m_pEnemy))
 		{
 			m_pEnemy = nullptr;
 			m_pOldEnemy = nullptr;
@@ -829,20 +824,20 @@ void CBotSynergy::handleWeapons()
 	}
 }
 
-bool CBotSynergy::handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy)
+bool CBotSynergy::handleAttack(CBotWeapon* pWeapon, edict_t* pEnemy)
 {
-	const char *szclassname = pEnemy->GetClassName();
+	const char* szclassname = pEnemy->GetClassName();
 
-	if((std::strncmp(szclassname, "npc_combinegunship", 18) == 0) || (std::strncmp(szclassname, "npc_combinedropship", 19) == 0) || (std::strncmp(szclassname, "npc_strider", 11) == 0) ||
-	(std::strncmp(szclassname, "npc_helicopter", 14) == 0))
+	if ((std::strncmp(szclassname, "npc_combinegunship", 18) == 0) || (std::strncmp(szclassname, "npc_combinedropship", 19) == 0) || (std::strncmp(szclassname, "npc_strider", 11) == 0) ||
+		(std::strncmp(szclassname, "npc_helicopter", 14) == 0))
 	{
-		if(!m_pWeapons->hasWeapon(SYN_WEAPON_RPG))
+		if (!m_pWeapons->hasWeapon(SYN_WEAPON_RPG))
 		{
 			return false;
 		}
 	}
 
-	if(pWeapon)
+	if (pWeapon)
 	{
 		clearFailedWeaponSelect();
 
@@ -864,107 +859,107 @@ bool CBotSynergy::handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy)
 
 /**
  * Filters and validates ammo entities
- * 
+ *
  * @param pAmmo			The ammo entity to validate
  * @param szclassname	The ammo entity's classname
  * @return          	True if the bot should pick up this ammo entity
  **/
-bool CBotSynergy::filterAmmo(edict_t *pAmmo, const char *szclassname)
+bool CBotSynergy::filterAmmo(edict_t* pAmmo, const char* szclassname)
 {
-	if(std::strncmp(szclassname, "item_ammo_pistol", 16) == 0)
+	if (std::strncmp(szclassname, "item_ammo_pistol", 16) == 0)
 	{
-		if(m_pWeapons->hasWeapon(SYN_WEAPON_PISTOL))
+		if (m_pWeapons->hasWeapon(SYN_WEAPON_PISTOL))
 		{
-			if(m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_PISTOL))->getAmmo(this, AMMO_PRIM) < 36)
+			if (m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_PISTOL))->getAmmo(this, AMMO_PRIM) < 36)
 			{
 				return true;
 			}
 		}
 	}
-	else if(std::strncmp(szclassname, "item_ammo_357", 13) == 0)
+	else if (std::strncmp(szclassname, "item_ammo_357", 13) == 0)
 	{
-		if(m_pWeapons->hasWeapon(SYN_WEAPON_357) || m_pWeapons->hasWeapon(SYN_WEAPON_DESERTEAGLE))
+		if (m_pWeapons->hasWeapon(SYN_WEAPON_357) || m_pWeapons->hasWeapon(SYN_WEAPON_DESERTEAGLE))
 		{
-			if(m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_357))->getAmmo(this, AMMO_PRIM) < 6 ||
-			m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_DESERTEAGLE))->getAmmo(this, AMMO_PRIM) < 6)
+			if (m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_357))->getAmmo(this, AMMO_PRIM) < 6 ||
+				m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_DESERTEAGLE))->getAmmo(this, AMMO_PRIM) < 6)
 			{
 				return true;
 			}
 		}
 	}
-	else if(std::strncmp(szclassname, "item_ammo_smg1", 14) == 0)
+	else if (std::strncmp(szclassname, "item_ammo_smg1", 14) == 0)
 	{
-		if(std::strncmp(szclassname, "item_ammo_smg1_grenade", 22) == 0)
+		if (std::strncmp(szclassname, "item_ammo_smg1_grenade", 22) == 0)
 		{
-			if(m_pWeapons->hasWeapon(SYN_WEAPON_SMG1))
+			if (m_pWeapons->hasWeapon(SYN_WEAPON_SMG1))
 			{
-				if(m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_SMG1))->getAmmo(this, AMMO_SEC) < 1)
+				if (m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_SMG1))->getAmmo(this, AMMO_SEC) < 1)
 				{
 					return true;
 				}
-			}		
+			}
 		}
 		else
 		{
-			if(m_pWeapons->hasWeapon(SYN_WEAPON_SMG1) || m_pWeapons->hasWeapon(SYN_WEAPON_MP5K))
+			if (m_pWeapons->hasWeapon(SYN_WEAPON_SMG1) || m_pWeapons->hasWeapon(SYN_WEAPON_MP5K))
 			{
-				if(m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_SMG1))->getAmmo(this, AMMO_PRIM) < 75 ||
-				m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_MP5K))->getAmmo(this, AMMO_PRIM) < 75)
+				if (m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_SMG1))->getAmmo(this, AMMO_PRIM) < 75 ||
+					m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_MP5K))->getAmmo(this, AMMO_PRIM) < 75)
 				{
 					return true;
 				}
 			}
 		}
 	}
-	else if(std::strncmp(szclassname, "item_ammo_ar2", 13) == 0)
+	else if (std::strncmp(szclassname, "item_ammo_ar2", 13) == 0)
 	{
-		if(std::strncmp(szclassname, "item_ammo_ar2_altfire", 21) == 0)
+		if (std::strncmp(szclassname, "item_ammo_ar2_altfire", 21) == 0)
 		{
-			if(m_pWeapons->hasWeapon(SYN_WEAPON_AR2))
+			if (m_pWeapons->hasWeapon(SYN_WEAPON_AR2))
 			{
-				if(m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_AR2))->getAmmo(this, AMMO_SEC) < 1)
+				if (m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_AR2))->getAmmo(this, AMMO_SEC) < 1)
 				{
 					return true;
 				}
-			}		
+			}
 		}
 		else
 		{
-			if(m_pWeapons->hasWeapon(SYN_WEAPON_AR2) || m_pWeapons->hasWeapon(SYN_WEAPON_MG1))
+			if (m_pWeapons->hasWeapon(SYN_WEAPON_AR2) || m_pWeapons->hasWeapon(SYN_WEAPON_MG1))
 			{
-				if(m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_AR2))->getAmmo(this, AMMO_PRIM) < 30 ||
-				m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_MG1))->getAmmo(this, AMMO_PRIM) < 30)
+				if (m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_AR2))->getAmmo(this, AMMO_PRIM) < 30 ||
+					m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_MG1))->getAmmo(this, AMMO_PRIM) < 30)
 				{
 					return true;
 				}
 			}
 		}
 	}
-	else if(std::strncmp(szclassname, "item_ammo_crossbow", 18) == 0)
+	else if (std::strncmp(szclassname, "item_ammo_crossbow", 18) == 0)
 	{
-		if(m_pWeapons->hasWeapon(SYN_WEAPON_CROSSBOW))
+		if (m_pWeapons->hasWeapon(SYN_WEAPON_CROSSBOW))
 		{
-			if(m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_CROSSBOW))->getAmmo(this, AMMO_PRIM) < 3)
+			if (m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_CROSSBOW))->getAmmo(this, AMMO_PRIM) < 3)
 			{
 				return true;
 			}
 		}
 	}
-	else if(std::strncmp(szclassname, "item_box_buckshot", 17) == 0)
+	else if (std::strncmp(szclassname, "item_box_buckshot", 17) == 0)
 	{
-		if(m_pWeapons->hasWeapon(SYN_WEAPON_SHOTGUN))
+		if (m_pWeapons->hasWeapon(SYN_WEAPON_SHOTGUN))
 		{
-			if(m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_SHOTGUN))->getAmmo(this, AMMO_PRIM) < 12)
+			if (m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_SHOTGUN))->getAmmo(this, AMMO_PRIM) < 12)
 			{
 				return true;
 			}
 		}
 	}
-	else if(std::strncmp(szclassname, "item_rpg_round", 14) == 0)
+	else if (std::strncmp(szclassname, "item_rpg_round", 14) == 0)
 	{
-		if(m_pWeapons->hasWeapon(SYN_WEAPON_RPG))
+		if (m_pWeapons->hasWeapon(SYN_WEAPON_RPG))
 		{
-			if(m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_RPG))->getAmmo(this, AMMO_PRIM) < 2)
+			if (m_pWeapons->getWeapon(CWeapons::getWeapon(SYN_WEAPON_RPG))->getAmmo(this, AMMO_PRIM) < 2)
 			{
 				return true;
 			}
@@ -976,7 +971,7 @@ bool CBotSynergy::filterAmmo(edict_t *pAmmo, const char *szclassname)
 
 /**
  * This functions is called by task interruptions check to see if the bot should change it's current task
- * 
+ *
  * @return 		TRUE if the bot should interrupt it's current task
  **/
 bool CBotSynergy::wantsToChangeCourseOfAction()

@@ -97,7 +97,7 @@ CBotEntProp *entprops = &s_entprops;
 			return returnval; \
 		} \
 		\
-		if (pProp->GetType() != type) \
+		if (pProp->GetType() != (type)) \
 		{ \
 			logger->Log(LogLevel::ERROR, "SendProp %s type is not \"integer\" ([%d,%d] != %d)", prop, pProp->GetType(), pProp->m_nBits, type); \
 			return returnval; \
@@ -124,9 +124,9 @@ CBotEntProp *entprops = &s_entprops;
 		} \
 		\
 		pProp = pTable->GetProp(element); \
-		if (pProp->GetType() != type) \
+		if (pProp->GetType() != (type)) \
 		{ \
-			if (pProp->GetType() != type) \
+			if (pProp->GetType() != (type)) \
 			{ \
 				logger->Log(LogLevel::ERROR, "SendProp %s type is not " type_name " ([%d,%d] != %d)", prop, pProp->GetType(), pProp->m_nBits, type); \
 				return returnval; \
@@ -149,7 +149,7 @@ CBotEntProp *entprops = &s_entprops;
 	if (td->fieldType == FIELD_CUSTOM && (td->flags & FTYPEDESC_OUTPUT) == FTYPEDESC_OUTPUT) \
 	{ \
 		auto *pVariant = (variant_t *)((intptr_t)pEntity + offset); \
-		if (pVariant->fieldType != type) \
+		if (pVariant->fieldType != (type)) \
 		{ \
 			logger->Log(LogLevel::ERROR, "Variant value for %s is not a %s (%d)", prop, typeName, pVariant->fieldType); \
 			return returnval; \
@@ -202,7 +202,7 @@ CBotEntProp *entprops = &s_entprops;
 				return retval; \
 			} \
 			\
-			if (pProp->GetType() != type) \
+			if (pProp->GetType() != (type)) \
 			{ \
 				return retval; \
 			} \
@@ -226,20 +226,20 @@ CBotEntProp *entprops = &s_entprops;
 	} \
 
 #define GAMERULES_FIND_PROP_SEND_IN_SENDTABLE(info, pProp, element, type, type_name, retval) \
-	SendTable *pTable = pProp->GetDataTable(); \
+	SendTable *pTable = (pProp)->GetDataTable(); \
 	if (!pTable) \
 	{ \
 		return retval; \
 	} \
 	\
 	int elementCount = pTable->GetNumProps(); \
-	if (element < 0 || element >= elementCount) \
+	if ((element) < 0 || (element) >= elementCount) \
 	{ \
 		return retval; \
 	} \
 	\
-	pProp = pTable->GetProp(element); \
-	if (pProp->GetType() != type) \
+	(pProp) = pTable->GetProp(element); \
+	if ((pProp)->GetType() != (type)) \
 	{ \
 		return retval; \
 	}
@@ -281,8 +281,8 @@ void CBotEntProp::Init(bool reset)
 /// @return true if the entity is networked, false otherwise
 bool CBotEntProp::IsNetworkedEntity(CBaseEntity *pEntity)
 {
-	IServerUnknown *pUnk = (IServerUnknown *)pEntity;
-	IServerNetworkable *pNet = pUnk->GetNetworkable();
+	IServerUnknown *pUnk = reinterpret_cast<IServerUnknown*>(pEntity);
+	const IServerNetworkable *pNet = pUnk->GetNetworkable();
 
 	if (!pNet)
 	{
@@ -294,7 +294,7 @@ bool CBotEntProp::IsNetworkedEntity(CBaseEntity *pEntity)
 
 bool CBotEntProp::FindSendProp(SourceMod::sm_sendprop_info_t *info, CBaseEntity *pEntity, char *prop, int entity)
 {
-	IServerUnknown *pUnk = (IServerUnknown *)pEntity;
+	IServerUnknown *pUnk = reinterpret_cast<IServerUnknown*>(pEntity);
 	IServerNetworkable *pNet = pUnk->GetNetworkable();
 
 	if (!pNet)
@@ -365,7 +365,7 @@ int CBotEntProp::GetEntProp(int entity, PropType proptype, char *prop, int size,
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
 	int bit_count;
 	int offset;
 	bool is_unsigned = false;
@@ -409,7 +409,7 @@ int CBotEntProp::GetEntProp(int entity, PropType proptype, char *prop, int size,
 		
 		if (td->fieldType == FIELD_CUSTOM && (td->flags & FTYPEDESC_OUTPUT) == FTYPEDESC_OUTPUT)
 		{
-			auto *pVariant = (variant_t *)((intptr_t)pEntity + offset);
+			const auto *pVariant = reinterpret_cast<variant_t*>(reinterpret_cast<intptr_t>(pEntity) + offset);
 			if ((bit_count = MatchTypeDescAsInteger(pVariant->fieldType, 0)) == 0)
 			{
 				logger->Log(LogLevel::ERROR, "Variant value for %s is not an integer (%d)", prop, pVariant->fieldType);
@@ -449,7 +449,7 @@ int CBotEntProp::GetEntProp(int entity, PropType proptype, char *prop, int size,
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
 		return 0;
-		break;
+		//break;
 	}
 
 	if (bit_count < 1)
@@ -461,32 +461,23 @@ int CBotEntProp::GetEntProp(int entity, PropType proptype, char *prop, int size,
 	{
 		return *(int32_t *)((uint8_t *)pEntity + offset);
 	}
-	else if (bit_count >= 9)
+	if (bit_count >= 9)
 	{
 		if (is_unsigned)
 		{
 			return *(uint16_t *)((uint8_t *)pEntity + offset);
 		}
-		else
-		{
-			return *(int16_t *)((uint8_t *)pEntity + offset);
-		}
+		return *(int16_t *)((uint8_t *)pEntity + offset);
 	}
-	else if (bit_count >= 2)
+	if (bit_count >= 2)
 	{
 		if (is_unsigned)
 		{
 			return *(uint8_t *)((uint8_t *)pEntity + offset);
 		}
-		else
-		{
-			return *(int8_t *)((uint8_t *)pEntity + offset);
-		}
+		return *(int8_t *)((uint8_t *)pEntity + offset);
 	}
-	else
-	{
-		return (bool *)((uint8_t *)pEntity + offset) ? 1 : 0;
-	}
+	return (bool *)((uint8_t *)pEntity + offset) ? 1 : 0;
 }
 
 /// @brief Retrieves an integer pointer in an entity's property.
@@ -501,7 +492,7 @@ int *CBotEntProp::GetEntPropPointer(int entity, PropType proptype, char *prop, i
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
 	int bit_count;
 	int offset;
 	bool is_unsigned = false;
@@ -545,7 +536,7 @@ int *CBotEntProp::GetEntPropPointer(int entity, PropType proptype, char *prop, i
 		
 		if (td->fieldType == FIELD_CUSTOM && (td->flags & FTYPEDESC_OUTPUT) == FTYPEDESC_OUTPUT)
 		{
-			auto *pVariant = (variant_t *)((intptr_t)pEntity + offset);
+			const auto *pVariant = reinterpret_cast<variant_t*>(reinterpret_cast<intptr_t>(pEntity) + offset);
 			if ((bit_count = MatchTypeDescAsInteger(pVariant->fieldType, 0)) == 0)
 			{
 				logger->Log(LogLevel::ERROR, "Variant value for %s is not an integer (%d)", prop, pVariant->fieldType);
@@ -585,7 +576,7 @@ int *CBotEntProp::GetEntPropPointer(int entity, PropType proptype, char *prop, i
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
 		return nullptr;
-		break;
+		//break;
 	}
 
 	if (bit_count < 1)
@@ -597,32 +588,23 @@ int *CBotEntProp::GetEntPropPointer(int entity, PropType proptype, char *prop, i
 	{
 		return (int32_t *)((uint8_t *)pEntity + offset);
 	}
-	else if (bit_count >= 9)
+	if (bit_count >= 9)
 	{
 		if (is_unsigned)
 		{
 			return (int*)(uint16_t *)((uint8_t *)pEntity + offset);
 		}
-		else
-		{
-			return (int*)(int16_t *)((uint8_t *)pEntity + offset);
-		}
+		return (int*)(int16_t *)((uint8_t *)pEntity + offset);
 	}
-	else if (bit_count >= 2)
+	if (bit_count >= 2)
 	{
 		if (is_unsigned)
 		{
 			return (int*)(uint8_t *)((uint8_t *)pEntity + offset);
 		}
-		else
-		{
-			return (int*)(int8_t *)((uint8_t *)pEntity + offset);
-		}
+		return (int*)(int8_t *)((uint8_t *)pEntity + offset);
 	}
-	else
-	{
-		return (int*)((uint8_t *)pEntity + offset);
-	}
+	return (int*)((uint8_t *)pEntity + offset);
 }
 
 /// @brief Retrieves a boolean value in an entity's property.
@@ -649,10 +631,10 @@ bool *CBotEntProp::GetEntPropBoolPointer(int entity, PropType proptype, char *pr
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
 	int bit_count;
 	int offset;
-	bool is_unsigned = false;
+	bool is_unsigned = false; //Unused? [APG]RoboCop[CL]
 
 	if (!IndexToAThings(entity, &pEntity, &pEdict))
 	{
@@ -693,7 +675,7 @@ bool *CBotEntProp::GetEntPropBoolPointer(int entity, PropType proptype, char *pr
 		
 		if (td->fieldType == FIELD_CUSTOM && (td->flags & FTYPEDESC_OUTPUT) == FTYPEDESC_OUTPUT)
 		{
-			auto *pVariant = (variant_t *)((intptr_t)pEntity + offset);
+			const auto *pVariant = reinterpret_cast<variant_t*>(reinterpret_cast<intptr_t>(pEntity) + offset);
 			if ((bit_count = MatchTypeDescAsInteger(pVariant->fieldType, 0)) == 0)
 			{
 				logger->Log(LogLevel::ERROR, "Variant value for %s is not an integer (%d)", prop, pVariant->fieldType);
@@ -733,7 +715,7 @@ bool *CBotEntProp::GetEntPropBoolPointer(int entity, PropType proptype, char *pr
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
 		return nullptr;
-		break;
+		//break;
 	}
 
 	if (bit_count < 1)
@@ -746,10 +728,7 @@ bool *CBotEntProp::GetEntPropBoolPointer(int entity, PropType proptype, char *pr
 		logger->Log(LogLevel::ERROR, "Property %s has bit_count %d > 1. Use GetEntPropPointer", prop, bit_count);
 		return nullptr;
 	}
-	else
-	{
-		return (bool*)((uint8_t *)pEntity + offset);
-	}
+	return (bool*)((uint8_t *)pEntity + offset);
 }
 
 /// @brief Sets an integer value in an entity's property.
@@ -765,10 +744,10 @@ bool CBotEntProp::SetEntProp(int entity, PropType proptype, char *prop, int valu
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
 	int bit_count;
 	int offset;
-	bool is_unsigned = false;
+	bool is_unsigned = false; //Unused? [APG]RoboCop[CL]
 
 	if (!IndexToAThings(entity, &pEntity, &pEdict))
 	{
@@ -809,7 +788,7 @@ bool CBotEntProp::SetEntProp(int entity, PropType proptype, char *prop, int valu
 		
 		if (td->fieldType == FIELD_CUSTOM && (td->flags & FTYPEDESC_OUTPUT) == FTYPEDESC_OUTPUT)
 		{
-			auto *pVariant = (variant_t *)((intptr_t)pEntity + offset);
+			auto *pVariant = reinterpret_cast<variant_t*>(reinterpret_cast<intptr_t>(pEntity) + offset);
 			// These are the only three int-ish types that variants support. If set to valid one that isn't
 			// (32-bit) integer, leave it alone. It's probably the intended type.
 			if (pVariant->fieldType != FIELD_COLOR32 && pVariant->fieldType != FIELD_BOOLEAN)
@@ -854,7 +833,7 @@ bool CBotEntProp::SetEntProp(int entity, PropType proptype, char *prop, int valu
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
 		return false;
-		break;
+		//break;
 	}
 
 	if (bit_count < 1)
@@ -879,7 +858,7 @@ bool CBotEntProp::SetEntProp(int entity, PropType proptype, char *prop, int valu
 		*(bool *)((uint8_t *)pEntity + offset) = value ? true : false;
 	}
 	
-	if (proptype == Prop_Send && (pEdict != NULL))
+	if (proptype == Prop_Send && (pEdict != nullptr))
 	{
 		sm_gamehelpers->SetEdictStateChanged(pEdict, offset);
 	}
@@ -898,8 +877,8 @@ float CBotEntProp::GetEntPropFloat(int entity, PropType proptype, char *prop, in
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
-	int bit_count;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	int offset;
 
 	if (!IndexToAThings(entity, &pEntity, &pEdict))
@@ -956,7 +935,7 @@ float CBotEntProp::GetEntPropFloat(int entity, PropType proptype, char *prop, in
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
 		return 0.0f;
-		break;
+		//break;
 	}
 
 	return *(float *)((uint8_t *)pEntity + offset);
@@ -973,8 +952,8 @@ float *CBotEntProp::GetEntPropFloatPointer(int entity, PropType proptype, char *
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
-	int bit_count;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	int offset;
 
 	if (!IndexToAThings(entity, &pEntity, &pEdict))
@@ -1031,7 +1010,7 @@ float *CBotEntProp::GetEntPropFloatPointer(int entity, PropType proptype, char *
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
 		return nullptr;
-		break;
+		//break;
 	}
 
 	return (float *)((uint8_t *)pEntity + offset);
@@ -1049,8 +1028,8 @@ bool CBotEntProp::SetEntPropFloat(int entity, PropType proptype, char *prop, flo
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
-	int bit_count;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	int offset;
 
 	if (!IndexToAThings(entity, &pEntity, &pEdict))
@@ -1114,13 +1093,13 @@ bool CBotEntProp::SetEntPropFloat(int entity, PropType proptype, char *prop, flo
 	
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
-		return 0.0f;
-		break;
+		return false;
+		//break;
 	}
 
 	*(float *)((uint8_t *)pEntity + offset) = value;
 
-	if (proptype == Prop_Send && (pEdict != NULL))
+	if (proptype == Prop_Send && (pEdict != nullptr))
 	{
 		sm_gamehelpers->SetEdictStateChanged(pEdict, offset);
 	}
@@ -1139,8 +1118,8 @@ int CBotEntProp::GetEntPropEnt(int entity, PropType proptype, char *prop, int el
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
-	int bit_count;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	int offset;
 	PropEntType type = PropEnt_Unknown;
 
@@ -1216,7 +1195,7 @@ int CBotEntProp::GetEntPropEnt(int entity, PropType proptype, char *prop, int el
 
 		offset = info.actual_offset;
 		pProp = info.prop;
-		bit_count = pProp->m_nBits;
+		bit_count = pProp->m_nBits; //Unused? [APG]RoboCop[CL]
 
 		PROP_TYPE_SWITCH(DPT_Int, "integer", -1);
 
@@ -1225,7 +1204,7 @@ int CBotEntProp::GetEntPropEnt(int entity, PropType proptype, char *prop, int el
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
 		return -1;
-		break;
+		//break;
 	}
 
 	switch (type)
@@ -1240,7 +1219,7 @@ int CBotEntProp::GetEntPropEnt(int entity, PropType proptype, char *prop, int el
 			}
 			else // PropEnt_Variant
 			{
-				auto *pVariant = (variant_t *)((intptr_t)pEntity + offset);
+				auto *pVariant = reinterpret_cast<variant_t*>(reinterpret_cast<intptr_t>(pEntity) + offset);
 				hndl = &pVariant->eVal;
 			}
 
@@ -1281,8 +1260,8 @@ bool CBotEntProp::SetEntPropEnt(int entity, PropType proptype, char *prop, int o
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
-	int bit_count;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	int offset;
 	PropEntType type = PropEnt_Unknown;
 
@@ -1358,7 +1337,7 @@ bool CBotEntProp::SetEntPropEnt(int entity, PropType proptype, char *prop, int o
 
 		offset = info.actual_offset;
 		pProp = info.prop;
-		bit_count = pProp->m_nBits;
+		bit_count = pProp->m_nBits; //Unused? [APG]RoboCop[CL]
 
 		PROP_TYPE_SWITCH(DPT_Int, "integer", false);
 
@@ -1367,7 +1346,7 @@ bool CBotEntProp::SetEntPropEnt(int entity, PropType proptype, char *prop, int o
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
 		return false;
-		break;
+		//break;
 	}
 
 	CBaseEntity *pOther = GetEntity(other);
@@ -1389,13 +1368,13 @@ bool CBotEntProp::SetEntPropEnt(int entity, PropType proptype, char *prop, int o
 			}
 			else // PropEnt_Variant
 			{
-				auto *pVariant = (variant_t *)((intptr_t)pEntity + offset);
+				auto *pVariant = reinterpret_cast<variant_t*>(reinterpret_cast<intptr_t>(pEntity) + offset);
 				hndl = &pVariant->eVal;
 			}
 
-			hndl->Set((IHandleEntity *) pOther);
+			hndl->Set(reinterpret_cast<IHandleEntity*>(pOther));
 
-			if (proptype == Prop_Send && (pEdict != NULL))
+			if (proptype == Prop_Send && (pEdict != nullptr))
 			{
 				sm_gamehelpers->SetEdictStateChanged(pEdict, offset);
 			}
@@ -1411,10 +1390,10 @@ bool CBotEntProp::SetEntPropEnt(int entity, PropType proptype, char *prop, int o
 
 	case PropEnt_Edict:
 		{
-			edict_t *pOtherEdict = NULL;
+			edict_t *pOtherEdict = nullptr;
 			if (pOther)
 			{
-				IServerNetworkable *pNetworkable = ((IServerUnknown *) pOther)->GetNetworkable();
+				const IServerNetworkable *pNetworkable = reinterpret_cast<IServerUnknown*>(pOther)->GetNetworkable();
 				if (!pNetworkable)
 				{
 					logger->Log(LogLevel::ERROR, "Entity %d does not have a valid edict", sm_gamehelpers->EntityToBCompatRef(pOther));
@@ -1448,10 +1427,10 @@ Vector CBotEntProp::GetEntPropVector(int entity, PropType proptype, char *prop, 
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
-	int bit_count;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	int offset;
-	bool is_unsigned = false;
+	bool is_unsigned = false; //Unused? [APG]RoboCop[CL]
 
 	if (!IndexToAThings(entity, &pEntity, &pEdict))
 	{
@@ -1492,7 +1471,7 @@ Vector CBotEntProp::GetEntPropVector(int entity, PropType proptype, char *prop, 
 		
 		if (td->fieldType == FIELD_CUSTOM && (td->flags & FTYPEDESC_OUTPUT) == FTYPEDESC_OUTPUT)
 		{
-			auto *pVariant = (variant_t *)((intptr_t)pEntity + offset);
+			const auto *pVariant = reinterpret_cast<variant_t*>(reinterpret_cast<intptr_t>(pEntity) + offset);
 			if (pVariant->fieldType != FIELD_VECTOR && pVariant->fieldType != FIELD_POSITION_VECTOR)
 			{
 				logger->Log(LogLevel::ERROR, "Variant value for %s is not vector (%d)", prop, pVariant->fieldType);
@@ -1512,7 +1491,7 @@ Vector CBotEntProp::GetEntPropVector(int entity, PropType proptype, char *prop, 
 
 		offset = info.actual_offset;
 		pProp = info.prop;
-		bit_count = pProp->m_nBits;
+		bit_count = pProp->m_nBits; //Unused? [APG]RoboCop[CL]
 
 		PROP_TYPE_SWITCH(DPT_Vector, "vector", Vector(0,0,0));
 
@@ -1521,7 +1500,7 @@ Vector CBotEntProp::GetEntPropVector(int entity, PropType proptype, char *prop, 
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
 		return Vector(0,0,0);
-		break;
+		//break;
 	}
 
 	Vector *v = (Vector *)((uint8_t *)pEntity + offset);
@@ -1540,10 +1519,10 @@ Vector *CBotEntProp::GetEntPropVectorPointer(int entity, PropType proptype, char
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
-	int bit_count;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	int offset;
-	bool is_unsigned = false;
+	bool is_unsigned = false; //Unused? [APG]RoboCop[CL]
 
 	if (!IndexToAThings(entity, &pEntity, &pEdict))
 	{
@@ -1584,7 +1563,7 @@ Vector *CBotEntProp::GetEntPropVectorPointer(int entity, PropType proptype, char
 		
 		if (td->fieldType == FIELD_CUSTOM && (td->flags & FTYPEDESC_OUTPUT) == FTYPEDESC_OUTPUT)
 		{
-			auto *pVariant = (variant_t *)((intptr_t)pEntity + offset);
+			const auto *pVariant = reinterpret_cast<variant_t*>(reinterpret_cast<intptr_t>(pEntity) + offset);
 			if (pVariant->fieldType != FIELD_VECTOR && pVariant->fieldType != FIELD_POSITION_VECTOR)
 			{
 				logger->Log(LogLevel::ERROR, "Variant value for %s is not vector (%d)", prop, pVariant->fieldType);
@@ -1604,7 +1583,7 @@ Vector *CBotEntProp::GetEntPropVectorPointer(int entity, PropType proptype, char
 
 		offset = info.actual_offset;
 		pProp = info.prop;
-		bit_count = pProp->m_nBits;
+		bit_count = pProp->m_nBits; //Unused? [APG]RoboCop[CL]
 
 		PROP_TYPE_SWITCH(DPT_Vector, "vector", nullptr);
 
@@ -1613,7 +1592,7 @@ Vector *CBotEntProp::GetEntPropVectorPointer(int entity, PropType proptype, char
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
 		return nullptr;
-		break;
+		//break;
 	}
 
 	Vector *v = (Vector *)((uint8_t *)pEntity + offset);
@@ -1633,10 +1612,10 @@ bool CBotEntProp::SetEntPropVector(int entity, PropType proptype, char *prop, Ve
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
-	int bit_count;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	int offset;
-	bool is_unsigned = false;
+	bool is_unsigned = false; //Unused? [APG]RoboCop[CL]
 
 	if (!IndexToAThings(entity, &pEntity, &pEdict))
 	{
@@ -1677,7 +1656,7 @@ bool CBotEntProp::SetEntPropVector(int entity, PropType proptype, char *prop, Ve
 		
 		if (td->fieldType == FIELD_CUSTOM && (td->flags & FTYPEDESC_OUTPUT) == FTYPEDESC_OUTPUT)
 		{
-			auto *pVariant = (variant_t *)((intptr_t)pEntity + offset);
+			auto *pVariant = reinterpret_cast<variant_t*>(reinterpret_cast<intptr_t>(pEntity) + offset);
 			// Both of these are supported and we don't know which is intended. But, if it's already
 			// a pos vector, we probably want to keep that.
 			if (pVariant->fieldType != FIELD_POSITION_VECTOR)
@@ -1698,7 +1677,7 @@ bool CBotEntProp::SetEntPropVector(int entity, PropType proptype, char *prop, Ve
 
 		offset = info.actual_offset;
 		pProp = info.prop;
-		bit_count = pProp->m_nBits;
+		bit_count = pProp->m_nBits; //Unused? [APG]RoboCop[CL]
 
 		PROP_TYPE_SWITCH(DPT_Vector, "vector", false);
 
@@ -1707,14 +1686,14 @@ bool CBotEntProp::SetEntPropVector(int entity, PropType proptype, char *prop, Ve
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
 		return false;
-		break;
+		//break;
 	}
 
 	Vector *v = (Vector *)((uint8_t *)pEntity + offset);
 
 	*v = value;
 
-	if (proptype == Prop_Send && (pEdict != NULL))
+	if (proptype == Prop_Send && (pEdict != nullptr))
 	{
 		sm_gamehelpers->SetEdictStateChanged(pEdict, offset);
 	}
@@ -1735,12 +1714,12 @@ char *CBotEntProp::GetEntPropString(int entity, PropType proptype, char *prop, i
 	edict_t *pEdict;
 	CBaseEntity *pEntity;
 	SourceMod::sm_sendprop_info_t info;
-	SendProp *pProp = nullptr;
-	int bit_count;
+	SendProp *pProp = nullptr; //Unused? [APG]RoboCop[CL]
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	int offset;
-	const char *src = nullptr;
+	const char *src = nullptr; //Unused? [APG]RoboCop[CL]
 	char *dest = nullptr;
-	bool bIsStringIndex = false;
+	bool bIsStringIndex = false; //Unused? [APG]RoboCop[CL]
 
 	if (!IndexToAThings(entity, &pEntity, &pEdict))
 	{
@@ -1806,9 +1785,7 @@ char *CBotEntProp::GetEntPropString(int entity, PropType proptype, char *prop, i
 		{
 			offset += (element * (td->fieldSizeInBytes / td->fieldSize));
 
-			string_t idx;
-
-			idx = *(string_t *) ((uint8_t *) pEntity + offset);
+			string_t idx = *(string_t*)((uint8_t*)pEntity + offset);
 			src = (idx == NULL_STRING) ? "" : STRING(idx);
 		}
 		else
@@ -1836,7 +1813,7 @@ char *CBotEntProp::GetEntPropString(int entity, PropType proptype, char *prop, i
 		{
 			DVariant var;
 			pProp->GetProxyFn()(pProp, pEntity, (const void *) ((intptr_t) pEntity + offset), &var, element, entity);
-			src = (char*)var.m_pString; // hack because SDK 2013 declares this as const char*
+			src = var.m_pString; // hack because SDK 2013 declares this as const char*
 		}
 		else
 		{
@@ -1848,7 +1825,7 @@ char *CBotEntProp::GetEntPropString(int entity, PropType proptype, char *prop, i
 	default:
 		logger->Log(LogLevel::ERROR, "Invalid PropType %d", proptype);
 		return nullptr;
-		break;
+		//break;
 	}
 
 	size_t length = ke::SafeStrcpy(dest, maxlen, src);
@@ -2067,7 +2044,7 @@ bool CBotEntProp::SetEntData(int entity, int offset, int value, int size, bool c
 		return false;
 	}
 
-	if (changeState && (pEdict != NULL))
+	if (changeState && (pEdict != nullptr))
 	{
 		sm_gamehelpers->SetEdictStateChanged(pEdict, offset);
 	}
@@ -2145,7 +2122,7 @@ bool CBotEntProp::SetEntDataFloat(int entity, int offset, float value, bool chan
 
 	*(float *)((uint8_t *)pEntity + offset) = value;
 
-	if (changeState && (pEdict != NULL))
+	if (changeState && (pEdict != nullptr))
 	{
 		sm_gamehelpers->SetEdictStateChanged(pEdict, offset);
 	}
@@ -2213,9 +2190,9 @@ bool CBotEntProp::SetEntDataEnt(int entity, int offset, int value, bool changeSt
 
 	CBaseHandle &hndl = *(CBaseHandle *)((uint8_t *)pEntity + offset);
 
-	if ((unsigned)value == INVALID_EHANDLE_INDEX)
+	if (static_cast<unsigned>(value) == INVALID_EHANDLE_INDEX)
 	{
-		hndl.Set(NULL);
+		hndl.Set(nullptr);
 	}
 	else
 	{
@@ -2227,11 +2204,11 @@ bool CBotEntProp::SetEntDataEnt(int entity, int offset, int value, bool changeSt
 			return false;
 		}
 
-		IHandleEntity *pHandleEnt = (IHandleEntity *)pOther;
+		const IHandleEntity *pHandleEnt = reinterpret_cast<IHandleEntity*>(pOther);
 		hndl.Set(pHandleEnt);
 	}
 
-	if (changeState && (pEdict != NULL))
+	if (changeState && (pEdict != nullptr))
 	{
 		sm_gamehelpers->SetEdictStateChanged(pEdict, offset);
 	}
@@ -2291,7 +2268,7 @@ bool CBotEntProp::SetEntDataVector(int entity, int offset, Vector value, bool ch
 
 	*v = value;
 
-	if (changeState && (pEdict != NULL))
+	if (changeState && (pEdict != nullptr))
 	{
 		sm_gamehelpers->SetEdictStateChanged(pEdict, offset);
 	}
@@ -2363,7 +2340,7 @@ bool CBotEntProp::SetEntDataString(int entity, int offset, char *value, int maxl
 
 	ke::SafeStrcpy(dest, maxlen, src);
 
-	if (changeState && (pEdict != NULL))
+	if (changeState && (pEdict != nullptr))
 	{
 		sm_gamehelpers->SetEdictStateChanged(pEdict, offset);
 	}
@@ -2394,7 +2371,7 @@ int CBotEntProp::GameRules_GetProp(char *prop, int size, int element)
 {
 	int offset;
 	int bit_count;
-	bool is_unsigned = false;
+	bool is_unsigned = false; //Unused? [APG]RoboCop[CL]
 	void *pGameRules = sm_sdktools->GetGameRules();
 
 	if (!pGameRules || !grclassname || !strcmp(grclassname, ""))
@@ -2403,7 +2380,7 @@ int CBotEntProp::GameRules_GetProp(char *prop, int size, int element)
 		return -1;
 	}
 
-	int elementCount = 1;
+	int elementCount = 1; //Unused? [APG]RoboCop[CL]
 	GAMERULES_FIND_PROP_SEND(DPT_Int, "integer", -1);
 	is_unsigned = ((pProp->GetFlags() & SPROP_UNSIGNED) == SPROP_UNSIGNED);
 
@@ -2425,34 +2402,25 @@ int CBotEntProp::GameRules_GetProp(char *prop, int size, int element)
 	{
 		return *(int32_t *)((intptr_t)pGameRules + offset);
 	}
-	else if (bit_count >= 9)
+	if (bit_count >= 9)
 	{
 		if (is_unsigned)
 		{
 			return *(uint16_t *)((intptr_t)pGameRules + offset);
 		}
-		else
-		{
-			return *(int16_t *)((intptr_t)pGameRules + offset);
-		}
+		return *(int16_t *)((intptr_t)pGameRules + offset);
 	}
-	else if (bit_count >= 2)
+	if (bit_count >= 2)
 	{
 		if (is_unsigned)
 		{
 			return *(uint8_t *)((intptr_t)pGameRules + offset);
 		}
-		else
-		{
-			return *(int8_t *)((intptr_t)pGameRules + offset);
-		}
+		return *(int8_t *)((intptr_t)pGameRules + offset);
 	}
-	else
-	{
-		return *(bool *)((intptr_t)pGameRules + offset) ? 1 : 0;
-	}
+	return *(bool *)((intptr_t)pGameRules + offset) ? 1 : 0;
 
-	return -1;
+	//return -1;
 }
 
 /// @brief Retrieves a float value from a property of the gamerules entity.
@@ -2462,7 +2430,7 @@ int CBotEntProp::GameRules_GetProp(char *prop, int size, int element)
 float CBotEntProp::GameRules_GetPropFloat(char *prop, int element)
 {
 	int offset;
-	int bit_count;
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	void *pGameRules = sm_sdktools->GetGameRules();
 
 	if (!pGameRules || !grclassname || !strcmp(grclassname, ""))
@@ -2471,7 +2439,7 @@ float CBotEntProp::GameRules_GetPropFloat(char *prop, int element)
 		return 0.0f;
 	}
 
-	int elementCount = 1;
+	int elementCount = 1; //Unused? [APG]RoboCop[CL]
 	GAMERULES_FIND_PROP_SEND(DPT_Float, "float", 0.0f);
 
 	return *(float *)((intptr_t)pGameRules + offset);
@@ -2484,7 +2452,7 @@ float CBotEntProp::GameRules_GetPropFloat(char *prop, int element)
 int CBotEntProp::GameRules_GetPropEnt(char *prop, int element)
 {
 	int offset;
-	int bit_count;
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	void *pGameRules = sm_sdktools->GetGameRules();
 
 	if (!pGameRules || !grclassname || !strcmp(grclassname, ""))
@@ -2493,7 +2461,7 @@ int CBotEntProp::GameRules_GetPropEnt(char *prop, int element)
 		return 0.0f;
 	}
 
-	int elementCount = 1;
+	int elementCount = 1; //Unused? [APG]RoboCop[CL]
 	GAMERULES_FIND_PROP_SEND(DPT_Int, "Integer", 0.0f);
 
 	CBaseHandle &hndl = *(CBaseHandle *)((intptr_t)pGameRules + offset);
@@ -2514,7 +2482,7 @@ int CBotEntProp::GameRules_GetPropEnt(char *prop, int element)
 Vector CBotEntProp::GameRules_GetPropVector(char *prop, int element)
 {
 	int offset;
-	int bit_count;
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	void *pGameRules = sm_sdktools->GetGameRules();
 
 	if (!pGameRules || !grclassname || !strcmp(grclassname, ""))
@@ -2523,7 +2491,7 @@ Vector CBotEntProp::GameRules_GetPropVector(char *prop, int element)
 		return Vector(0,0,0);
 	}
 
-	int elementCount = 1;
+	int elementCount = 1; //Unused? [APG]RoboCop[CL]
 	GAMERULES_FIND_PROP_SEND(DPT_Vector, "vector", Vector(0,0,0));
 
 	return *(Vector *)((intptr_t)pGameRules + offset);
@@ -2538,7 +2506,7 @@ Vector CBotEntProp::GameRules_GetPropVector(char *prop, int element)
 char *CBotEntProp::GameRules_GetPropString(char *prop, int *len, int maxlen, int element)
 {
 	int offset;
-	int bit_count;
+	int bit_count; //Unused? [APG]RoboCop[CL]
 	void *pGameRules = sm_sdktools->GetGameRules();
 
 	if (!pGameRules || !grclassname || !strcmp(grclassname, ""))
@@ -2547,7 +2515,7 @@ char *CBotEntProp::GameRules_GetPropString(char *prop, int *len, int maxlen, int
 		return nullptr;
 	}
 
-	int elementCount = 1;
+	int elementCount = 1; //Unused? [APG]RoboCop[CL]
 	GAMERULES_FIND_PROP_SEND(DPT_String, "string", nullptr);
 
 

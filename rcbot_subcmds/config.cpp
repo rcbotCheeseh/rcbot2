@@ -41,7 +41,7 @@ CBotCommandInline GameEventVersion("event_version", CMD_ACCESS_CONFIG, [](CClien
 
 CBotCommandInline MaxBotsCommand("max_bots", CMD_ACCESS_CONFIG | CMD_ACCESS_DEDICATED, [](CClient *pClient, BotCommandArgs args)
 {
-	edict_t *pEntity = NULL;
+	edict_t *pEntity = nullptr;
 
 	if ( pClient )
 		pEntity = pClient->getPlayer();
@@ -51,7 +51,7 @@ CBotCommandInline MaxBotsCommand("max_bots", CMD_ACCESS_CONFIG | CMD_ACCESS_DEDI
 		int max = atoi(args[0]);
 
 		bool err = false;
-		int min_bots = CBots::getMinBots();
+		const int min_bots = CBots::getMinBots();
 
 		if ( max <= -1 )// skip check for disabling max bots (require <=)
 			max = -1;
@@ -79,7 +79,7 @@ CBotCommandInline MaxBotsCommand("max_bots", CMD_ACCESS_CONFIG | CMD_ACCESS_DEDI
 
 CBotCommandInline MinBotsCommand("min_bots", CMD_ACCESS_CONFIG | CMD_ACCESS_DEDICATED, [](CClient *pClient, BotCommandArgs args)
 {
-	edict_t *pEntity = NULL;
+	edict_t *pEntity = nullptr;
 
 	if ( pClient )
 		pEntity = pClient->getPlayer();
@@ -87,7 +87,7 @@ CBotCommandInline MinBotsCommand("min_bots", CMD_ACCESS_CONFIG | CMD_ACCESS_DEDI
 	if ( args[0] && *args[0] )
 	{
 		int min = atoi(args[0]);
-		int max_bots = CBots::getMaxBots();
+		const int max_bots = CBots::getMaxBots();
 
 		bool err = false;
 

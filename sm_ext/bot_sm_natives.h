@@ -26,5 +26,5 @@ const sp_nativeinfo_t g_RCBotNatives[] = {
 	{ "RCBot2_SetProfileFloat", sm_RCBotSetProfileFloat },
 	{ "RCBot2_GetProfileFloat", sm_RCBotGetProfileFloat },
 
-	{NULL, NULL},
+	{nullptr, nullptr},
 };

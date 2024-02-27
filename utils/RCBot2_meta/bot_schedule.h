@@ -35,6 +35,7 @@
 #include "bot_task.h"
 //#include "bot_fortress.h"
 
+#include <algorithm>
 #include <deque>
 
 class CBotTask;
@@ -202,14 +203,11 @@ private:
 class CBotSchedules
 {
 public:
-	bool hasSchedule ( eBotSchedule iSchedule ) const
+	bool hasSchedule(eBotSchedule iSchedule) const
 	{
-		for (const CBotSchedule *sched : m_Schedules) {
-			if (sched->isID(iSchedule)) {
-				return true;
-			}
-		}
-		return false;
+		return std::any_of(m_Schedules.begin(), m_Schedules.end(), [&iSchedule](const CBotSchedule* sched) {
+			return sched->isID(iSchedule);
+			});
 	}
 
 	bool isCurrentSchedule ( eBotSchedule iSchedule ) const

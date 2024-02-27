@@ -47,7 +47,7 @@ public:
 	bool pointIsWithin( edict_t *pEntity, const Vector &vPoint );
 	bool isBrushEntity( edict_t *pEntity );
 	int FindEntityByClassname(int start, const char *classname);
-	int FindEntityInSphere(int start, Vector center, float radius);
+	int FindEntityInSphere(int start, const Vector& center, float radius);
 	int FindEntityByNetClass(int start, const char *classname);
 	bool PointWithinViewAngle(Vector const &vecSrcPosition, Vector const &vecTargetPosition, Vector const &vecLookDirection, float flCosHalfFOV);
 	float GetForwardViewCone(float angle);
@@ -58,7 +58,8 @@ private:
 		return ((pEntity->GetCollideable()->GetSolidFlags() & FSOLID_FORCE_WORLD_ALIGNED) == 0 &&
 		pEntity->GetCollideable()->GetSolid() != SOLID_BBOX && pEntity->GetCollideable()->GetSolid() != SOLID_NONE);
 	}
-	Vector getOBBCenter( edict_t *pEntity );
+
+	static Vector getOBBCenter( edict_t *pEntity );
 	Vector collisionToWorldSpace( const Vector &in, edict_t *pEntity );
 };
 
@@ -67,8 +68,8 @@ private:
 /// @return edict_t pointer
 inline edict_t *CBotHelper::BaseEntityToEdict(CBaseEntity *pEntity)
 {
-	IServerUnknown *pUnk = (IServerUnknown *)pEntity;
-	IServerNetworkable *pNet = pUnk->GetNetworkable();
+	IServerUnknown *pUnk = reinterpret_cast<IServerUnknown*>(pEntity);
+	const IServerNetworkable *pNet = pUnk->GetNetworkable();
 
 	if (!pNet)
 	{

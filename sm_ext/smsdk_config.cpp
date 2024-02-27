@@ -88,103 +88,103 @@ bool SM_AcquireInterfaces(char *error, size_t maxlength)
 
 void SM_UnsetInterfaces()
 {
-	myself = NULL;
-	smexts = NULL;
-	sharesys = NULL;
-	sm_main = NULL;
+	myself = nullptr;
+	smexts = nullptr;
+	sharesys = nullptr;
+	sm_main = nullptr;
 #if defined SMEXT_ENABLE_FORWARDSYS
-	sm_forwards = NULL;
+	sm_forwards = nullptr;
 #endif
 #if defined SMEXT_ENABLE_HANDLESYS
-	sm_handlesys = NULL;
+	sm_handlesys = nullptr;
 #endif
 #if defined SMEXT_ENABLE_PLAYERHELPERS
-	sm_players = NULL;
+	sm_players = nullptr;
 #endif
 #if defined SMEXT_ENABLE_DBMANAGER
-	sm_dbi = NULL;
+	sm_dbi = nullptr;
 #endif 
 #if defined SMEXT_ENABLE_GAMECONF
-	sm_gameconfs = NULL;
+	sm_gameconfs = nullptr;
 #endif
 #if defined SMEXT_ENABLE_MEMUTILS
-	sm_memutils = NULL;
+	sm_memutils = nullptr;
 #endif
 #if defined SMEXT_ENABLE_GAMEHELPERS
-	sm_gamehelpers = NULL;
+	sm_gamehelpers = nullptr;
 #endif
 #if defined SMEXT_ENABLE_TIMERSYS
-	sm_timersys = NULL;
+	sm_timersys = nullptr;
 #endif
 #if defined SMEXT_ENABLE_THREADER
-	sm_threader = NULL;
+	sm_threader = nullptr;
 #endif
 #if defined SMEXT_ENABLE_LIBSYS
-	sm_libsys = NULL;
+	sm_libsys = nullptr;
 #endif
 #if defined SMEXT_ENABLE_PLUGINSYS
-	sm_plsys = NULL;
+	sm_plsys = nullptr;
 #endif 
 #if defined SMEXT_ENABLE_MENUS
-	sm_menus = NULL;
+	sm_menus = nullptr;
 #endif
 #if defined SMEXT_ENABLE_ADMINSYS
-	sm_adminsys = NULL;
+	sm_adminsys = nullptr;
 #endif
 #if defined SMEXT_ENABLE_TEXTPARSERS
-	sm_text = NULL;
+	sm_text = nullptr;
 #endif
 #if defined SMEXT_ENABLE_TRANSLATOR
-	sm_translator = NULL;
+	sm_translator = nullptr;
 #endif
 }
 
-IExtension *myself = NULL;
-IExtensionManager *smexts = NULL;
-IShareSys *sharesys = NULL;
-SourceMod::ISourceMod *sm_main = NULL;
+IExtension *myself = nullptr;
+IExtensionManager *smexts = nullptr;
+IShareSys *sharesys = nullptr;
+SourceMod::ISourceMod *sm_main = nullptr;
 #if defined SMEXT_ENABLE_FORWARDSYS
-SourceMod::IForwardManager *sm_forwards = NULL;
+SourceMod::IForwardManager *sm_forwards = nullptr;
 #endif
 #if defined SMEXT_ENABLE_HANDLESYS
-SourceMod::IHandleSys *sm_handlesys = NULL;
+SourceMod::IHandleSys *sm_handlesys = nullptr;
 #endif
 #if defined SMEXT_ENABLE_PLAYERHELPERS
-SourceMod::IPlayerManager *sm_players = NULL;
+SourceMod::IPlayerManager *sm_players = nullptr;
 #endif
 #if defined SMEXT_ENABLE_DBMANAGER
-SourceMod::IDBManager *sm_dbi = NULL;
+SourceMod::IDBManager *sm_dbi = nullptr;
 #endif 
 #if defined SMEXT_ENABLE_GAMECONF
-SourceMod::IGameConfigManager *sm_gameconfs = NULL;
+SourceMod::IGameConfigManager *sm_gameconfs = nullptr;
 #endif
 #if defined SMEXT_ENABLE_MEMUTILS
-SourceMod::IMemoryUtils *sm_memutils = NULL;
+SourceMod::IMemoryUtils *sm_memutils = nullptr;
 #endif
 #if defined SMEXT_ENABLE_GAMEHELPERS
-SourceMod::IGameHelpers *sm_gamehelpers = NULL;
+SourceMod::IGameHelpers *sm_gamehelpers = nullptr;
 #endif
 #if defined SMEXT_ENABLE_TIMERSYS
-SourceMod::ITimerSystem *sm_timersys = NULL;
+SourceMod::ITimerSystem *sm_timersys = nullptr;
 #endif
 #if defined SMEXT_ENABLE_THREADER
-SourceMod::IThreader *sm_threader = NULL;
+SourceMod::IThreader *sm_threader = nullptr;
 #endif
 #if defined SMEXT_ENABLE_LIBSYS
-SourceMod::ILibrarySys *sm_libsys = NULL;
+SourceMod::ILibrarySys *sm_libsys = nullptr;
 #endif
 #if defined SMEXT_ENABLE_PLUGINSYS
-SourceMod::IPluginManager *sm_plsys = NULL;
+SourceMod::IPluginManager *sm_plsys = nullptr;
 #endif 
 #if defined SMEXT_ENABLE_MENUS
-SourceMod::IMenuManager *sm_menus = NULL;
+SourceMod::IMenuManager *sm_menus = nullptr;
 #endif
 #if defined SMEXT_ENABLE_ADMINSYS
-SourceMod::IAdminSystem *sm_adminsys = NULL;
+SourceMod::IAdminSystem *sm_adminsys = nullptr;
 #endif
 #if defined SMEXT_ENABLE_TEXTPARSERS
-SourceMod::ITextParsers *sm_text = NULL;
+SourceMod::ITextParsers *sm_text = nullptr;
 #endif
 #if defined SMEXT_ENABLE_TRANSLATOR
-SourceMod::ITranslator *sm_translator = NULL;
+SourceMod::ITranslator *sm_translator = nullptr;
 #endif

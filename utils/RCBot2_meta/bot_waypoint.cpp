@@ -1259,9 +1259,9 @@ void CWaypointNavigator :: rollBackPosition ()
 void CWaypointNavigator :: updatePosition ()
 {
 	static Vector vWptOrigin;
-	static float fRadius;
-	static float fPrevBelief;
-	static float fBelief;
+	static float fRadius; //Unused? [APG]RoboCop[CL]
+	static float fPrevBelief; //Unused? [APG]RoboCop[CL]
+	static float fBelief; //Unused? [APG]RoboCop[CL]
 
 	static QAngle aim;
 	static Vector vaim;

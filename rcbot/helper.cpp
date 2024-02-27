@@ -143,8 +143,7 @@ bool CBotHelper::pointIsWithin( edict_t *pEntity, const Vector &vPoint )
 /// @return True if brush model
 bool CBotHelper::isBrushEntity( edict_t *pEntity )
 {
-	const char *szModel;
-	szModel = pEntity->GetIServerEntity()->GetModelName().ToCStr();
+	const char* szModel = pEntity->GetIServerEntity()->GetModelName().ToCStr();
 	return szModel[0] == '*';
 }
 
@@ -158,7 +157,7 @@ int CBotHelper::FindEntityByClassname(int start,const char *classname)
 
 /// @brief Searches for entities in a sphere
 /// @return Entity index/reference or INVALID_EHANDLE_INDEX if none is found
-int CBotHelper::FindEntityInSphere(int start, Vector center, float radius)
+int CBotHelper::FindEntityInSphere(int start, const Vector& center, float radius)
 {
 	CBaseEntity *pEntity = servertools->FindEntityInSphere(GetEntity(start), center, radius);
 	return sm_gamehelpers->EntityToBCompatRef(pEntity);
@@ -168,19 +167,17 @@ int CBotHelper::FindEntityInSphere(int start, Vector center, float radius)
 /// @return Entity index or INVALID_EHANDLE_INDEX if none is found
 int CBotHelper::FindEntityByNetClass(int start, const char *classname)
 {
-	edict_t *current;
-
 	for (int i = ((start != -1) ? start : 0); i < gpGlobals->maxEntities; i++)
 	{
-		current = engine->PEntityOfEntIndex(i);
-		if (current == NULL || current->IsFree())
+		edict_t* current = engine->PEntityOfEntIndex(i);
+		if (current == nullptr || current->IsFree())
 		{
 			continue;
 		}
 
 		IServerNetworkable *network = current->GetNetworkable();
 
-		if (network == NULL)
+		if (network == nullptr)
 		{
 			continue;
 		}
@@ -207,13 +204,13 @@ int CBotHelper::FindEntityByNetClass(int start, const char *classname)
 /// @note https://github.com/ValveSoftware/source-sdk-2013/blob/beaae8ac45a2f322a792404092d4482065bef7ef/sp/src/public/mathlib/vector.h#L462-L477
 bool CBotHelper::PointWithinViewAngle(Vector const &vecSrcPosition, Vector const &vecTargetPosition, Vector const &vecLookDirection, float flCosHalfFOV)
 {
-	Vector vecDelta = vecTargetPosition - vecSrcPosition;
-	float cosDiff = DotProduct( vecLookDirection, vecDelta );
+	const Vector vecDelta = vecTargetPosition - vecSrcPosition;
+	const float cosDiff = DotProduct( vecLookDirection, vecDelta );
 
 	if ( cosDiff < 0 ) 
 		return false;
 
-	float flLen2 = vecDelta.LengthSqr();
+	const float flLen2 = vecDelta.LengthSqr();
 
 	// a/sqrt(b) > c  == a^2 > b * c ^2
 	return ( cosDiff * cosDiff > flLen2 * flCosHalfFOV * flCosHalfFOV );

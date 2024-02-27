@@ -4499,7 +4499,10 @@ void CBotTF2DemomanPipeJump :: execute (CBot *pBot,CBotSchedule *pSchedule)
 }
 
 //////////////////////////////////////////
-CBotTF2DemomanPipeEnemy :: CBotTF2DemomanPipeEnemy ( CBotWeapon *pPipeLauncher, const Vector& vEnemy, edict_t *pEnemy )
+CBotTF2DemomanPipeEnemy :: CBotTF2DemomanPipeEnemy ( CBotWeapon *pPipeLauncher, const Vector& vEnemy, edict_t *pEnemy ):
+	m_fTime(0),
+	m_fHoldAttackTime(0),
+	m_fHeldAttackTime(0)
 {
 	m_vEnemy = vEnemy;
 	m_pEnemy = MyEHandle(pEnemy);
@@ -5416,7 +5419,7 @@ void CBotHL2DMSnipe :: execute (CBot *pBot,CBotSchedule *pSchedule)
 	static CBotWeapon *pCurrentWeapon;
 	static CWeapon *pWeapon;
 
-	static bool bDeployedOrZoomed;
+	static bool bDeployedOrZoomed; //Unused? [APG]RoboCop[CL]
 	static float fDist;
 
 	bDeployedOrZoomed = false;

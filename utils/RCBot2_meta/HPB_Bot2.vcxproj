@@ -135,7 +135,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..\..\alliedmodders\hl2sdk-tf2\public\mathlib;..\..\alliedmodders\hl2sdk-tf2\public;..\..\alliedmodders\hl2sdk-tf2\public\engine;..\..\alliedmodders\hl2sdk-tf2\public\tier0;..\..\alliedmodders\hl2sdk-tf2\public\tier1;..\..\alliedmodders\hl2sdk-tf2\game\shared;..\..\alliedmodders\hl2sdk-tf2\game\server;..\..\alliedmodders\hl2sdk-tf2\public\game\server;..\..\alliedmodders\metamod-source\core\;..\..\alliedmodders\metamod-source\core\sourcehook\;..\..\alliedmodders\metamod-source\public\;..\..\sm_ext\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\alliedmodders\hl2sdk-tf2\public\mathlib;..\..\alliedmodders\hl2sdk-tf2\public;..\..\alliedmodders\hl2sdk-tf2\public\engine;..\..\alliedmodders\hl2sdk-tf2\public\tier0;..\..\alliedmodders\hl2sdk-tf2\public\tier1;..\..\alliedmodders\hl2sdk-tf2\game\shared;..\..\alliedmodders\hl2sdk-tf2\game\server;..\..\alliedmodders\hl2sdk-tf2\public\game\server;..\..\alliedmodders\metamod-source\core\;..\..\alliedmodders\metamod-source\core\sourcehook\;..\..\alliedmodders\metamod-source\public\;..\..\sm_ext\;..\..\rcbot\;..\..\rcbot\tf2;..\..\rcbot_subcmds;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SOURCE_ENGINE=4;WIN32;NDEBUG;_WINDOWS;HOMEFOLDER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>

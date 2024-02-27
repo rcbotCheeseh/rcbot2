@@ -2068,8 +2068,8 @@ void CBotTF2::MvM_Update()
 			// at this point we know the player is a human and is on RED team
 			num_players++; // increase player count
 
-			char prop[] = "m_bPlayerReady";
-			if (entprops->GameRules_GetProp(prop, 4, i) != 0)
+			char ready[] = "m_bPlayerReady";
+			if (entprops->GameRules_GetProp(ready, 4, i) != 0)
 				num_ready++;
 		}
 
@@ -2085,10 +2085,9 @@ void CBotTF2::MvM_Update()
 
 bool CBotTF2::MvM_IsReady() const
 {
-	char prop[] = "m_bPlayerReady";
-	return entprops->GameRules_GetProp(prop, 4, engine->IndexOfEdict(getEdict())) == 1;
+	char ready[] = "m_bPlayerReady";
+	return entprops->GameRules_GetProp(ready, 4, engine->IndexOfEdict(getEdict())) == 1;
 }
-
 
 // TODO: To allow bots to menuselect in order to buy upgrades? [APG]RoboCop[CL]
 void CBotTF2::MvM_Upgrade()

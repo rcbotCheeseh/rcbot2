@@ -32,7 +32,7 @@
 #ifndef _INCLUDE_SOURCEMOD_CONFIG_H_
 #define _INCLUDE_SOURCEMOD_CONFIG_H_
 
-#include <stdio.h>
+#include <cstdio>
 
 /**
  * @brief Acquires the interfaces enabled at the bottom of this header.

@@ -61,19 +61,19 @@ CBotCommandInline WaypointDeleteCommand("delete", CMD_ACCESS_WAYPOINT, [](CClien
 	{
 		if ( args[0] && *args[0] )
 		{
-			float radius = atof(args[0]);
+			const float radius = atof(args[0]);
 
 			if ( radius > 0 )
 			{
 				int numdeleted = 0;
-				Vector vOrigin = pClient->getOrigin();
+				const Vector vOrigin = pClient->getOrigin();
 
 				WaypointList pWpt;
 				CWaypointLocations::GetAllInArea(vOrigin,&pWpt,-1);
 
 				for ( unsigned short int i = 0; i < pWpt.size(); i ++ )
 				{
-					CWaypoint *pWaypoint = CWaypoints::getWaypoint(pWpt[i]);
+					const CWaypoint *pWaypoint = CWaypoints::getWaypoint(pWpt[i]);
 
 					if ( pWaypoint->distanceFrom(vOrigin) < radius)
 					{
@@ -136,14 +136,14 @@ CBotCommandInline WaypointInfoCommand("info", 0, [](CClient *pClient, BotCommand
 
 CBotCommandInline WaypointSaveCommand("save", CMD_ACCESS_WAYPOINT, [](CClient *pClient, BotCommandArgs args)
 {
-	if ( CWaypoints::save(false,(pClient!=NULL)?pClient->getPlayer():NULL,((args[0]!=NULL) && (*args[0]!=0))?args[0]:NULL,((args[1]!=NULL) && (*args[1]!=0))?args[1]:NULL) )
+	if ( CWaypoints::save(false,(pClient!= nullptr)?pClient->getPlayer(): nullptr,((args[0]!= nullptr) && (*args[0]!=0))?args[0]: nullptr,((args[1]!= nullptr) && (*args[1]!=0))?args[1]: nullptr) )
 	{
-		CBotGlobals::botMessage(NULL,0,"waypoints saved");
+		CBotGlobals::botMessage(nullptr,0,"waypoints saved");
 		if ( pClient )
 			pClient->giveMessage("Waypoints Saved");
 	}
 	else
-		CBotGlobals::botMessage(NULL,0,"error: could not save waypoints");
+		CBotGlobals::botMessage(nullptr,0,"error: could not save waypoints");
 
 	return COMMAND_ACCESSED;
 });
@@ -162,9 +162,9 @@ CBotCommandInline WaypointLoadCommand("load", CMD_ACCESS_WAYPOINT, [](CClient *p
 		bLoadOK = CWaypoints::load();
 
 	if ( bLoadOK )
-		CBotGlobals::botMessage(NULL,0,"waypoints %s loaded",szMapName);
+		CBotGlobals::botMessage(nullptr,0,"waypoints %s loaded",szMapName);
 	else
-		CBotGlobals::botMessage(NULL,0,"error: could not load %s waypoints",szMapName);
+		CBotGlobals::botMessage(nullptr,0,"error: could not load %s waypoints",szMapName);
 
 	return COMMAND_ACCESSED;
 });
@@ -187,7 +187,7 @@ CBotCommandInline WaypointGiveTypeCommand("givetype", CMD_ACCESS_WAYPOINT, [](CC
 			CBotGlobals::botMessage(pEntity,0,"No waypoint nearby to give types (move closer to the waypoint you want to give types)");
 		else
 		{
-			char *type = NULL;
+			char *type = nullptr;
 
 			for ( int i = 0; i < 4; i ++ )
 			{
@@ -203,7 +203,7 @@ CBotCommandInline WaypointGiveTypeCommand("givetype", CMD_ACCESS_WAYPOINT, [](CC
 				if ( !type || !*type )
 					break;
 
-				CWaypointType *pType = CWaypointTypes::getType(type);
+				const CWaypointType *pType = CWaypointTypes::getType(type);
 
 				if ( pType )
 				{
@@ -274,7 +274,7 @@ CBotCommandInline WaypointAngleCommand("angle", 0, [](CClient *pClient, BotComma
 
 		if ( pWpt )
 		{
-			QAngle eye = CBotGlobals::playerAngles(pClient->getPlayer());
+			const QAngle eye = CBotGlobals::playerAngles(pClient->getPlayer());
 			CBotGlobals::botMessage(pClient->getPlayer(),0,"Waypoint Angle == %0.3f deg, (Eye == %0.3f)",CBotGlobals::yawAngleFromEdict(pClient->getPlayer(),pWpt->getOrigin()),eye.y);
 			pClient->playSound("buttons/combine_button1");
 		}
@@ -470,7 +470,7 @@ CBotCommandInline WaypointPaste("paste", 0, [](CClient *pClient, BotCommandArgs 
 {
 	if ( pClient )
 	{
-		CWaypoints::addWaypoint(pClient,NULL,NULL,NULL,NULL,true);
+		CWaypoints::addWaypoint(pClient, nullptr, nullptr, nullptr, nullptr,true);
 		return COMMAND_ACCESSED;
 	}
 
@@ -488,7 +488,7 @@ CBotCommandInline WaypointShiftAreas("shiftareas", 0, [](CClient *pClient, BotCo
 
 		if ( args[1] && *args[1] )
 		{
-			int newarea = atoi(args[1]);
+			const int newarea = atoi(args[1]);
 
 			if ( pClient )
 			{
@@ -515,7 +515,7 @@ CBotCommandInline WaypointTeleportCommand("teleport", 0, [](CClient *pClient, Bo
 
 		id = atoi(args[0]);
 
-		if ( (pWpt=CWaypoints::getWaypoint(id)) != NULL )
+		if ( (pWpt=CWaypoints::getWaypoint(id)) != nullptr)
 		{
 			if ( pWpt->isUsed() )
 			{
@@ -550,7 +550,7 @@ CBotCommandInline WaypointAreaSetToNearest("setareatonearest", 0, [](CClient *pC
 
 		id = pClient->currentWaypoint();
 
-		if ( (pWpt=CWaypoints::getWaypoint(id)) != NULL )
+		if ( (pWpt=CWaypoints::getWaypoint(id)) != nullptr)
 		{
 			if ( pWpt->isUsed() )
 			{
@@ -589,7 +589,7 @@ CBotCommandInline WaypointShowCommand("show", 0, [](CClient *pClient, BotCommand
 {
 	if ( pClient )
 	{
-		int wpt = atoi(args[0]);
+		const int wpt = atoi(args[0]);
 		CWaypoint *pwpt = CWaypoints::getWaypoint(wpt);
 
 		if ( pwpt )
@@ -614,7 +614,7 @@ CBotCommandInline WaypointCheckCommand("check", 0, [](CClient *pClient, BotComma
 {
 	// loop through every waypoint and check the areas are not outside the number of control points
 
-	CWaypoints::checkAreas((pClient==NULL)?NULL:pClient->getPlayer());
+	CWaypoints::checkAreas((pClient== nullptr)? nullptr :pClient->getPlayer());
 
 	return COMMAND_ACCESSED;
 });
@@ -638,7 +638,7 @@ CBotCommandInline WaypointShowVisCommand("showvis", 0, [](CClient *pClient, BotC
 		if ( pWpt )
 		{
 			index = CWaypoints::getWaypointIndex(pWpt);
-			CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
+			const CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 	
 			for ( i = 0; i < CWaypoints::numWaypoints(); i ++ )
 			{

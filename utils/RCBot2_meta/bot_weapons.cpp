@@ -418,8 +418,8 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 {
 	unsigned short int iWeaponsSignature = 0x0; // check sum of weapons
 	edict_t* pWeapon;
+	
 	const CBaseHandle* m_Weapons = CClassInterface::getWeaponList(m_pBot->getEdict());
-
 	const CBaseHandle* m_Weapon_iter = m_Weapons;
 
 	for (short int i = 0; i < MAX_WEAPONS; i++)
@@ -436,8 +436,7 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 	if (iWeaponsSignature != m_iWeaponsSignature) // m_fUpdateWeaponsTime < engine->Time() )
 	{
 		this->clearWeapons();
-
-		const CBaseHandle* m_Weapons = CClassInterface::getWeaponList(m_pBot->getEdict());
+		
 		CBotWeapon* m_BotWeapon_iter = m_theWeapons; //m_BotWeapon_iter not used? [APG]RoboCop[CL]
 
 		// loop through the weapons array and see if it is in the CBaseCombatCharacter

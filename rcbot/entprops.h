@@ -34,7 +34,10 @@
 #include <dt_send.h>
 #include <server_class.h>
 
-#define INVALID_ENT_REFERENCE 0xFFFFFFFF
+enum
+{
+	INVALID_ENT_REFERENCE = 0xFFFFFFFF
+};
 
 enum PropType
 {
@@ -87,8 +90,8 @@ private:
 	CBaseEntity *GetEntity(int entity);
 	CBaseEntity *GetGameRulesProxyEntity();
 
-	const char *grclassname; // game rules proxy net class
-	bool initialized;
+	const char* grclassname = nullptr; // game rules proxy net class
+	bool initialized = false;
 };
 
 inline int CBotEntProp::MatchTypeDescAsInteger(_fieldtypes type, int flags)
@@ -126,8 +129,8 @@ inline int CBotEntProp::MatchTypeDescAsInteger(_fieldtypes type, int flags)
 /// @return edict_t pointer
 inline edict_t *CBotEntProp::BaseEntityToEdict(CBaseEntity *pEntity)
 {
-	IServerUnknown *pUnk = (IServerUnknown *)pEntity;
-	IServerNetworkable *pNet = pUnk->GetNetworkable();
+	IServerUnknown *pUnk = reinterpret_cast<IServerUnknown*>(pEntity);
+	const IServerNetworkable *pNet = pUnk->GetNetworkable();
 
 	if (!pNet)
 	{

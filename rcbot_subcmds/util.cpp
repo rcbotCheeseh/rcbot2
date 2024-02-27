@@ -90,7 +90,7 @@ CBotCommandInline TeleportUtilCommand("teleport", CMD_ACCESS_UTIL, [](CClient *p
 
 		vTeleport = pClient->getTeleportVector();
 
-		if ( vTeleport != NULL )
+		if ( vTeleport != nullptr)
 		{
 			CBotGlobals::teleportPlayer(pClient->getPlayer(),*vTeleport);
 			//CRCBotPlugin::HudTextMessage(pClient->getPlayer(),"teleported to your remembered location");
@@ -106,7 +106,7 @@ CBotCommandInline TeleportUtilCommand("teleport", CMD_ACCESS_UTIL, [](CClient *p
 CBotCommandInline NoClipCommand("noclip", CMD_ACCESS_UTIL, [](CClient *pClient, BotCommandArgs args)
 {
 
-	edict_t *pEntity = NULL;
+	edict_t *pEntity = nullptr;
 
 	if ( pClient )
 		pEntity = pClient->getPlayer();
@@ -192,7 +192,7 @@ CBotCommandInline NoTouchCommand("notouch", CMD_ACCESS_UTIL, [](CClient *pClient
 					*playerflags |= FL_DONTTOUCH;
 
 				sprintf(msg,"notouch mode %s",(*playerflags & FL_DONTTOUCH)?"enabled":"disabled");
-				CBotGlobals::botMessage(NULL,0,msg);
+				CBotGlobals::botMessage(nullptr,0,msg);
 				//CRCBotPlugin::HudTextMessage(pEntity,msg);
 
 				return COMMAND_ACCESSED;

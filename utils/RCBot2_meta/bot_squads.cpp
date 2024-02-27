@@ -359,6 +359,8 @@ Vector CBotSquad :: GetFormationVector (const edict_t* pEdict)
 			vBase = -v_forward + v_right;
 		}
 		break;
+	//case SQUAD_FORM_NONE:
+	//	break;
 	}
 	
 	vBase = vBase * m_fDesiredSpread * iPosition;

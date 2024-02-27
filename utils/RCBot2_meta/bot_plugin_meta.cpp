@@ -120,7 +120,7 @@ CON_COMMAND(rcbotd, "access the bot commands on a server")
 	for (size_t i = 1; i <= static_cast<size_t>(args.ArgC()); i++) {
 		argList.push_back(args.Arg(i));
 	}
-	eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(NULL, argList);
+	eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(nullptr, argList);
 
 	if (iResult == COMMAND_ACCESSED)
 	{
