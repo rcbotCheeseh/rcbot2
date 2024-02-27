@@ -252,14 +252,13 @@ void CCounterStrikeSourceMod::onBombPlanted()
  **/
 void CCounterStrikeSourceMod::updateHostages()
 {
-	edict_t *current;
 	CBaseHandle bh;
 	m_hHostages.clear();
 
 	for(int i = gpGlobals->maxClients + 1; i < gpGlobals->maxEntities; i++)
 	{
 		bh.Term();
-		current = engine->PEntityOfEntIndex(i);
+		edict_t* current = engine->PEntityOfEntIndex(i);
 		if (current == nullptr)
 		{
 			continue;
@@ -291,11 +290,9 @@ bool CCounterStrikeSourceMod::canRescueHostages()
 	if(m_hHostages.empty())
 		return false;
 
-	edict_t *pHostage;
-
 	for(const CBaseHandle& i : m_hHostages)
 	{
-		pHostage = INDEXENT(i.GetEntryIndex());
+		edict_t* pHostage = INDEXENT(i.GetEntryIndex());
 
 		if (CBotGlobals::entityIsValid(pHostage) && !CClassInterface::isCSHostageRescued(pHostage) && CClassInterface::getCSHostageLeader(pHostage))
 		{
@@ -309,12 +306,11 @@ bool CCounterStrikeSourceMod::canRescueHostages()
 edict_t *CCounterStrikeSourceMod::getRandomHostage()
 {
 	std::vector<CBaseHandle> temp;
-	edict_t *pEdict;
 
 	// Build a new vector with hostages that are valid to be rescued
 	for(const CBaseHandle& i : m_hHostages)
 	{
-		pEdict = INDEXENT(i.GetEntryIndex());
+		edict_t* pEdict = INDEXENT(i.GetEntryIndex());
 
 		if (CBotGlobals::entityIsValid(pEdict) && !CClassInterface::isCSHostageRescued(pEdict) && CClassInterface::getCSHostageLeader(pEdict) && CClassInterface::getCSHostageHealth(pEdict) > 0)
 		{

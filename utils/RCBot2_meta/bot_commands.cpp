@@ -64,7 +64,8 @@ eBotCommandResult CBotCommandInline::execute(CClient *pClient, BotCommandArgs ar
 	return m_Callback(pClient, args);
 }
 
-CBotCommandInline ControlCommand("control", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED, [](CClient *pClient, BotCommandArgs args)
+CBotCommandInline ControlCommand("control", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED, [](CClient *pClient,
+                                 const BotCommandArgs& args)
 {
 	edict_t *pEntity = nullptr;
 
@@ -84,7 +85,8 @@ CBotCommandInline ControlCommand("control", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATE
 	return COMMAND_ERROR;
 });
 
-CBotCommandInline AddBotCommand("addbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED, [](CClient *pClient, BotCommandArgs args)
+CBotCommandInline AddBotCommand("addbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED, [](CClient *pClient,
+                                const BotCommandArgs& args)
 {	
 //	bool bOkay = false;
 
@@ -117,7 +119,8 @@ CBotCommandInline AddBotCommand("addbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED,
 	return COMMAND_ACCESSED;
 });
 
-CBotCommandInline KickBotCommand("kickbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED, [](CClient *pClient, BotCommandArgs args)
+CBotCommandInline KickBotCommand("kickbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATED, [](CClient *pClient,
+                                 const BotCommandArgs& args)
 {
 	if ( !args[0] || !*args[0] )
 	{
@@ -132,7 +135,7 @@ CBotCommandInline KickBotCommand("kickbot", CMD_ACCESS_BOT | CMD_ACCESS_DEDICATE
 	}
 	
 	return COMMAND_ACCESSED;
-}, "usage \"kickbot\" or \"kickbot <team>\" : kicks random bot or bot on team: <team>");
+}, R"(usage "kickbot" or "kickbot <team>" : kicks random bot or bot on team: <team>)");
 
 bool CBotCommand :: hasAccess ( CClient *pClient ) const
 {
@@ -210,7 +213,7 @@ void CBotSubcommands::printHelp( edict_t *pPrintTo ) {
 	this->printCommand(pPrintTo);
 }
 
-CBotCommandInline PrintCommands("printcommands", CMD_ACCESS_DEDICATED, [](CClient *pClient, BotCommandArgs args)
+CBotCommandInline PrintCommands("printcommands", CMD_ACCESS_DEDICATED, [](CClient *pClient, const BotCommandArgs& args)
 {
 	if ( pClient != nullptr)
 	{
@@ -266,7 +269,7 @@ void CBotCommand :: printHelp ( edict_t *pPrintTo )
 	return;
 }
 
-CBotCommandInline CTestCommand("test", 0, [](CClient *pClient, BotCommandArgs args)
+CBotCommandInline CTestCommand("test", 0, [](CClient *pClient, const BotCommandArgs& args)
 {
 	// for developers
 	// first argument is at args[0]

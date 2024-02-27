@@ -199,7 +199,7 @@ public:
 
 	static edict_t *playerByUserId(int iUserId);
 
-	static bool isCurrentMod ( eModId modid );
+	static bool isCurrentMod ( eModId modid ); //TODO: not implemented? [APG]RoboCop[CL]
 
 	static bool checkOpensLater (const Vector& vSrc, const Vector& vDest );
 

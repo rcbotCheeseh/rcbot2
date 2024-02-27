@@ -131,42 +131,42 @@ bool CBotSynergy::needAmmo()
 		case SYN_WEAPON_PISTOL:
 		{
 			return iAmmo < 30;
-			break;
+			//break;
 		}
 		case SYN_WEAPON_SHOTGUN:
 		case SYN_WEAPON_DESERTEAGLE:
 		case SYN_WEAPON_357:
 		{
 			return iAmmo < 6;
-			break;
+			//break;
 		}
 		case SYN_WEAPON_SMG1:
 		case SYN_WEAPON_MP5K:
 		{
 			return iAmmo < 75;
-			break;
+			//break;
 		}
 		case SYN_WEAPON_AR2:
 		case SYN_WEAPON_MG1:
 		{
 			return iAmmo < 20;
-			break;
+			//break;
 		}
 		case SYN_WEAPON_CROSSBOW:
 		{
 			return iAmmo < 2;
-			break;
+			//break;
 		}
 		case SYN_WEAPON_RPG:
 		{
 			return iAmmo < 2;
-			break;
+			//break;
 		}
 
 		default:
 		{
 			return false;
-			break;
+			//break;
 		}
 		}
 	}

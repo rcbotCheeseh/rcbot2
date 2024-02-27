@@ -883,7 +883,7 @@ void CClient :: think ()
 				{
 					int inewwpt = CWaypoints::addWaypoint(m_pPlayer,vPlacePosition,iFlags,true);
 					CWaypoint *pWpt = CWaypoints::getWaypoint(inewwpt);
-					Vector v_floor;
+					Vector v_floor; //Unused? [APG]RoboCop[CL]
 
 					m_vLastAutoWaypointPlacePos = vPlacePosition;
 					bool bCanStand;

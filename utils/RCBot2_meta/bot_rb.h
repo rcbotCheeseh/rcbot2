@@ -17,7 +17,7 @@ private:
 class CBotOperator
 {
 public:
-	virtual ~CBotOperator() = default;
+	//virtual ~CBotOperator() = default;
 
 	CBotOperator ( const CBotFactOpertor& op ) : m_op(op)
 	{		

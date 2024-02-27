@@ -106,7 +106,7 @@ public:
 		m_bBotCommand_ResetCheatFlag = false;
 	}
 
-	virtual ~CBotMod() = default;
+	//virtual ~CBotMod() = default;
 	
 	virtual bool checkWaypointForTeam(CWaypoint *pWpt, int iTeam)
 	{
@@ -124,7 +124,7 @@ public:
 		return "CBasePlayer";
 	}
 
-	eModId getModId () const;
+	eModId getModId () const; //TODO: not implemented? [APG]RoboCop[CL]
 
 	virtual bool isAreaOwnedByTeam (int iArea, int iTeam) { return iArea == 0; }
 
@@ -876,7 +876,7 @@ public:
 
 	static int getTeam ( edict_t *pEntity );
 
-	static TF_Class getSpyDisguise ( edict_t *pPlayer );
+	static TF_Class getSpyDisguise ( edict_t *pPlayer ); //TODO: not implemented? [APG]RoboCop[CL]
 
 	static int getSentryLevel ( edict_t *pSentry );
 	static int getDispenserLevel ( edict_t *pDispenser );
@@ -895,7 +895,7 @@ public:
 
 	static bool isAmmo (const edict_t* pEntity);
 
-	static int getArea (); // get current area of map // TODO: Needs implemented properly [APG]RoboCop[CL]
+	static int getArea (); // get current area of map // TODO: Needs implemented properly? [APG]RoboCop[CL]
 
 	static void setArea ( int area ) { m_iArea = area; }
 
@@ -945,9 +945,9 @@ public:
 
 	static bool TF2_IsPlayerTaunting(edict_t *pPlayer);
 
-	static float TF2_GetPlayerSpeed(edict_t *pPlayer, TF_Class iClass );
+	static float TF2_GetPlayerSpeed(edict_t *pPlayer, TF_Class iClass );  //TODO: not implemented? [APG]RoboCop[CL]
 
-	static void teleporterBuilt ( edict_t *pOwner, eEngiBuild type, edict_t *pBuilding );
+	static void teleporterBuilt ( edict_t *pOwner, eEngiBuild type, edict_t *pBuilding );  //TODO: not implemented? [APG]RoboCop[CL]
 
 	static edict_t *getTeleporterExit ( edict_t *pTele );
 
@@ -1063,7 +1063,7 @@ public:
 		return false;
 	}
 
-	static void sapperPlaced(const edict_t* pOwner, eEngiBuild type, edict_t* pSapper);
+	static void sapperPlaced(const edict_t* pOwner, eEngiBuild type, edict_t* pSapper);  //TODO: all 4 lines not implemented? [APG]RoboCop[CL]
 	static void sapperDestroyed(edict_t *pOwner,eEngiBuild type,edict_t *pSapper);
 	static void sentryBuilt(const edict_t* pOwner, eEngiBuild type, edict_t* pBuilding);
 	static void dispenserBuilt(const edict_t* pOwner, eEngiBuild type, edict_t* pBuilding);
@@ -1216,8 +1216,8 @@ public:
 	static int getFlagCarrierTeam () { return m_iFlagCarrierTeam; }
 	static bool canTeamPickupFlag_SD(int iTeam,bool bGetUnknown);
 
-	static edict_t *getBuildingOwner (eEngiBuild object, short index);
-	static edict_t *getBuilding (eEngiBuild object, const edict_t* pOwner);
+	static edict_t *getBuildingOwner (eEngiBuild object, short index); //TODO: not implemented? [APG]RoboCop[CL]
+	static edict_t *getBuilding (eEngiBuild object, const edict_t* pOwner); //TODO: not implemented? [APG]RoboCop[CL]
 
 	static bool isBoss ( edict_t *pEntity, float *fFactor = nullptr);
 

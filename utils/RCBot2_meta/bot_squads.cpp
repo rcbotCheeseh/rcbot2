@@ -363,7 +363,7 @@ Vector CBotSquad :: GetFormationVector (const edict_t* pEdict)
 	//	break;
 	}
 	
-	vBase = vBase * m_fDesiredSpread * iPosition;
+	vBase = vBase * static_cast<int>(m_fDesiredSpread) * iPosition;
 
 	CBotGlobals::quickTraceline(pLeader,vLeaderOrigin,vLeaderOrigin+vBase);
 

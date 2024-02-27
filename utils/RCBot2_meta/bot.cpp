@@ -2499,9 +2499,9 @@ Vector CBot::snipe (const Vector& vAiming)
 {
 		if ( m_fLookAroundTime < engine->Time() )
 		{
-			CTraceFilterWorldAndPropsOnly filter;
+			CTraceFilterWorldAndPropsOnly filter; //Unused? [APG]RoboCop[CL]
 			float fTime;
-			Vector vOrigin = getOrigin();
+			Vector vOrigin = getOrigin(); //Unused? [APG]RoboCop[CL]
 
 			//trace_t *tr = CBotGlobals::getTraceResult();
 

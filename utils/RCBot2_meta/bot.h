@@ -310,7 +310,7 @@ private:
 class CBot 
 {
 public:
-	virtual ~CBot() = default;
+	//virtual ~CBot() = default;
 
 	static const float m_fAttackLowestHoldTime;
 	static const float m_fAttackHighestHoldTime;
@@ -1108,7 +1108,7 @@ public:
 
 	static CBot *get ( int iIndex ) { return m_Bots[iIndex]; }
 	static CBot *get ( edict_t *pPlayer ) { return m_Bots[slotOfEdict(pPlayer)]; }
-	int levelInit();
+	int levelInit(); //TODO: Not implemented [APG]RoboCop[CL]
 
 private:
 	static CBot **m_Bots;

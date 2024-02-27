@@ -118,7 +118,7 @@ public:
 		m_iFlags = 0;
 	}
 private:
-	int m_iFlags;
+	int m_iFlags; //Not initialised? [APG]RoboCop[CL]
 };
 
 class CToolTip

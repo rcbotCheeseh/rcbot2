@@ -120,7 +120,7 @@ CON_COMMAND(rcbotd, "access the bot commands on a server")
 	for (size_t i = 1; i <= static_cast<size_t>(args.ArgC()); i++) {
 		argList.push_back(args.Arg(i));
 	}
-	eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(nullptr, argList);
+	const eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(nullptr, argList);
 
 	if (iResult == COMMAND_ACCESSED)
 	{
@@ -199,7 +199,7 @@ void RCBotPluginMeta::HudTextMessage(edict_t *pEntity, const char *szMessage)
 	int msgid = 0;
 	int imsgsize = 0;
 	char msgbuf[64];
-	bool bOK;
+	bool bOK; //Unused? [APG]RoboCop[CL]
 
 	int hint = -1;
 	int say = -1;
@@ -250,9 +250,9 @@ void RCBotPluginMeta::BroadcastTextMessage(const char *szMessage)
 	int msgid = 0;
 	int imsgsize = 0;
 	char msgbuf[64];
-	bool bOK;
+	bool bOK; //Unused? [APG]RoboCop[CL]
 
-	int hint = -1;
+	int hint = -1; //Unused? [APG]RoboCop[CL]
 	int say = -1;
 
 	while ((bOK = servergamedll->GetUserMessageInfo(msgid, msgbuf, 63, imsgsize)) == true)
@@ -319,6 +319,8 @@ void RCBotPluginMeta::Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper)
 class BaseAccessor : public IConCommandBaseAccessor
 {
 public:
+	//virtual ~BaseAccessor() = default;
+
 	bool RegisterConCommandBase(ConCommandBase *pCommandBase) override
 	{
 		/* Always call META_REGCVAR instead of going through the engine. */
@@ -365,7 +367,6 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	{
 		ismm->EnableVSPListener();
 	}
-
 	
 	SH_ADD_HOOK_MEMFUNC(IServerGameDLL, LevelInit, server, this, &RCBotPluginMeta::Hook_LevelInit, true);
 	SH_ADD_HOOK_MEMFUNC(IServerGameDLL, ServerActivate, server, this, &RCBotPluginMeta::Hook_ServerActivate, true);
@@ -466,7 +467,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	extern IFileSystem *filesystem;
 	KeyValues *mainkv = new KeyValues("metamodplugin");
 	
-	const char *rcbot2path;
+	const char *rcbot2path; //Unused? [APG]RoboCop[CL]
 	logger->Log(LogLevel::INFO, "Reading rcbot2 path from VDF...");
 	
 	mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD");
@@ -678,7 +679,7 @@ void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 		for (size_t i = 1; i <= static_cast<size_t>(args.ArgC()); i++) {
 			argList.push_back(args.Arg(i));
 		}
-		eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient, argList);
+		const eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient, argList);
 
 		if ( iResult == COMMAND_ACCESSED )
 		{
@@ -739,7 +740,7 @@ bool RCBotPluginMeta::Hook_ClientConnect(edict_t *pEntity,
 
 void RCBotPluginMeta::Hook_ClientPutInServer(edict_t *pEntity, char const *playername)
 {
-	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pEntity);
+	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pEntity); //Unused? [APG]RoboCop[CL]
 	const bool is_Rcbot = false;
 
 	CClient *pClient = CClients::clientConnected(pEntity);
@@ -772,7 +773,7 @@ void RCBotPluginMeta::Hook_ClientPutInServer(edict_t *pEntity, char const *playe
 
 void RCBotPluginMeta::Hook_ClientDisconnect(edict_t *pEntity)
 {
-	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pEntity);
+	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pEntity); //Unused? [APG]RoboCop[CL]
 
 #ifdef OVERRIDE_RUNCMD
 	if ( pEnt )
@@ -950,7 +951,7 @@ bool RCBotPluginMeta::Hook_LevelInit(const char *pMapName,
 	CClients::setListenServerClient(nullptr);
 
 	// Setup game rules
-	extern void **g_pGameRules;
+	extern void **g_pGameRules; //Unused? [APG]RoboCop[CL]
 
 	if (g_pGameRules_Obj && g_pGameRules_Obj->found())
 	{

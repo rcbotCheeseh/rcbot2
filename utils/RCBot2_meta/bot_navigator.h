@@ -63,7 +63,7 @@ protected:
 class IBotNavigator
 {
 public:
-	virtual ~IBotNavigator() = default;
+	//virtual ~IBotNavigator() = default;
 	virtual void init () = 0;
 
 	// returns true when working out route finishes, not if successful
@@ -444,9 +444,9 @@ public:
 
 	//virtual void goBack();
 	
-	void belief ( Vector origin, Vector vOther, float fBelief, float fStrength, BotBelief iType ) override;
+	void belief ( Vector origin, Vector vOther, float fBelief, float fStrength, BotBelief iType ) override; //TODO: not implemented? [APG]RoboCop[CL]
 
-	void beliefOne ( int iWptIndex, BotBelief iBeliefType, float fDist ) override;
+	void beliefOne ( int iWptIndex, BotBelief iBeliefType, float fDist ) override; //TODO: not implemented? [APG]RoboCop[CL]
 
 	// nearest cover position to vOrigin only
 	bool getCoverPosition ( Vector vCoverOrigin, Vector *vCover ) override;
@@ -521,7 +521,7 @@ public:
 	CNavMesh* m_theNavMesh; // Add a member variable for the NavMesh instance
 
 	CNavMeshNavigator();
-	~CNavMeshNavigator() override;
+	~CNavMeshNavigator();
 
 	void CalculateRoute(Vector startNodeID, Vector goalNodeID);
 

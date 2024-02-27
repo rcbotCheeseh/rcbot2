@@ -6,7 +6,7 @@
 
 #include "bot_cvars.h"
 
-static ICvar* s_pCVar;
+static ICvar* s_pCVar; //TODO: Unused? [APG]RoboCop[CL]
 
 ConVar rcbot_tf2_debug_spies_cloakdisguise("rcbot_tf2_debug_spies_cloakdisguise", "1", 0, "Debug command : allow spy bots to cloak and disguise");
 ConVar rcbot_tf2_medic_letgotime("rcbot_tf2_medic_letgotime", "0.5", 0, "Time for medic to let go of medigun to switch players");

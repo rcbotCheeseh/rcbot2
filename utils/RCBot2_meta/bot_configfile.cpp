@@ -190,7 +190,7 @@ void CRCBotTF2UtilFile :: loadConfig()
 						&iClassList[7][0],&iClassList[7][1],
 						&iClassList[8][0],&iClassList[8][1]) )
 					{
-
+						//TODO: should be `iAction, iUtil, fUtility`? [APG]RoboCop[CL]
 						addUtilPerturbation(iUtil,iFile,iClassList);
 
 						iUtil = static_cast<eBotAction>(static_cast<int>(iUtil) + 1);

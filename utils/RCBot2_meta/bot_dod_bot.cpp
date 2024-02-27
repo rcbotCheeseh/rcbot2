@@ -630,7 +630,7 @@ void CDODBot :: seeFriendlyDie ( edict_t *pDied, edict_t *pKiller, CWeapon *pWea
 
 void CDODBot :: seeFriendlyKill ( edict_t *pTeamMate, edict_t *pDied, CWeapon *pWeapon )
 {
-	static CWaypoint *pWpt;
+	static CWaypoint *pWpt; //Unused? [APG]RoboCop[CL]
 
 	if ( (pDied != m_pEdict) && pTeamMate && !hasSomeConditions(CONDITION_SEE_CUR_ENEMY) && (CClassInterface::getTeam(pDied)!=m_iTeam) )
 	{
@@ -883,7 +883,7 @@ void CDODBot :: handleWeapons ()
 
 void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWaypoint )
 {
-	static int wptindex;
+	static int wptindex;  //Unused? [APG]RoboCop[CL]
 
 	CBot::touchedWpt(pWaypoint);
 
@@ -900,7 +900,7 @@ void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 
 		if ( CBotGlobals::entityIsValid(pBombTarget) )
 		{
-			Vector vBombTarget = CBotGlobals::entityOrigin(pBombTarget);
+			Vector vBombTarget = CBotGlobals::entityOrigin(pBombTarget);  //Unused? [APG]RoboCop[CL]
 			const int state = CClassInterface::getDODBombState(pBombTarget);
 
 			if ( state != 0 )
@@ -2430,7 +2430,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 			if ( pWaypoint == nullptr)
 			{
-				bool defend_wpt = true;
+				bool defend_wpt = true; //Unused? [APG]RoboCop[CL]
 				defend_wpt = false;
 
 				if ( distanceFrom(vGoal) > 1024 ) // outside waypoint bucket of goal
@@ -2723,7 +2723,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 		//break;
 	case BOT_UTIL_FOLLOW_SQUAD_LEADER:
 		{
-			Vector pos = m_pSquad->GetFormationVector(m_pEdict);
+			Vector pos = m_pSquad->GetFormationVector(m_pEdict); //Unused? [APG]RoboCop[CL]
 
 			m_pSchedules->add(new CBotSchedule(new CBotFollowSquadLeader(m_pSquad)));
 
@@ -3023,16 +3023,16 @@ void CDODBot :: getTasks (unsigned int iIgnore)
 {
 	static CBotUtilities utils;
 	static CBotUtility *next;
-	static CBotWeapon *grenade;
+	static CBotWeapon *grenade; //Unused? [APG]RoboCop[CL]
 	static CBotWeapon *pWeapon;
 	static float fAttackUtil;
 	static float fDefendUtil;
-	static int numPlayersOnTeam;
-	static int numClassOnTeam;
+	static int numPlayersOnTeam; //Unused? [APG]RoboCop[CL]
+	static int numClassOnTeam; //Unused? [APG]RoboCop[CL]
 	static bool bCheckCurrent;
 	static int iFlagID;
 	static int iFlagsOwned;
-	static int iEnemyFlagsOwned;
+	static int iEnemyFlagsOwned; //Unused? [APG]RoboCop[CL]
 	static int iNumFlags;
 	static bool bCanMessAround;
 
@@ -3425,14 +3425,14 @@ void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin,
 	//static Vector vAim;
 	//static bool bProne;
 
-	static float fStamina;
+	static float fStamina; //Unused? [APG]RoboCop[CL]
 	static CBotWeapon *pWp;
 	static Vector vel;
 	static int index;
 	bool bIsEnemyProne;
 	float fEnemyStamina;
 
-	bool bAddHeadHeight = false;
+	bool bAddHeadHeight = false; //Unused? [APG]RoboCop[CL]
 
 	CBot::modAim(pEntity,v_origin,v_desired_offset,v_size,fDist,fDist2D);
 
@@ -3507,8 +3507,8 @@ void CDODBot :: modAim ( edict_t *pEntity, Vector &v_origin,
 
 bool CDODBot :: isVisibleThroughSmoke ( edict_t *pSmoke, edict_t *pCheck )
 {
-	static float fTime = 0.0f;
-	static float fProb = 0.0f;
+	static float fTime = 0.0f; //Unused? [APG]RoboCop[CL]
+	static float fProb = 0.0f; //Unused? [APG]RoboCop[CL]
 
 	static short int iSlot;
 

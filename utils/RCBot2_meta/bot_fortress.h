@@ -823,7 +823,7 @@ public:
 
 	void pointsUpdated ( );
 
-	eBotFuncState rocketJump(int *iState,float *fTime);
+	eBotFuncState rocketJump(int *iState,float *fTime); //TODO: not implemented? [APG]RoboCop[CL]
 
 	bool wantToFollowEnemy () override;
 

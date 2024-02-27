@@ -524,7 +524,7 @@ void CPlayerHealed ::execute(IBotEventInterface *pEvent)
 {
 	const int patient = pEvent->getInt("patient",-1);
 	const int healer = pEvent->getInt("healer",-1);
-	const int amount = pEvent->getFloat("amount",0);
+	const float amount = pEvent->getFloat("amount",0);
 
 	if ( healer != -1 && patient != -1 && healer != patient )
 	{

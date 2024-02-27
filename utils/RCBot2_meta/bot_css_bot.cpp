@@ -772,7 +772,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			pSched->addTask(new CCSSEngageEnemyTask(m_pEnemy.get()));
 			m_pSchedules->add(pSched);
 			return true;
-			break;
+			//break;
 		}
 		case BOT_UTIL_WAIT_LAST_ENEMY:
 		{
@@ -784,7 +784,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			pSched->addTask(pTask);
 			m_pSchedules->add(pSched);
 			return true;
-			break;
+			//break;
 		}
 		case BOT_UTIL_HIDE_FROM_ENEMY:
 		{
@@ -808,7 +808,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			pSched->addTask(new CCSSPerformBuyTask());
 			m_pSchedules->add(pSched);
 			return true;
-			break;
+			//break;
 		}
 		case BOT_UTIL_PLANT_BOMB:
 		{
@@ -1013,11 +1013,10 @@ bool CCSSBot::executeAction(eBotAction iAction)
 		}
 		case BOT_UTIL_SNIPE:
 		{
-			CWaypoint *pWaypoint;
 			CBotSchedule* pSched = new CBotSchedule();
 			pSched->setID(SCHED_SNIPE);
 
-			pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_SNIPER, getTeam(), 0, false);
+			CWaypoint* pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_SNIPER, getTeam(), 0, false);
 			if(pWaypoint)
 			{
 				CFindPathTask *pFindPath = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));

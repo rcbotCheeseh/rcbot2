@@ -53,6 +53,7 @@ typedef struct
 class CRCBotTF2UtilFile
 {
 public:
+	//TODO: should be `(eBotAction iUtil, eTF2UtilType iFile, float iClassList)? [APG]RoboCop[CL]
 	static void addUtilPerturbation (eBotAction iAction, eTF2UtilType iUtil, float fUtility[9][2]);
 
 	static void init ();

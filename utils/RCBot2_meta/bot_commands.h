@@ -82,7 +82,7 @@ protected:
 	CBotCommand () : m_iAccessLevel{0}, m_szCommand{nullptr}, m_szHelp{nullptr} { }
 	
 public:
-	virtual ~CBotCommand() = default;
+	//virtual ~CBotCommand() = default;
 	
 	// initialise
 	//CBotCommand(const char *command, int iAccessLevel = 0) :
@@ -118,7 +118,7 @@ protected:
 class CBotCommandInline : public CBotCommand
 {
 public:
-	CBotCommandInline(const char* cmd, int iAccessLevel, BotCommandCallback callback, const char* help = nullptr) : CBotCommand(cmd, iAccessLevel, help), m_Callback(callback) {}
+	CBotCommandInline(const char* cmd, int iAccessLevel, const BotCommandCallback& callback, const char* help = nullptr) : CBotCommand(cmd, iAccessLevel, help), m_Callback(callback) {}
 	
 	eBotCommandResult execute(CClient *pClient, BotCommandArgs args) override;
 	
@@ -128,7 +128,7 @@ public:
 class CBotSubcommands : public CBotCommand
 {
 public:
-	CBotSubcommands(const char* cmd, int iAccessLevel, std::vector<CBotCommand*> subcommands) : CBotCommand(cmd, iAccessLevel, nullptr), m_theCommands{subcommands} {}
+	CBotSubcommands(const char* cmd, int iAccessLevel, const std::vector<CBotCommand*>& subcommands) : CBotCommand(cmd, iAccessLevel, nullptr), m_theCommands{subcommands} {}
 	
 	eBotCommandResult execute(CClient *pClient, BotCommandArgs args) override;
 	
