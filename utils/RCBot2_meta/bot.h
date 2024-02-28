@@ -1128,13 +1128,12 @@ protected:
 	~IEntityFactoryDictionary() = default;
 
 public:
-	// TODO: Investigate why making this destructor virtual causes a crash - [APG]RoboCop[CL]
-	//virtual ~IEntityFactoryDictionary() = default; //Unstable
-	virtual void InstallFactory( IEntityFactory *pFactory, const char *pClassName );
-	virtual IServerNetworkable *Create( const char *pClassName );
-	virtual void Destroy( const char *pClassName, IServerNetworkable *pNetworkable );
-	virtual IEntityFactory *FindFactory( const char *pClassName );
-	virtual const char *GetCannonicalName( const char *pClassName );
+	//virtual ~IEntityFactoryDictionary() = default;
+	virtual void InstallFactory( IEntityFactory *pFactory, const char *pClassName ) = 0;
+	virtual IServerNetworkable *Create( const char *pClassName ) = 0;
+	virtual void Destroy( const char *pClassName, IServerNetworkable *pNetworkable ) = 0;
+	virtual IEntityFactory *FindFactory( const char *pClassName ) = 0;
+	virtual const char *GetCannonicalName( const char *pClassName ) = 0;
 };
 
 #endif // __RCBOT2_H__
