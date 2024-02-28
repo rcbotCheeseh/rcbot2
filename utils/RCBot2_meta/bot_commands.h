@@ -82,7 +82,7 @@ protected:
 	CBotCommand () : m_iAccessLevel{0}, m_szCommand{nullptr}, m_szHelp{nullptr} { }
 	
 public:
-	//virtual ~CBotCommand() = default;
+	virtual ~CBotCommand() = default;
 	
 	// initialise
 	//CBotCommand(const char *command, int iAccessLevel = 0) :

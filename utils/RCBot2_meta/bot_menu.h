@@ -95,7 +95,7 @@ public:
 		m_szCaption[0] = 0;
 	}
 
-	//virtual ~CBotMenuItem() = default;
+	virtual ~CBotMenuItem() = default;
 
 	virtual const char *getCaption ( CClient *pClient, WptColor &color );
 

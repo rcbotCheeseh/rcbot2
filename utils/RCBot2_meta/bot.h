@@ -119,7 +119,7 @@ inline bool FStrEq(const char *sz1, const char *sz2)
 class IBotFunction
 {
 public:
-	//virtual ~IBotFunction() = default;
+	virtual ~IBotFunction() = default;
 	virtual void execute ( CBot *pBot ) = 0;
 };
 
@@ -310,7 +310,7 @@ private:
 class CBot 
 {
 public:
-	//virtual ~CBot() = default;
+	virtual ~CBot() = default;
 
 	static const float m_fAttackLowestHoldTime;
 	static const float m_fAttackHighestHoldTime;
@@ -326,7 +326,7 @@ public:
 
 	virtual unsigned int maxEntityIndex ( ) { return RCBOT_MAXPLAYERS; }
 
-// linux fix 1
+	// linux fix 1
 	virtual void onInventoryApplication (){}
 	
 	// return distance from this origin
@@ -342,6 +342,7 @@ public:
 	{
 		return m_pController->GetLocalOrigin();
 	}
+	
 	// linux fix 2
 	float distanceFrom(const Vector& vOrigin) const
 	{
@@ -409,7 +410,6 @@ public:
 	float DotProductFromOrigin (const Vector& pOrigin ) const;
 
 	bool FVisible ( edict_t *pEdict, bool bCheckHead = false );
-
 	bool isVisible ( edict_t *pEdict ) const;
 
 	void setEnemy ( edict_t *pEnemy )
@@ -444,9 +444,7 @@ public:
 	 * make bot start the gmae, e.g join a team first
 	 */
 	virtual bool startGame ();
-
 	virtual bool checkStuck ();
-
 	virtual void currentlyDead ();
 
 	/*
@@ -475,7 +473,6 @@ public:
 	virtual void friendlyFire( edict_t *pEdict ) {}
 
 	virtual void freeMapMemory ();
-
 	virtual void freeAllMemory ();
 
 	///////////////////////////////
@@ -622,10 +619,10 @@ public:
 
 	bool isHoldingPrimaryAttack() const;
 
-	void primaryAttack ( bool bHold=false, float fTime =0.0f ) const;
-	void secondaryAttack( bool bHold=false, float fTime = 0.0f ) const;
+	void primaryAttack (bool bHold=false, float fTime =0.0f) const;
+	void secondaryAttack(bool bHold=false, float fTime = 0.0f) const;
 	void jump () const;
-	void duck ( bool hold = false ) const;
+	void duck (bool hold = false) const;
 	void use () const;
 	void reload() const;
 
@@ -730,7 +727,6 @@ public:
 	bool isOnLift () const;
 
 	virtual bool isDOD () { return false; }
-
 	virtual bool isTF2 () { return false; }
 
 	// return an enemy sentry gun / special visible (e.g.) for quick checking - voffset is the 'head'
@@ -842,7 +838,6 @@ protected:
 	static void checkEntity ( edict_t **pEdict );
 	/////////////////////////
 	void doMove ();
-
 	void doLook ();
 
 	virtual void getLookAtVector ();
@@ -854,8 +849,7 @@ protected:
 
 	// look for new tasks
 	virtual void getTasks (unsigned int iIgnore=0);
-
-
+	
 	// really only need 249 bits (32 bytes) + WEAPON_SUBTYPE_BITS (whatever that is)
 	static constexpr int CMD_BUFFER_SIZE = 64; 
 	///////////////////////////////////
@@ -1063,7 +1057,6 @@ public:
 	static CBot *getBot ( int slot );
 
 	static void freeMapMemory ();
-
 	static void freeAllMemory ();
 
 	static CBot *findBotByProfile ( CBotProfile *pProfile );
@@ -1071,11 +1064,9 @@ public:
 	static void init ();
 
 	static bool controlBot ( edict_t *pEdict );
-
 	static bool controlBot ( const char *szOldName, const char *szName, const char *szTeam, const char *szClass );
 
 	static bool createBot (const char *szClass, const char *szTeam, const char *szName);
-
 	static int createDefaultBot(const char* szName);
 
 	static int numBots ();
@@ -1085,21 +1076,17 @@ public:
 	static void roundStart ();
 
 	static void kickRandomBot (size_t count = 1);
-
 	static void kickRandomBotOnTeam ( int team );
 
 	static void mapInit ();
 
 	static bool needToAddBot ();
-
 	static bool needToKickBot ();
 
 	static void setMaxBots ( int iMax ) { m_iMaxBots = iMax; }
-
 	static int getMaxBots () { return m_iMaxBots; }
 
 	static void setMinBots ( int iMin ) { m_iMinBots = iMin; }
-
 	static int getMinBots () { return m_iMinBots; }
 
 	static void botFunction ( IBotFunction *function );
@@ -1119,14 +1106,17 @@ private:
 
 	// add or kick bot time
 	static float m_flAddKickBotTime;
-
 };
 
 // this is yoinked from server/util.h
 abstract_class IEntityFactory
 {
+protected:
+	~IEntityFactory() = default;
+
 public:
-	//virtual ~IEntityFactory() = default;
+	// TODO: Investigate why making this destructor virtual causes a crash - [APG]RoboCop[CL]
+	//virtual ~IEntityFactory() = default; //Unstable
 	virtual IServerNetworkable *Create( const char *pClassName ) = 0;
 	virtual void Destroy( IServerNetworkable *pNetworkable ) = 0;
 	virtual size_t GetEntitySize() = 0;
@@ -1134,13 +1124,17 @@ public:
 
 abstract_class IEntityFactoryDictionary
 {
+protected:
+	~IEntityFactoryDictionary() = default;
+
 public:
-	//virtual ~IEntityFactoryDictionary() = default;
-	virtual void InstallFactory( IEntityFactory *pFactory, const char *pClassName ) = 0;
-	virtual IServerNetworkable *Create( const char *pClassName ) = 0;
-	virtual void Destroy( const char *pClassName, IServerNetworkable *pNetworkable ) = 0;
-	virtual IEntityFactory *FindFactory( const char *pClassName ) = 0;
-	virtual const char *GetCannonicalName( const char *pClassName ) = 0;
+	// TODO: Investigate why making this destructor virtual causes a crash - [APG]RoboCop[CL]
+	//virtual ~IEntityFactoryDictionary() = default; //Unstable
+	virtual void InstallFactory( IEntityFactory *pFactory, const char *pClassName );
+	virtual IServerNetworkable *Create( const char *pClassName );
+	virtual void Destroy( const char *pClassName, IServerNetworkable *pNetworkable );
+	virtual IEntityFactory *FindFactory( const char *pClassName );
+	virtual const char *GetCannonicalName( const char *pClassName );
 };
 
 #endif // __RCBOT2_H__

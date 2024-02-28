@@ -63,7 +63,7 @@ protected:
 class IBotNavigator
 {
 public:
-	//virtual ~IBotNavigator() = default;
+	virtual ~IBotNavigator() = default;
 	virtual void init () = 0;
 
 	// returns true when working out route finishes, not if successful

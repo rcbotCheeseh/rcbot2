@@ -127,7 +127,7 @@ public:
 	virtual void init () {
 	} // nothing, used by sub classes
 
-	//virtual ~CBotSchedule() = default; //TODO: experimental [APG]RoboCop[CL]
+	virtual ~CBotSchedule() = default; //TODO: experimental [APG]RoboCop[CL]
 
 	void addTask( CBotTask *pTask );
 

@@ -91,7 +91,7 @@ static void seed(unsigned long); // seed with 32 bit integer
 // overload operator() to make this a generator (functor)
   unsigned long operator()() { return rand_int32(); }
 // 2007-02-11: made the destructor virtual; thanks "double more" for pointing this out
-  //virtual ~MTRand_int32() = default; // destructor
+  virtual ~MTRand_int32() = default; // destructor
 protected: // used by derived classes, otherwise not accessible; use the ()-operator
   unsigned long rand_int32(); // generate 32 bit random integer
 private:

@@ -37,7 +37,7 @@
 class IIndividual
 {
 public:
-	//virtual ~IIndividual() = default;
+	virtual ~IIndividual() = default;
 
 	// get fitness for this individual
 	ga_nn_value getFitness () const { return m_fFitness; }
@@ -94,7 +94,7 @@ private:
 class ISelection
 {
 public:
-	//virtual ~ISelection() = default;
+	virtual ~ISelection() = default;
 	virtual IIndividual *select ( CPopulation *population ) = 0;
 };
 

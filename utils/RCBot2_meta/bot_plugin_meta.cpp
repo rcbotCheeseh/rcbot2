@@ -319,7 +319,7 @@ void RCBotPluginMeta::Hook_PlayerRunCmd(CUserCmd *ucmd, IMoveHelper *moveHelper)
 class BaseAccessor : public IConCommandBaseAccessor
 {
 public:
-	//virtual ~BaseAccessor() = default;
+	virtual ~BaseAccessor() = default;
 
 	bool RegisterConCommandBase(ConCommandBase *pCommandBase) override
 	{

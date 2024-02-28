@@ -46,7 +46,7 @@ class CWaypointVisibilityTable;
 class IBotTaskInterrupt
 {
 public:
-	//virtual ~IBotTaskInterrupt() = default;
+	virtual ~IBotTaskInterrupt() = default;
 	virtual bool isInterrupted ( CBot *pBot, bool *bFailed, bool *bCompleted ) = 0;
 };
 

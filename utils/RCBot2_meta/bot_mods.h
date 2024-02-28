@@ -106,7 +106,7 @@ public:
 		m_bBotCommand_ResetCheatFlag = false;
 	}
 
-	//virtual ~CBotMod() = default;
+	virtual ~CBotMod() = default;
 	
 	virtual bool checkWaypointForTeam(CWaypoint *pWpt, int iTeam)
 	{
