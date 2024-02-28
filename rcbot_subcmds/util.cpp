@@ -30,16 +30,12 @@
 
 CBotCommandInline SearchCommand("search", CMD_ACCESS_UTIL, [](CClient *pClient, BotCommandArgs args)
 {
-	int i = 0;
-
 	edict_t *pPlayer = pClient->getPlayer();
-	edict_t *pEdict;
 	float fDistance;
-	string_t model;
 
-	for ( i = 0; i < gpGlobals->maxEntities; i ++ )
+	for ( int i = 0; i < gpGlobals->maxEntities; i ++ )
 	{
-		pEdict = INDEXENT(i);
+		edict_t* pEdict = INDEXENT(i);
 
 		if ( pEdict )
 		{
@@ -57,7 +53,7 @@ CBotCommandInline SearchCommand("search", CMD_ACCESS_UTIL, [](CClient *pClient, 
 						else
 							fVelocity = 0;
 
-						model = pEdict->GetIServerEntity()->GetModelName();
+						string_t model = pEdict->GetIServerEntity()->GetModelName();
 				
 						CBotGlobals::botMessage(pPlayer,0,"(%d) D:%0.2f C:'%s', Mid:%d, Mn:'%s' Health=%d, Tm:%d, Fl:%d, Spd=%0.2f",i,fDistance,pEdict->GetClassName(),pEdict->GetIServerEntity()->GetModelIndex(),model.ToCStr(),(int)CClassInterface::getPlayerHealth(pEdict),(int)CClassInterface::getTeam(pEdict),pEdict->m_fStateFlags,fVelocity );
 					}
@@ -86,9 +82,7 @@ CBotCommandInline TeleportUtilCommand("teleport", CMD_ACCESS_UTIL, [](CClient *p
 {
 	if ( pClient )
 	{
-		Vector *vTeleport;
-
-		vTeleport = pClient->getTeleportVector();
+		Vector* vTeleport = pClient->getTeleportVector();
 
 		if ( vTeleport != nullptr)
 		{
@@ -128,7 +122,7 @@ CBotCommandInline NoClipCommand("noclip", CMD_ACCESS_UTIL, [](CClient *pClient, 
 		   *movetype |= MOVETYPE_WALK;
 	   }
 
-	   sprintf(msg,"%s used no_clip %d on self\n",pClient->getName(),((*movetype & 15) == MOVETYPE_NOCLIP));
+	   std::sprintf(msg,"%s used no_clip %d on self\n",pClient->getName(),((*movetype & 15) == MOVETYPE_NOCLIP));
            
 	  // CRCBotPlugin::HudTextMessage(pEntity,msg);
 	   CBotGlobals::botMessage(pEntity,0,msg);
@@ -157,7 +151,7 @@ CBotCommandInline GodModeUtilCommand("god", CMD_ACCESS_UTIL, [](CClient *pClient
 				else
 					*playerflags |= FL_GODMODE;
 
-				sprintf(msg,"god mode %s",(*playerflags & FL_GODMODE)?"enabled":"disabled");
+				std::sprintf(msg,"god mode %s",(*playerflags & FL_GODMODE)?"enabled":"disabled");
 				
 				//CRCBotPlugin::HudTextMessage(pEntity,msg);
 				CBotGlobals::botMessage(pEntity,0,msg);
@@ -191,7 +185,7 @@ CBotCommandInline NoTouchCommand("notouch", CMD_ACCESS_UTIL, [](CClient *pClient
 				else
 					*playerflags |= FL_DONTTOUCH;
 
-				sprintf(msg,"notouch mode %s",(*playerflags & FL_DONTTOUCH)?"enabled":"disabled");
+				std::sprintf(msg,"notouch mode %s",(*playerflags & FL_DONTTOUCH)?"enabled":"disabled");
 				CBotGlobals::botMessage(nullptr,0,msg);
 				//CRCBotPlugin::HudTextMessage(pEntity,msg);
 

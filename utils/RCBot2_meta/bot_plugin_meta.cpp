@@ -888,6 +888,7 @@ void RCBotPluginMeta::BotQuotaCheck() {
 		} else if (bot_target > bot_count) {
 			const int bot_diff = bot_target - bot_count;
 
+			// ReSharper disable once CppUnreachableCode
 			for (int i = 0; i < bot_diff; ++i) {
 				CBots::createBot("", "", "");
 				break; // Bug-Fix, only add one bot at a time

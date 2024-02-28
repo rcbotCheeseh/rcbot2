@@ -1058,7 +1058,7 @@ std::fstream CBotGlobals::openFile(const char* szFile, std::ios_base::openmode m
 		fp.open(szFile, mode);
 
 		if (!fp)
-			logger->Log(LogLevel::ERROR, "failed to make folders for %s", szFile);
+			logger->Log(LogLevel::WARN, "failed to make folders for %s", szFile);
 		} else {
 		logger->Log(LogLevel::INFO, "Opened file '%s' mode %s", szFile, mode);
 	}

@@ -148,26 +148,30 @@ CBotCommandInline WaypointSaveCommand("save", CMD_ACCESS_WAYPOINT, [](CClient *p
 	return COMMAND_ACCESSED;
 });
 
-CBotCommandInline WaypointLoadCommand("load", CMD_ACCESS_WAYPOINT, [](CClient *pClient, BotCommandArgs args)
+CBotCommandInline WaypointLoadCommand("load", CMD_ACCESS_WAYPOINT, [](CClient* pClient, BotCommandArgs args)
 {
-	char *szMapName = CBotGlobals::getMapName();
-	bool bLoadOK = false;
+	char* szMapName = CBotGlobals::getMapName();
+	bool bLoadOK;
 
-	if ( args[0] && *args[0] )
+	if (args[0] && *args[0])
 	{
 		bLoadOK = CWaypoints::load(args[0]);
-		szMapName = (char*)args[0];
+		szMapName = const_cast<char*>(args[0]);
 	}
-	else
-		bLoadOK = CWaypoints::load();
 
-	if ( bLoadOK )
-		CBotGlobals::botMessage(nullptr,0,"waypoints %s loaded",szMapName);
 	else
-		CBotGlobals::botMessage(nullptr,0,"error: could not load %s waypoints",szMapName);
+	{
+		bLoadOK = CWaypoints::load();
+	}
+
+	if (bLoadOK)
+		CBotGlobals::botMessage(nullptr, 0, "waypoints %s loaded", szMapName);
+	else
+		CBotGlobals::botMessage(nullptr, 0, "error: could not load %s waypoints", szMapName);
 
 	return COMMAND_ACCESSED;
 });
+
 
 CBotCommandInline WaypointClearCommand("clear", CMD_ACCESS_WAYPOINT, [](CClient *pClient, BotCommandArgs args)
 {
@@ -628,19 +632,14 @@ CBotCommandInline WaypointShowVisCommand("showvis", 0, [](CClient *pClient, BotC
 	{
 		CWaypoint *pWpt = CWaypoints::getWaypoint(pClient->currentWaypoint());
 
-		int i = 0; 
-		int index;
-		bool bVis;
-		float ftime;
-
-		ftime = (args[0]&&*args[0]) ? atof(args[0]) : 5.0f;
+		const float ftime = (args[0] && *args[0]) ? atof(args[0]) : 5.0f;
 
 		if ( pWpt )
 		{
-			index = CWaypoints::getWaypointIndex(pWpt);
+			const int index = CWaypoints::getWaypointIndex(pWpt);
 			const CWaypointVisibilityTable *pTable = CWaypoints::getVisiblity();
 	
-			for ( i = 0; i < CWaypoints::numWaypoints(); i ++ )
+			for ( int i = 0; i < CWaypoints::numWaypoints(); i ++ )
 			{
 				CWaypoint *pOther = CWaypoints::getWaypoint(i);
 
@@ -649,8 +648,8 @@ CBotCommandInline WaypointShowVisCommand("showvis", 0, [](CClient *pClient, BotC
 
 				if ( pOther->distanceFrom(pWpt) > 1024.0f )
 					continue;
-				
-				bVis = pTable->GetVisibilityFromTo(index,i);
+
+				const bool bVis = pTable->GetVisibilityFromTo(index, i);
 				
 				debugoverlay->AddTextOverlayRGB(pOther->getOrigin(),0,ftime,bVis ? 0 : 255,bVis ? 255 : 0,0,200,bVis ? "VIS" : "INV" );
 			}

@@ -521,7 +521,7 @@ public:
 	CNavMesh* m_theNavMesh; // Add a member variable for the NavMesh instance
 
 	CNavMeshNavigator();
-	~CNavMeshNavigator();
+	~CNavMeshNavigator() override;
 
 	void CalculateRoute(Vector startNodeID, Vector goalNodeID);
 

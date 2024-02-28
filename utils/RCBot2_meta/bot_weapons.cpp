@@ -801,7 +801,7 @@ void CWeapons::loadWeapons(const char* szWeaponListName, WeaponsData_t* pDefault
 					kv = kv->GetFirstSubKey();
 
 					if (false)
-						kv = kv->GetFirstTrueSubKey();
+						kv = kv->GetFirstTrueSubKey(); //Unreachable? [APG]RoboCop[CL]
 
 					while (kv != nullptr)
 					{
