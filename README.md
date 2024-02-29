@@ -96,7 +96,7 @@ Additionally, `rcbot/logging.{h,cpp}` is released separately under the
 - To add proper support for the new Zombie Infection TF2 maps since Scream Fortress XV update
 - To add proper support for Robot Destruction gameplay by destroying bots when not ubered
 - To prevent EngiBots from facing their SG Turrets the wrong way
-- To prevent bots to shoot at ghost players - like in plr_hightower_event Hell Zone
+- To prevent bots from shooting at ghost players - like in plr_hightower_event Hell Zone
 - To allow bots to attack Skeleton Mobsters in pl_spineyard
 - To improve on how Medic and Spy bots to behave smarter and properly when interacting with SG Turrets and Healing/Ubering
 - Bots needs to understand how to play Kart games from sd_doomsday_event as they only wonder around those minigames
