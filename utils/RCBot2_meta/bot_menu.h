@@ -105,7 +105,7 @@ public:
 
 	void setCaption ( const char *szCaption ) 
 	{
-		std::strncpy(m_szCaption,szCaption,63);
+		strncpy(m_szCaption,szCaption,63);
 		m_szCaption[63] = 0;
 	}
 
@@ -134,7 +134,7 @@ class CBotGotoMenuItem : public CBotMenuItem
 public:
 	CBotGotoMenuItem ( const char *szCaption, CBotMenu *pPrevMenu )  // caption = back / more etc
 	{
-		std::strncpy(m_szCaption,szCaption,63);
+		strncpy(m_szCaption,szCaption,63);
 		m_szCaption[63] = 0;
 		m_pPrevMenu = pPrevMenu;
 	}

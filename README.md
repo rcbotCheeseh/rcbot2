@@ -93,9 +93,9 @@ Additionally, `rcbot/logging.{h,cpp}` is released separately under the
 
 - To allow bots to menuselect in order to buy upgrades for MVM
 - To improve game detection for non-listed Source gamemods
-- To allow DemoBots to sticky trap enemy carts for PL and PLR maps
 - To add proper support for the new Zombie Infection TF2 maps since Scream Fortress XV update
 - To add proper support for Robot Destruction gameplay by destroying bots when not ubered
+- To prevent EngiBots from facing their SG Turrets the wrong way
 - To prevent bots to shoot at ghost players - like in plr_hightower_event Hell Zone
 - To allow bots to attack Skeleton Mobsters in pl_spineyard
 - To improve on how Medic and Spy bots to behave smarter and properly when interacting with SG Turrets and Healing/Ubering
