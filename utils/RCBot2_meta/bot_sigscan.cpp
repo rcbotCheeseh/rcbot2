@@ -24,9 +24,6 @@
 #include "tier2/tier2.h"
 #ifdef __linux__
 #include "shake.h"    //bir3yk
-#ifndef sscanf_s
-#define sscanf_s sscanf
-#endif
 #endif
 #include "eiface.h"
 #include "bot_const.h"

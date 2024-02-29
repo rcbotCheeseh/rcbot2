@@ -40,7 +40,7 @@ public:
 	void died ( edict_t *pKiller, const char *pszWeapon ) override;
 	void modThink () override;
 	void getTasks (unsigned int iIgnore=0) override;
-	virtual bool executeAction(eBotAction iAction);
+	virtual bool executeAction(eBotAction iAction); //TODO: not implemented yet? [APG]RoboCop[CL]
 	virtual float getArmorPercent() { return static_cast<int>(0.01f * m_pPlayerInfo->GetArmorValue()); }
 	unsigned int maxEntityIndex() override { return gpGlobals->maxEntities; }
 	bool isEnemy ( edict_t *pEdict, bool bCheckWeapons = true ) override;

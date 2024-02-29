@@ -60,8 +60,6 @@ class IMoveHelper;
 
 #if defined WIN32 && !defined snprintf
 #define snprintf _snprintf
-#elif defined __linux__ && !defined snprintf
-#define snprintf std::snprintf
 #endif
 
 class RCBotPluginMeta : public ISmmPlugin, public IMetamodListener

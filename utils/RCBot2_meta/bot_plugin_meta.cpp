@@ -118,7 +118,7 @@ CON_COMMAND(rcbotd, "access the bot commands on a server")
 	// shift args and call subcommand
 	BotCommandArgs argList;
 	for (size_t i = 1; i <= static_cast<size_t>(args.ArgC()); i++) {
-		argList.push_back(args.Arg(i));
+		argList.emplace_back(args.Arg(i));
 	}
 	const eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(nullptr, argList);
 
@@ -367,7 +367,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	{
 		ismm->EnableVSPListener();
 	}
-	
+
 	SH_ADD_HOOK_MEMFUNC(IServerGameDLL, LevelInit, server, this, &RCBotPluginMeta::Hook_LevelInit, true);
 	SH_ADD_HOOK_MEMFUNC(IServerGameDLL, ServerActivate, server, this, &RCBotPluginMeta::Hook_ServerActivate, true);
 	SH_ADD_HOOK_MEMFUNC(IServerGameDLL, GameFrame, server, this, &RCBotPluginMeta::Hook_GameFrame, true);
@@ -439,7 +439,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	if (!CBotGlobals::gameStart())
 		return false;
 
-	CBotMod *pMod = CBotGlobals::getCurrentMod();
+	CBotMod *pMod = CBotGlobals::getCurrentMod(); // `*pMod` Unused? [APG]RoboCop[CL]
 
 #ifdef OVERRIDE_RUNCMD
 	// TODO figure out a more robust gamedata fix instead of vtable
@@ -677,7 +677,7 @@ void RCBotPluginMeta::Hook_ClientCommand(edict_t *pEntity)
 		// create shifted command list
 		BotCommandArgs argList;
 		for (size_t i = 1; i <= static_cast<size_t>(args.ArgC()); i++) {
-			argList.push_back(args.Arg(i));
+			argList.emplace_back(args.Arg(i));
 		}
 		const eBotCommandResult iResult = CBotGlobals::m_pCommands->execute(pClient, argList);
 
@@ -740,12 +740,12 @@ bool RCBotPluginMeta::Hook_ClientConnect(edict_t *pEntity,
 
 void RCBotPluginMeta::Hook_ClientPutInServer(edict_t *pEntity, char const *playername)
 {
-	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pEntity); //Unused? [APG]RoboCop[CL]
+	CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pEntity); //`*pEnt` Unused? [APG]RoboCop[CL]
 	const bool is_Rcbot = false;
 
 	CClient *pClient = CClients::clientConnected(pEntity);
 
-	if ( !is_Rcbot && pClient )
+	if ( !is_Rcbot && pClient ) //`!is_Rcbot` Unused? [APG]RoboCop[CL]
 	{
 		if ( !engine->IsDedicatedServer() )
 		{

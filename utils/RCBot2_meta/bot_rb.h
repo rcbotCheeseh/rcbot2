@@ -7,8 +7,7 @@ class CBotOperator;
 class CBotRule
 {
 public:
-	CBotRule ()
-	= default;
+	CBotRule() = default;
 
 private:
 	std::vector<CBotOperator> m_Rules;
@@ -31,11 +30,11 @@ public:
 			return bVal;
 		case OP_PRE_NORM:
 			return pNext->value();
-		case OP_PRE_NOT:
-		case OP_AND:
-		case OP_OR:
-		case OP_AND_NOT:
-		case OP_OR_NOT:
+		//case OP_PRE_NOT:
+		//case OP_AND:
+		//case OP_OR:
+		//case OP_AND_NOT:
+		//case OP_OR_NOT:
 		}
 	}
 

@@ -112,7 +112,7 @@ public:
 	{
 		return true; // okay -- no teams!!
 	}
-// linux fix
+	// linux fix
 	void setup ( const char *szModFolder, eModId iModId, eBotType iBotType, const char *szWeaponListName );
 
 	bool isModFolder (const char* szModFolder) const;

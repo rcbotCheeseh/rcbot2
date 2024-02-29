@@ -9,6 +9,10 @@
 
 #include <cstring>
 
+#ifdef _WIN32
+#define strcmpi _strcmpi
+#endif 
+
 CClassInterfaceValue CClassInterface :: g_GetProps[GET_PROPDATA_MAX];
 bool CClassInterfaceValue :: m_berror = false;
 
@@ -44,8 +48,6 @@ void UTIL_FindServerClassnamePrint(const char *name_cmd)
 
 	CBotGlobals::botMessage(nullptr,0,"Not found");
 }
-
-
 
 void UTIL_FindServerClassPrint(const char *name_cmd)
 {
@@ -93,7 +95,6 @@ ServerClass *UTIL_FindServerClass(const char *name)
 	}
 
 	return nullptr;
-	
 }
 
 /**
@@ -240,7 +241,6 @@ edict_t *CClassInterfaceValue :: getEntity ( edict_t *edict )
 
 	getData(edict); 
 
-
 	if (m_berror)
 		return nullptr;
 
@@ -285,7 +285,7 @@ void UTIL_FindPropPrint(const char *prop_name)
 	}
 	catch (...)
 	{
-		bool bInterfaceErr = true;
+		bool bInterfaceErr = true; //Unused? [APG]RoboCop[CL]
 	}
 }
 

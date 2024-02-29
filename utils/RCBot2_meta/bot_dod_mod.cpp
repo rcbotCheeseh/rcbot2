@@ -122,11 +122,11 @@ bool CDODMod :: shouldAttack ( int iTeam )
 ////////////////////////////////////////////////
 void CDODMod :: initMod ()
 {
-	///-------------------------------------------------
+///-------------------------------------------------
 	CBotGlobals::botMessage(nullptr, 0, "Training DOD:S capture decision 'NN' ... hold on...");
 
 	const CBotNeuralNet nn(2, 2, 2, 1, 0.4f);
-	
+
 	CTrainingSet tset(2, 1, 4);
 
 	tset.setScale(0.0f,1.0f);
@@ -169,8 +169,8 @@ void CDODMod :: initMod ()
 	tset.freeMemory();
 
 	CBotGlobals::botMessage(nullptr, 0, "... done!");
-	///-------------------------------------------------
-	
+///-------------------------------------------------
+
 	CWeapons::loadWeapons(m_szWeaponListName == nullptr ? "DOD" : m_szWeaponListName, DODWeaps);
 	//CWeapons::loadWeapons("DOD", DODWeaps);
 	/*

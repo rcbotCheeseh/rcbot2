@@ -41,7 +41,7 @@ public:
 		m_iSerialNumber = 0;
 	}
 
-	MyEHandle ( edict_t *pent )
+    MyEHandle ( edict_t *pent )
 	{
 		m_pEnt = pent;
 

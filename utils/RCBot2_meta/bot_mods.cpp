@@ -50,6 +50,10 @@
 
 #include "rcbot/logging.h"
 
+#ifdef _WIN32
+#define strcmpi _strcmpi
+#endif 
+
 std::vector<edict_wpt_pair_t> CHalfLifeDeathmatchMod::m_LiftWaypoints;
 
 void CBotMods::parseFile()
@@ -127,7 +131,7 @@ void CBotMods::parseFile()
 
 			bottype = BOTTYPE_GENERIC;
 
-			//modtype = MOD_CUSTOM;
+			modtype = MOD_CUSTOM;
 
 			if (!strcmpi("CUSTOM", val))
 			{

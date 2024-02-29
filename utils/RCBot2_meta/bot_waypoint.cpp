@@ -342,7 +342,7 @@ float CWaypointNavigator :: getNextYaw ()
 	if ( m_iCurrentWaypoint != -1 )
 		return CWaypoints::getWaypoint(m_iCurrentWaypoint)->getAimYaw();
 
-	return 0.0f;
+	return false;
 }
 
 // best waypoints are those with lowest danger
@@ -1010,7 +1010,7 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 #ifndef __linux__
 			if ( rcbot_debug_show_route.GetBool() )
 			{
-				edict_t *pListenEdict;
+				edict_t *pListenEdict; //Unused? [APG]RoboCop[CL]
 
 				if ( !engine->IsDedicatedServer() && (pListenEdict = CClients::getListenServerClient())!= nullptr)
 				{
@@ -1157,7 +1157,7 @@ bool CWaypointNavigator :: workRoute ( Vector vFrom,
 #ifndef __linux__		
 		if ( rcbot_debug_show_route.GetBool() )
 		{
-			edict_t *pListenEdict;
+			edict_t *pListenEdict; //Unused? [APG]RoboCop[CL]
 
 			if ( !engine->IsDedicatedServer() && (pListenEdict = CClients::getListenServerClient())!= nullptr)
 			{
@@ -1350,7 +1350,6 @@ void CWaypointNavigator :: updatePosition ()
 
 				// fix: bots jumping at wrong positions
 				m_pBot->touchedWpt(pWaypoint,m_iCurrentWaypoint,iPrevWpt);
-
 
 				// fix : update pWaypoint as Current Waypoint
 				pWaypoint = CWaypoints::getWaypoint(m_iCurrentWaypoint);
@@ -3246,14 +3245,14 @@ void CWaypointType :: removeTypeFromWaypoint ( CWaypoint *pWaypoint )
 
 }*/
 
-CWaypointType::CWaypointType(int iBit, const char* szName, const char* szDescription, WptColor vColour, int iModBits, int iImportance)
-	: m_iMods(iModBits),
-	m_iBit(iBit),
-	m_szName(CStrings::getString(szName)),
-	m_szDescription(CStrings::getString(szDescription)),
-	m_iImportance(iImportance),
-	m_vColour(vColour)
+CWaypointType :: CWaypointType (int iBit, const char *szName, const char *szDescription, WptColor vColour, int iModBits, int iImportance )
 {
+	m_iBit = iBit;
+	m_szName = CStrings::getString(szName);
+	m_szDescription = CStrings::getString(szDescription);
+	m_vColour = vColour;
+	m_iMods = iModBits;
+	m_iImportance = iImportance;
 }
 
 bool CWaypoint :: forTeam ( int iTeam )

@@ -1067,7 +1067,7 @@ void CCSSBot::onRoundStart()
 bool CCSSBot::IsLeadingHostage()
 {
 	const std::vector<CBaseHandle> hostages = CCounterStrikeSourceMod::getHostageVector();
-	edict_t *pHostage = nullptr;
+	//edict_t *pHostage = nullptr;
 
 	if(getTeam() != CS_TEAM_COUNTERTERRORIST)
 		return false;

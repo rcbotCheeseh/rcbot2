@@ -168,7 +168,7 @@ bool CBotSynergy::needAmmo()
 			return false;
 			//break;
 		}
-		}
+		} //Not required? [APG]RoboCop[CL]
 	}
 
 	return false;
@@ -579,12 +579,12 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 		//break;
 	case BOT_UTIL_FIND_NEAREST_HEALTH:
 	{
-		CWaypoint* pWaypoint = nullptr;
 		const Vector vOrigin = getOrigin();
 		CBotSchedule* pSched = new CBotSchedule();
 		pSched->setID(SCHED_GOTO_ORIGIN);
 		updateCondition(CONDITION_COVERT); // Pay more attention to danger
-		pWaypoint = CWaypoints::getWaypoint(CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_HEALTH, vOrigin, 2048.0f));
+		CWaypoint* pWaypoint = CWaypoints::getWaypoint(
+			CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_HEALTH, vOrigin, 2048.0f));
 		m_fUtilTimes[BOT_UTIL_FIND_NEAREST_HEALTH] = engine->Time() + randomFloat(60.0f, 90.0f);
 
 		if (pWaypoint)
@@ -597,11 +597,11 @@ bool CBotSynergy::executeAction(eBotAction iAction)
 	}
 	case BOT_UTIL_FIND_NEAREST_AMMO:
 	{
-		CWaypoint* pWaypoint = nullptr;
 		const Vector vOrigin = getOrigin();
 		CBotSchedule* pSched = new CBotSchedule();
 		pSched->setID(SCHED_GOTO_ORIGIN);
-		pWaypoint = CWaypoints::getWaypoint(CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_AMMO, vOrigin, 2048.0f));
+		CWaypoint* pWaypoint = CWaypoints::getWaypoint(
+			CWaypoints::nearestWaypointGoal(CWaypointTypes::W_FL_AMMO, vOrigin, 2048.0f));
 		m_fUtilTimes[BOT_UTIL_FIND_NEAREST_AMMO] = engine->Time() + randomFloat(60.0f, 90.0f);
 
 		if (pWaypoint)
@@ -796,7 +796,7 @@ void CBotSynergy::handleWeapons()
 		isVisible(m_pEnemy) && isEnemy(m_pEnemy))
 	{
 		const char* szclassname = m_pEnemy.get()->GetClassName();
-		CBotWeapon* pWeapon = nullptr;
+		CBotWeapon* pWeapon;
 
 		if ((std::strncmp(szclassname, "npc_combinegunship", 18) == 0) || (std::strncmp(szclassname, "npc_combinedropship", 19) == 0) || (std::strncmp(szclassname, "npc_strider", 11) == 0) ||
 			(std::strncmp(szclassname, "npc_helicopter", 14) == 0))

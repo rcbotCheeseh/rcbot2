@@ -265,7 +265,7 @@ public:
 		m_OpensLaterInfo.clear();
 		m_bIsReachable = true;
 		m_fCheckReachableTime = 0.0f;
-		//m_iId(iId);
+		//m_iId = iId;
 	}
 
 	bool checkGround ();

@@ -36,7 +36,7 @@
 
 //#include "nav_mesh.h"
 
-CNavMeshNavigator::CNavMeshNavigator(): m_theNavMesh(nullptr), m_pNavMesh(nullptr)
+CNavMeshNavigator::CNavMeshNavigator()
 {
 	// Create a new instance of the NavMesh class
 	//m_theNavMesh = new CNavMesh();
@@ -63,7 +63,7 @@ void CNavMeshNavigator::CalculateRoute(Vector startNodeID, Vector goalNodeID)
 bool CNavMeshNavigator::workRoute(Vector vFrom, Vector vTo, bool* bFail, bool bRestart, bool bNoInterruptions, int iGoalId, int iConditions, int iDangerId)
 {
 	// Try to find a route using the primary waypoint system
-	bool routeFound = false; /* logic to find a route using the primary waypoint system */
+	/*bool routeFound = false; // logic to find a route using the primary waypoint system
 	
 	// If a route was not found using the primary waypoint system
 	if (!routeFound)
@@ -73,20 +73,21 @@ bool CNavMeshNavigator::workRoute(Vector vFrom, Vector vTo, bool* bFail, bool bR
 		routeFound = true; // Assume the route was successfully calculated
 		
 		// Now, you can check if the NavMesh has a valid route
-		/*if (routeFound && m_theNavMesh->routeFound())
-		{
-			// Perform additional logic or use the calculated route from the NavMesh
-			while (hasNextPoint())
-			{
-				getNextPoint();
-				// Use navMeshWaypoint as needed
-				// ...
-			}
-		}*/
+		//if (routeFound && m_theNavMesh->routeFound())
+		//{
+		//	// Perform additional logic or use the calculated route from the NavMesh
+		//	while (hasNextPoint())
+		//	{
+		//		getNextPoint();
+		//		// Use navMeshWaypoint as needed
+		//		// ...
+		//	}
+		//}
 	}
 	
 	// Continue with the rest of your navigation logic
-	return routeFound;
+	return routeFound;*/
+	return false;
 }
 
 Vector CNavMeshNavigator::getNextPoint()

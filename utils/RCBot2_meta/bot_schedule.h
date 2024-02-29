@@ -185,7 +185,6 @@ public:
 
 	void setID ( eBotSchedule iId ) { m_iSchedId = iId; }
 
-
 private:
 	std::deque<CBotTask*> m_Tasks;
 	bool m_bFailed;
@@ -317,10 +316,7 @@ public:
 class CBotTF2DemoPipeEnemySched : public CBotSchedule
 {
 public:
-	CBotTF2DemoPipeEnemySched ( 
-		CBotWeapon *pLauncher,
-		Vector vStand, 
-		edict_t *pEnemy );
+	CBotTF2DemoPipeEnemySched ( CBotWeapon *pLauncher, Vector vStand, edict_t *pEnemy );
 
 	void init() override;
 };

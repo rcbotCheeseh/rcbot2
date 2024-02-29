@@ -883,7 +883,7 @@ void CDODBot :: handleWeapons ()
 
 void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevWaypoint )
 {
-	static int wptindex;  //Unused? [APG]RoboCop[CL]
+	static int wptindex; //Unused? [APG]RoboCop[CL]
 
 	CBot::touchedWpt(pWaypoint);
 
@@ -900,7 +900,7 @@ void CDODBot :: touchedWpt ( CWaypoint *pWaypoint, int iNextWaypoint, int iPrevW
 
 		if ( CBotGlobals::entityIsValid(pBombTarget) )
 		{
-			Vector vBombTarget = CBotGlobals::entityOrigin(pBombTarget);  //Unused? [APG]RoboCop[CL]
+			Vector vBombTarget = CBotGlobals::entityOrigin(pBombTarget);  // `vBombTarget` Unused? [APG]RoboCop[CL]
 			const int state = CClassInterface::getDODBombState(pBombTarget);
 
 			if ( state != 0 )
@@ -2505,7 +2505,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 
 				iBombType = DOD_BOMB_PLANT;
 			}
-			
+
 			int iWptGoal = CDODMod::m_Flags.getWaypointAtFlag(id);
 	
 			if ( iWptGoal == -1 )
@@ -2723,7 +2723,7 @@ bool CDODBot :: executeAction ( CBotUtility *util )
 		//break;
 	case BOT_UTIL_FOLLOW_SQUAD_LEADER:
 		{
-			Vector pos = m_pSquad->GetFormationVector(m_pEdict); //Unused? [APG]RoboCop[CL]
+			Vector pos = m_pSquad->GetFormationVector(m_pEdict); // `pos` Unused? [APG]RoboCop[CL]
 
 			m_pSchedules->add(new CBotSchedule(new CBotFollowSquadLeader(m_pSquad)));
 
@@ -2769,7 +2769,6 @@ void CDODBot :: reachedCoverSpot (int flags)
 
 		m_pButtons->tap(IN_RELOAD);
 	}
-
 
 	//m_fFixWeaponTime = engine->Time() + 1.0f;
 	//}
@@ -3529,36 +3528,36 @@ bool CDODBot :: isVisibleThroughSmoke ( edict_t *pSmoke, edict_t *pCheck )
 			smokeinfo->bVisible = true;
 			smokeinfo->bInSmoke = false;
 
-				vSmoke = CBotGlobals::entityOrigin(pSmoke);
-				fSmokeDist = distanceFrom(vSmoke);
+			vSmoke = CBotGlobals::entityOrigin(pSmoke);
+			fSmokeDist = distanceFrom(vSmoke);
 
-				// I'm outside smoke -- but maybe the enemy is inside the smoke
-				if ( fSmokeDist > SMOKE_RADIUS )
+			// I'm outside smoke -- but maybe the enemy is inside the smoke
+			if ( fSmokeDist > SMOKE_RADIUS )
+			{
+				fDist = (CBotGlobals::entityOrigin(pCheck) - vSmoke).Length();
+
+				// enemy outside the smoke radius
+				if ( fDist > SMOKE_RADIUS )
 				{
-					fDist = (CBotGlobals::entityOrigin(pCheck) - vSmoke).Length();
+					static Vector vCheckComp;
+					// check if enemy is behind the smoke from my perspective
+					vCheckComp = CBotGlobals::entityOrigin(pCheck) - getOrigin();
+					vCheckComp = (vCheckComp / vCheckComp.Length())*fSmokeDist;
 
-					// enemy outside the smoke radius
-					if ( fDist > SMOKE_RADIUS )
-					{
-						static Vector vCheckComp;
-						// check if enemy is behind the smoke from my perspective
-						vCheckComp = CBotGlobals::entityOrigin(pCheck) - getOrigin();
-						vCheckComp = (vCheckComp / vCheckComp.Length())*fSmokeDist;
-
-						fDist = (vSmoke - (getOrigin() + vCheckComp)).Length();
-					}
+					fDist = (vSmoke - (getOrigin() + vCheckComp)).Length();
 				}
-				else
-					fDist = fSmokeDist;
+			}
+			else
+				fDist = fSmokeDist;
 
-				if ( fDist <= SMOKE_RADIUS ) 
-					// smoke gets heavy at 1.0 seconds and diminishes at 10 secs
-				{
-					smokeinfo->fProb = 1.0f-(fDist/SMOKE_RADIUS);
-					smokeinfo->bVisible = (randomFloat(0.0f,0.33f) > smokeinfo->fProb ); 
-					// smoke gets pretty heavy half way into the smoke grenade
-					smokeinfo->bInSmoke = true;
-				}
+			if ( fDist <= SMOKE_RADIUS ) 
+				// smoke gets heavy at 1.0 seconds and diminishes at 10 secs
+			{
+				smokeinfo->fProb = 1.0f-(fDist/SMOKE_RADIUS);
+				smokeinfo->bVisible = (randomFloat(0.0f,0.33f) > smokeinfo->fProb ); 
+				// smoke gets pretty heavy half way into the smoke grenade
+				smokeinfo->bInSmoke = true;
+			}
 				
 			#ifdef _DEBUG
 				if ( CClients::clientsDebugging(BOT_DEBUG_THINK) )

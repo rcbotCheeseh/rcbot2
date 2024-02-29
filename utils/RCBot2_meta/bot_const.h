@@ -204,7 +204,7 @@ enum
 typedef enum
 {
 	BOT_FUNC_FAIL = 0,
-	BOT_FUNC_CONTINUE,
+    BOT_FUNC_CONTINUE,
 	BOT_FUNC_COMPLETE,
 }eBotFuncState;
 

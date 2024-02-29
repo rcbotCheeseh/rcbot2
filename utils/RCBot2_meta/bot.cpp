@@ -377,7 +377,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 		"auto", "scout", "sniper", "soldier", "demoman", "medic", "heavy",
 		"pyro", "spy", "engineer"
 	};
-
+	
 	char cmd[32];
 	if (m_iDesiredClass >= 0 && static_cast<unsigned>(m_iDesiredClass) < sizeof(classNames)) {
 		snprintf(cmd, sizeof(cmd), "joinclass %s", classNames[m_iDesiredClass]);
@@ -3101,8 +3101,8 @@ bool CBots :: controlBot ( const char *szOldName, const char *szName, const char
 
 bool CBots :: createBot (const char *szClass, const char *szTeam, const char *szName)
 {
-	CBotMod *pMod = CBotGlobals::getCurrentMod();
-	const char *szOVName = "";
+	CBotMod *pMod = CBotGlobals::getCurrentMod(); // `*pMod` Unused? [APG]RoboCop[CL]
+	const char *szOVName = ""; // `szOVName` Unused? [APG]RoboCop[CL]
 
 	if ( m_iMaxBots != -1 && CBotGlobals::numClients() >= m_iMaxBots )
 		logger->Log(LogLevel::ERROR, "Can't create bot, max_bots reached");

@@ -143,16 +143,16 @@ void CRCBotTF2UtilFile :: loadConfig()
 {
 	init();
 
-	 for ( eTF2UtilType iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = static_cast<eTF2UtilType>(static_cast<int>(iFile) + 1) )
-	 {
-		 char szFilename[64];
-		 char szFullFilename[512];
-		 if ( iFile == BOT_ATT_UTIL )
-		 {
+	for ( eTF2UtilType iFile = BOT_ATT_UTIL; iFile < UTIL_TYPE_MAX; iFile = static_cast<eTF2UtilType>(static_cast<int>(iFile) + 1) )
+	{
+		char szFilename[64];
+		char szFullFilename[512];
+		if ( iFile == BOT_ATT_UTIL )
+		{
 			std::sprintf(szFilename,"attack_util.csv");
-		 }
-		 else
-		 {
+		}
+		else
+		{
 			std::sprintf(szFilename,"normal_util.csv");
 		}
 
@@ -199,9 +199,8 @@ void CRCBotTF2UtilFile :: loadConfig()
 							break;
 
 					}
-
 				}
 			}
 		}
-	 }
+	}
 }

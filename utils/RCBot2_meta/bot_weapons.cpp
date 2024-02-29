@@ -428,7 +428,7 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 		pWeapon = m_Weapon_iter == nullptr ? nullptr : INDEXENT(m_Weapon_iter->GetEntryIndex());
 		iWeaponsSignature += reinterpret_cast<unsigned>(pWeapon) + (pWeapon == nullptr ? 0 : static_cast<unsigned>(CClassInterface::getWeaponState(pWeapon)));
 		if (m_Weapon_iter != nullptr) {
-			m_Weapon_iter++;
+		m_Weapon_iter++;
 		}
 	}
 
@@ -436,7 +436,7 @@ bool CBotWeapons::update(bool bOverrideAllFromEngine)
 	if (iWeaponsSignature != m_iWeaponsSignature) // m_fUpdateWeaponsTime < engine->Time() )
 	{
 		this->clearWeapons();
-		
+
 		CBotWeapon* m_BotWeapon_iter = m_theWeapons; //m_BotWeapon_iter not used? [APG]RoboCop[CL]
 
 		// loop through the weapons array and see if it is in the CBaseCombatCharacter

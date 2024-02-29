@@ -1053,9 +1053,10 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 		break;
 	case 1:
 	{
+		//TODO: To prevent EngiBots from facing their SG Turrets the wrong way [APG]RoboCop[CL]
 		CTraceFilterWorldAndPropsOnly filter;
 		QAngle eyes = CBotGlobals::playerAngles(m_pEdict);
-		QAngle turn;
+		QAngle turn; //Unused? [APG]RoboCop[CL]
 		Vector forward;
 		Vector vchosen;
 		Vector v_right, v_up;
@@ -1096,7 +1097,7 @@ int CBotFortress :: engiBuildObject (int *iState, eEngiBuild iObject, float *fTi
 			////////////////////////////////////////
 
 		const Vector v_left = -v_right;
-
+		
 			// left
 			CBotGlobals::traceLine(building,building - v_right*4096.0,MASK_SOLID_BRUSHONLY,&filter);
 
@@ -1941,9 +1942,9 @@ void CBotTF2 :: engineerBuild ( eEngiBuild iBuilding, eEngiCmd iEngiCmd )
 			//m_pTeleExit = NULL;
 			helpers->ClientCommand(m_pEdict,"build 1 1");
 			break;
-		default:
-			return;
-			break;
+		//default:
+			//return;
+			//break;
 		}
 	}
 	else
@@ -1976,9 +1977,9 @@ void CBotTF2 :: engineerBuild ( eEngiBuild iBuilding, eEngiCmd iEngiCmd )
 			m_iTeleExitArea = 0;
 			helpers->ClientCommand(m_pEdict,"destroy 1 1");
 			break;
-		default:
-			return;
-			break;
+		//default:
+			//return;
+			//break;
 		}
 	}
 
@@ -2013,80 +2014,87 @@ void CBotTF2 :: updateCarrying ()
 /// @brief TF2 Mann vs Machine update/think function
 void CBotTF2::MvM_Update()
 {
-	if (getTeam() != TF2_TEAM_RED)
-		return; // ?? bots should be on RED team
-
-	if (!MvM_IsReady() && entprops->GameRules_GetRoundState() == RoundState_BetweenRounds)
+	if (CTeamFortress2Mod::isMapType(TF_MAP_MVM))
 	{
-		int num_players = 0, num_ready = 0;
-		const CBotSchedule* sched = m_pSchedules->getCurrentSchedule();
+		if (getTeam() != TF2_TEAM_RED)
+			return; // ?? bots should be on RED team
 
-		// Engineer: Doesn't have a dispenser and is not building something
-		if (getClass() == TF_CLASS_ENGINEER && m_pDispenser.get() == nullptr && sched && !sched->isID(SCHED_TF_BUILD))
+		if (!MvM_IsReady() && entprops->GameRules_GetRoundState() == RoundState_BetweenRounds)
 		{
-			updateCondition(CONDITION_CHANGED);
-		}
+			int num_players = 0, num_ready = 0;
+			const CBotSchedule* sched = m_pSchedules->getCurrentSchedule();
 
-		for (int i = 1; i <= gpGlobals->maxClients; i++)
-		{
-			edict_t* player = INDEXENT(i);
-
-			if (!CBotGlobals::entityIsValid(player))
-				continue;
-
-			IPlayerInfo* info = playerinfomanager->GetPlayerInfo(player);
-
-			if (!info)
-				continue;
-
-			if (info->GetTeamIndex() != TF2_TEAM_RED)
-				continue;
-
-			if (info->IsFakeClient())
-				continue;
-
-			// Engineer: Only ready up if my sentry is setup. TO-DO: Also do the same for dispenser and teleporter
-			if (getClass() == TF_CLASS_ENGINEER && m_pSentryGun.get() == nullptr)
+			// Engineer: Doesn't have a dispenser and is not building something
+			if (getClass() == TF_CLASS_ENGINEER && m_pDispenser.get() == nullptr && sched && !sched->isID(SCHED_TF_BUILD))
 			{
-				num_players = 99;
-				logger->Log(LogLevel::DEBUG, "%3.2f - %s is skipping Ready Check. Reason: Sentry Gun not built!", gpGlobals->curtime, m_szBotName);
-				break;
+				updateCondition(CONDITION_CHANGED);
 			}
 
-			// Medic: Only ready up if my uber is near ready.
-			if (getClass() == TF_CLASS_MEDIC)
+			for (int i = 1; i <= gpGlobals->maxClients; i++)
 			{
-				edict_t* medigun = CTeamFortress2Mod::getMediGun(m_pEdict);
-				if (medigun && CClassInterface::getUberChargeLevel(medigun) <= 98)
+				edict_t* player = INDEXENT(i);
+
+				if (!CBotGlobals::entityIsValid(player))
+					continue;
+
+				IPlayerInfo* info = playerinfomanager->GetPlayerInfo(player);
+
+				if (!info)
+					continue;
+
+				if (info->GetTeamIndex() != TF2_TEAM_RED)
+					continue;
+
+				if (info->IsFakeClient())
+					continue;
+
+				// Engineer: Only ready up if my sentry is setup. TO-DO: Also do the same for dispenser and teleporter
+				if (getClass() == TF_CLASS_ENGINEER && m_pSentryGun.get() == nullptr)
 				{
 					num_players = 99;
-					logger->Log(LogLevel::DEBUG, "%3.2f - %s is skipping Ready Check. Reason: Waiting to fill Ubercharge!", gpGlobals->curtime, m_szBotName);
+					logger->Log(LogLevel::DEBUG, "%3.2f - %s is skipping Ready Check. Reason: Sentry Gun not built!", gpGlobals->curtime, m_szBotName);
 					break;
 				}
+
+				// Medic: Only ready up if my uber is near ready.
+				if (getClass() == TF_CLASS_MEDIC)
+				{
+					edict_t* medigun = CTeamFortress2Mod::getMediGun(m_pEdict);
+					if (medigun && CClassInterface::getUberChargeLevel(medigun) <= 98)
+					{
+						num_players = 99;
+						logger->Log(LogLevel::DEBUG, "%3.2f - %s is skipping Ready Check. Reason: Waiting to fill Ubercharge!", gpGlobals->curtime, m_szBotName);
+						break;
+					}
+				}
+
+				// at this point we know the player is a human and is on RED team
+				num_players++; // increase player count
+
+				char ready[] = "m_bPlayerReady";
+				if (entprops->GameRules_GetProp(ready, 4, i) != 0)
+					num_ready++;
 			}
 
-			// at this point we know the player is a human and is on RED team
-			num_players++; // increase player count
+			logger->Log(LogLevel::DEBUG, "%3.2f - %s Ready Check - <%i/%i>", gpGlobals->curtime, m_szBotName, num_players, num_ready);
 
-			char ready[] = "m_bPlayerReady";
-			if (entprops->GameRules_GetProp(ready, 4, i) != 0)
-				num_ready++;
-		}
-
-		logger->Log(LogLevel::DEBUG, "%3.2f - %s Ready Check - <%i/%i>", gpGlobals->curtime, m_szBotName, num_players, num_ready);
-
-		if (num_players == num_ready) // All humans on RED team are ready
-		{
-			helpers->ClientCommand(m_pEdict, "tournament_player_readystate 1");
-			logger->Log(LogLevel::INFO, "%3.2f - TF2 MvM RCBot \"<%s><>\" is ready.", gpGlobals->curtime, m_szBotName);
+			if (num_players == num_ready) // All humans on RED team are ready
+			{
+				helpers->ClientCommand(m_pEdict, "tournament_player_readystate 1");
+				logger->Log(LogLevel::INFO, "%3.2f - TF2 MvM RCBot \"<%s><>\" is ready.", gpGlobals->curtime, m_szBotName);
+			}
 		}
 	}
 }
 
 bool CBotTF2::MvM_IsReady() const
 {
-	char ready[] = "m_bPlayerReady";
-	return entprops->GameRules_GetProp(ready, 4, engine->IndexOfEdict(getEdict())) == 1;
+	if (CTeamFortress2Mod::isMapType(TF_MAP_MVM))
+	{
+		char ready[] = "m_bPlayerReady";
+		return entprops->GameRules_GetProp(ready, 4, engine->IndexOfEdict(getEdict())) == 1;
+	}
+	return false;
 }
 
 // TODO: To allow bots to menuselect in order to buy upgrades? [APG]RoboCop[CL]
@@ -4355,7 +4363,7 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	static float fDefendFlagUtility;
 	static int iTeam;
 	static float fMetalPercent;
-	static Vector vOrigin;
+	static Vector vOrigin; //Unused? [APG]RoboCop[CL]
 	static unsigned char *failedlist;
 
 	static edict_t *pMedigun;

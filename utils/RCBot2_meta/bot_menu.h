@@ -105,7 +105,7 @@ public:
 
 	void setCaption ( const char *szCaption ) 
 	{
-		strncpy(m_szCaption,szCaption,63);
+		std::strncpy(m_szCaption,szCaption,63);
 		m_szCaption[63] = 0;
 	}
 
@@ -134,7 +134,7 @@ class CBotGotoMenuItem : public CBotMenuItem
 public:
 	CBotGotoMenuItem ( const char *szCaption, CBotMenu *pPrevMenu )  // caption = back / more etc
 	{
-		strncpy(m_szCaption,szCaption,63);
+		std::strncpy(m_szCaption,szCaption,63);
 		m_szCaption[63] = 0;
 		m_pPrevMenu = pPrevMenu;
 	}
@@ -181,7 +181,7 @@ public:
 
 	void activate ( CClient *pClient ) override;
 
-	Color getColor ( CClient *pClient ); // gets the colour of the caption
+	Color getColor ( CClient *pClient ); // gets the colour of the caption - not implemented yet [APG]RoboCop[CL]
 
 	virtual void addMenuItem ( CBotMenuItem *item )
 	{

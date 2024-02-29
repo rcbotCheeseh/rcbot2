@@ -180,6 +180,8 @@ class MMSConfig(object):
       cxx.defines += [
         'stricmp=strcasecmp',
         '_stricmp=strcasecmp',
+        'strcmpi=strcasecmp',
+        '_strcmpi=strcasecmp',
         '_snprintf=snprintf',
         '_vsnprintf=vsnprintf',
         '_alloca=alloca',
