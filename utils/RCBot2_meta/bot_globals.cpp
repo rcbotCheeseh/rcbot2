@@ -308,7 +308,6 @@ public:
 class CTraceFilterSimple : public CTraceFilter
 {
 public:
-	
 	CTraceFilterSimple( const IHandleEntity *passentity1, const IHandleEntity *passentity2, int collisionGroup )
 	{
 		m_pPassEnt1 = passentity1;
@@ -945,7 +944,7 @@ bool CBotGlobals :: makeFolders (const char* szFile)
 		szFolderName[folderNameSize] = 0;
 		
 #ifndef __linux__
-		mkdir(szFolderName);
+		_mkdir(szFolderName);
 #else
 		if ( mkdir(szFolderName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0 ) {
 			logger->Log(LogLevel::INFO, "Trying to create folder '%s' successful", szFolderName);
@@ -1060,7 +1059,7 @@ std::fstream CBotGlobals::openFile(const char* szFile, std::ios_base::openmode m
 		if (!fp)
 			logger->Log(LogLevel::WARN, "failed to make folders for %s", szFile);
 		} else {
-		logger->Log(LogLevel::INFO, "Opened file '%s' mode %s", szFile, mode);
+		logger->Log(LogLevel::INFO, "Opened file '%s' mode %i", szFile, mode); // `mode %i` fix by caxanga334
 	}
 
 	return fp;
