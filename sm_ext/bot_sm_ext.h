@@ -15,20 +15,21 @@ using SourceMod::IExtensionManager;
 
 class RCBotSourceModExt : public SourceMod::IExtensionInterface
 {
-	public:
-	virtual bool OnExtensionLoad(IExtension *me, IShareSys *sys, char* error, size_t maxlength, bool late);
-	virtual void OnExtensionUnload();
-	virtual void OnExtensionsAllLoaded();
-	virtual void OnExtensionPauseChange(bool pause);
-	virtual bool QueryRunning(char *error, size_t maxlength);
-	virtual bool IsMetamodExtension();
-	virtual const char *GetExtensionName();
-	virtual const char *GetExtensionURL();
-	virtual const char *GetExtensionTag();
-	virtual const char *GetExtensionAuthor();
-	virtual const char *GetExtensionVerString();
-	virtual const char *GetExtensionDescription();
-	virtual const char *GetExtensionDateString();
+public:
+	virtual ~RCBotSourceModExt() = default;
+	bool OnExtensionLoad(IExtension *me, IShareSys *sys, char* error, size_t maxlength, bool late) override;
+	void OnExtensionUnload() override;
+	void OnExtensionsAllLoaded() override;
+	void OnExtensionPauseChange(bool pause) override;
+	bool QueryRunning(char *error, size_t maxlength) override;
+	bool IsMetamodExtension() override;
+	const char *GetExtensionName() override;
+	const char *GetExtensionURL() override;
+	const char *GetExtensionTag() override;
+	const char *GetExtensionAuthor() override;
+	const char *GetExtensionVerString() override;
+	const char *GetExtensionDescription() override;
+	const char *GetExtensionDateString() override;
 
 	virtual void LateLoadExtensions();
 };

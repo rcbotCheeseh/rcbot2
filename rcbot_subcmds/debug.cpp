@@ -245,7 +245,7 @@ CBotCommandInline BotTaskCommand("givetask", CMD_ACCESS_DEBUG, [](CClient *pClie
 					CBotUtility util = CBotUtility(pBot,BOT_UTIL_PIPE_LAST_ENEMY,true,1.0f);
 					pBot->setLastEnemy(pClient->getPlayer());
 					pBot->getSchedule()->freeMemory();
-					((CBotTF2*)pBot)->executeAction(&util);
+					static_cast<CBotTF2*>(pBot)->executeAction(&util);
 				}
 				// 71
 				else if ( !strcmp(args[0],"gren") )
@@ -437,17 +437,17 @@ CBotCommandInline SetProp("setprop", CMD_ACCESS_DEBUG, [](CClient *pClient, BotC
 						static CBaseEntity *pEntity;
 						Vector vdata;
 
-						pUnknown = (IServerUnknown *)pNearest->GetUnknown();
+						pUnknown = pNearest->GetUnknown();
 					 
 						pEntity = pUnknown->GetBaseEntity();
 
-						data = (void *)((char *)pEntity + m_offset);
+						data = static_cast<void*>(reinterpret_cast<char*>(pEntity) + m_offset);
 
 						if ( data )
 						{
-							bool *booldata = (bool*)data;
-							int *intdata = (int*)data;
-							float *floatdata = (float*)data;
+							bool *booldata = static_cast<bool*>(data);
+							int *intdata = static_cast<int*>(data);
+							float *floatdata = static_cast<float*>(data);
 
 							if ( strcmp(args[2],"int")==0)
 								*intdata = atoi(args[3]);
@@ -524,13 +524,13 @@ CBotCommandInline GetProp("getprop", CMD_ACCESS_DEBUG, [](CClient *pClient, BotC
 							preoffs = atoi(args[2]);	
 						}
 
-						data = (void *)((char *)pEntity + m_offset);
+						data = static_cast<void*>(reinterpret_cast<char*>(pEntity) + m_offset);
 
 						if ( data )
 						{
-							vdata = *((Vector*)data+preoffs);
+							vdata = *(static_cast<Vector*>(data)+preoffs);
 	
-							CBotGlobals::botMessage(pPlayer,0,"int = %d, float = %f, bool = %s, Vector = (%0.4f,%0.4f,%0.4f)",*((int*)data + preoffs),*((float*)data+preoffs),*((bool*)data+preoffs) ? ("true"):("false"),vdata.x,vdata.y,vdata.z );
+							CBotGlobals::botMessage(pPlayer,0,"int = %d, float = %f, bool = %s, Vector = (%0.4f,%0.4f,%0.4f)",*(static_cast<int*>(data) + preoffs),*(static_cast<float*>(data)+preoffs),*(static_cast<bool*>(data)+preoffs) ? ("true"):("false"),vdata.x,vdata.y,vdata.z );
 						}
 						else
 							CBotGlobals::botMessage(pPlayer,0,"NULL");
@@ -633,9 +633,9 @@ CBotCommandInline DebugMemoryScanCommand("memoryscan", CMD_ACCESS_DEBUG, [](CCli
 	// args[2] = size in bytes
 	// args[3] = want to remember offsets or not
 
-	NEED_ARG(args[0]);
-	NEED_ARG(args[1]);
-	NEED_ARG(args[2]);
+	NEED_ARG(args[0])
+	NEED_ARG(args[1])
+	NEED_ARG(args[2])
 
 	const unsigned int m_prev_size = m_size;
 
@@ -668,8 +668,8 @@ CBotCommandInline DebugMemoryScanCommand("memoryscan", CMD_ACCESS_DEBUG, [](CCli
 	// begin memory scan
 	CBaseEntity *pent = pEdict->GetUnknown()->GetBaseEntity();
 
-	byte *mempoint = (byte*)pent;
-	const byte value = (byte)atoi(args[1]);
+	byte *mempoint = reinterpret_cast<byte*>(pent);
+	const byte value = static_cast<byte>(atoi(args[1]));
 	const int ivalue = (atoi(args[1]));
 	const float fvalue = (atof(args[1]));
 
@@ -682,14 +682,14 @@ CBotCommandInline DebugMemoryScanCommand("memoryscan", CMD_ACCESS_DEBUG, [](CCli
 		if ( m_size == MEMSEARCH_BYTE )
 			bfound = (value == *mempoint);
 		else if ( m_size == MEMSEARCH_INT )
-			bfound = (ivalue == *(int*)mempoint);
+			bfound = (ivalue == *reinterpret_cast<int*>(mempoint));
 		else if ( m_size == MEMSEARCH_FLOAT )
-			bfound = (fvalue == *(float*)mempoint);
+			bfound = (fvalue == *reinterpret_cast<float*>(mempoint));
 		else if ( m_size == MEMSEARCH_STRING )
 		{
 			try
 			{
-				const string_t *str = (string_t*) mempoint;
+				const string_t *str = reinterpret_cast<string_t*>(mempoint);
 
 				if ( str != nullptr)
 				{			
@@ -737,9 +737,9 @@ CBotCommandInline DebugMemoryCheckCommand("memorycheck", CMD_ACCESS_DEBUG, [](CC
 	// args[0] = classname
 	// args[1] = offset
 	// args[2] = type
-	NEED_ARG(args[0]);
-	NEED_ARG(args[1]);
-	NEED_ARG(args[2]);
+	NEED_ARG(args[0])
+	NEED_ARG(args[1])
+	NEED_ARG(args[2])
 	// find edict
 	edict_t *pEdict = CClassInterface::FindEntityByClassnameNearest(pClient->getOrigin(),args[0]);
 	
@@ -755,11 +755,11 @@ CBotCommandInline DebugMemoryCheckCommand("memorycheck", CMD_ACCESS_DEBUG, [](CC
 
 	if ( ( strcmp(args[2],"bool") == 0 ) || ( strcmp(args[2],"byte") == 0 ))
 	{
-		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(byte) = %d",args[0],offset,*(byte*)(((unsigned long)pent) + offset));
+		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(byte) = %d",args[0],offset,*reinterpret_cast<byte*>(reinterpret_cast<unsigned long>(pent) + offset));
 	}
 	else if ( strcmp(args[2],"int") == 0 )
 	{
-		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(int) = %d",args[0],offset,*(int*)(((unsigned long)pent) + offset));
+		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(int) = %d",args[0],offset,*reinterpret_cast<int*>(reinterpret_cast<unsigned long>(pent) + offset));
 		/*
 		if ( strcmp(args[0],"team_control_point_master") == 0 )
 		{
@@ -780,10 +780,10 @@ CBotCommandInline DebugMemoryCheckCommand("memorycheck", CMD_ACCESS_DEBUG, [](CC
 
 	}
 	else if ( strcmp(args[2],"float") == 0 )
-		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(float) = %0.6f",args[0],offset,*(float*)(((unsigned long)pent) + offset));
+		CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(float) = %0.6f",args[0],offset,*reinterpret_cast<float*>(reinterpret_cast<unsigned long>(pent) + offset));
 	else if ( strcmp(args[2],"string") == 0 )
 	{
-		const string_t *str = (string_t*)(((unsigned long)pent) + offset);
+		const string_t *str = reinterpret_cast<string_t*>(reinterpret_cast<unsigned long>(pent) + offset);
 		if ( str )
 			CBotGlobals::botMessage(pClient->getPlayer(),0,"%s - offset %d - Value(string) = %s",args[0],offset,STRING(*str));
 		else
@@ -821,9 +821,9 @@ CBotCommandInline DebugMstrOffsetSearch("mstr_offset_search", CMD_ACCESS_DEBUG, 
 
 	while (offset < 1000)
 	{
-		const unsigned long mempoint = ((unsigned long)pMasterEntity) + offset;
+		const unsigned long mempoint = reinterpret_cast<unsigned long>(pMasterEntity) + offset;
 
-		const CTeamControlPointMaster *PointMaster = (CTeamControlPointMaster*)mempoint;
+		const CTeamControlPointMaster *PointMaster = reinterpret_cast<CTeamControlPointMaster*>(mempoint);
 
 		try
 		{

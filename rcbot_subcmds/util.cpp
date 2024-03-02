@@ -55,7 +55,7 @@ CBotCommandInline SearchCommand("search", CMD_ACCESS_UTIL, [](CClient *pClient, 
 
 						string_t model = pEdict->GetIServerEntity()->GetModelName();
 				
-						CBotGlobals::botMessage(pPlayer,0,"(%d) D:%0.2f C:'%s', Mid:%d, Mn:'%s' Health=%d, Tm:%d, Fl:%d, Spd=%0.2f",i,fDistance,pEdict->GetClassName(),pEdict->GetIServerEntity()->GetModelIndex(),model.ToCStr(),(int)CClassInterface::getPlayerHealth(pEdict),(int)CClassInterface::getTeam(pEdict),pEdict->m_fStateFlags,fVelocity );
+						CBotGlobals::botMessage(pPlayer,0,"(%d) D:%0.2f C:'%s', Mid:%d, Mn:'%s' Health=%d, Tm:%d, Fl:%d, Spd=%0.2f",i,fDistance,pEdict->GetClassName(),pEdict->GetIServerEntity()->GetModelIndex(),model.ToCStr(),static_cast<int>(CClassInterface::getPlayerHealth(pEdict)),CClassInterface::getTeam(pEdict),pEdict->m_fStateFlags,fVelocity );
 					}
 				}
 			}

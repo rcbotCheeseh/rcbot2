@@ -61,6 +61,7 @@
 #include <cmath>
 #include <cstring>
 
+#include "rcbot/tf2/conditions.h"
 #include "rcbot/entprops.h"
 #include "rcbot/logging.h"
 
@@ -2432,16 +2433,16 @@ bool CBotTF2 :: hasEngineerBuilt ( eEngiBuild iBuilding )
 	{
 	case ENGI_SENTRY:
 		return m_pSentryGun!= nullptr; // TODO
-		break;
+		//break;
 	case ENGI_DISP:
 		return m_pDispenser!= nullptr; // TODO
-		break;
+		//break;
 	case ENGI_ENTRANCE:
 		return m_pTeleEntrance!= nullptr; // TODO
-		break;
+		//break;
 	case ENGI_EXIT:
 		return m_pTeleExit!= nullptr; // TODO
-		break;
+		//break;
 	}	
 
 	return false;
@@ -5369,7 +5370,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 				removeCondition(CONDITION_PUSH);
 				return true;
 			}
-			break;
+			//break;
 		case BOT_UTIL_ATTACK_POINT:
 			
 			/*pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_DEFEND,getTeam(),m_iCurrentAttackArea,true);
@@ -5741,13 +5742,13 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 			m_pSchedules->add(new CBotRemoveSapperSched(m_pNearestAllySentry,ENGI_SENTRY));
 			return true;
 
-			break;
+			//break;
 		case BOT_UTIL_REMOVE_TMDISP_SAPPER:
 			updateCondition(CONDITION_PARANOID);
 			m_pSchedules->add(new CBotRemoveSapperSched(m_pNearestDisp,ENGI_DISP));
 			return true;
 
-			break;
+			//break;
 		case BOT_UTIL_ENGI_DESTROY_DISP:
 			engineerBuild(ENGI_DISP,ENGI_DESTROY);
 		case BOT_UTIL_BUILDDISP:
@@ -6499,7 +6500,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 				return false;
 			}
-			break;
+			//break;
 		case BOT_UTIL_GETFLAG:
 			pWaypoint = CWaypoints::randomWaypointGoal(CWaypointTypes::W_FL_FLAG,getTeam());
 
@@ -6540,7 +6541,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 				return true;
 			}
-			break;
+			//break;
 		case BOT_UTIL_FOLLOW_SQUAD_LEADER:
 			{
 				Vector pos = m_pSquad->GetFormationVector(m_pEdict);
@@ -6549,7 +6550,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 				return true;
 			}
-			break;
+			//break;
 		case BOT_UTIL_ROAM:
 			// roam
 			pWaypoint = CWaypoints::randomWaypointGoal(-1,getTeam(),0,false,this);
@@ -7337,11 +7338,13 @@ bool CBotTF2 :: isEnemy ( edict_t *pEdict,bool bCheckWeapons )
 	{
 		if ( CBotGlobals::getTeam(pEdict) != getTeam() )
 		{
-			//TODO:
-			//if (tf2_conditions->TF2_IsPlayerInCondition(engine->IndexOfEdict(pEdict), TFCond_UberchargedHidden)) // Don't attack MvM bots who are inside spawn.
+			//TODO: To prevent bots from shooting at ghost players - like in plr_hightower_event Hell Zone [APG]RoboCop[CL]
+			//if (CTF2Conditions::TF2_IsPlayerInCondition(engine->IndexOfEdict(pEdict), TFCond_UberchargedHidden))
+			//	// Don't attack MvM bots who are inside spawn.
 			//	return false;
 
-			//if (tf2_conditions->TF2_IsPlayerInCondition(engine->IndexOfEdict(pEdict), TFCond_HalloweenGhostMode)) // Don't attack Ghost Players
+			//if (CTF2Conditions::TF2_IsPlayerInCondition(engine->IndexOfEdict(pEdict), TFCond_HalloweenGhostMode))
+			//	// Don't attack Ghost Players
 			//	return false;
 			
 			if ( m_iClass == TF_CLASS_SPY )	
@@ -7793,7 +7796,9 @@ void CBotTF2 :: sapperDestroyed ( edict_t *pSapper ) const
 
 CBotTF2::CBotTF2() 
 { 
-	CBotFortress(); 
+	CBotFortress();
+	//m_nextVoicecmd();
+	m_iMvMUpdateTime = 0;
 	m_iDesiredResistType = 0;
 	m_pVTable = nullptr;
 	m_fDispenserPlaceTime = 0.0f;

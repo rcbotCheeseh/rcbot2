@@ -34,6 +34,8 @@
 #include "toolframework/itoolentity.h"
 #include <server_class.h>
 
+#include "smsdk_config.h"
+
 static CBotHelper s_bot_helper;
 CBotHelper *bot_helper = &s_bot_helper;
 
@@ -52,7 +54,7 @@ bool CBotHelper::IndexToAThings(int num, CBaseEntity **pEntData, edict_t **pEdic
 		return false;
 	}
 
-	int index = sm_gamehelpers->ReferenceToIndex(num);
+	const int index = sm_gamehelpers->ReferenceToIndex(num);
 	if (index > 0 && index <= sm_players->GetMaxClients())
 	{
 		SourceMod::IGamePlayer *pPlayer = sm_players->GetGamePlayer(index);

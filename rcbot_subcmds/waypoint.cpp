@@ -196,13 +196,13 @@ CBotCommandInline WaypointGiveTypeCommand("givetype", CMD_ACCESS_WAYPOINT, [](CC
 			for ( int i = 0; i < 4; i ++ )
 			{
 				if ( i == 0 )
-					type = (char*)args[0];
+					type = const_cast<char*>(args[0]);
 				else if ( i == 1 )
-					type = (char*)args[1];
+					type = const_cast<char*>(args[1]);
 				else if ( i == 2 )
-					type = (char*)args[2];
+					type = const_cast<char*>(args[2]);
 				else if ( i == 3 )
-					type = (char*)args[3];
+					type = const_cast<char*>(args[3]);
 
 				if ( !type || !*type )
 					break;

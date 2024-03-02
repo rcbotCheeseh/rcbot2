@@ -57,7 +57,7 @@ void CPropertyVarBase::Init(const char *propname, PropType type, int entity)
 #ifdef WIN32 // TO-DO: verify of runtime_error works fine under linux
 		throw std::runtime_error("Initialization failed for PropertyVar!");
 #endif
-		return;
+		//return;
 	}
 
 	m_propname = std::string(propname);
@@ -71,29 +71,29 @@ void CPropertyVarBase::Term()
 	m_initialized = false;
 }
 
-int CPropertyVarInt::Get()
+int CPropertyVarInt::Get() const
 {
-	return entprops->GetEntProp(m_entity.GetEntryIndex(), m_type, m_propname.c_str());
+	return entprops->GetEntProp(m_entity.GetEntryIndex(), m_type, const_cast<char*>(m_propname.c_str()));
 }
 
-bool CPropertyVarBool::Get()
+bool CPropertyVarBool::Get() const
 {
-	return entprops->GetEntPropBool(m_entity.GetEntryIndex(), m_type, m_propname.c_str());
+	return entprops->GetEntPropBool(m_entity.GetEntryIndex(), m_type, const_cast<char*>(m_propname.c_str()));
 }
 
-float CPropertyVarFloat::Get()
+float CPropertyVarFloat::Get() const
 {
-	return entprops->GetEntPropFloat(m_entity.GetEntryIndex(), m_type, m_propname.c_str());
+	return entprops->GetEntPropFloat(m_entity.GetEntryIndex(), m_type, const_cast<char*>(m_propname.c_str()));
 }
 
-Vector CPropertyVarVector::Get()
+Vector CPropertyVarVector::Get() const
 {
-    return entprops->GetEntPropVector(m_entity.GetEntryIndex(), m_type, m_propname.c_str());
+    return entprops->GetEntPropVector(m_entity.GetEntryIndex(), m_type, const_cast<char*>(m_propname.c_str()));
 }
 
-void CPropertyVarVector::Get(Vector &dest)
+void CPropertyVarVector::Get(Vector &dest) const
 {
-	Vector source = entprops->GetEntPropVector(m_entity.GetEntryIndex(), m_type, m_propname.c_str());
+	const Vector source = entprops->GetEntPropVector(m_entity.GetEntryIndex(), m_type, const_cast<char*>(m_propname.c_str()));
 	dest.x = source.x;
 	dest.y = source.y;
 	dest.z = source.z;

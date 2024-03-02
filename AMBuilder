@@ -56,7 +56,7 @@ sourceFiles = [
   "rcbot/logging.cpp",
   "rcbot/helper.cpp",
   "rcbot/entprops.cpp",
-  #"rcbot/propvar.cpp",
+  "rcbot/propvar.cpp",
   "rcbot/math_fix.cpp",
   "rcbot/tf2/conditions.cpp",
 ]

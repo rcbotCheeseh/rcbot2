@@ -206,6 +206,9 @@
     <ClCompile Include="..\..\rcbot\tf2\conditions.cpp">
       <Filter>Source Files\rcbot\tf2</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\rcbot\propvar.cpp">
+      <Filter>Source Files\rcbot</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bot.h">
@@ -381,6 +384,9 @@
     </ClInclude>
     <ClInclude Include="..\..\rcbot\tf2\conditions.h">
       <Filter>Source Files\rcbot\tf2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\rcbot\propvar.h">
+      <Filter>Source Files\rcbot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

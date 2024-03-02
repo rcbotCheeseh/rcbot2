@@ -32,6 +32,7 @@
 #include "bot_plugin_meta.h"
 #include "bot_const.h"
 #include <dt_send.h>
+#include <IGameHelpers.h>
 #include <server_class.h>
 
 enum
@@ -74,12 +75,12 @@ public:
 	bool SetEntDataVector(int entity, int offset, Vector value, bool changeState = false);
 	char *GetEntDataString(int entity, int offset, int maxlen, int *len);
 	bool SetEntDataString(int entity, int offset, char *value, int maxlen, bool changeState = false);
-	int GameRules_GetProp(char *prop, int size = 4, int element = 0);
-	float GameRules_GetPropFloat(char *prop, int element = 0);
-	int GameRules_GetPropEnt(char *prop, int element = 0);
-	Vector GameRules_GetPropVector(char *prop, int element = 0);
-	char *GameRules_GetPropString(char *prop, int *len, int maxlen, int element = 0);
-	RoundState GameRules_GetRoundState();
+	int GameRules_GetProp(char *prop, int size = 4, int element = 0) const;
+	float GameRules_GetPropFloat(char *prop, int element = 0) const;
+	int GameRules_GetPropEnt(char *prop, int element = 0) const;
+	Vector GameRules_GetPropVector(char *prop, int element = 0) const;
+	char *GameRules_GetPropString(char *prop, int *len, int maxlen, int element = 0) const;
+	RoundState GameRules_GetRoundState() const;
 
 private:
 	bool IsNetworkedEntity(CBaseEntity *pEntity);

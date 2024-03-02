@@ -221,6 +221,7 @@
     <ClCompile Include="..\..\rcbot\helper.cpp" />
     <ClCompile Include="..\..\rcbot\logging.cpp" />
     <ClCompile Include="..\..\rcbot\math_fix.cpp" />
+    <ClCompile Include="..\..\rcbot\propvar.cpp" />
     <ClCompile Include="..\..\rcbot\tf2\conditions.cpp" />
     <ClCompile Include="..\..\rcbot_subcmds\config.cpp" />
     <ClCompile Include="..\..\rcbot_subcmds\debug.cpp" />
@@ -283,6 +284,7 @@
     <ClInclude Include="..\..\rcbot\entprops.h" />
     <ClInclude Include="..\..\rcbot\helper.h" />
     <ClInclude Include="..\..\rcbot\logging.h" />
+    <ClInclude Include="..\..\rcbot\propvar.h" />
     <ClInclude Include="..\..\rcbot\tf2\conditions.h" />
     <ClInclude Include="..\..\sm_ext\bot_sm_ext.h" />
     <ClInclude Include="..\..\sm_ext\bot_sm_natives.h" />

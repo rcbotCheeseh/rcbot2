@@ -914,19 +914,20 @@ void CBotGlobals :: botMessage ( edict_t *pEntity, int iErr, const char *fmt, ..
 
 bool CBotGlobals :: makeFolders (const char* szFile)
 {
+	//Should be `const char*` to fix strings [APG]RoboCop[CL]
 #ifndef __linux__
-	char *delimiter = "\\";
+	const char* delimiter = "\\";
 #else
-	char *delimiter = "/";
+	const char* delimiter = "/";
 #endif
 
 	char szFolderName[1024];
-	int folderNameSize = 0;
+	unsigned int folderNameSize = 0;
 	szFolderName[0] = 0;
 
-	const int iLen = std::strlen(szFile);
+	const unsigned int iLen = std::strlen(szFile);
 
-	int i = 0;
+	unsigned int i = 0;
 
 	while ( i < iLen )
 	{

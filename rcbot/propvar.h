@@ -63,26 +63,26 @@ protected:
 class CPropertyVarInt : public CPropertyVarBase
 {
 public:
-	int Get();
+	int Get() const;
 };
 
 class CPropertyVarBool : public CPropertyVarBase
 {
 public:
-	bool Get();
+	bool Get() const;
 };
 
 class CPropertyVarFloat : public CPropertyVarBase
 {
 public:
-	float Get();
+	float Get() const;
 };
 
 class CPropertyVarVector : public CPropertyVarBase
 {
 public:
-	Vector Get();
-	void Get(Vector &dest);
+	Vector Get() const;
+	void Get(Vector &dest) const;
 };
 
 #endif

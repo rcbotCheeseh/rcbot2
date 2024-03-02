@@ -172,7 +172,7 @@ typedef enum
 class CTF2Conditions
 {
 public:
-	bool TF2_IsPlayerInCondition(int client, TFCond cond);
+	static bool TF2_IsPlayerInCondition(int client, TFCond cond);
 };
 
 extern CTF2Conditions *tf2_conditions;

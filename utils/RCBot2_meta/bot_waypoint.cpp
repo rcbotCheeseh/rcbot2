@@ -105,7 +105,7 @@ void CWaypointNavigator :: init ()
 	m_iFailedGoals.clear();
 }
 
-bool CWaypointNavigator :: beliefLoad ( ) 
+bool CWaypointNavigator :: beliefLoad () 
 {
 	unsigned short int filebelief [ CWaypoints::MAX_WAYPOINTS ];
 
@@ -114,9 +114,9 @@ bool CWaypointNavigator :: beliefLoad ( )
 	char mapname[512];
 
 	m_bLoadBelief = false;
-	m_iBeliefTeam = m_pBot->getTeam();
+	m_iBeliefTeam = static_cast<short>(m_pBot->getTeam());
 	
-	std::sprintf(mapname,"%s%d",CBotGlobals::getMapName(),m_iBeliefTeam);
+	snprintf(mapname, sizeof(mapname), "%s%d", CBotGlobals::getMapName(), m_iBeliefTeam);
 
 	CBotGlobals::buildFileName(filename,mapname,BOT_WAYPOINT_FOLDER,"rcb",true);
 
@@ -131,7 +131,7 @@ bool CWaypointNavigator :: beliefLoad ( )
    bfp.seekg(0, std::fstream::end); // seek at end
 
 	const int iSize = bfp.tellg(); // get file size
-	const int iDesiredSize = CWaypoints::numWaypoints() * sizeof(unsigned short int);
+	const int iDesiredSize = static_cast<unsigned>(CWaypoints::numWaypoints()) * sizeof(unsigned short int);
 
    // size not right, return false to re workout table
    if ( iSize != iDesiredSize )
@@ -2244,7 +2244,7 @@ void CWaypoints :: deletePathsFrom ( int iWpt )
 	m_theWaypoints[iWpt].clearPaths();
 }
 
-int CWaypoints :: addWaypoint ( CClient *pClient, const char *type1, const char *type2,const char *type3,const char *type4,  bool bUseTemplate )
+int CWaypoints :: addWaypoint ( CClient *pClient, const char *type1, const char *type2, const char *type3, const char *type4, bool bUseTemplate )
 {
 	int iFlags = 0;
 	int iIndex; // waypoint index
