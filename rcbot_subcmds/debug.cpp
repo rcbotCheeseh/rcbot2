@@ -34,7 +34,7 @@ CBotCommandInline DebugGameEventCommand("gameevent", CMD_ACCESS_DEBUG, [](CClien
 	if (!args[0] || !*args[0]) {
 		return COMMAND_ERROR;
 	}
-	pClient->setDebug(BOT_DEBUG_GAME_EVENT,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_GAME_EVENT,std::atoi(args[0])>0);
 	return COMMAND_ACCESSED;
 }, "usage \"gameevent 1 or 0, 1 on, 0 off\" : shows event output");
 
@@ -99,7 +99,7 @@ CBotCommandInline DebugNavCommand("nav", CMD_ACCESS_DEBUG, [](CClient *pClient, 
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_NAV,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_NAV,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"nav 1 or 0, 1 on, 0 off\" : shows navigation output");
@@ -109,7 +109,7 @@ CBotCommandInline DebugVisCommand("vis", CMD_ACCESS_DEBUG, [](CClient *pClient, 
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_VIS,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_VIS,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"vis 1 or 0, 1 on, 0 off\" : shows bot visibility output");
@@ -119,7 +119,7 @@ CBotCommandInline DebugThinkCommand("think", CMD_ACCESS_DEBUG, [](CClient *pClie
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_THINK,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_THINK,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"think 1 or 0, 1 on, 0 off\" : shows bot thinking output");
@@ -129,7 +129,7 @@ CBotCommandInline DebugLookCommand("look", CMD_ACCESS_DEBUG, [](CClient *pClient
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_LOOK,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_LOOK,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"look 1 or 0, 1 on, 0 off\" : shows bot look output");
@@ -139,7 +139,7 @@ CBotCommandInline DebugHudCommand("hud", CMD_ACCESS_DEBUG, [](CClient *pClient, 
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_HUD,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_HUD,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"hud 1 or 0, 1 on, 0 off\" : displays most important info about bot on the hud");
@@ -149,7 +149,7 @@ CBotCommandInline DebugAimCommand("aim", CMD_ACCESS_DEBUG, [](CClient *pClient, 
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_AIM,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_AIM,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"aim 1 or 0, 1 on, 0 off\" : displays aiming accuracy info on the hud");
@@ -159,7 +159,7 @@ CBotCommandInline DebugChatCommand("chat", CMD_ACCESS_DEBUG, [](CClient *pClient
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_CHAT,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_CHAT,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"chat 1 or 0, 1 on, 0 off\" : displays logs in chat");
@@ -177,7 +177,7 @@ CBotCommandInline BotGoto("bot_goto", CMD_ACCESS_DEBUG, [](CClient *pClient, Bot
 
 			if ( args[0] && *args[0] )
 			{
-				iWpt = atoi(args[0]);
+				iWpt = std::atoi(args[0]);
 
 				if ( (iWpt < 0) || (iWpt >= CWaypoints::numWaypoints()) )
 					iWpt = -1;
@@ -215,7 +215,7 @@ CBotCommandInline DebugTaskCommand("task", CMD_ACCESS_DEBUG, [](CClient *pClient
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_TASK,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_TASK,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"nav 1 or 0, 1 on, 0 off\" : shows navigation output");
@@ -271,20 +271,19 @@ CBotCommandInline BotTaskCommand("givetask", CMD_ACCESS_DEBUG, [](CClient *pClie
 							#if SOURCE_ENGINE == SE_TF2
 								//if ( CClassInterface::getTF2Class() )
 							#else
-							CBotWeapon *pWeapon;
-							CBotWeapons *m_pWeapons;
 							CBotSchedule *snipe = new CBotSchedule();
 							CBotTask *findpath = new CFindPathTask(CWaypoints::getWaypointIndex(pWaypoint));
-							CBotTask *snipetask;
 
-							m_pWeapons = pBot->getWeapons();
-							pWeapon = m_pWeapons->hasWeapon(DOD_WEAPON_K98_SCOPED) ? m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_K98_SCOPED)) : m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_SPRING));
+							CBotWeapons* m_pWeapons = pBot->getWeapons();
+							CBotWeapon* pWeapon = m_pWeapons->hasWeapon(DOD_WEAPON_K98_SCOPED)
+								                      ? m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_K98_SCOPED))
+								                      : m_pWeapons->getWeapon(CWeapons::getWeapon(DOD_WEAPON_SPRING));
 
 							if ( pWeapon )
 							{
 								// linux fix - copy origin onto vector here
-								Vector vOrigin = pWaypoint->getOrigin();
-								snipetask = new CBotDODSnipe(pWeapon,vOrigin,pWaypoint->getAimYaw(),false,0,pWaypoint->getFlags());
+								const Vector vOrigin = pWaypoint->getOrigin();
+								CBotTask* snipetask = new CBotDODSnipe(pWeapon, vOrigin, pWaypoint->getAimYaw(), false, 0, pWaypoint->getFlags());
 
 								findpath->setCompleteInterrupt(CONDITION_PUSH);
 								snipetask->setCompleteInterrupt(CONDITION_PUSH);
@@ -296,7 +295,7 @@ CBotCommandInline BotTaskCommand("givetask", CMD_ACCESS_DEBUG, [](CClient *pClie
 								pSched->add(snipe);
 							}
 							else
-								CBotGlobals::botMessage(NULL,0,"Bot is not a sniper");
+								CBotGlobals::botMessage(nullptr,0,"Bot is not a sniper");
 							#endif
 						}
 						else
@@ -318,7 +317,7 @@ CBotCommandInline DebugButtonsCommand("buttons", CMD_ACCESS_DEBUG, [](CClient *p
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_BUTTONS,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_BUTTONS,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"buttons 1 or 0, 1 on, 0 off\" : shows buttons bitmask");
@@ -328,7 +327,7 @@ CBotCommandInline DebugSpeedCommand("speed", CMD_ACCESS_DEBUG, [](CClient *pClie
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_SPEED,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_SPEED,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"speed 1 or 0, 1 on, 0 off\" : shows speed");
@@ -338,7 +337,7 @@ CBotCommandInline DebugUsercmdCommand("usercmd", CMD_ACCESS_DEBUG, [](CClient *p
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_USERCMD,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_USERCMD,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"usercmd 1 or 0, 1 on, 0 off\" : shows last user command output");
@@ -348,7 +347,7 @@ CBotCommandInline DebugUtilCommand("util", CMD_ACCESS_DEBUG, [](CClient *pClient
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_UTIL,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_UTIL,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"util 1 or 0, 1 on, 0 off\" : shows utility/action output");
@@ -358,7 +357,7 @@ CBotCommandInline DebugProfilingCommand("profiling", CMD_ACCESS_DEBUG, [](CClien
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_PROFILE,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_PROFILE,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"profiling 1 or 0, 1 on, 0 off\" : shows performance profiling");
@@ -368,7 +367,7 @@ CBotCommandInline DebugEdictsCommand("edicts", CMD_ACCESS_DEBUG, [](CClient *pCl
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	pClient->setDebug(BOT_DEBUG_EDICTS,atoi(args[0])>0);
+	pClient->setDebug(BOT_DEBUG_EDICTS,std::atoi(args[0])>0);
 
 	return COMMAND_ACCESSED;
 }, "usage \"edicts 1 or 0, 1 on, 0 off\" : shows allocated/freed edicts");
@@ -450,11 +449,11 @@ CBotCommandInline SetProp("setprop", CMD_ACCESS_DEBUG, [](CClient *pClient, BotC
 							float *floatdata = static_cast<float*>(data);
 
 							if ( strcmp(args[2],"int")==0)
-								*intdata = atoi(args[3]);
+								*intdata = std::atoi(args[3]);
 							else if ( strcmp(args[2],"bool")==0 )
-								*booldata = (atoi(args[3])==1);
+								*booldata = (std::atoi(args[3])==1);
 							else if ( strcmp(args[2],"float")==0 )
-								*floatdata = atof(args[3]);
+								*floatdata = std::atof(args[3]);
 						}
 						else
 							CBotGlobals::botMessage(pPlayer,0,"NULL");
@@ -511,9 +510,8 @@ CBotCommandInline GetProp("getprop", CMD_ACCESS_DEBUG, [](CClient *pClient, BotC
 					{
 						static IServerUnknown *pUnknown;
 						static CBaseEntity *pEntity;
-						Vector vdata;
 
-						pUnknown = (IServerUnknown *)pNearest->GetUnknown();
+						pUnknown = pNearest->GetUnknown();
 					 
 						pEntity = pUnknown->GetBaseEntity();
 
@@ -521,14 +519,14 @@ CBotCommandInline GetProp("getprop", CMD_ACCESS_DEBUG, [](CClient *pClient, BotC
 
 						if ( (args[2] && *args[2]) )
 						{
-							preoffs = atoi(args[2]);	
+							preoffs = std::atoi(args[2]);	
 						}
 
 						data = static_cast<void*>(reinterpret_cast<char*>(pEntity) + m_offset);
 
 						if ( data )
 						{
-							vdata = *(static_cast<Vector*>(data)+preoffs);
+							const Vector vdata = *(static_cast<Vector*>(data) + preoffs);
 	
 							CBotGlobals::botMessage(pPlayer,0,"int = %d, float = %f, bool = %s, Vector = (%0.4f,%0.4f,%0.4f)",*(static_cast<int*>(data) + preoffs),*(static_cast<float*>(data)+preoffs),*(static_cast<bool*>(data)+preoffs) ? ("true"):("false"),vdata.x,vdata.y,vdata.z );
 						}
@@ -650,7 +648,7 @@ CBotCommandInline DebugMemoryScanCommand("memoryscan", CMD_ACCESS_DEBUG, [](CCli
 	else 
 		m_size = 0;
 
-	if ( (m_prev_size != m_size) || ((m_size==0) || !args[3] || !*args[3]) || ( atoi(args[3]) == 0 ) )
+	if ( (m_prev_size != m_size) || ((m_size==0) || !args[3] || !*args[3]) || ( std::atoi(args[3]) == 0 ) )
 	{
 		memset(stored_offsets,0,sizeof(u_MEMSEARCH)*MAX_MEM_SEARCH);
 	}
@@ -669,15 +667,13 @@ CBotCommandInline DebugMemoryScanCommand("memoryscan", CMD_ACCESS_DEBUG, [](CCli
 	CBaseEntity *pent = pEdict->GetUnknown()->GetBaseEntity();
 
 	byte *mempoint = reinterpret_cast<byte*>(pent);
-	const byte value = static_cast<byte>(atoi(args[1]));
-	const int ivalue = (atoi(args[1]));
+	const byte value = static_cast<byte>(std::atoi(args[1]));
+	const int ivalue = (std::atoi(args[1]));
 	const float fvalue = (atof(args[1]));
-
-	bool bfound;
 
 	for ( int i = 0; i < MAX_MEM_SEARCH; i ++ ) // 2KB search
 	{
-		bfound = false;
+		bool bfound = false;
 
 		if ( m_size == MEMSEARCH_BYTE )
 			bfound = (value == *mempoint);
@@ -751,7 +747,7 @@ CBotCommandInline DebugMemoryCheckCommand("memorycheck", CMD_ACCESS_DEBUG, [](CC
 
 	CBaseEntity *pent = pEdict->GetUnknown()->GetBaseEntity();
 
-	const unsigned int offset = atoi(args[1]);
+	const unsigned int offset = std::atoi(args[1]);
 
 	if ( ( strcmp(args[2],"bool") == 0 ) || ( strcmp(args[2],"byte") == 0 ))
 	{

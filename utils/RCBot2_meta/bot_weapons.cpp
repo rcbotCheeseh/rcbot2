@@ -1062,18 +1062,18 @@ CWeapon* CWeapons::getWeaponByShortName(const char* szWeapon)
 
 void CWeapons::eachWeapon(IWeaponFunc* pFunc)
 {
-	for (unsigned int i = 0; i < m_theWeapons.size(); i++)
+	for (const auto& m_theWeapon : m_theWeapons)
 	{
-		pFunc->execute(m_theWeapons[i]);
+		pFunc->execute(m_theWeapon);
 	}
 }
 
 void CWeapons::freeMemory()
 {
-	for (unsigned int i = 0; i < m_theWeapons.size(); i++)
+	for (auto& m_theWeapon : m_theWeapons)
 	{
-		delete m_theWeapons[i];
-		m_theWeapons[i] = nullptr;
+		delete m_theWeapon;
+		m_theWeapon = nullptr;
 	}
 
 	m_theWeapons.clear();

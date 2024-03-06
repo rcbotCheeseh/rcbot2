@@ -34,7 +34,7 @@ CBotCommandInline GameEventVersion("event_version", CMD_ACCESS_CONFIG, [](CClien
 	if ( !args[0] || !*args[0] )
 		return COMMAND_ERROR;
 
-	CBotGlobals::setEventVersion(atoi(args[0]));
+	CBotGlobals::setEventVersion(std::atoi(args[0]));
 	
 	return COMMAND_ACCESSED;
 });
@@ -48,7 +48,7 @@ CBotCommandInline MaxBotsCommand("max_bots", CMD_ACCESS_CONFIG | CMD_ACCESS_DEDI
 
 	if ( args[0] && *args[0] )
 	{
-		int max = atoi(args[0]);
+		int max = std::atoi(args[0]);
 
 		bool err = false;
 		const int min_bots = CBots::getMinBots();
@@ -86,7 +86,7 @@ CBotCommandInline MinBotsCommand("min_bots", CMD_ACCESS_CONFIG | CMD_ACCESS_DEDI
 
 	if ( args[0] && *args[0] )
 	{
-		int min = atoi(args[0]);
+		int min = std::atoi(args[0]);
 		const int max_bots = CBots::getMaxBots();
 
 		bool err = false;

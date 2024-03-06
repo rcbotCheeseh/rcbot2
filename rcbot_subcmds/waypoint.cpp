@@ -71,13 +71,13 @@ CBotCommandInline WaypointDeleteCommand("delete", CMD_ACCESS_WAYPOINT, [](CClien
 				WaypointList pWpt;
 				CWaypointLocations::GetAllInArea(vOrigin,&pWpt,-1);
 
-				for ( unsigned short int i = 0; i < pWpt.size(); i ++ )
+				for (const int i : pWpt)
 				{
-					const CWaypoint *pWaypoint = CWaypoints::getWaypoint(pWpt[i]);
+					const CWaypoint *pWaypoint = CWaypoints::getWaypoint(i);
 
 					if ( pWaypoint->distanceFrom(vOrigin) < radius)
 					{
-						CWaypoints::deleteWaypoint(pWpt[i]);
+						CWaypoints::deleteWaypoint(i);
 						numdeleted++;
 					}
 				}
@@ -261,7 +261,7 @@ CBotCommandInline WaypointDrawTypeCommand("drawtype", CMD_ACCESS_WAYPOINT, [](CC
 	{
 		if ( args[0] && *args[0] )
 		{
-			pClient->setDrawType(atoi(args[0]));
+			pClient->setDrawType(std::atoi(args[0]));
 			return COMMAND_ACCESSED;
 		}
 	}
@@ -309,7 +309,7 @@ CBotCommandInline WaypointSetAreaCommand("setarea", 0, [](CClient *pClient, BotC
 	{
 		CWaypoint *pWpt = CWaypoints::getWaypoint(pClient->currentWaypoint());
 
-		pWpt->setArea(atoi(args[0]));
+		pWpt->setArea(std::atoi(args[0]));
 	}
 	else
 		return COMMAND_ERROR;
@@ -488,11 +488,11 @@ CBotCommandInline WaypointShiftAreas("shiftareas", 0, [](CClient *pClient, BotCo
 		int val = 1;
 
 		if ( args[0] && *args[0] )
-			val = atoi(args[0]);
+			val = std::atoi(args[0]);
 
 		if ( args[1] && *args[1] )
 		{
-			const int newarea = atoi(args[1]);
+			const int newarea = std::atoi(args[1]);
 
 			if ( pClient )
 			{
@@ -513,11 +513,10 @@ CBotCommandInline WaypointTeleportCommand("teleport", 0, [](CClient *pClient, Bo
 {
 	if ( pClient && args[0] && *args[0] )
 	{
-		int id;
 		CWaypoint *pWpt;
 		bool bTele = false;
 
-		id = atoi(args[0]);
+		const int id = std::atoi(args[0]);
 
 		if ( (pWpt=CWaypoints::getWaypoint(id)) != nullptr)
 		{
@@ -547,12 +546,11 @@ CBotCommandInline WaypointAreaSetToNearest("setareatonearest", 0, [](CClient *pC
 {
 	if ( pClient )
 	{
-		int id;
 		CWaypoint *pWpt;
 		bool bOk = false;
 		int setarea = 0;
 
-		id = pClient->currentWaypoint();
+		const int id = pClient->currentWaypoint();
 
 		if ( (pWpt=CWaypoints::getWaypoint(id)) != nullptr)
 		{
@@ -593,7 +591,7 @@ CBotCommandInline WaypointShowCommand("show", 0, [](CClient *pClient, BotCommand
 {
 	if ( pClient )
 	{
-		const int wpt = atoi(args[0]);
+		const int wpt = std::atoi(args[0]);
 		CWaypoint *pwpt = CWaypoints::getWaypoint(wpt);
 
 		if ( pwpt )
@@ -666,8 +664,9 @@ CBotCommandInline WaypointAutoWaypointCommand("autowaypoint", CMD_ACCESS_WAYPOIN
 {
 	if ( pClient )
 	{
-		pClient->setAutoWaypointMode(atoi(args[0])>0,atoi(args[0])==2);
-		CBotGlobals::botMessage(pClient->getPlayer(),0,"Autowaypointing Mode %s, Debug %s",(atoi(args[0])>0)?"ON":"OFF",(atoi(args[0])==2)?"ON":"OFF");
+		const int temp = std::atoi(args[0]);
+		pClient->setAutoWaypointMode(temp > 0, temp == 2);
+		CBotGlobals::botMessage(pClient->getPlayer(), 0, "Autowaypointing Mode %s, Debug %s", (temp > 0) ? "ON" : "OFF", (temp == 2) ? "ON" : "OFF");
 	}
 	return COMMAND_ACCESSED;
 });
@@ -678,7 +677,7 @@ CBotCommandInline WaypointAutoFix("autofix", 0, [](CClient *pClient, BotCommandA
 
 	if ( args[0] && *args[0] )
 	{
-		bFixSentry_Sniper_Defend_TeleExtWpts = ( atoi(args[0]) == 1 );
+		bFixSentry_Sniper_Defend_TeleExtWpts = ( std::atoi(args[0]) == 1 );
 	}
 
 	CWaypoints::autoFix(bFixSentry_Sniper_Defend_TeleExtWpts);

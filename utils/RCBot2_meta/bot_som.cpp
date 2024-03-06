@@ -67,13 +67,13 @@ CSomNeuron *CSom :: getBMU (const std::vector<float>* inputs) const
 	CSomNeuron *winner = nullptr;
 	float bestdistance = 0;
 
-	for ( unsigned int i = 0; i < m_Neurons.size(); i ++ )
+	for (const auto m_Neuron : m_Neurons)
 	{
-		const float dist = m_Neurons[i]->distance(inputs);
+		const float dist = m_Neuron->distance(inputs);
 
 		if ( !winner || dist < bestdistance )
 		{
-			winner = m_Neurons[i];
+			winner = m_Neuron;
 			bestdistance = dist;
 		}
 	}
@@ -86,10 +86,8 @@ void CSom :: updateAround (const std::vector<float>* inputs, CSomNeuron* bmu) co
 	float dist;
 	const float nsiz = m_fNSize*m_fNSize;
 
-	for ( unsigned int i = 0; i < m_Neurons.size(); i ++ )
+	for (const auto current : m_Neurons)
 	{
-		CSomNeuron *current = m_Neurons[i];
-
 		if ( (dist = bmu->neighbourDistance(current)) <= nsiz )
 		{
 			bmu->update(inputs,std::exp(-dist / (2*nsiz)));    
@@ -114,9 +112,9 @@ void CSom::input(std::vector<std::vector<float>>* inputs, int epochs)// Experime
 {
 	for (int i = 0; i < epochs; i++)
 	{
-		for (unsigned int j = 0; j < inputs->size(); j++)
+		for (auto& input : *inputs)
 		{
-			inputOne(&(*inputs)[j]);
+			inputOne(&input);
 		}
 	}
 }
@@ -130,10 +128,10 @@ void CSom :: display () const
 {
 	//printf("\nDisplaying...\n");
 
-	for ( unsigned int i = 0; i < m_Neurons.size(); i ++ )
+	for (const auto m_Neuron : m_Neurons)
 	{
 		//printf("%d -- ",i);
-		m_Neurons[i]->displayWeights();
+		m_Neuron->displayWeights();
 		//printf("\n");
 	}
 }
@@ -192,9 +190,9 @@ std::vector <float> *CSomNeuron :: weights ()
 
 void CSomNeuron :: displayWeights () const
 {
-	for ( unsigned int i = 0; i < fWeights.size(); i ++ )
+	for (const float fWeight : fWeights)
 	{
-		std::printf("%0.4f,",fWeights[i]);
+		std::printf("%0.4f,", fWeight);
 	}
 }
 

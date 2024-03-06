@@ -187,7 +187,7 @@ void CBotSubcommands::printCommand(edict_t *pPrintTo, int indent)
 {
 	if ( indent )
 	{
-		const int maxIndent = 64;
+		constexpr int maxIndent = 64;
 		char szIndent[maxIndent];
 
 		int i;
@@ -203,9 +203,9 @@ void CBotSubcommands::printCommand(edict_t *pPrintTo, int indent)
 	else
 		CBotGlobals::botMessage(pPrintTo,0,"[%s]",m_szCommand);
 
-	for ( unsigned int i = 0; i < m_theCommands.size(); i ++ )
+	for (const auto& m_theCommand : m_theCommands)
 	{
-		m_theCommands[i]->printCommand(pPrintTo,indent+1);
+		m_theCommand->printCommand(pPrintTo,indent+1);
 	}
 }
 
@@ -235,7 +235,7 @@ void CBotCommand :: printCommand ( edict_t *pPrintTo, int indent )
 {
 	if ( indent )
 	{
-		const int maxIndent = 64;
+		constexpr int maxIndent = 64;
 		char szIndent[maxIndent];
 		int i;
 

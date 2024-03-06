@@ -339,6 +339,7 @@ void CBotTF2GetHealthSched :: init ()
 {
 	setID(SCHED_TF2_GET_HEALTH);
 }
+
 ///////////////////////////////////////
 
 CBotTF2GetAmmoSched :: CBotTF2GetAmmoSched (const Vector& vOrigin)
@@ -374,6 +375,7 @@ void CBotTF2GetFlagSched :: init ()
 {
 	setID(SCHED_TF2_GET_FLAG);
 }
+
 ///////////////////////////////////////////
 CBotUseTeleSched :: CBotUseTeleSched ( edict_t *pTele )
 {
@@ -385,6 +387,7 @@ void CBotUseTeleSched :: init ()
 {
 	setID(SCHED_USE_TELE);
 }
+
 //////////////////////////////////////////
 
 CBotUseDispSched :: CBotUseDispSched ( CBot *pBot, edict_t *pDisp )//, bool bNest )
@@ -406,7 +409,6 @@ void CBotUseDispSched :: init ()
 	setID(SCHED_USE_DISPENSER);
 }
 
-
 ////////////////////////////////////////////
 void CBotSpySapBuildingSched :: init ()
 {
@@ -427,7 +429,7 @@ CBotTauntSchedule :: CBotTauntSchedule ( edict_t *pPlayer, float fYaw )
 {
 	const QAngle angles = QAngle(0,fYaw,0);
 	Vector forward;
-	const float fTauntDist = 40.0f;
+	constexpr float fTauntDist = 40.0f;
 
 	m_pPlayer = pPlayer;
 	m_fYaw = 180 - fYaw;
@@ -516,6 +518,7 @@ void CBotGotoOriginSched :: init ()
 {
 	setID(SCHED_GOTO_ORIGIN);
 }
+
 ///////////////////////////////////////
 CBotDefendSched ::CBotDefendSched (const Vector& vOrigin, float fMaxTime)
 {

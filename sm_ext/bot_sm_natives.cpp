@@ -139,16 +139,12 @@ int* GetIntProperty(CBotProfile* profile, RCBotProfileVar profileVar) {
 			return &profile->m_iVisionTicks;
 		case RCBotProfile_iPathTicks:
 			return &profile->m_iPathTicks;
+		case RCBotProfile_iClass:
+			return &profile->m_iClass;
 		case RCBotProfile_iVisionTicksClients:
 			return &profile->m_iVisionTicksClients;
 		case RCBotProfile_iSensitivity:
 			return &profile->m_iSensitivity;
-		/*case RCBotProfile_fBraveness:
-			break;
-		case RCBotProfile_fAimSkill:
-			break;
-		case RCBotProfile_iClass:
-			break;*/
 	}
 	return nullptr;
 }
@@ -159,16 +155,6 @@ float* GetFloatProperty(CBotProfile* profile, RCBotProfileVar profileVar) {
 			return &profile->m_fBraveness;
 		case RCBotProfile_fAimSkill:
 			return &profile->m_fAimSkill;
-		/*case RCBotProfile_iVisionTicks:
-			break;
-		case RCBotProfile_iPathTicks:
-			break;
-		case RCBotProfile_iVisionTicksClients:
-			break;
-		case RCBotProfile_iSensitivity:
-			break;
-		case RCBotProfile_iClass:
-			break;*/
 	}
 	return nullptr;
 }

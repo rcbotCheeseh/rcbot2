@@ -87,9 +87,9 @@ public:
 
 	void freeMemory ()
 	{
-		for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
+		for (const auto& m_theButton : m_theButtons)
 		{			
-			delete m_theButtons[i];
+			delete m_theButton;
 		}
 		
 		m_theButtons.clear();

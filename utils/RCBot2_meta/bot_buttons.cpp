@@ -73,11 +73,11 @@ CBotButtons :: CBotButtons()
 
 void CBotButtons :: holdButton ( int iButtonId, float fFrom, float fFor, float fLetGoTime ) const
 {
-	for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
+	for (const auto m_theButton : m_theButtons)
 	{			
-		if ( m_theButtons[i]->getID() == iButtonId )
+		if (m_theButton->getID() == iButtonId )
 		{
-			m_theButtons[i]->hold(fFrom,fFor,fLetGoTime);
+			m_theButton->hold(fFrom,fFor,fLetGoTime);
 			return;
 		}
 	}
@@ -85,11 +85,11 @@ void CBotButtons :: holdButton ( int iButtonId, float fFrom, float fFor, float f
 
 void CBotButtons :: letGo (int iButtonId) const
 {
-	for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
+	for (const auto m_theButton : m_theButtons)
 	{			
-		if ( m_theButtons[i]->getID() == iButtonId )
+		if (m_theButton->getID() == iButtonId )
 		{
-			m_theButtons[i]->letGo();
+			m_theButton->letGo();
 			return;
 		}
 	}
@@ -103,12 +103,12 @@ int CBotButtons :: getBitMask () const
 
 	const float fTime = engine->Time();
 
-	for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
+	for (const auto m_theButton : m_theButtons)
 	{
-		if ( m_theButtons[i]->held(fTime) )
+		if (m_theButton->held(fTime) )
 		{
-			m_theButtons[i]->unTap();
-			iBitMask |= m_theButtons[i]->getID();
+			m_theButton->unTap();
+			iBitMask |= m_theButton->getID();
 		}
 	}
 
@@ -117,10 +117,10 @@ int CBotButtons :: getBitMask () const
 
 bool CBotButtons :: canPressButton ( int iButtonId ) const
 {
-	for (unsigned int i = 0; i < m_theButtons.size(); i ++ )
+	for (const auto m_theButton : m_theButtons)
 	{			
-		if ( m_theButtons[i]->getID() == iButtonId )
-			return m_theButtons[i]->canPress(engine->Time());
+		if (m_theButton->getID() == iButtonId )
+			return m_theButton->canPress(engine->Time());
 	}
 	return false;		
 }
@@ -132,10 +132,10 @@ void CBotButtons :: add ( CBotButton *theButton )
 
 bool CBotButtons :: holdingButton ( int iButtonId ) const
 {
-	for ( unsigned int i = 0; i < m_theButtons.size(); i ++ )
+	for (const auto m_theButton : m_theButtons)
 	{
-		if ( m_theButtons[i]->getID() == iButtonId )
-			return m_theButtons[i]->held(engine->Time());
+		if (m_theButton->getID() == iButtonId )
+			return m_theButton->held(engine->Time());
 	}
 
 	return false;
@@ -143,11 +143,11 @@ bool CBotButtons :: holdingButton ( int iButtonId ) const
 
 void CBotButtons :: tap ( int iButtonId ) const
 {
-	for ( unsigned int i = 0; i < m_theButtons.size(); i ++ )
+	for (const auto m_theButton : m_theButtons)
 	{
-		if ( m_theButtons[i]->getID() == iButtonId )
+		if (m_theButton->getID() == iButtonId )
 		{
-			 m_theButtons[i]->tap();
+			m_theButton->tap();
 
 			return;
 		}

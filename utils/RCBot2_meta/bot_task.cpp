@@ -2157,26 +2157,26 @@ void CFindPathTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 				pBot->getNavigator()->failMove();
 			}
 
-			if ( m_pEdict )
+			if (m_pEdict)
 			{
-				if ( CBotGlobals::entityIsValid(m_pEdict) )
+				if (CBotGlobals::entityIsValid(m_pEdict))
 				{
 					pBot->lookAtEdict(m_pEdict);
 
-					if ( m_flags.bits.m_bCompleteInRangeOfEdict && m_flags.bits.m_bCompleteSeeTaskEdict )
+					if (m_flags.bits.m_bCompleteInRangeOfEdict && m_flags.bits.m_bCompleteSeeTaskEdict)
 					{
 						// complete if inrange AND see edict
-						if ( m_flags.bits.m_bCompleteInRangeOfEdict && pBot->distanceFrom(m_pEdict)<m_fRange && pBot->isVisible(m_pEdict) )
+						if (pBot->distanceFrom(m_pEdict) < m_fRange && pBot->isVisible(m_pEdict))
 							complete();
 					}
-					else if ( !m_flags.bits.m_bDontGoToEdict && pBot->isVisible(m_pEdict) )
+					else if (!m_flags.bits.m_bDontGoToEdict && pBot->isVisible(m_pEdict))
 					{
-						if ( pBot->distanceFrom(m_pEdict) < pBot->distanceFrom(pBot->getNavigator()->getNextPoint()) )
+						if (pBot->distanceFrom(m_pEdict) < pBot->distanceFrom(pBot->getNavigator()->getNextPoint()))
 							complete();
-					} 
-					else if ( m_flags.bits.m_bCompleteOutOfRangeEdict && pBot->distanceFrom(m_pEdict)>m_fRange )
+					}
+					else if (m_flags.bits.m_bCompleteOutOfRangeEdict && pBot->distanceFrom(m_pEdict) > m_fRange)
 						complete();
-					else if ( m_flags.bits.m_bCompleteInRangeOfEdict && pBot->distanceFrom(m_pEdict)<m_fRange)
+					else if (m_flags.bits.m_bCompleteInRangeOfEdict && pBot->distanceFrom(m_pEdict) < m_fRange)
 						complete();
 				}
 				else
@@ -3591,7 +3591,7 @@ void CBotTFUseTeleporter :: execute (CBot *pBot,CBotSchedule *pSchedule)
 
 void CBotTFUseTeleporter :: debugString ( char *string )
 {
-	std::sprintf(string,"CBotTFUseTeleporter\nm_pTele = %x",reinterpret_cast<int>(m_pTele.get()));
+	std::sprintf(string, "CBotTFUseTeleporter\nm_pTele = %p", m_pTele.get());
 }
 
 ///////////////////////////////////////////////////
@@ -4334,13 +4334,13 @@ void CCrouchHideTask :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 		complete();
 
 }
+
 ////////////////////////////////////////////////////////
 CHideTask :: CHideTask(const Vector& vHideFrom )
 {
 	m_fHideTime = 0.0f;
 	m_vHideFrom = vHideFrom;
 }
-
 
 void CHideTask :: debugString ( char *string )
 {
@@ -4913,11 +4913,15 @@ void CBotTF2Spam :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		return;
 	}
 
-
 	if ( m_fTime == 0.0f )
 	{
-		if ( m_pWeapon->getID() == TF2_WEAPON_GRENADELAUNCHER )
+		if ( m_pWeapon->getID() == TF2_WEAPON_GRENADELAUNCHER ) // Triggers crash [APG]RoboCop[CL]
 		{
+			//Stability fix? [APG]RoboCop[CL]
+			if (pSchedule == nullptr) {
+				// Handle the error
+				return;
+			}
 			const Vector vVisibleWaypoint = pSchedule->passedVector();
 
 			if ( vVisibleWaypoint.z > m_vTarget.z + 32.0f ) // need to lob grenade
@@ -4970,7 +4974,6 @@ void CBotTF2Spam :: execute (CBot *pBot,CBotSchedule *pSchedule)
 		pBot->primaryAttack();
 		m_fNextAttack = engine->Time() + randomFloat(0.2f,1.0f); 
 	}
-		
 }
 
 ///////////
@@ -5676,9 +5679,11 @@ void CBotSynBreakICrateTask::execute(CBot *pBot, CBotSchedule *pSchedule)
 	pBot->setMoveLookPriority(MOVELOOK_TASK);
 
 	// Attack
-	if(pBot->getCurrentWeapon()->isGravGun())
+	const auto currentWeapon = pBot->getCurrentWeapon();
+
+	if (currentWeapon && currentWeapon->isGravGun())
 	{
-		if(CClassInterface::gravityGunObject(CClassInterface::getCurrentWeapon(pBot->getEdict())) != nullptr)
+		if (CClassInterface::gravityGunObject(CClassInterface::getCurrentWeapon(pBot->getEdict())) != nullptr)
 		{
 			pBot->primaryAttack();
 		}

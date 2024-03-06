@@ -85,7 +85,7 @@ extern IPlayerInfoManager *playerinfomanager;  // game dll interface to interact
 extern IServerPluginHelpers *helpers;  // special 3rd party plugin helpers from the engine
 extern IServerGameClients* gameclients;
 extern IEngineTrace *enginetrace;
-extern IEffects *g_pEffects;
+extern IEffects *g_pEffects; //Redundant? [APG]RoboCopCL]
 extern IBotManager *g_pBotManager;
 extern CGlobalVars *gpGlobals;
 

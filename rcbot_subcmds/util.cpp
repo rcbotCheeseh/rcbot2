@@ -82,7 +82,7 @@ CBotCommandInline TeleportUtilCommand("teleport", CMD_ACCESS_UTIL, [](CClient *p
 {
 	if ( pClient )
 	{
-		Vector* vTeleport = pClient->getTeleportVector();
+		const Vector* vTeleport = pClient->getTeleportVector();
 
 		if ( vTeleport != nullptr)
 		{

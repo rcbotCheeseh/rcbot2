@@ -464,20 +464,21 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	irand.seed( static_cast<unsigned>(time(nullptr)) );
 
 	// Find the RCBOT2 Path from metamod VDF
-	extern IFileSystem *filesystem;
-	KeyValues *mainkv = new KeyValues("metamodplugin");
-	
-	const char *rcbot2path; //Unused? [APG]RoboCop[CL]
-	logger->Log(LogLevel::INFO, "Reading rcbot2 path from VDF...");
-	
-	mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD");
-	
-	mainkv = mainkv->FindKey("Metamod Plugin");
+	extern IFileSystem* filesystem;
+	KeyValues* mainkv = new KeyValues("metamodplugin");
 
-	if (mainkv)
-		rcbot2path = mainkv->GetString("rcbot2path", "\0");
+	const char* rcbot2path; //Unused? [APG]RoboCop[CL]
+	logger->Log(LogLevel::INFO, "Reading rcbot2 path from VDF...");
+
+	mainkv->LoadFromFile(filesystem, "addons/metamod/rcbot2.vdf", "MOD");
+	KeyValues* temp = mainkv->FindKey("Metamod Plugin");
+
+	if (temp)
+		rcbot2path = temp->GetString("rcbot2path", "\0");
 
 	mainkv->deleteThis(); //mainkv possible redundant? [APG]RoboCop[CL]
+	mainkv = temp; // Memory leak fix [APG]RoboCop[CL]
+
 	//eventListener2 = new CRCBotEventListener();
 
 	// Initialize bot variables

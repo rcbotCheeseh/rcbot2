@@ -76,7 +76,7 @@ void CWaypointLocations :: getMinMaxs ( int iLoc, int jLoc, int kLoc,
 										int *iMinLoci, int *iMinLocj, int *iMinLock,
 										int *iMaxLoci, int *iMaxLocj, int *iMaxLock )
 {
-	static const int iMaxLoc = MAX_WPT_BUCKETS-1;
+	static constexpr int iMaxLoc = MAX_WPT_BUCKETS-1;
 
 	// get current area
 	*iMinLoci = iLoc-1;

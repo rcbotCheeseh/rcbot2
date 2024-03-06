@@ -420,10 +420,10 @@ private:
 class CWaypoints
 {
 public:
-	static const int MAX_WAYPOINTS = 1024;
-	static const int WAYPOINT_VERSION = 4; // waypoint version 4 add author information
+	static constexpr int MAX_WAYPOINTS = 1024;
+	static constexpr int WAYPOINT_VERSION = 4; // waypoint version 4 add author information
 
-	static const int W_FILE_FL_VISIBILITY = 1;
+	static constexpr int W_FILE_FL_VISIBILITY = 1;
 
 	static void init (const char *pszAuthor = nullptr, const char *pszModifiedBy = nullptr);
 

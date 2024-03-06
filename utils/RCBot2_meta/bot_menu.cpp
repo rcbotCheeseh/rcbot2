@@ -509,10 +509,8 @@ void CBotMenuItem::freeMemory()
 
 void CBotMenu::freeMemory()
 {
-	for (unsigned int i = 0; i < m_MenuItems.size(); i++)
+	for (const auto temp : m_MenuItems)
 	{
-		CBotMenuItem* temp = m_MenuItems[i];
-
 		temp->freeMemory();
 
 		delete temp;

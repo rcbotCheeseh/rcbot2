@@ -523,7 +523,7 @@ bool CCSSBot::handleAttack(CBotWeapon *pWeapon, edict_t *pEnemy)
 
 float CCSSBot::getNextAttackDelay()
 {
-	static const float max = 4096.0f;
+	static constexpr float max = 4096.0f;
 	static float dist;
 	static float delay;
 	delay = 0.050f; // Base delay
@@ -934,7 +934,6 @@ bool CCSSBot::executeAction(eBotAction iAction)
 		case BOT_UTIL_GET_HOSTAGE:
 		{
 			// Select a random hostage to rescue
-			CWaypoint* pRoute;
 			CBotSchedule* pSched = new CBotSchedule();
 			edict_t* pHostage = CCounterStrikeSourceMod::getRandomHostage();
 			pSched->setID(SCHED_GOTONEST);
@@ -942,7 +941,7 @@ bool CCSSBot::executeAction(eBotAction iAction)
 			if (pHostage)
 			{
 				const Vector vHostage = CBotGlobals::entityOrigin(pHostage);
-				pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), vHostage, getTeam(), 0);
+				CWaypoint* pRoute = CWaypoints::randomRouteWaypoint(this, getOrigin(), vHostage, getTeam(), 0);
 				if((m_fUseRouteTime <= engine->Time()))
 				{
 					if(pRoute)
@@ -1072,10 +1071,10 @@ bool CCSSBot::IsLeadingHostage()
 	if(getTeam() != CS_TEAM_COUNTERTERRORIST)
 		return false;
 
-	if(hostages.size() == 0)
+	if(hostages.empty())
 		return false;
 
-	for(CBaseHandle i : hostages)
+	for(const CBaseHandle& i : hostages)
 	{
 		edict_t *pHostage = INDEXENT(i.GetEntryIndex());
 

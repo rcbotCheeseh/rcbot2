@@ -182,9 +182,9 @@ void CBotUtilities::execute()
 {
 	m_pBest.head = nullptr;
 
-	for (unsigned int i = 0; i < m_Utilities.size(); i++)
+	for (auto& m_Utility : m_Utilities)
 	{
-		CBotUtility* pUtil = &m_Utilities[i];
+		CBotUtility* pUtil = &m_Utility;
 		const float fUtil = pUtil->getUtility();
 
 		// if bot can do this action

@@ -69,10 +69,8 @@ char *CStrings :: getString ( const char *szString )
 
 	const unsigned short int iHash = szString[0]%MAX_STRINGS_HASH;
 	
-	for ( unsigned int i = 0; i < m_Strings[iHash].size(); i ++ )
+	for (const auto szCompString : m_Strings[iHash])
 	{
-		char *szCompString = m_Strings[iHash][i];
-
 		// check if pointers match first
 		if ( szCompString == szString )
 			return szCompString;

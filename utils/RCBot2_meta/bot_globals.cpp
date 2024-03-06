@@ -79,6 +79,8 @@ extern IVDebugOverlay *debugoverlay;
 class CTraceFilterVis : public CTraceFilter
 {
 public:
+	virtual ~CTraceFilterVis() = default;
+
 	CTraceFilterVis(edict_t *pPlayer, edict_t *pHit = nullptr)
 	{
 		m_pPlayer = pPlayer;
@@ -260,14 +262,13 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 // find a player by a truncated name "name".
 // e.g. name = "Jo" might find a player called "John"
 {
+	const unsigned int length = std::strlen(name);
 	for( int i = 1; i <= maxClients(); i ++ )
 	{
 		edict_t* pent = INDEXENT(i);
 
 		if( pent && CBotGlobals::isNetworkable(pent) )
 		{
-			const int length = std::strlen(name);						 
-
 			char arg_lwr[128];
 			char pent_lwr[128];
 
@@ -280,8 +281,8 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 
 			std::strcpy(pent_lwr,pInfo->GetName());
 
-			__strlow(arg_lwr);
-			__strlow(pent_lwr);
+			__strlow(arg_lwr)
+			__strlow(pent_lwr)
 
 			if( std::strncmp( arg_lwr,pent_lwr,length) == 0 )
 			{
@@ -296,6 +297,8 @@ edict_t *CBotGlobals :: findPlayerByTruncName ( const char *name )
 class CTraceFilterHitAllExceptPlayers : public CTraceFilter
 {
 public:
+	virtual ~CTraceFilterHitAllExceptPlayers() = default;
+
 	bool ShouldHitEntity( IHandleEntity *pServerEntity, int contentsMask ) override
 	{ 
 		return pServerEntity->GetRefEHandle().GetEntryIndex() <= gpGlobals->maxClients; 
@@ -308,6 +311,8 @@ public:
 class CTraceFilterSimple : public CTraceFilter
 {
 public:
+	virtual ~CTraceFilterSimple() = default;
+
 	CTraceFilterSimple( const IHandleEntity *passentity1, const IHandleEntity *passentity2, int collisionGroup )
 	{
 		m_pPassEnt1 = passentity1;
@@ -483,8 +488,8 @@ bool CBotGlobals::initModFolder() {
 	char szGameFolder[512];
 	engine->GetGameDir(szGameFolder, 512);
 
-	const int iLength = std::strlen(CStrings::getString(szGameFolder));
-	int pos = iLength - 1;
+	const unsigned int iLength = std::strlen(CStrings::getString(szGameFolder));
+	unsigned int pos = iLength - 1;
 
 	while (pos > 0 && szGameFolder[pos] != '\\' && szGameFolder[pos] != '/') {
 		pos--;
@@ -884,15 +889,15 @@ void CBotGlobals :: botMessage ( edict_t *pEntity, int iErr, const char *fmt, ..
 	va_end (argptr); 
 
 	const char *bot_tag = BOT_TAG;
-	const int len = std::strlen(string);
-	const int taglen = std::strlen(BOT_TAG);
+	const unsigned int len = std::strlen(string);
+	const unsigned int taglen = std::strlen(BOT_TAG);
 	// add tag -- push tag into string
-	for ( int i = len + taglen; i >= taglen; i -- )
+	for ( unsigned int i = len + taglen; i >= taglen; i -- )
 		string[i] = string[i-taglen];
 
 	string[len+taglen+1] = 0;
 
-	for ( int i = 0; i < taglen; i ++ )
+	for ( unsigned int i = 0; i < taglen; i ++ )
 		string[i] = bot_tag[i];
 
 	std::strcat(string,"\n");

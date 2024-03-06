@@ -474,7 +474,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 	case TF_CLASS_SOLDIER:
 	case TF_CLASS_PYRO:
 		{
-			bHeavyClass = true;
+			bHeavyClass = true; //Unused? [APG]RoboCop[CL]
 
 			fFactor += 1.0f;
 
@@ -502,6 +502,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 			if ( CTeamFortress2Mod::TF2_IsPlayerCloaked(pPlayer) )
 				return 0.0f;
 		}
+		break;
 	default:
 
 		if ( !bHeavyClass && pMedigun ) // add more factor bassed on uber charge level - bot can gain more uber charge
@@ -538,7 +539,7 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 		if ( iHighestScore == 0 )
 			iHighestScore = 1;
 
-		fFactor += (static_cast<float>(CClassInterface::getTF2Score(pPlayer))/iHighestScore)/2;
+		fFactor += (static_cast<float>(CClassInterface::getTF2Score(pPlayer)/iHighestScore))/2;
 
 		if ( (fLastCalledMedic = m_fCallMedicTime[ENTINDEX(pPlayer)-1]) > 0 )
 			fFactor += MAX(0.0f,1.0f-((engine->Time() - fLastCalledMedic)/5));
@@ -936,9 +937,9 @@ void CBotFortress :: detectedAsSpy( edict_t *pDetector, bool bDisguiseComprimise
 		else
 			m_fClassDisguiseTime [m_iDisguiseClass] = (m_fClassDisguiseTime [m_iDisguiseClass] * 0.5f) + (fTime * 0.5f);
 
-		for ( unsigned short int i = 0; i < 10; i ++ )
+		for (const float i : m_fClassDisguiseTime)
 		{
-			fTotal += m_fClassDisguiseTime[i];
+			fTotal += i;
 		}
 		
 		for ( unsigned short int i = 0; i < 10; i ++ )
@@ -4926,13 +4927,21 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	{
 		if ( iTeam == TF2_TEAM_BLUE )
 		{
-			ADD_UTILITY(BOT_UTIL_DEFEND_PAYLOAD_BOMB,((m_iClass!=TF_CLASS_SPY)||!isDisguised()) && (m_pDefendPayloadBomb!=NULL),fDefendFlagUtility+randomFloat(-0.1,0.2));
-			ADD_UTILITY(BOT_UTIL_PUSH_PAYLOAD_BOMB,((m_iClass!=TF_CLASS_SPY)||!isDisguised()) && (m_pPushPayloadBomb!=NULL),fGetFlagUtility+randomFloat(-0.1,0.2));
+			ADD_UTILITY(BOT_UTIL_DEFEND_PAYLOAD_BOMB,
+			            ((m_iClass!=TF_CLASS_SPY)||!isDisguised()) && (m_pDefendPayloadBomb!=NULL),
+			            fDefendFlagUtility+randomFloat(-0.1f,0.2f))
+			ADD_UTILITY(BOT_UTIL_PUSH_PAYLOAD_BOMB,
+			            ((m_iClass!=TF_CLASS_SPY)||!isDisguised()) && (m_pPushPayloadBomb!=NULL),
+			            fGetFlagUtility+randomFloat(-0.1f,0.2f))
 		}
 		else
 		{
-			ADD_UTILITY(BOT_UTIL_DEFEND_PAYLOAD_BOMB,((m_iClass!=TF_CLASS_SPY)||!isDisguised()) && (m_pDefendPayloadBomb!=NULL),fDefendFlagUtility+randomFloat(-0.1,0.2));
-			ADD_UTILITY(BOT_UTIL_PUSH_PAYLOAD_BOMB,((m_iClass!=TF_CLASS_SPY)||!isDisguised()) && (m_pPushPayloadBomb!=NULL),fGetFlagUtility+randomFloat(-0.1,0.2));
+			ADD_UTILITY(BOT_UTIL_DEFEND_PAYLOAD_BOMB,
+			            ((m_iClass!=TF_CLASS_SPY)||!isDisguised()) && (m_pDefendPayloadBomb!=NULL),
+			            fDefendFlagUtility+randomFloat(-0.1f,0.2f))
+			ADD_UTILITY(BOT_UTIL_PUSH_PAYLOAD_BOMB,
+			            ((m_iClass!=TF_CLASS_SPY)||!isDisguised()) && (m_pPushPayloadBomb!=NULL),
+			            fGetFlagUtility+randomFloat(-0.1f,0.2f))
 		}
 	}
 	else if ( CTeamFortress2Mod::isMapType(TF_MAP_CART) )
@@ -5422,7 +5431,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 				{
 					if ( m_pDefendPayloadBomb != nullptr)
 					{
-						static const float fSearchDist = 1500.0f;
+						static constexpr float fSearchDist = 1500.0f;
 						Vector vPayloadBomb = CBotGlobals::entityOrigin(m_pDefendPayloadBomb);
 						CWaypoint* pCapturePoint = CWaypoints::getWaypoint(
 							CWaypointLocations::NearestWaypoint(vPayloadBomb, fSearchDist, -1, false, false, true, nullptr,
@@ -5504,6 +5513,9 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 
 									newSched->addTask(path);
 									newSched->addTask(spam);
+
+									// Ensure newSched is deleted before function exits [APG]RoboCopCL]
+									delete newSched;
 									return true;
 								}
 								delete spam;

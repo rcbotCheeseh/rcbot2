@@ -1086,9 +1086,9 @@ void CDODBot :: chooseClass ( bool bIsChangingClass )
 		fClassFitness[DOD_CLASS_MACHINEGUNNER] *= 0.8f;
 		fClassFitness[DOD_CLASS_ROCKET] *= 0.5f;
 
-		for (int i = 0; i < 6; i++)
+		for (float& fClassFitnes : fClassFitness)
 		{
-			fClassFitness[i] = 1.0f;
+			fClassFitnes = 1.0f;
 		}
 
 		if (bIsChangingClass && ((m_iClass >= 0) && (m_iClass < 6)))

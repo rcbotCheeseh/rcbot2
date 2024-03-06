@@ -49,7 +49,7 @@ public:
 	/// @param entity Entity index to read the property from.
 	virtual void Init(const char* propname, PropType type, int entity);
 	/// @brief Checks if the property is initialized with a property name, type and entity index.
-	bool IsInitialized() { return m_initialized; }
+	bool IsInitialized() const { return m_initialized; }
 	/// @brief Marks this as not initialized.
 	virtual void Term();
 protected:

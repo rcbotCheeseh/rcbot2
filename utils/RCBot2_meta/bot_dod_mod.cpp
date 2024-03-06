@@ -829,14 +829,14 @@ void CDODMod ::roundStart()
 // find it and add it as a waypoint offset
 Vector CDODMod :: getGround ( CWaypoint *pWaypoint )
 {
-	for ( unsigned int i = 0; i < m_BombWaypoints.size(); i ++ )
+	for (auto& m_BombWaypoint : m_BombWaypoints)
 	{
-		if ( m_BombWaypoints[i].pWaypoint == pWaypoint )
+		if (m_BombWaypoint.pWaypoint == pWaypoint )
 		{
-			if ( m_BombWaypoints[i].pEdict )
+			if (m_BombWaypoint.pEdict )
 			{
-				if ( CClassInterface::getDODBombState(m_BombWaypoints[i].pEdict) == 0 )
-					return m_BombWaypoints[i].v_ground;
+				if ( CClassInterface::getDODBombState(m_BombWaypoint.pEdict) == 0 )
+					return m_BombWaypoint.v_ground;
 				
 				break;
 			}
@@ -933,11 +933,11 @@ bool CDODMod :: isBreakableRegistered ( edict_t *pBreakable, int iTeam )
 {
 	static CWaypoint *pWpt;
 
-	for ( unsigned int i = 0; i < m_BreakableWaypoints.size(); i ++ )
+	for (auto& m_BreakableWaypoint : m_BreakableWaypoints)
 	{
-		if ( m_BreakableWaypoints[i].pEdict == pBreakable )
+		if (m_BreakableWaypoint.pEdict == pBreakable )
 		{
-			pWpt = m_BreakableWaypoints[i].pWaypoint;
+			pWpt = m_BreakableWaypoint.pWaypoint;
 
 			if ( pWpt->hasFlag(CWaypointTypes::W_FL_NOALLIES) )
 				return iTeam != TEAM_ALLIES;

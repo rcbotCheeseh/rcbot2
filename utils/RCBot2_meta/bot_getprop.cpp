@@ -589,8 +589,8 @@ void CClassInterface :: setupCTeamRoundTimer ( CTeamRoundTimer *pTimer )
 {
 	/*
 		GETPROP_TF2_RNDTM_m_flTimerEndTime,
-	GETPROP_TF2_RNDTM_m_nSetupTimeLength,
-	GETPROP_TF2_RNDTM_m_bInSetup,
+		GETPROP_TF2_RNDTM_m_nSetupTimeLength,
+		GETPROP_TF2_RNDTM_m_bInSetup,
 	*/
 	pTimer->m_flTimerEndTime = g_GetProps[GETPROP_TF2_RNDTM_m_flTimerEndTime].getFloatPointer(pTimer->m_Resource);
 	pTimer->m_nSetupTimeLength = g_GetProps[GETPROP_TF2_RNDTM_m_nSetupTimeLength].getIntPointer(pTimer->m_Resource);

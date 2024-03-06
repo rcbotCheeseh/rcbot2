@@ -160,17 +160,17 @@ CBotCommandInline PathWaypointCreateFromToCommand("createfromto", CMD_ACCESS_WAY
 {
 	if ( pClient && args[0] && *args[0] && args[1] && *args[1] )
 	{
-		CWaypoint *pWaypoint = CWaypoints::getWaypoint(atoi(args[0]));
+		CWaypoint *pWaypoint = CWaypoints::getWaypoint(std::atoi(args[0]));
 
 		if ( pWaypoint && pWaypoint->isUsed() )
 		{
-			CWaypoint *pWaypoint2 = CWaypoints::getWaypoint(atoi(args[1]));
+			CWaypoint *pWaypoint2 = CWaypoints::getWaypoint(std::atoi(args[1]));
 
 			if ( pWaypoint2 && pWaypoint2->isUsed() )
 			{
-				pWaypoint->addPathTo(atoi(args[1]));
+				pWaypoint->addPathTo(std::atoi(args[1]));
 				CBotGlobals::botMessage(pClient!= nullptr ? pClient->getPlayer() : nullptr,
-					0,"Added path from <%d> to <%d>",atoi(args[0]),atoi(args[1]));
+					0,"Added path from <%d> to <%d>",std::atoi(args[0]),std::atoi(args[1]));
 
 				pWaypoint->draw(pClient->getPlayer(),true,DRAWTYPE_DEBUGENGINE);
 				pWaypoint->info(pClient->getPlayer());
@@ -182,11 +182,11 @@ CBotCommandInline PathWaypointCreateFromToCommand("createfromto", CMD_ACCESS_WAY
 				return COMMAND_ACCESSED;
 			}
 			CBotGlobals::botMessage(pClient!= nullptr ? pClient->getPlayer() : nullptr,
-			                        0,"Waypoint id <%d> not found",atoi(args[1]));
+			                        0,"Waypoint id <%d> not found",std::atoi(args[1]));
 		}
 		else
 			CBotGlobals::botMessage(pClient!= nullptr ? pClient->getPlayer() : nullptr,
-				0,"Waypoint id <%d> not found",atoi(args[0]));
+				0,"Waypoint id <%d> not found",std::atoi(args[0]));
 	}
 	else
 		CBotGlobals::botMessage(pClient!= nullptr ? pClient->getPlayer() : nullptr,
@@ -199,17 +199,17 @@ CBotCommandInline PathWaypointRemoveFromToCommand("removefromto", CMD_ACCESS_WAY
 {
 	if ( pClient && args[0] && *args[0] && args[1] && *args[1] )
 	{
-		CWaypoint *pWaypoint = CWaypoints::getWaypoint(atoi(args[0]));
+		CWaypoint *pWaypoint = CWaypoints::getWaypoint(std::atoi(args[0]));
 
 		if ( pWaypoint && pWaypoint->isUsed() )
 		{
-			CWaypoint *pWaypoint2 = CWaypoints::getWaypoint(atoi(args[1]));
+			CWaypoint *pWaypoint2 = CWaypoints::getWaypoint(std::atoi(args[1]));
 
 			if ( pWaypoint2 && pWaypoint2->isUsed() )
 			{
-				pWaypoint->removePathTo(atoi(args[1]));
+				pWaypoint->removePathTo(std::atoi(args[1]));
 				CBotGlobals::botMessage(pClient!= nullptr ? pClient->getPlayer() : nullptr,
-					0,"Removed path from <%d> to <%d>",atoi(args[0]),atoi(args[1]));
+					0,"Removed path from <%d> to <%d>",std::atoi(args[0]),std::atoi(args[1]));
 
 				pWaypoint->draw(pClient->getPlayer(),true,DRAWTYPE_DEBUGENGINE);
 				pWaypoint->info(pClient->getPlayer());
@@ -221,11 +221,11 @@ CBotCommandInline PathWaypointRemoveFromToCommand("removefromto", CMD_ACCESS_WAY
 				return COMMAND_ACCESSED;
 			}
 			CBotGlobals::botMessage(pClient!= nullptr ? pClient->getPlayer() : nullptr,
-			                        0,"Waypoint id <%d> not found",atoi(args[1]));
+			                        0,"Waypoint id <%d> not found",std::atoi(args[1]));
 		}
 		else
 			CBotGlobals::botMessage(pClient!= nullptr ? pClient->getPlayer() : nullptr,
-				0,"Waypoint id <%d> not found",atoi(args[0]));
+				0,"Waypoint id <%d> not found",std::atoi(args[0]));
 	}
 	else
 		CBotGlobals::botMessage(pClient!= nullptr ? pClient->getPlayer() : nullptr,

@@ -131,7 +131,7 @@ void CBotMods::parseFile()
 
 			bottype = BOTTYPE_GENERIC;
 
-			modtype = MOD_CUSTOM;
+			//modtype = MOD_CUSTOM;
 
 			if (!strcmpi("CUSTOM", val))
 			{
@@ -296,11 +296,11 @@ std::vector<CBotMod*> CBotMods::m_Mods;
 
 void CBotMods::freeMemory()
 {
-	for (unsigned int i = 0; i < m_Mods.size(); i++)
+	for (auto& m_Mod : m_Mods)
 	{
-		m_Mods[i]->freeMemory();
-		delete m_Mods[i];
-		m_Mods[i] = nullptr;
+		m_Mod->freeMemory();
+		delete m_Mod;
+		m_Mod = nullptr;
 	}
 
 	m_Mods.clear();
@@ -308,13 +308,13 @@ void CBotMods::freeMemory()
 
 CBotMod* CBotMods::getMod(char* szModFolder)
 {
-	for (unsigned int i = 0; i < m_Mods.size(); i++)
+	for (const auto& m_Mod : m_Mods)
 	{
-		if (m_Mods[i]->isModFolder(szModFolder))
+		if (m_Mod->isModFolder(szModFolder))
 		{
-			logger->Log(LogLevel::INFO, "HL2 MOD ID %d (Game Folder = %s) FOUND", m_Mods[i]->getModId(), szModFolder);
+			logger->Log(LogLevel::INFO, "HL2 MOD ID %d (Game Folder = %s) FOUND", m_Mod->getModId(), szModFolder);
 
-			return m_Mods[i];
+			return m_Mod;
 		}
 	}
 

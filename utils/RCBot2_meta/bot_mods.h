@@ -582,10 +582,10 @@ public:
 
 	static CWaypoint *getBombWaypoint ( edict_t *pBomb )
 	{
-		for ( unsigned int i = 0; i < m_BombWaypoints.size(); i ++ )
+		for (auto& m_BombWaypoint : m_BombWaypoints)
 		{
-			if ( m_BombWaypoints[i].pEdict == pBomb )
-				return m_BombWaypoints[i].pWaypoint;
+			if (m_BombWaypoint.pEdict == pBomb )
+				return m_BombWaypoint.pWaypoint;
 		}
 
 		return nullptr;
@@ -593,9 +593,9 @@ public:
 
 	static bool isPathBomb ( edict_t *pBomb )
 	{
-		for ( unsigned int i = 0; i < m_BombWaypoints.size(); i ++ )
+		for (auto& m_BombWaypoint : m_BombWaypoints)
 		{
-			if ( m_BombWaypoints[i].pEdict == pBomb )
+			if (m_BombWaypoint.pEdict == pBomb )
 				return true;
 		}
 
@@ -1357,10 +1357,10 @@ public:
 
 	static edict_t *getButtonAtWaypoint ( CWaypoint *pWaypoint )
 	{
-		for ( unsigned int i = 0; i < m_LiftWaypoints.size(); i ++ )
+		for (auto& m_LiftWaypoint : m_LiftWaypoints)
 		{
-			if ( m_LiftWaypoints[i].pWaypoint == pWaypoint )
-				return m_LiftWaypoints[i].pEdict;
+			if (m_LiftWaypoint.pWaypoint == pWaypoint )
+				return m_LiftWaypoint.pEdict;
 		}
 
 		return nullptr;
