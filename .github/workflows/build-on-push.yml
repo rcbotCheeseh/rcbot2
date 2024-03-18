@@ -1,0 +1,132 @@
+name: Build on Push
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build_main:
+    name: Build for ${{ matrix.os_short }}
+    runs-on: ${{ matrix.os_version }}
+
+    # skip build on '[ci skip]'
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - debian-10
+          - windows-latest
+        include:
+          - meta_branch: "1.11-dev"
+            sm_branch: "1.11-dev"
+
+          - os: debian-10
+            os_short: linux
+            os_version: debian-10
+            package_ext: tar.gz
+            dbg_ext: dbg
+            cc: clang
+            cxx: clang++
+
+          - os: windows-latest
+            os_short: win
+            os_version: windows-latest
+            package_ext: zip
+            dbg_ext: pdb
+            cc: not-used
+            cxx: not-used
+
+    steps:
+    - name: Install (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        sudo apt-get install -y ${{ matrix.cc }} ${{ matrix.cxx }} g++-multilib
+        echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+        echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+
+    - name: Add msbuild to PATH (Windows)
+      if: runner.os == 'Windows'
+      uses: microsoft/setup-msbuild@v1.1.3
+
+    - name: Install (Windows)
+      if: runner.os == 'Windows'
+      shell: cmd
+      run: |
+        :: See https://github.com/microsoft/vswhere/wiki/Find-VC
+        for /f "usebackq delims=*" %%i in (`vswhere -latest -property installationPath`) do (
+          call "%%i"\Common7\Tools\vsdevcmd.bat -arch=x86 -host_arch=x64
+        )
+        
+        :: Loop over all environment variables and make them global.
+        for /f "delims== tokens=1,2" %%a in ('set') do (
+          echo>>"%GITHUB_ENV%" %%a=%%b
+        )
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Setup ambuild
+      run: |
+        python -m pip install wheel
+        pip install git+https://github.com/alliedmodders/ambuild
+
+    - name: Fetch Metamod:Source ${{ matrix.meta_branch }}
+      uses: actions/checkout@v3
+      with:
+        repository: alliedmodders/metamod-source
+        ref: ${{ matrix.meta_branch }}
+        path: mmsource
+
+    - name: Fetch SourceMod ${{ matrix.sm_branch }}
+      uses: actions/checkout@v3
+      with:
+        repository: alliedmodders/sourcemod
+        ref: ${{ matrix.sm_branch }}
+        path: sourcemod
+        submodules: recursive
+
+    - name: Fetch SDKs
+      shell: bash
+      run: |
+        git clone --mirror https://github.com/alliedmodders/hl2sdk hl2sdk-proxy-repo
+        sdks=(tf2 css hl2dm dods bms sdk2013)
+        for sdk in "${sdks[@]}"
+        do
+          git clone hl2sdk-proxy-repo -b $sdk hl2sdk-$sdk
+        done
+
+    - name: Fetch RCBot2
+      uses: actions/checkout@v3
+      with:
+        path: rcbot2
+
+    - name: Build Files
+      working-directory: rcbot2
+      run: |
+        mkdir post
+        cd post
+        python3 ../configure.py --sdks=present --sm-path="${{ github.workspace }}/sourcemod" --mms_path="${{ github.workspace }}/mmsource" --symbol-files
+        ambuild
+
+    - uses: benjlevesque/short-sha@v2.1
+      id: short-sha
+
+    - name: Upload Binary
+      uses: actions/upload-artifact@v3
+      with:
+        name: rcbot2-${{ matrix.os_short }}-${{ steps.short-sha.outputs.sha }}
+        path: |
+            rcbot2/post/package/*
+
+    - name: Upload Debug Symbols
+      uses: actions/upload-artifact@v3
+      with:
+        name: rcbot2-dbgsym-${{ matrix.os_short }}-${{ steps.short-sha.outputs.sha }}
+        path: |
+            rcbot2/post/**/*.${{ matrix.dbg_ext }}
